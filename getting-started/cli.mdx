@@ -1,0 +1,186 @@
+---
+title: 'Command Line Interface'
+description: 'If you are familiar with git, oxen should be an easy learning curve.'
+---
+
+## Setup User
+
+For your commit history, you will have to set up your local Oxen user name and email. This is what will show up in `oxen log` or in the OxenHub dashboard for who changed what.
+
+```bash
+oxen config --name "YOUR_NAME" --email "YOUR_EMAIL"
+```
+
+## Clone
+
+There are a few ways that you can clone an Oxen repository, depending on the level of data transfer you want to incur. The default `oxen clone` with no flags will download the *latest commit* from the `main` branch.
+
+```bash
+oxen clone https://hub.oxen.ai/ox/CatDogBBox
+```
+
+To fetch the latest commit from a specific branch you can use the `-b` flag.
+
+```bash
+oxen clone https://hub.oxen.ai/ox/CatDogBBox -b my-pets
+```
+
+## Remote Workspaces
+
+Downloading all the data may still be a more expensive operation than you need. You can download the minimal metadata to still interact with the remote by using the `--shallow` flag.
+
+```bash
+oxen clone https://hub.oxen.ai/ox/CatDogBBox --shallow -b my-pets
+```
+
+This is especially handy for appending data via the [remote workspace](/concepts/remote-workspace). When downloading by using the `--shallow` flag you will notice no data files in your working directory. You can still see the data on the branch on the remote with the `oxen remote` subcommands.
+
+```bash
+oxen remote ls
+```
+
+You can also download any subset of the data by using `oxen remote download`. This is useful if you only need a specific set of files and directories for training or testing.
+
+```bash
+oxen remote download test.csv
+```
+
+## Clone All
+
+Lastly, if you want to clone the entire commit history locally, you can use the `--all` flag. This is handy if you want to pull a full history and push to a new remote, or have a workflow where you need to quickly swap between commits locally. Often for running experiments, training, or testing, all you need is a subset of the data.
+
+```bash
+oxen clone https://hub.oxen.ai/ox/CatDogBBox --all
+```
+
+## Initialize Local Repository
+
+If you do not have a remote dataset, you can initialize one locally.
+
+Similar to git: create a new directory, navigate into it, and perform
+
+```bash
+oxen init
+```
+
+## Stage Data
+
+You can stage changes that you are interested in committing with the `oxen add` command and giving a full file path or directory.
+
+```bash
+oxen add images/
+```
+
+## View Status
+
+To see what data is tracked, staged, or not yet added to the repository you can use the `status` command. 
+
+Note: since we are dealing with large datasets with many files, `status` rolls up the changes and summarizes them for you.
+
+```bash
+oxen status
+```
+
+```
+On branch main -> e76dd52a4fc13a6f
+
+Directories to be committed
+  added: images with added 8108 files
+
+Files to be committed:
+  new file: images/000000000042.jpg
+  new file: images/000000000074.jpg
+  new file: images/000000000109.jpg
+  new file: images/000000000307.jpg
+  new file: images/000000000309.jpg
+  new file: images/000000000394.jpg
+  new file: images/000000000400.jpg
+  new file: images/000000000443.jpg
+  new file: images/000000000490.jpg
+  new file: images/000000000575.jpg
+  ... and 8098 others
+
+Untracked Directories
+  (use "oxen add <dir>..." to update what will be committed)
+  annotations/ (3 items)
+```
+
+You can always paginate through the changes with the `-s` (skip) and `-l` (limit) params on the status command. Run `oxen status --help` for more info.
+
+## Commit Changes
+
+To commit the changes that are staged with a message you can use
+
+```bash
+oxen commit -m "Some informative commit message"
+```
+
+## Log
+
+You can see the history of changes on your current branch by running:
+
+```bash
+oxen log
+```
+
+```
+commit 6b958e268656b0c5
+
+Author: Ox
+Date:   Fri, 21 Oct 2022 16:08:39 -0700
+
+    adding 10,000 training images
+
+commit e76dd52a4fc13a6f
+
+Author: Ox
+Date:   Fri, 21 Oct 2022 16:05:22 -0700
+
+    Initialized Repo 🐂
+```
+
+## Reverting To Commit
+
+If ever you want to change your working directory to a point in your commit history, you can simply supply the commit id from your history to the `checkout` command.
+
+```bash
+oxen checkout COMMIT_ID
+```
+
+## Restore Working Directory
+
+The `restore` command comes in handy if you made some changes locally and you want to revert the changes. This can be used for example if you accidentally delete or modify or stage a file that you did not intend to.
+
+```bash
+oxen restore path/to/file.txt
+```
+
+Restore defaults to restoring the files to the current HEAD. For more detailed options, as well as how to unstage files refer to the [restore documentation](/commands/restore).
+
+## Removing Data
+
+To stage a file to be removed from the next commit, use the `oxen rm` command. Removing data from a commit can be useful if you find errors or simply want to create a smaller subset of data on a separate branch for debugging or testing.
+
+```bash
+oxen rm path/to/file.txt
+```
+
+Note: the file must be committed in the history for this to work. If you want to remove a file that has not been committed yet, simple use your /bin/rm command.
+
+To recursively remove a directory use the `-r` flag.
+
+```bash
+oxen rm -r path/to/dir
+```
+
+If you accidentally staged a file that you do not want to commit, you can also use `oxen rm` with the `--staged` flag to unstage the file or directory.
+
+```bash
+oxen rm --staged -r path/to/dir
+```
+
+Once data has been committed, a version of it always lives in the .oxen/versions directory. As of right now there is no way to completely remove it from the repository history, this functionality is in our backlog for sensitive data that was accidentally committed.
+
+## Advanced Features
+
+Oxen has many more advanced features such as [computing diffs](/concepts/diffs) between tabular data as well as convenient DataFrame manipulation through the [oxen df](/concepts/data-frames) command.

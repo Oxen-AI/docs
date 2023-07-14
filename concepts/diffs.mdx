@@ -1,0 +1,56 @@
+---
+title: 'Diffs'
+description: 'How to tell what changed between commits'
+---
+
+If you want to see the differences between your file and the conflicting file, you can use the `oxen diff` command.
+
+Oxen knows how to compare text files as well as [tabular data](https://github.com/Oxen-AI/oxen-release/blob/main/DataFrames.md) between commits. Currently, you must specify the specific path to the file you want to compare the changes.
+
+If the file is tabular data `oxen diff` will show you the rows that were added or removed.
+
+First use the `oxen df` command to add a row to the data frame.
+
+```bash
+oxen df annotations/data.csv --add-row 'images/my_cat.jpg,cat,0,0,0,0' -o annotations/data.csv
+```
+
+Then use the `oxen diff` command to see the changes.
+
+```bash
+oxen diff annotations/data.csv 
+``` 
+
+![diff add row](/images/diff-added-row.png)
+
+If the tabular data schema has changed `oxen diff` will flag and show you the columns that were added.
+
+Add a new column to the data frame.
+
+```bash
+oxen df annotations/data.csv --add-col 'is_fluffy:unknown:str' -o annotations/data.csv
+```
+
+Then use the `oxen diff` command to see the changes.
+
+```bash
+oxen diff annotations/data.csv
+```
+
+![diff add col](/images/diff-added-col.png)
+
+If the file is any other type of text data, it will simply show you the added and removed lines.
+
+```bash
+oxen diff path/to/file.txt
+```
+
+```
+ i
++here
+ am a text file that
++I am modifying
+-la-dee-da
++la-doo-da
++another line
+```

@@ -1,32 +1,32 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Starter Kit",
+  "name": "Oxen.ai",
   "logo": {
     "dark": "/logo/dark.svg",
     "light": "/logo/light.svg"
   },
   "favicon": "/favicon.png",
   "colors": {
-    "primary": "#9563FF",
-    "light": "#AE87FF",
-    "dark": "#0D001D",
+    "primary": "#0E87CB",
+    "light": "#0E87CB",
+    "dark": "#161616",
     "background": {
       "dark": "#0A0A0A"
     },
     "anchors": {
-      "from": "#FF7F57",
-      "to": "#9563FF"
+      "from": "#0E87CB",
+      "to": "#0E87CB"
     }
   },
   "topbarLinks": [
     {
       "name": "Support",
-      "url": "mailto:hi@mintlify.com"
+      "url": "mailto:hello@oxen.ai"
     }
   ],
   "topbarCtaButton": {
-    "name": "Dashboard",
-    "url": "https://dashboard.mintlify.com"
+    "name": "Sign Up",
+    "url": "https://oxen.ai/register"
   },
   "tabs": [
     {
@@ -38,27 +38,22 @@
     {
       "name": "Documentation",
       "icon": "book-open-cover",
-      "url": "https://mintlify.com/docs"
-    },
-    {
-      "name": "Community",
-      "icon": "slack",
-      "url": "https://mintlify.com/community"
+      "url": "/"
     },
     {
       "name": "Blog",
       "icon": "newspaper",
-      "url": "https://mintlify.com/blog"
+      "url": "https://blog.oxen.ai"
     }
   ],
   "navigation": [
     {
       "group": "Get Started",
-      "pages": ["introduction", "quickstart", "development"]
+      "pages": ["getting-started/intro", "getting-started/install", "getting-started/cli", "getting-started/python", "getting-started/oxen-server", "getting-started/web"]
     },
     {
-      "group": "Essentials",
-      "pages": ["essentials/markdown", "essentials/code", "essentials/images", "essentials/settings", "essentials/navigation"]
+      "group": "Core Concepts",
+      "pages": ["concepts/data-frames", "concepts/diffs", "concepts/remote-workspace"]
     },
     {
       "group": "API Documentation",
@@ -67,10 +62,10 @@
     {
       "group": "Endpoint Examples",
       "pages": [
-        "api-reference/endpoint/get",
-        "api-reference/endpoint/create",
-        "api-reference/endpoint/update",
-        "api-reference/endpoint/delete"
+        "api-reference/branches/get",
+        "api-reference/branches/create",
+        "api-reference/branches/update",
+        "api-reference/branches/delete"
       ]
     }
   ],
