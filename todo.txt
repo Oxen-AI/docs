@@ -1,0 +1,14 @@
+* python documentation
+* update homebrew & pip
+* give descriptions to featured repos
+* link to docs on github site
+* add use case documentation
+  * link to repos with datatype at minimum, and change to "view example repos"
+* setup fun ox with wings repo (discord integration with stable diffusion?)
+  * if not finished, 
+* add better __repr__ and __str__ for rust py objects
+  * PyStagedData
+* add release notes for previous releases
+* post on reddit
+  * Rust Oxen Version 0.7.2
+  * Python Oxen Package 0.1.21

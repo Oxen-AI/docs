@@ -1,4 +1,161 @@
 ---
-title: 'Python Library'
+title: 'Python'
 description: 'Learn how to use the oxenai python package.'
 ---
+
+## Install
+
+```bash
+$ pip install oxenai
+```
+
+There are two ways to interact with Oxen in the python library:
+
+1) A [Local Repository](/python/local_repo) where the full data is downloaded to your machine.
+2) A [Remote Repository](/python/remote_repo) where you can interact with the data remotely and selectively download the data you need.
+
+## Local Repository
+
+[LocalRepo](/python/local_repo)
+
+If you are creating a new repository from scratch, this is a great place to start. The workflow is very similar to [git](https://git-scm.com/) in terms of initializing a repository, adding data, committing, and pushing to a remote.
+
+Let's walk through some basic operations.
+
+### Configure User
+
+In order for Oxen to know who is committing and where to sync to by default, you must configure your user and default host.
+
+First create an Oxen config file in your home directory.
+
+```bash
+mkdir ~/.oxen
+nano ~/.oxen/user_config.toml 
+```
+
+Then populate it with the required information. 
+
+```bash
+name = "YOUR NAME" 
+email = "YOUR EMAIL"
+default_host = "hub.oxen.ai"
+
+[[host_configs]]
+host = "hub.oxen.ai"
+auth_token = "<YOUR AUTH TOKEN FROM OXEN>"
+```
+
+You can obtain an `auth_token` by creating an account on [Oxen.ai](https://oxen.ai) and going to your profile.
+
+<img
+  className="block"
+  src="/images/auth_key.png"
+  alt="Oxen.ai authentication key"
+/>
+
+You can also set up your own [oxen-server](/getting-started/oxen-server) and generate custom auth tokens there.
+
+### Init
+
+Assuming you are creating a brand new repository, first you will have to create an empty directory, point your `LocalRepo` to it and run `init()`.
+
+```python
+import os
+from oxen import LocalRepo
+
+# Create an empty directory named CatsAndDogs
+directory = "CatsAndDogs"
+os.makedirs(directory)
+
+# Initialize the Oxen Repository
+repo = LocalRepo(directory)
+repo.init()
+```
+
+### Add Files
+
+Now let's create a README.md file and add it to the local staging area.
+
+```python
+import os
+from oxen import LocalRepo
+
+# write a file called README.md to disk
+directory = "CatsAndDogs"
+file_name = "README.md"
+file_path = os.path.join(directory, file_name)
+
+# Open the file in write mode
+with open(file_path, "w") as file:
+    # Write the title to the file
+    file.write("# " + directory + "\n")
+
+# Assuming the LocalRepo is already initialized
+repo = LocalRepo(directory)
+# add the path relative to the dir
+repo.add(file_name)
+# list added files
+status = repo.status()
+print(status.added_files())
+```
+
+You should see that we have one file added `[README.md]`
+
+### Commit Staged Files
+
+With your README.md staged you can now commit with a message
+
+```python
+from oxen import LocalRepo
+
+# Assuming you have already added the data
+repo = LocalRepo(directory)
+repo.commit("Adding README.md")
+```
+
+🎉 Congratulations you have just versioned your first file! Now to sync it with the rest of your team.
+
+### Configure Remote
+
+The easiest way to create a remote is in the [Oxen Hub web interface](https://oxen.ai). 
+
+<img
+  className="block"
+  src="/images/MyRepos.png"
+  alt="Oxen.ai authentication key"
+/>
+
+Then once you have a remote created, set the remote on the repo object.
+
+```python
+from oxen import LocalRepo
+
+# Once you have data committed that you want to sync
+repo = LocalRepo(directory)
+# You can have multiple named remotes
+username = "YOUR_USERNAME"
+repo_name = "REMOTE_REPO_NAME"
+remote_name = "origin"
+remote_url = f"https://hub.oxen.ai/{username}/{repo_name}"
+repo.set_remote(remote_name, remote_url)
+```
+
+### Push to Remote
+
+With your remote set and auth key configured, you are ready to push the data!
+
+```python
+from oxen import LocalRepo
+
+# Once you have committed data and set the remote, it's time to push your branch
+repo = LocalRepo(directory)
+remote_name = "origin"
+remote_branch = "main"
+repo.push(remote_name, remote_branch)
+```
+
+## Remote Repository
+
+[RemoteRepo](/python/remote_repo)
+
+See the [remote workspace documentation](/concepts/remote-workspace) for a jumping off point.

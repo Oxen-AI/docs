@@ -1,0 +1,313 @@
+<a id="oxen.remote_repo"></a>
+
+# oxen.remote\_repo
+
+<a id="oxen.remote_repo.RemoteRepo"></a>
+
+## RemoteRepo Objects
+
+```python
+class RemoteRepo()
+```
+
+Remote repository object that allows you to interact with a remote oxen repository.
+
+<a id="oxen.remote_repo.RemoteRepo.__init__"></a>
+
+#### \_\_init\_\_
+
+```python
+def __init__(path: str, host: str = "hub.oxen.ai", revision: str = "main")
+```
+
+Create a new RemoteRepo object to interact with.
+
+Parameters
+----------
+path : str
+    Name of the repository in the format `namespace/repo_name`.
+    For example `ox/chatbot`
+host : str
+    The host to connect to. Defaults to `hub.oxen.ai`
+revision: str
+    The branch name or commit id to checkout. Defaults to `main`
+
+<a id="oxen.remote_repo.RemoteRepo.namespace"></a>
+
+#### namespace
+
+```python
+@property
+def namespace() -> str
+```
+
+The namespace for the repo.
+
+<a id="oxen.remote_repo.RemoteRepo.name"></a>
+
+#### name
+
+```python
+@property
+def name() -> str
+```
+
+The name of the repo.
+
+<a id="oxen.remote_repo.RemoteRepo.url"></a>
+
+#### url
+
+```python
+@property
+def url() -> str
+```
+
+The remote url for the repo.
+
+<a id="oxen.remote_repo.RemoteRepo.revision"></a>
+
+#### revision
+
+```python
+@property
+def revision() -> str
+```
+
+The branch or commit id for the repo
+
+<a id="oxen.remote_repo.RemoteRepo.create"></a>
+
+#### create
+
+```python
+def create()
+```
+
+Will create the repo on the remote server.
+
+<a id="oxen.remote_repo.RemoteRepo.exists"></a>
+
+#### exists
+
+```python
+def exists() -> bool
+```
+
+Checks if this remote repo exists on the server.
+
+<a id="oxen.remote_repo.RemoteRepo.delete"></a>
+
+#### delete
+
+```python
+def delete()
+```
+
+Delete this remote repo from the server.
+
+<a id="oxen.remote_repo.RemoteRepo.checkout"></a>
+
+#### checkout
+
+```python
+def checkout(revision: str, create=False)
+```
+
+Switches the remote repo to the specified revision.
+
+Parameters
+----------
+revision : str
+    The name of the branch or commit id to checkout.
+create : bool
+    Whether to create a new branch if it doesn't exist. Default: False
+
+<a id="oxen.remote_repo.RemoteRepo.ls"></a>
+
+#### ls
+
+```python
+def ls(directory: Optional[str] = None,
+       page_num: int = 1,
+       page_size: int = 100)
+```
+
+Lists the contents of a directory in the remote repo.
+
+Parameters
+----------
+directory : str
+    The directory to list. If None, will list the root directory.
+page_num : int
+    The page number to return. Default: 1
+page_size : int
+    The number of items to return per page. Default: 100
+
+<a id="oxen.remote_repo.RemoteRepo.download"></a>
+
+#### download
+
+```python
+def download(remote_path: str, local_path: Optional[str] = None)
+```
+
+Download a file or directory from the remote repo.
+
+Parameters
+----------
+remote_path : str
+    The path to the remote file
+local_path : str | None
+    The path to the local file. If None, will download to
+    the same path as remote_path
+
+<a id="oxen.remote_repo.RemoteRepo.add"></a>
+
+#### add
+
+```python
+def add(local_path: str, remote_directory: str = "")
+```
+
+Stage a file to the remote workspace
+
+Parameters
+----------
+path: str
+    The path to the local file to be staged
+remote_directory: str
+    The path in the remote repo where the file will be added
+
+<a id="oxen.remote_repo.RemoteRepo.remove"></a>
+
+#### remove
+
+```python
+def remove(path: str)
+```
+
+Unstage a file from the remote workspace
+
+Parameters
+----------
+path: str
+    The path to the file on remote to be removed from staging
+
+<a id="oxen.remote_repo.RemoteRepo.restore_df"></a>
+
+#### restore\_df
+
+```python
+def restore_df(path: str)
+```
+
+Unstage any changes to the schema or contents of a dataframe file
+on the remote repo
+
+Parameters
+----------
+path: str
+    The path to the df on the remote to be restored
+
+<a id="oxen.remote_repo.RemoteRepo.status"></a>
+
+#### status
+
+```python
+def status(path: str = "")
+```
+
+Get the status of the remote repo. Returns a StagedData object.
+
+Parameters
+----------
+path: str
+    The directory or file path on the remote that
+    will be checked for modifications
+
+<a id="oxen.remote_repo.RemoteRepo.commit"></a>
+
+#### commit
+
+```python
+def commit(message: str)
+```
+
+Commit the staged data in the remote repo with a message.
+
+Parameters
+----------
+message : str
+    The commit message.
+
+<a id="oxen.remote_repo.RemoteRepo.log"></a>
+
+#### log
+
+```python
+def log()
+```
+
+Get the commit history for a remote repo
+
+<a id="oxen.remote_repo.RemoteRepo.list_branches"></a>
+
+#### list\_branches
+
+```python
+def list_branches()
+```
+
+List all branches for a remote repo
+
+<a id="oxen.remote_repo.RemoteRepo.add_df_row"></a>
+
+#### add\_df\_row
+
+```python
+def add_df_row(path: str, row: dict)
+```
+
+Adds a row to the dataframe at the specified path on the remote repo
+
+Parameters
+----------
+path: str
+    Path to the dataframe on the remote repo
+row: dict
+    A dictionary representing the row to be added to the dataframe,
+    where keys are column names and values are the values to be inserted.
+    Schema must exactly match DF on remote repo.
+
+<a id="oxen.remote_repo.RemoteRepo.get_branch"></a>
+
+#### get\_branch
+
+```python
+def get_branch(branch: str)
+```
+
+Return a branch by name on this repo, if exists
+
+Parameters
+----------
+branch: str
+    The name of the branch to return
+
+<a id="oxen.remote_repo.RemoteRepo.create_branch"></a>
+
+#### create\_branch
+
+```python
+def create_branch(new_branch: str)
+```
+
+Return a branch by name on this repo,
+creating it from the currently checked out branch if it doesn't exist
+
+Parameters
+----------
+new_branch: str
+    The name to assign to the created branch
+
