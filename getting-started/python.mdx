@@ -9,6 +9,41 @@ description: 'Learn how to use the oxenai python package.'
 $ pip install oxenai
 ```
 
+## Integrate Tools You Already Know
+
+One of the core tenents behind Oxen is that is should be easy to grab any version of any resource at any time. This means accessing the data without pulling the entire remote repository.
+
+You can list and paginate over files and directories with `.ls()`
+
+```python Python
+from oxen import RemoteRepo
+
+repo = RemoteRepo("ox/CatDogBBox")
+images_results = repo.ls("images", page_num=1, page_size=10)
+print(images_results)
+print(images_results.total_pages)
+print(images_results.page_number)
+print(images_results.total_entries)
+```
+
+It is also easy to download a specific file with a specific revision.
+
+```python Python
+from oxen import RemoteRepo
+import pandas as pd
+
+# Connect to the remote repo
+repo = RemoteRepo("ox/CatDogBBox")
+# Downloads the file locally
+repo.download("annotations/train.csv", revision="COMMIT_ID_OR_BRANCH")
+# Use whatever library you want to explore the data
+df = pd.read_csv("annotations/train.csv")
+print(df.head())
+```
+
+
+# Oxen Repositories
+
 There are two ways to interact with Oxen in the python library:
 
 1) A [Local Repository](/python/local_repo) where the full data is downloaded to your machine.
