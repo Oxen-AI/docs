@@ -1,0 +1,61 @@
+---
+title: 'Oxen Hub'
+description: 'OxenHub enables your team to version, explore, and collaborate on your datasets.'
+---
+
+The simple web interface allows you to discover and explore datasets without having to download them. You can also upload files directly, add permissions, and explore branches directly in the interface.
+
+
+<p align="center">
+    <img src="/images/CatsVsDogsRepo.png?raw=true" alt="oxen cats vs dogs repo" />
+</p>
+
+## Create an account
+
+Visit [https://www.oxen.ai/register](https://www.oxen.ai/register) to register
+
+## Your Repositories
+
+From your home page, you can view your repositories and create a new repository.
+
+![repository home page](/images/MyRepos.png)
+
+## Setup Authorization
+
+You will notice on the side panel you have access to your API Key. In order to push data to your repository you will need to copy this key and set it up in your user config. This saves your key in `~/.oxen/user_config.toml` with one key per host if you ever need to push to multiple hosts.
+
+```bash
+oxen config --auth hub.oxen.ai YOUR_API_KEY
+```
+
+```bash
+cat ~/.oxen/user_config.toml
+```
+
+## Create Remote Repository
+
+Pick a name and give your repository a description. Repositories can be public for anyone to view, or private just for you and your company.
+
+![repository home page](/images/CreateRepository.png)
+
+## Push your data
+
+Once you have created a repository, you will see a URL you can push your data to in the format `https://hub.oxen.ai/<username>/<repo_name>`
+
+From the data repository that you [created above](https://github.com/Oxen-AI/oxen-release#create-repository) you can simply add the remote and push.
+
+```bash
+oxen config --set-remote origin https://hub.oxen.ai/<username>/<repo_name>
+```
+
+```bash
+oxen push origin main
+```
+
+🎉 Congrats! You should now be able to see your data in the hub.
+
+You can add collaborators from the web interface and start building out your data pipeline.
+
+![repository home page](/images/AddCollaborators.png)
+
+Check out the [CLI](/getting-started/cli) to learn more about how to use Oxen.

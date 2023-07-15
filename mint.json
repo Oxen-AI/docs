@@ -49,29 +49,16 @@
   "navigation": [
     {
       "group": "Get Started",
-      "pages": ["getting-started/intro", "getting-started/install", "getting-started/cli", "getting-started/python", "getting-started/oxen-server", "getting-started/web"]
+      "pages": ["getting-started/intro", "getting-started/install", "getting-started/features", "getting-started/cli", "getting-started/python", "getting-started/oxen-hub", "getting-started/oxen-server"]
     },
     {
       "group": "Core Concepts",
       "pages": ["concepts/data-frames", "concepts/diffs", "concepts/remote-workspace"]
-    },
-    {
-      "group": "API Documentation",
-      "pages": ["api-reference/authentication"]
-    },
-    {
-      "group": "Endpoint Examples",
-      "pages": [
-        "api-reference/branches/get",
-        "api-reference/branches/create",
-        "api-reference/branches/update",
-        "api-reference/branches/delete"
-      ]
     }
   ],
   "footerSocials": {
-    "twitter": "https://twitter.com/mintlify",
-    "github": "https://github.com/mintlify",
-    "linkedin": "https://www.linkedin.com/company/mintsearch"
+    "twitter": "https://twitter.com/oxen_ai",
+    "github": "https://github.com/Oxen-AI/oxen-release",
+    "linkedin": "https://www.linkedin.com/company/oxenai/"
   }
 }

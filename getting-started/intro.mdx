@@ -3,7 +3,9 @@ title: What is Oxen?
 description: 'Oxen is a lighting fast unstructured data version control system for machine learning datasets.'
 ---
 
-Whether you are building [Generative AI](/use-cases/generative-ai), [Image Recognition](/use-cases/computer-vision), or [Text Classification](/use-cases/text-classification), Oxen is the key to managing your entire team’s data workflows.
+Whether you are building [Generative AI](/use-cases/generative-ai), [Image Recognition](/use-cases/computer-vision), or [Text Classification](/use-cases/text-classification), Oxen is the key to managing your entire team’s data workflows. 
+
+Collaboration is key when it comes to having the highest quality data for your machine learning models. Oxen’ version control makes it easy to collaborate on datasets with your team, and with the ML community at large.
 
 <img
   className="block"
@@ -21,7 +23,7 @@ Oxen makes versioning your datasets as easy as versioning your code.
 oxen init
 oxen add images/
 oxen commit -m "Adding my data"
-oxen config --set-remote origin https://hub.oxen.ai/ox/CatDogBoundingBox
+oxen config --set-remote origin https://hub.oxen.ai/ox/CatDogBBox
 oxen push origin main
 ```
 
@@ -30,7 +32,7 @@ Clone your data faster than ever before.
 ```bash
 # The first step in collaborating on a dataset should be `oxen clone`
 
-oxen clone https://hub.oxen.ai/ox/CatDogBoundingBox
+oxen clone https://hub.oxen.ai/ox/CatDogBBox
 ```
 
 ## Learn the Basics
@@ -108,20 +110,6 @@ See examples of how to use Oxen in your workflow.
   </Card>
 </CardGroup>
 
-## Features
-
-Oxen was optimized to be fast on structured and unstructured data types. Unlike traditional version control systems that are optimized for text files and code, Oxen was built from the [ground up to be fast](https://github.com/Oxen-AI/oxen-release/blob/main/Performance.md) on images, video, audio, text, and more.
-
-* 🔥 Fast (10-100x faster than existing tools)
-* 🧠 Easy to learn (same commands as git)
-* 🗄️ Index lots of files (millions of images? no problem)
-* 🎥 Handles large files (images, videos, audio, text, parquet, arrow, json, models, etc)
-* 📊 Native DataFrame processing ([oxen df](/concepts/data-frames) command for data exploration)
-* 📈 Tracks changes over time (never worry about losing the state of your data)
-* 🤝 Collaborate with your team (sync to an oxen-server)
-* 👀 Better data visualization on [OxenHub](https://oxen.ai)
-
-
 ## Why the name Oxen?
 
-“Oxen” 🐂 comes from the fact that we will plow, maintain, and version your data like a good farmer tends to their fields 🌾. Let Oxen take care of the grunt work of your infrastructure so you can focus on the higher-level ML problems that matter to your product.
+“Oxen” 🐂 comes from the fact that we will plow, maintain, and version your data like a good farmer tends to their fields 🌾. During the agricultural revolution, the plow and offloading work to Oxen helped people specialize and start working on other important societal tasks. Let Oxen take care of the grunt work of your infrastructure so you can focus on the higher-level ML problems that matter to your product.
