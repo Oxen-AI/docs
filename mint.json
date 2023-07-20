@@ -30,8 +30,8 @@
   },
   "tabs": [
     {
-      "name": "API Reference",
-      "url": "api-reference"
+      "name": "Python API",
+      "url": "python-api"
     }
   ],
   "anchors": [
@@ -54,6 +54,10 @@
     {
       "group": "Core Concepts",
       "pages": ["concepts/data-frames", "concepts/diffs", "concepts/remote-workspace", "concepts/performance"]
+    },
+    {
+      "group": "Python API",
+      "pages": ["python-api/local_repo", "python-api/remote_repo"]
     }
   ],
   "footerSocials": {

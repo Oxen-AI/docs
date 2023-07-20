@@ -9,24 +9,25 @@ description: 'Learn how to use the oxenai python package.'
 $ pip install oxenai
 ```
 
-## Integrate Tools You Already Know
+## Python API
 
-One of the core tenents behind Oxen is that is should be easy to grab any version of any resource at any time. This means accessing the data without pulling the entire remote repository.
+There are a few basic python classes you can use to interact with Oxen repositories. The full list with class methods can be found in the [API Documentation](/api-reference/python).
 
-You can list and paginate over files and directories with `.ls()`
+## Remote vs Local
 
-```python Python
-from oxen import RemoteRepo
+Oxen has the concept of  [Remote Repositories](#remote-repositories) and [Local Repositories](#local-repositories). One of the core tenets of Oxen is that data should feel like it is local, even if it is not. Hence the APIs for Local vs Remote are very similar, the only difference is where you are performing the operation.
 
-repo = RemoteRepo("ox/CatDogBBox")
-images_results = repo.ls("images", page_num=1, page_size=10)
-print(images_results)
-print(images_results.total_pages)
-print(images_results.page_number)
-print(images_results.total_entries)
-```
+## Remote Repositories
 
-It is also easy to download a specific file with a specific revision.
+Remote Repositories only download pointers and metadata, so that you can interact with the data as if it was local. 
+
+Here is the full documentation for the [RemoteRepo](/python/remote_repo).
+
+### Integrate with Pandas
+
+The fastest way to integrate Oxen into your existing workflow is to use the fact that Oxen give you direct access to files and directories given a specific revision.
+
+For example let's load a data file given a specific commit into [Pandas](https://pandas.pydata.org/)
 
 ```python Python
 from oxen import RemoteRepo
@@ -34,24 +35,43 @@ import pandas as pd
 
 # Connect to the remote repo
 repo = RemoteRepo("ox/CatDogBBox")
-# Downloads the file locally
-repo.download("annotations/train.csv", revision="COMMIT_ID_OR_BRANCH")
-# Use whatever library you want to explore the data
+# Specify the version of the file you want to download
+branch = repo.get_branch("my-pets")
+# Download takes a file or directory a commit id
+repo.download("annotations", revision=branch.commit_id)
+# Once you have the data locally, use whatever library you want to explore the data
 df = pd.read_csv("annotations/train.csv")
 print(df.head())
 ```
 
+All the files are also accessible directly over http, which removes some of the boiler plate as long as the files are of a reasonable size.
 
-# Oxen Repositories
+The url structure is `https://hub.oxen.ai/api/repos/:namespace/:repo_name/file/:revision/:file_path`
 
-There are two ways to interact with Oxen in the python library:
+```python Python
+import pandas as pd
 
-1) A [Local Repository](/python/local_repo) where the full data is downloaded to your machine.
-2) A [Remote Repository](/python/remote_repo) where you can interact with the data remotely and selectively download the data you need.
+df = pd.read_csv("https://hub.oxen.ai/api/repos/ox/CatDogBBox/file/main/annotations/test.csv")
+print(df.head())
+```
 
-## Local Repository
+### Add Files
 
-[LocalRepo](/python/local_repo)
+Oxen has the concept of [Remote Workspaces](/concepts/remote-workspace) that make it easy to add data to a remote repository without ever downloading it locally.
+
+```python Python
+from oxen import RemoteRepo
+
+# Connect to the Remote
+repo = RemoteRepo("ox/CatDogBBox")
+# Create a branch on the remote and check it out
+# similar to oxen checkout -b add-images
+repo.create_checkout_branch("add-images")
+```
+
+## Local Repositories
+
+[Local Repositories](/python/local_repo) have all the files versioned and accessible on your local machine. They duplicate the data between your working directory and a hidden .oxen directory so that you can quickly swap between versions and run experiments.
 
 If you are creating a new repository from scratch, this is a great place to start. The workflow is very similar to [git](https://git-scm.com/) in terms of initializing a repository, adding data, committing, and pushing to a remote.
 
@@ -188,9 +208,3 @@ remote_name = "origin"
 remote_branch = "main"
 repo.push(remote_name, remote_branch)
 ```
-
-## Remote Repository
-
-[RemoteRepo](/python/remote_repo)
-
-See the [remote workspace documentation](/concepts/remote-workspace) for a jumping off point.

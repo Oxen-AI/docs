@@ -1,7 +1,6 @@
 * python documentation
 * update homebrew & pip
 * give descriptions to featured repos
-* link to docs on github site
 * add use case documentation
   * link to repos with datatype at minimum, and change to "view example repos"
 * setup fun ox with wings repo (discord integration with stable diffusion?)
@@ -12,3 +11,5 @@
 * post on reddit
   * Rust Oxen Version 0.7.2
   * Python Oxen Package 0.1.21
+* check if RemoteRepo exists when initializing the object to "connect"
+* create_checkout_branch on remote repo

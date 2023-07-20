@@ -1,0 +1,228 @@
+<a id="oxen.local_repo"></a>
+
+# oxen.local\_repo
+
+<a id="oxen.local_repo.LocalRepo"></a>
+
+## LocalRepo Objects
+
+```python
+class LocalRepo()
+```
+
+The LocalRepo class that allows you to interact with your local oxen repo.
+
+## Examples
+
+### Init, Add, Commit and Push
+
+Adding and committing a file to a remote workspace.
+
+```python
+import os
+from oxen import LocalRepo
+
+# Initialize the Oxen Repository in a CatsAndDogs directory
+directory = "CatsAndDogs"
+repo = LocalRepo(directory)
+repo.init()
+repo.add("images")
+repo.commit("Adding all the images")
+# Replace <namespace> and <repo_name> with your values
+repo.set_remote("origin", "https://hub.oxen.ai/<namespace>/<repo_name>")
+repo.push()
+```
+
+<a id="oxen.local_repo.LocalRepo.__init__"></a>
+
+## \_\_init\_\_
+
+```python
+def __init__(path: str = "")
+```
+
+Create a new Repo object. Use .init() to initialize a new oxen repository,
+or pass the path to an existing one.
+
+**Arguments**:
+
+- `path` - `str`
+  Path to the main working directory of your oxen repo.
+
+<a id="oxen.local_repo.LocalRepo.init"></a>
+
+## init
+
+```python
+def init()
+```
+
+Initializes a new oxen repository at the path specified in the constructor.
+Will create a .oxen folder to store all the versions and metadata.
+
+<a id="oxen.local_repo.LocalRepo.clone"></a>
+
+## clone
+
+```python
+def clone(url: str, branch: str = "main", shallow=False, all=False)
+```
+
+Clone repository from a remote url.
+
+**Arguments**:
+
+- `url` - `str`
+  The url of the remote repository. ex) https://hub.oxen.ai/ox/chatbot
+- `branch` - `str`
+  The name of the branch to clone. Default: main
+- `shallow` - `bool`
+  Whether to do a shallow clone or not. Default: False
+- `all` - `bool`
+  Whether to clone the full commit history or not. Default: False
+
+<a id="oxen.local_repo.LocalRepo.branches"></a>
+
+## branches
+
+```python
+def branches()
+```
+
+List all branches for a repo
+
+<a id="oxen.local_repo.LocalRepo.checkout"></a>
+
+## checkout
+
+```python
+def checkout(revision: str, create=False)
+```
+
+Checkout a branch or commit id.
+
+**Arguments**:
+
+- `revision` - `str`
+  The name of the branch or commit id to checkout.
+- `create` - `bool`
+  Whether to create a new branch if it doesn't exist. Default: False
+
+<a id="oxen.local_repo.LocalRepo.add"></a>
+
+## add
+
+```python
+def add(path: str)
+```
+
+Stage a file or directory to be committed.
+
+<a id="oxen.local_repo.LocalRepo.status"></a>
+
+## status
+
+```python
+def status()
+```
+
+Check the status of the repo. Returns a StagedData object.
+
+<a id="oxen.local_repo.LocalRepo.commit"></a>
+
+## commit
+
+```python
+def commit(message: str)
+```
+
+Commit the staged data in a repo with a message.
+
+**Arguments**:
+
+- `message` - `str`
+  The commit message.
+
+<a id="oxen.local_repo.LocalRepo.log"></a>
+
+## log
+
+```python
+def log()
+```
+
+Get the commit history for a repo.
+
+<a id="oxen.local_repo.LocalRepo.set_remote"></a>
+
+## set\_remote
+
+```python
+def set_remote(name: str, url: str)
+```
+
+Map a name to a remote url.
+
+**Arguments**:
+
+- `name` - `str`
+  The name of the remote. Ex) origin
+- `url` - `str`
+  The url you want to map the name to. Ex) https://hub.oxen.ai/ox/chatbot
+
+<a id="oxen.local_repo.LocalRepo.push"></a>
+
+## push
+
+```python
+def push(remote_name: str = "origin", branch: str = "main")
+```
+
+Push data to a remote repo from a local repo.
+
+**Arguments**:
+
+- `remote_name` - `str`
+  The name of the remote to push to.
+- `branch` - `str`
+  The name of the branch to push to.
+
+<a id="oxen.local_repo.LocalRepo.pull"></a>
+
+## pull
+
+```python
+def pull(remote_name: str = "origin", branch: str = "main")
+```
+
+Pull data from a remote repo to a local repo.
+
+**Arguments**:
+
+- `remote_name` - `str`
+  The name of the remote to pull from.
+- `branch` - `str`
+  The name of the branch to pull from.
+
+<a id="oxen.local_repo.LocalRepo.path"></a>
+
+## path
+
+```python
+@property
+def path()
+```
+
+Returns the path to the repo.
+
+<a id="oxen.local_repo.LocalRepo.current_branch"></a>
+
+## current\_branch
+
+```python
+@property
+def current_branch()
+```
+
+Returns the current branch.
+

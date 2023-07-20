@@ -3,11 +3,13 @@ title: 'Remote Workspace'
 description: 'The Oxen Remote Workspace allows you to interact with your data without having to download the entire dataset.'
 ---
 
-The default oxen clone will clone the latest commit data on the default branch. This can be expensive depending on the size of your data repository.
+Oxen makes it feel like your dataset is local, even when it is not downloaded to the machine you are on.
 
-## Shallow Clone / RemoteRepo
+The default `oxen clone` will clone the latest commit data on the default branch, but this is not desirable for all use cases. It can be expensive depending on the size of your data repository, and you may just be doing exploratory data analysis or only need a subset of the data.
 
-There is a `--shallow` flag on `oxen clone` to make sure you don't pull all the data on clone. The default is cloning `main` and all the associated data
+## Interacting with the Remote
+
+There is a `--shallow` flag on `oxen clone` which only pulls the necessary metadata, but does not pull any actual files. 
 
 <CodeGroup>
 
