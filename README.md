@@ -8,7 +8,7 @@ mintlify dev --port 3333
 
 ## Python Doc Generation
 
-To generate/update the python documentation for the `/api-reference/python` there is a `./generate-python-docs.sh` script.
+To generate/update the python documentation for the `/python-api` directory there is a `./generate-python-docs.sh` script.
 
 Depends on [pydoc-markdown](https://pypi.org/project/pydoc-markdown/) project and `gsed`.
 
