@@ -32,6 +32,10 @@
     {
       "name": "Python API",
       "url": "python-api"
+    },
+    {
+      "name": "HTTP API",
+      "url": "http-api"
     }
   ],
   "anchors": [
@@ -58,6 +62,10 @@
     {
       "group": "Python API",
       "pages": ["python-api/local_repo", "python-api/remote_repo"]
+    },
+    {
+      "group": "HTTP API",
+      "pages": ["http-api/files"]
     }
   ],
   "footerSocials": {
