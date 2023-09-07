@@ -1,0 +1,251 @@
+---
+title: 'Schemas'
+description: 'Managing and validating data schemas is an important part of making robust data pipelines.'
+---
+
+## Detect Schema
+
+When you add a dataframe to Oxen, it will automatically detect and version the schema of any tabular data. This is done by using [Polars](https://www.pola.rs/) under the hood to infer the column names and datatypes.
+
+To list all the schemas that have been detected and committed, you can use the `oxen schemas` subcommand.
+
+```bash
+oxen schemas
+```
+
+```bash
++-----------------------+------+----------------------------------+------------------------+
+| path                  | name | hash                             | fields                 |
++==========================================================================================+
+| annotations/train.csv | ?    | 53732ea1c2a9ba5807bd59978ebb69f5 | [file, ..., is_fluffy] |
+|-----------------------+------+----------------------------------+------------------------|
+| annotations/test.csv  | ?    | 36d0edc8779f42e30b0d630aa83bc83c | [file, ..., height]    |
++-----------------------+------+----------------------------------+------------------------+
+```
+
+The schema detection is done on a per file basis. This means that if you have a directory of csv or parquet files, each file will have its own schema.
+
+## View Schema
+
+To view a specific schema, you can pass in a schema hash, name, or path to the `oxen schemas` command.
+
+```bash
+oxen schemas annotations/train.csv
+```
+
+```bash
++--------+-------+----------------+----------+
+| name   | dtype | dtype_override | metadata |
++============================================+
+| file   | str   |                |          |
+|--------+-------+----------------+----------|
+| label  | str   |                |          |
+|--------+-------+----------------+----------|
+| min_x  | f64   |                |          |
+|--------+-------+----------------+----------|
+| min_y  | f64   |                |          |
+|--------+-------+----------------+----------|
+| width  | i64   |                |          |
+|--------+-------+----------------+----------|
+| height | i64   |                |          |
++--------+-------+----------------+----------+
+```
+
+## Add Schema
+
+Schemas for dataframes are detected when you add `csv`, `tsv`, `jsonl`, `parquet`, and `arrow` files to Oxen. Before a schema is committed, you can see the detected schemas in the `oxen status` command.
+
+```bash
+oxen add annotations/train.csv
+oxen status
+```
+
+```bash
+On branch main -> 503591398980c485
+
+Directories to be committed
+  added: annotations with 1 file
+
+Files to be committed:
+  (use "oxen restore --staged <file> ..." to unstage)
+  modified: annotations/train.csv
+
+Schemas to be committed
+  (use "oxen schemas show --staged <HASH>" to view staged schema)
+  detected schema: annotations/train.csv 23d86a4c1481b817b57ee8ccd7d9016b
+```
+
+To view more detailed information about the detected schema, use the `--staged` flag on the `oxen schemas` command.
+
+```bash
+oxen schemas --staged annotations/train.csv
+```
+
+```bash
+annotations/train.csv 23d86a4c1481b817b57ee8ccd7d9016b
++-----------+-------+----------------+----------+
+| name      | dtype | dtype_override | metadata |
++===============================================+
+| file      | str   |                |          |
+|-----------+-------+----------------+----------|
+| label     | str   |                |          |
+|-----------+-------+----------------+----------|
+| min_x     | f64   |                |          |
+|-----------+-------+----------------+----------|
+| min_y     | f64   |                |          |
+|-----------+-------+----------------+----------|
+| width     | f64   |                |          |
+|-----------+-------+----------------+----------|
+| height    | f64   |                |          |
+|-----------+-------+----------------+----------|
+| is_fluffy | str   |                |          |
+|-----------+-------+----------------+----------|
+| breed     | str   |                |          |
++-----------+-------+----------------+----------+
+```
+
+To view how Polars interprets the schema before adding the file, you can use the `oxen df` command with the `--schema` flag.
+
+```bash
+oxen df annotations/train.csv --schema
+```
+
+```bash
++-----------+-------+
+| column    | dtype |
++===================+
+| file      | str   |
+|-----------+-------|
+| label     | str   |
+|-----------+-------|
+| min_x     | f64   |
+|-----------+-------|
+| min_y     | f64   |
+|-----------+-------|
+| width     | f64   |
+|-----------+-------|
+| height    | f64   |
+|-----------+-------|
+| is_fluffy | str   |
+|-----------+-------|
+| breed     | str   |
++-----------+-------+
+```
+
+## Additional Metadata
+
+You can also add additional metadata to the schema. This is useful if you want to provide additional information about the data for a UI, data fetching, or any other reason.
+
+Notice the empty columns `dtype_override` and `metadata` in the schema above. You can use them for the following purposes:
+
+* `dtype_override` => Override the detected datatype with a custom datatype. This must be a valid datatype.
+* `metadata` => Add custom metadata to the column. This can be any string, but it is recommended to use JSON.
+
+## Override Column
+
+Say you wanted to add information about the root directory of the images for the `file` field, you can do the following:
+
+```bash
+oxen schemas metadata annotations/train.csv -c file -t path '{"root": "images/"}'
+```
+
+```
+"annotations/train.csv"
++-----------+-------+----------------+---------------------+
+| name      | dtype | dtype_override | metadata            |
++==========================================================+
+| file      | str   | path           | {"root": "images/"} |
+|-----------+-------+----------------+---------------------|
+| label     | str   |                |                     |
+|-----------+-------+----------------+---------------------|
+| min_x     | f64   |                |                     |
+|-----------+-------+----------------+---------------------|
+| min_y     | f64   |                |                     |
+|-----------+-------+----------------+---------------------|
+| width     | f64   |                |                     |
+|-----------+-------+----------------+---------------------|
+| height    | f64   |                |                     |
+|-----------+-------+----------------+---------------------|
+| is_fluffy | str   | bool           |                     |
+|-----------+-------+----------------+---------------------|
+| breed     | str   |                |                     |
++-----------+-------+----------------+---------------------+
+```
+
+The flag `-c` stands for column and the flag `-t` stands for type. Then you can pass in an arbitrary string for the metadata.
+
+Notice, it does not change the detected type, but updates the `dtype_override` for the datatypes on the schema. This is because the overrides get applied on read, not on write.
+
+The [OxenHub UI](https://oxen.ai) uses schema metadata to render more complex datatypes in the UI. For example viewing inline images directly in a dataframe.
+
+TODO: Add image of OxenHub UI.
+
+## Valid Column Types
+
+The following are the valid column types that can be used in a schema.
+
+* `bool` => Boolean value, true or false
+* `uint8` => Unsigned 8-bit integer
+* `u16` => Unsigned 16-bit integer
+* `u32` => Unsigned 32-bit integer
+* `u64` => Unsigned 64-bit integer
+* `i8` => Signed 8-bit integer
+* `i16` => Signed 16-bit integer
+* `int` => Signed 32-bit integer
+* `i32` => Signed 32-bit integer
+* `i64` => Signed 64-bit integer
+* `float` => 32-bit floating point number
+* `f32` => 32-bit floating point number
+* `double` => 64-bit floating point number
+* `f64` => 64-bit floating point number
+* `str` => UTF-8 String
+* `path` => A file path referencing some other in the data repository
+* `null` => No value
+
+## Commit
+
+Schemas changes will not be saved until you commit them. To view the schemas staged for commit, you can use the `--staged` flag.
+
+```bash
+oxen schemas --staged
+```
+
+```bash
++-----------------------+------+----------------------------------+--------------------+
+| path                  | name | hash                             | fields             |
++======================================================================================+
+| annotations/train.csv | ?    | 9d1fac486f95120403d7f18232fa5520 | [file, ..., breed] |
++-----------------------+------+----------------------------------+--------------------+
+```
+
+You can then commit the schema to the dataframe with the `commit` subcommand.
+
+```bash
+oxen commit -m "Overriding schema for annotations/train.csv"
+```
+
+These changes are persistent across commits and will be carried forward.
+
+## Schema On Read
+
+When schemas are staged or committed, they are applied on read. This means the underlying data is never actually changed, but the columns are casted to the specified datatypes.
+
+For example, if you have a column of integers, but you want to treat them as strings, you can do the following:
+
+```bash
+# TODO: We only expose the newly added metadata and override via API right now.
+curl "http://hub.oxen.ai/ox/CatDogBBox/df/main/annotations/train.csv" | jq
+```
+
+## Name Schema
+
+```bash
+oxen schemas name annotations/train.csv bounding_box
+```
+
+## Remove Schema
+
+```bash
+oxen schemas rm annotations/train.csv --staged
+```
+
