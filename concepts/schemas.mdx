@@ -53,7 +53,7 @@ oxen schemas annotations/train.csv
 
 ## Add Schema
 
-Schemas for dataframes are detected when you add `csv`, `tsv`, `jsonl`, `parquet`, and `arrow` files to Oxen. Before a schema is committed, you can see the detected schemas in the `oxen status` command.
+Schemas are automatically detected when you add `csv`, `tsv`, `jsonl`, `parquet`, and `arrow` files to Oxen. Before a schema is committed, you can see the detected schemas in the `oxen status` command.
 
 ```bash
 oxen add annotations/train.csv
@@ -134,19 +134,55 @@ oxen df annotations/train.csv --schema
 
 ## Additional Metadata
 
-You can also add additional metadata to the schema. This is useful if you want to provide additional information about the data for a UI, data fetching, or any other reason.
+You can also add additional information to the schema. This is useful if you want to provide context about the data for a UI, data fetching, or any other reason.
 
 Notice the empty columns `dtype_override` and `metadata` in the schema above. You can use them for the following purposes:
 
 * `dtype_override` => Override the detected datatype with a custom datatype. This must be a valid datatype.
 * `metadata` => Add custom metadata to the column. This can be any string, but it is recommended to use JSON.
 
-## Override Column
+## Schema Metadata
 
-Say you wanted to add information about the root directory of the images for the `file` field, you can do the following:
+Each schema has an `Optional<String>` of metadata that can be added to the root of the schema. This is useful for adding information about the schema itself. For example, you can add a description of the schema or a json blob that gives context to a data renderer.
 
 ```bash
-oxen schemas metadata annotations/train.csv -c file -t path '{"root": "images/"}'
+oxen schemas add annotations/train.csv -m '{"task": "bounding_box", "description": "Extracting bounding boxes from images"}'
+```
+
+You will see the additional metadata listed above the schema if it is added.
+
+```
+"annotations/train.csv"
+
+{"task": "bounding_box", "description": "Extracting bounding boxes from images"}
+
++-----------+-------+----------------+---------------------+
+| name      | dtype | dtype_override | metadata            |
++==========================================================+
+| file      | str   |                |                     |
+|-----------+-------+----------------+---------------------|
+| label     | str   |                |                     |
+|-----------+-------+----------------+---------------------|
+| min_x     | f64   |                |                     |
+|-----------+-------+----------------+---------------------|
+| min_y     | f64   |                |                     |
+|-----------+-------+----------------+---------------------|
+| width     | f64   |                |                     |
+|-----------+-------+----------------+---------------------|
+| height    | f64   |                |                     |
+|-----------+-------+----------------+---------------------|
+| is_fluffy | str   | bool           |                     |
+|-----------+-------+----------------+---------------------|
+| breed     | str   |                |                     |
++-----------+-------+----------------+---------------------+
+```
+
+## Column Metadata
+
+You can also add metadata to specific columns. Say you wanted to add information to the `file` column about the root directory of the images, you could do the following:
+
+```bash
+oxen schemas add annotations/train.csv -c 'file' -t 'path' -m '{"root": "images/"}'
 ```
 
 ```
@@ -172,9 +208,9 @@ oxen schemas metadata annotations/train.csv -c file -t path '{"root": "images/"}
 +-----------+-------+----------------+---------------------+
 ```
 
-The flag `-c` stands for column and the flag `-t` stands for type. Then you can pass in an arbitrary string for the metadata.
+The `-c` flag stands for `column`, the `-t` flag stands for `type`, and the `-m` flag stands for `metadata`. You can pass in an arbitrary string for metadata, but it is nice to pass in some structured data such as json.
 
-Notice, it does not change the detected type, but updates the `dtype_override` for the datatypes on the schema. This is because the overrides get applied on read, not on write.
+Notice, it does not change the original detected type, but updates the `dtype_override` for the datatypes on the schema. This is because the overrides get applied on read, not on write.
 
 The [OxenHub UI](https://oxen.ai) uses schema metadata to render more complex datatypes in the UI. For example viewing inline images directly in a dataframe.
 
@@ -239,11 +275,15 @@ curl "http://hub.oxen.ai/ox/CatDogBBox/df/main/annotations/train.csv" | jq
 
 ## Name Schema
 
+It is nice to have human readable names to refer to schemas by. Use the `oxen schemas name` command to name a schema.
+
 ```bash
 oxen schemas name annotations/train.csv bounding_box
 ```
 
 ## Remove Schema
+
+If you have accidentally staged a schema, you can remove it with the `oxen schemas rm` command.
 
 ```bash
 oxen schemas rm annotations/train.csv --staged
