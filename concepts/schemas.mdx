@@ -3,9 +3,11 @@ title: 'Schemas'
 description: 'Managing and validating data schemas is an important part of making robust data pipelines.'
 ---
 
+⚠️ This is a work in progress. Do not rely on being stable yet. ⚠️
+
 ## Detect Schema
 
-When you add a dataframe to Oxen, it will automatically detect and version the schema of any tabular data. This is done by using [Polars](https://www.pola.rs/) under the hood to infer the column names and datatypes.
+When you add a dataframe to Oxen, it automatically detects and versions the schema of any tabular data. This is done by using [Polars](https://www.pola.rs/) under the hood to infer the column names and datatypes.
 
 To list all the schemas that have been detected and committed, you can use the `oxen schemas` subcommand.
 
