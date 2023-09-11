@@ -34,21 +34,21 @@ oxen schemas annotations/train.csv
 ```
 
 ```bash
-+--------+-------+----------------+----------+
-| name   | dtype | dtype_override | metadata |
-+============================================+
-| file   | str   |                |          |
-|--------+-------+----------------+----------|
-| label  | str   |                |          |
-|--------+-------+----------------+----------|
-| min_x  | f64   |                |          |
-|--------+-------+----------------+----------|
-| min_y  | f64   |                |          |
-|--------+-------+----------------+----------|
-| width  | i64   |                |          |
-|--------+-------+----------------+----------|
-| height | i64   |                |          |
-+--------+-------+----------------+----------+
++--------+-------+----------+
+| name   | dtype | metadata |
++===========================+
+| file   | str   |          |
+|--------+-------+----------|
+| label  | str   |          |
+|--------+-------+----------|
+| min_x  | f64   |          |
+|--------+-------+----------|
+| min_y  | f64   |          |
+|--------+-------+----------|
+| width  | i64   |          |
+|--------+-------+----------|
+| height | i64   |          |
++--------+-------+----------+
 ```
 
 ## Add Schema
@@ -83,25 +83,25 @@ oxen schemas --staged annotations/train.csv
 
 ```bash
 annotations/train.csv 23d86a4c1481b817b57ee8ccd7d9016b
-+-----------+-------+----------------+----------+
-| name      | dtype | dtype_override | metadata |
-+===============================================+
-| file      | str   |                |          |
-|-----------+-------+----------------+----------|
-| label     | str   |                |          |
-|-----------+-------+----------------+----------|
-| min_x     | f64   |                |          |
-|-----------+-------+----------------+----------|
-| min_y     | f64   |                |          |
-|-----------+-------+----------------+----------|
-| width     | f64   |                |          |
-|-----------+-------+----------------+----------|
-| height    | f64   |                |          |
-|-----------+-------+----------------+----------|
-| is_fluffy | str   |                |          |
-|-----------+-------+----------------+----------|
-| breed     | str   |                |          |
-+-----------+-------+----------------+----------+
++-----------+-------+----------+
+| name      | dtype | metadata |
++==============================+
+| file      | str   |          |
+|-----------+-------+----------|
+| label     | str   |          |
+|-----------+-------+----------|
+| min_x     | f64   |          |
+|-----------+-------+----------|
+| min_y     | f64   |          |
+|-----------+-------+----------|
+| width     | f64   |          |
+|-----------+-------+----------|
+| height    | f64   |          |
+|-----------+-------+----------|
+| is_fluffy | str   |          |
+|-----------+-------+----------|
+| breed     | str   |          |
++-----------+-------+----------+
 ```
 
 To view how Polars interprets the schema before adding the file, you can use the `oxen df` command with the `--schema` flag.
@@ -136,14 +136,17 @@ oxen df annotations/train.csv --schema
 
 You can also add additional information to the schema. This is useful if you want to provide context about the data for a UI, data fetching, or any other reason.
 
-Notice the empty columns `dtype_override` and `metadata` in the schema above. You can use them for the following purposes:
+Notice the empty column `metadata` in the schema above. You can add aribitrary JSON blobs to the schema itself, as well as each column.
 
-* `dtype_override` => Override the detected datatype with a custom datatype. This must be a valid datatype.
-* `metadata` => Add custom metadata to the column. This can be any string, but it is recommended to use JSON.
+Metadata may provide useful information for your end application:
+
+* Transforms you want to perform.
+* How you want to render the data.
+* Information about the data itself, such as a description of the schema or colun.
 
 ## Schema Metadata
 
-Each schema has an `Optional<String>` of metadata that can be added to the root of the schema. This is useful for adding information about the schema itself. For example, you can add a description of the schema or a json blob that gives context to a data renderer.
+At the root of each schema is an `Optional<json::Value>` metadata value. This is useful for adding information about the schema itself. For example, you can add a description of the schema or a json blob that gives context to a data renderer.
 
 ```bash
 oxen schemas add annotations/train.csv -m '{"task": "bounding_box", "description": "Extracting bounding boxes from images"}'
@@ -156,25 +159,25 @@ You will see the additional metadata listed above the schema if it is added.
 
 {"task": "bounding_box", "description": "Extracting bounding boxes from images"}
 
-+-----------+-------+----------------+---------------------+
-| name      | dtype | dtype_override | metadata            |
-+==========================================================+
-| file      | str   |                |                     |
-|-----------+-------+----------------+---------------------|
-| label     | str   |                |                     |
-|-----------+-------+----------------+---------------------|
-| min_x     | f64   |                |                     |
-|-----------+-------+----------------+---------------------|
-| min_y     | f64   |                |                     |
-|-----------+-------+----------------+---------------------|
-| width     | f64   |                |                     |
-|-----------+-------+----------------+---------------------|
-| height    | f64   |                |                     |
-|-----------+-------+----------------+---------------------|
-| is_fluffy | str   | bool           |                     |
-|-----------+-------+----------------+---------------------|
-| breed     | str   |                |                     |
-+-----------+-------+----------------+---------------------+
++-----------+-------+----------+
+| name      | dtype | metadata |
++==============================+
+| file      | str   |          |
+|-----------+-------+----------|
+| label     | str   |          |
+|-----------+-------+----------|
+| min_x     | f64   |          |
+|-----------+-------+----------|
+| min_y     | f64   |          |
+|-----------+-------+----------|
+| width     | f64   |          |
+|-----------+-------+----------|
+| height    | f64   |          |
+|-----------+-------+----------|
+| is_fluffy | str   |          |
+|-----------+-------+----------|
+| breed     | str   |          |
++-----------+-------+----------+
 ```
 
 ## Column Metadata
@@ -182,65 +185,43 @@ You will see the additional metadata listed above the schema if it is added.
 You can also add metadata to specific columns. Say you wanted to add information to the `file` column about the root directory of the images, you could do the following:
 
 ```bash
-oxen schemas add annotations/train.csv -c 'file' -t 'path' -m '{"root": "images/"}'
+oxen schemas add annotations/train.csv -c 'file' -m '{"root": "images/"}'
 ```
 
 ```
 "annotations/train.csv"
-+-----------+-------+----------------+---------------------+
-| name      | dtype | dtype_override | metadata            |
-+==========================================================+
-| file      | str   | path           | {"root": "images/"} |
-|-----------+-------+----------------+---------------------|
-| label     | str   |                |                     |
-|-----------+-------+----------------+---------------------|
-| min_x     | f64   |                |                     |
-|-----------+-------+----------------+---------------------|
-| min_y     | f64   |                |                     |
-|-----------+-------+----------------+---------------------|
-| width     | f64   |                |                     |
-|-----------+-------+----------------+---------------------|
-| height    | f64   |                |                     |
-|-----------+-------+----------------+---------------------|
-| is_fluffy | str   | bool           |                     |
-|-----------+-------+----------------+---------------------|
-| breed     | str   |                |                     |
-+-----------+-------+----------------+---------------------+
++-----------+-------+---------------------+
+| name      | dtype | metadata            |
++=========================================+
+| file      | str   | {"root": "images/"} |
+|-----------+-------+---------------------|
+| label     | str   |                     |
+|-----------+-------+---------------------|
+| min_x     | f64   |                     |
+|-----------+-------+---------------------|
+| min_y     | f64   |                     |
+|-----------+-------+---------------------|
+| width     | f64   |                     |
+|-----------+-------+---------------------|
+| height    | f64   |                     |
+|-----------+-------+---------------------|
+| is_fluffy | str   |                     |
+|-----------+-------+---------------------|
+| breed     | str   |                     |
++-----------+-------+---------------------+
 ```
 
-The `-c` flag stands for `column`, the `-t` flag stands for `type`, and the `-m` flag stands for `metadata`. You can pass in an arbitrary string for metadata, but it is nice to pass in some structured data such as json.
-
-Notice, it does not change the original detected type, but updates the `dtype_override` for the datatypes on the schema. This is because the overrides get applied on read, not on write.
+The `-c` flag stands for `column` and the `-m` flag stands for `metadata`. The metadata is a JSON blob that can be used to store any information you want.
 
 The [OxenHub UI](https://oxen.ai) uses schema metadata to render more complex datatypes in the UI. For example viewing inline images directly in a dataframe.
 
 TODO: Add image of OxenHub UI.
 
-## Valid Column Types
+## Commit The Schema
 
-The following are the valid column types that can be used in a schema.
+Schemas changes will not be saved until you commit them.
 
-* `bool` => Boolean value, true or false
-* `uint8` => Unsigned 8-bit integer
-* `u16` => Unsigned 16-bit integer
-* `u32` => Unsigned 32-bit integer
-* `u64` => Unsigned 64-bit integer
-* `i8` => Signed 8-bit integer
-* `i16` => Signed 16-bit integer
-* `int` => Signed 32-bit integer
-* `i32` => Signed 32-bit integer
-* `i64` => Signed 64-bit integer
-* `float` => 32-bit floating point number
-* `f32` => 32-bit floating point number
-* `double` => 64-bit floating point number
-* `f64` => 64-bit floating point number
-* `str` => UTF-8 String
-* `path` => A file path referencing some other in the data repository
-* `null` => No value
-
-## Commit
-
-Schemas changes will not be saved until you commit them. To view the schemas staged for commit, you can use the `--staged` flag.
+To view the schemas staged for commit, you can use the `--staged` flag.
 
 ```bash
 oxen schemas --staged
@@ -261,17 +242,6 @@ oxen commit -m "Overriding schema for annotations/train.csv"
 ```
 
 These changes are persistent across commits and will be carried forward.
-
-## Schema On Read
-
-When schemas are staged or committed, they are applied on read. This means the underlying data is never actually changed, but the columns are casted to the specified datatypes.
-
-For example, if you have a column of integers, but you want to treat them as strings, you can do the following:
-
-```bash
-# TODO: We only expose the newly added metadata and override via API right now.
-curl "http://hub.oxen.ai/ox/CatDogBBox/df/main/annotations/train.csv" | jq
-```
 
 ## Name Schema
 
