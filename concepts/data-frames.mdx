@@ -90,7 +90,9 @@ Writing "annotations/train.parquet"
 
 ## View Schema
 
-Sometimes a Data Frame will have many columns and the default command collapses them so they are hard to see. You can use the `--schema` flag to just display the schema of this data frame. Note this is an exclusive flag.
+Oxen automatically detects and versions the schema of your data frame. See the [schema docs](/concepts/schemas) for more information on the power of Oxen schemas.
+
+To view a data frame's schema in full, you can use the `--schema` flag to display the full schema of this data frame.
 
 ```bash
 oxen df annotations/train.csv --schema
