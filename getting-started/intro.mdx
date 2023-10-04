@@ -13,7 +13,7 @@ description: 'Oxen is a lighting fast unstructured data version control system f
 
 Oxen was build by a team of machine learning engineers, who have spent countless hours in their careers managing datasets. We have used many different tools, but none of them were as easy to use and as ergonomic as we would like. 
 
-If you have ever tried [git lfs](https://git-lfs.com/) or other solutions as a hack to version large datasets, we feel your pain. If you have ever uploaded a dataset to a cloud storage bucket with the name:
+If you have ever tried [git lfs](https://git-lfs.com/) to version large datasets and became frustrated, we feel your pain. If you have ever uploaded a dataset to a cloud storage bucket with the name:
 
 `images_july_2022_final_2_no_really_final.tar.gz`
 
@@ -25,13 +25,34 @@ If you are building an AI application, data is the lifeblood. Whether you are bu
 
 Versioning machine learning data is like brushing your teeth. You know you should do it, but it’s been a pain and you don’t do it as often as you should...Until now.
 
-## 🔥 Oxen Is Fast
+## ✅ Features
 
 One of the reasons versioning data has been a pain in the past is the pure speed. Don't let the 🐂 fool you. Yes Oxen are strong, reliable creatures, but when it comes to big data they are also fast.
 
-Many versioning tools out there are built for code or smaller datasets, not for large unstructured data. Oxen is built from the ground up, from first principles, to be fast, scalable, and easy to use for modern machine learning datasets that may include images, video, audio and text.
+When we say fast, [we mean fast](/concepts/performance). Oxen can commit hundreds of thousands of images in a matter of seconds 🚀
 
-When we say fast, [we mean fast](/concepts/performance). Oxen can commit hundreds of thousands of images in a matter of seconds.
+Speed is only the beginning. Oxen is built to be easy to use, and easy to learn. If you know how to use git, you know how to use Oxen.
+
+* 🔥 Fast (10-100x faster than existing tools)
+* 🧠 Easy to learn (same commands as git)
+* 🗄️ Index lots of files (millions of images, no problem)
+* 🎥 Handles large files (images, videos, audio, text, parquet, arrow, json, machine learning models, etc)
+* 📊 Native data frame library to compare data ([oxen df](https://github.com/Oxen-AI/oxen-release/blob/main/DataFrames.md) command for data exploration)
+* 📈 Tracks changes over time (never worry about losing the state of your data)
+* 🤝 Collaborate with your team (sync to an oxen-server)
+* 🌎 [Remote Workspaces](https://docs.oxen.ai/concepts/remote-workspace) to interact with the data without downloading it
+* 👀 Better data visualization on [OxenHub](https://oxen.ai)
+
+
+## 📚 Learn the Basics
+
+No need to learn a new paradigm.
+
+The Oxen Command Line Interface (CLI) mirrors [git](https://git-scm.com/) in many ways, so if you are comfortable versioning code with git, it will be straightforward to version your datasets with Oxen.
+
+<p align="center">
+    <img src="https://github.com/Oxen-AI/oxen-release/raw/main/images/cli-celeba.gif?raw=true" alt="oxen cli demo" />
+</p>
 
 ## 🧑‍💻 Getting Started
 
@@ -52,19 +73,15 @@ pip install oxenai
 
 ### Create Repository
 
-Initialize and push your first Oxen repository.
+Initialize your first Oxen repository, and make your first commit
 
 <CodeGroup>
 
 ```bash CLI
 oxen init
-echo "name,age\nbob,12\njane,13" > people.csv
+printf '%s\n' 'name,age' 'bob,12' 'jane,13' > people.csv
 oxen add people.csv
 oxen commit -m "Adding my data"
-# Go create repo at https://oxen.ai
-# ...
-oxen config --set-remote origin https://hub.oxen.ai/<namespace>/<repo_name>
-oxen push origin main
 ```
 
 ```python Python
@@ -75,14 +92,165 @@ from oxen import LocalRepo
 repo = LocalRepo("/path/to/data", mkdir=True)
 # Initialize the repository
 repo.init()
-# Write a data file
+# Write data to a file
 data_path = os.path.join(repo.path, "people.csv")
 with open(data_path, "w") as f:
     f.write("name,age\nbob,12\njane,13")
-# Stage a subdirectory in the repository for commit
+# Stage the data for commit
 repo.add(data_path)
 # Commit the changes with a message
 repo.commit("Adding my data")
+```
+
+</CodeGroup>
+
+### Version Your Data
+
+Once your data has been committed, you can always return to that version.
+
+Confidently overwrite the file, move the file, delete the file, it doesn't matter. Oxen will always have a copy of the data at the time of the previous commit.
+
+It is good practice to create a new branch for changes you make to your data. This will allow you to easily compare the parallel versions of your data over time.
+
+<CodeGroup>
+
+```bash CLI
+oxen checkout -b modify-data
+printf '%s\n' 'name,age' 'bob,12' 'jane,13' 'joe,14' > people.csv
+```
+
+```python Python
+import os
+from oxen import LocalRepo
+
+repo = LocalRepo("/path/to/data")
+# Create a new branch
+repo.checkout("modify-data", create=True)
+# Overwrite data in existing file
+data_path = os.path.join(repo.path, "people.csv")
+with open(data_path, "w") as f:
+    f.write("name,age\nbob,12\njane,13\njoe,14")
+```
+
+</CodeGroup>
+
+### Compare Changes
+
+View the change you made with the `oxen diff` command. This will show you the changes you made to your data since the last commit.
+
+<CodeGroup>
+
+```bash CLI
+oxen diff people.csv
+```
+
+```python Python
+# TODO: implement python wrapper
+```
+
+</CodeGroup>
+
+### Revert Changes
+
+If you are not happy with the changes you made to your data, you can revert them to the previous commit with the `oxen restore` command.
+
+<CodeGroup>
+
+```bash CLI
+oxen restore people.csv
+```
+
+```python Python
+# TODO: implement python wrapper
+```
+
+</CodeGroup>
+
+### Commit Changes
+
+Once you are happy with the changes you have made to your data, you can commit them to the repository with a new message.
+
+<CodeGroup>
+
+```bash CLI
+oxen add people.csv
+oxen commit -m "Adding Joe to the dataset"
+```
+
+```python Python
+from oxen import LocalRepo
+
+repo = LocalRepo("/path/to/data")
+# Stage the data for commit
+data_path = os.path.join(repo.path, "people.csv")
+repo.add(data_path)
+# Commit the changes with a message
+repo.commit("Adding Joe to the dataset")
+```
+
+</CodeGroup>
+
+### View History
+
+To see the commit history of your repository, you can use the `oxen log` command.
+
+<CodeGroup>
+
+```bash CLI
+oxen log
+```
+
+```python Python
+from oxen import LocalRepo
+
+# Instantiate a LocalRepo object
+repo = LocalRepo("/path/to/data")
+# Get the commit history
+commits = repo.log()
+```
+
+</CodeGroup>
+
+### Return To Main Branch
+
+Once you are done making changes to your data, you can return to the main branch with the `oxen checkout` command.
+
+Never fear, the file now has now been reverted to the inital commit again, but your changes will be saved in the branch you created.
+
+<CodeGroup>
+
+```bash CLI
+oxen checkout main
+```
+
+```python Python
+from oxen import LocalRepo
+
+# Instantiate a LocalRepo object
+repo = LocalRepo("/path/to/data")
+# Checkout the main branch
+repo.checkout("main")
+```
+
+</CodeGroup>
+
+### Push Data
+
+Once your data has been committed locally, you can sync it to the OxenHub.
+
+OxenHub is a free service that allows you to collaborate on your data in the cloud. You can create a free account at [https://oxen.ai](https://oxen.ai).
+
+<CodeGroup>
+
+```bash CLI
+# Go create repo at https://oxen.ai
+# ...
+oxen config --set-remote origin https://hub.oxen.ai/<namespace>/<repo_name>
+oxen push origin main
+# to push your other branch simply change the branch name from `main` to `modify-data`
+```
+
+```python Python
 # Go create repo at https://oxen.ai
 # ...
 # Set where to push the data to (replace <namespace> and <repo_name> with your remote)
@@ -107,7 +275,7 @@ oxen clone https://hub.oxen.ai/ox/CatDogBBox
 from oxen import LocalRepo
 
 # Clone the repository
-repo = LocalRepo("/path/to/repo")
+repo = LocalRepo("/path/to/dst")
 repo = LocalRepo.clone("https://hub.oxen.ai/ox/CatDogBBox")
 ```
 
@@ -151,21 +319,9 @@ repo.download("annotations/test.csv")
 
 </CodeGroup>
 
-## 📚 Learn the Basics
-
-No need to learn a new paradigm.
-
-The Oxen Command Line Interface (CLI) mirrors [git](https://git-scm.com/) in many ways, so if you are comfortable versioning code with git, it will be straightforward to version your datasets with Oxen.
-
-Commit hundreds of thousands of images to an Oxen repository in a matter of seconds 🚀
-
-<p align="center">
-    <img src="https://github.com/Oxen-AI/oxen-release/raw/main/images/cli-celeba.gif?raw=true" alt="oxen cli demo" />
-</p>
-
 ## 🥾 Choose Your Adventure
 
-There are many ways to use Oxen. You can use the command line interface, the python library, or the OxenHub web interface.
+Now that you have the basics down, your adventure has just begun. Learn the many ways to use Oxen. You can use the command line interface, the python library, or the OxenHub web interface.
 
 <CardGroup cols={2}>
   <Card
