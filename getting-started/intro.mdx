@@ -9,7 +9,17 @@ description: 'Oxen is a lighting fast unstructured data version control system f
   alt="Oxen.ai Moon Ox Hero"
 />
 
-## 🤷‍♂️ Why Should I Care?
+## 🐂 Why Build Oxen?
+
+Oxen was build by a team of machine learning engineers, who have spent countless hours in their careers managing datasets. We have used many different tools, but none of them were as easy to use and as ergonomic as we would like. 
+
+If you have ever tried [git lfs](https://git-lfs.com/) or other solutions as a hack to version large datasets, we feel your pain. If you have ever uploaded a dataset to a cloud storage bucket with the name:
+
+`images_july_2022_final_2_no_really_final.tar.gz`
+
+We feel your pain. We built Oxen to be the tool we wish we had.
+
+## 🤖 Built for AI
 
 If you are building an AI application, data is the lifeblood. Whether you are building your own model from scratch, fine-tuning a pre-trained model, or using a model as a service, you will need to manage and compare datasets over time. We version our code, why not our data?
 
@@ -25,21 +35,121 @@ When we say fast, [we mean fast](/concepts/performance). Oxen can commit hundred
 
 ## 🧑‍💻 Getting Started
 
-Oxen makes versioning your datasets as easy as versioning your code.
+Oxen makes versioning your datasets as easy as versioning your code. You can install through homebrew or pip or from our [releases page](https://github.com/Oxen-AI/Oxen/releases).
 
-```bash
+<CodeGroup>
+
+```bash CLI
+brew tap Oxen-AI/oxen
+brew install oxen
+```
+
+```bash Python
+pip install oxenai
+```
+
+</CodeGroup>
+
+### Create Repository
+
+Initialize and push your first Oxen repository.
+
+<CodeGroup>
+
+```bash CLI
 oxen init
-oxen add images/
+echo "name,age\nbob,12\njane,13" > people.csv
+oxen add people.csv
 oxen commit -m "Adding my data"
-oxen config --set-remote origin https://hub.oxen.ai/ox/CatDogBBox
+# Go create repo at https://oxen.ai
+# ...
+oxen config --set-remote origin https://hub.oxen.ai/<namespace>/<repo_name>
 oxen push origin main
 ```
 
-Clone your data faster than ever before.
+```python Python
+import os
+from oxen import LocalRepo
 
-```bash
+# Instantiate a LocalRepo object and create the repo directory
+repo = LocalRepo("/path/to/data", mkdir=True)
+# Initialize the repository
+repo.init()
+# Write a data file
+data_path = os.path.join(repo.path, "people.csv")
+with open(data_path, "w") as f:
+    f.write("name,age\nbob,12\njane,13")
+# Stage a subdirectory in the repository for commit
+repo.add(data_path)
+# Commit the changes with a message
+repo.commit("Adding my data")
+# Go create repo at https://oxen.ai
+# ...
+# Set where to push the data to (replace <namespace> and <repo_name> with your remote)
+repo.set_remote("origin", "https://hub.oxen.ai/<namespace>/<repo_name>")
+# Push the changes to the remote
+repo.push()
+```
+
+</CodeGroup>
+
+### Clone Data
+
+Clone your data faster than ever before. Oxen has been optimized to the core to make pulling large datasets as fast as possible.
+
+<CodeGroup>
+
+```bash CLI
 oxen clone https://hub.oxen.ai/ox/CatDogBBox
 ```
+
+```python Python
+from oxen import LocalRepo
+
+# Clone the repository
+repo = LocalRepo("/path/to/repo")
+repo = LocalRepo.clone("https://hub.oxen.ai/ox/CatDogBBox")
+```
+
+</CodeGroup>
+
+### Pull Changes
+
+Only pull the changes you need. Oxen will only pull the files that have changed since the last time you pulled.
+
+<CodeGroup>
+
+```bash CLI
+oxen pull origin main
+```
+
+```python Python
+from oxen import LocalRepo
+repo = LocalRepo("/path/to/repo")
+repo.pull()
+```
+
+</CodeGroup>
+
+### Download Individual Files
+
+With Oxen you do not need to download the entire dataset to your local machine. You can download only the subset of files or directories you need.
+
+<CodeGroup>
+
+```bash CLI
+oxen clone http://hub.oxen.ai/ox/CatDogBBox --shallow
+cd CatDogBBox
+oxen remote download annotations/test.csv
+```
+
+```python Python
+from oxen import RemoteRepo
+repo = RemoteRepo("http://hub.oxen.ai/ox/CatDogBBox")
+repo.download("annotations/test.csv")
+```
+
+</CodeGroup>
 
 ## 📚 Learn the Basics
 
