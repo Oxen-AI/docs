@@ -13,17 +13,21 @@ description: 'Oxen is a lighting fast unstructured data version control system f
 
 Oxen was build by a team of machine learning engineers, who have spent countless hours in their careers managing datasets. We have used many different tools, but none of them were as easy to use and as ergonomic as we would like. 
 
-If you have ever tried [git lfs](https://git-lfs.com/) to version large datasets and became frustrated, we feel your pain. If you have ever uploaded a dataset to a cloud storage bucket with the name:
+If you have ever tried [git lfs](https://git-lfs.com/) to version large datasets and became frustrated, we feel your pain. 
 
-`images_july_2022_final_2_no_really_final.tar.gz`
+If you have ever uploaded a large dataset of images, audio, video, or text to a cloud storage bucket with the name:
+
+`s3://data/images_july_2022_final_2_no_really_final.tar.gz`
 
 We feel your pain. We built Oxen to be the tool we wish we had.
 
 ## 🤖 Built for AI
 
-If you are building an AI application, data is the lifeblood. Whether you are building your own model from scratch, fine-tuning a pre-trained model, or using a model as a service, you will need to manage and compare datasets over time. We version our code, why not our data?
+If you are building an AI application, data is the lifeblood. Whether you are building your own model from scratch, fine-tuning a pre-trained model, or using a model as a service, you will need to manage and compare datasets over time. Data differentiates your model from the competition. 
 
-Versioning machine learning data is like brushing your teeth. You know you should do it, but it’s been a pain and you don’t do it as often as you should...Until now.
+[We version our code, why not our data?](https://blog.oxen.ai/we-version-our-code-why-not-our-data/)
+
+Versioning your data means you can experiment on models in parallel with different data. The more experiments you run, the smarter your model becomes, and the more confident you can be in it.
 
 ## ✅ Features
 
@@ -71,16 +75,37 @@ pip install oxenai
 
 </CodeGroup>
 
-### Create Repository
+### Initialize User
 
-Initialize your first Oxen repository, and make your first commit
+Each change you make will be associated with a name and email. Set them before you get started so you know who changed what. The user data is saved by default in `~/.config/oxen/user_config.toml`.
 
 <CodeGroup>
 
 ```bash CLI
+oxen config --name "Bessie Oxington" --email "bessie@yourcomany.com"
+```
+
+```python Python
+from oxen.user import config_user
+config_user("Bessie Oxington", "bessie@oxen.ai")
+```
+
+</CodeGroup>
+
+### Create Repository
+
+Initialize your first Oxen repository, and commit the first version of your data.
+
+<CodeGroup>
+
+```bash CLI
+# Initialize the repository
 oxen init
+# Write data to a file
 printf '%s\n' 'name,age' 'bob,12' 'jane,13' > people.csv
+# Stage the data for commit
 oxen add people.csv
+# Commit the changes with a message
 oxen commit -m "Adding my data"
 ```
 
@@ -115,7 +140,9 @@ It is good practice to create a new branch for changes you make to your data. Th
 <CodeGroup>
 
 ```bash CLI
+# Checkout a branch named `modify-data`
 oxen checkout -b modify-data
+# Overwrite data in existing file
 printf '%s\n' 'name,age' 'bob,12' 'jane,13' 'joe,14' > people.csv
 ```
 
@@ -124,7 +151,7 @@ import os
 from oxen import LocalRepo
 
 repo = LocalRepo("/path/to/data")
-# Create a new branch
+# Create a new branch called `modify-data`
 repo.checkout("modify-data", create=True)
 # Overwrite data in existing file
 data_path = os.path.join(repo.path, "people.csv")
@@ -133,6 +160,9 @@ with open(data_path, "w") as f:
 ```
 
 </CodeGroup>
+
+{/*
+TODO: Need to implement python diff
 
 ### Compare Changes
 
@@ -149,6 +179,7 @@ oxen diff people.csv
 ```
 
 </CodeGroup>
+*/}
 
 ### Revert Changes
 
@@ -317,6 +348,14 @@ repo = RemoteRepo("http://hub.oxen.ai/ox/CatDogBBox")
 repo.download("annotations/test.csv")
 ```
 
+```bash cURL
+# URL Format: https://hub.oxen.ai/api/repos/:namespace/:repo_name/file/:revision/:path
+# :revision can be a branch name or commit hash
+curl -X GET -H "Authorization: Bearer $TOKEN" \
+    https://hub.oxen.ai/api/repos/ox/CatDogBBox/file/main/annotations/test.csv \
+    -o ~/Downloads/test.csv
+```
+
 </CodeGroup>
 
 ## 🥾 Choose Your Adventure
@@ -344,6 +383,13 @@ Now that you have the basics down, your adventure has just begun. Learn the many
     href="https://oxen.ai"
   >
     Use the OxenHub web interface
+  </Card>
+  <Card
+    title="Self Host"
+    icon="data"
+    href="/getting-started/oxen-server"
+  >
+    Host Oxen in your own infrastructure
   </Card>
 </CardGroup>
 
