@@ -37,7 +37,6 @@ The difference is Oxen is built for data. It is optimized to handle large files,
     <img src="https://github.com/Oxen-AI/oxen-release/raw/main/images/cli-celeba.gif?raw=true" alt="oxen cli demo" />
 </p>
 
-
 ## 🤖 Built for AI
 
 If you are building an AI application, data is the lifeblood. Whether you are building your own model from scratch, fine-tuning a pre-trained model, or using a model as a service, you will need to manage and compare datasets over time. Data differentiates your model from the competition. 
@@ -80,6 +79,29 @@ pip install oxenai
 ```
 
 </CodeGroup>
+
+## ⬇️ Clone Dataset
+
+Clone your first Oxen repository from the [OxenHub](https://oxen.ai/explore).
+
+<CodeGroup>
+
+```bash CLI
+oxen clone https://hub.oxen.ai/ox/CatDogBBox
+```
+
+```python Python
+from oxen import LocalRepo
+
+# Set the destination directory
+repo = LocalRepo("/path/to/dst")
+# Clone the repository
+repo = LocalRepo.clone("https://hub.oxen.ai/ox/CatDogBBox")
+```
+
+</CodeGroup>
+
+## 🐮 Create Your Own Dataset
 
 ### Initialize User
 
