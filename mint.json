@@ -53,7 +53,15 @@
   "navigation": [
     {
       "group": "Get Started",
-      "pages": ["getting-started/intro", "getting-started/install", "getting-started/cli", "getting-started/python", "getting-started/oxen-hub", "getting-started/oxen-server"]
+      "pages": [
+        "getting-started/intro",
+        "getting-started/install",
+        "getting-started/learn-the-basics",
+        "getting-started/cli",
+        "getting-started/python",
+        "getting-started/oxen-hub",
+        "getting-started/oxen-server"
+      ]
     },
     {
       "group": "Python API",

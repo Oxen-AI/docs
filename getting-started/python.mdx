@@ -1,6 +1,6 @@
 ---
 title: '🐍 Python'
-description: 'Learn how to use the oxenai python package.'
+description: 'Learn how to get started with the oxenai python package.'
 ---
 
 ## Install
@@ -20,6 +20,49 @@ oxen.clone("ox/SpanishToEnglish")
 
 This will create a directory called `SpanishToEnglish` in your current working directory and download the latest version of the repository.
 
+### Private Repositories
+
+Not all repositories are public. If you are trying to clone a private repository, you will need to [configure auth](/python-api/auth) before you can clone.
+
+If you try to clone a repository you do not have access to, and you have not configured auth, you will see the following error:
+
+```bash
+ValueError: oxen authentication token not found, obtain one from your administrator and configure with:
+
+oxen config --auth <HOST> <TOKEN>
+```
+
+### Obtain Auth Token
+
+Before you can push to a remote repository, you must have permissions to do so. Permissions are handled through an `auth_token` that is passed in with the request.
+
+You can obtain an `auth_token` by creating an account on [Oxen.ai](https://oxen.ai) and going to your profile.
+
+<img
+  className="block"
+  src="/images/auth_key.png"
+  alt="Oxen.ai authentication key"
+/>
+
+### Set Auth Token
+
+To set your auth token, you can either set it through the command line interface or directly in python.
+
+<CodeGroup>
+
+```python Python
+from oxen.auth import config_auth
+config_auth("YOUR_AUTH_TOKEN")
+```
+
+```bash CLI
+oxen config --auth 'hub.oxen.ai' YOUR_AUTH_TOKEN
+```
+
+</CodeGroup>
+
+This will write the auth token to a file in `~/.config/oxen/auth_config.toml` for future use. If you set up your own [oxen-server](/getting-started/oxen-server) you can generate custom auth tokens there.
+
 ## Setup User
 
 In order for Oxen to know who is committing and where to sync to by default, you must call [config_user](/python-api/user) and pass in the name and email you would like to use in your commit messages.
@@ -35,12 +78,14 @@ This will save a file in `~/.config/oxen/user_config.toml` that contains your us
 
 If you are creating a new repository from scratch, you can initialize it with the [init](/python-api/init) method.
 
+We will be using a fictional repository called `CatsVsDogs` for this example.
+
 ```python
 import oxen
 import os
 
-# Create an empty directory named MyNewRepo
-directory = "MyNewRepo"
+# Create an empty directory named CatsVsDogs
+directory = "CatsVsDogs"
 os.makedirs(directory)
 
 # Initialize the Oxen Repository
@@ -56,8 +101,8 @@ Use the [LocalRepo](/python-api/localrepo) class to interact with a repository t
 ```python
 from oxen import LocalRepo
 
-# Load the repostory from the MyNewRepo directory
-repo = LocalRepo("MyNewRepo")
+# Load the repostory from the CatsVsDogs directory
+repo = LocalRepo("CatsVsDogs")
 # Check the status of the repository
 print(repo.status())
 ```
@@ -72,7 +117,7 @@ Now let's create a README.md file and [add](/python-api/local_repo#add) it to th
 # Create a README.md file
 filename = os.path.join(repo.path, "README.md")
 with open(filename, "w") as f:
-    f.write("# My New Repo")
+    f.write("# Cats vs. Dogs\n\nWhich is it? We will be using machine learning to find out!")
 
 # Add the README.md file to the staging area
 repo.add(filename)
@@ -92,21 +137,131 @@ Now that we have added the README.md file to the staging area, we can commit the
 repo.commit("Adding README.md")
 ```
 
-## Configure Auth
+## Push To Remote
 
-You can obtain an `auth_token` by creating an account on [Oxen.ai](https://oxen.ai) and going to your profile.
+It's one thing to version your data locally, but where the real power comes in is when you can share your data with others. Oxen repositories can be pushed to a remote repository hosted on [Oxen Hub](https://oxen.ai) or your own [oxen-server](/getting-started/oxen-server).
 
-<img
-  className="block"
-  src="/images/auth_key.png"
-  alt="Oxen.ai authentication key"
-/>
+There are a few steps when pushing to a remote for the first time.
 
-To set your auth token, you can either set it in the `user_config.toml` file or you can set it through the python interface.
+1. [Create Remote](/python-api/remote_repo#create_repo)
+2. [Point Local to Remote](/python-api/local_repo#set_remote)
+3. [Push Changes](/python-api/local_repo#push)
+
+### Create Remote
+
+Before you can push to a remote repository, you must create it. This can be done with the [create_repo](/python-api/remote_repo#create_repo) method.
 
 ```python
-from oxen.auth import config_auth
-config_auth("hub.oxen.ai", "YOUR_AUTH_TOKEN")
+from oxen.remote_repo import create_repo
+
+# Create a remote repository
+remote_name = "MyNamespace/CatsVsDogs"
+create_repo(remote_name)
 ```
 
-You can also set up your own [oxen-server](/getting-started/oxen-server) and generate custom auth tokens there.
+### Point Local to Remote
+
+Now that we have created the remote repository, we need to point our local repository to sync to it. This can be done with the [set_remote](/python-api/local_repo#set_remote) method.
+
+```python
+from oxen import LocalRepo
+
+# Load the local repository
+local_repo = LocalRepo("CatsVsDogs")
+
+# Point the local repository to the remote
+local_repo.set_remote(remote_name)
+```
+
+### Push Changes
+
+Now that we have created the remote repository and pointed our local repository to it, we can [push](/python-api/local_repo#push) our changes to the remote repository.
+
+```python
+# Push the changes to the remote repository
+local_repo.push()
+```
+
+### Full Push Example
+
+The end to end workflow from scratch looks like this:
+
+```python
+from oxen import LocalRepo
+from oxen.remote_repo import create_repo
+from oxen.auth import config_auth
+
+# 0. Load the local repository
+local_repo = LocalRepo("CatsVsDogs")
+
+# 1. Configure Authentication
+config_auth("YOUR_AUTH_TOKEN")
+
+# 2. Create a remote repository
+remote_name = "MyNamespace/CatsVsDogs"
+create_repo(remote_name)
+
+# 3. Point the local repository to the remote
+local_repo.set_remote(remote_name)
+
+# 4. Push the changes to the remote repository
+local_repo.push()
+```
+
+## Pull Data
+
+Now that we have pushed our changes to the remote repository, we can [pull](/python-api/local_repo#pull) them down to another machine.
+
+```python
+import oxen
+import os
+
+repo_path = "CatsVsDogs"
+if os.path.exists(repo_path):
+  # if you already have a local copy of the repository, you can load it
+  repo = oxen.LocalRepo(repo_path)
+else:
+  # if you don't have a local copy of the repository, you can clone it
+  repo = oxen.clone("ox/CatsVsDogs")
+
+# Pull the latest changes from the remote repository
+repo.pull()
+```
+
+## Branching
+
+Branching is a powerful feature of Oxen that allows you to create a named version of your data without affecting the original version. This is useful when you want to experiment with your changes affecting the original version.
+
+### Create Branch
+
+To create a new branch, use the [LocalRepo.checkout](/python-api/local_repo#checkout) method.
+
+```python
+from oxen import LocalRepo
+
+repo = LocalRepo("CatsVsDogs")
+repo.checkout("add-dogs", create=True)
+```
+
+This both creates the branch and checks it out (the command line equivalent of `oxen checkout -b add-dogs`).
+
+### List Branches
+
+To list all of the branches in a repository, use the [LocalRepo.branches](/python-api/local_repo#branches) method.
+
+```python
+from oxen import LocalRepo
+
+repo = LocalRepo("CatsVsDogs")
+print(repo.branches())
+```
+
+```
+[Branch(name=add-dogs, commit_id=3168391af834ac18), Branch(name=main, commit_id=3168391af834ac18)]
+```
+
+As you can see there should be a `main` branch and a `add-dogs` branch, each tied to a commit id. The commit ids will be the same at this point, because the branches have not diverged in content.
+
+## Next Steps
+
+Now that you have learned the basics of Oxen, the rest of the workflow is very similar to git. You can dive deeper into the [API Documentation](/python-api) to learn more about the methods available to you.
