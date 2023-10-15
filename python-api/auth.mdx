@@ -1,0 +1,24 @@
+<a id="oxen.auth"></a>
+
+# oxen.auth
+
+<a id="oxen.auth.config_auth"></a>
+
+## config\_auth
+
+```python
+def config_auth(host: str, token: str, path: Optional[str] = None)
+```
+
+Configures authentication for a host.
+
+**Arguments**:
+
+- `host` - `str`
+  The host to configure authentication for. For example: 'hub.oxen.ai'
+- `token` - `str`
+  The token to use for authentication.
+- `path` - `Optional[str]`
+  The path to save the authentication config to.
+  Defaults to $HOME/.config/oxen/user_config.toml
+

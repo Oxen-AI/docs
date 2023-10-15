@@ -1,0 +1,40 @@
+<a id="oxen.user"></a>
+
+# oxen.user
+
+<a id="oxen.user.config_user"></a>
+
+## config\_user
+
+```python
+def config_user(name: str, email: str, path: Optional[str] = None)
+```
+
+Configures user for a host.
+
+**Arguments**:
+
+- `name` - `str`
+  The name to use for user.
+- `email` - `str`
+  The email to use for user.
+- `path` - `Optional[str]`
+  The path to save the user config to.
+  Defaults to $HOME/.config/oxen/user_config.toml
+
+<a id="oxen.user.current_user"></a>
+
+## current\_user
+
+```python
+def current_user(path: Optional[str] = None)
+```
+
+Gets the current user.
+
+**Arguments**:
+
+- `path` - `Optional[str]`
+  The path to load the user config from.
+  Defaults to $HOME/.config/oxen/user_config.toml
+

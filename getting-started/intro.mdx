@@ -21,7 +21,7 @@ If you have ever uploaded a large dataset of images, audio, video, or text to a 
 
 We feel your pain. We built Oxen to be the tool we wish we had.
 
-## 📚 Simple Learning Curve
+## 📚 Familiar Workflow
 
 No need to learn a new paradigm.
 
@@ -91,12 +91,10 @@ oxen clone https://hub.oxen.ai/ox/CatDogBBox
 ```
 
 ```python Python
-from oxen import LocalRepo
+import oxen
 
-# Set the destination directory
-repo = LocalRepo("/path/to/dst")
 # Clone the repository
-repo = LocalRepo.clone("https://hub.oxen.ai/ox/CatDogBBox")
+repo = oxen.clone("ox/CatDogBBox")
 ```
 
 </CodeGroup>

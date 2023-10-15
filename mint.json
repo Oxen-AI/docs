@@ -56,16 +56,23 @@
       "pages": ["getting-started/intro", "getting-started/install", "getting-started/cli", "getting-started/python", "getting-started/oxen-hub", "getting-started/oxen-server"]
     },
     {
-      "group": "Core Concepts",
-      "pages": ["concepts/data-frames", "concepts/schemas", "concepts/diffs", "concepts/remote-workspace", "concepts/performance"]
-    },
-    {
       "group": "Python API",
-      "pages": ["python-api/local_repo", "python-api/remote_repo"]
+      "pages": [
+        "python-api/index",
+        "python-api/clone",
+        "python-api/init",
+        "python-api/repositories",
+        "python-api/local_repo",
+        "python-api/remote_repo"
+      ]
     },
     {
       "group": "HTTP API",
       "pages": ["http-api/files"]
+    },
+    {
+      "group": "Core Concepts",
+      "pages": ["concepts/data-frames", "concepts/schemas", "concepts/diffs", "concepts/remote-workspace", "concepts/performance"]
     }
   ],
   "footerSocials": {

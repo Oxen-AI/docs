@@ -38,7 +38,7 @@ repo.push()
 ## \_\_init\_\_
 
 ```python
-def __init__(path: str = "")
+def __init__(path: str = "", mkdir=False)
 ```
 
 Create a new Repo object. Use .init() to initialize a new oxen repository,
@@ -48,6 +48,8 @@ or pass the path to an existing one.
 
 - `path` - `str`
   Path to the main working directory of your oxen repo.
+- `mkdir` - `bool`
+  Whether to create the directory if one doesn't exist. Default: False
 
 <a id="oxen.local_repo.LocalRepo.init"></a>
 
@@ -117,6 +119,27 @@ def add(path: str)
 ```
 
 Stage a file or directory to be committed.
+
+<a id="oxen.local_repo.LocalRepo.rm"></a>
+
+## rm
+
+```python
+def rm(path: str, recursive=False, staged=False, remote=False)
+```
+
+Remove a file or directory from being tracked. This will not delete the file or directory.
+
+**Arguments**:
+
+- `path` - `str`
+  The path to the file or directory to remove.
+- `recursive` - `bool`
+  Whether to remove the file or directory recursively. Default: False
+- `staged` - `bool`
+  Whether to remove the file or directory from the staging area. Default: False
+- `remote` - `bool`
+  Whether to remove the file or directory from a remote workspace. Default: False
 
 <a id="oxen.local_repo.LocalRepo.status"></a>
 
@@ -192,7 +215,7 @@ Push data to a remote repo from a local repo.
 ## pull
 
 ```python
-def pull(remote_name: str = "origin", branch: str = "main")
+def pull(remote_name: str = "origin", branch: str = "main", all=False)
 ```
 
 Pull data from a remote repo to a local repo.
@@ -203,6 +226,8 @@ Pull data from a remote repo to a local repo.
   The name of the remote to pull from.
 - `branch` - `str`
   The name of the branch to pull from.
+- `all` - `bool`
+  Whether to pull all data from branch history or not. Default: False
 
 <a id="oxen.local_repo.LocalRepo.path"></a>
 

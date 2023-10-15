@@ -4,7 +4,14 @@
 DOCS_DIR=$1
 
 # Define your list
-list=("remote_repo" "local_repo")
+list=(
+    "clone"
+    "init"
+    "auth"
+    "user"
+    "remote_repo"
+    "local_repo"
+)
 
 # Loop over the list
 for i in "${list[@]}"; do

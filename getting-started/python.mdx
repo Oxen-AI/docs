@@ -1,5 +1,5 @@
 ---
-title: 'Python'
+title: '🐍 Python'
 description: 'Learn how to use the oxenai python package.'
 ---
 
@@ -9,96 +9,90 @@ description: 'Learn how to use the oxenai python package.'
 $ pip install oxenai
 ```
 
-## Python API
+## Clone Repository
 
-There are a few basic python classes you can use to interact with Oxen repositories. The full list with class methods can be found in the [API Documentation](/python-api).
+Clone a repository from the [Oxen Hub](https://oxen.ai) or a your own [oxen-server](/getting-started/oxen-server). Detailed documentation for the [clone](/python-api/clone) method can be found in the [API Documentation](/python-api).
 
-## Remote vs Local
-
-Oxen has the concept of  [Remote Repositories](#remote-repositories) and [Local Repositories](#local-repositories). One of the core tenets of Oxen is that data should feel like it is local, even if it is not. Hence the APIs for Local vs Remote are very similar, the only difference is where you are performing the operation.
-
-## Remote Repositories
-
-Remote Repositories only download pointers and metadata, so that you can interact with the data as if it was local. 
-
-Here is the full documentation for the [RemoteRepo](/python/remote_repo).
-
-### Integrate with Pandas
-
-The fastest way to integrate Oxen into your existing workflow is to use the fact that Oxen give you direct access to files and directories given a specific revision.
-
-For example let's load a data file given a specific commit into [Pandas](https://pandas.pydata.org/)
-
-```python Python
-from oxen import RemoteRepo
-import pandas as pd
-
-# Connect to the remote repo
-repo = RemoteRepo("ox/CatDogBBox")
-# Specify the version of the file you want to download
-branch = repo.get_branch("my-pets")
-# Download takes a file or directory a commit id
-repo.download("annotations", revision=branch.commit_id)
-# Once you have the data locally, use whatever library you want to explore the data
-df = pd.read_csv("annotations/train.csv")
-print(df.head())
+```python
+import oxen
+oxen.clone("ox/SpanishToEnglish")
 ```
 
-All the files are also accessible directly over http, which removes some of the boiler plate as long as the files are of a reasonable size.
+This will create a directory called `SpanishToEnglish` in your current working directory and download the latest version of the repository.
 
-The url structure is `https://hub.oxen.ai/api/repos/:namespace/:repo_name/file/:revision/:file_path`
+## Setup User
 
-```python Python
-import pandas as pd
+In order for Oxen to know who is committing and where to sync to by default, you must call [config_user](/python-api/user) and pass in the name and email you would like to use in your commit messages.
 
-df = pd.read_csv("https://hub.oxen.ai/api/repos/ox/CatDogBBox/file/main/annotations/test.csv")
-print(df.head())
+```python
+from oxen.user import config_user
+config_user("YOUR NAME", "YOUR EMAIL")
 ```
 
-### Add Files
+This will save a file in `~/.config/oxen/user_config.toml` that contains your user configuration.
 
-Oxen has the concept of [Remote Workspaces](/concepts/remote-workspace) that make it easy to add data to a remote repository without ever downloading it locally.
+## Initialize Repository
 
-```python Python
-from oxen import RemoteRepo
+If you are creating a new repository from scratch, you can initialize it with the [init](/python-api/init) method.
 
-# Connect to the Remote
-repo = RemoteRepo("ox/CatDogBBox")
-# Create a branch on the remote and check it out
-# similar to oxen checkout -b add-images
-repo.create_checkout_branch("add-images")
+```python
+import oxen
+import os
+
+# Create an empty directory named MyNewRepo
+directory = "MyNewRepo"
+os.makedirs(directory)
+
+# Initialize the Oxen Repository
+repo = oxen.init(directory)
 ```
 
-## Local Repositories
+This will create a `.oxen` directory to keep track of changes as you make them.
 
-[Local Repositories](/python/local_repo) have all the files versioned and accessible on your local machine. They duplicate the data between your working directory and a hidden .oxen directory so that you can quickly swap between versions and run experiments.
+## Load Existing Repository
 
-If you are creating a new repository from scratch, this is a great place to start. The workflow is very similar to [git](https://git-scm.com/) in terms of initializing a repository, adding data, committing, and pushing to a remote.
+Use the [LocalRepo](/python-api/localrepo) class to interact with a repository that has already been initialized.
 
-Let's walk through some basic operations.
+```python
+from oxen import LocalRepo
 
-### Configure User
-
-In order for Oxen to know who is committing and where to sync to by default, you must configure your user and default host.
-
-First create an Oxen config file in your home directory.
-
-```bash
-mkdir ~/.oxen
-nano ~/.oxen/user_config.toml 
+# Load the repostory from the MyNewRepo directory
+repo = LocalRepo("MyNewRepo")
+# Check the status of the repository
+print(repo.status())
 ```
 
-Then populate it with the required information. 
+## Add Files
 
-```bash
-name = "YOUR NAME" 
-email = "YOUR EMAIL"
-default_host = "hub.oxen.ai"
+Now let's create a README.md file and [add](/python-api/local_repo#add) it to the local staging area. This will not commit the changes to the repository, but it will prepare them to be committed.
 
-[[host_configs]]
-host = "hub.oxen.ai"
-auth_token = "<YOUR AUTH TOKEN FROM OXEN>"
+```python
+# ... continue from previous example
+
+# Create a README.md file
+filename = os.path.join(repo.path, "README.md")
+with open(filename, "w") as f:
+    f.write("# My New Repo")
+
+# Add the README.md file to the staging area
+repo.add(filename)
+
+# Confirm that the file has been staged
+print(repo.status())
 ```
+
+## Commit Changes
+
+Now that we have added the README.md file to the staging area, we can commit the changes to the repository.
+
+```python
+# ... continue from previous example
+
+# Commit the changes to the repository
+repo.commit("Adding README.md")
+```
+
+## Configure Auth
 
 You can obtain an `auth_token` by creating an account on [Oxen.ai](https://oxen.ai) and going to your profile.
 
@@ -108,103 +102,11 @@ You can obtain an `auth_token` by creating an account on [Oxen.ai](https://oxen.
   alt="Oxen.ai authentication key"
 />
 
+To set your auth token, you can either set it in the `user_config.toml` file or you can set it through the python interface.
+
+```python
+from oxen.auth import config_auth
+config_auth("hub.oxen.ai", "YOUR_AUTH_TOKEN")
+```
+
 You can also set up your own [oxen-server](/getting-started/oxen-server) and generate custom auth tokens there.
-
-### Init
-
-Assuming you are creating a brand new repository, first you will have to create an empty directory, point your `LocalRepo` to it and run `init()`.
-
-```python
-import os
-from oxen import LocalRepo
-
-# Create an empty directory named CatsAndDogs
-directory = "CatsAndDogs"
-os.makedirs(directory)
-
-# Initialize the Oxen Repository
-repo = LocalRepo(directory)
-repo.init()
-```
-
-### Add Files
-
-Now let's create a README.md file and add it to the local staging area.
-
-```python
-import os
-from oxen import LocalRepo
-
-# write a file called README.md to disk
-directory = "CatsAndDogs"
-file_name = "README.md"
-file_path = os.path.join(directory, file_name)
-
-# Open the file in write mode
-with open(file_path, "w") as file:
-    # Write the title to the file
-    file.write("# " + directory + "\n")
-
-# Assuming the LocalRepo is already initialized
-repo = LocalRepo(directory)
-# add the path relative to the dir
-repo.add(file_name)
-# list added files
-status = repo.status()
-print(status.added_files())
-```
-
-You should see that we have one file added `[README.md]`
-
-### Commit Staged Files
-
-With your README.md staged you can now commit with a message
-
-```python
-from oxen import LocalRepo
-
-# Assuming you have already added the data
-repo = LocalRepo(directory)
-repo.commit("Adding README.md")
-```
-
-🎉 Congratulations you have just versioned your first file! Now to sync it with the rest of your team.
-
-### Configure Remote
-
-The easiest way to create a remote is in the [Oxen Hub web interface](https://oxen.ai). 
-
-<img
-  className="block"
-  src="/images/MyRepos.png"
-  alt="Oxen.ai authentication key"
-/>
-
-Then once you have a remote created, set the remote on the repo object.
-
-```python
-from oxen import LocalRepo
-
-# Once you have data committed that you want to sync
-repo = LocalRepo(directory)
-# You can have multiple named remotes
-username = "YOUR_USERNAME"
-repo_name = "REMOTE_REPO_NAME"
-remote_name = "origin"
-remote_url = f"https://hub.oxen.ai/{username}/{repo_name}"
-repo.set_remote(remote_name, remote_url)
-```
-
-### Push to Remote
-
-With your remote set and auth key configured, you are ready to push the data!
-
-```python
-from oxen import LocalRepo
-
-# Once you have committed data and set the remote, it's time to push your branch
-repo = LocalRepo(directory)
-remote_name = "origin"
-remote_branch = "main"
-repo.push(remote_name, remote_branch)
-```
