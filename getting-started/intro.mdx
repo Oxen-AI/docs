@@ -1,6 +1,6 @@
 ---
 title: 🐂 What is Oxen?
-description: 'Oxen is a lighting fast unstructured data version control system for machine learning datasets.'
+description: 'Oxen is a lighting fast data version control system for structured and unstructured machine learning datasets.'
 ---
 
 <img
@@ -9,7 +9,7 @@ description: 'Oxen is a lighting fast unstructured data version control system f
   alt="Oxen.ai Moon Ox Hero"
 />
 
-Oxen's interface mirrors git, so that it is easy to learn if you are a software engineer, but it optimized from the ground up to work with large datasets.
+Oxen's interface mirrors git, but shines in many areas that git or git-lfs fall short. Oxen is built from the ground up for data, and is optimized to handle large datasets, and large files.
 
 <CodeGroup>
 
@@ -34,27 +34,39 @@ repo.push("origin", "main")
 
 </CodeGroup>
 
-As well as a [command line interface](https://docs.oxen.ai/getting-started/cli), there are bindings for [Rust](https://github.com/Oxen-AI/Oxen) 🦀, [Python](https://docs.oxen.ai/getting-started/python) 🐍, and [HTTP interfaces](https://docs.oxen.ai/http-api) 🌎.
+Oxen is comprised of a [command line interface](https://docs.oxen.ai/getting-started/cli), as well as bindings for [Rust](https://github.com/Oxen-AI/Oxen) 🦀, [Python](https://docs.oxen.ai/getting-started/python) 🐍, and [HTTP interfaces](https://docs.oxen.ai/http-api) 🌎 to make it easy to integrate into your workflow.
 
-## 📚 Familiar Workflow
+## 🌾 What kind of data?
 
-No need to learn a new paradigm.
+Oxen is designed to efficiently manage large datasets, including those with large individual files, for example CSV files with millions of rows. It also handles datasets comprising millions of individual files and directories such as the complete collection of ImageNet images.
 
-The Oxen Command Line Interface (CLI) mirrors [git](https://git-scm.com/) in many ways, so if you are comfortable versioning code with git, it will be straightforward to version your datasets with Oxen.
+## 🚀 Built for speed
 
-The difference is Oxen is built for data. It is optimized to handle large files, and large datasets. It is [built to be fast](/concepts/performance), and easy to use.
+One of the main reasons datasets are hard to maintain is the pure performance of indexing the data and transferring the data over the network. We wanted to be able to index hundreds of thousands of images, videos, audio files, and text files in seconds. 
 
 Watch below as we version **hundreds of thousands of images** in seconds 🔥
-
-<p align="center">
-  <a href="/getting-started/learn-the-basics">🐮 Learn The Basics</a>
-</p>
 
 <p align="center">
     <img src="https://github.com/Oxen-AI/oxen-release/raw/main/images/cli-celeba.gif?raw=true" alt="oxen cli demo" />
 </p>
 
-## ⚒️ Install Oxen
+But speed is only the beginning. 
+
+## ✅ Features
+
+Oxen is built around ergonomics, ease of use, and it is easy to learn. If you know how to use git, you know how to use Oxen.
+
+* 🔥 Fast (efficient indexing and syncing of data)
+* 🧠 Easy to learn (same commands as git)
+* 💪 Handles large files (images, videos, audio, text, parquet, arrow, json, models, etc)
+* 🗄️ Index lots of files (millions of images? no problem)
+* 📊 Native DataFrame processing (index, compare and serve up DataFrames)
+* 📈 Tracks changes over time (never worry about losing the state of your data)
+* 🤝 Collaborate with your team (sync to an oxen-server)
+* 🌎 [Remote Workspaces](https://docs.oxen.ai/concepts/remote-workspace) to interact with the data without downloading it
+* 👀 Better data visualization on [OxenHub](https://oxen.ai)
+
+## ⚒️ Installation
 
 <CodeGroup>
 
@@ -71,7 +83,7 @@ pip install oxenai
 
 ## ⬇️ Clone Dataset
 
-Clone your first Oxen repository from the [OxenHub](https://oxen.ai/explore).
+The fastest way to get up and running with oxen is by cloning a dataset. Explore the many public datasets we have today on the [OxenHub](https://oxen.ai/explore).
 
 <CodeGroup>
 
@@ -88,35 +100,9 @@ repo = oxen.clone("ox/CatDogBBox")
 
 </CodeGroup>
 
-## ✅ Features
+## 📚 Learn The Basics
 
-One of the reasons versioning data has been a pain in the past is the pure speed. Don't let the 🐂 fool you. Yes Oxen are strong, reliable creatures, but when it comes to big data they are also fast.
-
-When we say fast, [we mean fast](/concepts/performance). Oxen can commit hundreds of thousands of images in a matter of seconds 🚀
-
-Speed is only the beginning. Oxen is built to be easy to use, and easy to learn. If you know how to use git, you know how to use Oxen.
-
-* 🔥 Fast (efficient indexing and syncing of data)
-* 🧠 Easy to learn (same commands as git)
-* 🗄️ Index lots of files (millions of images? no problem)
-* 🎥 Handles large files (images, videos, audio, text, parquet, arrow, json, models, etc)
-* 📊 Native DataFrame processing (index, compare and serve up DataFrames)
-* 📈 Tracks changes over time (never worry about losing the state of your data)
-* 🤝 Collaborate with your team (sync to an oxen-server)
-* 🌎 [Remote Workspaces](https://docs.oxen.ai/concepts/remote-workspace) to interact with the data without downloading it
-* 👀 Better data visualization on [OxenHub](https://oxen.ai)
-
-## 🤓 Compare Data Over Time
-
-Use the [OxenHub](https://oxen.ai) to compare data over time. OxenHub is a web interface for your Oxen repositories. It is a great way to visualize your data, and view how your data has changed.
-
-<p align="center">
-    <img src="/images/diff.jpg" alt="oxen cli demo" />
-</p>
-
-## 🥾 Choose Your Adventure
-
-Now that you have the basics down, your adventure has just begun. Learn the many ways to use Oxen. You can use the command line interface, the python library, or the OxenHub web interface.
+There are many ways to use Oxen. You can use the command line interface, the python library, or the OxenHub web interface. Learn the basics of each below.
 
 <CardGroup cols={2}>
   <Card
