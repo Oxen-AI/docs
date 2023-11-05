@@ -9,28 +9,32 @@ description: 'Oxen is a lighting fast unstructured data version control system f
   alt="Oxen.ai Moon Ox Hero"
 />
 
-## 🌾 Why Build Oxen?
+Oxen's interface mirror git, so that it is easy to learn if you are a software engineer, but it optimized from the ground up to work with large datasets.
 
-Oxen was build by a team of machine learning engineers, who have spent countless hours in their careers managing datasets. We have used many different tools, but none of them were as easy to use and as ergonomic as we would like. 
+<CodeGroup>
 
-If you have ever tried [git lfs](https://git-lfs.com/) to version large datasets and became frustrated, we feel your pain. Solutions like git-lfs are too slow when it comes to the scale of data we need for machine learning.
+```bash CLI
+oxen init
+oxen add images/
+oxen add annotations/*.parquet
+oxen commit "Adding 200k images and their corresponding annotations"
+oxen push origin main
+```
 
-If you have ever uploaded a large dataset of images, audio, video, or text to a cloud storage bucket with the name:
+```python Python
+import oxen
 
-`s3://data/images_july_2022_final_2_no_really_final.tar.gz`
+# Initialize a new repository given a directory
+repo = oxen.init("/path/to/my-dataset")
+repo.add("images/")
+repo.add("annotations/*.parquet")
+repo.commit("Adding 200k images and their corresponding annotations")
+repo.push("origin", "main")
+```
 
-We built Oxen to be the tool we wish we had.
+</CodeGroup>
 
-
-## 🤖 Built for AI
-
-If you are building an AI application, data is the lifeblood. Data is constantly changing over time, and data differentiates your model from the competition.
-
-Whether you are building your own model from scratch, fine-tuning a pre-trained model, or using a model as a service, you will need to manage and compare the inputs and outputs over time to ensure your model is improving.
-
-[We version our code, why not our data?](https://blog.oxen.ai/we-version-our-code-why-not-our-data/)
-
-Versioning your data means you can experiment on models in parallel with different data. The more experiments you run, the smarter your model becomes, and more robust models lead to better products.
+As well as a [command line interface](https://docs.oxen.ai/getting-started/cli), there are bindings for [Rust](https://github.com/Oxen-AI/Oxen) 🦀, [Python](https://docs.oxen.ai/getting-started/python) 🐍, and [HTTP interfaces](https://docs.oxen.ai/http-api) 🌎.
 
 ## 📚 Familiar Workflow
 
@@ -92,11 +96,11 @@ When we say fast, [we mean fast](/concepts/performance). Oxen can commit hundred
 
 Speed is only the beginning. Oxen is built to be easy to use, and easy to learn. If you know how to use git, you know how to use Oxen.
 
-* 🔥 Fast (10-100x faster than existing tools)
+* 🔥 Fast (efficient indexing and syncing of data)
 * 🧠 Easy to learn (same commands as git)
 * 🗄️ Index lots of files (millions of images? no problem)
-* 🎥 Handles large files (images, videos, audio, text, parquet, arrow, json, machine learning models, etc)
-* 📊 Native data frame library to compare data ([oxen df](https://github.com/Oxen-AI/oxen-release/blob/main/DataFrames.md) command for data exploration)
+* 🎥 Handles large files (images, videos, audio, text, parquet, arrow, json, models, etc)
+* 📊 Native DataFrame processing (index, compare and serve up DataFrames)
 * 📈 Tracks changes over time (never worry about losing the state of your data)
 * 🤝 Collaborate with your team (sync to an oxen-server)
 * 🌎 [Remote Workspaces](https://docs.oxen.ai/concepts/remote-workspace) to interact with the data without downloading it
@@ -180,10 +184,6 @@ See examples repositories for inspiration.
   </Card>
 </CardGroup>
 
-## 🐂 Why the name Oxen?
-
-“Oxen” comes from the fact that we will plow, maintain, and version your data like a good farmer tends to their fields 🌾. During the agricultural revolution, the plow and offloading work to Oxen helped people specialize and start working on other important societal tasks. Let Oxen take care of the grunt work of your infrastructure so you can focus on the higher-level ML problems that matter to your product.
-
 ## ⭐️ Every GitHub Star Gives an Ox its Wings
 
 No really.
@@ -195,3 +195,29 @@ Go find your own in our [ox/FlyingOxen](https://www.oxen.ai/ox/FlyingOxen) repos
 <p align="center">
     <img src="https://github.com/Oxen-AI/oxen-release/blob/main/images/ox-with-wings.png?raw=true" alt="oxen repo with wings" />
 </p>
+
+## 🌾 Why Build Oxen?
+
+Oxen was build by a team of machine learning engineers, who have spent countless hours in their careers managing datasets. We have used many different tools, but none of them were as easy to use and as ergonomic as we would like. 
+
+If you have ever tried [git lfs](https://git-lfs.com/) to version large datasets and became frustrated, we feel your pain. Solutions like git-lfs are too slow when it comes to the scale of data we need for machine learning.
+
+If you have ever uploaded a large dataset of images, audio, video, or text to a cloud storage bucket with the name:
+
+`s3://data/images_july_2022_final_2_no_really_final.tar.gz`
+
+We built Oxen to be the tool we wish we had.
+
+## 🤖 Built for AI
+
+If you are building an AI application, data is the lifeblood. Data is constantly changing over time, and data differentiates your model from the competition.
+
+Whether you are building your own model from scratch, fine-tuning a pre-trained model, or using a model as a service, you will need to manage and compare the inputs and outputs over time to ensure your model is improving.
+
+[We version our code, why not our data?](https://blog.oxen.ai/we-version-our-code-why-not-our-data/)
+
+Versioning your data means you can experiment on models in parallel with different data. The more experiments you run, the smarter your model becomes, and more robust models lead to better products.
+
+## 🐂 Why the name Oxen?
+
+“Oxen” comes from the fact that we will plow, maintain, and version your data like a good farmer tends to their fields 🌾. During the agricultural revolution, the plow and offloading work to Oxen helped people specialize and start working on other important societal tasks. Let Oxen take care of the grunt work of your infrastructure so you can focus on the higher-level ML problems that matter to your product.

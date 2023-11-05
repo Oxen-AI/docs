@@ -48,6 +48,11 @@
       "name": "Blog",
       "icon": "newspaper",
       "url": "https://blog.oxen.ai"
+    },
+    {
+      "name": "GitHub",
+      "icon": "github",
+      "url": "https://github.com/Oxen-AI/oxen-release"
     }
   ],
   "navigation": [
