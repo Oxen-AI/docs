@@ -92,5 +92,13 @@
     "twitter": "https://twitter.com/oxen_ai",
     "github": "https://github.com/Oxen-AI/oxen-release",
     "linkedin": "https://www.linkedin.com/company/oxenai/"
+  },
+  "analytics": {
+    "posthog": {
+        "apiKey": "phc_Do6VnS78puWwBQuPcJ7TkjixBZwsV4Xxc3ABHVNvjmE"
+    },
+    "ga4": {
+      "measurementId": "G-H6D2C08EKP"
+    }
   }
 }
