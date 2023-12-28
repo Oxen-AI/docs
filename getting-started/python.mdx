@@ -156,7 +156,7 @@ from oxen.remote_repo import create_repo
 
 # Create a remote repository
 remote_name = "MyNamespace/CatsVsDogs"
-create_repo(remote_name)
+remote_repo = create_repo(remote_name)
 ```
 
 ### Point Local to Remote
@@ -170,7 +170,7 @@ from oxen import LocalRepo
 local_repo = LocalRepo("CatsVsDogs")
 
 # Point the local repository to the remote
-local_repo.set_remote(remote_name)
+local_repo.set_remote("origin", remote_repo.url)
 ```
 
 ### Push Changes
@@ -199,10 +199,10 @@ config_auth("YOUR_AUTH_TOKEN")
 
 # 2. Create a remote repository
 remote_name = "MyNamespace/CatsVsDogs"
-create_repo(remote_name)
+repo = create_repo(remote_name)
 
 # 3. Point the local repository to the remote
-local_repo.set_remote(remote_name)
+local_repo.set_remote("origin", repo.url)
 
 # 4. Push the changes to the remote repository
 local_repo.push()
