@@ -114,21 +114,43 @@ repo = oxen.clone("ox/CatDogBBox")
 
 </CodeGroup>
 
-## ⬇️ Pushing Datasets
+## ⬆️ Pushing Datasets
 
-Create and share your own datasets with your team or the world by pushing them to [OxenHub](https://oxen.ai).
+Create and share your own repository to share your datasets with your team or the world by pushing them to [OxenHub](https://oxen.ai).
 
 <CodeGroup>
 
 ```bash CLI
-oxen clone https://hub.oxen.ai/ox/CatDogBBox
+# New repos can also be create in UI
+oxen add .
+oxen commit -m "message"
+oxen create-remote --name <namespace>/<repo_name>
+oxen config --set-remote origin https://hub.oxen.ai/<namespace>/<repo_name>
+oxen push origin main
 ```
 
 ```python Python
-import oxen
+import os
+from oxen import LocalRepo
 
-# Clone the repository
-repo = oxen.clone("ox/CatDogBBox")
+# Instantiate a LocalRepo object and create the repo directory
+repo = LocalRepo("/path/to/data", mkdir=True)
+# Initialize the repository
+repo.init()
+# Write data to a file
+data_path = os.path.join(repo.path, "people.csv")
+with open(data_path, "w") as f:
+    f.write("name,age\nbob,12\njane,13")
+# Stage the data for commit
+repo.add(data_path)
+# Commit the changes with a message
+repo.commit("Adding my data")
+
+# Set where to push the data to (replace <namespace> and <repo_name> with your remote)
+repo.set_remote("origin", "https://hub.oxen.ai/<namespace>/<repo_name>")
+
+# Push the changes to the remote
+repo.push()
 ```
 
 </CodeGroup>
