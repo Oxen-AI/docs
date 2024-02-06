@@ -2,6 +2,61 @@
 
 # oxen.remote\_repo
 
+<a id="oxen.remote_repo.get_repo"></a>
+
+## get\_repo
+
+```python
+def get_repo(name: str, host: str = "hub.oxen.ai")
+```
+
+Get a RemoteRepo object for the specified name. For example 'ox/CatDogBBox'.
+
+**Arguments**:
+
+- `name` - `str`
+  Name of the repository in the format 'namespace/repo_name'.
+- `host` - `str`
+  The host to connect to. Defaults to 'hub.oxen.ai'
+
+**Returns**:
+
+  [RemoteRepo](/python-api/remote_repo)
+
+<a id="oxen.remote_repo.create_repo"></a>
+
+## create\_repo
+
+```python
+def create_repo(name: str,
+                description="",
+                is_public: bool = True,
+                host: str = "hub.oxen.ai",
+                files: List[Tuple[str, str]] = [])
+```
+
+Create a new repository on the remote server.
+
+**Arguments**:
+
+- `name` - `str`
+  Name of the repository in the format 'namespace/repo_name'.
+- `description` - `str`
+  Description of the repository.
+  Only applicable to [OxenHub](https://oxen.ai).
+- `is_public` - `bool`
+  Whether the repository is public or private.
+  Only applicable to [OxenHub](https://oxen.ai).
+- `host` - `str`
+  The host to connect to. Defaults to 'hub.oxen.ai'
+- `files` - `List[Tuple[str, str]]`
+  A list of tuples containing the path to the file and the contents
+  of the file that you would like to seed the repository with.
+
+**Returns**:
+
+  [RemoteRepo](/python-api/remote_repo)
+
 <a id="oxen.remote_repo.RemoteRepo"></a>
 
 ## RemoteRepo Objects
@@ -10,7 +65,8 @@
 class RemoteRepo()
 ```
 
-The RemoteRepo class allows you to interact with an Oxen repository without downloading the data locally.
+The RemoteRepo class allows you to interact with an Oxen repository
+without downloading the data locally.
 
 ## Examples
 
@@ -52,7 +108,7 @@ print(df.head())
 ## \_\_init\_\_
 
 ```python
-def __init__(path: str, host: str = "hub.oxen.ai", revision: str = "main")
+def __init__(path: str, host: Optional[str] = None, revision: str = "main")
 ```
 
 Create a new RemoteRepo object to interact with.
@@ -72,10 +128,17 @@ Create a new RemoteRepo object to interact with.
 ## create
 
 ```python
-def create()
+def create(empty: bool = False, is_public: bool = False)
 ```
 
 Will create the repo on the remote server.
+
+**Arguments**:
+
+- `empty` - `bool`
+  Whether to create an empty repo or not. Default: False
+- `is_public` - `bool`
+  Whether the repository is public or private. Default: False
 
 <a id="oxen.remote_repo.RemoteRepo.exists"></a>
 
@@ -140,21 +203,21 @@ Lists the contents of a directory in the remote repo.
 ## download
 
 ```python
-def download(remote_path: str,
-             local_path: Optional[str] = None,
-             revision: str = "")
+def download(src: str,
+             dst: Optional[str] = None,
+             revision: Optional[str] = None)
 ```
 
 Download a file or directory from the remote repo.
 
 **Arguments**:
 
-- `remote_path` - `str`
+- `src` - `str`
   The path to the remote file
-- `local_path` - `str | None`
+- `dst` - `str | None`
   The path to the local file. If None, will download to
-  the same path as remote_path
-- `revision` - `str`
+  the same path as `src`
+- `revision` - `str | None`
   The branch or commit id to download. Defaults to `self.revision`
 
 <a id="oxen.remote_repo.RemoteRepo.add"></a>
@@ -255,6 +318,62 @@ def branches()
 ```
 
 List all branches for a remote repo
+
+<a id="oxen.remote_repo.RemoteRepo.get_df_size"></a>
+
+## get\_df\_size
+
+```python
+def get_df_size(path: str)
+```
+
+Get the size of a dataframe file on the remote repo
+
+**Arguments**:
+
+- `path` - `str`
+  The path to the df on the remote
+
+<a id="oxen.remote_repo.RemoteRepo.get_df_row"></a>
+
+## get\_df\_row
+
+```python
+def get_df_row(path: str, idx: int)
+```
+
+Fetches a row from the dataframe at the specified path on the remote repo
+
+**Arguments**:
+
+- `path` - `str`
+  Path to the dataframe on the remote repo
+- `idx` - `int`
+  The index of the row to return
+
+<a id="oxen.remote_repo.RemoteRepo.get_df_slice"></a>
+
+## get\_df\_slice
+
+```python
+def get_df_slice(path: str,
+                 start: int,
+                 end: int,
+                 columns: Optional[List[str]] = None)
+```
+
+Gets a slice of rows from the dataframe at the specified path on the remote repo
+
+**Arguments**:
+
+- `path` - `str`
+  Path to the dataframe on the remote repo
+- `start` - `int`
+  The start index of the data frame to return
+- `end` - `int`
+  The end index of the data frame to return
+- `columns` - `List[str]`
+  A list of column names to return. If None, will return all columns.
 
 <a id="oxen.remote_repo.RemoteRepo.add_df_row"></a>
 
