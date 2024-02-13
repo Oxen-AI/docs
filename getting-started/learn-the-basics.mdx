@@ -124,6 +124,37 @@ with open(data_path, "w") as f:
 
 </CodeGroup>
 
+## Delete Branch
+
+Once finished with a branch, you can delete it.
+
+<CodeGroup>
+
+```bash CLI
+# Checkout main branch locally
+oxen checkout main
+# Delete 'other_branch' locally
+oxen branch -d new_branch # may need -D if branch is not merged into main
+# Delete branch in remote repo
+oxen push origin --delete new_branch
+```
+
+```python Python
+import os
+from oxen import LocalRepo
+
+# Instantiate a LocalRepo object
+repo = LocalRepo("/path/to/data")
+# Checkout the main branch
+repo.checkout("main")
+# Delete new_branch
+repo.branch(name ='new_branch', delete=True)
+# Delete remote branch
+repo.push('origin', 'new_branch', delete=True)
+```
+
+</CodeGroup>
+
 ## Compare Changes
 
 View the change you made with the `oxen diff` command. This will show you the changes you made to your data since the last commit.
@@ -138,9 +169,9 @@ Once you [push](#push-data) you changes to [OxenHub](https://oxen.ai), you can v
     <img src="/images/diff.jpg" alt="oxen cli demo" />
 </p>
 
-## Revert Changes
+## Restore Changes
 
-If you are not happy with the changes you made to your data, you can revert them to the previous commit with the `oxen restore` command.
+If you are not happy with the changes you made to your data, you can restore them to the previous commit with the `oxen restore` command.
 
 <CodeGroup>
 
