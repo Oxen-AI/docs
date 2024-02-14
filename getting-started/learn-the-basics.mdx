@@ -148,7 +148,7 @@ repo = LocalRepo("/path/to/data")
 # Checkout the main branch
 repo.checkout("main")
 # Delete new_branch
-repo.branch(name ='new_branch', delete=True)
+repo.branch('new_branch', delete=True)
 # Delete remote branch
 repo.push('origin', 'new_branch', delete=True)
 ```
