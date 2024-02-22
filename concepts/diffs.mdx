@@ -1,6 +1,6 @@
 ---
 title: 'Data Diffs'
-description: 'Quickly find differences in your datasets with Oxen.ai'
+description: 'Quickly find changes in your datasets with Oxen.ai'
 ---
 
 Oxen.ai has built in tools to help you find differences in your datasets. It is as simple as running the `oxen diff` command with the path to your datasets.
@@ -33,11 +33,13 @@ shape: (6, 7)
 +-------------+-----+-----+-------+--------+-------------+-------------------+
 ```
 
-Under the hood Oxen.ai is using a combination of hashing and diffing algorithms to find the differences in your datasets. This allows you to quickly find changes in your datasets, whether they are rows, columns, or individual cells. Oxen's diff tool tries to strike a balance between being easy to use and being powerful enough to handle complex datasets.
+Under the hood Oxen.ai is using a combination of hashing and diffing algorithms to find the differences in your datasets. This allows you to quickly find changes in your datasets, whether they are rows, columns, or individual cells. Oxen's diff tool tries to strike a balance between being easy to use and being flexible enough to handle complex datasets.
 
-# Tools for Data Diffs
+# Pick Your Tooling
 
-The tooling is available through the 🖥️ command line, 🦀 rust library, 🐍 python library, as well as the 🌎 web interface. This guide will focus on the command line tooling, but the same principles apply to the other interfaces.
+All the functionality below is available through the [🖥️ Command Line](/getting-started/cli), [🦀 Rust Library](https://crates.io/crates/liboxen), [🐍 Python Library](/getting-started/python), as well as the [🌎 Web Interface](/getting-started/oxen-hub). This guide will focus on the command line tooling, but the same principles apply to the other interfaces.
+
+Using the [Oxen.ai Web Hub](https://oxen.ai) you can quickly visualize and navigate the changes in your datasets with an easy to use interface. Sign up for free 👉 [here](https://oxen.ai/register).
 
 ![Data Diff](/images/data-frames/data-diff.png)
 
@@ -115,7 +117,7 @@ shape: (1, 3)
 +--------+----------+-------------------+
 ```
 
-As you can see Oxen found the one added row and added a `.oxen.diff.status` column to the dataset to show the status of the row.
+As you can see Oxen found the one added row and augmented the data frame with an `.oxen.diff.status` column to show the status of the row.
 
 There are three possible values for the `.oxen.diff.status` column:
 
@@ -125,7 +127,7 @@ There are three possible values for the `.oxen.diff.status` column:
 
 ## Removing Rows
 
-Next remove the first entry of the file to see how Oxen handles deletions.
+Next remove the first entry of the file to see how Oxen handles deletions. We will use the `sed` command with the in place flag `-i` to remove the first row from the file.
 
 ```bash
 sed -i '' '2d' dataset.csv
@@ -192,7 +194,7 @@ shape: (5, 3)
 +----------------------------------+-----------+-------------------+
 ```
 
-You'll notice that for every row we modified we end up having +1 addition and +1 removal. This is because Oxen is treating the modified row as a new row and a removed row.
+You'll notice that for every row we modified we end up having +1 addition and +1 removal. This is because Oxen is treating the modified row as one added row and one removed row.
 
 ## Specifying Keys
 
