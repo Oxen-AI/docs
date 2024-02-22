@@ -9,7 +9,7 @@ Oxen.ai has built in tools to help you find differences in your datasets. It is 
 oxen diff dataset1.csv dataset2.csv -o diff.csv
 ```
 
-```bash
+```
 Column changes:
    + label (str)
 
@@ -53,7 +53,7 @@ In order to demonstrate how to use the `oxen diff` command, we will need a datas
 
 Create a new file called `dataset.csv` and add the following data to it.
 
-```bash
+```
 prompt,category
 What is the capital of France?,geography
 What is 2+10?,math
@@ -68,7 +68,7 @@ If you are not familiar with the `oxen df` command it is a handy tool to manipul
 oxen df dataset.csv
 ```
 
-```bash
+```
 shape: (5, 2)
 +-----------------------------------+-------------+
 | prompt                            | category    |
@@ -105,7 +105,7 @@ If you want to see the changes between the current version of your file and the 
 oxen diff dataset.csv
 ```
 
-```bash
+```
 Row changes:
    + 1 (added)
 
@@ -143,7 +143,7 @@ Verify that the first row was removed by using the `oxen diff` command.
 oxen diff dataset.csv
 ```
 
-```bash
+```
 Row changes:
    + 1 (added)
    - 1 (removed)
@@ -177,7 +177,7 @@ What is the fastest land animal?,trivia
 
 If we run the `oxen diff` command again, we will see the changes.
 
-```bash
+```
 Row changes:
    + 3 (added)
    - 2 (removed)
@@ -208,7 +208,7 @@ If you have a unique identifier for each row, you can use the `--keys` (or `-k`)
 oxen diff dataset.csv -k prompt
 ```
 
-```bash
+```
 Row changes:
    Δ 1 (modified)
    + 2 (added)
@@ -242,7 +242,7 @@ Adding and removing rows is great, but what about changes to the schema itself? 
 
 Update your raw csv with the new columns like so:
 
-```bash
+```
 id,prompt,answer,category
 0,What is 2+10?,12,math
 1,What is the capital of Germany?,Berlin,trivia
@@ -258,7 +258,7 @@ Now if you run the `oxen diff` command, you will see that it automatically detec
 oxen diff dataset.csv
 ```
 
-```bash
+```
 Column changes:
    + id (i64)
    + answer (str)
@@ -298,7 +298,7 @@ To see this in action, let's add one row, remove one row, and modify 3 existing 
 
 Overwrite the `dataset.csv` file with the following data.
 
-```bash
+```
 id,prompt,answer,category
 0,What is 2+10?,12,math
 1,What is the capital of Germany?,The capital of Germany is Berlin,trivia
@@ -314,7 +314,7 @@ Since we only modified the answers in this dataset and not the category or the p
 oxen diff dataset.csv -k id,prompt -t answer
 ```
 
-```bash
+```
 Row changes:
    Δ 3 (modified)
    + 1 (added)
@@ -344,7 +344,7 @@ Contrast this with a default diff which will show 8 changes, 4 added and 4 remov
 oxen diff dataset.csv
 ```
 
-```bash
+```
 Row changes:
    + 4 (added)
    - 4 (removed)
@@ -376,7 +376,7 @@ To see how this works, try using the `-k` flag on the same dataset without any t
 oxen diff dataset.csv -k id
 ```
 
-```bash
+```
 Row changes:
    Δ 3 (modified)
    + 1 (added)
@@ -500,7 +500,7 @@ Quickly inspect the `model_results.csv` file with the `oxen df` command to make 
 oxen df model_results.csv
 ```
 
-```bash
+```
 shape: (6, 8)
 +-----+--------------------------+------------------------+-------------+--------------------------------+------------+-------+----------------+
 | id  | prompt                   | answer                 | category    | response                       | is_correct | model | inference_time |
@@ -533,7 +533,7 @@ Let's say you tweaked the prompt and wanted to run the dataset through the LLM a
 
 Overwrite the `model_results.csv` file with the new results.
 
-```bash
+```
 id,prompt,answer,category,response,is_correct,model,inference_time
 0,What is 2+10?,12,math,12,true,model-2,0.21
 1,What is the capital of Germany?,Berlin,trivia,Berlin,true,model-2,0.12
@@ -549,7 +549,7 @@ If we do a base diff without any flags, we will see that every row is has been m
 oxen diff model_results.csv
 ```
 
-```bash
+```
 Row changes:
    + 6 (added)
    - 6 (removed)
@@ -580,7 +580,7 @@ In combination with the `--keys` flag, you can use the `--targets` (or `-t`) fla
 oxen diff model_results.csv -k id,prompt,answer -t response,is_correct
 ```
 
-```bash
+```
 Row changes:
    Δ 2 (modified)
 
