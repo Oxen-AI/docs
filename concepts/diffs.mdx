@@ -45,6 +45,8 @@ Using the [Oxen.ai Web Hub](https://oxen.ai) you can quickly visualize and navig
 
 We will build up from simple examples to more complex ones. Starting from adding and removing rows, to modifying rows, to detecting schema changes, and finally providing specific target fields you are interested in.
 
+All the data below can be found in the [datasets/diff-examples repository](https://www.oxen.ai/datasets/diff-examples).
+
 # Let's Build a Dataset
 
 In order to demonstrate how to use the `oxen diff` command, we will need a dataset to work with. Imagine we are collecting a dataset for fine-tuning a Large Language Model (LLM). This dataset will have a set of `prompts` and a `category` that they belong to.
@@ -198,7 +200,7 @@ You'll notice that for every row we modified we end up having +1 addition and +1
 
 ## Specifying Keys
 
-The reason that the above example treats the modified row as a new row and a removed row is because both the `prompt` and `category` columns being considered keys under the hood. `oxen diff` hashes the combination of keys in order to find differences in the data. The default keys are all the common columns between the two datasets.
+The reason that the above example treats the modified row as a new row and a removed row is because both the `prompt` and `category` columns being considered keys under the hood. `oxen diff` hashes the combination of keys in order to find differences in the data. The default keys are all the common columns between the two versions of the datasets.
 
 If you have a unique identifier for each row, you can use the `--keys` (or `-k`) flag to specify the column or columns that should be used as the primary keys.
 
@@ -279,7 +281,7 @@ shape: (6, 5)
 +-----------------------------------+-------------+----------+------------------------------+-------------------+
 ```
 
-If you are happy with the changes, you can add and commit the changes to your local repository.
+Removing a column would show the values in columns called `.left` to show the values in columns that are now missing. If you are happy with the changes, you can add and commit the changes to your local repository.
 
 ```bash
 oxen add dataset.csv
@@ -290,7 +292,9 @@ oxen commit -m "Added id and answer column"
 
 Not only can you specify keys to narrow down the scope of what fields oxen hashes, but you can also specify targets with the `--targets` (`-t`) flag to narrow down the scope of what fields oxen compares.
 
-You can think of the keys as the fields that are hashed to create a unique id and the targets as the fields that are compared to tell if a row is added, removed, or modified. To see this in action, let's add one row, remove one row, and modify 3 existing ones to demonstrate how this works.
+You can think of the keys as the fields that are hashed to create a unique id to tell if a row was added or removed. The targets are the fields that are compared to check if a row was modified. By default if you specify a single key, the rest of the columns become the targets. If you specify multiple keys, the targets are all the columns that are not keys.
+
+To see this in action, let's add one row, remove one row, and modify 3 existing ones to demonstrate how this works. In this case we will only modify values of the `answer` column.
 
 Overwrite the `dataset.csv` file with the following data.
 
@@ -364,7 +368,9 @@ shape: (8, 5)
 +-----+----------------------------------+----------------------------------+-------------+-------------------+
 ```
 
-A diff that only specifies a key will show the correct number of changes, but it may have many columns that are not relevant to the changes you are interested in. This is where the `-t` flag comes in handy.
+A diff that only specifies a key will show the correct number of changes, but it may have many columns that are not relevant to the changes you are interested in. This is because under the hood Oxen infers the targets to be the remaining columns. Having more control over the targets is where the `-t` flag comes in handy.
+
+To see how this works, try using the `-k` flag on the same dataset without any targets.
 
 ```bash
 oxen diff dataset.csv -k id
@@ -408,15 +414,15 @@ The `--output` (`-o`) flag can be used to save the results of the diff to a new 
 oxen diff dataset.csv -o diff.csv
 ```
 
-Oxen will save the results of the diff to a new file called `diff.csv`. You can then load it into a jupyter notebook or any other tool to do more analysis on the results.
+The above command will save the results of the diff to a new file called `diff.csv`. You can then load it into a jupyter notebook, pandas, or even back into Oxen to do more analysis on the results.
 
 ## Real World Example
 
-To drive this home, imagine you have taken this dataset and run it through an LLM with a prompt to get the responses. You have saved the results in a new file called `model_results.csv`.
+To drive all these features home, imagine you have taken the dataset above and run it through an LLM with a prompt to get the responses. You have saved the results in a new file called `model_results.csv`.
 
 Below is an example script that runs the prompts through `gpt-3.5-turbo` and saves the results to a new file. This script uses the `openai` python package to interact with the OpenAI API.
 
-process_csv_with_openai.py
+[process_csv_with_openai.py](https://www.oxen.ai/datasets/diff-examples/file/main/process_with_openai.py)
 
 ```python
 import csv
@@ -606,6 +612,10 @@ Imagine you had two parallel set of results from two different models, `model_re
 oxen diff model_results_1.csv model_results_2.csv
 ```
 
-In the next section we will see how this is useful for finding the best model given multiple results datasets.
+Upcoming: Guides for how comparing different files can be used for finding the best model given multiple results datasets.
 
-[Next: Comparing Different Files](/concepts/compare)
+You can find all the example data used in this guide in the [datasets/diff-examples repository](https://www.oxen.ai/datasets/diff-examples).
+
+{/* In the next section we will see how this is useful for finding the best model given multiple results datasets.
+
+[Next: Comparing Different Files](/concepts/compare) */}
