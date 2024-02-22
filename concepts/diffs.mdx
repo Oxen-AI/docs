@@ -3,22 +3,59 @@ title: 'Data Diffs'
 description: 'Quickly find differences in your datasets with Oxen.ai'
 ---
 
-Oxen.ai has built in tools to help you find differences in your datasets. Unlike code where you are scanning line by line through changes, datasets are often large and have structure that can be used to find differences. Oxen.ai uses a combination of automatic schema inference and hashing to find differences in your datasets.
+Oxen.ai has built in tools to help you find differences in your datasets. It is as simple as running the `oxen diff` command with the path to your datasets.
+
+```bash
+oxen diff dataset1.csv dataset2.csv -o diff.csv
+```
+
+```bash
+Column changes:
+   + label (str)
+
+Row changes:
+   Δ 1 (modified)
+   + 3 (added)
+   - 2 (removed)
+
+shape: (6, 7)
++-------------+-----+-----+-------+--------+-------------+-------------------+
+| file        | x   | y   | width | height | label.right | .oxen.diff.status |
+| ---         | --- | --- | ---   | ---    | ---         | ---               |
+| str         | i64 | i64 | i64   | i64    | str         | str               |
++-------------+-----+-----+-------+--------+-------------+-------------------+
+| image_0.jpg | 0   | 0   | 10    | 10     | cat         | modified          |
+| image_1.jpg | 1   | 2   | 10    | 20     | null        | removed           |
+| image_1.jpg | 200 | 100 | 10    | 20     | dog         | added             |
+| image_2.jpg | 4   | 10  | 20    | 20     | null        | removed           |
+| image_3.jpg | 4   | 10  | 20    | 20     | dog         | added             |
+| image_4.jpg | 10  | 10  | 10    | 10     | dog         | added             |
++-------------+-----+-----+-------+--------+-------------+-------------------+
+```
+
+Under the hood Oxen.ai is using a combination of hashing and diffing algorithms to find the differences in your datasets. This allows you to quickly find changes in your datasets, whether they are rows, columns, or individual cells. Oxen's diff tool tries to strike a balance between being easy to use and being powerful enough to handle complex datasets.
+
+# Tools for Data Diffs
+
+The tooling is available through the 🖥️ command line, 🦀 rust library, 🐍 python library, as well as the 🌎 web interface. This guide will focus on the command line tooling, but the same principles apply to the other interfaces.
 
 ![Data Diff](/images/data-frames/data-diff.png)
 
-# Creating a dataset
+We will build up from simple examples to more complex ones. Starting from adding and removing rows, to modifying rows, to detecting schema changes, and finally providing specific target fields you are interested in.
 
-Let's start with a simple example of collecting a dataset for fine-tuning a Large Language Model (LLM). This dataset will have a set of `prompts` and a `category` that they belong to.
+# Let's Build a Dataset
 
+In order to demonstrate how to use the `oxen diff` command, we will need a dataset to work with. Imagine we are collecting a dataset for fine-tuning a Large Language Model (LLM). This dataset will have a set of `prompts` and a `category` that they belong to.
+
+Create a new file called `dataset.csv` and add the following data to it.
 
 ```bash
-echo "prompt,category" > dataset.csv
-echo "What is the capital of France?,geography" >> dataset.csv
-echo "What is 2+10?,math" >> dataset.csv
-echo "What is the capital of Germany?,geography" >> dataset.csv
-echo "What is the best python library for http requests?,programming" >> dataset.csv
-echo "Tell me a story about an ox.,story" >> dataset.csv
+prompt,category
+What is the capital of France?,geography
+What is 2+10?,math
+What is the capital of Germany?,geography
+What is the best python library for http requests?,programming
+Tell me a story about an ox.,story
 ```
 
 If you are not familiar with the `oxen df` command it is a handy tool to manipulate and inspect tabular data. You can use it with any CSV, TSV, Parquet, or line delimited JSON file.
@@ -42,22 +79,23 @@ shape: (5, 2)
 +-----------------------------------+-------------+
 ```
 
-Add and commit this version of the dataset to your local repository.
+In order to return to this initial version of the data at any point, let's add and commit it to a local Oxen repository.
 
 ```bash
+oxen init
 oxen add dataset.csv
 oxen commit -m "Initial dataset"
 ```
 
-## Adding and Removing Rows
+## Adding Rows
 
-Then let's append a row to the dataset.
+Let's start with a completely additive workflow as if we are collecting a large datasets of prompts. Add a row to the dataset by simply appending to the file.
 
 ```bash
 echo "20*20,math" >> dataset.csv
 ```
 
-If you want to see the changes between the current version of your file and the previous version, you can use the `oxen diff` command.
+If you want to see the changes between the current version of your file and the previous version, you can use the `oxen diff` command. If you only specify one file, Oxen will compare the current version of the file with the last committed version.
 
 ```bash
 oxen diff dataset.csv
@@ -85,13 +123,17 @@ There are three possible values for the `.oxen.diff.status` column:
 - `removed`
 - `modified`
 
-Let's remove the first entry of the file to see how Oxen handles deletions.
+## Removing Rows
+
+Next remove the first entry of the file to see how Oxen handles deletions.
 
 ```bash
 sed -i '' '2d' dataset.csv
 ```
 
 (Note: the `-i ''` flag is for MacOS, if you are using Linux you can simply use `-i`.) Since the file is a CSV with a header row, you will need to remove the second row hence `2d`.
+
+Verify that the first row was removed by using the `oxen diff` command.
 
 ```bash
 oxen diff dataset.csv
@@ -113,28 +155,20 @@ shape: (2, 3)
 +--------------------------------+-----------+-------------------+
 ```
 
+## Modifing Rows
+
 This is great for adding and removing rows, but what about modifying rows? Say we change the `category` of "geography" to be a more generic "trivia" category and add a new prompt to it "What is the fastest land animal?".
 
-The raw data now should look like this:
+Edit the `datasets.csv` file to look like this:
 
 ```bash
-oxen df dataset.csv
-```
-
-```bash
-shape: (6, 2)
-+-----------------------------------+-------------+
-| prompt                            | category    |
-| ---                               | ---         |
-| str                               | str         |
-+-----------------------------------+-------------+
-| What is 2+10?                     | math        |
-| What is the capital of Germany?   | trivia      |
-| What is the best python library … | programming |
-| Tell me a story about an ox.      | story       |
-| 20*20                             | math        |
-| What is the fastest land animal?  | trivia      |
-+-----------------------------------+-------------+
+prompt,category
+What is 2+10?,math
+What is the capital of Germany?,trivia
+What is the best python library for http requests?,programming
+Tell me a story about an ox.,story
+20*20,math
+What is the fastest land animal?,trivia
 ```
 
 If we run the `oxen diff` command again, we will see the changes.
@@ -160,9 +194,9 @@ shape: (5, 3)
 
 You'll notice that for every row we modified we end up having +1 addition and +1 removal. This is because Oxen is treating the modified row as a new row and a removed row.
 
-## Modified Rows with Keys
+## Specifying Keys
 
-The reason that the above example treats the modified row as a new row and a removed row is because both the `prompt` and `category` columns being considered keys under the hood. `oxen diff` hashes the combination of keys in order to find differences in the data.
+The reason that the above example treats the modified row as a new row and a removed row is because both the `prompt` and `category` columns being considered keys under the hood. `oxen diff` hashes the combination of keys in order to find differences in the data. The default keys are all the common columns between the two datasets.
 
 If you have a unique identifier for each row, you can use the `--keys` (or `-k`) flag to specify the column or columns that should be used as the primary keys.
 
@@ -189,7 +223,7 @@ shape: (4, 4)
 +----------------------------------+---------------+----------------+-------------------+
 ```
 
-Great! Now we can see the the `prompt` column is being used as the key and we can see the changes in the `category` column.
+Great! This collapsed our added and removed row into a single modified row. The category column has now been split into two columns, `category.left` and `category.right`, to show the old and new values.
 
 Assumming these changes look good, you can add and commit the changes to your local repository.
 
@@ -198,9 +232,9 @@ oxen add dataset.csv
 oxen commit -m "Added and removed rows"
 ```
 
-## Schema Changes
+## Adding Columns
 
-Adding and removing rows is great, but what about changes to the columns? Instead of using the prompt as a key, let's add an ID column to the dataset and use that as the key. Let's also add an `answer` column to the dataset, so that we can evaluate the responses.
+Adding and removing rows is great, but what about changes to the schema itself? Instead of using the prompt as a key, let's add an `id` column to the dataset and use that as the key. Let's also add an `answer` column to the dataset, so that we can evaluate the responses.
 
 Update your raw csv with the new columns like so:
 
@@ -214,7 +248,7 @@ id,prompt,answer,category
 5,What is the fastest land animal?,cheetah,trivia
 ```
 
-Now if you run the `oxen diff` command, you will see that it automatically detects the new columns and that each row has been modified.
+Now if you run the `oxen diff` command, you will see that it automatically detects the added columns and displays the new values in `id.right` and `answer.right`.
 
 ```bash
 oxen diff dataset.csv
@@ -243,17 +277,114 @@ shape: (6, 5)
 +-----------------------------------+-------------+----------+------------------------------+-------------------+
 ```
 
-Let's commit these changes so we have a proper primary key and answers for our dataset.
+If you are happy with the changes, you can add and commit the changes to your local repository.
 
 ```bash
 oxen add dataset.csv
 oxen commit -m "Added id and answer column"
 ```
 
+## Specifying Targets
 
-TODO: Split compare disparate files into a separate section - link to a "Compare" doc
+Now imagine you have taken this dataset and run it through an LLM with a prompt to get the responses. You have saved the results in a new file called `model_results.csv`.
 
-## Targeting Specific Columns
+```python
+
+```
+
+```bash
+id,prompt,answer,category,response,is_correct,model,inference_time
+0,What is 2+10?,12,math,12,true,model-1,0.23
+1,What is the capital of Germany?,Berlin,trivia,Munich,false,model-1,0.11
+2,What is the best python library for http requests?,requests,programming,requests,true,model-1,0.32
+3,Tell me a story about an ox.,I am sorry I cannot do that.,story,Once upon a time,false,model-1,0.22
+4,20*20,400,math,400,true,model-1,0.1
+5,What is the fastest land animal?,cheetah,trivia,cheetah,true,model-1,0.4
+```
+
+This dataset has the same `id`, `prompt`, `answer`, and `category` columns as the original dataset, but it also has some additional columns such as `response`, `is_correct`, `model`, and `inference_time`.
+
+Add and commit the model results to your local repository.
+
+```bash
+oxen add model_results.csv
+oxen commit -m "Added model results"
+```
+
+Let's say you tweaked the prompt and wanted to run the dataset through the LLM again. Since you have the results versioned in your local repository, you can fearlessly overwrite the file and run the `oxen diff` command to see the differences.
+
+Overwrite the `model_results.csv` file with the new results.
+
+```bash
+id,prompt,answer,category,response,is_correct,model,inference_time
+0,What is 2+10?,12,math,12,true,model-2,0.21
+1,What is the capital of Germany?,Berlin,trivia,Berlin,true,model-2,0.12
+2,What is the best python library for http requests?,requests,programming,requests,true,model-2,0.31
+3,Tell me a story about an ox.,I am sorry I cannot do that.,story,I am sorry I cannot do that.,true,model-2,0.23
+4,20*20,400,math,400,true,model-2,0.09
+5,What is the fastest land animal?,cheetah,trivia,cheetah,true,model-2,0.41
+```
+
+If we do a base diff without any flags, we will see that every row is has been marked as added and removed, since the `model` and `inference_time` columns are always different.
+
+```bash
+oxen diff model_results.csv
+```
+
+```bash
+Row changes:
+   + 6 (added)
+   - 6 (removed)
+
+shape: (12, 9)
++-----+----------------------------------+---------+----------+---+------------+---------+----------------+-------------------+
+| id  | prompt                           | answer  | category | … | is_correct | model   | inference_time | .oxen.diff.status |
+| --- | ---                              | ---     | ---      |   | ---        | ---     | ---            | ---               |
+| i64 | str                              | str     | str      |   | bool       | str     | f64            | str               |
++-----+----------------------------------+---------+----------+---+------------+---------+----------------+-------------------+
+| 4   | 20*20                            | 400     | math     | … | true       | model-2 | 0.09           | added             |
+| 4   | 20*20                            | 400     | math     | … | true       | model-1 | 0.1            | removed           |
+| 0   | What is 2+10?                    | 12      | math     | … | true       | model-2 | 0.21           | added             |
+| 0   | What is 2+10?                    | 12      | math     | … | true       | model-1 | 0.23           | removed           |
+| …   | …                                | …       | …        | … | …          | …       | …              | …                 |
+| 1   | What is the capital of Germany?  | Berlin  | trivia   | … | true       | model-2 | 0.12           | added             |
+| 1   | What is the capital of Germany?  | Berlin  | trivia   | … | false      | model-1 | 0.11           | removed           |
+| 5   | What is the fastest land animal? | cheetah | trivia   | … | true       | model-1 | 0.4            | removed           |
+| 5   | What is the fastest land animal? | cheetah | trivia   | … | true       | model-2 | 0.41           | added             |
++-----+----------------------------------+---------+----------+---+------------+---------+----------------+------------
+```
+
+This is clearly not what we want. We want to see the differences in the `response` and `is_correct` columns, and ignore the `model` and `inference_time` columns.
+
+In combination with the `--keys` flag, you can use the `--targets` (or `-t`) flag to specify the columns you are interested in.
+
+```bash
+oxen diff model_results.csv -k id,prompt,answer -t response,is_correct
+```
+
+```bash
+Row changes:
+   Δ 2 (modified)
+
+shape: (2, 8)
++-----+----------------+----------------+----------------+----------------+----------------+----------------+---------------+
+| id  | prompt         | answer         | response.left  | response.right | is_correct.lef | is_correct.rig | .oxen.diff.st |
+| --- | ---            | ---            | ---            | ---            | t              | ht             | atus          |
+| i64 | str            | str            | str            | str            | ---            | ---            | ---           |
+|     |                |                |                |                | bool           | bool           | str           |
++-----+----------------+----------------+----------------+----------------+----------------+----------------+---------------+
+| 1   | What is the    | Berlin         | Munich         | Berlin         | false          | true           | modified      |
+|     | capital of     |                |                |                |                |                |               |
+|     | Germany?       |                |                |                |                |                |               |
+| 3   | Tell me a      | I am sorry I   | Once upon a    | I am sorry I   | false          | true           | modified      |
+|     | story about an | cannot do      | time           | cannot do      |                |                |               |
+|     | ox.            | that.          |                | that.          |                |                |               |
++-----+----------------+----------------+----------------+----------------+----------------+----------------+---------------+
+```
+
+This now narrows down the scope of the diff to only the `response` and `is_correct` columns. We can see that the new model has a different response for the prompt "What is the capital of Germany?" and the response for "Tell me a story about an ox.". This allows us to quickly narrow down the responses that model 1 and model 2 disagree on, and which ones are correct.
+
+## Compare
 
 The next logical step for this dataset would be to run it through a model and add some additional fields such as `response`, `is_correct`, `model` and `inference_time`. The problem is this adds a lot of noise to the diff since the `model` and `inference_time` columns will always be different.
 
@@ -318,21 +449,3 @@ shape: (2, 8)
 ```
 
 In this case we are using the `id`, `prompt`, and `answer` columns as the keys and the `response` and `is_correct` columns as the targets. This allows us to quickly narrow down the responses that model 1 and model 2 disagree on, and which ones are correct.
-
-# Text Diff
-
-If the file is any other type of text data, it will simply show you the added and removed lines.
-
-```bash
-oxen diff path/to/file.txt
-```
-
-```
- i
-+here
- am a text file that
-+I am modifying
--la-dee-da
-+la-doo-da
-+another line
-```
