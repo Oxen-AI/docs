@@ -22,14 +22,14 @@ From your home page, you can view your repositories and create a new repository.
 
 ## Setup Authorization
 
-You will notice on the side panel you have access to your API Key. In order to push data to your repository you will need to copy this key and set it up in your user config. This saves your key in `~/.oxen/user_config.toml` with one key per host if you ever need to push to multiple hosts.
+You will notice on the side panel you have access to your API Key. In order to push data to your repository you will need to copy this key and set it up in your user config. This saves your key in `~/.config/oxen/user_config.toml` with one key per host if you ever need to push to multiple hosts.
 
 ```bash
 oxen config --auth hub.oxen.ai YOUR_API_KEY
 ```
 
 ```bash
-cat ~/.oxen/user_config.toml
+cat ~/.config/oxen/user_config.toml
 ```
 
 ## Create Remote Repository
