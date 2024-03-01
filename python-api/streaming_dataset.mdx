@@ -1,0 +1,68 @@
+<a id="oxen.streaming_dataset"></a>
+
+# oxen.streaming\_dataset
+
+<a id="oxen.streaming_dataset.load_dataset"></a>
+
+## load\_dataset
+
+```python
+def load_dataset(repo: Union[RemoteRepo, str],
+                 paths: Optional[Union[str, List[str]]] = None,
+                 directory: Optional[str] = None,
+                 features: Optional[List[str]] = None,
+                 host: Optional[str] = None)
+```
+
+Load a dataset from a repo.
+
+Parameters
+----------
+repo : Repo
+    The oxen repository you are loading data from
+    can be a local or a remote repo
+paths : str | List[str] | None
+    A path or set of paths to the data files needed to load the dataset.
+    all paths must be data frames.
+directory : str | None
+    The directory to stream the data from.
+    Must be a directory of files with type data frame.
+    Can be used instead of paths.
+    (default: None)
+features : List[str] | None
+    The columns of the dataset (default: None)
+
+<a id="oxen.streaming_dataset.StreamingDataset"></a>
+
+## StreamingDataset Objects
+
+```python
+class StreamingDataset()
+```
+
+StreamingDataset object constructs a dataset from a remote repo.
+It can be used to load data into a dataloader.
+
+<a id="oxen.streaming_dataset.StreamingDataset.__init__"></a>
+
+## \_\_init\_\_
+
+```python
+def __init__(provider: DatasetPathProvider,
+             features=None,
+             num_buffers=3,
+             buffer_size=128,
+             sleep_interval=0.1)
+```
+
+Create a new RemoteRepo object to interact with.
+
+Parameters
+----------
+provider : DatasetPathProvider
+    The implementation of fetching data from a path and index
+features : List[str] | None
+    The features of the dataset, columns, dtypes, etc.
+paths : str | List[str]
+    The paths to the data files needed to load the dataset
+

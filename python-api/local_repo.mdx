@@ -93,6 +93,16 @@ def branches()
 
 List all branches for a repo
 
+<a id="oxen.local_repo.LocalRepo.branch"></a>
+
+## branch
+
+```python
+def branch(name: str, delete=False)
+```
+
+
+
 <a id="oxen.local_repo.LocalRepo.checkout"></a>
 
 ## checkout
@@ -201,7 +211,9 @@ Map a name to a remote url.
 ## push
 
 ```python
-def push(remote_name: str = "origin", branch: str = "main")
+def push(remote_name: str = "origin",
+         branch: str = "main",
+         delete: bool = False)
 ```
 
 Push data to a remote repo from a local repo.

@@ -5,9 +5,22 @@ description: 'Quickly find changes in your datasets with Oxen.ai'
 
 Oxen.ai has built in tools to help you find differences in your datasets. It is as simple as running the `oxen diff` command with the path to your datasets.
 
-```bash
+TODO: Add python code to examples
+
+<CodeGroup>
+
+```bash CLI
 oxen diff dataset1.csv dataset2.csv -o diff.csv
 ```
+
+```bash Python
+import oxen
+
+diff = oxen.diff_tabular("dataset1.csv", "dataset2.csv")
+print(diff)
+```
+
+</CodeGroup>
 
 ```
 Column changes:

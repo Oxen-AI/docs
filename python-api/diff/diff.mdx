@@ -1,0 +1,134 @@
+<a id="oxen.diff/diff"></a>
+
+# oxen.diff/diff
+
+Oxen can be used to compare data frames and return a tabular diff.
+
+For example comparing two data frames will give you an output data frame,
+where the `.oxen.diff.status` column shows if the row was `added`, `removed`, 
+or `modified`.
+
+```
+shape: (6, 7)
++-------------+-----+-----+-------+--------+-------------+-------------------+
+| file        | x   | y   | width | height | label.right | .oxen.diff.status |
+| ---         | --- | --- | ---   | ---    | ---         | ---               |
+| str         | i64 | i64 | i64   | i64    | str         | str               |
++-------------+-----+-----+-------+--------+-------------+-------------------+
+| image_0.jpg | 0   | 0   | 10    | 10     | cat         | modified          |
+| image_1.jpg | 1   | 2   | 10    | 20     | null        | removed           |
+| image_1.jpg | 200 | 100 | 10    | 20     | dog         | added             |
+| image_2.jpg | 4   | 10  | 20    | 20     | null        | removed           |
+| image_3.jpg | 4   | 10  | 20    | 20     | dog         | added             |
+| image_4.jpg | 10  | 10  | 10    | 10     | dog         | added             |
++-------------+-----+-----+-------+--------+-------------+-------------------+
+```
+
+## Usage
+
+```python
+import os
+import oxen
+
+result = oxen.diff("dataset_1.csv", "dataset_2.csv")
+print(result.get())
+```
+
+<a id="oxen.diff/diff.diff"></a>
+
+## diff
+
+```python
+def diff(path: os.PathLike,
+         to: Optional[os.PathLike] = None,
+         repo_dir: Optional[os.PathLike] = None,
+         revision_left: Optional[str] = None,
+         revision_right: Optional[str] = None,
+         output: Optional[os.PathLike] = None,
+         keys: list[str] = [],
+         targets: list[str] = [])
+```
+
+Compares data from two paths and returns a diff respecting the type of data.
+
+**Arguments**:
+
+- `path` - `os.PathLike`
+  The path to diff. If `to` is not provided,
+  this will compare the data frame to the previous commit.
+- `to` - `os.PathLike`
+  An optional second path to compare to.
+  If provided this will be the right side of the diff.
+- `repo_dir` - `os.PathLike`
+  The path to the oxen repository. Must be provided if `compare_to` is
+  not provided, or if `revision_left` or `revision_right` is provided.
+  If not provided, the repository will be searched for in the current working directory.
+- `revision_left` - `str`
+  The left revision to compare. Can be a commit hash or branch name.
+- `revision_right` - `str`
+  The right revision to compare. Can be a commit hash or branch name.
+- `output` - `os.PathLike`
+  The path to save the diff to. If not provided, the diff will not be saved.
+- `keys` - `list[str]`
+  Only for tabular diffs. The keys to compare on.
+  This is used to join the two data frames.
+  Keys will be combined and hashed to create a identifier for each row.
+- `targets` - `list[str]`
+  Only for tabular diffs. The targets to compare on.
+  This is used to compare the values of the two data frames.
+
+<a id="oxen.diff/diff.Diff"></a>
+
+## Diff Objects
+
+```python
+class Diff()
+```
+
+Diff class wraps many types of diffs and provides a consistent interface. 
+For example the diff can be tabular or text. Eventually we will extend this 
+to support other types of diffs such as images, audio, etc.
+
+<a id="oxen.diff/diff.Diff.format"></a>
+
+## format
+
+```python
+@property
+def format() -> str
+```
+
+Returns the format of the diff. Ie. tabular, text, etc.
+
+<a id="oxen.diff/diff.Diff.tabular"></a>
+
+## tabular
+
+```python
+@property
+def tabular() -> Optional[TabularDiff]
+```
+
+Returns the tabular diff if the diff is tabular.
+
+<a id="oxen.diff/diff.Diff.text"></a>
+
+## text
+
+```python
+@property
+def text() -> Optional[TextDiff]
+```
+
+Returns the text diff if the diff is text.
+
+<a id="oxen.diff/diff.Diff.get"></a>
+
+## get
+
+```python
+def get()
+```
+
+Resolves the diff type and returns the appropriate diff object.
+

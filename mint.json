@@ -73,6 +73,10 @@
       "pages": [
         "python-api/index",
         "python-api/clone",
+        "python-api/diff/diff",
+        "python-api/diff/tabular_diff",
+        "python-api/diff/line_diff",
+        "python-api/diff/text_diff",
         "python-api/init",
         "python-api/repositories",
         "python-api/local_repo",
