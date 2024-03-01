@@ -137,6 +137,17 @@ Now that we have added the README.md file to the staging area, we can commit the
 repo.commit("Adding README.md")
 ```
 
+## Diff Changes
+
+Oxen.ai has powerful diff tools built in that allow you to see the changes to files between commits, branches, and more.
+
+```python
+result = oxen.diff("README.md")
+print(result.get())
+```
+
+To learn more about diffs checkout the [diff](/concepts/diffs) documentation or the [Python API Documentation](/python-api/diff/diff).
+
 ## Push To Remote
 
 It's one thing to version your data locally, but where the real power comes in is when you can share your data with others. Oxen repositories can be pushed to a remote repository hosted on [Oxen Hub](https://oxen.ai) or your own [oxen-server](/getting-started/oxen-server).

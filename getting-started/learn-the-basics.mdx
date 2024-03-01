@@ -155,12 +155,36 @@ repo.push('origin', 'new_branch', delete=True)
 
 </CodeGroup>
 
-## Compare Changes
+## Diff Changes
 
 View the change you made with the `oxen diff` command. This will show you the changes you made to your data since the last commit.
 
 ```bash CLI
-oxen diff people.csv
+oxen diff image_classification_data.csv
+```
+
+```
+Column changes:
+   + label (str)
+
+Row changes:
+   Δ 1 (modified)
+   + 3 (added)
+   - 2 (removed)
+
+shape: (6, 7)
++-------------+-----+-----+-------+--------+-------------+-------------------+
+| file        | x   | y   | width | height | label.right | .oxen.diff.status |
+| ---         | --- | --- | ---   | ---    | ---         | ---               |
+| str         | i64 | i64 | i64   | i64    | str         | str               |
++-------------+-----+-----+-------+--------+-------------+-------------------+
+| image_0.jpg | 0   | 0   | 10    | 10     | cat         | modified          |
+| image_1.jpg | 1   | 2   | 10    | 20     | null        | removed           |
+| image_1.jpg | 200 | 100 | 10    | 20     | dog         | added             |
+| image_2.jpg | 4   | 10  | 20    | 20     | null        | removed           |
+| image_3.jpg | 4   | 10  | 20    | 20     | dog         | added             |
+| image_4.jpg | 10  | 10  | 10    | 10     | dog         | added             |
++-------------+-----+-----+-------+--------+-------------+-------------------+
 ```
 
 Once you [push](#push-data) you changes to [OxenHub](https://oxen.ai), you can view the changes you made in your commit history.
@@ -168,6 +192,10 @@ Once you [push](#push-data) you changes to [OxenHub](https://oxen.ai), you can v
 <p align="center">
     <img src="/images/diff.jpg" alt="oxen cli demo" />
 </p>
+
+The diff command line tool is more powerful than it looks on the surface. Oxen has the ability to diff files of many formats, and the ability to specify keys are targets in tabular diffs to make it easier to see what changed.
+
+For advanced usage, check out the [full diff documentation](/concepts/diffs).
 
 ## Restore Changes
 
