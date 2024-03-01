@@ -5,9 +5,20 @@ description: 'Quickly find changes in your datasets with Oxen.ai'
 
 Oxen.ai has built in tools to help you find differences in your datasets. It is as simple as running the `oxen diff` command with the path to your datasets.
 
-```bash
+<CodeGroup>
+
+```bash CLI
 oxen diff dataset1.csv dataset2.csv -o diff.csv
 ```
+
+```bash Python
+import oxen
+
+result = oxen.diff("dataset1.csv", "dataset2.csv")
+print(result.get()) # .get() will resolve the diff data type
+```
+
+</CodeGroup>
 
 ```
 Column changes:
@@ -35,11 +46,17 @@ shape: (6, 7)
 
 Under the hood Oxen.ai is using a combination of hashing and diffing algorithms to find the differences in your datasets. This allows you to quickly find changes in your datasets, whether they are rows, columns, or individual cells. Oxen's diff tool tries to strike a balance between being easy to use and being flexible enough to handle complex datasets.
 
+# Diff Types
+
+Oxen.ai currently supports a [TextDiff](/python-api/diff/text_diff) and a [TabularDiff](/python-api/diff/tabular_diff) data type. 
+
+The `TabularDiff` data type is used to represent the differences in tabular data, such as CSV, TSV, or Parquet files. The `TextDiff` data type is used to represent the differences in text files, such as markdown, code, or configuration files. In the future, we plan to add support for other data types such as images, audio, and video.
+
 # Pick Your Tooling
 
 All the functionality below is available through the [🖥️ Command Line](/getting-started/cli), [🦀 Rust Library](https://crates.io/crates/liboxen), [🐍 Python Library](/getting-started/python), as well as the [🌎 Web Interface](/getting-started/oxen-hub). This guide will focus on the command line tooling, but the same principles apply to the other interfaces.
 
-Using the [Oxen.ai Web Hub](https://oxen.ai) you can quickly visualize and navigate the changes in your datasets with an easy to use interface. Sign up for free 👉 [here](https://oxen.ai/register).
+Using the [Oxen.ai Hub](https://oxen.ai) you can quickly visualize and navigate the changes in your datasets with an easy to use interface. Sign up for free 👉 [here](https://oxen.ai/register).
 
 ![Data Diff](/images/data-frames/data-diff.png)
 
@@ -64,9 +81,24 @@ Tell me a story about an ox.,story
 
 If you are not familiar with the `oxen df` command it is a handy tool to manipulate and inspect tabular data. You can use it with any CSV, TSV, Parquet, or line delimited JSON file.
 
-```bash
+<CodeGroup>
+
+```bash CLI
 oxen df dataset.csv
 ```
+
+```python Python
+import oxen
+
+# the oxen.df module can save and load files into a polars data frame
+# for more info on polars see: https://pola.rs/
+
+# it will infer the type of data from the fileextension
+df = oxen.df("dataset.csv")
+print(df)
+```
+
+</CodeGroup>
 
 ```
 shape: (5, 2)
@@ -85,11 +117,24 @@ shape: (5, 2)
 
 In order to return to this initial version of the data at any point, let's add and commit it to a local Oxen repository.
 
-```bash
+<CodeGroup>
+
+```bash CLI
 oxen init
 oxen add dataset.csv
 oxen commit -m "Initial dataset"
 ```
+
+```python Python
+import os
+from oxen import LocalRepo
+
+repo = LocalRepo("/path/to/data")
+repo.init()
+repo.add("dataset.csv")
+repo.commit("Adding my data")
+```
+</CodeGroup>
 
 ## Adding Rows
 
@@ -101,9 +146,20 @@ echo "20*20,math" >> dataset.csv
 
 If you want to see the changes between the current version of your file and the previous version, you can use the `oxen diff` command. If you only specify one file, Oxen will compare the current version of the file with the last committed version.
 
-```bash
+<CodeGroup>
+
+```bash CLI
 oxen diff dataset.csv
 ```
+
+```python Python
+import oxen
+
+result = oxen.diff("dataset.csv")
+print(result.get())
+```
+
+</CodeGroup>
 
 ```
 Row changes:
@@ -139,9 +195,20 @@ sed -i '' '2d' dataset.csv
 
 Verify that the first row was removed by using the `oxen diff` command.
 
-```bash
+<CodeGroup>
+
+```bash CLI
 oxen diff dataset.csv
 ```
+
+```python Python
+import oxen
+
+result = oxen.diff("dataset.csv")
+print(result.get())
+```
+
+</CodeGroup>
 
 ```
 Row changes:
@@ -204,9 +271,20 @@ The reason that the above example treats the modified row as a new row and a rem
 
 If you have a unique identifier for each row, you can use the `--keys` (or `-k`) flag to specify the column or columns that should be used as the primary keys.
 
-```bash
+<CodeGroup>
+
+```bash CLI
 oxen diff dataset.csv -k prompt
 ```
+
+```python Python
+import oxen
+
+result = oxen.diff("dataset.csv", keys=["prompt"])
+print(result.get())
+```
+
+</CodeGroup>
 
 ```
 Row changes:
@@ -231,10 +309,21 @@ Great! This collapsed our added and removed row into a single modified row. The 
 
 Assumming these changes look good, you can add and commit the changes to your local repository.
 
-```bash
+<CodeGroup>
+
+```bash CLI
 oxen add dataset.csv
 oxen commit -m "Added and removed rows"
 ```
+
+```python Python
+# ... instantiate repo
+
+repo.add("dataset.csv")
+repo.commit("Added and removed rows")
+```
+
+</CodeGroup>
 
 ## Adding Columns
 
@@ -254,9 +343,20 @@ id,prompt,answer,category
 
 Now if you run the `oxen diff` command, you will see that it automatically detects the added columns and displays the new values in `id.right` and `answer.right`.
 
-```bash
+<CodeGroup>
+
+```bash CLI
 oxen diff dataset.csv
 ```
+
+```python Python
+import oxen
+
+result = oxen.diff("dataset.csv")
+print(result.get())
+```
+
+</CodeGroup>
 
 ```
 Column changes:
@@ -283,10 +383,21 @@ shape: (6, 5)
 
 Removing a column would show the values in columns called `.left` to show the values in columns that are now missing. If you are happy with the changes, you can add and commit the changes to your local repository.
 
-```bash
+<CodeGroup>
+
+```bash CLI
 oxen add dataset.csv
 oxen commit -m "Added id and answer column"
 ```
+
+```python Python
+# ... instantiate repo
+
+repo.add("dataset.csv")
+repo.commit("Added id and answer column")
+```
+
+</CodeGroup>
 
 ## Specifying Targets
 
@@ -310,9 +421,20 @@ id,prompt,answer,category
 
 Since we only modified the answers in this dataset and not the category or the prompt, we can use the `-t` flag to specify that we are only interested in changes in the `answer` column.
 
-```bash
+<CodeGroup>
+
+```bash CLI
 oxen diff dataset.csv -k id,prompt -t answer
 ```
+
+```python Python
+import oxen
+
+result = oxen.diff("dataset.csv", keys=["id", "prompt"], targets=["answer"])
+print(result.get())
+```
+
+</CodeGroup>
 
 ```
 Row changes:
@@ -340,9 +462,20 @@ shape: (5, 5)
 
 Contrast this with a default diff which will show 8 changes, 4 added and 4 removed, and you can see the id field is duplicated because we are flagging one addition and one removal for each changed row.
 
-```
+<CodeGroup>
+
+```bash CLI
 oxen diff dataset.csv
 ```
+
+```python Python
+import oxen
+
+result = oxen.diff("dataset.csv")
+print(result.get())
+```
+
+</CodeGroup>
 
 ```
 Row changes:
@@ -372,9 +505,20 @@ A diff that only specifies a key will show the correct number of changes, but it
 
 To see how this works, try using the `-k` flag on the same dataset without any targets.
 
-```bash
+<CodeGroup>
+
+```bash CLI
 oxen diff dataset.csv -k id
 ```
+
+```python Python
+import oxen
+
+result = oxen.diff("dataset.csv", keys=["id"])
+print(result.get())
+```
+
+</CodeGroup>
 
 ```
 Row changes:
@@ -410,9 +554,20 @@ The above output is `(5 rows x 7 columns)` which isn't too bad, but if you have 
 
 The `--output` (`-o`) flag can be used to save the results of the diff to a new file. This is useful if you want to save the results of the diff to a new file for further inspection or to share with others.
 
-```bash
+<CodeGroup>
+
+```bash CLI
 oxen diff dataset.csv -o diff.csv
 ```
+
+```python Python
+import oxen
+
+oxen.diff("dataset.csv", output="diff.csv")
+```
+
+</CodeGroup>
+
 
 The above command will save the results of the diff to a new file called `diff.csv`. You can then load it into a jupyter notebook, pandas, or even back into Oxen to do more analysis on the results.
 
@@ -545,9 +700,20 @@ id,prompt,answer,category,response,is_correct,model,inference_time
 
 If we do a base diff without any flags, we will see that every row is has been marked as added and removed, since the `model` and `inference_time` columns could be different for each row.
 
-```bash
-oxen diff model_results.csv
+<CodeGroup>
+
+```bash CLI
+oxen diff dataset.csv
 ```
+
+```python Python
+import oxen
+
+result = oxen.diff("dataset.csv")
+print(result.get())
+```
+
+</CodeGroup>
 
 ```
 Row changes:
@@ -576,9 +742,24 @@ This is clearly not what we want. We want to see the differences in the `respons
 
 In combination with the `--keys` flag, you can use the `--targets` (or `-t`) flag to specify the columns you are interested in.
 
-```bash
+<CodeGroup>
+
+```bash CLI
 oxen diff model_results.csv -k id,prompt,answer -t response,is_correct
 ```
+
+```python Python
+import oxen
+
+result = oxen.diff(
+   "dataset.csv", 
+   keys=["id", "prompt", "answer"], 
+   targets=["response", "is_correct"]
+)
+print(result.get())
+```
+
+</CodeGroup>
 
 ```
 Row changes:
@@ -608,9 +789,20 @@ Now that you understand the basics of the diff command, you may be wondering if 
 
 Imagine you had two parallel set of results from two different models, `model_results_1.csv` and `model_results_2.csv`, and you wanted to compare them.
 
-```bash
+<CodeGroup>
+
+```bash CLI
 oxen diff model_results_1.csv model_results_2.csv
 ```
+
+```python Python
+import oxen
+
+result = oxen.diff("model_results_1.csv", to="model_results_2.csv")
+print(result.get())
+```
+
+</CodeGroup>
 
 Upcoming: Guides for how comparing different files can be used for finding the best model given multiple results datasets.
 
