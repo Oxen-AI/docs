@@ -2,6 +2,52 @@
 
 # oxen.df
 
+The `df` module provides a consistent interface for working with data frames.
+
+Supported types: csv, parquet, json, jsonl, arrow
+
+Example usage:
+
+```python
+import os
+from oxen import df
+
+# load a data frame
+data_frame = df.load("path/to/data.csv")
+
+# save a data frame
+df.save(data_frame, "path/to/save.csv")
+```
+
+<a id="oxen.df.load_df_call"></a>
+
+## load\_df\_call Objects
+
+```python
+class load_df_call()
+```
+
+Reads a file into a data frame. The file format is inferred from the file extension.
+
+Supported types: csv, parquet, json, jsonl, arrow
+
+<a id="oxen.df.load"></a>
+
+## load
+
+```python
+def load(path: os.PathLike)
+```
+
+Reads a file into a data frame. The file format is inferred from the file extension.
+
+Supported types: csv, parquet, json, jsonl, arrow
+
+**Arguments**:
+
+- `path` - `os.PathLike`
+  The path to the file to read.
+
 <a id="oxen.df.save"></a>
 
 ## save

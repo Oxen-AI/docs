@@ -32,6 +32,7 @@ def create_repo(name: str,
                 description="",
                 is_public: bool = True,
                 host: str = "hub.oxen.ai",
+                scheme: str = "https",
                 files: List[Tuple[str, str]] = [])
 ```
 
@@ -49,6 +50,8 @@ Create a new repository on the remote server.
   Only applicable to [OxenHub](https://oxen.ai).
 - `host` - `str`
   The host to connect to. Defaults to 'hub.oxen.ai'
+- `scheme` - `str`
+  The scheme to use for the remote url. Default: 'https'
 - `files` - `List[Tuple[str, str]]`
   A list of tuples containing the path to the file and the contents
   of the file that you would like to seed the repository with.
@@ -108,7 +111,10 @@ print(df.head())
 ## \_\_init\_\_
 
 ```python
-def __init__(path: str, host: Optional[str] = None, revision: str = "main")
+def __init__(path: str,
+             host: Optional[str] = None,
+             revision: str = "main",
+             scheme="https")
 ```
 
 Create a new RemoteRepo object to interact with.
@@ -139,6 +145,8 @@ Will create the repo on the remote server.
   Whether to create an empty repo or not. Default: False
 - `is_public` - `bool`
   Whether the repository is public or private. Default: False
+- `scheme` - `str`
+  The scheme to use for the remote url. Default: 'https'
 
 <a id="oxen.remote_repo.RemoteRepo.exists"></a>
 

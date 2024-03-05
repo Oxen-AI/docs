@@ -4,7 +4,8 @@
 
 Oxen can be used to compare data frames and return a tabular diff.
 
-There is more information about the diff in the [Diff Getting Started Documentation](/concepts/diffs).
+There is more information about the diff in the 
+[Diff Getting Started Documentation](/concepts/diffs).
 
 For example comparing two data frames will give you an output data frame,
 where the `.oxen.diff.status` column shows if the row was `added`, `removed`, 
@@ -64,7 +65,8 @@ Compares data from two paths and returns a diff respecting the type of data.
 - `repo_dir` - `os.PathLike`
   The path to the oxen repository. Must be provided if `compare_to` is
   not provided, or if `revision_left` or `revision_right` is provided.
-  If not provided, the repository will be searched for in the current working directory.
+  If not provided, the repository will be searched for in the current
+  working directory.
 - `revision_left` - `str`
   The left revision to compare. Can be a commit hash or branch name.
 - `revision_right` - `str`
@@ -87,8 +89,8 @@ Compares data from two paths and returns a diff respecting the type of data.
 class Diff()
 ```
 
-Diff class wraps many types of diffs and provides a consistent interface. 
-For example the diff can be tabular or text. Eventually we will extend this 
+Diff class wraps many types of diffs and provides a consistent interface.
+For example the diff can be tabular or text. Eventually we will extend this
 to support other types of diffs such as images, audio, etc.
 
 <a id="oxen.diff/diff.Diff.format"></a>
