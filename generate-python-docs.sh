@@ -8,7 +8,7 @@ list=(
     "auth"
     "clone"
     "config"
-    "df"
+    "df_utils"
     "diff/diff"
     "diff/tabular_diff"
     "diff/line_diff"
