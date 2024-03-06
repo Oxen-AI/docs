@@ -399,11 +399,11 @@ repo.commit("Added id and answer column")
 
 </CodeGroup>
 
-## Specifying Targets
+## Specifying Compares
 
-Not only can you specify keys to narrow down the scope of what fields oxen hashes, but you can also specify targets with the `--targets` (`-t`) flag to narrow down the scope of what fields oxen compares.
+Not only can you specify keys to narrow down the scope of what fields oxen hashes, but you can also specify columns to compare with the `--compares` (`-c`) flag. This specifies the fields oxen compares.
 
-You can think of the keys as the fields that are hashed to create a unique id to tell if a row was added or removed. The targets are the fields that are compared to check if a row was modified. By default if you specify a single key, the rest of the columns become the targets. If you specify multiple keys, the targets are all the columns that are not keys.
+You can think of the keys as the fields that are hashed to create a unique id to tell if a row was added or removed. The compares are the fields that are compared to check if a row was modified. By default if you specify a single key, the rest of the columns become the compares. If you specify multiple keys, the compares are all the columns that are not keys.
 
 To see this in action, let's add one row, remove one row, and modify 3 existing ones to demonstrate how this works. In this case we will only modify values of the `answer` column.
 
@@ -419,18 +419,18 @@ id,prompt,answer,category
 6,What is Oxen.ai?,Imagine git - but can handle large datasets,trivia
 ```
 
-Since we only modified the answers in this dataset and not the category or the prompt, we can use the `-t` flag to specify that we are only interested in changes in the `answer` column.
+Since we only modified the answers in this dataset and not the category or the prompt, we can use the `-c` flag to specify that we are only interested in changes in the `answer` column.
 
 <CodeGroup>
 
 ```bash CLI
-oxen diff dataset.csv -k id,prompt -t answer
+oxen diff dataset.csv -k id,prompt -c answer
 ```
 
 ```python Python
 import oxen
 
-result = oxen.diff("dataset.csv", keys=["id", "prompt"], targets=["answer"])
+result = oxen.diff("dataset.csv", keys=["id", "prompt"], compares=["answer"])
 print(result.get())
 ```
 
@@ -501,9 +501,9 @@ shape: (8, 5)
 +-----+----------------------------------+----------------------------------+-------------+-------------------+
 ```
 
-A diff that only specifies a key will show the correct number of changes, but it may have many columns that are not relevant to the changes you are interested in. This is because under the hood Oxen infers the targets to be the remaining columns. Having more control over the targets is where the `-t` flag comes in handy.
+A diff that only specifies a key will show the correct number of changes, but it may have many columns that are not relevant to the changes you are interested in. This is because under the hood Oxen infers the compares to be the remaining columns. Having more control over the compares is where the `-c` flag comes in handy.
 
-To see how this works, try using the `-k` flag on the same dataset without any targets.
+To see how this works, try using the `-k` flag on the same dataset without any compares.
 
 <CodeGroup>
 
@@ -548,7 +548,7 @@ shape: (5, 7)
 +-----+-----------------+-----------------+-----------------+---------------+----------------+----------------+
 ```
 
-The above output is `(5 rows x 7 columns)` which isn't too bad, but if you have a dataset with many columns, it can quickly become overwhelming with irrelevant information. If you know where to look, you can use the `-t` flag to narrow down the scope of the diff.
+The above output is `(5 rows x 7 columns)` which isn't too bad, but if you have a dataset with many columns, it can quickly become overwhelming with irrelevant information. If you know where to look, you can use the `-c` flag to narrow down the scope of the diff.
 
 ## Saving Results
 
@@ -740,12 +740,12 @@ shape: (12, 9)
 
 This is clearly not what we want. We want to see the differences in the `response` and `is_correct` columns, and ignore the `model` and `inference_time` columns.
 
-In combination with the `--keys` flag, you can use the `--targets` (or `-t`) flag to specify the columns you are interested in.
+In combination with the `--keys` flag, you can use the `--compares` (or `-c`) flag to specify the columns you are interested in.
 
 <CodeGroup>
 
 ```bash CLI
-oxen diff model_results.csv -k id,prompt,answer -t response,is_correct
+oxen diff model_results.csv -k id,prompt,answer -c response,is_correct
 ```
 
 ```python Python
@@ -754,7 +754,7 @@ import oxen
 result = oxen.diff(
    "dataset.csv", 
    keys=["id", "prompt", "answer"], 
-   targets=["response", "is_correct"]
+   compares=["response", "is_correct"]
 )
 print(result.get())
 ```
