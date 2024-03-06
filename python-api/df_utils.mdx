@@ -1,8 +1,8 @@
-<a id="oxen.df"></a>
+<a id="oxen.df_utils"></a>
 
-# oxen.df
+# oxen.df\_utils
 
-The `df` module provides a consistent interface for working with data frames.
+The `df_utils` module provides a consistent interface for loading data frames and saving them to disk.
 
 Supported types: csv, parquet, json, jsonl, arrow
 
@@ -10,16 +10,16 @@ Example usage:
 
 ```python
 import os
-from oxen import df
+from oxen import df_utils
 
 # load a data frame
-data_frame = df.load("path/to/data.csv")
+data_frame = df_utils.load("path/to/data.csv")
 
 # save a data frame
-df.save(data_frame, "path/to/save.csv")
+df_utils.save(data_frame, "path/to/save.csv")
 ```
 
-<a id="oxen.df.load_df_call"></a>
+<a id="oxen.df_utils.load_df_call"></a>
 
 ## load\_df\_call Objects
 
@@ -31,7 +31,7 @@ Reads a file into a data frame. The file format is inferred from the file extens
 
 Supported types: csv, parquet, json, jsonl, arrow
 
-<a id="oxen.df.load"></a>
+<a id="oxen.df_utils.load"></a>
 
 ## load
 
@@ -48,7 +48,7 @@ Supported types: csv, parquet, json, jsonl, arrow
 - `path` - `os.PathLike`
   The path to the file to read.
 
-<a id="oxen.df.save"></a>
+<a id="oxen.df_utils.save"></a>
 
 ## save
 
