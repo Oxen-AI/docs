@@ -128,6 +128,8 @@ Create a new RemoteRepo object to interact with.
   The host to connect to. Defaults to 'hub.oxen.ai'
 - `revision` - `str`
   The branch name or commit id to checkout. Defaults to 'main'
+- `scheme` - `str`
+  The scheme to use for the remote url. Default: 'https'
 
 <a id="oxen.remote_repo.RemoteRepo.create"></a>
 
@@ -145,8 +147,6 @@ Will create the repo on the remote server.
   Whether to create an empty repo or not. Default: False
 - `is_public` - `bool`
   Whether the repository is public or private. Default: False
-- `scheme` - `str`
-  The scheme to use for the remote url. Default: 'https'
 
 <a id="oxen.remote_repo.RemoteRepo.exists"></a>
 
