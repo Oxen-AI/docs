@@ -90,7 +90,7 @@
     },
     {
       "group": "Core Concepts",
-      "pages": ["concepts/data-frames", "concepts/schemas", "concepts/diffs", "concepts/remote-workspace", "concepts/performance"]
+      "pages": ["concepts/data-frames", "concepts/schemas", "concepts/diffs", "concepts/remote-workspace", "concepts/performance", "concepts/compare"]
     }
   ],
   "footerSocials": {
