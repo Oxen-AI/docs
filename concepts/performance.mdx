@@ -7,16 +7,15 @@ description: 'Oxen is fast. Simple as that.'
 
 Oxen was designed from the ground up to be fast. Whether you have many small files, a few large files, or a mix of both, Oxen intelligently hashes, packages, and syncs the data as fast as an Ox physically can.
 
-## CelebA Dataset
+## Food 101 Dataset
 
-The CelebA dataset has 202,599 images of celebrity faces and their attributes. 
+The Food 101 dataset has 100k images in many different sub directories. Here is the <a href="https://www.oxen.ai/datasets/food101">Food 101 Dataset</a> on Oxen.ai.
 
 ~ TLDR ~
 
-* ✅ Oxen syncs all the images in under 6 minutes
-* 👎 aws s3 cp takes almost 40 minutes to sync all 200k images
-* 😩 DVC+Dags Hub took over 2 hours and 40 minutes with intermittent failures
-* 🐢 git+git lfs syncing GitHub took over 4 hours
+* ✅ Oxen syncs all the images in about 3 minutes
+* 🦥 DVC backed by S3 took 16 minutes
+* 🦥 git+git lfs syncing GitHub took over an hour
 
 <p align="center">
     <img src="/images/PerformanceNumbers.png" alt="oxen performance metrics" width="400" />
@@ -25,16 +24,56 @@ The CelebA dataset has 202,599 images of celebrity faces and their attributes.
 ## 🐂 Oxen
 
 ```
-oxen add images # ~10 sec
-oxen commit -m "adding images # ~41 sec
-oxen push origin main # ~308.98 secs
+oxen add images # 12.90 secs
+oxen commit -m "adding images # 34.77 secs
+oxen push origin main # 150.22 secs
 ```
 
-Total time or `< 6 min` to sync to Oxen.
+Total time or `~3 min` to sync to Oxen.
+
+## Git + Git LFS
+
+Compare this to a system like [git lfs](https://git-lfs.github.com/) on the same dataset.
+
+Git-LFS is also many more commands to keep track of in your head and easy to mess up.
+
+```
+git init
+git lfs install
+git lfs track "*.jpg"
+git add .gitattributes
+git add images # 132.82 secs
+git commit -m "adding images"
+git push origin main # 79.96 min
+```
+
+Total time pushing to hugging face: 82+ min
+
+## DVC + S3 Backend
+
+DVC is built on top of git + an open source project and can be synced to S3 for storage.
+
+You have to keep track of which commands are dvc and which are git, and the commands are not as intuitive as Oxen. It is easy to track the wrong things in your git repo.
+
+```
+git init
+dvc init
+dvc add images/ # Executed in  249.16 secs
+git add images.dvc .gitignore
+git commit -m "adding images"
+git remote add origin https://github.com/owner/repository.git
+dvc remote add --default datastore s3://my-bucket
+git push origin main
+dvc push # Executed in  719.79 secs
+```
+
+Total: 968.95 = 16 min
 
 ## aws s3 cp
 
-You may currently be storing your training data in AWS s3 buckets. Even this is slower than syncing to Oxen. Not to mention it lacks other features you gain with Oxen.
+NOTE: This test was on CelebA dataset with 200k images, so not apples to apples with the ones above. We did the same test in oxen and it took ~6 minutes.
+
+You may currently be storing your training data in AWS s3 buckets. Even is slower than syncing to Oxen. Not to mention it lacks other features you gain with Oxen.
 
 The AWS S3 tool syncs each image sequentially and takes about 38 minutes to complete. Oxen optimizes the file transfer, compresses the data, and has a 5-10x performance improvement depending on your network and compute.
 
@@ -42,62 +81,4 @@ The AWS S3 tool syncs each image sequentially and takes about 38 minutes to comp
 time aws s3 cp images/ s3://testing-celeba --recursive
 ________________________________________________________
 Executed in   38.87 mins
-```
-
-## Git + Git LFS
-
-Compare this to a system like [git lfs](https://git-lfs.github.com/) on the same dataset
-
-```
-git init
-git lfs install
-git lfs track "*.jpg"
-git add .gitattributes
-git add images # ~189 sec
-git commit -m "adding images" # ~32 sec
-```
-
-Push to GitHub had a transfer speed anywhere from 80-100 kb/s
-
-```
-$ git remote add origin git@github.com:Oxen-AI/GitLFS-CelebA.git
-$ git push origin main # ~264 mins
-
-Uploading LFS objects: 100% (202468/202468), 1.4 GB | 99 KB/s, done.                                                                                                             
-________________________________________________________
-Executed in  264.55 mins    fish           external
-
-```
-
-Total time: ~4.4 hours
-
-## DVC + DagsHub
-
-DVC is built on top of git + an open source project and can be synced to a hub called DagsHub.
-
-```
-dvc init
-dvc add images/ # ~460.13 secs
-dvc push -r origin # ~160.95 mins
-```
-
-~2 hours 40 minutes with intermittent failures
-
-![dvc push fail](/images/DVC_Dagshub_Fail.png)
-
-## WIP: CI Performance Numbers
-
-We are working a CI script that publishes numbers on every release. On a meta level, we are going to store these metrics in an Oxen Data Repository
-
-```bash
-# Setup Remote Workspace
-oxen clone https://hub.oxen.ai/ox/performance --shallow
-cd performance
-
-# ... Do the work to clone CelebA then push to a separate remote with all tools ...
-
-# Assuming there are columns
-# date,version,tool,dataset,clone_time,push_time
-oxen remote df data/clone.csv --add-row "$DATE,$VERSION,oxen,CelebA,$OXEN_CLONE_TIME,$OXEN_PUSH_TIME"
-oxen remote commit -m "performance testing $DATE"
 ```
