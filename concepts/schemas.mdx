@@ -263,3 +263,34 @@ If you have accidentally staged a schema, you can remove it with the `oxen schem
 oxen schemas rm annotations/train.csv --staged
 ```
 
+## Render Images
+
+Oxen.ai can render images through the webhub if you add the proper schema metadata.
+
+For Example:
+
+```bash
+oxen schemas add data.csv -c 'file' -m '{
+  "_oxen": {
+    "render": {
+        "func": "image"
+    }
+  }
+}'
+```
+
+## Render Links
+
+Oxen.ai can render links to other files through the webhub if you add the proper schema metadata.
+
+For Example:
+
+```bash
+oxen schemas add data.csv -c 'file' -m '{
+  "_oxen": {
+    "render": {
+        "func": "link"
+    }
+  }
+}'
+```
