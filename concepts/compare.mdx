@@ -3,3 +3,90 @@ title: 'Comparing Model Results'
 description: 'Oxen.ai helps you compare results from your machine learning models.'
 ---
 
+There's always a reason to do a model comparison - whether a new model/finetune drops, a new methodology for prompting comes out, or it's time to evaluate an in-house model. 
+Oxen's diff tool allows you to evaluate and compare model outputs from small tests all the way to large benchmarks.
+
+To follow along with this example, we'll be using data from the [BoolQ Repo](https://www.oxen.ai/datasets/boolq-llama-gemma) which was generated with this [notebook](https://www.oxen.ai/datasets/boolq-llama-gemma/file/main/gemma_llama_diff_setup.ipynb).
+
+
+```bash
+oxen clone https://www.oxen.ai/datasets/boolq-llama-gemma
+cd boolq-llama-gemma
+```
+
+## Our Data
+In this repo, we're comparing the outputs of the Gemma-2b-Instruct model and Llama-7b-chat-hf model on the Boolq Benchmark.
+
+Let's check out the structure of these datasets:
+
+<CodeGroup>
+
+```bash CLI
+oxen df gemma.jsonl
+```
+
+```python Python
+print(oxen.df_utils.load('gemma.jsonl'))
+```
+</CodeGroup>
+Each dataframe has columns for the index, the context for the question, the prompt, and the ground truth label (`validation_response`).
+We can see here that our models didn't output exactly "True" or "False" like they were told to. So we added a column `processed_response` to show a clean difference between the outputs.
+
+### Comparing Model Results
+
+But we mainly care about how these models do _compared to_ each other. So we basically want to know where the `processed_response`'s are different in each file.
+<CodeGroup>
+
+```bash CLI
+oxen diff gemma.jsonl llama_chat.jsonl -k id,context,prompt,validation_response -c processed_response
+```
+
+```python Python
+diff = oxen.diff(path='gemma.jsonl', to='llama_chat.jsonl', keys=["id", "context", "prompt"], compares=['processed_response'])
+print(diff.get())
+```
+</CodeGroup>
+```
+Row changes: 
+   Δ 360 (modified)
+
+shape: (360, 7)
++------+-----------------------------------+-----------------------------------+---------------------+-------------------------+--------------------------+-------------------+
+| id   | context                           | prompt                            | validation_response | processed_response.left | processed_response.right | .oxen.diff.status |
+| ---  | ---                               | ---                               | ---                 | ---                     | ---                      | ---               |
+| i64  | str                               | str                               | str                 | str                     | str                      | str               |
++------+-----------------------------------+-----------------------------------+---------------------+-------------------------+--------------------------+-------------------+
+| 0    | All biomass goes through at leas… | does ethanol take more energy ma… | False               | False                   | True                     | modified          |
+| 12   | Shower gels for men may contain … | is it bad to wash your hair with… | True                | False                   | True                     | modified          |
+| 25   | The drinking age in Wisconsin is… | can you drink alcohol with your … | True                | True                    | Both                     | modified          |
+| 38   | The carbon-hydrogen bond (C--H b… | can carbon form polar covalent b… | False               | False                   | True                     | modified          |
+| …    | …                                 | …                                 | …                   | …                       | …                        | …                 |
+| 3213 | It is illegal to sell packaged l… | are liquor stores in oklahoma op… | False               | False                   | True                     | modified          |
+| 3216 | Flash memory cards, e.g., Secure… | is a memory card the same as a f… | False               | False                   | True                     | modified          |
+| 3220 | Rumors of this chemical's existe… | can pool water change color if y… | False               | False                   | True                     | modified          |
+| 3224 | Before the 1999--2000 season awa… | do away goals count in the leagu… | False               | False                   | True                     | modified          |
++------+-----------------------------------+-----------------------------------+---------------------+-------------------------+--------------------------+-------------------+
+```
+
+### View Results in Oxen UI
+
+These results are also available in the Oxen UI, which makes it a bit easier to grok what's going on than the command line.
+
+![compare model results](/images/CompareModelResults.png)
+
+You can view the results in the UI by going to the compare tab in [this repository](https://www.oxen.ai/datasets/boolq-llama-gemma/compare/1).
+
+From this, we can see that out of the 3270 total samples, our models disagreed on 360 total samples, or roughly 11% of the dataset.
+In some cases, like line 25, the model on the right (`llama_chat` in this case) didn't really provide an answer, as it responded with both "True and False".
+
+### Takeaways
+Some potential takeaways are: 
+1. Gemma-2b was better at following these instructions (text formating) than Llama-7b despite its smaller size. 
+2. These models were fairly in agreement on the validation set without any finetuning on the training set.
+3. Gemma-2b is a candidate to replace Llama-7b-chat as a base model for this task, however we will need to further explore to confirm.
+
+## Next Steps
+We will use the oxen diff tool to dive deeper into these results, comparing accuracies. We will also further explore the trends in these differences and how to use Oxen to take the next steps in our data science workflow.
+
+
+
