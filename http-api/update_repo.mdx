@@ -1,0 +1,16 @@
+---
+title: "Update Repositories"
+api: "PUT https://hub.oxen.ai/api/repos/:namespace"
+---
+
+Update repository information.
+
+```bash
+curl -X PUT \
+    https://hub.oxen.ai/api/repos/:namespace \
+    -- data '{
+    "description": "Add some description",
+    "is_public": false,
+    "default_branch": "main"
+    }'
+```
