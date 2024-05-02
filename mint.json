@@ -116,6 +116,5 @@
     "ga4": {
       "measurementId": "G-H6D2C08EKP"
     }
-  },
-  "openapi": "http=api/repos.yml"
+  }
 }
