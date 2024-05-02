@@ -6,6 +6,6 @@ api: "DELETE https://hub.oxen.ai/api/repos/:namespace/:repo_name"
 Delete a repo.
 
 ```bash
-curl -X DELETE \
+curl -X DELETE -H "Authorization: Bearer $TOKEN" \
     https://hub.oxen.ai/api/repos/:namespace
 ```
