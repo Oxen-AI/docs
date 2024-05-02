@@ -1,0 +1,16 @@
+---
+title: "Update Repository"
+api: "PUT https://hub.oxen.ai/api/repos/:namespace/:repo_name"
+---
+
+Update repository information.
+
+```bash
+curl -X PUT -H "Authorization: Bearer $TOKEN" \
+    https://hub.oxen.ai/api/repos/:namespace/:repo_name \
+    -- data '{
+    "description": "Add some description",
+    "is_public": false,
+    "default_branch": "main"
+    }'
+```

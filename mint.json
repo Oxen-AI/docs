@@ -86,7 +86,18 @@
     },
     {
       "group": "HTTP API",
-      "pages": ["http-api/files"]
+      "pages": [
+        "http-api/files",
+        {
+          "group": "Repository",
+          "pages": [
+            "http-api/repositories/get_repos",
+            "http-api/repositories/create_repo",
+            "http-api/repositories/update_repo",
+            "http-api/repositories/delete_repo"
+          ]
+        }
+    ]
     },
     {
       "group": "Core Concepts",
