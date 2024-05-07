@@ -181,7 +181,7 @@ from oxen import LocalRepo
 local_repo = LocalRepo("CatsVsDogs")
 
 # Point the local repository to the remote
-local_repo.set_remote("origin", remote_repo.url)
+local_repo.set_remote("origin", remote_repo.url())
 ```
 
 ### Push Changes
