@@ -9,3 +9,10 @@ You can get public repositories information under a namespace without authentica
 curl -X GET \
     https://hub.oxen.ai/api/repos/:namespace
 ```
+
+Or get info about a single repo.
+
+```bash
+curl -X GET \
+    https://hub.oxen.ai/api/repos/:namespace/:repo_name
+```
