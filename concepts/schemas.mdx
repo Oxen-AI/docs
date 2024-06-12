@@ -267,7 +267,11 @@ oxen schemas rm annotations/train.csv --staged
 
 Oxen.ai can render images through the webhub if you add the proper schema metadata.
 
-For Example:
+```bash
+oxen schemas add data.csv -c 'file' --render image
+```
+
+Under the hood this applied a metadata blob to the column, telling Oxen to render an image. More verbosely it would look like:
 
 ```bash
 oxen schemas add data.csv -c 'file' -m '{
@@ -283,7 +287,11 @@ oxen schemas add data.csv -c 'file' -m '{
 
 Oxen.ai can render links to other files through the webhub if you add the proper schema metadata.
 
-For Example:
+```bash
+oxen schemas add data.csv -c 'file' --render link
+```
+
+Under the hood this applied a metadata blob to the column, telling Oxen to render an link. More verbosely it would look like:
 
 ```bash
 oxen schemas add data.csv -c 'file' -m '{
