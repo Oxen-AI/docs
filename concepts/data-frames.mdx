@@ -1,6 +1,6 @@
 ---
 title: 'Data Frames'
-description: 'As a data scientist or machine learning engineer we deal with a lot of tabular data.'
+description: 'Oxen provides a powerful data frame library under the hood that allows you to interact with tabular data.'
 ---
 
 Whether it is csv, parquet, or line delimited json, it is useful to store your training data in data frames that we can filter, aggregate, slice and dice.
@@ -10,6 +10,46 @@ To follow along with the examples below feel free to grab the example data from 
 ```bash
 oxen download ox/CatDogBBox train.csv
 ```
+
+# Remote Data Frames
+
+With Oxen you can interact with data frames that are not downloaded to your local machine. This can be useful for data collection, labeling workflows, or quickly inspecting data without having to download it.
+
+See the [Oxen Workspaces](/concepts/workspace) documentation for more information on how to edit data directly the oxen-server.
+
+```python
+from oxen import RemoteRepo
+from oxen import Workspace
+from oxen import WorkspaceDataFrame
+
+# Connect to the remote repo
+repo = RemoteRepo("ox/CatDogBBox")
+
+# Create the workspace with the latest commit off main
+workspace = Workspace(repo, "main")
+
+# Connect to the data frame
+data_frame = WorkspaceDataFrame(workspace, "train.csv")
+
+# Add a row
+row_id = data_frame.insert_row({"file": "images/000000128154.jpg", "label": "dog"})
+
+# Get a row by id
+row = data_frame.get_row_by_id(row_id)
+print(row)
+
+# Update a row
+row = data_frame.update_row(row_id, {"label": "cat"})
+print(row)
+
+# Delete a row
+data_frame.delete_row(row_id)
+
+# Commit the changes
+workspace.commit("Update label")
+```
+
+# Local Data Frames
 
 ## oxen df
 
@@ -38,17 +78,7 @@ shape: (9_000, 6)
 +-------------------------+-------+--------+--------+--------+--------+
 ```
 
-Oxen uses a powerful [Data Frame library](https://pola-rs.github.io/polars-book/user-guide/introduction.html) under the hood, and uses the [Apache Arrow](https://arrow.apache.org/) data format to provide powerful cross application functionality. A lot of time and effort can be saved by transforming the data on the command line before writing a single line of application specific code or even opening a python repl or Juptyer notebook.
-
-## Remote Data Frames
-
-You can also interact with Data Frames that are not downloaded to your local machine. This can be useful for quickly inspecting data on the command line without having to download the data first.
-
-See the [Oxen Remote Workspace](/concepts/remote-workspace) documentation for more information on how to use remote data frames.
-
-```bash
-oxen remote df train.csv
-```
+Oxen uses a combination of [polars](https://pola-rs.github.io/polars-book/user-guide/introduction.html) and [duckdb](https://duckdb.org/) under the hood, and uses the [Apache Arrow](https://arrow.apache.org/) data format to provide powerful cross application functionality. 
 
 ## Useful Commands
 

@@ -1,47 +1,38 @@
 ---
-title: 'Remote Workspace'
-description: 'The Oxen Remote Workspace allows you to interact with your data without having to download the entire dataset.'
+title: 'Workspaces'
+description: 'Workspaces allows you to interact with your data without having to download the entire dataset locally.'
 ---
 
 Oxen makes it feel like your dataset is local, even when it is not downloaded to the machine you are on.
 
 The default `oxen clone` will clone the latest commit data on the default branch, but this is not desirable for all use cases. It can be expensive depending on the size of your data repository, and you may just be doing exploratory data analysis or only need a subset of the data.
 
-## Interacting with the Remote
-
-There is a `--shallow` flag on `oxen clone` which only pulls the necessary metadata, but does not pull any actual files. 
+# Connecting to a Remote Repository
 
 <CodeGroup>
-
-```bash CLI
-oxen clone https://hub.oxen.ai/ox/CatDogBBox --shallow
-cd CatDogBBox
-```
 
 ```python Python
 from oxen import RemoteRepo
 
-repo = RemoteRepo("ox/CatDogBBox")
+repo = RemoteRepo("datasets/dolly-15k-rlhf")
+```
+
+```bash CLI
+oxen clone https://hub.oxen.ai/datasets/dolly-15k-rlhf --shallow
 ```
 
 </CodeGroup>
 
-If you do a quick `ls` on the command line you will see that there are no files locally. Never fear, we are in a shallow state and can still interact with the repo remotely.
-
-## Data Exploration
+# File Exploration
 
 To view the remote files you can use `oxen remote ls` which lists the files, as well as giving a summary of their data types.
 
 <CodeGroup>
 
-```bash CLI
-oxen remote ls
-```
-
 ```python Python
 from oxen import RemoteRepo
 
-repo = RemoteRepo("ox/CatDogBBox")
+repo = RemoteRepo("datasets/dolly-15k-rlhf")
 print(repo.ls())
 ```
 
@@ -58,7 +49,7 @@ oxen remote ls images/
 ```python Python
 from oxen import RemoteRepo
 
-repo = RemoteRepo("ox/CatDogBBox")
+repo = RemoteRepo("datasets/dolly-15k-rlhf")
 images_results = repo.ls("images", page_num=1, page_size=10)
 print(images_results)
 print(images_results.total_pages)
@@ -68,7 +59,7 @@ print(images_results.total_entries)
 
 </CodeGroup>
 
-### Downloading Data
+## Downloading Data
 
 You can even download subsets of the data in the event you do not need the entire data repository for your job. You may even just want to do some intial exploration of the data before you decide to clone the entire repository.
 
@@ -80,13 +71,13 @@ oxen remote download images/000000002754.jpg
 
 ```python Python
 from oxen import RemoteRepo
-repo = RemoteRepo("ox/CatDogBBox")
+repo = RemoteRepo("datasets/dolly-15k-rlhf")
 repo.download("images/000000002754.jpg")
 ```
 
 </CodeGroup>
 
-### Exploring Data Frames
+## Exploring Data Frames
 
 Data Frames can be explored straight from the command line or downloaded into your local python environment to do additional exploration. The same parameters for exploring local data frames apply to remote data frames, and can be found in the [data frame documentation](/concepts/data-frames).
 
@@ -102,7 +93,7 @@ from oxen import RemoteRepo
 import pandas as pd
 
 # Connect to the remote repo
-repo = RemoteRepo("ox/CatDogBBox")
+repo = RemoteRepo("datasets/dolly-15k-rlhf")
 # Downloads the file locally
 repo.download("annotations/train.csv")
 # Use whatever library you want to explore the data
@@ -123,7 +114,7 @@ oxen remote status
 ```python Python
 from oxen import RemoteRepo
 
-repo = RemoteRepo("ox/CatDogBBox")
+repo = RemoteRepo("datasets/dolly-15k-rlhf")
 status = repo.status()
 print(status.added_files())
 ```
@@ -134,7 +125,7 @@ print(status.added_files())
 
 When adding data, it is always a good idea to create a branch for the changes you are about to make. This will allow you to make changes without affecting the default branch.
 
-### Creating a Branch
+## Creating a Branch
 
 <CodeGroup>
 
@@ -146,7 +137,7 @@ oxen push origin add-images
 ```python Python
 from oxen import RemoteRepo
 
-repo = RemoteRepo("ox/CatDogBBox")
+repo = RemoteRepo("datasets/dolly-15k-rlhf")
 # Create the branch on the remote
 repo.create_branch("add-images")
 # Make sure you are pointing to this branch
@@ -155,7 +146,7 @@ repo.checkout("add-images")
 
 </CodeGroup>
 
-### Staging Files
+## Staging Files
 
 To add raw files to the remote workspace you can use `oxen remote add <file>`. This will add the file to the remote workspace, but will not commit the changes.
 
@@ -171,7 +162,7 @@ oxen remote status
 ```python Python
 from oxen import RemoteRepo
 
-repo = RemoteRepo("ox/CatDogBBox")
+repo = RemoteRepo("datasets/dolly-15k-rlhf")
 repo.add("/path/to/image.png")
 status = repo.status()
 print(status.added_files())
@@ -179,7 +170,7 @@ print(status.added_files())
 
 </CodeGroup>
 
-### Removing Remote Staged Files
+## Removing Remote Staged Files
 
 If you accidentally add file from the remote workspace and want to remove it, no worries, you can unstage it with `oxen remote rm --staged`. 
 
@@ -187,7 +178,7 @@ If you accidentally add file from the remote workspace and want to remove it, no
 $ oxen remote rm --staged my-images/image.jpg
 ```
 
-### Commit Staged Files
+## Commit Staged Files
 
 When you are confident in the changes you have made, you can commit the changes to the remote workspace. This will create a new commit on the remote branch.
 
@@ -208,7 +199,7 @@ repo.commit("adding an image")
 
 Note: If the remote branch cannot be merged cleanly, the remote commit will fail, and you will have to resolve the merge conflicts with some more advanced commands which we will cover later.
 
-### Remote Log
+## Remote Log
 
 To see a list of remote commits on the branch you can use `remote log`. Your latest commit will be at the top of this list.
 
@@ -221,7 +212,7 @@ oxen remote log
 ```python Python
 from oxen import RemoteRepo
 
-repo = RemoteRepo("ox/CatDogBBox")
+repo = RemoteRepo("datasets/dolly-15k-rlhf")
 print(repo.log())
 ```
 

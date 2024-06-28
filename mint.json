@@ -101,7 +101,14 @@
     },
     {
       "group": "Core Concepts",
-      "pages": ["concepts/data-frames", "concepts/schemas", "concepts/diffs", "concepts/compare", "concepts/remote-workspace", "concepts/performance"]
+      "pages": [
+        "concepts/data-frames",
+        "concepts/diffs",
+        "concepts/compare",
+        "concepts/performance",
+        "concepts/schemas",
+        "concepts/workspace"
+      ]
     }
   ],
   "footerSocials": {
