@@ -105,24 +105,24 @@ Once you have pushed your data to an Oxen repository, Oxen exposes a CRUD interf
 from oxen import DataFrame
 
 # Connect to the data frame
-data_frame = DataFrame("my-username/spam-or-ham", "data.tsv")
+df = DataFrame("my-username/spam-or-ham", "data.tsv")
 
 # Add a row
-row_id = data_frame.insert_row({"category": "spam", "message": "CLICK HERE TO WIN INSTANTLY."})
+row_id = df.insert_row({"category": "spam", "message": "CLICK HERE TO WIN INSTANTLY."})
 
 # Get a row by id
-row = data_frame.get_row_by_id(row_id)
+row = df.get_row_by_id(row_id)
 print(row)
 
 # Update a row
-row = data_frame.update_row(row_id, {"category": "new_category"})
+row = df.update_row(row_id, {"category": "new_category"})
 print(row)
 
 # Delete a row
-data_frame.delete_row(row_id)
+df.delete_row(row_id)
 
 # Commit the changes
-data_frame.commit("Update label")
+df.commit("Update label")
 ```
 
 All of these operations are exposed over HTTP, so you are not limited to using the Python library. Check out all our HTTP [reference docs](/http-api) to see how to interact with your data programatically.
