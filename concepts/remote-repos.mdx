@@ -1,0 +1,177 @@
+---
+title: 'Remote Repositories'
+description: 'After you push your data to an [oxen-server](/getting-started/oxen-server), you can use remote repositories to interact with your data.'
+---
+
+Oxen makes it feel like your dataset is local, even when it is not downloaded to the machine you are on.
+
+# Connecting to a Remote Repository
+
+<CodeGroup>
+
+```python Python
+from oxen import RemoteRepo
+
+repo = RemoteRepo("datasets/dolly-15k-rlhf")
+```
+
+</CodeGroup>
+
+# File Exploration
+
+To see the files in the remote repository you can use `ls`.
+
+<CodeGroup>
+
+```python Python
+from oxen import RemoteRepo
+
+repo = RemoteRepo("ox/CatDogBBox")
+print(repo.ls())
+```
+
+</CodeGroup>
+
+To view a specific directory you can pass the directory name to the `ls` method. 
+
+Note: the directories are paginated so you will need to use the `page_num` parameter to view the next page of results.
+There are also `total_pages`, `page_number`, and `total_entries` attributes that give you information about the pagination.
+
+<CodeGroup>
+
+```python Python
+from oxen import RemoteRepo
+
+repo = RemoteRepo("ox/CatDogBBox")
+images_results = repo.ls("images", page_num=1, page_size=10)
+print(images_results)
+print(images_results.total_pages)
+print(images_results.page_number)
+print(images_results.total_entries)
+```
+
+</CodeGroup>
+
+# Downloading Data
+
+You can download subsets of the data if you do not need the entire data repository for your job.
+
+<CodeGroup>
+
+```python Python
+from oxen import RemoteRepo
+repo = RemoteRepo("ox/CatDogBBox")
+repo.download("images/000000002754.jpg")
+```
+
+```bash CLI
+oxen download ox/CatDogBBox images/000000002754.jpg
+```
+
+</CodeGroup>
+
+# Checkout a Branch
+
+If you have a data on a separate branch that you want to view you can checkout a branch by passing the branch name to the `checkout` method.
+
+```python Python
+from oxen import RemoteRepo
+repo = RemoteRepo("ox/CatDogBBox")
+repo.checkout("my-branch-name")
+print(repo.ls())
+```
+
+# Create a New Branch
+
+The `checkout` method also allows you to create a new branch if the branch does not exist.
+
+```python Python
+from oxen import RemoteRepo
+repo = RemoteRepo("ox/CatDogBBox")
+repo.checkout("my-new-branch-name", create=True)
+print(repo.ls())
+```
+
+# View Branches
+
+To see all the branches in the remote repository you can use the `branches` method.
+
+```python Python
+from oxen import RemoteRepo
+repo = RemoteRepo("ox/CatDogBBox")
+print(repo.branches())
+```
+
+# Create a RemoteRepo
+
+You may want to start with an empty remote repository and add your data later.
+
+<CodeGroup>
+
+```python Python
+from oxen import RemoteRepo
+
+repo = RemoteRepo.create("my-user/my-repo-name")
+```
+
+```bash CLI
+oxen create-remote --name my-user/my-repo-name
+```
+
+</CodeGroup>
+
+By default we add a `README.md` file to the repository with an initial commit. If you want to create an empty repository without adding a `README.md` you can pass `empty=True` to the `create` method.
+
+<CodeGroup>
+
+```python Python
+from oxen import RemoteRepo
+
+repo = RemoteRepo.create("my-user/my-repo-name", empty=True)
+```
+
+```bash CLI
+oxen create-remote --name my-user/my-repo-name --empty
+```
+
+</CodeGroup>
+
+The reason you may want to start with an empty repository is if you already started a local repository and want to push it to the remote repository. This local repository already has a commit history. When pushing to a remote, commit histories must match. Hence we need to start with an empty remote repository without any commits if we want to push a local repository with a commit history.
+
+# Remote URL
+
+Remote repositories are identified by a remote URL. This is the URL that you can use to clone the repository.
+
+```python Python
+from oxen import RemoteRepo
+
+repo = RemoteRepo.create("my-user/my-repo-name", empty=True)
+print(repo.url())
+```
+
+You can use this URL to clone the repository.
+
+```bash Python
+# Local Repository
+from oxen import Repo
+from oxen import RemoteRepo
+
+remote_repo = RemoteRepo.create("my-user/my-repo-name", empty=True)
+repo_url = remote_repo.url()
+
+local_repo = Repo("/path/to/local/repo")
+local_repo.clone(repo_url)
+```
+
+Or you can set the remote of a local repository to the remote repository.
+
+```bash Python
+from oxen import Repo
+from oxen import RemoteRepo
+
+remote_repo = RemoteRepo.create("my-user/my-repo-name", empty=True)
+repo_url = remote_repo.url()
+
+local_repo = Repo("/path/to/local/repo")
+remote_repo.set_remote("origin", remote_repo.url())
+```

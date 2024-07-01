@@ -69,6 +69,18 @@
       ]
     },
     {
+      "group": "Core Concepts",
+      "pages": [
+        "concepts/data-frames",
+        "concepts/diffs",
+        "concepts/compare",
+        "concepts/performance",
+        "concepts/schemas",
+        "concepts/remote-repos",
+        "concepts/workspaces"
+      ]
+    },
+    {
       "group": "Python API",
       "pages": [
         "python-api/index",
@@ -98,17 +110,6 @@
           ]
         }
     ]
-    },
-    {
-      "group": "Core Concepts",
-      "pages": [
-        "concepts/data-frames",
-        "concepts/diffs",
-        "concepts/compare",
-        "concepts/performance",
-        "concepts/schemas",
-        "concepts/workspace"
-      ]
     }
   ],
   "footerSocials": {

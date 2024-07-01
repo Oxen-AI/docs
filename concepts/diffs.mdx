@@ -127,9 +127,9 @@ oxen commit -m "Initial dataset"
 
 ```python Python
 import os
-from oxen import LocalRepo
+from oxen import Repo
 
-repo = LocalRepo("/path/to/data")
+repo = Repo("/path/to/data")
 repo.init()
 repo.add("dataset.csv")
 repo.commit("Adding my data")

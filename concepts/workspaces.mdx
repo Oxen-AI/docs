@@ -5,8 +5,6 @@ description: 'Workspaces allows you to interact with your data without having to
 
 Oxen makes it feel like your dataset is local, even when it is not downloaded to the machine you are on.
 
-The default `oxen clone` will clone the latest commit data on the default branch, but this is not desirable for all use cases. It can be expensive depending on the size of your data repository, and you may just be doing exploratory data analysis or only need a subset of the data.
-
 # Connecting to a Remote Repository
 
 <CodeGroup>
@@ -17,15 +15,11 @@ from oxen import RemoteRepo
 repo = RemoteRepo("datasets/dolly-15k-rlhf")
 ```
 
-```bash CLI
-oxen clone https://hub.oxen.ai/datasets/dolly-15k-rlhf --shallow
-```
-
 </CodeGroup>
 
 # File Exploration
 
-To view the remote files you can use `oxen remote ls` which lists the files, as well as giving a summary of their data types.
+To see the files in the remote repository you can use `ls`.
 
 <CodeGroup>
 

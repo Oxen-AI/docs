@@ -74,7 +74,7 @@ config_user("YOUR NAME", "YOUR EMAIL")
 
 This will save a file in `~/.config/oxen/user_config.toml` that contains your user configuration.
 
-## Initialize Repository
+## Initialize Local Repository
 
 If you are creating a new repository from scratch, you can initialize it with the [init](/python-api/init) method.
 
@@ -96,20 +96,20 @@ This will create a `.oxen` directory to keep track of changes as you make them.
 
 ## Load Existing Repository
 
-Use the [LocalRepo](/python-api/localrepo) class to interact with a repository that has already been initialized.
+Use the [repo](/python-api/repo) class to interact with a repository that has already been initialized.
 
 ```python
-from oxen import LocalRepo
+from oxen import Repo
 
 # Load the repostory from the CatsVsDogs directory
-repo = LocalRepo("CatsVsDogs")
+repo = Repo("CatsVsDogs")
 # Check the status of the repository
 print(repo.status())
 ```
 
 ## Add Files
 
-Now let's create a README.md file and [add](/python-api/local_repo#add) it to the local staging area. This will not commit the changes to the repository, but it will prepare them to be committed.
+Now let's create a README.md file and [add](/python-api/repo#add) it to the local staging area. This will not commit the changes to the repository, but it will prepare them to be committed.
 
 ```python
 # ... continue from previous example
@@ -155,8 +155,8 @@ It's one thing to version your data locally, but where the real power comes in i
 There are a few steps when pushing to a remote for the first time.
 
 1. [Create Remote](/python-api/remote_repo#create_repo)
-2. [Point Local to Remote](/python-api/local_repo#set_remote)
-3. [Push Changes](/python-api/local_repo#push)
+2. [Point Local to Remote](/python-api/repo#set_remote)
+3. [Push Changes](/python-api/repo#push)
 
 ### Create Remote
 
@@ -172,25 +172,25 @@ remote_repo = create_repo(remote_name)
 
 ### Point Local to Remote
 
-Now that we have created the remote repository, we need to point our local repository to sync to it. This can be done with the [set_remote](/python-api/local_repo#set_remote) method.
+Now that we have created the remote repository, we need to point our local repository to sync to it. This can be done with the [set_remote](/python-api/repo#set_remote) method.
 
 ```python
-from oxen import LocalRepo
+from oxen import Repo
 
 # Load the local repository
-local_repo = LocalRepo("CatsVsDogs")
+repo = Repo("CatsVsDogs")
 
 # Point the local repository to the remote
-local_repo.set_remote("origin", remote_repo.url())
+repo.set_remote("origin", remote_repo.url())
 ```
 
 ### Push Changes
 
-Now that we have created the remote repository and pointed our local repository to it, we can [push](/python-api/local_repo#push) our changes to the remote repository.
+Now that we have created the remote repository and pointed our local repository to it, we can [push](/python-api/repo#push) our changes to the remote repository.
 
 ```python
 # Push the changes to the remote repository
-local_repo.push()
+repo.push()
 ```
 
 ### Full Push Example
@@ -198,12 +198,12 @@ local_repo.push()
 The end to end workflow from scratch looks like this:
 
 ```python
-from oxen import LocalRepo
+from oxen import Repo
 from oxen.remote_repo import create_repo
 from oxen.auth import config_auth
 
 # 0. Load the local repository
-local_repo = LocalRepo("CatsVsDogs")
+repo = Repo("CatsVsDogs")
 
 # 1. Configure Authentication
 config_auth("YOUR_AUTH_TOKEN")
@@ -213,15 +213,15 @@ remote_name = "MyNamespace/CatsVsDogs"
 repo = create_repo(remote_name)
 
 # 3. Point the local repository to the remote
-local_repo.set_remote("origin", repo.url)
+repo.set_remote("origin", repo.url)
 
 # 4. Push the changes to the remote repository
-local_repo.push()
+repo.push()
 ```
 
 ## Pull Data
 
-Now that we have pushed our changes to the remote repository, we can [pull](/python-api/local_repo#pull) them down to another machine.
+Now that we have pushed our changes to the remote repository, we can [pull](/python-api/repo#pull) them down to another machine.
 
 ```python
 import oxen
@@ -230,7 +230,7 @@ import os
 repo_path = "CatsVsDogs"
 if os.path.exists(repo_path):
   # if you already have a local copy of the repository, you can load it
-  repo = oxen.LocalRepo(repo_path)
+  repo = oxen.Repo(repo_path)
 else:
   # if you don't have a local copy of the repository, you can clone it
   repo = oxen.clone("ox/CatsVsDogs")
@@ -245,12 +245,12 @@ Branching is a powerful feature of Oxen that allows you to create a named versio
 
 ### Create Branch
 
-To create a new branch, use the [LocalRepo.checkout](/python-api/local_repo#checkout) method.
+To create a new branch, use the [Repo.checkout](/python-api/repo#checkout) method.
 
 ```python
-from oxen import LocalRepo
+from oxen import Repo
 
-repo = LocalRepo("CatsVsDogs")
+repo = Repo("CatsVsDogs")
 repo.checkout("add-dogs", create=True)
 ```
 
@@ -258,12 +258,12 @@ This both creates the branch and checks it out (the command line equivalent of `
 
 ### List Branches
 
-To list all of the branches in a repository, use the [LocalRepo.branches](/python-api/local_repo#branches) method.
+To list all of the branches in a repository, use the [Repo.branches](/python-api/repo#branches) method.
 
 ```python
-from oxen import LocalRepo
+from oxen import Repo
 
-repo = LocalRepo("CatsVsDogs")
+repo = Repo("CatsVsDogs")
 print(repo.branches())
 ```
 

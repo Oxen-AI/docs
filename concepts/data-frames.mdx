@@ -5,48 +5,52 @@ description: 'Oxen provides a powerful data frame library under the hood that al
 
 Whether it is csv, parquet, or line delimited json, it is useful to store your training data in data frames that we can filter, aggregate, slice and dice.
 
-To follow along with the examples below feel free to grab the example data from our public [CatDogBBox](https://hub.oxen.ai/ox/CatDogBBox) repository.
+To follow along with the examples below feel free to grab the example data from our public [LLM-Zero-Hero](https://hub.oxen.ai/datasets/LLM-Zero-Hero) repository.
 
 ```bash
-oxen download ox/CatDogBBox train.csv
+mkdir my-dataset
+cd my-dataset
+oxen download datasets/LLM-Zero-Hero finetune/SMSSpamCollection.tsv
+```
+
+Then push the data to a repository of your own.
+
+```bash
+oxen init
+oxen create-remote --name my-username/my-dataset
+oxen config --set-remote origin https://hub.oxen.ai/my-username/my-dataset
+oxen add SMSSpamCollection.tsv
+oxen push
 ```
 
 # Remote Data Frames
 
-With Oxen you can interact with data frames that are not downloaded to your local machine. This can be useful for data collection, labeling workflows, or quickly inspecting data without having to download it.
+Oxen allows you to interact with data frames that are not downloaded to your local machine. This can be useful for data collection, labeling workflows, or quickly inspecting data without having to download it.
 
-See the [Oxen Workspaces](/concepts/workspace) documentation for more information on how to edit data directly the oxen-server.
+See the [Workspaces](/concepts/workspaces) documentation for more information on how editing data works under the hood.
 
 ```python
-from oxen import RemoteRepo
-from oxen import Workspace
-from oxen import WorkspaceDataFrame
-
-# Connect to the remote repo
-repo = RemoteRepo("ox/CatDogBBox")
-
-# Create the workspace with the latest commit off main
-workspace = Workspace(repo, "main")
+from oxen import DataFrame
 
 # Connect to the data frame
-data_frame = WorkspaceDataFrame(workspace, "train.csv")
+data_frame = DataFrame("my-username/my-dataset", "SMSSpamCollection.tsv")
 
 # Add a row
-row_id = data_frame.insert_row({"file": "images/000000128154.jpg", "label": "dog"})
+row_id = data_frame.insert_row({"category": "spam", "message": "CLICK HERE TO WIN INSTANTLY."})
 
 # Get a row by id
 row = data_frame.get_row_by_id(row_id)
 print(row)
 
 # Update a row
-row = data_frame.update_row(row_id, {"label": "cat"})
+row = data_frame.update_row(row_id, {"category": "new_category"})
 print(row)
 
 # Delete a row
 data_frame.delete_row(row_id)
 
 # Commit the changes
-workspace.commit("Update label")
+data_frame.commit("Update label")
 ```
 
 # Local Data Frames

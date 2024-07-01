@@ -131,10 +131,10 @@ oxen push origin main
 
 ```python Python
 import os
-from oxen import LocalRepo
+from oxen import Repo
 
-# Instantiate a LocalRepo object and create the repo directory
-repo = LocalRepo("/path/to/data", mkdir=True)
+# Instantiate a Repo object and create the repo directory
+repo = Repo("/path/to/data", mkdir=True)
 # Initialize the repository
 repo.init()
 # Write data to a file
