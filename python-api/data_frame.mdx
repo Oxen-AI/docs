@@ -1,0 +1,250 @@
+<a id="oxen.data_frame"></a>
+
+# oxen.data\_frame
+
+<a id="oxen.data_frame.DataFrame"></a>
+
+## DataFrame Objects
+
+```python
+class DataFrame()
+```
+
+The DataFrame class allows you to perform CRUD operations on a remote data frame.
+
+If you pass in a [Workspace](/concepts/workspaces) or a [RemoteRepo](/concepts/remote-repos) the data is indexed into DuckDB on an oxen-server without downloading the data locally.
+
+## Examples
+
+### CRUD Operations
+
+Index a data frame in a workspace.
+
+```python
+from oxen import DataFrame
+
+# Connect to and index the data frame
+# Note: This must be an existing file committed to the repo
+#       indexing may take a while for large files
+data_frame = DataFrame("datasets/SpamOrHam", "data.tsv")
+
+# Add a row
+row_id = data_frame.insert_row({"category": "spam", "message": "Hello, do I have an offer for you!"})
+
+# Get a row by id
+row = data_frame.get_row_by_id(row_id)
+print(row)
+
+# Update a row
+row = data_frame.update_row(row_id, {"category": "ham"})
+print(row)
+
+# Delete a row
+data_frame.delete_row(row_id)
+
+# Get the current changes to the data frame
+status = data_frame.diff()
+print(status.added_files())
+
+# Commit the changes
+data_frame.commit("Updating data.csv")
+```
+
+<a id="oxen.data_frame.DataFrame.__init__"></a>
+
+## \_\_init\_\_
+
+```python
+def __init__(remote: Union[str, RemoteRepo, Workspace],
+             path: str,
+             host: str = "hub.oxen.ai",
+             branch: str = "main",
+             scheme: str = "https")
+```
+
+Initialize the DataFrame class. Will index the data frame
+into duckdb on init.
+
+Will throw an error if the data frame does not exist.
+
+**Arguments**:
+
+- `remote` - `str`, `RemoteRepo`, or `Workspace`
+  The workspace or remote repo the data frame is in.
+- `path` - `str`
+  The path of the data frame file in the repository.
+- `host` - `str`
+  The host of the oxen-server. Defaults to "hub.oxen.ai".
+- `branch` - `str`
+  The branch of the remote repo. Defaults to "main".
+- `scheme` - `str`
+  The scheme of the remote repo. Defaults to "https".
+
+<a id="oxen.data_frame.DataFrame.size"></a>
+
+## size
+
+```python
+def size() -> (int, int)
+```
+
+Get the size of the data frame. Returns a tuple of (rows, columns)
+
+<a id="oxen.data_frame.DataFrame.page_size"></a>
+
+## page\_size
+
+```python
+def page_size() -> int
+```
+
+Get the page size of the data frame for pagination in list() command.
+
+**Returns**:
+
+  The page size of the data frame.
+
+<a id="oxen.data_frame.DataFrame.total_pages"></a>
+
+## total\_pages
+
+```python
+def total_pages() -> int
+```
+
+Get the total number of pages in the data frame for pagination in list() command.
+
+**Returns**:
+
+  The total number of pages in the data frame.
+
+<a id="oxen.data_frame.DataFrame.list_page"></a>
+
+## list\_page
+
+```python
+def list_page(page_num: int = 1) -> List[dict]
+```
+
+List the rows within the data frame.
+
+**Arguments**:
+
+- `page_num` - `int`
+  The page number of the data frame to list. We default to page size of 100 for now.
+  
+
+**Returns**:
+
+  A list of rows from the data frame.
+
+<a id="oxen.data_frame.DataFrame.insert_row"></a>
+
+## insert\_row
+
+```python
+def insert_row(data: dict)
+```
+
+Insert a single row of data into the data frame.
+
+**Arguments**:
+
+- `data` - `dict`
+  A dictionary representing a single row of data.
+  The keys must match a subset of the columns in the data frame.
+  If a column is not present in the dictionary,
+  it will be set to an empty value.
+  
+
+**Returns**:
+
+  The id of the row that was inserted.
+
+<a id="oxen.data_frame.DataFrame.get_row_by_id"></a>
+
+## get\_row\_by\_id
+
+```python
+def get_row_by_id(id: str)
+```
+
+Get a single row of data by id.
+
+**Arguments**:
+
+- `id` - `str`
+  The id of the row to get.
+  
+
+**Returns**:
+
+  A dictionary representing the row.
+
+<a id="oxen.data_frame.DataFrame.update_row"></a>
+
+## update\_row
+
+```python
+def update_row(id: str, data: dict)
+```
+
+Update a single row of data by id.
+
+**Arguments**:
+
+- `id` - `str`
+  The id of the row to update.
+- `data` - `dict`
+  A dictionary representing a single row of data.
+  The keys must match a subset of the columns in the data frame.
+  If a column is not present in the dictionary,
+  it will be set to an empty value.
+  
+
+**Returns**:
+
+  The updated row as a dictionary.
+
+<a id="oxen.data_frame.DataFrame.delete_row"></a>
+
+## delete\_row
+
+```python
+def delete_row(id: str)
+```
+
+Delete a single row of data by id.
+
+**Arguments**:
+
+- `id` - `str`
+  The id of the row to delete.
+
+<a id="oxen.data_frame.DataFrame.restore"></a>
+
+## restore
+
+```python
+def restore()
+```
+
+Unstage any changes to the schema or contents of a data frame
+
+<a id="oxen.data_frame.DataFrame.commit"></a>
+
+## commit
+
+```python
+def commit(message: str, branch: Optional[str] = None)
+```
+
+Commit the current changes to the data frame.
+
+**Arguments**:
+
+- `message` - `str`
+  The message to commit the changes.
+- `branch` - `str`
+  The branch to commit the changes to. Defaults to the current branch.
+

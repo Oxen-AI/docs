@@ -5,35 +5,107 @@ description: 'Oxen provides a powerful data frame library under the hood that al
 
 Whether it is csv, parquet, or line delimited json, it is useful to store your training data in data frames that we can filter, aggregate, slice and dice.
 
-To follow along with the examples below feel free to grab the example data from our public [LLM-Zero-Hero](https://hub.oxen.ai/datasets/LLM-Zero-Hero) repository.
+To follow along with the examples below feel free to grab the example data from our public [SpamOrHam](https://oxen.ai/datasets/SpamOrHam) repository.
 
 ```bash
-mkdir my-dataset
-cd my-dataset
-oxen download datasets/LLM-Zero-Hero finetune/SMSSpamCollection.tsv
+mkdir spam-or-ham
+cd spam-or-ham
+oxen download datasets/SpamOrHam data.tsv
 ```
 
-Then push the data to a repository of your own.
+# Look At Your Data
+
+Oxen comes with a convenient `df` subcommand to view your data frames on disk. This is useful for quickly inspecting your data before you start modifying it.
 
 ```bash
+$ oxen df data.tsv
+
+shape: (4_774, 2)
++-----------+---------------------------------+
+| dcategory | text                            |
+| ---       | ---                             |
+| str       | str                             |
++-----------+---------------------------------+
+| ham       | Go until jurong point, crazy..… |
+| ham       | Ok lar... Joking wif u oni...   |
+| spam      | Free entry in 2 a wkly comp to… |
+| ham       | U dun say so early hor... U c … |
+| ham       | Nah I dont think  he goes to u… |
+| …         | …                               |
+| ham       | Well, im glad you didnt find  … |
+| ham       | Guy, no flash me now. If you g… |
+| spam      | Do you want a New Nokia 3510i … |
+| ham       | Mark works tomorrow. He gets o… |
+| ham       | Keep ur problems in ur heart, … |
++-----------+---------------------------------+
+```
+
+# Upload Your Data
+
+Then add the data to a repository of your own so that you can modify it. You can do this in the [UI](https://oxen.ai/), Python, or CLI.
+
+<CodeGroup>
+
+```python Python
+from oxen.remote_repo import create_repo
+
+# Create a new local repository
+repo = oxen.init("spam-or-ham")
+
+# Create a new remote repository
+# NOTE: make sure to replace 'my-username' with your username
+remote_repo = create_repo("my-username/spam-or-ham")
+
+# Connect the local repository to the remote repository
+repo.set_remote("origin", remote_repo.url())
+
+# Add the data to the local repository
+repo.add("data.tsv")
+
+# Commit the changes
+repo.commit("Add data")
+
+# Push the changes to the remote repository
+repo.push()
+```
+
+```bash CLI
+# Create a new local repository
 oxen init
-oxen create-remote --name my-username/my-dataset
-oxen config --set-remote origin https://hub.oxen.ai/my-username/my-dataset
-oxen add SMSSpamCollection.tsv
-oxen push
+
+# Create a new remote repository
+oxen create-remote --name my-username/spam-or-ham
+
+# Connect the local repository to the remote repository
+oxen config --set-remote origin https://hub.oxen.ai/my-username/spam-or-ham
+
+# Add the data to the local repository
+oxen add data.tsv
+
+# Commit the changes
+oxen commit -m "Add data"
+
+# Push the changes to the remote repository
+oxen push origin main
 ```
 
-# Remote Data Frames
+</CodeGroup>
+
+If you have pushed to the Oxen Hub, you can view, edit, and query your data directly using the [UI](https://oxen.ai/).
+
+![Spam or Ham Data Frame](/images/SpamOrHamDataFrame.png)
+
+# Editing Data Frames
 
 Oxen allows you to interact with data frames that are not downloaded to your local machine. This can be useful for data collection, labeling workflows, or quickly inspecting data without having to download it.
 
-See the [Workspaces](/concepts/workspaces) documentation for more information on how editing data works under the hood.
+Once you have pushed your data to an Oxen repository, Oxen exposes a CRUD interface to interact with the rows.
 
 ```python
 from oxen import DataFrame
 
 # Connect to the data frame
-data_frame = DataFrame("my-username/my-dataset", "SMSSpamCollection.tsv")
+data_frame = DataFrame("my-username/spam-or-ham", "data.tsv")
 
 # Add a row
 row_id = data_frame.insert_row({"category": "spam", "message": "CLICK HERE TO WIN INSTANTLY."})
@@ -52,6 +124,8 @@ data_frame.delete_row(row_id)
 # Commit the changes
 data_frame.commit("Update label")
 ```
+
+All of these operations are exposed over HTTP, so you are not limited to using the Python library. Check out all our HTTP [reference docs](/http-api) to see how to interact with your data programatically.
 
 # Local Data Frames
 
@@ -82,7 +156,7 @@ shape: (9_000, 6)
 +-------------------------+-------+--------+--------+--------+--------+
 ```
 
-Oxen uses a combination of [polars](https://pola-rs.github.io/polars-book/user-guide/introduction.html) and [duckdb](https://duckdb.org/) under the hood, and uses the [Apache Arrow](https://arrow.apache.org/) data format to provide powerful cross application functionality. 
+Oxen uses a combination of [polars](https://pola-rs.github.io/polars-book/user-guide/introduction.html) and [duckdb](https://duckdb.org/) under the hood, and uses the [Apache Arrow](https://arrow.apache.org/) data format to provide powerful cross application functionality.
 
 ## Useful Commands
 

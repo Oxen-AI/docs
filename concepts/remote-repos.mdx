@@ -5,17 +5,57 @@ description: 'After you push your data to an [oxen-server](/getting-started/oxen
 
 Oxen makes it feel like your dataset is local, even when it is not downloaded to the machine you are on.
 
-# Connecting to a Remote Repository
+# Read a Remote Repository
+
+If a remote repository already exists, you simply have to pass in the namespace/name of the remote repository you want to instantiate.
 
 <CodeGroup>
 
 ```python Python
 from oxen import RemoteRepo
 
-repo = RemoteRepo("datasets/dolly-15k-rlhf")
+repo = RemoteRepo("ox/CatDogBBox")
 ```
 
 </CodeGroup>
+
+This is a cheap operation that just sets up the pointer to the remote repository. It does not download any data.
+
+# Create a Remote Repository
+
+If you do not already have a remote repository, you can create one directly from Pyhton. You may want to start with an empty remote repository and add your data later.
+
+<CodeGroup>
+
+```python Python
+from oxen import RemoteRepo
+
+repo = RemoteRepo.create("my-user/my-repo-name")
+```
+
+```bash CLI
+oxen create-remote --name my-user/my-repo-name
+```
+
+</CodeGroup>
+
+By default we add a `README.md` file to the repository with an initial commit. If you want to create an empty repository without adding a `README.md` you can pass `empty=True` to the `create` method.
+
+<CodeGroup>
+
+```python Python
+from oxen import RemoteRepo
+
+repo = RemoteRepo.create("my-user/my-repo-name", empty=True)
+```
+
+```bash CLI
+oxen create-remote --name my-user/my-repo-name --empty
+```
+
+</CodeGroup>
+
+The reason you may want to start with an empty repository is if you already started a local repository and want to push it to the remote repository. This local repository already has a commit history. When pushing to a remote, commit histories must match. Hence we need to start with an empty remote repository without any commits if we want to push a local repository with a commit history.
 
 # File Exploration
 
@@ -32,7 +72,7 @@ print(repo.ls())
 
 </CodeGroup>
 
-To view a specific directory you can pass the directory name to the `ls` method. 
+To view a specific directory you can pass the directory name to the `ls` method.
 
 Note: the directories are paginated so you will need to use the `page_num` parameter to view the next page of results.
 There are also `total_pages`, `page_number`, and `total_entries` attributes that give you information about the pagination.
@@ -102,43 +142,9 @@ repo = RemoteRepo("ox/CatDogBBox")
 print(repo.branches())
 ```
 
-# Create a RemoteRepo
 
-You may want to start with an empty remote repository and add your data later.
 
-<CodeGroup>
-
-```python Python
-from oxen import RemoteRepo
-
-repo = RemoteRepo.create("my-user/my-repo-name")
-```
-
-```bash CLI
-oxen create-remote --name my-user/my-repo-name
-```
-
-</CodeGroup>
-
-By default we add a `README.md` file to the repository with an initial commit. If you want to create an empty repository without adding a `README.md` you can pass `empty=True` to the `create` method.
-
-<CodeGroup>
-
-```python Python
-from oxen import RemoteRepo
-
-repo = RemoteRepo.create("my-user/my-repo-name", empty=True)
-```
-
-```bash CLI
-oxen create-remote --name my-user/my-repo-name --empty
-```
-
-</CodeGroup>
-
-The reason you may want to start with an empty repository is if you already started a local repository and want to push it to the remote repository. This local repository already has a commit history. When pushing to a remote, commit histories must match. Hence we need to start with an empty remote repository without any commits if we want to push a local repository with a commit history.
-
-# Remote URL
+# Point Local to Remote
 
 Remote repositories are identified by a remote URL. This is the URL that you can use to clone the repository.
 

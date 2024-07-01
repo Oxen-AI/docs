@@ -1,0 +1,141 @@
+<a id="oxen.workspace"></a>
+
+# oxen.workspace
+
+<a id="oxen.workspace.Workspace"></a>
+
+## Workspace Objects
+
+```python
+class Workspace()
+```
+
+The Workspace class allows you to interact with an Oxen workspace
+without downloading the data locally.
+
+Workspaces can be created off a branch and is tied to the commit id of the branch
+at the time of creation.
+
+You can commit a Workspace back to the same branch if the branch has not
+advanced, otherwise you will have to commit to a new branch and merge.
+
+## Examples
+
+### Adding Files to a Workspace
+
+Create a workspace from a branch.
+
+```python
+from oxen import RemoteRepo
+from oxen import Workspace
+
+# Connect to the remote repo
+repo = RemoteRepo("ox/CatDogBBox")
+
+# Create the workspace
+workspace = Workspace(repo, "my-branch")
+
+# Add a file to the workspace
+workspace.add("my-image.png")
+
+# Print the status of the workspace
+status = workspace.status()
+print(status.added_files())
+
+# Commit the workspace
+workspace.commit("Adding my image to the workspace.")
+```
+
+<a id="oxen.workspace.Workspace.__init__"></a>
+
+## \_\_init\_\_
+
+```python
+def __init__(repo: RemoteRepo,
+             branch: str,
+             workspace_id: Optional[str] = None,
+             path: Optional[str] = None)
+```
+
+Create a new Workspace.
+
+**Arguments**:
+
+- `repo` - `PyRemoteRepo`
+  The remote repo to create the workspace from.
+- `branch` - `str`
+  The branch name to create the workspace from. The workspace
+  will be tied to the commit id of the branch at the time of creation.
+- `workspace_id` - `Optional[str]`
+  The workspace id to create the workspace from.
+  If left empty, will create a unique workspace id.
+
+<a id="oxen.workspace.Workspace.status"></a>
+
+## status
+
+```python
+def status(path: str = "")
+```
+
+Get the status of the workspace.
+
+**Arguments**:
+
+- `path` - `str`
+  The path to check the status of.
+
+<a id="oxen.workspace.Workspace.add"></a>
+
+## add
+
+```python
+def add(src: str, dst: str = "")
+```
+
+Add a file to the workspace
+
+**Arguments**:
+
+- `src` - `str`
+  The path to the local file to be staged
+- `dst` - `str`
+  The path in the remote repo where the file will be added
+
+<a id="oxen.workspace.Workspace.rm"></a>
+
+## rm
+
+```python
+def rm(path: str)
+```
+
+Remove a file from the workspace
+
+**Arguments**:
+
+- `path` - `str`
+  The path to the file on workspace to be removed
+
+<a id="oxen.workspace.Workspace.commit"></a>
+
+## commit
+
+```python
+def commit(message: str,
+           branch_name: Optional[str] = None,
+           should_delete: bool = False)
+```
+
+Commit the workspace to a branch
+
+**Arguments**:
+
+- `message` - `str`
+  The message to commit with
+- `branch_name` - `Optional[str]`
+  The name of the branch to commit to. If left empty, will commit to the branch
+  the workspace was created from.
+- `should_delete` - `bool`
+  Whether to delete the workspace after the commit.
+

@@ -86,6 +86,7 @@
         "python-api/index",
         "python-api/clone",
         "python-api/df_utils",
+        "python-api/data_frame",
         "python-api/diff/diff",
         "python-api/diff/tabular_diff",
         "python-api/diff/line_diff",
@@ -93,7 +94,8 @@
         "python-api/init",
         "python-api/repositories",
         "python-api/local_repo",
-        "python-api/remote_repo"
+        "python-api/remote_repo",
+        "python-api/workspace"
       ]
     },
     {
