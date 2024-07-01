@@ -69,11 +69,24 @@
       ]
     },
     {
+      "group": "Core Concepts",
+      "pages": [
+        "concepts/data-frames",
+        "concepts/diffs",
+        "concepts/compare",
+        "concepts/performance",
+        "concepts/schemas",
+        "concepts/remote-repos",
+        "concepts/workspaces"
+      ]
+    },
+    {
       "group": "Python API",
       "pages": [
         "python-api/index",
         "python-api/clone",
         "python-api/df_utils",
+        "python-api/data_frame",
         "python-api/diff/diff",
         "python-api/diff/tabular_diff",
         "python-api/diff/line_diff",
@@ -81,7 +94,8 @@
         "python-api/init",
         "python-api/repositories",
         "python-api/local_repo",
-        "python-api/remote_repo"
+        "python-api/remote_repo",
+        "python-api/workspace"
       ]
     },
     {
@@ -98,10 +112,6 @@
           ]
         }
     ]
-    },
-    {
-      "group": "Core Concepts",
-      "pages": ["concepts/data-frames", "concepts/schemas", "concepts/diffs", "concepts/compare", "concepts/remote-workspace", "concepts/performance"]
     }
   ],
   "footerSocials": {

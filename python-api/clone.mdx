@@ -11,7 +11,7 @@ def clone(repo_id: str,
           path: Optional[str] = None,
           host: str = "hub.oxen.ai",
           branch: str = "main",
-          protocol: str = "https",
+          scheme: str = "https",
           shallow=False,
           all=False)
 ```
@@ -29,8 +29,8 @@ Clone a repository
   The host to connect to. Defaults to 'hub.oxen.ai'
 - `branch` - `str`
   The branch name id to clone. Defaults to 'main'
-- `protocol` - `str`
-  The protocol to use. Defaults to 'https'
+- `scheme` - `str`
+  The scheme to use. Defaults to 'https'
 - `shallow` - `bool`
   Whether to do a shallow clone or not. Default: False
 - `all` - `bool`
@@ -38,6 +38,6 @@ Clone a repository
 
 **Returns**:
 
-  [LocalRepo](/python-api/local_repo)
-  A LocalRepo object that can be used to interact with the cloned repo.
+  [Repo](/python-api/repo)
+  A Repo object that can be used to interact with the cloned repo.
 

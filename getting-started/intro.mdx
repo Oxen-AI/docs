@@ -77,7 +77,7 @@ Oxen is built around ergonomics, ease of use, and it is easy to learn. If you kn
 * 📊 Native DataFrame processing (index, compare and serve up DataFrames)
 * 📈 Tracks changes over time (never worry about losing the state of your data)
 * 🤝 Collaborate with your team (sync to an oxen-server)
-* 🌎 [Remote Workspaces](https://docs.oxen.ai/concepts/remote-workspace) to interact with the data without downloading it
+* 🌎 [Workspaces](https://docs.oxen.ai/concepts/workspace) to interact with the data without downloading it
 * 👀 Better data visualization on [OxenHub](https://oxen.ai)
 
 ## ⚒️ Installation
@@ -131,10 +131,10 @@ oxen push origin main
 
 ```python Python
 import os
-from oxen import LocalRepo
+from oxen import Repo
 
-# Instantiate a LocalRepo object and create the repo directory
-repo = LocalRepo("/path/to/data", mkdir=True)
+# Instantiate a Repo object and create the repo directory
+repo = Repo("/path/to/data", mkdir=True)
 # Initialize the repository
 repo.init()
 # Write data to a file
@@ -229,7 +229,7 @@ See examples repositories for inspiration.
 
 No really.
 
-We hooked up the GitHub webhook for stars to an [OxenHub repository](https://www.oxen.ai/ox/FlyingOxen). Using a combination of Oxen's [python library](https://docs.oxen.ai/getting-started/python), [remote workspaces](https://docs.oxen.ai/concepts/remote-workspace), and [Stable Diffusion XL](https://huggingface.co/docs/diffusers/api/pipelines/stable_diffusion/stable_diffusion_xl) we generate a unique Ox for each user, and attempt to give them wings.
+We hooked up the GitHub webhook for stars to an [OxenHub repository](https://www.oxen.ai/ox/FlyingOxen). Using a combination of Oxen's [python library](https://docs.oxen.ai/getting-started/python), [remote workspaces](https://docs.oxen.ai/concepts/workspace), and [Stable Diffusion XL](https://huggingface.co/docs/diffusers/api/pipelines/stable_diffusion/stable_diffusion_xl) we generate a unique Ox for each user, and attempt to give them wings.
 
 Go find your own in our [ox/FlyingOxen](https://www.oxen.ai/ox/FlyingOxen) repository.
 

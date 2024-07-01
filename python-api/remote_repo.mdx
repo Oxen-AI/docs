@@ -112,9 +112,9 @@ print(df.head())
 
 ```python
 def __init__(path: str,
-             host: Optional[str] = None,
+             host: str = "hub.oxen.ai",
              revision: str = "main",
-             scheme="https")
+             scheme: str = "https")
 ```
 
 Create a new RemoteRepo object to interact with.
@@ -228,85 +228,6 @@ Download a file or directory from the remote repo.
 - `revision` - `str | None`
   The branch or commit id to download. Defaults to `self.revision`
 
-<a id="oxen.remote_repo.RemoteRepo.add"></a>
-
-## add
-
-```python
-def add(local_path: str, directory: str = "")
-```
-
-Stage a file to the remote workspace
-
-**Arguments**:
-
-- `path` - `str`
-  The path to the local file to be staged
-- `directory` - `str`
-  The path in the remote repo where the file will be added
-
-<a id="oxen.remote_repo.RemoteRepo.remove"></a>
-
-## remove
-
-```python
-def remove(path: str)
-```
-
-Unstage a file from the remote workspace
-
-**Arguments**:
-
-- `path` - `str`
-  The path to the file on remote to be removed from staging
-
-<a id="oxen.remote_repo.RemoteRepo.restore_df"></a>
-
-## restore\_df
-
-```python
-def restore_df(path: str)
-```
-
-Unstage any changes to the schema or contents of a dataframe file
-on the remote repo
-
-**Arguments**:
-
-- `path` - `str`
-  The path to the df on the remote to be restored
-
-<a id="oxen.remote_repo.RemoteRepo.status"></a>
-
-## status
-
-```python
-def status(path: str = "")
-```
-
-Get the status of the remote repo. Returns a StagedData object.
-
-**Arguments**:
-
-- `path` - `str`
-  The directory or file path on the remote that
-  will be checked for modifications
-
-<a id="oxen.remote_repo.RemoteRepo.commit"></a>
-
-## commit
-
-```python
-def commit(message: str)
-```
-
-Commit the staged data in the remote repo with a message.
-
-**Arguments**:
-
-- `message` - `str`
-  The commit message.
-
 <a id="oxen.remote_repo.RemoteRepo.log"></a>
 
 ## log
@@ -326,81 +247,6 @@ def branches()
 ```
 
 List all branches for a remote repo
-
-<a id="oxen.remote_repo.RemoteRepo.get_df_size"></a>
-
-## get\_df\_size
-
-```python
-def get_df_size(path: str)
-```
-
-Get the size of a dataframe file on the remote repo
-
-**Arguments**:
-
-- `path` - `str`
-  The path to the df on the remote
-
-<a id="oxen.remote_repo.RemoteRepo.get_df_row"></a>
-
-## get\_df\_row
-
-```python
-def get_df_row(path: str, idx: int)
-```
-
-Fetches a row from the dataframe at the specified path on the remote repo
-
-**Arguments**:
-
-- `path` - `str`
-  Path to the dataframe on the remote repo
-- `idx` - `int`
-  The index of the row to return
-
-<a id="oxen.remote_repo.RemoteRepo.get_df_slice"></a>
-
-## get\_df\_slice
-
-```python
-def get_df_slice(path: str,
-                 start: int,
-                 end: int,
-                 columns: Optional[List[str]] = None)
-```
-
-Gets a slice of rows from the dataframe at the specified path on the remote repo
-
-**Arguments**:
-
-- `path` - `str`
-  Path to the dataframe on the remote repo
-- `start` - `int`
-  The start index of the data frame to return
-- `end` - `int`
-  The end index of the data frame to return
-- `columns` - `List[str]`
-  A list of column names to return. If None, will return all columns.
-
-<a id="oxen.remote_repo.RemoteRepo.add_df_row"></a>
-
-## add\_df\_row
-
-```python
-def add_df_row(path: str, row: dict)
-```
-
-Adds a row to the dataframe at the specified path on the remote repo
-
-**Arguments**:
-
-- `path` - `str`
-  Path to the dataframe on the remote repo
-- `row` - `dict`
-  A dictionary representing the row to be added to the dataframe,
-  where keys are column names and values are the values to be inserted.
-  Schema must exactly match DF on remote repo.
 
 <a id="oxen.remote_repo.RemoteRepo.get_branch"></a>
 
@@ -470,6 +316,17 @@ def name() -> str
 ```
 
 The name of the repo.
+
+<a id="oxen.remote_repo.RemoteRepo.identifier"></a>
+
+## identifier
+
+```python
+@property
+def identifier()
+```
+
+The namespace/name of the repo.
 
 <a id="oxen.remote_repo.RemoteRepo.url"></a>
 

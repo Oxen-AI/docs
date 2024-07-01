@@ -1,0 +1,141 @@
+---
+title: 'Workspaces'
+description: 'Workspaces allows you to interact with your data without having to download the entire dataset locally.'
+---
+
+An Oxen Workspace is a convenient construct for adding data. Conceptually you can think of a workspace a special type of branch where you can stage remote changes before committing them. Under the hood, a workspace is tied to a commit id. This means whatever changes you make will always be with respect to the commit you created the workspace off of.
+
+# Instantiating a Workspace
+
+A workspace is created off of a `RemoteRepo` and a branch name. The branch name is just a convenience for the user to create a workspace on the underlying commit id.
+
+<CodeGroup>
+
+```python Python
+from oxen import RemoteRepo
+from oxen import Workspace
+
+repo = RemoteRepo("ox/CatDogBBox")
+workspace = Workspace(repo, "add-images")
+```
+
+```bash CLI
+oxen workspace create -w my-workspace-name -b add-images
+```
+
+</CodeGroup>
+
+If no branch name is provided, the workspace will be created off of the default branch (usually `main`).
+
+<CodeGroup>
+
+```python Python
+from oxen import RemoteRepo
+from oxen import Workspace
+
+repo = RemoteRepo("ox/CatDogBBox")
+workspace = Workspace(repo)
+```
+
+```bash CLI
+oxen workspace create -w my-workspace-name
+```
+
+</CodeGroup>
+
+# Adding Files
+
+When adding data, it is always a good idea to create a branch for the changes you are about to make. This will allow you to commit changes without affecting the default branch.
+
+## Creating a Branch
+
+<CodeGroup>
+
+```python Python
+from oxen import RemoteRepo
+
+repo = RemoteRepo("ox/CatDogBBox")
+# Create the branch on the remote
+repo.create_branch("add-images")
+# Make sure you are pointing to this branch
+repo.checkout("add-images")
+```
+
+```bash CLI
+oxen checkout -b add-images
+oxen push origin add-images
+```
+
+</CodeGroup>
+
+## Uploading Files
+
+Workspaces allow you to upload files without immediately committing them. Think of this as a staging area where you can upload the data, and then batch commit when you are ready.
+
+<CodeGroup>
+
+```python Python
+from oxen import RemoteRepo
+from oxen import Workspace
+
+repo = RemoteRepo("ox/CatDogBBox")
+workspace = Workspace(repo, "add-images")
+workspace.add("/path/to/image.png")
+status = workspace.status()
+print(status.added_files())
+```
+
+```bash CLI
+oxen workspace add image.png -w my-workspace-id
+oxen workspace status -w my-workspace-id
+```
+
+</CodeGroup>
+
+## Removing Uploaded Files
+
+If you accidentally add file from the remote workspace and want to remove it, no worries, you can unstage it with `oxen remote rm --staged`.
+
+<CodeGroup>
+
+```python Python
+from oxen import RemoteRepo
+from oxen import Workspace
+
+repo = RemoteRepo("ox/CatDogBBox")
+workspace = Workspace(repo, "add-images")
+workspace.rm("image.jpg")
+status = workspace.status()
+print(status.added_files())
+```
+
+```bash
+oxen workspace rm image.jpg -w my-workspace-id
+```
+
+</CodeGroup>
+
+## Commit Changes
+
+When you are confident in the changes you have made, you can commit the changes to the remote workspace. This will create a new commit on the remote branch.
+
+<CodeGroup>
+
+```python Python
+from oxen import RemoteRepo
+from oxen import Workspace
+
+repo = RemoteRepo("ox/CatDogBBox")
+workspace = Workspace(repo, "add-images")
+workspace.commit("adding an image", "add-images")
+```
+
+```bash CLI
+oxen workspace commit -m "adding an image" -w my-workspace-id -b add-images
+```
+
+</CodeGroup>
+
+🎉 You have now committed data to the remote branch without cloning the full repo.
+
+Note: If the remote branch cannot be merged cleanly, the remote commit will fail, and you will have to resolve the merge conflicts with some more advanced commands which we will cover later.

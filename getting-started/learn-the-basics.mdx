@@ -72,10 +72,10 @@ oxen commit -m "Adding my data"
 
 ```python Python
 import os
-from oxen import LocalRepo
+from oxen import Repo
 
-# Instantiate a LocalRepo object and create the repo directory
-repo = LocalRepo("/path/to/data", mkdir=True)
+# Instantiate a Repo object and create the repo directory
+repo = Repo("/path/to/data", mkdir=True)
 # Initialize the repository
 repo.init()
 # Write data to a file
@@ -111,9 +111,9 @@ printf '%s\n' 'name,age' 'bob,12' 'jane,13' 'joe,14' > people.csv
 
 ```python Python
 import os
-from oxen import LocalRepo
+from oxen import Repo
 
-repo = LocalRepo("/path/to/data")
+repo = Repo("/path/to/data")
 # Create a new branch called `modify-data`
 repo.checkout("modify-data", create=True)
 # Overwrite data in existing file
@@ -141,10 +141,10 @@ oxen push origin --delete new_branch
 
 ```python Python
 import os
-from oxen import LocalRepo
+from oxen import Repo
 
-# Instantiate a LocalRepo object
-repo = LocalRepo("/path/to/data")
+# Instantiate a Repo object
+repo = Repo("/path/to/data")
 # Checkout the main branch
 repo.checkout("main")
 # Delete new_branch
@@ -225,9 +225,9 @@ oxen commit -m "Adding Joe to the dataset"
 ```
 
 ```python Python
-from oxen import LocalRepo
+from oxen import Repo
 
-repo = LocalRepo("/path/to/data")
+repo = Repo("/path/to/data")
 # Stage the data for commit
 data_path = os.path.join(repo.path, "people.csv")
 repo.add(data_path)
@@ -248,10 +248,10 @@ oxen log
 ```
 
 ```python Python
-from oxen import LocalRepo
+from oxen import Repo
 
-# Instantiate a LocalRepo object
-repo = LocalRepo("/path/to/data")
+# Instantiate a Repo object
+repo = Repo("/path/to/data")
 # Get the commit history
 commits = repo.log()
 ```
@@ -271,10 +271,10 @@ oxen checkout main
 ```
 
 ```python Python
-from oxen import LocalRepo
+from oxen import Repo
 
-# Instantiate a LocalRepo object
-repo = LocalRepo("/path/to/data")
+# Instantiate a Repo object
+repo = Repo("/path/to/data")
 # Checkout the main branch
 repo.checkout("main")
 ```
@@ -292,10 +292,10 @@ oxen branch
 ```
 
 ```python Python
-from oxen import LocalRepo
+from oxen import Repo
 
-# Instantiate a LocalRepo object
-repo = LocalRepo("/path/to/data")
+# Instantiate a Repo object
+repo = Repo("/path/to/data")
 # Get the branches
 print(repo.branches())
 ```
@@ -343,11 +343,11 @@ oxen clone https://hub.oxen.ai/ox/CatDogBBox
 ```
 
 ```python Python
-from oxen import LocalRepo
+from oxen import Repo
 
 # Clone the repository
-repo = LocalRepo("/path/to/dst")
-repo = LocalRepo.clone("https://hub.oxen.ai/ox/CatDogBBox")
+repo = Repo("/path/to/dst")
+repo = Repo.clone("https://hub.oxen.ai/ox/CatDogBBox")
 ```
 
 </CodeGroup>
@@ -363,8 +363,8 @@ oxen pull origin main
 ```
 
 ```python Python
-from oxen import LocalRepo
-repo = LocalRepo("/path/to/repo")
+from oxen import Repo
+repo = Repo("/path/to/repo")
 repo.pull()
 ```
 

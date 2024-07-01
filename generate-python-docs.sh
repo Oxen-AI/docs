@@ -14,10 +14,12 @@ list=(
     "diff/line_diff"
     "diff/text_diff"
     "init"
-    "local_repo"
+    "repo"
     "remote_repo"
     "streaming_dataset"
     "user"
+    "workspace"
+    "data_frame"
 )
 
 # Loop over the list
