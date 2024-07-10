@@ -1,11 +1,11 @@
 ---
 title: 'Data Frames'
-description: 'Oxen provides a powerful data frame library under the hood that allows you to interact with tabular data.'
+description: 'Oxen provides a powerful data frame library that allows you to interact with tabular data.'
 ---
 
-Whether it is csv, parquet, or line delimited json, it is useful to store your training data in data frames that we can filter, aggregate, slice and dice.
+Data frames are 2-dimensional tables that organize data into rows and columns like Excel spreadsheets. Whether you're dealing with csv, parquet, or line delimited json, they can be used to help you view, edit, query, and filter your data. 
 
-To follow along with the examples below feel free to grab the example data from our public [SpamOrHam](https://oxen.ai/datasets/SpamOrHam) repository.
+Below are several examples of data frame usage with our public [SpamOrHam](https://oxen.ai/datasets/SpamOrHam) repository, which compares spam (spam) text messages to real (ham) ones. You can use these commands to download the data and follow along.
 
 ```bash
 mkdir spam-or-ham
@@ -15,7 +15,9 @@ oxen download datasets/SpamOrHam data.tsv
 
 # Look At Your Data
 
-Oxen comes with a convenient `df` subcommand to view your data frames on disk. This is useful for quickly inspecting your data before you start modifying it.
+## oxen df
+
+Oxen uses the `df` command for all CLI actions involving data frames. For example, `oxen df <FILENAME>` displays the contents of tabular data files. 
 
 ```bash
 $ oxen df data.tsv
@@ -40,9 +42,75 @@ shape: (4_774, 2)
 +-----------+---------------------------------+
 ```
 
-# Upload Your Data
+Here, we see that [SpamOrHam](https://oxen.ai/datasets/SpamOrHam)'s dataset consists of 4,774 rows and 2 columns 
 
-Then add the data to a repository of your own so that you can modify it. You can do this in the [UI](https://oxen.ai/), Python, or CLI.
+You can also use `oxen df` options to view your data with modifications. These changes won't be written anywhere unless you use the `--write` or `--output` flags. 
+
+```bash
+# Add extra column
+$ oxen df data.tsv --add-col 'language:English:str'
+
+shape: (4_774, 3)
++----------+---------------------------------+----------+
+| category | text                            | language |
+| ---      | ---                             | ---      |
+| str      | str                             | str      |
++----------+---------------------------------+----------+
+| ham      | Go until jurong point, crazy..… | English  |
+| ham      | Ok lar... Joking wif u oni...   | English  |
+| spam     | Free entry in 2 a wkly comp to… | English  |
+| ham      | U dun say so early hor... U c … | English  |
+| ham      | Nah I don't think he goes to u… | English  |
+| …        | …                               | …        |
+| ham      | Well, i'm glad you didn't find… | English  |
+| ham      | Guy, no flash me now. If you g… | English  |
+| spam     | Do you want a New Nokia 3510i … | English  |
+| ham      | Mark works tomorrow. He gets o… | English  |
+| ham      | Keep ur problems in ur heart, … | English  |
++----------+---------------------------------+----------+
+
+# Filter out spam messages, view text only
+$ oxen df data.tsv --filter 'category == ham' --columns 'text'
+
+shape: (4_124, 1)
++---------------------------------+
+| text                            |
+| ---                             |
+| str                             |
++---------------------------------+
+| Go until jurong point, crazy..… |
+| Ok lar... Joking wif u oni...   |
+| U dun say so early hor... U c … |
+| Nah I don't think he goes to u… |
+| Even my brother is not like to… |
+| …                               |
+| I want to sent  &lt;#&gt; mesa… |
+| Well, i'm glad you didn't find… |
+| Guy, no flash me now. If you g… |
+| Mark works tomorrow. He gets o… |
+| Keep ur problems in ur heart, … |
++---------------------------------+
+
+# Randomize the data, then view the first 5 entries
+$ oxen df data.tsv --head 5 --randomize
+
+shape: (5, 2)
++----------+---------------------------------+
+| category | text                            |
+| ---      | ---                             |
+| str      | str                             |
++----------+---------------------------------+
+| ham      | He didn't see his shadow. We g… |
+| ham      | Thank god they are in bed!      |
+| ham      | Where are you ? You said you w… |
+| spam     | XCLUSIVE@CLUBSAISAI 2MOROW 28/… |
+| ham      | In which place do you want da.  |
++----------+---------------------------------+
+```
+
+# Uploading Data
+
+Before modifying your data, add it to a repository to preserve its history. This can be done in the [UI](https://oxen.ai/), Python, or CLI.
 
 <CodeGroup>
 
@@ -91,15 +159,13 @@ oxen push origin main
 
 </CodeGroup>
 
-If you have pushed to the Oxen Hub, you can view, edit, and query your data directly using the [UI](https://oxen.ai/).
+If you've pushed to the Oxen Hub, you can view, edit, and query your data directly using the [UI](https://oxen.ai/).
 
 ![Spam or Ham Data Frame](/images/SpamOrHamDataFrame.png)
 
 # Editing Data Frames
 
-Oxen allows you to interact with data frames that are not downloaded to your local machine. This can be useful for data collection, labeling workflows, or quickly inspecting data without having to download it.
-
-Once you have pushed your data to an Oxen repository, Oxen exposes a CRUD interface to interact with the rows.
+Once you've added your data to an Oxen repository, you can interact with data frames even if they're not downloaded locally. Oxen exposes a CRUD interface that makes this possible.
 
 ```python
 from oxen import DataFrame
@@ -127,48 +193,66 @@ df.commit("Update label")
 
 All of these operations are exposed over HTTP, so you are not limited to using the Python library. Check out all our HTTP [reference docs](/http-api) to see how to interact with your data programatically.
 
-# Local Data Frames
-
-## oxen df
-
-Oxen has a convenient `df` (short for "Data Frame") command to deal with tabular data. This example data has 10,000 rows and 6 columns of bounding boxes around cats or dogs. The shape hint at the top of the output can be useful for making sure you are transforming the data correctly.
+You can also edit data files locally with `oxen df --write`. Any modifications you make with this flag set will be written back to the original file and register as 'modified' in your Oxen repository. 
 
 ```bash
-oxen df train.csv
+$ oxen df data.tsv --filter 'category == spam' --write
+
+shape: (650, 2)
++----------+---------------------------------+
+| category | text                            |
+| ---      | ---                             |
+| str      | str                             |
++----------+---------------------------------+
+| spam     | Free entry in 2 a wkly comp to… |
+| spam     | FreeMsg Hey there darling it's… |
+| spam     | WINNER!! As a valued network c… |
+| spam     | Had your mobile 11 months or m… |
+| spam     | SIX chances to win CASH! From … |
+| …        | …                               |
+| spam     | 83039 62735=£450 UK Break Acco… |
+| spam     | 5p 4 alfie Moon's Children in … |
+| spam     | WIN a £200 Shopping spree ever… |
+| spam     | This is the 2nd attempt to con… |
+| spam     | Do you want a New Nokia 3510i … |
++----------+---------------------------------+
+Writing "data.tsv"
+
+$ oxen df data.tsv 
+
+shape: (650, 2)
++----------+---------------------------------+
+| category | text                            |
+| ---      | ---                             |
+| str      | str                             |
++----------+---------------------------------+
+| spam     | Free entry in 2 a wkly comp to… |
+| spam     | FreeMsg Hey there darling it's… |
+| spam     | WINNER!! As a valued network c… |
+| spam     | Had your mobile 11 months or m… |
+| spam     | SIX chances to win CASH! From … |
+| …        | …                               |
+| spam     | 83039 62735=£450 UK Break Acco… |
+| spam     | 5p 4 alfie Moon's Children in … |
+| spam     | WIN a £200 Shopping spree ever… |
+| spam     | This is the 2nd attempt to con… |
+| spam     | Do you want a New Nokia 3510i … |
++----------+---------------------------------+
 ```
 
-```bash
-shape: (9_000, 6)
-+-------------------------+-------+--------+--------+--------+--------+
-| file                    ┆ label ┆ min_x  ┆ min_y  ┆ width  ┆ height |
-| ---                     ┆ ---   ┆ ---    ┆ ---    ┆ ---    ┆ ---    |
-| str                     ┆ str   ┆ f64    ┆ f64    ┆ f64    ┆ f64    |
-|-------------------------+-------+--------+--------+--------+--------|
-| images/000000128154.jpg ┆ cat   ┆ 0.0    ┆ 19.27  ┆ 130.79 ┆ 129.58 |
-| images/000000544590.jpg ┆ cat   ┆ 9.75   ┆ 13.49  ┆ 214.25 ┆ 188.35 |
-| images/000000000581.jpg ┆ dog   ┆ 49.37  ┆ 67.79  ┆ 74.29  ┆ 116.08 |
-| images/000000236841.jpg ┆ cat   ┆ 115.21 ┆ 96.65  ┆ 93.87  ┆ 42.29  |
-| …                       ┆ …     ┆ …      ┆ …      ┆ …      ┆ …      |
-| images/000000431980.jpg ┆ dog   ┆ 98.3   ┆ 110.46 ┆ 42.69  ┆ 26.64  |
-| images/000000071025.jpg ┆ cat   ┆ 55.33  ┆ 105.45 ┆ 160.15 ┆ 73.57  |
-| images/000000518015.jpg ┆ cat   ┆ 43.72  ┆ 4.34   ┆ 72.98  ┆ 129.1  |
-| images/000000171435.jpg ┆ dog   ┆ 22.86  ┆ 100.03 ┆ 125.55 ┆ 41.61  |
-+-------------------------+-------+--------+--------+--------+--------+
-```
-
-Oxen uses a combination of [polars](https://pola-rs.github.io/polars-book/user-guide/introduction.html) and [duckdb](https://duckdb.org/) under the hood, and uses the [Apache Arrow](https://arrow.apache.org/) data format to provide powerful cross application functionality.
+Oxen uses a combination of polars and duckdb under the hood, and uses the Apache Arrow data format to provide powerful cross application functionality.
 
 ## Useful Commands
 
-There are many ways you might want to view, transform, and filter your data on the command line before committing to the version of the dataset.
+There are many ways you might want to view, transform, and filter your data on the command line before committing changes to the dataset. `oxen df` provides several options that can help with this.
 
-To quickly see all the options on the `df` command you can run `oxen df --help`.
+(INSERT DOGS/CATS DATASET HERE!). To see all the options available, run `oxen df --help`.
 
 ## Convert Dataset Format
 
-The `--output` option is handy for quickly transforming data files between data formats on disk. Some formats like parquet and arrow are more efficient for data different [tasks](https://towardsdatascience.com/apache-arrow-read-dataframe-with-zero-memory-69634092b1a), but are not human readable like tsv or csv. Data format is always a trade off you'll have to decide on for your application.
+Oxen allows you to quickly transform data files between data formats. When you run `oxen df` with `--output`, the resulting data frame will be written to disk as a new file of the specified type. 
 
-Oxen currently supports these file extensions: `csv`, `tsv`, `parquet`, `arrow`, `json`, `jsonl`.
+Some formats like parquet and arrow are more efficient for different [tasks](https://towardsdatascience.com/apache-arrow-read-dataframe-with-zero-memory-69634092b1a), but are not human readable like tsv or csv. These are tradeoffs you'll have to decide on for your application. Oxen currently supports the following file extensions: `csv`, `tsv`, `parquet`, `arrow`, `json`, `jsonl`.
 
 ```bash
 oxen df train.csv -o train.parquet
@@ -195,94 +279,11 @@ shape: (9_000, 6)
 Writing "train.parquet"
 ```
 
-## SQL Query
-
-Oxen has a powerful SQL query engine built in to the CLI. You can run SQL queries on your data frames with the `--sql` flag.
-
-```bash
-oxen df train.csv --sql 'SELECT * FROM df WHERE label = "dog"'
-```
-
-```bash
-shape: (4_860, 6)
-+-------------------------+-------+--------+--------+--------+--------+
-| file                    ┆ label ┆ min_x  ┆ min_y  ┆ width  ┆ height |
-| ---                     ┆ ---   ┆ ---    ┆ ---    ┆ ---    ┆ ---    |
-| str                     ┆ str   ┆ f64    ┆ f64    ┆ f64    ┆ f64    |
-+-------------------------+-------+--------+--------+--------+--------+
-| images/000000128154.jpg ┆ dog   ┆ 0.0    ┆ 19.27  ┆ 130.79 ┆ 129.58 |
-| images/000000544590.jpg ┆ dog   ┆ 9.75   ┆ 13.49  ┆ 214.25 ┆ 188.35 |
-| images/000000000581.jpg ┆ dog   ┆ 49.37  ┆ 67.79  ┆ 74.29  ┆ 116.08 |
-| images/000000236841.jpg ┆ dog   ┆ 115.21 ┆ 96.65  ┆ 93.87  ┆ 42.29  |
-| …                       ┆ …     ┆ …      ┆ …      ┆ …      ┆ …      |
-| images/000000055645.jpg ┆ dog   ┆ 8.67   ┆ 122.36 ┆ 60.22  ┆ 99.24  |
-| images/000000094271.jpg ┆ dog   ┆ 47.6   ┆ 115.26 ┆ 111.57 ┆ 102.27 |
-| images/000000041257.jpg ┆ dog   ┆ 6.81   ┆ 117.29 ┆ 207.06 ┆ 86.08  |
-| images/000000321014.jpg ┆ dog   ┆ 51.86  ┆ 61.18  ┆ 166.26 ┆ 63.11  |
-+-------------------------+-------+--------+--------+--------+--------+
-```
-
-## Text2SQL
-
-If you are too lazy to write SQL queries, Oxen also has a powerful text2sql engine built in to the CLI. You can run text2sql queries on your data frames with the `--text2sql` flag. This uses an LLM to convert natural language queries to SQL queries. This can be useful for quickly querying data frames without having to remember SQL syntax.
-
-```bash
-oxen df train.csv --text2sql 'show me all the rows where the label is dog'
-```
-
-```bash
-shape: (4_860, 6)
-+-------------------------+-------+--------+--------+--------+--------+
-| file                    ┆ label ┆ min_x  ┆ min_y  ┆ width  ┆ height |
-| ---                     ┆ ---   ┆ ---    ┆ ---    ┆ ---    ┆ ---    |
-| str                     ┆ str   ┆ f64    ┆ f64    ┆ f64    ┆ f64    |
-+-------------------------+-------+--------+--------+--------+--------+
-| images/000000128154.jpg ┆ dog   ┆ 0.0    ┆ 19.27  ┆ 130.79 ┆ 129.58 |
-| images/000000544590.jpg ┆ dog   ┆ 9.75   ┆ 13.49  ┆ 214.25 ┆ 188.35 |
-| images/000000000581.jpg ┆ dog   ┆ 49.37  ┆ 67.79  ┆ 74.29  ┆ 116.08 |
-| images/000000236841.jpg ┆ dog   ┆ 115.21 ┆ 96.65  ┆ 93.87  ┆ 42.29  |
-| …                       ┆ …     ┆ …      ┆ …      ┆ …      ┆ …      |
-| images/000000055645.jpg ┆ dog   ┆ 8.67   ┆ 122.36 ┆ 60.22  ┆ 99.24  |
-| images/000000094271.jpg ┆ dog   ┆ 47.6   ┆ 115.26 ┆ 111.57 ┆ 102.27 |
-| images/000000041257.jpg ┆ dog   ┆ 6.81   ┆ 117.29 ┆ 207.06 ┆ 86.08  |
-| images/000000321014.jpg ┆ dog   ┆ 51.86  ┆ 61.18  ┆ 166.26 ┆ 63.11  |
-+-------------------------+-------+--------+--------+--------+--------+
-```
-
-NOTE: The text2sql engine is still in development and may not work for all queries. It also requires you to have an [Oxen.ai API key](/getting-started/oxen-hub) setup.
-
-## Randomize
-
-Often you will want to randomize data before splitting into train and test sets, or even just to peek at different data values.
-
-```bash
-oxen df train.csv --randomize
-```
-
-```bash
-shape: (9_000, 6)
-+-------------------------+-------+--------+--------+--------+--------+
-| file                    ┆ label ┆ min_x  ┆ min_y  ┆ width  ┆ height |
-| ---                     ┆ ---   ┆ ---    ┆ ---    ┆ ---    ┆ ---    |
-| str                     ┆ str   ┆ f64    ┆ f64    ┆ f64    ┆ f64    |
-+-------------------------+-------+--------+--------+--------+--------+
-| images/000000124002.jpg ┆ cat   ┆ 82.92  ┆ 8.31   ┆ 108.31 ┆ 158.48 |
-| images/000000207597.jpg ┆ dog   ┆ 75.64  ┆ 3.65   ┆ 125.47 ┆ 218.19 |
-| images/000000113810.jpg ┆ cat   ┆ 104.34 ┆ 44.65  ┆ 119.66 ┆ 159.42 |
-| images/000000340160.jpg ┆ dog   ┆ 79.78  ┆ 89.31  ┆ 127.1  ┆ 103.66 |
-| …                       ┆ …     ┆ …      ┆ …      ┆ …      ┆ …      |
-| images/000000310573.jpg ┆ dog   ┆ 102.55 ┆ 91.48  ┆ 42.24  ┆ 52.18  |
-| images/000000162801.jpg ┆ cat   ┆ 112.96 ┆ 75.05  ┆ 57.38  ┆ 98.19  |
-| images/000000544117.jpg ┆ dog   ┆ 108.16 ┆ 124.28 ┆ 11.08  ┆ 64.58  |
-| images/000000283210.jpg ┆ dog   ┆ 49.37  ┆ 40.01  ┆ 174.43 ┆ 182.0  |
-+-------------------------+-------+--------+--------+--------+--------+
-```
-
 ## View Schema
 
-Oxen automatically detects and versions the schema of your data frame. See the [schema docs](/concepts/schemas) for more information on the power of Oxen schemas.
+Oxen automatically detects and versions the schema of your data frame. See the [schema docs](/concepts/schemas) for more information about this.
 
-To view a data frame's schema in full, you can use the `--schema` flag to display the full schema of this data frame.
+To view a data frame's schema in full, you can use the `--schema` flag.
 
 ```bash
 oxen df train.csv --schema
@@ -308,7 +309,7 @@ oxen df train.csv --schema
 
 ## View Specific Columns
 
-Maybe you have many columns, and only need to work with a few. You can specify column names in a comma separated list with `--columns`.
+If you only need a subset of your data frame's columns, you can specify them in a comma separated list with `--columns`.
 
 ```bash
 oxen df train.csv --columns 'file,label'
@@ -333,19 +334,9 @@ shape: (9_000, 2)
 +-------------------------+-------+
 ```
 
-## Concatenate (vstack)
-
-Maybe you have filtered down data, and want to stack the data back into a single frame. The `--vstack` option takes a variable length list of files you would like to concatenate.
-
-```bash
-oxen df train.csv --filter 'label-dog' -o /tmp/dogs.parquet
-oxen df train.csv --filter 'label-cat' -o /tmp/cats.parquet
-oxen df /tmp/cats.parquet --vstack /tmp/dogs.parquet -o annotations/data.parquet
-```
-
 ## Take Indices
 
-Sometimes you have a specific row or set of rows of data you would like to look at. This is where the `--take` option comes in handy.
+You can also view particular rows using `--take`
 
 ```bash
 oxen df train.csv --take '1,13,42'
@@ -364,9 +355,28 @@ shape: (3, 6)
 +-------------------------+-------+-------+-------+--------+--------+
 ```
 
+## Unique
+
+Oxen can efficiently compute all the unique values of a given column or set of columns using the `--unique` option.  
+
+```bash
+oxen df train.csv --unique "file"
+oxen df train.csv -u "file,label"
+```
+
+## Concatenate (vstack)
+
+If you've filtered down your data and want to stack it back into a single frame. The `--vstack` option takes a variable length list of files you'd like to concatenate.
+
+```bash
+oxen df train.csv --filter 'label-dog' -o /tmp/dogs.parquet
+oxen df train.csv --filter 'label-cat' -o /tmp/cats.parquet
+oxen df /tmp/cats.parquet --vstack /tmp/dogs.parquet -o annotations/data.parquet
+```
+
 ## Add Column
 
-Your data might not match the schema of a data frame you want to combine with, in this case you may need to add a column to match the schema. You can do this and project default values with `--add-col 'col:val:dtype'`
+Your data might not match the schema of a data frame you want to combine with, in which case you may need to add a column to match it. You can do this and project default values with `--add-col 'col:val:dtype'`
 
 ```bash
 oxen df train.csv --add-col 'is_cute:unknown:str'
@@ -393,7 +403,7 @@ shape: (9_000, 7)
 
 ## Add Row
 
-Sometimes it can be a pain to append data to a data file without writing code to do so. The `--add-row` option makes it as easy as a comma separated list and automatically parses the data to the correct dtypes.
+You can also append new rows to the data frame. The `--add-row` option takes in a comma separated list of values and automatically parses the correct dtypes.
 
 ```bash
 oxen df train.csv --add-row 'images/my_cat.jpg,cat,0,0,0,0'
@@ -418,18 +428,36 @@ shape: (9_001, 6)
 +-------------------------+-------+--------+--------+--------+--------+
 ```
 
-## Unique
+## Randomize
 
-Oxen can efficiently compute all the unique values given a column name, or comma separated list of column names.
+Often, you'll want to randomize data before splitting into train and test sets, or just to peek at different data values. This can be done with the `--randomize` flag.
 
 ```bash
-oxen df train.csv --unique "file"
-oxen df train.csv -u "file,label"
+oxen df train.csv --randomize
+```
+
+```bash
+shape: (9_000, 6)
++-------------------------+-------+--------+--------+--------+--------+
+| file                    ┆ label ┆ min_x  ┆ min_y  ┆ width  ┆ height |
+| ---                     ┆ ---   ┆ ---    ┆ ---    ┆ ---    ┆ ---    |
+| str                     ┆ str   ┆ f64    ┆ f64    ┆ f64    ┆ f64    |
++-------------------------+-------+--------+--------+--------+--------+
+| images/000000124002.jpg ┆ cat   ┆ 82.92  ┆ 8.31   ┆ 108.31 ┆ 158.48 |
+| images/000000207597.jpg ┆ dog   ┆ 75.64  ┆ 3.65   ┆ 125.47 ┆ 218.19 |
+| images/000000113810.jpg ┆ cat   ┆ 104.34 ┆ 44.65  ┆ 119.66 ┆ 159.42 |
+| images/000000340160.jpg ┆ dog   ┆ 79.78  ┆ 89.31  ┆ 127.1  ┆ 103.66 |
+| …                       ┆ …     ┆ …      ┆ …      ┆ …      ┆ …      |
+| images/000000310573.jpg ┆ dog   ┆ 102.55 ┆ 91.48  ┆ 42.24  ┆ 52.18  |
+| images/000000162801.jpg ┆ cat   ┆ 112.96 ┆ 75.05  ┆ 57.38  ┆ 98.19  |
+| images/000000544117.jpg ┆ dog   ┆ 108.16 ┆ 124.28 ┆ 11.08  ┆ 64.58  |
+| images/000000283210.jpg ┆ dog   ┆ 49.37  ┆ 40.01  ┆ 174.43 ┆ 182.0  |
++-------------------------+-------+--------+--------+--------+--------+
 ```
 
 ## Sort
 
-Sorting can be achieved with the `sort` flag. For example you may want to find the largest bounding boxes by sorting on the height column.
+You can sort your data with the `sort` flag. You can sort the data by the values of any column in your data frame. 
 
 ```bash
 oxen df train.csv --sort "height"
@@ -456,7 +484,7 @@ shape: (9_000, 6)
 
 ## Reverse
 
-You can also reverse the order of a data table. By default `--sort` sorts in ascending order, but can be reversed with the `--reverse` flag.
+You can also reverse the order of a data table. By default `--sort` sorts in ascending order, but this can be switched with the `--reverse` flag.
 
 ```bash
 oxen df train.csv --reverse
