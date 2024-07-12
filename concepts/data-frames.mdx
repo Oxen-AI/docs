@@ -279,6 +279,30 @@ shape: (9_000, 6)
 Writing "train.parquet"
 ```
 
+## SQL Query
+Oxen has a powerful SQL query engine built in to the CLI. You can run SQL queries on your data frames with the --sql flag.
+
+```bash
+oxen df train.csv --sql 'SELECT * FROM df WHERE label = "dog"'
+
+shape: (4_860, 6)
++-------------------------+-------+--------+--------+--------+--------+
+| file                    ┆ label ┆ min_x  ┆ min_y  ┆ width  ┆ height |
+| ---                     ┆ ---   ┆ ---    ┆ ---    ┆ ---    ┆ ---    |
+| str                     ┆ str   ┆ f64    ┆ f64    ┆ f64    ┆ f64    |
++-------------------------+-------+--------+--------+--------+--------+
+| images/000000128154.jpg ┆ dog   ┆ 0.0    ┆ 19.27  ┆ 130.79 ┆ 129.58 |
+| images/000000544590.jpg ┆ dog   ┆ 9.75   ┆ 13.49  ┆ 214.25 ┆ 188.35 |
+| images/000000000581.jpg ┆ dog   ┆ 49.37  ┆ 67.79  ┆ 74.29  ┆ 116.08 |
+| images/000000236841.jpg ┆ dog   ┆ 115.21 ┆ 96.65  ┆ 93.87  ┆ 42.29  |
+| …                       ┆ …     ┆ …      ┆ …      ┆ …      ┆ …      |
+| images/000000055645.jpg ┆ dog   ┆ 8.67   ┆ 122.36 ┆ 60.22  ┆ 99.24  |
+| images/000000094271.jpg ┆ dog   ┆ 47.6   ┆ 115.26 ┆ 111.57 ┆ 102.27 |
+| images/000000041257.jpg ┆ dog   ┆ 6.81   ┆ 117.29 ┆ 207.06 ┆ 86.08  |
+| images/000000321014.jpg ┆ dog   ┆ 51.86  ┆ 61.18  ┆ 166.26 ┆ 63.11  |
++-------------------------+-------+--------+--------+--------+--------+
+​```
+
 ## View Schema
 
 Oxen automatically detects and versions the schema of your data frame. See the [schema docs](/concepts/schemas) for more information about this.
