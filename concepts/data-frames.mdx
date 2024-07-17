@@ -42,7 +42,7 @@ shape: (4_774, 2)
 +-----------+---------------------------------+
 ```
 
-Here, we see that [SpamOrHam](https://oxen.ai/datasets/SpamOrHam)'s dataset consists of 4,774 rows and 2 columns 
+Here, we see that [SpamOrHam](https://oxen.ai/datasets/SpamOrHam)'s dataset consists of 4,774 rows and 2 columns. The output is automatically truncated to 10 entries. To display the entire data set, you can use the `--full` flag.
 
 You can also use `oxen df` options to view your data with modifications. These changes won't be written anywhere unless you use the `--write` or `--output` flags. 
 
@@ -246,7 +246,7 @@ Oxen uses a combination of polars and duckdb under the hood, and uses the Apache
 
 There are many ways you might want to view, transform, and filter your data on the command line before committing changes to the dataset. `oxen df` provides several options that can help with this.
 
-(INSERT DOGS/CATS DATASET HERE!). To see all the options available, run `oxen df --help`.
+For these examples, we'll use our [CatDogBBox](https://hub.oxen.ai/ox/CatDogBBox) repository.
 
 ## Convert Dataset Format
 
@@ -302,6 +302,31 @@ shape: (4_860, 6)
 | images/000000321014.jpg ┆ dog   ┆ 51.86  ┆ 61.18  ┆ 166.26 ┆ 63.11  |
 +-------------------------+-------+--------+--------+--------+--------+
 ​```
+
+## Filter
+If you don't need actions full sql query, Oxen also has a lightweight `--filter` option which supports >, <, and == operations
+
+```bash
+oxen df train.csv --filter 'width > 100'
+
+shape: (3_483, 6)
++-------------------------+-------+--------+--------+--------+--------+
+| file                    | label | min_x  | min_y  | width  | height |
+| ---                     | ---   | ---    | ---    | ---    | ---    |
+| str                     | str   | f64    | f64    | f64    | f64    |
++-------------------------+-------+--------+--------+--------+--------+
+| images/000000128154.jpg | cat   | 0.0    | 19.27  | 130.79 | 129.58 |
+| images/000000544590.jpg | cat   | 9.75   | 13.49  | 214.25 | 188.35 |
+| images/000000177913.jpg | dog   | 11.56  | 52.83  | 177.18 | 166.41 |
+| images/000000002337.jpg | dog   | 5.42   | 7.28   | 180.01 | 167.21 |
+| images/000000012673.jpg | cat   | 117.11 | 98.61  | 106.61 | 47.17  |
+| …                       | …     | …      | …      | …      | …      |
+| images/000000399102.jpg | cat   | 106.03 | 145.22 | 111.91 | 66.68  |
+| images/000000155707.jpg | cat   | 14.18  | 13.97  | 165.84 | 207.62 |
+| images/000000150919.jpg | cat   | 38.7   | 71.29  | 147.7  | 127.17 |
+| images/000000071025.jpg | cat   | 55.33  | 105.45 | 160.15 | 73.57  |
+| images/000000171435.jpg | dog   | 22.86  | 100.03 | 125.55 | 41.61  |
++-------------------------+-------+--------+--------+--------+--------+
 
 ## View Schema
 
@@ -393,8 +418,8 @@ oxen df train.csv -u "file,label"
 If you've filtered down your data and want to stack it back into a single frame. The `--vstack` option takes a variable length list of files you'd like to concatenate.
 
 ```bash
-oxen df train.csv --filter 'label-dog' -o /tmp/dogs.parquet
-oxen df train.csv --filter 'label-cat' -o /tmp/cats.parquet
+oxen df train.csv --filter 'label == dog' -o /tmp/dogs.parquet
+oxen df train.csv --filter 'label == cat' -o /tmp/cats.parquet
 oxen df /tmp/cats.parquet --vstack /tmp/dogs.parquet -o annotations/data.parquet
 ```
 
