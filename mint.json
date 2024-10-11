@@ -70,13 +70,6 @@
       ]
     },
     {
-      "group": "Use Cases",
-      "pages": [
-        "use-cases/sentiment-analysis",
-        "use-cases/text-translation"
-      ]
-    },
-    {
       "group": "Core Concepts",
       "pages": [
         "concepts/data-frames",
