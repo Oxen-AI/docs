@@ -65,7 +65,8 @@
         "getting-started/cli",
         "getting-started/python",
         "getting-started/oxen-hub",
-        "getting-started/oxen-server"
+        "getting-started/oxen-server",
+        "getting-started/models"
       ]
     },
     {

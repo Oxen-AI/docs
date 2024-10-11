@@ -1,0 +1,164 @@
+---
+title: 🚀 Model Inference
+---
+
+At the end of the day, AI is about automating workflows and making sure your model performs well given your data.
+
+[Oxen.ai](https://oxen.ai) makes it easy to run models on your data. With Oxen, you can either kick off [compute jobs](#compute-jobs) on the [Oxen.ai Hub](https://hub.oxen.ai) or you can [write your own custom code](#diy-logging-model-results) to log model results to an Oxen repository.
+
+<Warning>Currently the only model supported is `gpt-4o`. We are working on adding support for more models, including multimodal embeddings, Audio, and Vision models. If you want to use a different model, please [let us know](https://discord.gg/s3tBEn7Ptg).</Warning>
+
+# Kicking off Compute Jobs
+
+The easiest way to get started with model inference is to use the [Oxen.ai Hub](https://hub.oxen.ai). The Hub allows you to provide a prompt, select a model, and then run the model on your data.
+
+![rmod](/images/rmod.png)
+
+{/*
+The Oxen.ai Hub currently supports LLM and Embedding models for Text, but we are working on adding support for more model modalities including Vision and Audio.
+
+The current list of supported models (as of October 2024) includes:
+
+**OpenAI**
+
+- `gpt-4o`
+- `gpt-4o-mini`
+- `text-embedding-3-small`
+- `text-embedding-3-large` */}
+
+## Grab a Dataset
+
+For a simple example, we'll use a [SMS Spam Collection Dataset](https://www.oxen.ai/ox/spam-classification/file/main/test.parquet). The goal of this dataset is to classify whether a given text is spam or ham (not spam).
+
+To get started, you can download the 200 row dataset [here](https://hub.oxen.ai/api/repos/ox/spam-classification/file/main/test.parquet).
+
+![spam-vs-ham](/images/spam-or-ham-start.png)
+
+By the end of this tutorial, we will have processed our dataset through an LLM to classify whether a given text is spam or ham.
+
+![spam-vs-ham](/images/spam-or-ham-results.png)
+
+## Upload Dataset
+
+Once you have the [sample dataset](https://hub.oxen.ai/api/repos/ox/spam-classification/file/main/test.parquet) downloaded, you can upload it to an Oxen repository by clicking the `+` button in the top-right of the UI and selecting `Create Repository` then choosing `Add Files`.
+
+Once the dataset is uploaded, you should see it in the file list.
+
+![file-list](/images/spam-or-ham-file-list.png)
+
+Clicking on the file will allow you to preview the data.
+
+![run-model-on-dataset](/images/spam-or-ham-rocket.png)
+
+## Select a Model
+
+Start by clicking the `🚀` icon in the top-right above the data preview. This will open up a Prompt UI where you can select a task type, model, and setup your prompt.
+
+<Warning>Currently the only model supported is `gpt-4o`. We are working on adding support for more models.</Warning>
+
+![create-prompt](/images/spam-or-ham-prompt.png)
+
+Once you are happy with your prompt, click the `Run Sample` button. This will run the model on the first 5 rows of data and show you the results.
+
+![sample-prompt](/images/spam-or-ham-prompt-sample.png)
+
+You can either `Run Again` with a different prompt until you are satisfied with the results or you click `Next` to configure where the results should be written.
+
+## Run a Job
+
+Once you are satisfied with your prompt, you can pick a destination branch and write a commit message for once the job is finished.
+
+![run-evaluation](/images/spam-or-ham-run-evaluation.png)
+
+Be sure to check the "Automatically commit on completion" if you want your results to be committed to the repository. Otherwise the results will be sitting in a [workspace](/concepts/workspaces) for you to review before committing.
+
+TODO: Add image of finished run after UI updates are shipped.
+
+## Query Results
+
+Once you have a job committed to a branch, you can query the results using the Oxen.ai text2sql engine.
+
+For example, you can see the breakdown of results of the `prediction` column by running the following query:
+
+```
+What is the percentage of spam vs ham?
+```
+
+It will write the complex SQL query behind the scenes and return the results.
+
+![text2sql](/images/spam-or-ham-query-percentage.png)
+
+
+As we can see here, `82%` of the results are `ham`, but there is an anomoly of one result that says "Please provide the text you'd like me to classify."
+
+Let's run another query to find this outlier.
+
+```
+Show me the row where the prediction is not equal to spam or ham.
+```
+
+![text2sql-outlier](/images/spam-or-ham-query-outlier.png)
+
+Looks like it was row `101` in the original dataset. Even gpt-4o made a mistake! To fix this, we might want to tweak our prompt to be more explicit about where the text is located and re-run the job.
+{/*
+# DIY: Logging Model Results
+
+Under the hood, the Oxen.ai Hub is just a nice front end to functionality exposed through the [Oxen.ai Python Library](/getting-started/python). If you'd like more control over the model inference process, you can use the SDK to log results to an Oxen Data Frame.
+
+First, install the library if you haven't already.
+
+```bash
+pip install oxenai
+```
+
+Then you can create a new repository, and upload the [dataset](https://hub.oxen.ai/api/repos/ox/spam-classification/file/main/test.parquet) to an Oxen Data Frame.
+
+```python
+import oxen
+from oxen.remote_repo import create_repo
+
+# Create a new local repository
+repo = oxen.init("spam-or-ham")
+
+# Create a new remote repository
+# WARNING: make sure to replace 'my-username' with your username
+remote_repo = create_repo("my-username/spam-or-ham")
+
+# Connect the local repository to the remote repository
+repo.set_remote("origin", remote_repo.url())
+
+# Add the data to the local repository
+repo.add("data.parquet")
+
+# Commit the changes
+repo.commit("Add data")
+
+# Push the changes to the remote repository
+repo.push()
+```
+
+
+```python
+from oxen import DataFrame
+
+# Connect to the remote repository's data frame
+df = DataFrame("my-username/spam-or-ham", "data.parquet")
+
+# Add a row
+row_id = df.insert_row({"category": "spam", "message": "CLICK HERE TO WIN INSTANTLY."})
+
+# Get a row by id
+row = df.get_row_by_id(row_id)
+print(row)
+
+# Update a row
+row = df.update_row(row_id, {"category": "new_category"})
+print(row)
+
+# Delete a row
+df.delete_row(row_id)
+
+# Commit the changes
+df.commit("Update label")
+```
+ */}
