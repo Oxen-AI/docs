@@ -65,7 +65,15 @@
         "getting-started/cli",
         "getting-started/python",
         "getting-started/oxen-hub",
-        "getting-started/oxen-server"
+        "getting-started/oxen-server",
+        "getting-started/models"
+      ]
+    },
+    {
+      "group": "Use Cases",
+      "pages": [
+        "use-cases/sentiment-analysis",
+        "use-cases/text-translation"
       ]
     },
     {
