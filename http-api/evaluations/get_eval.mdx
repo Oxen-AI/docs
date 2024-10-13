@@ -1,0 +1,76 @@
+---
+title: "Get Evaluation"
+api: "GET https://hub.oxen.ai/api/repos/:namespace/:repo_name/evaluations/:evaluation_id"
+---
+
+# Example Request
+
+You can list an evaluation by sending a GET request to the following URL:
+
+```bash
+curl -X GET -H "Content-Type: application/json" \
+    https://hub.oxen.ai/api/repos/:namespace/:repo_name/evaluations/:evaluation_id
+```
+
+The parameters should be:
+
+* `:namespace` -> Your oxen username or organization name
+* `:repo_name` -> The name of the repository
+* `:evaluation_id` -> The id of the evaluation
+
+# Example Response
+
+```json
+{
+  "evaluation": {
+    "closing_commit": {
+      "author": "Ox",
+      "email": "ox@oxen.ai",
+      "id": "5defcfe0610e6344",
+      "message": "test commit message",
+      "timestamp": "2024-10-12T21:44:32Z"
+    },
+    "commit_id": "e6c2c7192f620617",
+    "commit_started_at": "2024-10-12T21:44:32Z",
+    "completed_at": "2024-10-12T21:44:32Z",
+    "conflict_target_branch": null,
+    "created_by": {
+      "id": "4fbfe7e0-6d65-4ccb-86f5-ec8093c7ddac",
+      "image": null,
+      "name": "Ox",
+      "username": "ox"
+    },
+    "credits_per_token": "0.000000600",
+    "error_message": null,
+    "id": "cadbecba-25fb-4e5d-8637-4d85af81d186",
+    "inserted_at": "2024-10-12T21:38:44Z",
+    "is_sample": false,
+    "master_id": "cadbecba-25fb-4e5d-8637-4d85af81d186",
+    "model": "gpt-4o-mini",
+    "name": "My Awesome Evaluation w/API KEY",
+    "parent_id": null,
+    "progress": {
+      "processed": 100,
+      "total": 100
+    },
+    "prompt": "Answer the following math problem\n{sentence}",
+    "queued_at": "2024-10-12T21:38:44Z",
+    "repository_id": "c769cfa0-043c-4ee4-8919-052bc7808d60",
+    "resource": {
+      "path": "intent-classification.jsonl",
+      "version": "main"
+    },
+    "sample_count": 10,
+    "started_at": "2024-10-12T21:38:44Z",
+    "status": "completed",
+    "target_branch": "api-results-branch",
+    "target_column": "prediction",
+    "target_path": null,
+    "tokens_used": 10044,
+    "type": "text",
+    "workspace_id": "89179fc2-d058-45e9-81d3-b9bc5ca8b00a"
+  },
+  "status": "success",
+  "status_message": "resource_found"
+}
+```

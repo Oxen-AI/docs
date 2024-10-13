@@ -4,7 +4,7 @@ title: 🚀 Model Inference
 
 At the end of the day, AI is about automating workflows and making sure your model performs well given your data.
 
-[Oxen.ai](https://oxen.ai) makes it easy to run models on your data. With Oxen, you can either kick off [compute jobs](#compute-jobs) on the [Oxen.ai Hub](https://hub.oxen.ai) or you can [write your own custom code](#diy-logging-model-results) to log model results to an Oxen repository.
+[Oxen.ai](https://oxen.ai) makes it easy to run models on your data. With Oxen, you can either kick off [compute jobs](#compute-jobs) on the [Oxen.ai Hub](https://hub.oxen.ai) or you can [write your own custom code](#programmatically-run-a-job) to log model results to an Oxen repository.
 
 <Warning>Currently the only model supported is `gpt-4o`. We are working on adding support for more models, including multimodal embeddings, Audio, and Vision models. If you want to use a different model, please [let us know](https://discord.gg/s3tBEn7Ptg).</Warning>
 
@@ -100,6 +100,53 @@ Show me the row where the prediction is not equal to spam or ham.
 ![text2sql-outlier](/images/spam-or-ham-query-outlier.png)
 
 Looks like it was row `101` in the original dataset. Even gpt-4o made a mistake! To fix this, we might want to tweak our prompt to be more explicit about where the text is located and re-run the job.
+
+# Programmatically Run a Job
+
+If you need to run a model as part of a larger workflow, you can use the [Oxen.ai API](/http-api) to programmatically run a model on a dataset.
+
+Currently the API is only exposed over HTTP requests and requires a valid [api key](/getting-started/python#obtain-auth-token) in the header. To kick off a model inference job, you can send a POST request to the `/api/repos/:namespace/:repo_name/evaluations/:resource` endpoint.
+
+For example if the file you want to process is at:
+
+`https://oxen.ai/ox/customer-intents/main/data.parquet`
+
+The parameters should be:
+
+* `:namespace` -> `ox`
+* `:repo_name` -> `customer-intents`
+* `:resource` -> `main/data.parquet` (combination of branch name and `file_name`)
+
+```bash
+curl -X POST -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" \
+    https://hub.oxen.ai/api/repos/:namespace/:repo_name/evaluations/:resource \
+    --data '{
+    "name": "My Awesome Evaluation",
+    "prompt": "Classify the following text into one of the following categories: [intent_1, intent_2, intent_3]\n{my_text_column_name}",
+    "type": "text",
+    "model": "gpt-4o-mini",
+    "is_sample": false,
+    "target_column": "prediction",
+    "target_branch": "api-results-branch",
+    "auto_commit": true,
+    "commit_message": "test commit message"
+}
+'
+```
+
+Make sure to grab the `evaluation.id` from the response as you will need it to check the status of the job or retrieve the results later.
+
+To check the status of the job, you can send a GET request to the `/api/repos/:namespace/:repo_name/evaluations/:evaluation_id` endpoint.
+
+```bash
+curl -X GET -H "Content-Type: application/json" \
+    https://hub.oxen.ai/api/repos/:namespace/:repo_name/evaluations/:evaluation_id
+```
+
+You will be able to poll this response to see the progress of your job, or check it out in the Oxen.ai UI under the "Evaluations" tab.
+
+<Note>We will be adding Python SDK support for this in the near future.</Note>
+
 {/*
 # DIY: Logging Model Results
 

@@ -111,6 +111,12 @@
             "http-api/repositories/update_repo",
             "http-api/repositories/delete_repo"
           ]
+        },
+        {
+          "group": "Evaluations",
+          "pages": [
+            "http-api/evaluations/create_eval"
+          ]
         }
     ]
     }
