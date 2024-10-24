@@ -70,6 +70,12 @@
       ]
     },
     {
+      "group": "Tutorials",
+      "pages": [
+        "use-cases/sentiment-analysis"
+      ]
+    },
+    {
       "group": "Core Concepts",
       "pages": [
         "concepts/data-frames",
