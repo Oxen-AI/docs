@@ -1,9 +1,10 @@
 ---
 title: '🧐 Sentiment Analysis'
-description: 'Here is an example of how we can use Oxen to do sentiment analysis with GPT-4o.'
+description: 'Sentiment analysis is computationally identifying and categorizing the overall feeling and opinion of a piece of text. It is advantageous because a person or company can leverage AI to understand and gain insights into large datasets of text practically instantly. Sentiment analysis has many applications, including understanding customer service, market research, and financial analysis.  
+In this tutorial, we will show how you can use Oxen to do sentiment analysis with GPT-4o to categorize political spam synthetic data.'
 ---
 
-## First Step
+## Open Your Oxen Repo
 Open the dataset you want to work with. You can clone the [political spam synthetic dataset](https://www.oxen.ai/Laurence/political-spam) we are using in this example or find one in our [explore page](https://www.oxen.ai/explore) if needed.
 
 
@@ -13,7 +14,7 @@ Open the dataset you want to work with. You can clone the [political spam synthe
   alt="Oxen.ai Political Spam Repo"
 />
 
-## Second Step
+## Open The File You Want to Analyze
 
 Open the file you want to run sentiment analysis on and press the glowing button with the rocket🚀 on it located at the top right of the screen.
 
@@ -24,7 +25,7 @@ Open the file you want to run sentiment analysis on and press the glowing button
   alt="Where to find model evaluations"
 />
 
-## Third Step
+## Set Up The Evaluation
 
 You will now find Oxen's model evaluation feature. Here, enter the evaluation type as "text", choose the model (in this case GPT-4o), and choose if the responses should populate an existing column or a new "prediction" column.  
 From there give your evaluation a name, fill in your prompt with the values you want to pass to the model, and decide if you want to run a quick sample on a few rows or click "Next" to finalize the sentiment analysis preparations:
@@ -35,7 +36,7 @@ From there give your evaluation a name, fill in your prompt with the values you 
   alt="RMOD prompt example"
 />
 
-## Final Step
+## Set Up Your Versioning
 
 After clicking "Next" once your sample has been completed, you will see a commiting page. Here you will decide the target branch, target path, and if you would like to commit instantly or after reviewing the output. Once decided, simply click "Run Evaluation".
  
