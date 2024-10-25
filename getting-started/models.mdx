@@ -6,25 +6,45 @@ At the end of the day, AI is about automating workflows and making sure your mod
 
 [Oxen.ai](https://oxen.ai) makes it easy to run models on your data. With Oxen, you can either kick off [compute jobs](#compute-jobs) on the [Oxen.ai Hub](https://hub.oxen.ai) or you can [write your own custom code](#programmatically-run-a-job) to log model results to an Oxen repository.
 
-<Warning>Currently the only model supported is `gpt-4o`. We are working on adding support for more models, including multimodal embeddings, Audio, and Vision models. If you want to use a different model, please [let us know](https://discord.gg/s3tBEn7Ptg).</Warning>
-
 # Kicking off Compute Jobs
 
 The easiest way to get started with model inference is to use the [Oxen.ai Hub](https://hub.oxen.ai). The Hub allows you to provide a prompt, select a model, and then run the model on your data.
 
 ![rmod](/images/rmod.png)
 
-{/*
-The Oxen.ai Hub currently supports LLM and Embedding models for Text, but we are working on adding support for more model modalities including Vision and Audio.
+The Oxen.ai Hub currently supports LLM models for processing Text columns, but we are working on adding support for more model modalities including Vision and Audio.
 
-The current list of supported models (as of October 2024) includes:
+# Supported Models
+
+The current list of supported models and providers (as of October 2024) includes:
 
 **OpenAI**
 
 - `gpt-4o`
 - `gpt-4o-mini`
-- `text-embedding-3-small`
-- `text-embedding-3-large` */}
+- `o1-preview`
+- `o1-mini`
+
+**Mistral**
+
+- `open-mixtral-8x22b`
+- `open-mistral-7b`
+- `mistral-nemo`
+- `pixtral-12b`
+- `ministral-8b-latest`
+- `ministral-3b-latest`
+- `codestral-2405`
+- `mistral-small-2409`
+- `mistral-large-2407`
+
+**TogetherAI**
+
+- `together-llama-3-8b-instruct`
+- `together-llama-3-70b-instruct`
+- `together-llama-3-405b-instruct`
+
+
+If you want to use a different model, please [let us know](https://discord.gg/s3tBEn7Ptg) and we'll add support for it.
 
 ## Grab a Dataset
 
@@ -54,8 +74,6 @@ Clicking on the file will allow you to preview the data.
 
 Start by clicking the `🚀` icon in the top-right above the data preview. This will open up a Prompt UI where you can select a task type, model, and setup your prompt.
 
-<Warning>Currently the only model supported is `gpt-4o`. We are working on adding support for more models.</Warning>
-
 ![create-prompt](/images/spam-or-ham-prompt.png)
 
 Once you are happy with your prompt, click the `Run Sample` button. This will run the model on the first 5 rows of data and show you the results.
@@ -71,8 +89,6 @@ Once you are satisfied with your prompt, you can pick a destination branch and w
 ![run-evaluation](/images/spam-or-ham-run-evaluation.png)
 
 Be sure to check the "Automatically commit on completion" if you want your results to be committed to the repository. Otherwise the results will be sitting in a [workspace](/concepts/workspaces) for you to review before committing.
-
-TODO: Add image of finished run after UI updates are shipped.
 
 ## Query Results
 
