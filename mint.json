@@ -72,7 +72,8 @@
     {
       "group": "Tutorials",
       "pages": [
-        "use-cases/sentiment-analysis"
+        "use-cases/sentiment-analysis",
+        "use-cases/text-translation"
       ]
     },
     {
