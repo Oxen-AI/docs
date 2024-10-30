@@ -39,6 +39,17 @@ Open the file you want to run sentiment analysis on and press the glowing button
 
 You will now find Oxen's model evaluation feature. This is where you can choose a model, setup a prompt, and choose the output column.
 
+In this case, we will use [GPT-4o](https://platform.openai.com/docs/models/gpt-4o) and the following prompt:
+
+```
+Compute the sentiment of the text based on how well the companies are performing in the market.
+Return only one of three options: positive, negative, or neutral.
+Respond with one word, all lowercase.
+
+Text:
+{text}
+```
+
 After you have selected your model, give your evaluation a name, fill in your prompt with the values you want to pass to the model, and decide if you want to run a quick sample on a few rows or click "Next" to finalize the sentiment analysis preparations:
 
 <img
