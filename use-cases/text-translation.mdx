@@ -1,3 +1,107 @@
 ---
-title: Text Translation
+title: 📝 Text Translation
+description: 'Text translation is the process of translating text into another language. This process has never been easier with LLMs commonly supporting multiple languages such as Spanish, French, and Italian.'
 ---
+
+For example, a marketing campaign can easily be translated from English to Spanish, you could use Oxen's Model Evaluations feature to automatically translate all ad copy. More uses include customer support, legal documents, and education.
+
+In this tutorial, we will show how to use Oxen to translate product titles for e-commerce localization with Mistral-7B.
+
+## Upload Your Dataset
+
+Open the dataset you want to work with. You can find an example dataset on our [explore page](https://www.oxen.ai/explore) or if you want to follow along with the example, you can clone the [Amazon Product Sample](https://www.oxen.ai/mathias/amazon-product-sample/file/main/sample.csv) dataset we are using.
+
+
+
+```bash
+oxen clone https://hub.oxen.ai/mathias/amazon-product-sample --all
+oxen create-remote --name "your-username/amazon-product-sample"
+oxen config --set-remote origin "your-username/amazon-product-sample"
+oxen push origin main
+```
+
+<img
+  className="block"
+  src="/images/repo.png"
+  alt="Amazon Product Catalog Sample"
+/>
+
+## Create a Model Evaluation
+
+Open the file you want to translate and press the glowing button with the rocket🚀 on it at the top right of the screen.
+
+
+<img
+  className="block"
+  src="/images/rmod_button.png"
+  alt="Where to find model evaluations"
+/>
+
+## Setting Up The Evaluation
+
+You will now find Oxen's model evaluation feature. Here, select your model, give your evaluation a name, fill in your prompt with the values you want to pass to the model. For this example, we will use [Mistral-7B](https://mistral.ai/technology/#models) and the following prompt:
+
+```
+You are an expert in translating amazon product titles to french.
+Translate the following title to french:
+
+{TITLE}
+
+Only respond with the translated title nothing else.
+```
+
+Then, decide if you want to run a quick sample on a few rows or click "Next" to finalize the text translation preparations.
+
+<img
+  className="block"
+  src="/images/product_translation_prompt.png"
+  alt="RMOD prompt example"
+/>
+
+If you would like some effective tips for prompting, we just posted a [blog](https://www.oxen.ai/blog/the-prompt-report-part-1-a-systematic-survey-of-prompting-techniques) on cutting-edge prompting techniques.
+
+## Select Your Destination
+
+After clicking "Next," you will see a commiting page. Here you will decide the target branch, target path, and if you would like to commit instantly or after reviewing the translations. Once decided, simply click "Run Evaluation".
+
+<img
+  className="block"
+  src="/images/commit_page.png"
+  alt="RMOD commit page"
+/>
+
+## Monitor Your Evaluation
+
+Feel free to grab a coffee, close the tab, or check your Duolingo streak while the evaluation is running. Your trusty Oxen Herd will be running in the background.
+
+While the evaluation is running you will see a progress bar showing how many rows have been completed, an update of how many tokens are being used, and how expensive the run is so far.
+
+
+<img
+  className="block"
+  src="/images/progress_bar.png"
+  alt="RMOD processing bar"
+/>
+
+## Next Steps
+
+Once done, you will see your new translations committed to the branch you specified. If you don't like the results, don't worry! Under the hood, all the runs are versioned so you can always revert to or compare to a previous version.
+
+
+<img
+  className="block"
+  src="/images/example_completed.png"
+  alt="RMOD completed"
+/>
+
+You can then search through the translations immediately with Oxen's Text2SQL feature. Here, we are looking for the French word for fridge, frigo, to see if the correct products show up. As you can see, the only two products that are refrigerators popped up immediately.
+
+<img
+  className="block"
+  src="/images/t2s_example.png"
+  alt="Editable Dataframes example"
+/>
+
+You can also run queries such as *"What was the most product?"* or *"How many rows have descriptions in the French title?"*  to find where the LLM made mistakes to fix.
+
+Congratulations! You've just seen how easy it is to translate text on your data with Oxen. Feel free to tweak your prompt, model, or dataset and see how the results change.
