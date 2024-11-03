@@ -1,0 +1,157 @@
+---
+title: 🔥 Performance
+---
+
+# 🖼️ 1 Million Files Benchmark
+
+When we first started working on Oxen.ai, we were inspired by making a tool that would make it easy to collaborate on large datasets that power modern AI research.
+
+One dataset that comes to mind is the original [ImageNet](https://image-net.org/) dataset. This dataset spans 1000 object classes and contains > 1,000,000 training images and 100,000 test images. It commonly gets shared as a tarball, zip file, or gets dumped to S3 without much visibility into the data itself.
+
+![ImageNet](/images/ImageNet.png)
+
+A version control system (VCS) would be a much better way to share and iterate on datasets like ImageNet. This is an example of a dataset that hasn't been updated since it's initial release. Backing the dataset with a VCS would allow people to collaborate on the dataset without duplicating data all over the place.
+
+In order to do this effectively, the VCS needs to be fast to make the developer experience worth using. Not an easy task, but one we were willing to plow through at Oxen.ai 🐂
+
+# 📊 The Raw Numbers
+
+To create this benchmark, we took the 1 million+ images from ImageNet and added them to Oxen, DVC, Git-LFS, and S3. The total time is to get the files from A-B successfully (versioning where applicable). The steps to reproduce and the machine specs are in the sections below.
+
+Here are the results in ranked order from fastest to slowest.
+
+| Tool            | Time                |
+|-----------------|---------------------|
+| __🐂 Oxen.ai__   | 1 hour and 30 mins |
+| __Tarball + S3__ | 2 hours 21 mins    |
+| __DVC + Local__  | 3 hours            |
+| __DVC + S3__     | 4 hours and 51 mins|
+| __Git-LFS__      | 20 hours           |
+
+Notice that **Oxen is faster than even the laziest of methods**, creating a tarball and uploading it to S3, but with the benefits of being able to view, query, and compare versions of the data. If you would like us to add any other tools to the benchmark, please let us know!
+
+Feel free to explore the full dataset [here](https://oxen.ai/datasets/ImageNet-1k).
+
+![ImageNet-Oxen-DataFrame](/images/ImageNet-Oxen-DataFrame.png)
+
+# 🧐 Why not Git?
+
+Everybody knows and loves Git. But we also know that it isn't exactly suited to version data. Trying to add multi-gigabyte datasets can quickly blowup storage costs and cause serious slowdown. And that isn't really Git's purpose, either - GitHub, for instance, doesn't even accept files larger than 100 megabytes.
+
+Over the years, however, several attempts have been made to extend Git to gigabyte or even terabyte scale. In 2015 Git-LFS support was added to GitHub, which speeds up pulls by downloading files lazily, replacing tracked files with pointers and retrieving their content upon checkout. Data Version Control (DVC) came out in 2017, employing a similar concept but storing the file contents externally to Git.
+
+In theory it sounds great to tie your VCS to the most popular version control system in the world in git. But in practice, it is a bit like trying to fill a swimming pool with a straw. You can do it, but you are tied to the limitations of the git protocols.
+
+# 🐂 Oxen.ai
+
+With Oxen.ai, we take a different approach. Rather than trying to extend Git, we built Oxen, taking inspiration from Git where we can, but designing a new tool specifically to make versioning large amounts of data as fast as possible. Under the hood, Oxen uses Merkle trees, smart network protocols and fast hashing algorithms to reduce the amount of data our repositories store. 
+
+Unbound by Git, however, we're also able to employ several other optimizations that make Oxen fast such as block-level deduplication, compression, iterating on subtrees, and more. Some of these optimizations are still under development, but we're excited to share what we have so far, and you can find a deeper dive and list of the upcoming features [here](https://oxen-ai.github.io/).
+
+# 🏋️‍♀️ Benchmark Details
+
+All of the following benchmarks were executed on a `t3.2xlarge` EC2 instance with `4 vCPUs` and `16.0 GB of RAM` and a `1TB EBS` volume attached. We found that the size of the EBS volume did impact the IOPs for adding and committing data for all tools. All of the network transfer was within us-west-1 within AWS to S3.
+
+## Git + LFS
+
+Git-LFS is a popular first tool to try since it is already in the Git ecosystem. The problem is that it is painfully slow when it comes to adding, committing, and pushing non-text files. It can also be a bit annoying to remember which files are tracked under LFS vs just regular Git. Many times have I accidentally committed a multi-GB file to git and wondered why my push was taking so long. Removing files from the git merkle tree is a whole other pain.
+
+Steps to reproduce:
+
+```
+git init
+git lfs install
+git lfs track "*.jpg"
+git add .gitattributes
+git add images # 61 minutes
+git commit -m "adding images" # 11 minutes
+git push origin main # 19 hours 🥱
+```
+
+Total time 🥱: `20+ hours`
+
+Adding and committing data locally is not terribly slow (still slower than Oxen). But it does have to hash and copy every file into the hidden `.git` directory. The combination of using a slow hashing algorithm and copying large files makes git-lfs slower than it has to be on `add` and `commit`.
+
+The real killer here though is the push. Pushing data to the remote takes over 20 hours in the case of ImageNet, even on the same network as our other tests.
+
+## Oxen.ai
+
+With Oxen, if you know how to use git, there are no extra commands to remember. With the same commands as plain old git you can initialize, add, commit, and push your data to the remote.
+
+Steps to reproduce:
+
+```
+oxen init
+oxen add images # Executed in 41.35 mins
+oxen commit -m "adding images" # Executed in 50.75 secs
+oxen config --set-remote origin https://hub.oxen.ai/datasets/ImageNet-1k
+oxen push # Executed in 49.11 mins
+```
+
+Total Time 🔥: `1 hour and 30 mins`
+
+If you are curious how Oxen works under the hood, we are working on a detailed technical writeup that dives into the Merkle tree, block-level deduplication, and more [here](https://oxen-ai.github.io/).
+
+## Tarball + S3
+
+I like to call this one, "F' it, let's just create a tarball and upload it to S3". Easy to remember, easy to use, but not very efficient nor effective when it comes to iterating on data.
+
+```
+time tar czf imagenet-images.tar.gz images/ # Executed in  114.66 mins
+time aws s3 cp imagenet-images.tar.gz s3://imagenet-tarball # Executed in  27.13 mins
+```
+
+Total Time: `2 hours 21 mins`
+
+This may work well for cold storage of data you may rarely want to view again. But for anything else, Oxen is a much better tool.
+
+Oxen smartly compresses and creates smaller data chunks behind the scenes while transferring your data across the network, taking advantage of the network bandwidth and reducing the amount of time it takes to upload and download data.
+
+## DVC + S3 Backend
+
+DVC is a popular tool, tightly integrated with the Git ecosystem and can be configured for multiple storage backends. You'll see that you have to toggle back and forth between DVC and git with 11 commands to remember and execute. It is easy to make a mistake and track the wrong things in your git repo as well as simply wrap your head around the fact that you are using two different tools to version your data.
+
+Steps to reproduce:
+
+```
+git init
+dvc init
+git status
+git commit -m "Initialize DVC"
+dvc add images/ # Executed in 132.12 mins
+git add images.dvc .gitignore
+git commit -m "adding images"
+git remote add origin https://github.com/owner/repository.git
+dvc remote add --default datastore s3://my-bucket
+git push origin main
+dvc push # Executed in 159.55 mins
+```
+
+Total Time: `4 hours and 51 mins`
+
+As you can see, DVC is not as slow as Git-LFS, but it is significantly more commands to remember and execute. Let's see how Oxen compares.
+
+## DVC + Local Storage Backend
+
+We wanted to do another test with DVC without any network transfer, purely to test the protocol overhead. Transferring to S3 may not be the best apples to apples comparison, since Oxen also compresses and deduplicates data on the network transfer.
+
+```
+git init
+dvc init
+git status
+git commit -m "Initialize DVC"
+dvc add images/ # Executed in   132.12 mins
+git add images.dvc .gitignore
+git commit -m "adding images"
+dvc remote add -d myremote /home/ubuntu/dvc-remote
+git push origin main
+dvc push # Executed in   49.53 mins
+```
+
+Total Time: `3 hours`
+
+Oxen is faster even if you drop the overhead of network transfer in the case of DVC.
+
+# Try Oxen.ai for Yourself
+
+If you would like to try Oxen.ai for yourself, you can sign up for a free account [here](https://oxen.ai/). All of the code is open source and available on [GitHub](https://github.com/oxen-ai/oxen-release). We appreciate any feedback you have and welcome any stars and contributions!
