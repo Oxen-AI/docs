@@ -16,17 +16,17 @@ In order to do this effectively, the VCS needs to be fast to make the developer 
 
 # 📊 The Raw Numbers
 
-To create this benchmark, we took the 1 million+ images from ImageNet and added them to Oxen, DVC, Git-LFS, and S3. The total time is to get the files from A-B successfully (versioning where applicable). The steps to reproduce and the machine specs are in the sections below.
+To create this benchmark, we took the 1 million+ images from ImageNet and added them to Oxen, DVC, Git-LFS, and S3. The total time is to get the files from A (local filesystem) to B (remote storage) successfully. The steps to reproduce and the machine specs are in the sections below.
 
 Here are the results in ranked order from fastest to slowest.
 
-| Tool            | Time                |
-|-----------------|---------------------|
-| __🐂 Oxen.ai__   | 1 hour and 30 mins |
-| __Tarball + S3__ | 2 hours 21 mins    |
-| __DVC + Local__  | 3 hours            |
-| __DVC + S3__     | 4 hours and 51 mins|
-| __Git-LFS__      | 20 hours           |
+| Tool            | Time                | Can view data? |
+|-----------------|---------------------|----------------|
+| __🐂 Oxen.ai__   | 1 hour and 30 mins | ✅ Yes |
+| __Tarball + S3__ | 2 hours 21 mins    | ❌ No |
+| __DVC + Local__  | 3 hours            | ❌ No |
+| __DVC + S3__     | 4 hours and 51 mins| ❌ No |
+| __Git-LFS__      | 20 hours           | ❌ No |
 
 Notice that **Oxen is faster than even the laziest of methods**, creating a tarball and uploading it to S3, but with the benefits of being able to view, query, and compare versions of the data. If you would like us to add any other tools to the benchmark, please let us know!
 
