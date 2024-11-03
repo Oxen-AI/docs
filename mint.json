@@ -64,19 +64,23 @@
         "getting-started/learn-the-basics",
         "getting-started/cli",
         "getting-started/python",
-        "getting-started/oxen-hub",
-        "getting-started/oxen-server",
-        "getting-started/models"
+        "getting-started/oxen-server"
       ]
     },
     {
-      "group": "Core Concepts",
+      "group": "Key Features",
       "pages": [
-        "concepts/data-frames",
+        "features/performance",
+        "features/web-hub",
+        "features/data_frames",
+        "features/models"
+      ]
+    },
+    {
+      "group": "Other Concepts",
+      "pages": [
         "concepts/diffs",
         "concepts/compare",
-        "concepts/performance",
-        "concepts/one_million_files",
         "concepts/schemas",
         "concepts/remote-repos",
         "concepts/workspaces"
