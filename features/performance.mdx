@@ -61,6 +61,8 @@ All of the code is open source and available on [GitHub](https://github.com/oxen
 
 # 🏃 Running the Experiments
 
+To give you a sense of the process as well as point out the advantages & challenges associated with each method, we ran the following experiments below, listed from slowest to fastest.
+
 ## Git + LFS (~20 hours)
 
 Git-LFS is a popular first tool to try since it is already in the Git ecosystem. The problem is that it is painfully slow when it comes to adding, committing, and pushing non-text files. It can also be a bit annoying to remember which files are tracked under LFS vs just regular Git. Many times have I accidentally committed a multi-GB file to git and wondered why my push was taking so long. Removing files from the git merkle tree is a whole other pain.
