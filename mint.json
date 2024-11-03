@@ -77,6 +77,13 @@
       ]
     },
     {
+      "group": "Use Cases",
+      "pages": [
+        "use-cases/sentiment-analysis",
+        "use-cases/text-translation"
+      ]
+    },
+    {
       "group": "Other Concepts",
       "pages": [
         "concepts/diffs",
