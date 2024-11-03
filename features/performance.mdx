@@ -21,12 +21,12 @@ To create this benchmark, we took the 1 million+ images from ImageNet and added 
 Here are the results in ranked order from fastest to slowest.
 
 | Tool            | Time                | Can view data? |
-|-----------------|---------------------|----------------|
+|-----------------|---------------------|--------------------|
 | __🐂 Oxen.ai__   | 1 hour and 30 mins | ✅ Yes |
 | __Tarball + S3__ | 2 hours 21 mins    | ❌ No |
 | __aws s3 cp__     | 2 hours 48 mins    | ❌ No |
 | __DVC + Local__  | 3 hours            | ❌ No |
-| __DVC + S3__     | 4 hours and 51 mins| ❌ No |
+| __DVC + S3__     | 4 hours and 51 mins| ✅ Yes w/ Other Tools |
 | __Git-LFS__      | 20 hours           | ❌ No |
 
 Notice that **Oxen is faster than even the laziest of methods**, creating a tarball and uploading it to S3, but with the benefits of being able to view, query, and compare versions of the data. If you would like us to add any other tools to the benchmark, please let us know!
