@@ -1,0 +1,129 @@
+# 1 Million Files Benchmark
+
+When we first started working on Oxen.ai, we were inspired by making a tool that would make it easy to version and iterate on the large datasets that are common in AI research.
+
+One dataset that comes to mind is the original [ImageNet](https://image-net.org/) dataset. This dataset spans 1000 object classes and contains > 1,000,000 training images and 100,000 test images. It commonly gets shared as a tarball, zip file, or gets dumped to S3 without much visibility into the data itself.
+
+A version control system (VCS) would be a much better way to share and iterate on datasets like ImageNet. But the VCS needs to be fast to make the developer experience worth using over simply dup-ing tarballs all over the place. Version control has the benefit of content addressable file storage and deduplication, but can also have additional overhead of tracking every file change.
+
+All challenges we were willing to plow through at Oxen.ai.
+
+# TDLR ~ Just show me the numbers
+
+We took 1 million+ files and added them to Oxen, DVC, Git-LFS, and a tarball + S3. The total time is for `add`, `commit`, `push` to remote. 
+
+Here are the results in ranked order from fastest to slowest.
+
+* Oxen: `1 hour and 30 mins`
+* Tarball + S3: `2 hours 21 mins`
+* DVC + Local Remote: `3 hours`
+* DVC + S3 Remote: `4 hours and 51 mins`
+* Git-LFS: `20 hours`
+
+# Why not Git?
+
+Everybody knows and loves Git. But we also know that it isn't exactly suited to version data. Trying to add multi-gigabyte datasets can quickly blowup storage costs and cause serious slowdown. And that isn't really Git's purpose, either - GitHub, for instance, doesn't even accept files larger than 100 megabytes.
+
+Over the years, however, several attempts have been made to extend Git to gigabyte or even terabyte scale. In 2015 Git-LFS support was added to GitHub, which speeds up pulls by downloading files lazily, replacing tracked files with pointers and retrieving their content upon checkout. Data Version Control (DVC) came out in 2017, employing a similar concept but storing the file contents externally to Git.
+
+In theory it sounds great to tie your VCS to the most popular version control system in the world in git. But in practice, it is a bit like trying to fill a swimming pool with a straw. You can do it, but you are tied to the limitations of the git protocols.
+
+# 🐂 Oxen.ai
+
+Here at Oxen.ai, we take a different approach. Rather than trying to extend Git, we built Oxen, a new tool designed specifically to make versioning large amounts of data as fast as possible. Under the hood, Oxen uses Merkle trees, smart network protocols and hashing algorithms to reduce the amount of data our repositories store. Unbound by Git, however, we're also able to employ several other optimizations that make Oxen fast such as block-level deduplication, compression, iterating on subtrees, and more. Some of these optimizations are still under development, but we're excited to share what we have so far, and you can find a deeper dive and list of the upcoming features [here](https://oxen-ai.github.io/).
+
+# Comparisons
+
+Three popular methods when we started working on Oxen.ai were:
+
+* Git + LFS
+* Git + DVC
+* (F' it, we'll just upload it to S3) Tarball + S3
+
+All of the following benchmarks were executed on a `t3.2xlarge` EC2 instance with `4 vCPUs` and `16.0 GB of RAM` and a `1TB EBS` volume attached. We found that the size of the EBS volume did impact the IOPs for adding and committing data for all tools. All of the network transfer was within us-west-1 within AWS to S3.
+
+## Git + LFS
+
+Git-LFS is a popular first tool to try since it is already in the Git ecosystem. The problem is that it is painfully slow when it comes to adding, committing, and pushing non-text files. It can also be a bit annoying to remember which files are tracked under LFS vs just regular Git. Many times have I accidentally committed a multi-GB file to git and wondered why my push was taking so long. Removing files from the git merkle tree is a whole other pain.
+
+Steps to reproduce:
+
+```
+git init
+git lfs install
+git lfs track "*.jpg"
+git add .gitattributes
+git add images # 61 minutes
+git commit -m "adding images" # 11 minutes
+git push origin main # 19 hours 🥱
+```
+
+Total time: `20+ hours`
+
+Adding and committing data locally is not terribly slow (still slower than Oxen). But it does have to hash and copy every file into the hidden `.git` directory. The combination of using a slow hashing algorithm and copying large files makes git-lfs slower than it has to be.
+
+## DVC + S3 Backend
+
+DVC is a popular tool, tightly integrated with the Git ecosystem and can be configured for multiple storage backends. DVC in my opinion is a bit confusing to use, and also slower than it has to be. You'll see it has a similar issue of having to remember which commands are dvc and which are git. It is easy to track the wrong things in your git repo.
+
+Steps to reproduce:
+
+```
+git init
+dvc init
+git status
+git commit -m "Initialize DVC"
+dvc add images/ # Executed in 132.12 mins
+git add images.dvc .gitignore
+git commit -m "adding images"
+git remote add origin https://github.com/owner/repository.git
+dvc remote add --default datastore s3://my-bucket
+git push origin main
+dvc push # Executed in 159.55 mins
+```
+
+Total Time: `4 hours and 51 mins`
+
+As you can see, DVC is not as slow as Git-LFS, but it is significantly more commands to remember and execute. Let's see how Oxen compares.
+
+## Oxen.ai
+
+TODO: Explaination.
+
+Steps to reproduce:
+
+```
+oxen init
+oxen add images # Executed in 41.35 mins
+oxen commit -m "adding images" # Executed in 50.75 secs
+oxen push # Executed in 49.11 mins
+```
+
+Total Time: `1 hour and 30 mins`
+
+
+## Tarball + S3
+
+```
+time tar czf imagenet-images.tar.gz images/ # Executed in  114.66 mins
+time aws s3 cp imagenet-images.tar.gz s3://imagenet-tarball # Executed in  27.13 mins
+```
+
+Total Time: `2 hours 21 mins`
+
+## DVC + Local Storage Backend
+
+Wanted to do a test without the overhead of S3.
+
+```
+git init
+dvc init
+git status
+git commit -m "Initialize DVC"
+dvc add images/ # Executed in   132.12 mins
+git add images.dvc .gitignore
+git commit -m "adding images"
+dvc remote add -d myremote /home/ubuntu/dvc-remote
+git push origin main
+dvc push # Executed in   49.53 mins
+```

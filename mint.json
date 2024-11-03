@@ -76,6 +76,7 @@
         "concepts/diffs",
         "concepts/compare",
         "concepts/performance",
+        "concepts/one_million_files",
         "concepts/schemas",
         "concepts/remote-repos",
         "concepts/workspaces"
