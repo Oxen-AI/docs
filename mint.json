@@ -85,12 +85,10 @@
       ]
     },
     {
-      "group": "Core Concepts",
+      "group": "Other Concepts",
       "pages": [
-        "concepts/data-frames",
         "concepts/diffs",
         "concepts/compare",
-        "concepts/performance",
         "concepts/schemas",
         "concepts/remote-repos",
         "concepts/workspaces"
