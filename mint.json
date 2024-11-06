@@ -64,9 +64,17 @@
         "getting-started/learn-the-basics",
         "getting-started/cli",
         "getting-started/python",
-        "getting-started/oxen-hub",
         "getting-started/oxen-server",
         "getting-started/models"
+      ]
+    },
+    {
+      "group": "Oxen Hub",
+      "pages": [
+        "oxen-hub/oxen-hub",
+        "oxen-hub/rmod",
+        "oxen-hub/editable-dfs",
+        "oxen-hub/text2sql"
       ]
     },
     {

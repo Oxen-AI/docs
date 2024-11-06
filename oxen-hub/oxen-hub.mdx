@@ -5,9 +5,12 @@ description: 'OxenHub enables your team to version, explore, and collaborate on 
 
 The simple web interface allows you to discover and explore datasets without having to download them. You can also upload files directly, add permissions, and explore branches directly in the interface.
 
+The Oxen Hub also provides a wide arrange of data exploration tools including one click [Model Inference](/oxen-hub/rmod.mdx), [UI Editable Dataframes](/oxen-hub/editable-dfs.mdx), and [Text2SQL search](/oxen-hub/text2sql.mdx).
+
 
 <p align="center">
-    <img src="/images/CatsVsDogsRepo.png?raw=true" alt="oxen cats vs dogs repo" />
+    <img src="/images/example_repo.png?raw=true"
+    alt="Pixart Example Repo" />
 </p>
 
 ## Create an account
@@ -18,7 +21,7 @@ Visit [https://www.oxen.ai/register](https://www.oxen.ai/register) to register
 
 From your home page, you can view your repositories and create a new repository.
 
-![repository home page](/images/MyRepos.png)
+![repository home page](/images/mathias_account.png)
 
 ## Setup Authorization
 
@@ -36,7 +39,7 @@ cat ~/.config/oxen/user_config.toml
 
 Pick a name and give your repository a description. Repositories can be public for anyone to view, or private just for you and your company.
 
-![repository home page](/images/CreateRepository.png)
+![repository home page](/images/new_repo.png)
 
 ## Push your data
 
@@ -52,10 +55,14 @@ oxen config --set-remote origin https://hub.oxen.ai/<username>/<repo_name>
 oxen push origin main
 ```
 
-🎉 Congrats! You should now be able to see your data in the hub.
+You will now be able to see your data in the hub.
 
-You can add collaborators from the web interface and start building out your data pipeline.
+## Add Collaborators
 
-![repository home page](/images/AddCollaborators.png)
+Now you can add collaborators from the web interface to share your work with your team. Click the + next to "Contributors" on the bottom right of your repo and you will find the contributors page:
 
-Check out the [CLI](/getting-started/cli) to learn more about how to use Oxen.
+![repository home page](/images/collaborate_page.png)
+
+🎉 Congrats! Now your have your team and data in the hub and are ready to start building out your data pipeline with Oxen's one click [Model Inference](/oxen-hub/rmod.mdx), [UI Editable Dataframes](/oxen-hub/editable-dfs.mdx), and [Text2SQL search](/oxen-hub/text2sql.mdx).
+
+P.S. You can also check out the [CLI](/getting-started/cli) to learn more about how to use Oxen.
