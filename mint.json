@@ -64,17 +64,18 @@
         "getting-started/learn-the-basics",
         "getting-started/cli",
         "getting-started/python",
-        "getting-started/oxen-server",
-        "getting-started/models"
+        "getting-started/oxen-server"
       ]
     },
     {
-      "group": "Oxen Hub",
+      "group": "Key Features",
       "pages": [
-        "oxen-hub/oxen-hub",
-        "oxen-hub/rmod",
-        "oxen-hub/editable-dfs",
-        "oxen-hub/text2sql"
+        "features/performance",
+        "features/web_hub",
+        "features/data_frames",
+        "features/labeling_data",
+        "features/text2sql",
+        "features/models"
       ]
     },
     {
