@@ -5,19 +5,19 @@ description: 'Writing SQL queries has never been easier with Oxen.AI''s Text2SQL
 
 ## Upload Your Dataset
 
-Open the dataset you want to work with. You can find an example dataset on our [explore page](https://www.oxen.ai/explore) or if you want to follow along with the example, you can clone the [PixArt-α dataset](https://www.oxen.ai/ox/PixArtResults) we are using.
+Open the dataset you want to work with. You can find an example dataset on our [explore page](https://www.oxen.ai/explore) or if you want to follow along with the example, you can clone the [Thinking LLMs dataset](https://www.oxen.ai/ox/Thinking-LLMs) we are using.
 
 ```bash
-oxen clone https://hub.oxen.ai/ox/PixArtResults --all
-oxen create-remote --name "your-username/PixArtResults"
-oxen config --set-remote origin "your-username/PixArtResults"
+oxen clone https://hub.oxen.ai/ox/Thinking-LLMs --all
+oxen create-remote --name "your-username/Thinking-LLMs"
+oxen config --set-remote origin "your-username/Thinking-LLMs"
 oxen push origin main
 ```
 
 <img
   className="block"
-  src="/images/pixart_repo.png"
-  alt="Oxen.ai Pixart Repo"
+  src="/images/thinking_llms.png"
+  alt="Oxen.ai Thinking LLMs Repo"
 />
 
 ## Open file and Query
@@ -35,30 +35,28 @@ Open the file you want to query and press the glowing search bar right above you
 
 Go ahead and ask any questions you have! The SQL will automatically generate and apply to the view of your data.
 
-In this case, we are looking for all the examples of the word "dragon" in the prompt used to generate the images:
+In this case, we are looking for the distribution of the type of questions asked to the LLM:
 
 ```
-Show me all the rows with dragon in the prompt column
+what is the distribution in the category column sort by count
 ```
-### ***CHANGE THIS IMAGE
+
 <img
   className="block"
-  src="/images/rmod_prompt.png"
-  alt="RMOD prompt example"
+  src="/images/count_dist.png"
+  alt="Text 2 SQL prompt example"
 />
 
-You can also run queries such as *"What was the most common image asked for in the prompt columns?"* or *"How many rows have the word "blue" in the prompt column?"*
+You can also run queries in different datasets such as *"What was the most common word asked for in the prompt columns?"* or *"How many rows have the word "code" in the prompt column?"*
 
 ## Edit, Augment, or Delete SQL Query
 
 If you would like to change or augment your SQL query, simply click on the "show SQL" button on the right of the screen. If you would like to delete the SQL query, just click the "Remove query" button to the left of the edit SQL button.
 
-### ***CHANGE THIS IMAGE
-
 <img
   className="block"
-  src="/images/rmod_commit_page.png"
-  alt="RMOD commit page"
+  src="/images/inside_sql.png"
+  alt="Inside SQL query"
 />
 
 Congratulations! You've just seen how easy it is to query your datasets with Oxen.AI. For more examples of different uses, [click here](/use-cases/sentiment-analysis.mdx)!
