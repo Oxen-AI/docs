@@ -73,9 +73,9 @@
         "features/performance",
         "features/web_hub",
         "features/data_frames",
+        "features/models",
         "features/labeling_data",
-        "features/text2sql",
-        "features/models"
+        "features/text2sql"
       ]
     },
     {
