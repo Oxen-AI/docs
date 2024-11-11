@@ -18,33 +18,44 @@ The Oxen.ai Hub currently supports LLM models for processing Text columns, but w
 
 The current list of supported models and providers (as of October 2024) includes:
 
-**OpenAI**
+<Tabs>
+  <Tab title="OpenAI">
+    - `gpt-4o`&nbsp;&nbsp;&nbsp;&nbsp;High-intelligence flagship model for complex, multi-step tasks
+    - `gpt-4o-mini`&nbsp;&nbsp;&nbsp;&nbsp;Affordable and intelligent small model for fast, lightweight tasks
+    - `o1-preview and o1-mini`&nbsp;&nbsp;&nbsp;&nbsp;Language models trained with reinforcement learning to perform complex reasoning.
+    - `Text Embedding 3 Small and Large`&nbsp;&nbsp;&nbsp;&nbsp;A set of models that can convert text into a numerical form.
+  </Tab>
+  <Tab title="Mistral">
+    - `open-mixtral-8x22b`&nbsp;&nbsp;&nbsp;&nbsp;Sparse Mixture-of-Experts (SMoE) model that uses only 39B active parameters out of 141B, offering unparalleled cost efficiency for its size.
+    - `open-mixtral-8x7b`&nbsp;&nbsp;&nbsp;&nbsp;Sparse Mixture-of-Experts (MoE) model with a total of 45 billion parameters. Best model overall regarding cost/performance trade-offs.
+    - `open-mistral-7b`&nbsp;&nbsp;&nbsp;&nbsp;Decoder-only transformer for chat based purposes.
+    - `mistral-nemo`&nbsp;&nbsp;&nbsp;&nbsp;Multilingual open source model.
+    - `pixtral-12b`&nbsp;&nbsp;&nbsp;&nbsp;A 12B model with image understanding capabilities in addition to text.
+    - `ministral-8b-latest`&nbsp;&nbsp;&nbsp;&nbsp;Powerful edge model with extremely high performance/price ratio. 
+    - `ministral-3b-latest`&nbsp;&nbsp;&nbsp;&nbsp;Mistral's best edge model.
+    - `codestral-2405`&nbsp;&nbsp;&nbsp;&nbsp;Cutting-edge language model for coding.
+    - `mistral-small-2409`&nbsp;&nbsp;&nbsp;&nbsp;Enterprise-grade small model with the lastest version v2 released September 2024. 
+    - `mistral-large-2407`&nbsp;&nbsp;&nbsp;&nbsp;Reasoning model for high-complexity tasks with the lastest version v2 released July 2024.
+  </Tab>
+  <Tab title="Google">
+    - `gemini-1.5-flash`&nbsp;&nbsp;&nbsp;&nbsp;A lightweight model optimized for speed and efficiency. Good for multimodal, high-volume tasks and latency-sensitive applications.
+    - `gemini-1.5-pro`&nbsp;&nbsp;&nbsp;&nbsp;Created to be multimodal (text, images, audio, documents, code, videos) and to scale across a wide range of tasks with up to 1M input tokens.
+    - `gemini-1.5-flash-8B`&nbsp;&nbsp;&nbsp;&nbsp;Best suited for simple, higher volume tasks.
+    - `Text Embedding 004`&nbsp;&nbsp;&nbsp;&nbsp;A set of models that can convert text into a numerical form.
+  </Tab>
+  <Tab title="Together AI">
+    - `together-llama-3-8b-instruct-turbo`&nbsp;&nbsp;&nbsp;&nbsp;7 billion parameter instruct-tuned decoder-only handles complex language tasks with high accuracy and efficiency.
+    - `together-llama-3-70b-instruct-turbo`&nbsp;&nbsp;&nbsp;&nbsp;70 billion parameter instruction-tuned model optimized for language understanding, reasoning, and text generation use cases.
+    - `together-llama-3-405b-instruct-turbo`&nbsp;&nbsp;&nbsp;&nbsp;405 billion parameter instruction-tuned model which is optimized for language understanding, reasoning, and text generation use cases.
+  </Tab>
+  <Tab title="Fireworks AI">
+    - `fireworks-llama-3-8b-instruct-turbo`&nbsp;&nbsp;&nbsp;&nbsp;7 billion parameter instruct-tuned decoder-only handles complex language tasks with high accuracy and efficiency.
+    - `fireworks-llama-3-70b-instruct-turbo`&nbsp;&nbsp;&nbsp;&nbsp;70 billion parameter instruction-tuned model optimized for language understanding, reasoning, and text generation use cases.
+    - `fireworks-llama-3-405b-instruct-turbo`&nbsp;&nbsp;&nbsp;&nbsp;405 billion parameter instruction-tuned model which is optimized for language understanding, reasoning, and text generation use cases.
+  </Tab>
+</Tabs>
 
-- `gpt-4o`
-- `gpt-4o-mini`
-- `o1-preview`
-- `o1-mini`
-
-**Mistral**
-
-- `open-mixtral-8x22b`
-- `open-mistral-7b`
-- `mistral-nemo`
-- `pixtral-12b`
-- `ministral-8b-latest`
-- `ministral-3b-latest`
-- `codestral-2405`
-- `mistral-small-2409`
-- `mistral-large-2407`
-
-**TogetherAI**
-
-- `together-llama-3-8b-instruct`
-- `together-llama-3-70b-instruct`
-- `together-llama-3-405b-instruct`
-
-
-If you want to use a different model, please [let us know](https://discord.gg/s3tBEn7Ptg) and we'll add support for it.
+If you want to add different models, please [let us know](https://discord.gg/s3tBEn7Ptg) and we'll add support for it.
 
 ## Grab a Dataset
 

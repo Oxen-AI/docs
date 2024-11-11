@@ -71,13 +71,15 @@
       "group": "Key Features",
       "pages": [
         "features/performance",
-        "features/web-hub",
+        "features/web_hub",
         "features/data_frames",
+        "features/labeling_data",
+        "features/text2sql",
         "features/models"
       ]
     },
     {
-      "group": "Use Cases",
+      "group": "Tutorials",
       "pages": [
         "use-cases/sentiment-analysis",
         "use-cases/text-translation"

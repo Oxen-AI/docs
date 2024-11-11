@@ -1,5 +1,5 @@
 ---
-title: '📊 DataFrames'
+title: '📊 Data Frames'
 description: 'Oxen makes it easy to work with tabular data as well as other data formats.'
 ---
 
@@ -45,7 +45,7 @@ Oxen also provides command line tools to interact with data frames. This makes i
 
 ## oxen df
 
-`oxen df` is a handy subcommand to interact with data frames locally. For example, `oxen df <FILENAME>` displays the contents of tabular data files. 
+`oxen df` is a handy subcommand to interact with data frames locally. For example, `oxen df <FILENAME>` displays the contents of tabular data files.
 
 ```bash
 $ oxen df data.tsv
@@ -72,7 +72,7 @@ shape: (4_774, 2)
 
 Here, we see that [SpamOrHam](https://oxen.ai/datasets/SpamOrHam)'s dataset consists of 4,774 rows and 2 columns. The output is automatically truncated to 10 entries. To display the entire data set, you can use the `--full` flag.
 
-You can also use `oxen df` options to view your data with modifications. These changes won't be written anywhere unless you use the `--write` or `--output` flags. 
+You can also use `oxen df` options to view your data with modifications. These changes won't be written anywhere unless you use the `--write` or `--output` flags.
 
 ```bash
 # Add extra column
@@ -221,7 +221,7 @@ df.commit("Update label")
 
 All of these operations are exposed over HTTP, so you are not limited to using the Python library. Check out all our HTTP [reference docs](/http-api) to see how to interact with your data programatically.
 
-You can also edit data files locally with `oxen df --write`. Any modifications you make with this flag set will be written back to the original file and register as 'modified' in your Oxen repository. 
+You can also edit data files locally with `oxen df --write`. Any modifications you make with this flag set will be written back to the original file and register as 'modified' in your Oxen repository.
 
 ```bash
 $ oxen df data.tsv --filter 'category == spam' --write
@@ -246,7 +246,7 @@ shape: (650, 2)
 +----------+---------------------------------+
 Writing "data.tsv"
 
-$ oxen df data.tsv 
+$ oxen df data.tsv
 
 shape: (650, 2)
 +----------+---------------------------------+
@@ -278,7 +278,7 @@ For these examples, we'll use our [CatDogBBox](https://hub.oxen.ai/ox/CatDogBBox
 
 ## Convert Dataset Format
 
-Oxen allows you to quickly transform data files between data formats. When you run `oxen df` with `--output`, the resulting data frame will be written to disk as a new file of the specified type. 
+Oxen allows you to quickly transform data files between data formats. When you run `oxen df` with `--output`, the resulting data frame will be written to disk as a new file of the specified type.
 
 Some formats like parquet and arrow are more efficient for different [tasks](https://towardsdatascience.com/apache-arrow-read-dataframe-with-zero-memory-69634092b1a), but are not human readable like tsv or csv. These are tradeoffs you'll have to decide on for your application. Oxen currently supports the following file extensions: `csv`, `tsv`, `parquet`, `arrow`, `json`, `jsonl`.
 
@@ -434,7 +434,7 @@ shape: (3, 6)
 
 ## Unique
 
-Oxen can efficiently compute all the unique values of a given column or set of columns using the `--unique` option.  
+Oxen can efficiently compute all the unique values of a given column or set of columns using the `--unique` option.
 
 ```bash
 oxen df train.csv --unique "file"
@@ -534,7 +534,7 @@ shape: (9_000, 6)
 
 ## Sort
 
-You can sort your data with the `sort` flag. You can sort the data by the values of any column in your data frame. 
+You can sort your data with the `sort` flag. You can sort the data by the values of any column in your data frame.
 
 ```bash
 oxen df train.csv --sort "height"

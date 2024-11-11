@@ -1,0 +1,108 @@
+---
+title: '📝 Labeling Data'
+description: 'You can now immediately edit large datasets straight from Oxen.AI''s website without downloading the dataset.'
+---
+
+## Upload Your Dataset
+
+Open the dataset you want to work with. You can find an example dataset on our [explore page](https://www.oxen.ai/explore) or to follow along with the example, you can clone the [Synthetic Political Spam Dataset](https://www.oxen.ai/Laurence/political-spam) we are using.
+
+```bash
+oxen clone https://hub.oxen.ai/Laurence/political-spam --all
+oxen create-remote --name "your-username/political-spam"
+oxen config --set-remote origin "your-username/political-spam"
+oxen push origin main
+```
+
+<img
+  className="block"
+  src="/images/spam_dataset.png"
+  alt="Oxen.ai Spam Repo"
+/>
+
+## Edit File
+
+Open the file you want to edit and press the *Edit* button above your data.
+
+
+<img
+  className="block"
+  src="/images/edit_button.png"
+  alt="Where to find edit button"
+/>
+
+## Editing Columns
+
+To edit columns, go to the *Schema* section on the left of your dataset. Here, there are four actions you can take:
+
+* Add a Column: Click the *Add Column* button.
+* Delete a Column: Click the Trash icon next to the column name you would like to delete.
+* Edit a Column: Click the pencil icon to change the column name or the data type.
+* Hide a Column: Click the Eye icon to the left of the column name you would like to hide for the edit.
+
+<img
+  className="block"
+  src="/images/columns_edit.png"
+  alt="Schema picture"
+/>
+
+## Editing Rows
+
+To edit your rows, there are two actions you can take:
+
+* Add a Row: Click the *Add Row* button to get a new blank row at the end of your dataset.
+* Delete a Row: Click one of the cells in the row you would like to delete. Then click the large red "delete" button on the right of the screen.
+
+<img
+  className="block"
+  src="/images/add_row.png"
+  alt="Add and remove row"
+/>
+
+To undo a deleted row, click the revert button.
+
+<img
+  className="block"
+  src="/images/revert_button.png"
+  alt="Revert Button"
+/>
+
+## Editing Cells
+
+To edit cells, click on the cell you would like to edit and make any changes you would like to the data. Then click the *Save* button to save progress.
+
+<img
+  className="block"
+  src="/images/edit_cell.png"
+  alt="Editing a cell"
+/>
+
+To undo any saved changes, click the revert button.
+
+<img
+  className="block"
+  src="/images/revert_cell_changes.png"
+  alt="Revert Button for cell"
+/>
+
+## Committing Changes
+
+To commit your changes, click on the *Commit* button, write your commit message, choose the branch, and click "Commit changes".
+
+<img
+  className="block"
+  src="/images/commit_ed.png"
+  alt="Commit section"
+/>
+
+## Returning to Data Frame
+
+To return to the original dataframe, click the *Return to dataframe* button on the left of the commit button.
+
+<img
+  className="block"
+  src="/images/return_from_edf.png"
+  alt="Return from Editing"
+/>
+
+Congratulations! You've just seen how easy it is to edit your datasets without downloading on Oxen.AI. For more examples of different uses, [click here](/use-cases/sentiment-analysis.mdx)!
