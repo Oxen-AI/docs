@@ -82,7 +82,8 @@
       "group": "Tutorials",
       "pages": [
         "use-cases/sentiment-analysis",
-        "use-cases/text-translation"
+        "use-cases/text-translation",
+        "use-cases/rag"
       ]
     },
     {
