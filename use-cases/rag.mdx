@@ -17,8 +17,9 @@ Open the dataset you want to work with. You can find an example dataset on our [
 
 ```bash
 oxen clone https://hub.oxen.ai/ox/RAG-Answer-Extraction --all
-oxen create-remote --name "your-username/RAG-Answer-Extraction"
-oxen config --set-remote origin "your-username/RAG-Answer-Extraction"
+export OXEN_USERNAME="your-username" # NOTE: Replace with your username
+oxen create-remote --name "$OXEN_USERNAME/RAG-Answer-Extraction"
+oxen config --set-remote origin "$OXEN_USERNAME/RAG-Answer-Extraction"
 oxen push origin main
 ```
 
@@ -49,9 +50,9 @@ In this case, we are using OpenAI's [o1-Mini](https://platform.openai.com/docs/m
 Answer the following question only using facts from the facts given after the question.
 Keep your answer grounded in the facts given.
 If no facts given after the question, return 'None'.
+
 Question:
 {query}
-
 
 Facts:
 {context}
