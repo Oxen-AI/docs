@@ -71,6 +71,7 @@
       "group": "Key Features",
       "pages": [
         "features/performance",
+        "features/workspaces",
         "features/web_hub",
         "features/data_frames",
         "features/models",
