@@ -1,21 +1,27 @@
 ---
-title: '🌲 Optimizing Data Transfer'
+title: '⬇️ Partial Clones'
 description: 'Oxen allows you to interact with your data without having to download the entire dataset locally.'
 ---
 
-There are many times when you only need a small subset of a dataset. For example, you may only want to run a model on a subset of images, kick off an evaluation, or run a query on a small subset of rows.
+Say you want to contribute to a dataset with 100GB of images, or only need a small subset of the data to run a model. In these cases, it doesn't make sense to download the entire dataset locally. Instead, you can use partial clones.
 
-Oxen has two main ways of slicing, dicing and filtering your data.
+Oxen has three main ways of interacting with subsets of your data.
 
-1) **Local Subtrees** - A local subtree allows you to clone a subset of the data in your repository.
-2) **Remote Workspaces** - A remote workspace is a remote branch that allows you to interact with your data all server side, no files are downloaded locally.
+1) **Download Read Only** - Download a read only copy of the subset to your local machine.
+2) **Partial Clones** - Clone a subtree of the data in your repository to a local working directory.
+3) **Remote Workspaces** - Interact with your data all server side, no files are downloaded locally.
 
+Each of these methods has it's own benefits and trade offs. We will go over each of them in more detail below.
 
-![Workspaces](/images/local-subtrees-workspaces.png)
+# Download Read Only
 
-This is a quickstart guide to show you some different workflows you can use to interact with your repository.
+If you have no intention of making any changes to the data, the easiest way to interact with a subset is to download a read only copy. This can be done with the `oxen download` command.
 
-# Local Subtrees
+Under the hood, this command does not download any of the history, version files, or other metadata. It simply downloads the data unpacks it to a local directory.
+
+![Download Read Only](/images/partial-download.jpg)
+
+# Partial Clones
 
 TODO:
 
