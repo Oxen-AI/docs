@@ -1,37 +1,62 @@
 ---
-title: '⬇️ Partial Clones'
+title: '🧩 Partial Clones'
 description: 'Oxen allows you to interact with your data without having to download the entire dataset locally.'
 ---
 
-Say you want to contribute to a dataset with 100GB of images, or only need a small subset of the data to run a model. In these cases, it doesn't make sense to download the entire dataset locally. Instead, you can use partial clones.
+Say you are working with a dataset with 100GB of images, you may want to contribute back to the dataset, or only need a small subset of the data to run a model. In these cases, it doesn't make sense to download the entire dataset locally. Instead, you can use partial clones.
 
 Oxen has three main ways of interacting with subsets of your data.
 
-1) **Download Read Only** - Download a read only copy of the subset to your local machine.
-2) **Partial Clones** - Clone a subtree of the data in your repository to a local working directory.
+1) **Partial Clones** - Clone a subtree of the data in your repository to a local working directory.
+2) **Download Read Only** - Download a read only copy of the subset to your local machine.
 3) **Remote Workspaces** - Interact with your data all server side, no files are downloaded locally.
 
 Each of these methods has it's own benefits and trade offs. We will go over each of them in more detail below.
 
-# Download Read Only
+
+## Partial Clones
+
+The first command line parameter you should be aware of is the `--filter` flag. This flag is inclusive for the paths you want to clone.
+
+```bash
+oxen clone https://hub.oxen.ai/ox/Flowers --filter "images/roses"
+```
+
+This will clone all the data under the `images/roses` directory into a local working directory. Under the hood, it also creates a `.oxen` directory which contains the merkle tree for the cloned data, and content addressable copies of each file in the subtree.
+
+![Partial Clone](/images/PartialClones.png)
+
+You can also specify a depth parameter to control how deep the clone is. If you have many nested subdirectories, you can use the `--depth` flag to limit how deep the clone goes.
+
+```bash
+oxen clone https://hub.oxen.ai/ox/Flowers --filter "." --depth 1
+```
+
+Note that full clones and partial clones end up using ~2x the storage. This is because the clone contains the merkle tree for the cloned data, and content addressable copies of each file in the subtree.
+
+## Download Read Only
 
 If you have no intention of making any changes to the data, the easiest way to interact with a subset is to download a read only copy. This can be done with the `oxen download` command.
 
-Under the hood, this command does not download any of the history, version files, or other metadata. It simply downloads the data unpacks it to a local directory.
+```bash
+oxen download https://hub.oxen.ai/ox/Flowers images/roses
+```
+
+Under the hood, this command does not download any of the history, content addressed version files, or other metadata. It simply downloads the data unpacks it to a local directory.
 
 ![Download Read Only](/images/partial-download.jpg)
 
-# Partial Clones
+This is the most efficient way to download data if you are simply going to read the data or throw it away later.
 
-TODO:
+## Remote Workspaces
 
-# Remote Workspaces
+You may not need a local copy of the data at all. If you are working with a remote dataset, you can interact with it all server side.
 
-TODO:
+![Remote Workspace](/images/RemoteWorkspaces.png)
 
-An Oxen Workspace is a convenient construct for adding data. Conceptually you can think of a workspace a special type of branch where you can stage remote changes before committing them. Under the hood, a workspace is tied to a commit id. This means whatever changes you make will always be with respect to the commit you created the workspace off of.
+Conceptually you can think of a workspace as a server side working directory where you can stage changes before committing them. Under the hood, a workspace is tied to a commit id. This means whatever changes you make will always be with respect to the commit you created the workspace off of.
 
-# Instantiating a Workspace
+### Instantiating a Workspace
 
 A workspace is created off of a `RemoteRepo` and a branch name. The branch name is just a convenience for the user to create a workspace on the underlying commit id.
 
@@ -69,11 +94,11 @@ oxen workspace create -w my-workspace-name
 
 </CodeGroup>
 
-# Adding Files
+### Adding Files
 
 When adding data, it is always a good idea to create a branch for the changes you are about to make. This will allow you to commit changes without affecting the default branch.
 
-## Creating a Branch
+### Creating a Branch
 
 <CodeGroup>
 
@@ -94,7 +119,7 @@ oxen push origin add-images
 
 </CodeGroup>
 
-## Uploading Files
+### Uploading Files
 
 Workspaces allow you to upload files without immediately committing them. Think of this as a staging area where you can upload the data, and then batch commit when you are ready.
 
@@ -118,7 +143,7 @@ oxen workspace status -w my-workspace-id
 
 </CodeGroup>
 
-## Removing Uploaded Files
+### Removing Uploaded Files
 
 If you accidentally add file from the remote workspace and want to remove it, no worries, you can unstage it with `oxen remote rm --staged`.
 
@@ -141,7 +166,7 @@ oxen workspace rm image.jpg -w my-workspace-id
 
 </CodeGroup>
 
-## Commit Changes
+### Commit Changes
 
 When you are confident in the changes you have made, you can commit the changes to the remote workspace. This will create a new commit on the remote branch.
 

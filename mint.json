@@ -84,7 +84,7 @@
       "pages": [
         "use-cases/sentiment-analysis",
         "use-cases/text-translation",
-        "use-cases/rag"
+        "use-cases/rag-extracting-answers"
       ]
     },
     {
