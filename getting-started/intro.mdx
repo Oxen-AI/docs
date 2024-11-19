@@ -3,35 +3,29 @@ title: 🐂 What is Oxen?
 description: 'Oxen is a lightning fast data version control system for structured and unstructured machine learning datasets.'
 ---
 
-<img
-  className="block"
-  src="/images/MoonOx.png"
-  alt="Oxen.ai Moon Ox Hero"
-/>
+<img alt="Oxen.ai Moon Ox Hero" classname="block" src="/images/MoonOx.png" />
 
 Oxen.AI's interface mirrors git, but shines in many areas that git or git-lfs fall short. Oxen is built from the ground up for data, and is optimized to handle large datasets, and large files.
 
 <CodeGroup>
+  ```bash CLI
+  oxen init
+  oxen add images/
+  oxen add annotations/*.parquet
+  oxen commit -m "Adding 200k images and their corresponding annotations"
+  oxen push origin main
+  ```
 
-```bash CLI
-oxen init
-oxen add images/
-oxen add annotations/*.parquet
-oxen commit -m "Adding 200k images and their corresponding annotations"
-oxen push origin main
-```
+  ```python Python
+  import oxen
 
-```python Python
-import oxen
-
-# Initialize a new repository given a directory
-repo = oxen.init("/path/to/my-dataset")
-repo.add("images/")
-repo.add("annotations/*.parquet")
-repo.commit("Adding 200k images and their corresponding annotations")
-repo.push("origin", "main")
-```
-
+  # Initialize a new repository given a directory
+  repo = oxen.init("/path/to/my-dataset")
+  repo.add("images/")
+  repo.add("annotations/*.parquet")
+  repo.commit("Adding 200k images and their corresponding annotations")
+  repo.push("origin", "main")
+  ```
 </CodeGroup>
 
 Oxen.AI's comprised of a [command line interface](/getting-started/cli), as well as bindings for [Rust](https://github.com/Oxen-AI/Oxen) 🦀, [Python](/getting-started/python) 🐍, and [HTTP interfaces](/http-api) 🌎 to make it easy to integrate into your workflow.
@@ -43,62 +37,56 @@ Oxen is built around ergonomics, ease of use, and it is easy to learn. If you kn
 ### [Oxen Hub Features](/features/web_hub)
 
 * 🚀 [Model Inference](/features/models): One click solution for your model inference.
+
 * 📝 [Labeling Images](/features/labeling_data): Edit any and all your datasets straight from our UI.
+
 * 🔍 [Text2SQL](/features/text2sql): Instant Text to SQL generation to ask your data questions.
 
-### Oxen Open Source Features 
+### Oxen Open Source Features
 
 * 🔥 Fast: Efficient indexing and syncing of any dataset size (millions of images? no problem)
+
 * 🌎 [Workspaces](/concepts/workspaces): Interact with your data without downloading it
+
 * 🧠 Intuitive: Same commands as git
+
 * 💪 Handles large, unstructured files: images, videos, audio, text, parquet, arrow, json, models, etc
+
 * 📊 Native DataFrame processing: index, compare and serve up DataFrames
+
 * 📈 Versioning: Never worry about losing the state of your data
-* 🤝 Team Collaborate: sync to an oxen-server
 
-## 🎥 Oxen 101
-
-To learn more about Oxen, you can watch our 101 video below, or work through the getting started guides in [Python](/getting-started/python) or [CLI](/getting-started/cli).
-
-<iframe
-  width="560"
-  height="315"
-  src="https://www.youtube.com/embed/75cvVkDf-6w"
-  title="Oxen 101"
-  frameBorder="0"
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-  allowFullScreen
-></iframe>
+* 🤝 Distributed Collaboration: sync to an oxen-server
 
 ## 🌾 What kind of data?
 
-Oxen is designed to efficiently manage large datasets, including those with large individual files, for example CSV files with millions of rows. It also handles datasets comprising millions of individual files and directories such as the complete collection of ImageNet images.
+Oxen.ai is designed to efficiently manage large datasets, including those with large individual files, for example CSV files with millions of rows. It also handles datasets comprising millions of individual files and directories such as the complete collection of ImageNet images.
+
+The backend is agnostic to data type, so feel free to add any binary blobs. We automatically detect certain data types on upload so that we can render them within the UI. Specifically filetypes such as csv, tsv, jsonl, parquet, arrow turn into beautiful data tables. Images, audio, and video files will also play natively.
 
 ## 🚀 Built for speed
 
-One of the main reasons datasets are hard to maintain is the pure performance of indexing the data and transferring the data over the network. We wanted to be able to index hundreds of thousands of images, videos, audio files, and text files in seconds. 
+One of the main reasons datasets are hard to maintain is the pure performance of indexing the data and transferring the data over the network. We wanted to be able to index hundreds of thousands of images, videos, audio files, and text files in seconds.
 
 Watch below as we version **hundreds of thousands of images** in seconds 🔥
 
 <p align="center">
-    <img src="https://github.com/Oxen-AI/oxen-release/raw/main/images/cli-celeba.gif?raw=true" alt="oxen cli demo" />
+  <img src="https://github.com/Oxen-AI/oxen-release/raw/main/images/cli-celeba.gif?raw=true" alt="oxen cli demo" />
 </p>
 
-But speed is only the beginning. 
+But speed is only the beginning. Think of Oxen.ai as a set of building blocks to build your dream workflow on top of.
 
 ## ⚒️ Installation
 
 <CodeGroup>
+  ```bash CLI
+  brew tap Oxen-AI/oxen
+  brew install oxen
+  ```
 
-```bash CLI
-brew tap Oxen-AI/oxen
-brew install oxen
-```
-
-```bash Python
-pip install oxenai
-```
-
+  ```bash Python
+  pip install oxenai
+  ```
 </CodeGroup>
 
 ## ⬇️ Cloning Datasets
@@ -106,18 +94,16 @@ pip install oxenai
 The fastest way to get up and running with oxen is by cloning a dataset. Explore the many public datasets we have today on the [OxenHub](https://oxen.ai/explore).
 
 <CodeGroup>
+  ```bash CLI
+  oxen clone https://hub.oxen.ai/ox/CatDogBBox
+  ```
 
-```bash CLI
-oxen clone https://hub.oxen.ai/ox/CatDogBBox
-```
+  ```python Python
+  import oxen
 
-```python Python
-import oxen
-
-# Clone the repository
-repo = oxen.clone("ox/CatDogBBox")
-```
-
+  # Clone the repository
+  repo = oxen.clone("ox/CatDogBBox")
+  ```
 </CodeGroup>
 
 ## ⬆️ Pushing Datasets
@@ -125,40 +111,38 @@ repo = oxen.clone("ox/CatDogBBox")
 Create and share your own repository to share your datasets with your team or the world by pushing them to [OxenHub](https://oxen.ai).
 
 <CodeGroup>
+  ```bash CLI
+  # New repos can also be create in UI
+  oxen add .
+  oxen commit -m "message"
+  oxen create-remote --name <namespace>/<repo_name>
+  oxen config --set-remote origin https://hub.oxen.ai/<namespace>/<repo_name>
+  oxen push origin main
+  ```
 
-```bash CLI
-# New repos can also be create in UI
-oxen add .
-oxen commit -m "message"
-oxen create-remote --name <namespace>/<repo_name>
-oxen config --set-remote origin https://hub.oxen.ai/<namespace>/<repo_name>
-oxen push origin main
-```
+  ```python Python
+  import os
+  from oxen import Repo
 
-```python Python
-import os
-from oxen import Repo
+  # Instantiate a Repo object and create the repo directory
+  repo = Repo("/path/to/data", mkdir=True)
+  # Initialize the repository
+  repo.init()
+  # Write data to a file
+  data_path = os.path.join(repo.path, "people.csv")
+  with open(data_path, "w") as f:
+      f.write("name,age\nbob,12\njane,13")
+  # Stage the data for commit
+  repo.add(data_path)
+  # Commit the changes with a message
+  repo.commit("Adding my data")
 
-# Instantiate a Repo object and create the repo directory
-repo = Repo("/path/to/data", mkdir=True)
-# Initialize the repository
-repo.init()
-# Write data to a file
-data_path = os.path.join(repo.path, "people.csv")
-with open(data_path, "w") as f:
-    f.write("name,age\nbob,12\njane,13")
-# Stage the data for commit
-repo.add(data_path)
-# Commit the changes with a message
-repo.commit("Adding my data")
+  # Set where to push the data to (replace <namespace> and <repo_name> with your remote)
+  repo.set_remote("origin", "https://hub.oxen.ai/<namespace>/<repo_name>")
 
-# Set where to push the data to (replace <namespace> and <repo_name> with your remote)
-repo.set_remote("origin", "https://hub.oxen.ai/<namespace>/<repo_name>")
-
-# Push the changes to the remote
-repo.push()
-```
-
+  # Push the changes to the remote
+  repo.push()
+  ```
 </CodeGroup>
 
 ## 📚 Learn The Basics
@@ -166,32 +150,19 @@ repo.push()
 There are many ways to use Oxen. You can use the command line interface, the python library, or the OxenHub web interface. Learn the basics of each below.
 
 <CardGroup cols={2}>
-  <Card
-    title="Command Line Interface"
-    icon="rectangle-terminal"
-    href="/getting-started/cli"
-  >
+  <Card title="Command Line Interface" icon="rectangle-terminal" href="/getting-started/cli">
     Learn how to use the Oxen command line interface
   </Card>
-  <Card
-    title="Python Library"
-    icon="python"
-    href="/getting-started/python"
-  >
+
+  <Card title="Python Library" icon="python" href="/getting-started/python">
     Get started with the python library
   </Card>
-  <Card
-    title="Web Interface"
-    icon="browser"
-    href="https://oxen.ai"
-  >
+
+  <Card title="Web Interface" icon="browser" href="https://oxen.ai">
     Use the OxenHub web interface
   </Card>
-  <Card
-    title="Self Host"
-    icon="satellite-dish"
-    href="/getting-started/oxen-server"
-  >
+
+  <Card title="Self Host" icon="satellite-dish" href="/getting-started/oxen-server">
     Host Oxen in your own infrastructure
   </Card>
 </CardGroup>
@@ -201,51 +172,26 @@ There are many ways to use Oxen. You can use the command line interface, the pyt
 See examples repositories for inspiration.
 
 <CardGroup cols={2}>
-  <Card
-    title="Computer Vision"
-    icon="camera-viewfinder"
-    href="https://www.oxen.ai/categories/vision"
-  >
+  <Card title="Computer Vision" icon="camera-viewfinder" href="https://www.oxen.ai/categories/vision">
     Classify images, detect objects, semantic segmentation and more.
   </Card>
-  <Card
-    title="Natural Language Processing"
-    icon="file-lines"
-    href="https://www.oxen.ai/categories/text"
-  >
+
+  <Card title="Natural Language Processing" icon="file-lines" href="https://www.oxen.ai/categories/text">
     Build chatbots, analyze sentiment, answer questions and more.
   </Card>
-  <Card
-    title="Audio"
-    icon="headphones"
-    href="https://www.oxen.ai/categories/audio"
-  >
+
+  <Card title="Audio" icon="headphones" href="https://www.oxen.ai/categories/audio">
     Classify audio, detect speakers, transcribe speech and more.
   </Card>
-  <Card
-    title="Generative AI"
-    icon="palette"
-    href="https://www.oxen.ai/categories/generative-ai"
-  >
+
+  <Card title="Generative AI" icon="palette" href="https://www.oxen.ai/categories/generative-ai">
     Generate images, text, music and more.
   </Card>
 </CardGroup>
 
-## ⭐️ Every GitHub Star Gives an Ox its Wings
-
-No really.
-
-We hooked up the GitHub webhook for stars to an [OxenHub repository](https://www.oxen.ai/ox/FlyingOxen). Using a combination of Oxen's [python library](/getting-started/python), [remote workspaces](/concepts/workspace), and [Stable Diffusion XL](https://huggingface.co/docs/diffusers/api/pipelines/stable_diffusion/stable_diffusion_xl) we generate a unique Ox for each user, and attempt to give them wings.
-
-Go find your own in our [ox/FlyingOxen](https://www.oxen.ai/ox/FlyingOxen) repository.
-
-<p align="center">
-    <img src="https://github.com/Oxen-AI/oxen-release/blob/main/images/ox-with-wings.png?raw=true" alt="oxen repo with wings" />
-</p>
-
 ## 🌾 Why Build Oxen?
 
-Oxen was build by a team of machine learning engineers, who have spent countless hours in their careers managing datasets. We have used many different tools, but none of them were as easy to use and as ergonomic as we would like. 
+Oxen was build by a team of machine learning engineers, who have spent countless hours in their careers managing datasets. We have used many different tools, but none of them were as easy to use and as ergonomic as we would like.
 
 If you have ever tried [git lfs](https://git-lfs.com/) to version large datasets and became frustrated, we feel your pain. Solutions like git-lfs are too slow when it comes to the scale of data we need for machine learning.
 
