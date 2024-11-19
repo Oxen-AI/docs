@@ -71,6 +71,7 @@
       "group": "Key Features",
       "pages": [
         "features/performance",
+        "features/workspaces",
         "features/web_hub",
         "features/data_frames",
         "features/models",
@@ -83,7 +84,7 @@
       "pages": [
         "use-cases/sentiment-analysis",
         "use-cases/text-translation",
-        "use-cases/rag"
+        "use-cases/rag-extracting-answers"
       ]
     },
     {

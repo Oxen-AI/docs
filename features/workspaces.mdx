@@ -1,0 +1,192 @@
+---
+title: '🧩 Partial Clones'
+description: 'Oxen allows you to interact with your data without having to download the entire dataset locally.'
+---
+
+Say you are working with a dataset with 100GB of images, you may want to contribute back to the dataset, or only need a small subset of the data to run a model. In these cases, it doesn't make sense to download the entire dataset locally. Instead, you can use partial clones.
+
+Oxen has three main ways of interacting with subsets of your data.
+
+1) **Partial Clones** - Clone a subtree of the data in your repository to a local working directory.
+2) **Download Read Only** - Download a read only copy of the subset to your local machine.
+3) **Remote Workspaces** - Interact with your data all server side, no files are downloaded locally.
+
+Each of these methods has it's own benefits and trade offs. We will go over each of them in more detail below.
+
+
+## Partial Clones
+
+The first command line parameter you should be aware of is the `--filter` flag. This flag is inclusive for the paths you want to clone.
+
+```bash
+oxen clone https://hub.oxen.ai/ox/Flowers --filter "images/roses"
+```
+
+This will clone all the data under the `images/roses` directory into a local working directory. Under the hood, it also creates a `.oxen` directory which contains the merkle tree for the cloned data, and content addressable copies of each file in the subtree.
+
+![Partial Clone](/images/PartialClones.png)
+
+You can also specify a depth parameter to control how deep the clone is. If you have many nested subdirectories, you can use the `--depth` flag to limit how deep the clone goes.
+
+```bash
+oxen clone https://hub.oxen.ai/ox/Flowers --filter "." --depth 1
+```
+
+Note that full clones and partial clones end up using ~2x the storage. This is because the clone contains the merkle tree for the cloned data, and content addressable copies of each file in the subtree.
+
+## Download Read Only
+
+If you have no intention of making any changes to the data, the easiest way to interact with a subset is to download a read only copy. This can be done with the `oxen download` command.
+
+```bash
+oxen download https://hub.oxen.ai/ox/Flowers images/roses
+```
+
+Under the hood, this command does not download any of the history, content addressed version files, or other metadata. It simply downloads the data unpacks it to a local directory.
+
+![Download Read Only](/images/partial-download.jpg)
+
+This is the most efficient way to download data if you are simply going to read the data or throw it away later.
+
+## Remote Workspaces
+
+You may not need a local copy of the data at all. If you are working with a remote dataset, you can interact with it all server side.
+
+![Remote Workspace](/images/RemoteWorkspaces.png)
+
+Conceptually you can think of a workspace as a server side working directory where you can stage changes before committing them. Under the hood, a workspace is tied to a commit id. This means whatever changes you make will always be with respect to the commit you created the workspace off of.
+
+### Instantiating a Workspace
+
+A workspace is created off of a `RemoteRepo` and a branch name. The branch name is just a convenience for the user to create a workspace on the underlying commit id.
+
+<CodeGroup>
+
+```python Python
+from oxen import RemoteRepo
+from oxen import Workspace
+
+repo = RemoteRepo("ox/CatDogBBox")
+workspace = Workspace(repo, "add-images")
+```
+
+```bash CLI
+oxen workspace create -w my-workspace-name -b add-images
+```
+
+</CodeGroup>
+
+If no branch name is provided, the workspace will be created off of the default branch (usually `main`).
+
+<CodeGroup>
+
+```python Python
+from oxen import RemoteRepo
+from oxen import Workspace
+
+repo = RemoteRepo("ox/CatDogBBox")
+workspace = Workspace(repo)
+```
+
+```bash CLI
+oxen workspace create -w my-workspace-name
+```
+
+</CodeGroup>
+
+### Adding Files
+
+When adding data, it is always a good idea to create a branch for the changes you are about to make. This will allow you to commit changes without affecting the default branch.
+
+### Creating a Branch
+
+<CodeGroup>
+
+```python Python
+from oxen import RemoteRepo
+
+repo = RemoteRepo("ox/CatDogBBox")
+# Create the branch on the remote
+repo.create_branch("add-images")
+# Make sure you are pointing to this branch
+repo.checkout("add-images")
+```
+
+```bash CLI
+oxen checkout -b add-images
+oxen push origin add-images
+```
+
+</CodeGroup>
+
+### Uploading Files
+
+Workspaces allow you to upload files without immediately committing them. Think of this as a staging area where you can upload the data, and then batch commit when you are ready.
+
+<CodeGroup>
+
+```python Python
+from oxen import RemoteRepo
+from oxen import Workspace
+
+repo = RemoteRepo("ox/CatDogBBox")
+workspace = Workspace(repo, "add-images")
+workspace.add("/path/to/image.png")
+status = workspace.status()
+print(status.added_files())
+```
+
+```bash CLI
+oxen workspace add image.png -w my-workspace-id
+oxen workspace status -w my-workspace-id
+```
+
+</CodeGroup>
+
+### Removing Uploaded Files
+
+If you accidentally add file from the remote workspace and want to remove it, no worries, you can unstage it with `oxen remote rm --staged`.
+
+<CodeGroup>
+
+```python Python
+from oxen import RemoteRepo
+from oxen import Workspace
+
+repo = RemoteRepo("ox/CatDogBBox")
+workspace = Workspace(repo, "add-images")
+workspace.rm("image.jpg")
+status = workspace.status()
+print(status.added_files())
+```
+
+```bash
+oxen workspace rm image.jpg -w my-workspace-id
+```
+
+</CodeGroup>
+
+### Commit Changes
+
+When you are confident in the changes you have made, you can commit the changes to the remote workspace. This will create a new commit on the remote branch.
+
+<CodeGroup>
+
+```python Python
+from oxen import RemoteRepo
+from oxen import Workspace
+
+repo = RemoteRepo("ox/CatDogBBox")
+workspace = Workspace(repo, "add-images")
+workspace.commit("adding an image", "add-images")
+```
+
+```bash CLI
+oxen workspace commit -m "adding an image" -w my-workspace-id -b add-images
+```
+
+</CodeGroup>
+
+🎉 You have now committed data to the remote branch without cloning the full repo.
+
+Note: If the remote branch cannot be merged cleanly, the remote commit will fail, and you will have to resolve the merge conflicts with some more advanced commands which we will cover later.
