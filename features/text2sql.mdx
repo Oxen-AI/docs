@@ -5,7 +5,7 @@ description: 'Writing SQL queries has never been easier with Oxen.AI''s Text2SQL
 
 ## Upload Your Dataset
 
-Open the dataset you want to work with. You can find an example dataset on our [explore page](https://www.oxen.ai/explore) or if you want to follow along with the example, you can clone the [Thinking LLMs dataset](https://www.oxen.ai/ox/Thinking-LLMs) we are using.
+Open the dataset you want to work with. You can find an example dataset on our [explore page](https://www.oxen.ai/explore) or if you want to follow along with the example, you can clone the [Thinking LLMs dataset](https://www.oxen.ai/ox/Thinking-LLMs).
 
 ```bash
 oxen clone https://hub.oxen.ai/ox/Thinking-LLMs --all
@@ -14,26 +14,17 @@ oxen config --set-remote origin "your-username/Thinking-LLMs"
 oxen push origin main
 ```
 
-<img
-  className="block"
-  src="/images/thinking_llms.png"
-  alt="Oxen.ai Thinking LLMs Repo"
-/>
+<img alt="Oxen.ai Thinking LLMs Repo" classname="block" src="/images/thinking_llms.png" />
 
 ## Open file and Query
 
 Open the file you want to query and press the glowing search bar right above your data.
 
-
-<img
-  className="block"
-  src="/images/text2sql.png"
-  alt="Where to find Text2SQL"
-/>
+<img alt="Where to find Text2SQL" classname="block" src="/images/text2sql.png" />
 
 ## Ask any Question!
 
-Go ahead and ask any questions you have! The SQL will automatically generate and apply to the view of your data.
+Go ahead and ask any questions you have! Okay - not any question...but any question that can be answered with SQL 🙂. Oxen.ai will automatically generate the SQL query and apply to the view of your data.
 
 In this case, we are looking for the distribution of the type of questions asked to the LLM:
 
@@ -41,11 +32,7 @@ In this case, we are looking for the distribution of the type of questions asked
 what is the distribution in the category column sort by count
 ```
 
-<img
-  className="block"
-  src="/images/count_dist.png"
-  alt="Text 2 SQL prompt example"
-/>
+<img alt="Text 2 SQL prompt example" classname="block" src="/images/count_dist.png" />
 
 You can also run queries in different datasets such as *"What was the most common word asked for in the prompt columns?"* or *"How many rows have the word "code" in the prompt column?"*
 
@@ -53,10 +40,6 @@ You can also run queries in different datasets such as *"What was the most commo
 
 If you would like to change or augment your SQL query, simply click on the "show SQL" button on the right of the screen. If you would like to delete the SQL query, just click the "Remove query" button to the left of the edit SQL button.
 
-<img
-  className="block"
-  src="/images/inside_sql.png"
-  alt="Inside SQL query"
-/>
+<img alt="Inside SQL query" classname="block" src="/images/inside_sql.png" />
 
 Congratulations! You've just seen how easy it is to query your datasets with Oxen.AI. For more examples of different uses, [click here](/use-cases/text-translation)!
