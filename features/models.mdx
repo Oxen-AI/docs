@@ -4,11 +4,11 @@ title: 🚀 Model Inference
 
 At the end of the day, AI is about automating workflows and making sure your model performs well given your data.
 
-[Oxen.ai](https://oxen.ai) makes it easy to run models on your data. With Oxen, you can either kick off [compute jobs](#compute-jobs) on the [Oxen.ai Hub](https://hub.oxen.ai) or you can [write your own custom code](#programmatically-run-a-job) to log model results to an Oxen repository.
+[Oxen.ai](https://oxen.ai) makes it easy to run models on your data. With Oxen, you can either kick off [compute jobs](#compute-jobs) on the [Oxen.ai Hub](https://oxen.ai/explore/models) or you can [write your own custom code](#programmatically-run-a-job) to log model results to an Oxen repository.
 
 # Kicking off Compute Jobs
 
-The easiest way to get started with model inference is to use the [Oxen.ai Hub](https://hub.oxen.ai). The Hub allows you to provide a prompt, select a model, and then run the model on your data.
+The easiest way to get started with model inference is to use the [Oxen.ai Hub](https://oxen.ai/explore/models). The Hub allows you to provide a prompt, select a model, and then run the model on your data.
 
 ![rmod](/images/rmod.png)
 
@@ -16,48 +16,11 @@ The Oxen.ai Hub currently supports LLM models for processing Text columns, but w
 
 # Supported Models
 
-The current list of supported models and providers (as of October 2024) includes:
+Oxen.ai supports many of the flagship AI models such as [OpenAI's GPT-4](https://platform.openai.com/docs/models), [Meta's Llama](https://www.llama.com/), and [Google's Gemini](https://gemini.google.com/). 
 
-<Tabs>
-  <Tab title="OpenAI">
-    - `gpt-4o` High-intelligence flagship model for complex, multi-step tasks
-    - `gpt-4o-mini` Affordable and intelligent small model for fast, lightweight tasks
-    - `o1-preview` Language model trained with reinforcement learning to perform complex reasoning.
-    - `o1-mini` More efficient than `o1-preview` with similar reasoning capabilities.
-    - `text-embedding-3-small` Small embeddings for text. Useful for RAG pipelines, clustering, or semantic search.
-    - `text-embedding-3-large` Large embeddings for text. Useful for RAG pipelines, clustering, or semantic search.
-  </Tab>
-  <Tab title="Mistral">
-    - `open-mixtral-8x22b` Sparse Mixture-of-Experts (SMoE) model that uses only 39B active parameters out of 141B, offering unparalleled cost efficiency for its size.
-    - `open-mixtral-8x7b` Sparse Mixture-of-Experts (MoE) model with a total of 45 billion parameters. Best model overall regarding cost/performance trade-offs.
-    - `open-mistral-7b` Decoder-only transformer for chat based purposes.
-    - `mistral-nemo` Multilingual open source model.
-    - `pixtral-12b` A 12B model with image understanding capabilities in addition to text.
-    - `ministral-8b-latest` Powerful edge model with extremely high performance/price ratio. 
-    - `ministral-3b-latest` Mistral's best edge model.
-    - `codestral-2405` Cutting-edge language model for coding.
-    - `mistral-small-2409` Enterprise-grade small model with the lastest version v2 released September 2024. 
-    - `mistral-large-2407` Reasoning model for high-complexity tasks with the lastest version v2 released July 2024.
-  </Tab>
-  <Tab title="Google">
-    - `gemini-1.5-flash` A lightweight model optimized for speed and efficiency. Good for multimodal, high-volume tasks and latency-sensitive applications.
-    - `gemini-1.5-pro` Created to be multimodal (text, images, audio, documents, code, videos) and to scale across a wide range of tasks with up to 1M input tokens.
-    - `gemini-1.5-flash-8B` Best suited for simple, higher volume tasks.
-    - `Text Embedding 004` A set of models that can convert text into a numerical form.
-  </Tab>
-  <Tab title="Together AI">
-    - `together-llama-3-8b-instruct-turbo` 7 billion parameter instruct-tuned decoder-only handles complex language tasks with high accuracy and efficiency.
-    - `together-llama-3-70b-instruct-turbo` 70 billion parameter instruction-tuned model optimized for language understanding, reasoning, and text generation use cases.
-    - `together-llama-3-405b-instruct-turbo` 405 billion parameter instruction-tuned model which is optimized for language understanding, reasoning, and text generation use cases.
-  </Tab>
-  <Tab title="Fireworks AI">
-    - `fireworks-llama-3-8b-instruct-turbo` 7 billion parameter instruct-tuned decoder-only handles complex language tasks with high accuracy and efficiency.
-    - `fireworks-llama-3-70b-instruct-turbo` 70 billion parameter instruction-tuned model optimized for language understanding, reasoning, and text generation use cases.
-    - `fireworks-llama-3-405b-instruct-turbo` 405 billion parameter instruction-tuned model which is optimized for language understanding, reasoning, and text generation use cases.
-  </Tab>
-</Tabs>
-
-If you want to add different models, please [let us know](https://discord.gg/s3tBEn7Ptg) and we'll add support for it.
+To see which model would best suit your task, visit our [Models Page](https://www.oxen.ai/explore/models).
+![Models-Page](/images/models.png)
+If you don't see the model you need, please [let us know](https://discord.gg/s3tBEn7Ptg) and we'll add it.
 
 ## Grab a Dataset
 
