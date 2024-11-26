@@ -48,13 +48,13 @@ Under the hood Oxen.ai is using a combination of hashing and diffing algorithms 
 
 # Diff Types
 
-Oxen.ai currently supports a [TextDiff](/python-api/diff/text_diff) and a [TabularDiff](/python-api/diff/tabular_diff) data type. 
+Oxen.ai currently supports a [TextDiff](/python-api/diff/text_diff) and a [TabularDiff](/python-api/diff/tabular_diff) data type.
 
 The `TabularDiff` data type is used to represent the differences in tabular data, such as CSV, TSV, or Parquet files. The `TextDiff` data type is used to represent the differences in text files, such as markdown, code, or configuration files. In the future, we plan to add support for other data types such as images, audio, and video.
 
 # Pick Your Tooling
 
-All the functionality below is available through the [🖥️ Command Line](/getting-started/cli), [🦀 Rust Library](https://crates.io/crates/liboxen), [🐍 Python Library](/getting-started/python), as well as the [🌎 Web Interface](/getting-started/oxen-hub). This guide will focus on the command line tooling, but the same principles apply to the other interfaces.
+All the functionality below is available through the [🖥️ Command Line](/getting-started/cli), [🦀 Rust Library](https://crates.io/crates/liboxen), [🐍 Python Library](/getting-started/python), as well as the [🌎 Web Interface](/features/web_hub). This guide will focus on the command line tooling, but the same principles apply to the other interfaces.
 
 Using the [Oxen.ai Hub](https://oxen.ai) you can quickly visualize and navigate the changes in your datasets with an easy to use interface. Sign up for free 👉 [here](https://oxen.ai/register).
 
@@ -134,6 +134,7 @@ repo.init()
 repo.add("dataset.csv")
 repo.commit("Adding my data")
 ```
+
 </CodeGroup>
 
 ## Adding Rows
@@ -568,7 +569,6 @@ oxen.diff("dataset.csv", output="diff.csv")
 
 </CodeGroup>
 
-
 The above command will save the results of the diff to a new file called `diff.csv`. You can then load it into a jupyter notebook, pandas, or even back into Oxen to do more analysis on the results.
 
 ## Real World Example
@@ -752,8 +752,8 @@ oxen diff model_results.csv -k id,prompt,answer -c response,is_correct
 import oxen
 
 result = oxen.diff(
-   "dataset.csv", 
-   keys=["id", "prompt", "answer"], 
+   "dataset.csv",
+   keys=["id", "prompt", "answer"],
    compares=["response", "is_correct"]
 )
 print(result.get())
@@ -810,4 +810,4 @@ You can find all the example data used in this guide in the [datasets/diff-examp
 
 In the next section we will see how this is useful for finding the best model given multiple results datasets.
 
-[Next: Comparing Different Files](/concepts/compare) 
+[Next: Comparing Different Files](/concepts/compare)
