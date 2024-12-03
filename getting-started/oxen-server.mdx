@@ -9,7 +9,7 @@ You can deploy your own `oxen-server` instance on your own infrastructure, or us
 oxen-server start -p 3000 -i 0.0.0.0
 ```
 
-The hosted solution comes with a [UI](/features/web_hub) and the benefits of not having to setup infrastructure yourself. [Sign up here](https://oxen.ai/register) to get started. 
+The hosted solution comes with a [UI](/features/web_hub) and the benefits of not having to setup infrastructure yourself. [Sign up here](https://oxen.ai/register) to get started.
 
 ![OxenHub](/images/ImageNet-Oxen-Files.png)
 
@@ -115,7 +115,7 @@ You can either clone data from this remote repository, or push data to it.
 
 ## 🗄️ File Storage
 
-When you create a remote repository, Oxen will create a directory for it on the server. The directory structure is `$SYNC_DIR/<namespace>/<repo_name>/.oxen`. 
+When you create a remote repository, Oxen will create a directory for it on the server. The directory structure is `$SYNC_DIR/<namespace>/<repo_name>/.oxen`.
 
 ```bash
 $ ls /var/oxen/data/my_namespace/repo_name/.oxen
@@ -144,28 +144,49 @@ cd my-dataset
 oxen init
 
 # Add data to the repository
-echo "Hello World" > data.txt
-oxen add data.txt
+echo "prompt,response" > data.csv
+oxen add data.csv
 
 # Commit the changes
 oxen commit -m "Initial commit"
 ```
 
-and add the remote to an existing repository:
+If you look in your local repository, you will see the `.oxen` directory.
 
 ```bash
-oxen config --set-remote origin http://<HOST>/my_namespace/repo_name
+$ ls .oxen
+
+config.toml
+history/
+refs/
+tree/
+versions/
 ```
 
-Once a remote is set you can push
+You can set the remote to the server by running the following command. This will update the `config.toml` file in your local repository.
+
+```bash
+oxen config --set-remote origin http://localhost:3000/my_namespace/repo_name
+```
+
+If you look at the `config.toml` file, you will see the remote set.
+```bash
+$ cat .oxen/config.toml
+
+remote_name = "origin"
+
+[[remotes]]
+name = "origin"
+url = "http://localhost:3000/my_namespace/repo_name"
+```
+
+Once a remote is set you can push your changes to the server.
 
 ```bash
 oxen push origin main
 ```
 
 You can change the remote (origin) and the branch (main) to whichever remote and branch you want to push.
-
-TODO: show how the data mirrors the server, talk about the history, refs, tree, versions, etc.
 
 ## ⬇️ Clone Data
 
@@ -175,3 +196,6 @@ Clone the empty repository:
 oxen clone http://<HOST>/my_namespace/repo_name
 ```
 
+## API Spec
+
+The server has a REST API that can be used to interact with the server. The API is documented [here](/http-api).

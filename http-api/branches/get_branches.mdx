@@ -1,0 +1,18 @@
+---
+title: "Get Branches"
+api: "GET https://hub.oxen.ai/api/repos/:namespace/:repo_name/branches"
+---
+
+You can get branches information under a repository without authentication.
+
+```bash
+curl -X GET \
+    https://hub.oxen.ai/api/repos/:namespace/:repo_name/branches
+```
+
+Or get info about a single branch.
+
+```bash
+curl -X GET \
+    https://hub.oxen.ai/api/repos/:namespace/:repo_name/branches/:branch_name
+```

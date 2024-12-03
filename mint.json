@@ -118,7 +118,13 @@
     {
       "group": "HTTP API",
       "pages": [
-        "http-api/files",
+        "http-api/index",
+        {
+          "group": "Namespaces",
+          "pages": [
+            "http-api/namespaces/list_namespaces"
+          ]
+        },
         {
           "group": "Repository",
           "pages": [
@@ -126,6 +132,39 @@
             "http-api/repositories/create_repo",
             "http-api/repositories/update_repo",
             "http-api/repositories/delete_repo"
+          ]
+        },
+        {
+          "group": "Branches",
+          "pages": [
+            "http-api/branches/get_branches",
+            "http-api/branches/create_branch"
+          ]
+        },
+        {
+          "group": "Commits",
+          "pages": [
+            "http-api/commits/get_commit"
+          ]
+        },
+        {
+          "group": "Files",
+          "pages": [
+            "http-api/files/list_files",
+            "http-api/files/download_file",
+            "http-api/files/upload_file"
+          ]
+        },
+        {
+          "group": "Data Frames",
+          "pages": [
+            "http-api/data_frames/get_data_frame"
+          ]
+        },
+        {
+          "group": "Workspaces",
+          "pages": [
+            "http-api/workspaces/list_workspaces"
           ]
         },
         {

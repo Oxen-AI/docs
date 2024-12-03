@@ -1,0 +1,21 @@
+---
+title: "Create Branch"
+api: "POST https://hub.oxen.ai/api/repos/:namespace/:repo_name/branches"
+---
+
+Parameters:
+- new_name: new branch name
+- from_name: branch name to create from
+
+To create a branch, a valid token in the header is needed.
+
+## Example Request
+
+```bash
+curl -X POST -H "Authorization: Bearer $TOKEN" \
+    https://hub.oxen.ai/api/repos/:namespace/:repo_name/branches \
+    --data '{
+    "new_name": "my_branch",
+    "from_name": "main"
+}'
+```
