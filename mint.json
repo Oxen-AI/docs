@@ -110,7 +110,7 @@
         "python-api/diff/text_diff",
         "python-api/init",
         "python-api/repositories",
-        "python-api/local_repo",
+        "python-api/repo",
         "python-api/remote_repo",
         "python-api/workspace"
       ]
