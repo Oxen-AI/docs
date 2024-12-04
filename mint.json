@@ -35,14 +35,15 @@
     },
     {
       "name": "HTTP API",
-      "url": "http-api"
+      "url": "http-api",
+      "openapi": "https://7e538bfd39b1.ngrok.app/oxen-server-openapi-spec.json"
     }
   ],
   "anchors": [
     {
       "name": "Documentation",
       "icon": "book-open-cover",
-      "url": "/"
+      "url": "https://docs.oxen.ai"
     },
     {
       "name": "Blog",
@@ -128,7 +129,8 @@
         {
           "group": "Repository",
           "pages": [
-            "http-api/repositories/get_repos",
+            "http-api/repositories/list_repos",
+            "http-api/repositories/get_repo",
             "http-api/repositories/create_repo",
             "http-api/repositories/update_repo",
             "http-api/repositories/delete_repo"
@@ -144,27 +146,20 @@
         {
           "group": "Commits",
           "pages": [
-            "http-api/commits/get_commit"
+            "http-api/commits/list_commits"
           ]
         },
         {
           "group": "Files",
           "pages": [
-            "http-api/files/list_files",
-            "http-api/files/download_file",
-            "http-api/files/upload_file"
+            "http-api/files/list_entries",
+            "http-api/files/download_file"
           ]
         },
         {
           "group": "Data Frames",
           "pages": [
             "http-api/data_frames/get_data_frame"
-          ]
-        },
-        {
-          "group": "Workspaces",
-          "pages": [
-            "http-api/workspaces/list_workspaces"
           ]
         },
         {

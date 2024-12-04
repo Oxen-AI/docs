@@ -1,11 +1,6 @@
 ---
 title: "Delete Repository"
-api: "DELETE https://hub.oxen.ai/api/repos/:namespace/:repo_name"
+openapi: "DELETE /api/repos/{namespace}/{repo_name}"
 ---
 
-Delete a repo.
-
-```bash
-curl -X DELETE -H "Authorization: Bearer $TOKEN" \
-    https://hub.oxen.ai/api/repos/:namespace
-```
+Delete a repository by namespace and name.

@@ -26,3 +26,11 @@ cd ~/Code/docs/oxen-release/oxen
 # Generate the markdown for the classes
 ~/Code/docs/generate-python-docs.sh ~/Code/docs/
 ```
+
+## OpenAPI Spec Generation
+
+We need a file that has the OpenAPI spec in JSON format that is served from a public server.
+
+```
+postman2openapi ~/Downloads/OxenServer\ API.postman_collection.json -f json | jq '.servers = [{"url": "https://hub.oxen.ai"}, {"url": "http://localhost:3001"}]' > ~/Code/Oxen/OxenHub/priv/static/api/oxen-server-openapi-spec.json
+```
