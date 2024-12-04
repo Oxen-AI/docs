@@ -1,36 +1,6 @@
 ---
 title: "Create Repository"
-api: "POST https://hub.oxen.ai/api/repos"
+openapi: "POST /api/repos"
 ---
 
-Parameters:
-- name: repo name
-- description: describe the repo
-- is_public(optional): private repo by default 
-- files(optional): create repository with files 
-- organization(optional): create repository in an organization
-
-To create a repo, a valid token in the header is needed.
-## Example Request
-
-```bash
-curl -X POST -H "Authorization: Bearer $TOKEN" \
-    https://hub.oxen.ai/api/repos \
-    --data '{
-    "name": "repo",
-    "description": "Aut dolore voluptatibus dolore adipisci iusto iste non quis. Voluptas ut eos sit error. Illo tempore error ipsam occaecati eos quia incidunt. Dicta labore quaerat amet autem sequi voluptas amet voluptate aut. Voluptatem et sunt vel quo amet quos cupiditate modi quasi.",
-    "is_public": true,
-    "organization_id": "{{org_id}}",
-    "files": [
-        {
-            "path": "README.md",
-            "contents": "# My Repo Name",
-            
-            "user": {
-                "name": "oxen",
-                "email": "oxen@oxen.ai"
-            }
-        }
-    ]
-}'
-```
+Create a new repository.
