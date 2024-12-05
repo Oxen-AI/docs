@@ -3,6 +3,8 @@ title: '🧠 RAG: Extracting Answers'
 description: '**Retrieval-Augmented Generation (RAG)** is the process of retrieving information that the AI does not have in its training data to answer a question. RAG is usually used to answer customer service questions, analyze legal documents, answer internal business questions, and much more.'
 ---
 
+This is part 2 of a 2 step tutorial. Here you'll learn how to use RAG to extract answers from a dataset assuming search is already done. For the first step of embedding your data, check out [🔢 RAG Generating Embeddings](/use-cases/rag-embeddings).
+
 
 A couple of examples would be:
 >
@@ -10,13 +12,11 @@ A couple of examples would be:
 >
 >If a business wants to know "What was the total amount of the invoice?" the LLM would access the invoice, comb through it to get the total amount, and answer with the correct number.
 
-This tutorial will show you how to use RAG to extract answers from a dataset, which is typically the second step in a RAG pipeline after vector search.
-
 Evaluating how well your model can extract answers is an important part of building a robust pipeline. You may want to tweak your prompt, evaluate different models, and continuously add new data to your dataset to improve the quality of your results.
 
 ## Upload Your Dataset
 
-Open the dataset you want to work with. You can find an example dataset on our [explore page](https://www.oxen.ai/explore) or if you want to follow along with the example, you can clone the [RAG Answer Extraction dataset](https://www.oxen.ai/ox/RAG-Answer-Extraction) we are using.
+Open the dataset you want to work with. You can find an example dataset on our [explore page](https://www.oxen.ai/explore) or if you want to follow along with the example, you can clone the [RAG Answer Extraction dataset](https://www.oxen.ai/ox/RAG-Answer-Extraction) we are using. We're going to use a subset of the 50,000 rows available (that would take foreverrr) so if you want to do the same go to the branch 'train_data_subset'.
 
 ```bash
 oxen clone https://hub.oxen.ai/ox/RAG-Answer-Extraction --all
@@ -34,7 +34,7 @@ oxen push origin main
 
 ## Create a Model Evaluation
 
-Open the file you want to run sentiment analysis on and press the glowing button with the rocket🚀 on it at the top right of the screen.
+Open the file you want to use and press the glowing button with the rocket 🚀 on it at the top right of the screen.
 
 
 <img
@@ -47,7 +47,7 @@ Open the file you want to run sentiment analysis on and press the glowing button
 
 You will now find Oxen's model evaluation feature. This is where you can choose a model, set up a prompt, and choose the output column.
 
-In this case, we are using OpenAI's [o1-Mini](https://platform.openai.com/docs/models/gpt-4o) and passing in the question and data related to the question in the prompt:
+In this case, we are using OpenAI's [o1-Mini](https://www.oxen.ai/explore/models#openai) and passing in the question and data related to the question in the prompt:
 
 ```
 Answer the following question only using facts from the facts given after the question.
@@ -61,7 +61,7 @@ Facts:
 {context}
 ```
 
-After selecting your model, give your evaluation a name, fill in your prompt with the values you want to pass to the model and decide if you want to run a quick sample on a few rows or click "Next" to finalize the sentiment analysis preparations:
+After selecting your model, give your evaluation a name, fill in your prompt with the values you want to pass to the model and decide if you want to run a quick sample on a few rows or click "Next" to finalize the answer extracting preparations:
 
 <img
   className="block"
@@ -72,7 +72,7 @@ After selecting your model, give your evaluation a name, fill in your prompt wit
 ## Select Your Destination
 
 After clicking "Next" once your sample has been completed, you will see a commiting page. Here you will decide the target branch, target path, and if you would like to commit instantly or after reviewing the analysis.
-In this case, I am creating and saving to a new branch called "01-mini_tests". Once you've decided, click "Run Evaluation".
+In this case, a new branch called `o1-mini_tests` is being created and storing the changes. Once you've decided, click "Run Evaluation".
 
 <img
   className="block"
@@ -104,7 +104,7 @@ Once done, you will see your new dataset committed to the branch you specified. 
   alt="RMOD completed"
 />
 
-You can then search through the sentiment evaluation immediately with Oxen's Text2SQL feature. In this case, we are finding all the rows where the answer and prediction columns have different results to check o1-mini's work.
+You can then search through the outcomes immediately with Oxen's Text2SQL feature. In this case, we are finding all the rows where the answer and prediction columns have different results to check o1-mini's work.
 
 ```
 give me all the rows where the answer column and prediction columns are different

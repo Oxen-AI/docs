@@ -84,6 +84,7 @@
       "pages": [
         "use-cases/sentiment-analysis",
         "use-cases/text-translation",
+        "use-cases/rag-embeddings",
         "use-cases/rag-extracting-answers"
       ]
     },
@@ -94,7 +95,8 @@
         "concepts/compare",
         "concepts/schemas",
         "concepts/remote-repos",
-        "concepts/workspaces"
+        "concepts/workspaces",
+        "concepts/feature-updates"
       ]
     },
     {
