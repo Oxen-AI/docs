@@ -1,0 +1,21 @@
+---
+title: '🔍 Embeddings'
+description: 'Embeddings are a way to represent data as vectors in a way that can be used for machine learning tasks like search, clustering, classification, and more.'
+---
+
+```bash
+# Create a workspace
+oxen workspace create -n index_titles
+
+# List workspaces
+oxen workspace list
+
+# Add embeddings to a dataframe
+oxen workspace df index train_0_100_embeddings.parquet -w 446d6e6c-1a3a-4645-9e6e-fc79759f6cc0 -c title_embeddings --embeddings
+
+# Query embeddings
+oxen workspace df get train_0_50000_embeddings.parquet -w 446d6e6c-1a3a-4645-9e6e-fc79759f6cc0 --sort-by-embedding-query "title = 'Stanton, California'" --embedding-column title_embeddings
+
+# Query embeddings with SQL
+oxen workspace df get train_0_50000_embeddings.parquet -w 446d6e6c-1a3a-4645-9e6e-fc79759f6cc0 --sql "SELECT * FROM df WHERE title = 'Stanton, California'"
+```

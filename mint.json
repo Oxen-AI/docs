@@ -35,14 +35,15 @@
     },
     {
       "name": "HTTP API",
-      "url": "http-api"
+      "url": "http-api",
+      "openapi": "https://hub.oxen.ai/oxen-server-openapi-spec.json"
     }
   ],
   "anchors": [
     {
       "name": "Documentation",
       "icon": "book-open-cover",
-      "url": "/"
+      "url": "https://docs.oxen.ai"
     },
     {
       "name": "Blog",
@@ -112,7 +113,7 @@
         "python-api/diff/text_diff",
         "python-api/init",
         "python-api/repositories",
-        "python-api/local_repo",
+        "python-api/repo",
         "python-api/remote_repo",
         "python-api/workspace"
       ]
@@ -120,14 +121,47 @@
     {
       "group": "HTTP API",
       "pages": [
-        "http-api/files",
+        "http-api/index",
+        {
+          "group": "Namespaces",
+          "pages": [
+            "http-api/namespaces/list_namespaces"
+          ]
+        },
         {
           "group": "Repository",
           "pages": [
-            "http-api/repositories/get_repos",
+            "http-api/repositories/list_repos",
+            "http-api/repositories/get_repo",
             "http-api/repositories/create_repo",
             "http-api/repositories/update_repo",
             "http-api/repositories/delete_repo"
+          ]
+        },
+        {
+          "group": "Branches",
+          "pages": [
+            "http-api/branches/get_branches",
+            "http-api/branches/create_branch"
+          ]
+        },
+        {
+          "group": "Commits",
+          "pages": [
+            "http-api/commits/list_commits"
+          ]
+        },
+        {
+          "group": "Files",
+          "pages": [
+            "http-api/files/list_entries",
+            "http-api/files/download_file"
+          ]
+        },
+        {
+          "group": "Data Frames",
+          "pages": [
+            "http-api/data_frames/get_data_frame"
           ]
         },
         {
