@@ -1,0 +1,110 @@
+---
+title: '💡 Summarization'
+description: '**Summarization** is using AI to summarizing a long piece of text. This is most commonly used with long legal documents, textbooks and educational texts, manuals, etc.'
+---
+
+This tutorial will show you how to summarize legal documents using the Model Inference feature. We will be using [o1-preview](https://www.oxen.ai/explore/models#openai) but check out the [Models Page](https://www.oxen.ai/explore/models) to see which model works best for you. 
+
+## Upload Your Dataset
+
+Open the dataset you want to work with. You can find a dataset on our [explore page](https://www.oxen.ai/explore) or you can clone the [Legal Documents Dataset](https://www.oxen.ai/mathias/law_data) we are using.
+
+```bash
+oxen clone https://hub.oxen.ai/ox/law_data --all
+export OXEN_USERNAME="your-username" # NOTE: Replace with your username
+oxen create-remote --name "$OXEN_USERNAME/law_data"
+oxen config --set-remote origin "$OXEN_USERNAME/law_data"
+oxen push origin main
+```
+
+<img
+  className="block"
+  src="/images/law_data.png"
+  alt="Oxen.ai Law Data"
+/>
+
+## Create a Model Evaluation
+
+Open the file you want to summarize and press the glowing button with the rocket 🚀 on it at the top right of the screen.
+
+
+<img
+  className="block"
+  src="/images/rmod_button.png"
+  alt="Where to find model evaluations"
+/>
+
+## Setting Up The Evaluation
+
+You will now find Oxen's model evaluation feature. This is where you can choose the model, write a prompt, and name the output column.
+
+In this case, we are using OpenAI's [o1-preview](https://www.oxen.ai/explore/models#openai) and passing in the Text column we want to summarize.
+
+If you'd like more tips on how to effectively prompt, check out our [blogs on prompting](https://www.oxen.ai/blog/the-prompt-report-part-1-a-systematic-survey-of-prompting-techniques)!
+
+<img
+  className="block"
+  src="/images/summarize_prompt.png"
+  alt="RMOD Summarize example"
+/>
+
+After selecting your model, give your evaluation a name and decide if you want to run a quick sample on a few rows or click "Next" to finalize the embedding preparations. 
+Here's an example of a finished sample:
+
+<img
+  className="block"
+  src="/images/sample_emb.png"
+  alt="RMOD Sample Embedding"
+/>
+
+## Select Your Destination
+
+After clicking "Next" once your sample has been completed, you will see a commiting page. Here you will decide the target branch, target path, and if you would like to commit instantly or after reviewing the embeddings.
+In this case, a new branch called "Embeddings" is being created and storing the changes. Once you've decided, click "Run Evaluation".
+
+<img
+  className="block"
+  src="/images/saved_file_path.png"
+  alt="RAG commit page"
+/>
+
+## Monitor Your Evaluation
+
+Feel free to grab a coffee, close the tab, or do something else while the evaluation is running. Your trusty Oxen Herd will be running in the background.
+
+While the evaluation is running you will see a progress bar showing how many rows have been completed, an update of how many tokens are being used, and how expensive the run is so far.
+
+
+<img
+  className="block"
+  src="/images/rag_status.png"
+  alt="RMOD processing bar"
+/>
+
+## Next Steps
+
+Once done, you will see your new dataset committed to the branch you specified. If you don't like the results, don't worry! Under the hood, all the runs are versioned so you can always revert to or compare to a previous version.
+
+
+<img
+  className="block"
+  src="/images/rag_final.png"
+  alt="RMOD completed"
+/>
+
+You can then search through the outcomes immediately with Oxen's Text2SQL feature. In this case, we are finding all the rows where the answer and prediction columns have different results to check o1-mini's work.
+
+```
+give me all the rows where the answer column and prediction columns are different
+
+```
+
+<img
+  className="block"
+  src="/images/RAG_t2s.png"
+  alt="Text2SQL example"
+/>
+
+You can also run queries such as *"Give me all the rows with invoice in the query column?"* or *"How many rows have May 3rd in the answer column?"*
+
+Congratulations! You've just seen how easy it is to use RAG on your data. Feel free to tweak your prompt, model, or dataset and see how the results change.

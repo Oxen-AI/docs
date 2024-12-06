@@ -1,0 +1,149 @@
+---
+title: '🐂 Feature Updates'
+description: 'Welcome to [Oxen.ai](http://Oxen.ai) Feature Updates! We send out an email blast with all new/updated features, bug fixes, and more relating to your Oxen experience. If you want to opt in (and get cool invites to our [weekly arXiv Dives](https://www.youtube.com/watch?v=MXWlB9nDAFU&list=PL4cf-Px41sse4XjSXRbOVylx09wTKTAkG&index=30)), [click here](https://www.oxen.ai/community)!
+This page will have a complete update with demos, photos, and top feature updates/bug squashes.'
+---
+
+
+## December 03, 2024
+
+### Feature Updates
+
+- Oxen has eyes 👀! [Multi-modal models](https://www.oxen.ai/explore/models) now available for evaluations:
+
+<img
+  className="block"
+  src="/images/oxen-has-eyes.png"
+  alt="Oxen vision models"
+/>
+
+- [Forking repos](https://www.oxen.ai/HuggingFaceH4/ultrafeedback_binarized) now supported (button on top right, next to clone)
+    
+<img
+  className="block"
+  src="/images/forking-button.png"
+  alt="Forking button"
+/>
+
+- The new [Models Page](https://www.oxen.ai/explore/models) shows all new models we support for [Model Inference](/features/models)
+    
+<img
+  className="block"
+  src="/images/models-page.png"
+  alt="Models Page"
+/>
+
+- Now able to `oxen add`, `oxen add schema` metadata, and `oxen rm` in a subdirectory
+- Enabled pushing, pulling, merging of [subtrees](/features/workspaces)
+    
+<img
+  className="block"
+  src="/images/partial-clone-page.png"
+  alt="Partial Clone Page"
+/>
+ 
+- Modified Evaluations to use input/output types in place of existing type
+
+### Fixed Bugs
+
+- Versions page no longer gives an error when no branches on the repo
+- Fixed some image rendering bugs in dataframe
+- Refactored oxen CLI commands for windows
+- Evaluations now handle long file names overflow in list view
+- Unknown column data type won't break the server on column add
+- Data Frame json content now matches in side bar vs column
+
+## August 13, 2024
+
+### Feature Updates
+
+- CLI // Added command to easily set schema metadata render type
+
+e.g. Instead of
+```
+oxen schemas add data.csv -c 'file' -m '{
+
+"_oxen": {
+
+    "render": {
+
+        "func": "image"
+
+        }
+
+    }
+
+}'
+```
+Now we have:
+
+```
+oxen schemas render data.csv -c 'file' -t 'image'
+```
+
+or...
+
+```
+oxen schemas add data.csv -c 'file' --render 'image’
+```
+
+- CLI // unlocks branch with a `oxen branch unlock` command
+- Hub // Expose RepositoryCategory APIs
+- UI // Delete, edit, and add row on dataframe
+- UI // View staged DF diffs
+- UI // Add instructions to the README to clone repo, add first file, and push back
+
+### Fixed Bugs
+
+- Image name with ~ at the end are now rendering in UI
+- We fixed collaborator email button (couldn’t be clicked)
+- Hub // now renders images on branches
+- UI // filenames overflow in data frame image viewer
+- UI // Toggle column visibility in Dataframe (view & edit modes)
+- UI // Remove the left side redundant NLP query
+
+## June 7, 2024
+
+### Feature Updates
+
+- Hub // Added header for the HEAD commit ID of file
+- UI // cell navigation in data-frame is now bi-directional with row details pane
+- Added collaborator CTA
+
+### Fixed Bugs
+
+- UI // edit repository name was retuning 404
+- CLI // Fixed oxen config global setting so that we don't require a local .oxen repository
+- UI // Text area in Row Details pane should not let content overflow
+
+## May 7, 2024
+
+### Feature Updates
+
+- Improved S3 account validation when linking AWS account
+- Added search for users when adding collaborators
+- Improved large file download in UI
+- Docs// Add HTTP endpoints to public developer docs
+
+### Fixed Bugs
+
+- Improved error handling on reading invalid parquet, jsonl, csv, arrow files
+- Fixed search by organization
+
+## April 26, 2024
+
+### Feature Updates
+
+- Improved flow to improve claiming an unclaimed organization
+- Oxen blog now respects syntax highlighting when importing code from ghost
+- Collaborated images are all one fixed image size
+- Added careers link to bottom of mobile website
+- Can now load large data-frames on Oxen server
+
+### Fixed Bugs
+
+- Fixed binary in data-frame response on Oxen-server
+- Fixed upload paths for Windows CLI
+- Fixed inaccurate GB storage UI
+- Large files are now downloading fully
+- Saved compare name as typing or on unfocus instead of just enter
