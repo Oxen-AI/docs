@@ -170,11 +170,7 @@
         {
           "group": "Workspaces",
           "pages": [
-            "http-api/workspaces/list_workspaces",
-            "http-api/workspaces/create_workspace",
-            "http-api/workspaces/index_dataframe",
-            "http-api/workspaces/query_dataframe",
-            "http-api/workspaces/index_embeddings"
+            "http-api/workspaces/list_workspaces"
           ]
         },
         {
