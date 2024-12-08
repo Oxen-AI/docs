@@ -77,7 +77,8 @@
         "features/data_frames",
         "features/models",
         "features/labeling_data",
-        "features/text2sql"
+        "features/text2sql",
+        "features/embeddings"
       ]
     },
     {
@@ -155,6 +156,7 @@
           "group": "Files",
           "pages": [
             "http-api/files/list_entries",
+            "http-api/files/file_metadata",
             "http-api/files/download_file"
           ]
         },
@@ -162,6 +164,12 @@
           "group": "Data Frames",
           "pages": [
             "http-api/data_frames/get_data_frame"
+          ]
+        },
+        {
+          "group": "Workspaces",
+          "pages": [
+            "http-api/workspaces/list_workspaces"
           ]
         },
         {

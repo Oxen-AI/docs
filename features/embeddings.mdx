@@ -3,19 +3,154 @@ title: '🔍 Embeddings'
 description: 'Embeddings are a way to represent data as vectors in a way that can be used for machine learning tasks like search, clustering, classification, and more.'
 ---
 
+## Nearest Neighbor Search
+
+Nearest neighbor search is a common use case for embeddings. This allows you to sort data by similarity to a query. This is useful for search and retrieval tasks where you can't rely on exact string matches.
+
+For example, say you want to find all the rows that have a similar title to "Wild yak".
+
+```bash
+# Query with nearest neighbor search
+oxen workspace df get embeddings.parquet \
+  --find-embedding-where "title = 'Wild yak'" \
+  --sort-by-similarity-to title_embeddings \
+  --workspace-id $WORKSPACE_ID
+```
+
+This is a advanced command that we will break down step by step in the next sections. For now, let's look at the results.
+
+![Nearest Neighbor Search](/images/title_embeddings_sorted.png)
+
+If you look in the `title` column, you will see all of the top results have something in common with wild animals. The forth result is Musk ox, which is another large bovine animal 🐂. In the `similarity` column, you will see a score between 0 and 1 that indicates how similar the two vectors are.
+
+## How it works
+
+Embeddings are an abstraction of the data, represented as vectors of floating point numbers. You can perform efficient nearest neighbor searches on these vectors to see which vectors are closest to your query.
+
+To give you an idea of how this works, let's break down each one of the parameters in the command above.
+
+### --find-embedding-where
+
+The first step is to pick a row that we want to find similar rows to. We want to pluck out the embedding for this row so that we can compare all of the other rows to it.
+
+This parameter is simply the SQL `WHERE` clause that we use to filter the rows that we want to find similar rows to.
+
+```sql
+SELECT title_embeddings FROM df WHERE title = 'Wild yak'
+```
+
+You can use any SQL `WHERE` clause here, using an id or primary key is a good idea. If there are multiple rows that match the query, the embeddings will be averaged together.
+
+
+### --sort-by-similarity-to
+
+In the above example, you will see that we need to specify the column that contains the embeddings. This parameter tells oxen which column to grab the embeddings from as well as the column to sort by.
+
+For example, if we want to sort on the `title_embeddings` column the underlying SQL that is generated will look like this.
+
+```sql
+SELECT *, array_cosine_similarity(title_embeddings, [0.1, 0.2 ...]::FLOAT[512]) as similarity FROM df ORDER BY similarity DESC
+```
+
+### --workspace-id
+
+The workspace is where the embeddings are stored. It contains the vector index that is used for the nearest neighbor search.
+
+## Putting it all together
+
+If you don't already have a dataset with embeddings, either [compute them yourself](/use-cases/rag-embeddings) or download one of our [example datasets](https://www.oxen.ai/ox/Simple-Wikipedia-50k/file/main/title_embeddings.parquet).
+
+![Embeddings](/images/title_embeddings.png)
+
+Grab these precomputed embeddings with the following command.
+
+```bash
+# Download the embeddings
+oxen download https://hub.oxen.ai/ox/Simple-Wikipedia-50k title_embeddings.parquet -o embeddings.parquet
+```
+
+### Create a workspace
+
+In order to use embeddings, you will need to create a [workspace](/concepts/workspaces). Workspaces allow you to query and edit versions of the data without immediately committing your changes. Oxen uses [DuckDB](https://duckdb.org/2024/05/03/vector-similarity-search-vss.html) to store your embeddings and data.
+
+If you haven't already created an Oxen repository, you should create a new one to get started.
+
+```bash
+# Create a new directory for your repository
+mkdir MyRepo
+cd MyRepo
+
+# Create a new Oxen repository
+oxen init
+
+# Add the embeddings to the repository
+mv ../embeddings.parquet .
+oxen add embeddings.parquet
+
+# Commit the data to the repository
+oxen commit -m "Add embeddings"
+```
+
+Now we have our embeddings committed to the repository. We can create a workspace to query the data. A workspace is based off of a branch and links directly to a version of a dataset at a commit. If you want to learn more about workspaces, check out the [workspaces](/concepts/workspaces) page.
+
+Create a workspace and give it a name.
+
 ```bash
 # Create a workspace
 oxen workspace create -n index_titles
+```
 
+To see which workspaces have been created, you can list them.
+
+```bash
 # List workspaces
 oxen workspace list
-
-# Add embeddings to a dataframe
-oxen workspace df index train_0_100_embeddings.parquet -w 446d6e6c-1a3a-4645-9e6e-fc79759f6cc0 -c title_embeddings --embeddings
-
-# Query embeddings
-oxen workspace df get train_0_50000_embeddings.parquet -w 446d6e6c-1a3a-4645-9e6e-fc79759f6cc0 --sort-by-embedding-query "title = 'Stanton, California'" --embedding-column title_embeddings
-
-# Query embeddings with SQL
-oxen workspace df get train_0_50000_embeddings.parquet -w 446d6e6c-1a3a-4645-9e6e-fc79759f6cc0 --sql "SELECT * FROM df WHERE title = 'Stanton, California'"
 ```
+
+### Index your embeddings
+
+Once you have a workspace, you can then index any `csv`, `parquet`, or `jsonl` file into DuckDB. If the file contains embeddings, you can specify the column name with the embeddings.
+
+```bash
+# Add embeddings to a dataframe
+oxen workspace df index embeddings.parquet --embeddings \
+  --column title_embeddings \
+  --workspace-id $WORKSPACE_ID
+```
+
+Note: `oxen df index` without the `--embeddings` flag will just index the data into DuckDB so that you can query it with SQL, but will not enable nearest neighbor search. When you pass in the `--embeddings` flag, oxen will automatically run the following SQL commands to enable nearest neighbor search.
+
+```sql
+INSTALL vss;
+LOAD vss;
+SET hnsw_enable_experimental_persistence = true;
+```
+
+### Query embeddings
+
+Now that the embeddings have been indexed, you can query them.
+
+```bash
+oxen workspace df get embeddings.parquet \
+  --find-embedding-where "title = 'Wild yak'" \
+  --sort-by-similarity-to title_embeddings \
+  --workspace-id $WORKSPACE_ID
+```
+
+This will string together all the underlying SQL queries and do the heavy lifting to give you a set of sorted results.
+
+![Nearest Neighbor Search](/images/title_embeddings_sorted.png)
+
+### Query with SQL
+
+Now that the data is indexed into a workspace, you can also query the data with raw SQL.
+
+```bash
+oxen workspace df get embeddings.parquet \
+  --sql "SELECT * FROM df WHERE title = 'Musk ox'" \
+  -w $WORKSPACE_ID
+```
+
+Workspaces are power tools once you wrap your head around them. They allow you to build some really interesting exploratory data analysis, labeling workflows, and search pipelines. Using nearest neighbor search with embeddings is a great way to sift through large datasets, prototype RAG pipelines, and test different embeddings models.
+
+If you want to see the underlying HTTP request that is being made, checkout the [API reference](/http-api/workspaces).
