@@ -5,9 +5,15 @@ This page will have a complete update with demos, photos, and top feature update
 ---
 
 
-## December 24, 2024
+## December 26, 2024
 
 ### Feature Updates
+
+- New onboading flow to upload files
+<img
+  className="block"
+  src="/images/onboard.png"
+  alt="Oxen Owner View"/>
 
 - New starred repos section in your profile
 <img
@@ -15,35 +21,22 @@ This page will have a complete update with demos, photos, and top feature update
   src="/images/star-repo.png"
   alt="Oxen Owner View"/>
 
-- The list of collaborators for a repo now marks the repo owners with a crown
-
+- You can now save [inference results](/features/models) to a different file name
 <img
   className="block"
-  src="/images/repo-owner.png"
-  alt="Oxen Owner View"
-/>
-
-- There is now an "add Collaborators" Button
-
-<img
-  className="block"
-  src="/images/add-collabs.png"
+  src="/images/new_file_name.png"
   alt="Oxen Owner View"/>
 
+- We now have APIs to sort your dataframes by [embedding cosine similarity](/features/embeddings)
+- The list of collaborators for a repo now marks the repo owners with a crown
+- There is now an "add Collaborators" Button
 - You can now see all the people who have starred your repo in the stargazer view
 - We removed "Versions" Tab from Top Nav
 - There is now a Commit button directly on the data frame 
 - You now have more advanced commit options for [editable data frames](/features/labeling_data)
 - We now list [workspace API](/http-api/list_workspaces) so admins can see all workspaces
 - There is now a Create Query API
-- Cleaned up repo card to account for more categories
-
-<img
-  className="block"
-  src="/images/repo-card.png"
-  alt="Oxen Owner View"
-/>
-
+- Auto detect image file type with Rust for images that do not end in .png or .jpg
 
 ### Fixed Bugs
 - Dataframe json content now matches in side bar and column
@@ -53,6 +46,10 @@ This page will have a complete update with demos, photos, and top feature update
 - Improved image rendering in dataframes
 - Found a better place for "add row" button in [editable df](/features/labeling_data)
 - Fixed repo validation to allow "."
+- Cleaned up repo card to account for more categories
+- We now have a fallback "download" if we cannot render in the UI
+
+
 ## December 03, 2024
 
 ### Feature Updates
