@@ -135,8 +135,8 @@ As we'll see below, Oxen is faster than DVC even if you drop the overhead of net
 I like to call this one, "F' it, let's just create a tarball and upload it to S3". Easy to remember, easy to use, but not very efficient nor effective when it comes to iterating on data.
 
 ```
-time tar czf imagenet-images.tar.gz images/ # Executed in  114.66 mins
-time aws s3 cp imagenet-images.tar.gz s3://imagenet-tarball # Executed in  27.13 mins
+tar czf imagenet-images.tar.gz images/ # Executed in  114.66 mins
+aws s3 cp imagenet-images.tar.gz s3://imagenet-tarball # Executed in  27.13 mins
 ```
 
 Total Time: `2 hours 21 mins`
@@ -150,12 +150,42 @@ Oxen smartly compresses and creates smaller data chunks behind the scenes while 
 You may be asking yourself, well if the tarball takes so long to create, why not just use the `aws s3 cp` command with the `--recursive` flag?
 
 ```
-time aws s3 cp --recursive images s3://imagenet-files # Executed in  168.28 mins
+aws s3 cp --recursive images s3://imagenet-files # Executed in  168.28 mins
 ```
 
 Total Time: `2 hours 48 mins`
 
 This is a bit slower overall than the tarball method, and you still have the same problems of iterating on and viewing the data. By looking at the logs, it looks like the s3 sdk is syncing the files one by one, which accounts for the slowness.
+
+## Huggingface-CLI ()
+
+Another popular choice for storing datasets, Hugging Face hosts several variations of ImageNet on its hub. For the repositories that contain the full 1 million+ files, they appear to all compress the data into small amounts of tarballs or parquet files. For example, [ILSVRC/imagenet-1k](https://huggingface.co/datasets/ILSVRC/imagenet-1k), their most popular ImageNet, stores the images as 5 ~30-GB tarballs, which we tested.        
+
+Steps to reproduce:
+
+```
+tar czf imagenet-images.tar.gz images/ # Executed in  114.66 mins
+split -n 5 -d imagenet-images.tar.gz imagenet-part.tar.gz # Executed in  minutes
+huggingface-cli upload --repo-type dataset user/repo ./ImageNet/data # Executed in  18.40 minutes
+```
+
+Total Time: `2 hours 48 mins`
+
+Huggingface-CLI offers strong performance uploading the data, but this requires you to extract and then recompress every time you want to make an update. 
+
+Hugging Face is not suitable for repositories with millions of individual image files. Attempting to upload the uncompressed folder was slow and resulted in an inaccessible repo.
+
+Steps to reproduce:
+
+```
+
+```
+
+Total Time : `3 hour and 44 mins`
+
+While the data was uploaded to Huggingface and counted against the storage quota, the repo displayed as being empty and was therefore unusable.
+
+Notably, Hugging Face uses [Git under the hood](https://huggingface.co/docs/hub/storage-limits) to version data, which might explain storage limits like disallowing files over 50-GB and storing >100k files in a repo.
 
 ## Oxen.ai (~1 hour and 30 mins)
 
@@ -173,8 +203,84 @@ oxen push # Executed in 49.11 mins
 
 Total Time 🔥: `1 hour and 30 mins`
 
-If you are curious how Oxen works under the hood, we are working on a detailed technical writeup that dives into the Merkle tree, block-level deduplication, and more [here](https://oxen-ai.github.io/).
+# Pulling the data
+
+With our data stored remotely, we next benchmarked pulling it from B (remote storage) to A (local machine). 
+
+## DVC + S3 Backend ()
+
+As Git-LFS was prohibitively slow uploading ImageNet, we began this testing with DVC
+
+Steps to reproduce: 
+
+```
+
+```
+
+Total Time: ``
+
+## DVC DataChain + S3 Backend (6 hours and 50 minutes)
+
+DVC's DataChain is a recent software that facillitates the processing and versioning of data in machine learning workflows. In general, it's used to avoid copying large amounts of data, which might explain its performance in the benchmark.
+
+Script to reproduce:
+
+```
+import numpy
+from datachain.lib.dc import DataChain
+
+def main():
+    images = DataChain.from_storage("s3://ImageNet-1k")
+    images.export_files("new_images")
+
+if _name main()
+__main__":
+```
+
+Total time: `6 hours and 50 minutes`
+
+With the minimal Python script, DataChain underperforms the base DVC. This makes sense, seeing that pulling large datasets falls outside DataChain's advertised scope. 
+
+## Huggingface-CLI (~1 hour)
+
+As with the upload, Huggingface-cli performs strongly for the download itself, but is bogged down by the need to unpack the tarballs
+
+Steps to reproduce:
+
+```
+huggingface-cli download user/ImageNet --include "data/train_images_*.tar.gz" --repo-type dataset # Executed in  17.58 mins
+for i in {0..4}; do
+    tar -xzf "train_images_$i.tar.gz" 
+done # Executed in 40.07 mins
+```
+
+Total time: `1 hour`
+
+## Oxen.ai (33 minutes)
+
+Oxen.ai also hosts [ImageNet](https://www.oxen.ai/datasets/ImageNet-1k) on the OxenHub, and pulling it to your local machine can be accomplished with a single `oxen download` 
+
+Steps to reproduce:
+
+```
+oxen download https://hub.oxen.ai/datasets/ImageNet-1k images/train # Executed in  33.23 mins
+```
+Total Time 🔥: `33 minutes`
+
+Unlike with Hugging Face, this will download the uncompressed files, saving the cost of extracting them from tarballs or parquet. You can also clone the repository to have the whole thing in a local oxen repo.
+
+Steps to reproduce:
+
+```
+oxen clone https://hub.oxen.ai/datasets/ImageNet-1k # Executed in  75.14 mins
+```
+Total Time 🔥: `33 minutes`
+
+To learn about how Oxen works under the hood, we are working on a detailed technical writeup that dives into the Merkle tree, block-level deduplication, and more [here](https://oxen-ai.github.io/).
+
 
 # Try Oxen.ai for Yourself
 
 If you would like to try Oxen.ai for yourself, you can sign up for a free account [here](https://oxen.ai/). All of the code is open source and available on [GitHub](https://github.com/oxen-ai/oxen-release). Let us know what you think by joining our [Discord](https://discord.com/invite/s3tBEn7Ptg).
+
+
