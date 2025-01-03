@@ -4,6 +4,48 @@ description: 'Welcome to [Oxen.ai](http://Oxen.ai) Feature Updates! We send out 
 This page will have a complete update with demos, photos, and top feature updates/bug squashes.'
 ---
 
+## January 3, 2025
+
+### Feature Updates
+
+- You can now run [Nearest Neighbor Search](/features/embeddings) on your embeddings! ([Heres](https://www.oxen.ai/ox/nfl-player-contact-detection) the repo)
+<img
+  className="block"
+  src="/images/embedding_example.png"
+  alt="Embedding example"/>
+
+- We now have full page view for deeper data exploration! (Just click the expand button on the right)
+<img
+  className="block"
+  src="/images/full_page_view.png"
+  alt="Data types improvement"/>
+
+- Improved the onboarding flow for mobile (DW, I'll charge my phone soon)
+<img
+  className="block mx-auto rounded-lg"
+  src="/images/mobile_onboarding.jpeg"
+  alt="Onboarding flow for mobile"
+  width="200"/>
+
+- We've improved the data type tags so all jsonl, csv, and parquet files are now tagged as tabular
+- Updated `oxen download` command to be updated syntax
+- Added options to select tabular files or upload a new file
+- Added pytests to CI
+- We've added a python method to sort by [input embedding](/features/embeddings)
+- Added [Bytez Models](https://www.oxen.ai/explore/models)
+- Added a new field on evals for unit price in API
+- A repo is created when a file is uploaded
+- We moved error banner in [Model Inference](/features/models) above the dataframe
+- We've added to the [HTTP API docs](/http-api)
+- You can now ask Text2SQL queries throught the workspaces API and [download results](/http-api/workspaces/query_dataframe)
+
+### Fixed Bugs
+- Shout out [Mund](https://www.oxen.ai/MundVetter) for letting us know Model Inference crashed and wasn't showing the commit message. Fixed! :)
+- when an ID is `0`, the sidbar will not show `Null` but `0`
+- The target branch stays the target branch when running an evaluation from the completed evaluation page (it used to use the evaluation ID as the target branch)
+- You can now have several [workspaces](/concepts/workspaces) with the same commit ID
+- Columns used to sometimes show up twice...not anymore:)
+
 
 ## December 26, 2024
 
@@ -79,7 +121,7 @@ This page will have a complete update with demos, photos, and top feature update
 />
 
 - Now able to `oxen add`, `oxen add schema` metadata, and `oxen rm` in a subdirectory
-- Enabled pushing, pulling, merging of [subtrees](/features/workspaces)
+- Enabled pushing, pulling, merging of [subtrees](/features/workspaces#remote-workspaces)
     
 <img
   className="block"
