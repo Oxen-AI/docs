@@ -87,7 +87,8 @@
         "use-cases/sentiment-analysis",
         "use-cases/text-translation",
         "use-cases/rag-embeddings",
-        "use-cases/rag-extracting-answers"
+        "use-cases/rag-extracting-answers",
+        "use-cases/synthetic-data-gen"
       ]
     },
     {

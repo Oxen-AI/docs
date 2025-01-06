@@ -1,36 +1,37 @@
 ---
-title: ' Synthetic Data Gen'
-description: '**Retrieval-Augmented Generation (RAG)** is the process of retrieving information that the AI does not have in its original training data to answer a question. To set up RAG, the first step is to embed the data you would like to retrieve. Basically, convert the text, image, or other data to a number the AI knows how to find and retrieve when asked a question which relates to the text, image, etc.'
+title: '🤖 Synthetic Data Gen'
+description: '**Synthetic Data Generation** is using a model to generate data. Instead of just using naturally collected data, you can use a model to augment your data by adding examples, columns, etc. or even generate a completely new dataset.'
 ---
 
 
 A couple of examples would be:
 >
->If you're a student and want to reference a textbook for any questions you have to your AI, you would use RAG to ensure it answers based on the textbook.
+>You use a model to generate a dataset of 1000 invoices with random amounts and dates. This data can then be used for training a model to predict the total amount of an invoice.
 >
->If a business wants to know "What was the total amount of the invoice?" the LLM would access the invoice, comb through it to get the total amount, and answer with the correct number.
+>You generate a bunch of images with [GPT-4o](https://www.oxen.ai/explore/models#openai) and then ask the model to describe the images in detail. You then use the synthetic labeled image data to train another model to generate images.
 
-This tutorial will show you how to create embeddings to use for RAG using the [Simple Wikipedia Dataset](https://www.oxen.ai/ox/Simple-Wikipedia-50k), for the second step in a RAG pipeline, check out [🧠 RAG Extracting Answers](/use-cases/rag-extracting-answers).
-
-Choosing the right embedding model is a vital part of building a robust pipeline. Check out the [Models Page](https://www.oxen.ai/explore/models) to evaluate different models and continuously add new, clean data to your dataset to improve the quality of your results.
+In this tutorial, we will show you how we created a dataset of different roles in a company, a product they would use, and then a question and response about the product. This can be used for customer support, a chatbot, etc.
+>
+We used [Llama 3.1 70B](https://www.oxen.ai/explore/models#fireworks) and [Hermes 3 70B](https://www.oxen.ai/explore/models#lambda) to compare the quality of the synthetic data. Check out the [Models Page](https://www.oxen.ai/explore/models) to try different models.
 
 ## Upload Your Dataset
 
-Open the dataset you want to work with. You can find a dataset on our [explore page](https://www.oxen.ai/explore) or you can clone the [Simple Wikipedia Dataset](https://www.oxen.ai/ox/Simple-Wikipedia-50k) we are using. Since running a 50k row dataset would take forever, we created a subset of the first 1k rows which you can find in the `train_data_subset` branch.
+[Push the dataset](/getting-started/learn-the-basics#create-repository) you want to work with, clone the [Synthetic Persona Customer Support Dataset](https://www.oxen.ai/datasets/Synthetic-Persona-Customer-Support) we generated, or you can find a dataset on our [explore page](https://www.oxen.ai/explore).
 
 
 ```bash
-oxen clone https://hub.oxen.ai/ox/Simple-Wikipedia-50k --all
+
+oxen clone https://hub.oxen.ai/ox/Synthetic-Persona-Customer-Support --all
 export OXEN_USERNAME="your-username" # NOTE: Replace with your username
-oxen create-remote --name "$OXEN_USERNAME/Simple-Wikipedia-50k"
-oxen config --set-remote origin "$OXEN_USERNAME/Simple-Wikipedia-50k"
+oxen create-remote --name "$OXEN_USERNAME/Synthetic-Persona-Customer-Support"
+oxen config --set-remote origin "$OXEN_USERNAME/Synthetic-Persona-Customer-Support"
 oxen push origin main
 ```
 
 <img
   className="block"
-  src="/images/repo_emb.png"
-  alt="Oxen.ai Simple Wiki Repo"
+  src="/images/final_llama_data_2.png"
+  alt="Final Llama Dataset"
 />
 
 ## Create a Model Evaluation
@@ -44,74 +45,117 @@ Open the file you want to embed and press the glowing button with the rocket �
   alt="Where to find model evaluations"
 />
 
-## Setting Up The Evaluation
+## First Evaluation Run
 
 You will now find Oxen's model evaluation feature. This is where you can choose the evaluation type, a model, and name the output column.
 
-In this case, we are using OpenAI's [Text Embedding 3 - Small](https://www.oxen.ai/explore/models#openai) and passing in the Text column we want to embed.
+We're starting with Meta's [Llama 3.1 70B](https://www.oxen.ai/explore/models#fireworks) and generating a product for each role.
+We are passing the roles (and uuid to see if it has an effect on the output) in the prompt.
+Give the evaluation a name and run a quick sample on a few rows to see if the prompt works.
 
 <img
   className="block"
-  src="/images/synthetic-data-eval.png"
-  alt="Eval for synthetic Data"
+  src="/images/synthetic_data_prompt_page.png"
+  alt="creating the product for each role"
 />
+The product generation prompt:
+```bash
 
-After selecting your model, give your evaluation a name and decide if you want to run a quick sample on a few rows or click "Next" to finalize the embedding preparations. 
-Here's an example of a finished sample with the new column:
+{uuid} Imagine you are a {role} what is the most necessary software product you need for your job?
+Just answer with the product. No extra words or descriptions.
+```
 
+## Select File Destination
+
+After tweaking your prompt and getting a sample you like, click "Next" to decide the destination of the finished evaluation.
+Decide the target branch, target path, and if you would like to commit instantly or after reviewing the outcome. Once you've decided, click "Run Evaluation".
 <img
   className="block"
-  src="/images/sample_emb.png"
-  alt="RMOD Sample Embedding"
-/>
-
-## Select Your Destination
-
-After clicking "Next" once your sample has been completed, you will see a commiting page. Here you will decide the target branch, target path, and if you would like to commit instantly or after reviewing the embeddings. Once you've decided, click "Run Evaluation".
-
-<img
-  className="block"
-  src="/images/saved_file_path.png"
-  alt="RAG commit page"
+  src="/images/syn_data_file_path.png"
+  alt="Eval commit page"
 />
 
 ## Monitor Your Evaluation
 
 Feel free to grab a coffee, close the tab, or do something else while the evaluation is running. Your trusty Oxen Herd will be running in the background.
-
+>
 While the evaluation is running you will see a progress bar showing how many rows have been completed, an update of how many tokens are being used, and how expensive the run is so far.
-
 
 <img
   className="block"
-  src="/images/rag_embedding_status.png"
-  alt="RMOD processing bar"
+  src="/images/syn_data_rmod_completing.png"
+  alt="Eval processing bar"
+/>
+
+
+
+## Repeat, Repeat, Repeat
+
+
+After generating the product, we then generated a question and response about each product with the same process. 
+Just click "View file at commit" to see the updated dataset.
+
+<img
+  className="block"
+  src="/images/synth_file_at_commit.png"
+  alt="Finished file location"
+/>
+
+Then repeat the whole process for the question and response generation with these prompts:
+```bash
+
+{uuid} Imagine you are {role}, what is a question you would ask about {product}?
+Answer with only the question, nothing else.
+```
+
+```bash
+
+{uuid} Imagine you are {role} what is a response you would give to the question about {product}?
+Only give the response, nothing else:
+
+{question}
+```
+You'll then get a full dataset ready for fine-tuning, training, or anything you'd like.
+<img
+  className="block"
+  src="/images/final_llama_data_2.png"
+  alt="Final Llama Dataset"
 />
 
 ## Next Steps
 
-Once done, you will see your new dataset committed to the branch you specified. If you don't like the results, don't worry! Under the hood, all the runs are versioned so you can always revert to or compare to a previous version.
-
+Once done, you will see your new dataset committed to the branch you specified. If you don't like the results, don't worry! Under the hood, all the [runs are versioned](https://www.oxen.ai/datasets/Synthetic-Persona-Customer-Support/commits/main) so you can always revert to or compare to a previous version.
+>
+We also generated some synthetic data with [Hermes 3 70B](https://www.oxen.ai/explore/models#lambda) to compare the quality, you can see the results [here](https://www.oxen.ai/datasets/Synthetic-Persona-Customer-Support).
+We found that the Llama 3.1 70B model was better overall. Hermes 3 70B was very chatty, just returned nothing at times, and, perhaps because of the length of the output, took extremely long (over 2:45 hours for response gen in comparison to 28 mins for Llama 3.1 70B) to complete.
 
 <img
   className="block"
-  src="/images/rag_emb_final.png"
-  alt="RMOD completed"
+  src="/images/hermes-super-long.png"
+  alt="Hermes Run"
 />
 
-You can then search through the outcomes immediately with Oxen's Text2SQL feature. In this case, we are finding all the rows where the answer and prediction columns have different results to check o1-mini's work.
+You can search through the outcomes with Oxen's [Text2SQL search](https://www.oxen.ai/datasets/Synthetic-Persona-Customer-Support/file/main/llama-v.3.1-70B.jsonl?query_id=0554627f-6da2-4d31-97a8-2181cb790b7d).
+In this case, we looked for all the rows where the product column was MATLAB to compare the quality of the question and response.
 
-```
-give me all the rows where the answer column and prediction columns are different
-
+```bash 
+show me MATLAB in product column
 ```
 
 <img
   className="block"
-  src="/images/RAG_t2s.png"
+  src="/images/MATLAB-demo-t2s.png"
   alt="Text2SQL example"
 />
 
-You can also run queries such as *"Give me all the rows with invoice in the query column?"* or *"How many rows have May 3rd in the answer column?"*
+You can also edit the SQL query to deepen your search.
+<img
+  className="block"
+  src="/images/edit-sql-example.png"
+  alt="Text2SQL edit sql example"
+/>
 
-Congratulations! You've just seen how easy it is to use RAG on your data. Feel free to tweak your prompt, model, or dataset and see how the results change.
+
+You can also run queries such as *"Give me all the rows with "Researcher" in the role column?"* or *"How many rows have "Jira" in the product column?"*
+
+Congratulations! You've just seen how easy it is to generate synthetic data. [Let us know](https://discord.com/invite/s3tBEn7Ptg) how your experience was and if you have any improvement requests.
