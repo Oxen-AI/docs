@@ -5,22 +5,22 @@ description: '**Summarization** is using AI to summarizing a long piece of text.
 
 This tutorial will show you how to summarize legal documents using the Model Inference feature. We will be using [o1-preview](https://www.oxen.ai/explore/models#openai) but check out the [Models Page](https://www.oxen.ai/explore/models) to see which model works best for you. 
 
-## Upload Your Dataset
+## Find or Upload your Dataset
 
-Open the dataset you want to work with. You can find a dataset on our [explore page](https://www.oxen.ai/explore) or you can clone the [Legal Documents Dataset](https://www.oxen.ai/mathias/law_data) we are using.
+Open the dataset you want to work with. You can find a dataset on our [explore page](https://www.oxen.ai/explore) or you can clone the [multi_news Dataset](https://www.oxen.ai/datasets/multi_news) we are cloning.
 
 ```bash
-oxen clone https://hub.oxen.ai/ox/law_data --all
+oxen clone https://hub.oxen.ai/datasets/multi_news --all
 export OXEN_USERNAME="your-username" # NOTE: Replace with your username
-oxen create-remote --name "$OXEN_USERNAME/law_data"
-oxen config --set-remote origin "$OXEN_USERNAME/law_data"
+oxen create-remote --name "$OXEN_USERNAME/multi_news"
+oxen config --set-remote origin "$OXEN_USERNAME/multi_news"
 oxen push origin main
 ```
 
 <img
   className="block"
-  src="/images/law_data.png"
-  alt="Oxen.ai Law Data"
+  src="/images/multi_news_dataset.png"
+  alt="Oxen.ai multi news dataset"
 />
 
 ## Create a Model Evaluation
