@@ -24,3 +24,12 @@ curl -X GET -H "Authorization: Bearer $TOKEN" \
     https://hub.oxen.ai/api/repos/my-namespace/my-private-repo/file/main/secret_image.png \
     -o ~/Downloads/secret_image.png
 ```
+
+## Pre-signed URLs
+
+You can also get a pre-signed URL for a file. This is useful if you want to download a file from a web page.
+
+```bash
+curl -X GET -H "Authorization: Bearer $TOKEN" \
+    https://hub.oxen.ai/api/repos/my-namespace/my-private-repo/file/presigned_url/main/secret_image.png
+```
