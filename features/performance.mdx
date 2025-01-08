@@ -159,17 +159,16 @@ This is a bit slower overall than the tarball method, and you still have the sam
 
 ## Huggingface-CLI ()
 
-Another popular choice for storing datasets, Hugging Face hosts several variations of ImageNet on its hub. For the repositories that contain the full 1 million+ files, they appear to all compress the data into small amounts of tarballs or parquet files. For example, [ILSVRC/imagenet-1k](https://huggingface.co/datasets/ILSVRC/imagenet-1k), their most popular ImageNet, stores the images as 5 ~30-GB tarballs, which we tested.        
+Another popular choice for storing datasets, Hugging Face hosts several variations of ImageNet on its hub. For the repositories that contain the full 1 million+ files, they all compress the data into a small number of tarballs or parquet files. For example, [ILSVRC/imagenet-1k](https://huggingface.co/datasets/ILSVRC/imagenet-1k), their most popular ImageNet, stores the images as 5 ~30-GB tarballs, which we tested.        
 
 Steps to reproduce:
 
 ```
-tar czf imagenet-images.tar.gz images/ # Executed in  114.66 mins
-split -n 5 -d imagenet-images.tar.gz imagenet-part.tar.gz # Executed in  minutes
-huggingface-cli upload --repo-type dataset user/repo ./ImageNet/data # Executed in  18.40 minutes
+tar czf imagenet-images.tar.gz images/ # Executed in 114.66 mins
+huggingface-cli upload --repo-type dataset user/repo ./ImageNet/data # Executed in 18.40 minutes
 ```
 
-Total Time: `2 hours 48 mins`
+Total Time: `2 hours 13 mins`
 
 Huggingface-CLI offers strong performance uploading the data, but this requires you to extract and then recompress every time you want to make an update. 
 
@@ -178,7 +177,7 @@ Hugging Face is not suitable for repositories with millions of individual image 
 Steps to reproduce:
 
 ```
-
+huggingface-cli upload --repo-type dataset user/repo ./ImageNet/data # Executed in 224.23 minutes
 ```
 
 Total Time : `3 hour and 44 mins`
@@ -206,18 +205,6 @@ Total Time 🔥: `1 hour and 30 mins`
 # Pulling the data
 
 With our data stored remotely, we next benchmarked pulling it from B (remote storage) to A (local machine). 
-
-## DVC + S3 Backend ()
-
-As Git-LFS was prohibitively slow uploading ImageNet, we began this testing with DVC
-
-Steps to reproduce: 
-
-```
-
-```
-
-Total Time: ``
 
 ## DVC DataChain + S3 Backend (6 hours and 50 minutes)
 
@@ -256,7 +243,7 @@ done # Executed in 40.07 mins
 
 Total time: `1 hour`
 
-## Oxen.ai (33 minutes)
+## Oxen.ai (28 minutes)
 
 Oxen.ai also hosts [ImageNet](https://www.oxen.ai/datasets/ImageNet-1k) on the OxenHub, and pulling it to your local machine can be accomplished with a single `oxen download` 
 
@@ -265,16 +252,18 @@ Steps to reproduce:
 ```
 oxen download https://hub.oxen.ai/datasets/ImageNet-1k images/train # Executed in  33.23 mins
 ```
-Total Time 🔥: `33 minutes`
+Total Time 🔥: `28 minutes`
 
-Unlike with Hugging Face, this will download the uncompressed files, saving the cost of extracting them from tarballs or parquet. You can also clone the repository to have the whole thing in a local oxen repo.
+Unlike with Hugging Face, this will download the uncompressed files, saving the cost of extracting them from tarballs or parquet. Taking that into account, Oxen is the fastest tool on the market. You can also clone the repository to have the whole thing in a local oxen repo.
 
 Steps to reproduce:
 
 ```
 oxen clone https://hub.oxen.ai/datasets/ImageNet-1k # Executed in  75.14 mins
 ```
-Total Time 🔥: `33 minutes`
+Total Time 🔥: `1 hour 15 minutes`
+
+This is slower, but will provide you with a version-controlled ImageNet repo rather than just the raw files.
 
 To learn about how Oxen works under the hood, we are working on a detailed technical writeup that dives into the Merkle tree, block-level deduplication, and more [here](https://oxen-ai.github.io/).
 
