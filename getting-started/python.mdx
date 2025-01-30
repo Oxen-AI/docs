@@ -239,6 +239,25 @@ else:
 repo.pull()
 ```
 
+## OxenFS (fsspec Integration)
+
+OxenFS allows you to conveniently read and write files through a Pythonic file interface.
+
+```python
+import oxen
+
+fs = oxen.OxenFS("openai", "gsm8k")
+with fs.open("gsm8k_test.parquet") as f:
+    content = f.read()
+```
+
+It also integrates directly with third-party libraries like Pandas like this:
+```python
+df = pd.read_parquet("oxen://openai:gsm8k@main/gsm8k_test.parquet")
+```
+
+See the full documentation for [OxenFS](/python-api/oxen_fs).
+
 ## Branching
 
 Branching is a powerful feature of Oxen that allows you to create a named version of your data without affecting the original version. This is useful when you want to experiment with your changes affecting the original version.
