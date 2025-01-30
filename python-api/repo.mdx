@@ -67,7 +67,7 @@ Will create a .oxen folder to store all the versions and metadata.
 ## clone
 
 ```python
-def clone(url: str, branch: str = "main", shallow=False, all=False)
+def clone(url: str, branch: str = "main", all=False)
 ```
 
 Clone repository from a remote url.
@@ -78,8 +78,6 @@ Clone repository from a remote url.
   The url of the remote repository. ex) https://hub.oxen.ai/ox/chatbot
 - `branch` - `str`
   The name of the branch to clone. Default: main
-- `shallow` - `bool`
-  Whether to do a shallow clone or not. Default: False
 - `all` - `bool`
   Whether to clone the full commit history or not. Default: False
 
@@ -275,4 +273,14 @@ def current_branch()
 ```
 
 Returns the current branch.
+
+<a id="oxen.repo.Repo.merge"></a>
+
+## merge
+
+```python
+def merge(branch: str)
+```
+
+Merge a branch into the current branch.
 

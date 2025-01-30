@@ -7,7 +7,7 @@
 ## get\_repo
 
 ```python
-def get_repo(name: str, host: str = "hub.oxen.ai")
+def get_repo(name: str, host: str = "hub.oxen.ai", scheme: str = "https")
 ```
 
 Get a RemoteRepo object for the specified name. For example 'ox/CatDogBBox'.
@@ -111,7 +111,7 @@ print(df.head())
 ## \_\_init\_\_
 
 ```python
-def __init__(path: str,
+def __init__(repo_id: str,
              host: str = "hub.oxen.ai",
              revision: str = "main",
              scheme: str = "https")
@@ -121,7 +121,7 @@ Create a new RemoteRepo object to interact with.
 
 **Arguments**:
 
-- `path` - `str`
+- `repo_id` - `str`
   Name of the repository in the format 'namespace/repo_name'.
   For example 'ox/chatbot'
 - `host` - `str`
@@ -227,6 +227,85 @@ Download a file or directory from the remote repo.
   the same path as `src`
 - `revision` - `str | None`
   The branch or commit id to download. Defaults to `self.revision`
+
+<a id="oxen.remote_repo.RemoteRepo.add"></a>
+
+## add
+
+```python
+def add(src: str, dst_dir: Optional[str] = "", branch: Optional[str] = None)
+```
+
+Stage a file to a workspace in the remote repo.
+
+**Arguments**:
+
+- `src` - `str`
+  The path to the local file to upload
+- `dst_dir` - `str | None`
+  The directory to upload the file to. If None, will upload to the root directory.
+- `branch` - `str | None`
+  The branch to upload the file to. Defaults to `self.revision`
+  
+
+**Returns**:
+
+  [Workspace](/python-api/workspace)
+
+<a id="oxen.remote_repo.RemoteRepo.status"></a>
+
+## status
+
+```python
+def status()
+```
+
+Get the status of the workspace.
+
+<a id="oxen.remote_repo.RemoteRepo.commit"></a>
+
+## commit
+
+```python
+def commit(message: str)
+```
+
+Commit the workspace to the remote repo.
+
+<a id="oxen.remote_repo.RemoteRepo.upload"></a>
+
+## upload
+
+```python
+def upload(src: str,
+           commit_message: str,
+           file_name: Optional[str] = None,
+           dst_dir: Optional[str] = "",
+           branch: Optional[str] = None)
+```
+
+Upload a file to the remote repo.
+
+**Arguments**:
+
+- `src` - `str`
+  The path to the local file to upload
+- `file_name` - `str | None`
+  The name of the file to upload. If None, will use the name of the file in `src`
+- `dst_dir` - `str | None`
+  The directory to upload the file to. If None, will upload to the root directory.
+- `branch` - `str | None`
+  The branch to upload the file to. Defaults to `self.revision`
+
+<a id="oxen.remote_repo.RemoteRepo.metadata"></a>
+
+## metadata
+
+```python
+def metadata(path: str)
+```
+
+Get the metadata for a file in the remote repo.
 
 <a id="oxen.remote_repo.RemoteRepo.log"></a>
 

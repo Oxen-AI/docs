@@ -12,7 +12,6 @@ def clone(repo_id: str,
           host: str = "hub.oxen.ai",
           branch: str = "main",
           scheme: str = "https",
-          shallow=False,
           all=False)
 ```
 
@@ -31,8 +30,6 @@ Clone a repository
   The branch name id to clone. Defaults to 'main'
 - `scheme` - `str`
   The scheme to use. Defaults to 'https'
-- `shallow` - `bool`
-  Whether to do a shallow clone or not. Default: False
 - `all` - `bool`
   Whether to clone the full commit history or not. Default: False
 
