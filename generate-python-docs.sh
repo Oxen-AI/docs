@@ -8,18 +8,19 @@ list=(
     "auth"
     "clone"
     "config"
+    "data_frame"
     "df_utils"
     "diff/diff"
-    "diff/tabular_diff"
     "diff/line_diff"
+    "diff/tabular_diff"
     "diff/text_diff"
     "init"
-    "repo"
+    "oxen_fs"
     "remote_repo"
+    "repo"
     "streaming_dataset"
     "user"
     "workspace"
-    "data_frame"
 )
 
 # Loop over the list

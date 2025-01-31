@@ -85,7 +85,7 @@ Will throw an error if the data frame does not exist.
 ## size
 
 ```python
-def size() -> (int, int)
+def size() -> tuple[int, int]
 ```
 
 Get the size of the data frame. Returns a tuple of (rows, columns)
@@ -160,6 +160,93 @@ Insert a single row of data into the data frame.
 **Returns**:
 
   The id of the row that was inserted.
+
+<a id="oxen.data_frame.DataFrame.where_sql_from_dict"></a>
+
+## where\_sql\_from\_dict
+
+```python
+def where_sql_from_dict(attributes: dict, operator: str = "AND") -> str
+```
+
+Generate the SQL from the attributes.
+
+<a id="oxen.data_frame.DataFrame.select_sql_from_dict"></a>
+
+## select\_sql\_from\_dict
+
+```python
+def select_sql_from_dict(attributes: dict,
+                         columns: Optional[List[str]] = None) -> str
+```
+
+Generate the SQL from the attributes.
+
+<a id="oxen.data_frame.DataFrame.get_embeddings"></a>
+
+## get\_embeddings
+
+```python
+def get_embeddings(attributes: dict, column: str = "embedding") -> List[float]
+```
+
+Get the embedding from the data frame.
+
+<a id="oxen.data_frame.DataFrame.is_nearest_neighbors_enabled"></a>
+
+## is\_nearest\_neighbors\_enabled
+
+```python
+def is_nearest_neighbors_enabled(column="embedding")
+```
+
+Check if the embeddings column is indexed in the data frame.
+
+<a id="oxen.data_frame.DataFrame.enable_nearest_neighbors"></a>
+
+## enable\_nearest\_neighbors
+
+```python
+def enable_nearest_neighbors(column: str = "embedding")
+```
+
+Index the embeddings in the data frame.
+
+<a id="oxen.data_frame.DataFrame.query"></a>
+
+## query
+
+```python
+def query(sql: Optional[str] = None,
+          find_embedding_where: Optional[dict] = None,
+          embedding: Optional[list[float]] = None,
+          sort_by_similarity_to: Optional[str] = None,
+          page_num: int = 1,
+          page_size: int = 10)
+```
+
+Sort the data frame by the embedding.
+
+<a id="oxen.data_frame.DataFrame.nearest_neighbors_search"></a>
+
+## nearest\_neighbors\_search
+
+```python
+def nearest_neighbors_search(find_embedding_where: dict,
+                             sort_by_similarity_to: str = "embedding")
+```
+
+Get the nearest neighbors to the embedding.
+
+<a id="oxen.data_frame.DataFrame.get_by"></a>
+
+## get\_by
+
+```python
+def get_by(attributes: dict)
+```
+
+Get a single row of data by attributes.
 
 <a id="oxen.data_frame.DataFrame.get_row_by_id"></a>
 
