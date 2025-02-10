@@ -54,6 +54,7 @@ workspace.commit("Adding my image to the workspace.")
 def __init__(repo: "RemoteRepo",
              branch: str,
              workspace_id: Optional[str] = None,
+             workspace_name: Optional[str] = None,
              path: Optional[str] = None)
 ```
 
@@ -69,6 +70,10 @@ Create a new Workspace.
 - `workspace_id` - `Optional[str]`
   The workspace id to create the workspace from.
   If left empty, will create a unique workspace id.
+- `workspace_name` - `Optional[str]`
+  The name of the workspace. If left empty, the workspace will have no name.
+- `path` - `Optional[str]`
+  The path to the workspace. If left empty, the workspace will be created in the root of the remote repo.
 
 <a id="oxen.workspace.Workspace.status"></a>
 
@@ -138,4 +143,14 @@ Commit the workspace to a branch
   the workspace was created from.
 - `should_delete` - `bool`
   Whether to delete the workspace after the commit.
+
+<a id="oxen.workspace.Workspace.delete"></a>
+
+## delete
+
+```python
+def delete()
+```
+
+Delete the workspace
 

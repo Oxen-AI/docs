@@ -21,10 +21,10 @@ Navigate into your local [oxen-release](https://github.com/Oxen-AI/oxen-release)
 
 ```
 # Nagivate into the oxen-release codebase where the python doc strings are
-cd ~/Code/docs/oxen-release/oxen
+cd ~/Code/Oxen/oxen-release/oxen
 
 # Generate the markdown for the classes
-~/Code/docs/generate-python-docs.sh ~/Code/docs/
+~/Code/Oxen/docs/generate-python-docs.sh ~/Code/Oxen/docs/
 ```
 
 ## OpenAPI Spec Generation
