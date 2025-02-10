@@ -114,6 +114,7 @@
         "python-api/diff/line_diff",
         "python-api/diff/text_diff",
         "python-api/init",
+        "python-api/oxen_fs",
         "python-api/repositories",
         "python-api/repo",
         "python-api/remote_repo",

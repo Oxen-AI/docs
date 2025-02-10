@@ -66,6 +66,22 @@ wget https://github.com/Oxen-AI/Oxen/releases/latest/download/oxen.exe
 
 Binaries are coming for other Linux distributions in the future. [In the meanwhile, you can build from source.](#building-from-source)
 
+### Docker
+
+We build many binary wheels for the Python library (and we're working on adding more), but if your container image doesn't work with one of our binary wheels, pip will have to build it from source. Here is a minimal Dockerfile for a Debian-based image that installs the prerequisites for building the Oxen library from source:
+
+```Dockerfile
+FROM python:3.12-slim-bookworm
+
+RUN apt update
+RUN apt install -y clang pkg-config libssl-dev curl
+
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+RUN pip install oxenai
+```
+
 ## Server Install
 
 The Oxen server binary can be deployed where ever you want to store and backup your data. It is an HTTP server that the client communicates with to enable collaboration.
