@@ -206,6 +206,23 @@ Lists the contents of a directory in the remote repo.
 - `page_size` - `int`
   The number of items to return per page. Default: 100
 
+<a id="oxen.remote_repo.RemoteRepo.scan"></a>
+
+## scan
+
+```python
+def scan(directory: Optional[str] = None, page_size: int = 100)
+```
+
+Generator over the contents of a directory in the remote repo
+
+**Arguments**:
+
+- `directory` - `str`
+  The directory to list. If None, will list the root directory
+- `page_size` - `int`
+  The number of items to return per page. Default: 100
+
 <a id="oxen.remote_repo.RemoteRepo.download"></a>
 
 ## download
@@ -307,6 +324,44 @@ def metadata(path: str)
 
 Get the metadata for a file in the remote repo.
 
+<a id="oxen.remote_repo.RemoteRepo.file_exists"></a>
+
+## file\_exists
+
+```python
+def file_exists(path: str, revision: str = None)
+```
+
+Check if a file exists in the remote repo.
+
+**Arguments**:
+
+- `path` - `str`
+  The path to the file to check
+- `revision` - `str`
+  The revision to check against, defaults to `self.revision`
+
+<a id="oxen.remote_repo.RemoteRepo.file_has_changes"></a>
+
+## file\_has\_changes
+
+```python
+def file_has_changes(local_path: str,
+                     remote_path: str = None,
+                     revision: str = None)
+```
+
+Check if a local file has changed compared to a remote revision
+
+**Arguments**:
+
+- `local_path` - `str`
+  The local path to the file to check
+- `remote_path` - `str`
+  The remote path to the file to check, will default to `local_path` if not provided
+- `revision` - `str`
+  The revision to check against, defaults to `self.revision`
+
 <a id="oxen.remote_repo.RemoteRepo.log"></a>
 
 ## log
@@ -326,6 +381,16 @@ def branches()
 ```
 
 List all branches for a remote repo
+
+<a id="oxen.remote_repo.RemoteRepo.list_workspaces"></a>
+
+## list\_workspaces
+
+```python
+def list_workspaces()
+```
+
+List all workspaces for a remote repo
 
 <a id="oxen.remote_repo.RemoteRepo.get_branch"></a>
 
@@ -373,6 +438,23 @@ and switch to it
 
 - `branch` - `str`
   The name to assign to the created branch
+
+<a id="oxen.remote_repo.RemoteRepo.merge"></a>
+
+## merge
+
+```python
+def merge(base_branch: str, head_branch: str)
+```
+
+Merge the head branch into the base branch on the remote repo.
+
+**Arguments**:
+
+- `base_branch` - `str`
+  The base branch to merge into
+- `head_branch` - `str`
+  The head branch to merge
 
 <a id="oxen.remote_repo.RemoteRepo.namespace"></a>
 
