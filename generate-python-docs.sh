@@ -9,6 +9,7 @@ list=(
     "clone"
     "config"
     "data_frame"
+    "datasets"
     "df_utils"
     "diff/diff"
     "diff/line_diff"

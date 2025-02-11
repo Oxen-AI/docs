@@ -107,17 +107,18 @@
       "pages": [
         "python-api/index",
         "python-api/clone",
-        "python-api/df_utils",
         "python-api/data_frame",
+        "python-api/datasets",
+        "python-api/df_utils",
         "python-api/diff/diff",
-        "python-api/diff/tabular_diff",
         "python-api/diff/line_diff",
+        "python-api/diff/tabular_diff",
         "python-api/diff/text_diff",
         "python-api/init",
         "python-api/oxen_fs",
-        "python-api/repositories",
-        "python-api/repo",
         "python-api/remote_repo",
+        "python-api/repo",
+        "python-api/repositories",
         "python-api/workspace"
       ]
     },
