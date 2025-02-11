@@ -4,18 +4,37 @@ description: 'Welcome to [Oxen.ai](http://Oxen.ai) Feature Updates! We send out 
 This page will have a complete update with demos, photos, and top feature updates/bug squashes.'
 ---
 
+## February 10, 2025
+
+### Feature Updates
+ - `oxen init`, `oxen-server start`, and `oxen help` now have some getting started info on client and server initialization
+![oxen init](/images/getting-started-CLI.png)
+
+#### By Customer Request
+- [@isaac_pivotal](https://www.oxen.ai/isaac_pivotal) requested the audio player in the UI can now be scrolled through
+![audio player](/images/audio_player.png)
+- [@isaac_pivotal](https://www.oxen.ai/isaac_pivotal) requested a [Python API](getting-started/python) to upload bytes
+- [@isaac_pivotal](https://www.oxen.ai/isaac_pivotal) requested to add a generator for paginating over a file list
+- We've added a method to fetch file metadata (hash, etc) through our [Python SDK](/getting-started/python)
+- [@Mirascope](https://www.oxen.ai/Mirascope) requested named [workspaces](/concepts/workspaces)
+- We've added a method for checking if local file matches remote file in the [Python SDK](/getting-started/python)
+
+### Fixed Bugs
+- We now have better handling on commit view in the UI
+
 ## January 31, 2025
 
 ### Feature Updates
 - We've added [Deepseek models](https://www.oxen.ai/explore/models?developers=deepseek) to Open.AI!
 ![Deepseek models](/images/deepseek_models.png)
 
-- You can now download SQL query results within [workspaces](/http-api/workspaces/query_dataframe) and [UI](/features/web_hub)!
+- New [Model Description Page](https://www.oxen.ai/ai/models/deepseek-r1)! Click on any model in [The Model Page](https://www.oxen.ai/ai/models) to learn what to use it for, stats, and compare prices.
+![Model Description Page](/images/model_description_page.png)
+
+- You can now download your SQL query results within [workspaces](/http-api/workspaces/query_dataframe) and in the [UI](/features/web_hub)!
 ![download SQL query results](/images/download_sql_query.png)
 
 - We cleaned up [Oxen.ai's](https://www.oxen.ai) navigation bar:)
-![new-headers](/images/new_headers.png)
-
 - The [Query Data Frame API](/http-api/workspaces/query_dataframe) now accepts a query id for downloading a SQL queried data frame in a workspace 
 - As per request (shout out [Paul](https://www.oxen.ai/paul)), we've support PUT to a file with a `based-on` revision passed in
 - Added --remote to `oxen workspace list`
