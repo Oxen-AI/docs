@@ -377,14 +377,12 @@ With Oxen you do not need to download the entire dataset to your local machine. 
 <CodeGroup>
 
 ```bash CLI
-oxen clone http://hub.oxen.ai/ox/CatDogBBox --shallow
-cd CatDogBBox
-oxen remote download annotations/test.csv
+oxen download ox/CatDogBBox annotations/test.csv
 ```
 
 ```python Python
 from oxen import RemoteRepo
-repo = RemoteRepo("http://hub.oxen.ai/ox/CatDogBBox")
+repo = RemoteRepo("ox/CatDogBBox")
 repo.download("annotations/test.csv")
 ```
 

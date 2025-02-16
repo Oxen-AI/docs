@@ -39,7 +39,7 @@ Note that full clones and partial clones end up using ~2x the storage. This is b
 If you have no intention of making any changes to the data, the easiest way to interact with a subset is to download a read only copy. This can be done with the `oxen download` command.
 
 ```bash
-oxen download https://hub.oxen.ai/ox/Flowers images/roses
+oxen download ox/Flowers images/roses
 ```
 
 Under the hood, this command does not download any of the history, content addressed version files, or other metadata. It simply downloads the data unpacks it to a local directory.
