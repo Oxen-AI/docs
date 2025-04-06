@@ -3,4 +3,74 @@ title: 🗺️ Explore, Process, and Version Data
 description: Explore, process, and version data with your favorite tools
 ---
 
-TODO
+Example Notebook: [Explore, Process, and Version Data](https://www.oxen.ai/datasets/MarimoNotebooks/file/main/explore_data.py)
+
+## Downloading Data
+
+The [RemoteRepo](/python-api/remote_repo) class allows you to download arbitrary files from a remote repository. To see more options check out the [Python Docs](/python-api/remote_repo).
+
+```python
+from oxen import RemoteRepo
+repo = RemoteRepo("datasets/GettingStarted")
+repo.download("tables/llm_fine_tune.jsonl")
+```
+
+Or you can directly download a file into a [Pandas DataFrame](https://pandas.pydata.org/) using HTTP or the FSSpec format:
+
+```python
+import pandas as pd
+# URL Format: https://hub.oxen.ai/api/repos/{username}/{repo_name}/file/{revision}/{file_path}
+url = "https://hub.oxen.ai/api/repos/datasets/GettingStarted/file/main/tables/llm_fine_tune.jsonl"
+
+# FSSpec Format: oxen://{username}:{repo_name}@{revision}/{path}
+url = "oxen://datasets:GettingStarted@main/tables/llm_fine_tune.jsonl"
+df = pd.read_json(url, lines=True)
+```
+
+## Exploring Data
+
+Use whatever tools you want to explore your data. For example you can use Matplotlib to plot the distribution of the `model` column:
+
+```python
+import matplotlib.pyplot as plt
+
+category_counts = data_frame['model'].value_counts()
+category_counts.plot(kind='bar')
+plt.title('Model Distribution')
+plt.xlabel('Models')
+plt.ylabel('Counts')
+plt.gca()
+```
+
+![Model Distribution](/images/marimo-model-distribution.png)
+
+## Cleaning Data
+
+Use pandas to clean or process the data. For example you can remove the `Internal Thoughts` from the `response` column:
+
+```python
+df['response'] = df['response'].replace(to_replace=r'^(Internal Thoughts|\*Internal Thoughts:\*|\*\*Internal Thoughts:\*\*).*', value='', regex=True)
+```
+
+## Versioning Data
+
+You can then either write the data back directly with `pandas` or with the `RemoteRepo` class.
+
+With pandas (auto commit message):
+
+```python
+df.write_parquet("oxen://datasets:GettingStarted@main/tables/llm_fine_tune.jsonl", index=False)
+```
+
+With RemoteRepo and a commit message
+
+```python
+from oxen import RemoteRepo
+repo = RemoteRepo("datasets/GettingStarted")
+repo.add("llm_fine_tune.jsonl", dst="tables")
+repo.commit("Cleaned 'Internal thoughts' string from the start of the response column")
+```
+
+
+
+
