@@ -72,13 +72,11 @@
       "group": "Key Features",
       "pages": [
         "features/performance",
-        "features/workspaces",
-        "features/web_hub",
-        "features/data_frames",
-        "features/models",
+        "features/exploring_data",
         "features/labeling_data",
-        "features/text2sql",
-        "features/embeddings"
+        "features/collaboration",
+        "features/notebooks",
+        "features/models"
       ]
     },
     {

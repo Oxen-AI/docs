@@ -5,47 +5,52 @@ description: 'Oxen is a lightning fast data version control system for structure
 
 <img alt="Oxen.ai Moon Ox Hero" classname="block" src="/images/MoonOx.png" />
 
-Oxen.AI's interface mirrors git, but shines in many areas that git or git-lfs fall short. Oxen is built from the ground up for data, and is optimized to handle large datasets, and large files.
+Oxen.ai's shines at workflows and data sizes that git or git-lfs fall short. The interface is inspired by git, so that it is easy to learn, but has a few core differences. Oxen is built from the ground up to handle [large datasets](/features/performance) with many files or large csvs, parquet files, or other large binary blobs.
+
+# 💾 Oxen Versioning 101
+
+The first thing you need to know about Oxen.ai is that allows to add files directly to the remote without pulling any data locally. If you want to make a contribution to a dataset with [1 Million Files](/features/performance), you do not want to wait to clone all the files locally just to add yours.
 
 <CodeGroup>
-  ```bash CLI
-  oxen init
-  oxen add images/
-  oxen add annotations/*.parquet
-  oxen commit -m "Adding 200k images and their corresponding annotations"
-  oxen push origin main
-  ```
-
   ```python Python
-  import oxen
+  from oxen import RemoteRepo
 
-  # Initialize a new repository given a directory
-  repo = oxen.init("/path/to/my-dataset")
-  repo.add("images/")
-  repo.add("annotations/*.parquet")
-  repo.commit("Adding 200k images and their corresponding annotations")
-  repo.push("origin", "main")
+  # Connect your client
+  repo = RemoteRepo("my-username/my-repo")
+  # Upload the image
+  repo.add("images/image_1_000_001.png")
+  # Commit to the main branch
+  repo.commit("Adding the 1,000,001st image to the dataset")
   ```
 </CodeGroup>
 
-Oxen.AI's comprised of a [command line interface](/getting-started/cli), as well as bindings for [Rust](https://github.com/Oxen-AI/Oxen) 🦀, [Python](/getting-started/python) 🐍, and [HTTP interfaces](/http-api) 🌎 to make it easy to integrate into your workflow.
+This is just one example of how Oxen.ai enables a more developer friendly workflow for large datasets. There are also optimizations under the hood such as parallel file transfer, scalable merkle trees, and data deduplication to make Oxen go brrr (or mooo?).
+
+Oxen.ai's comprised of a [command line interface](/getting-started/cli), as well as bindings for [Rust](https://github.com/Oxen-AI/Oxen) 🦀, [Python](/getting-started/python) 🐍, and [HTTP interfaces](/http-api) 🌎 to make it easy to integrate into your workflow.
 
 ## ✅ Features
 
-Oxen is built around ergonomics, ease of use, and it is easy to learn. If you know how to use git, you know how to use Oxen.
+Oxen.ai is built around ergonomics, ease of use, and it is easy to learn. If you know how to use git, you know how to use Oxen. The main difference is that data is a first class citizen in Oxen. The interface allows you to view, edit, query, and version your data as well as your code.
 
-### [Oxen Hub Features](/features/web_hub)
+![Image Net](/images/image-net-example.png)
 
-* 🚀 [Model Inference](/features/models): No code model inference.
+### Web Hub Features
 
-* 🏷️ [Labeling Images](/features/labeling_data): Edit any of your datasets straight from our UI.
+The Oxen Web Hub is an easy to use web interface that allows you to discover and explore datasets without having to download them. You can also upload files directly, add permissions, and explore branches directly in the interface.
 
-* 📝 [Text2SQL](/features/text2sql): Instant Text to SQL generation to ask your data questions.
+* 🔎 [Explore Datasets](/features/exploring_data): View and query your data in a beautiful interface
 
-* 🔍 [Embeddings Search](/features/embeddings): Instant Text to SQL generation to ask your data questions.
+* 🏷️ [Labeling Workflows](/features/labeling_data): Edit data from the UI, or build your own labeling workflows
 
+* 🤝 [Collaboration](/features/collaboration): Share datasets, models, and code with your team 
 
-### Oxen Open Source Features
+* 📝 [Notebooks](/features/notebooks): Spin up a Python Notebook on a GPU in seconds
+
+* 🚀 [Model Inference](/features/models): Run an LLM on your dataset simply by writing a prompt
+
+### Open Source Features
+
+The tooling behind the Oxen.ai is open source and available on [GitHub](https://github.com/Oxen-AI/oxen-release). This includes the powerful command line interface, oxen server, python library, and the HTTP API. The Oxen.ai web interface is built on top of the open source tooling, and can be deployed on your own infrastructure as a part of our [enterprise offering](https://www.oxen.ai/pricing).
 
 * 🔥 Fast: Efficient indexing and syncing of any dataset size (millions of images? no problem)
 
