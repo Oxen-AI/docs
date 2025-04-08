@@ -1,6 +1,30 @@
 ---
 title: 🏷️ Custom Labeling Tool
-description: Rate random examples from your dataset with Oxen's DataFrame APIs
+description: Rate random examples from your dataset and write them back to a data frame before committing.
 ---
 
-TODO
+TODO: This is blocked on the `DataFrame` API being able to `get_row` from a remote repo that it does not have access to. Which right now is confusing because there is a PyWorkspaceDataFrame and a PyDataFrame.
+
+Oxen's [DataFrame](/python-api/dataframe) APIs make it easy to build a custom labeling tool.
+
+Here's an example of a simple function that reads random examples from a dataset:
+
+```python
+from oxen import RemoteRepo, DataFrame
+import random
+def get_random_example(repo_name: str, path: str):
+    repo = RemoteRepo(repo_name)
+    remote_df = DataFrame(repo, path)
+    height, width = remote_df.size()
+    return remote_df.get_row(random.randint(0, height - 1))
+```
+
+Then writes the ratings back to the dataset:
+
+```python
+def write_ratings(df: pd.DataFrame, ratings: pd.DataFrame):
+    """Write the ratings back to the dataset."""
+    df.update(ratings)
+```
+
+
