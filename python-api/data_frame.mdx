@@ -58,8 +58,9 @@ data_frame.commit("Updating data.csv")
 def __init__(remote: Union[str, RemoteRepo, Workspace],
              path: str,
              host: str = "hub.oxen.ai",
-             branch: str = "main",
-             scheme: str = "https")
+             branch: Optional[str] = None,
+             scheme: str = "https",
+             workspace_name: Optional[str] = None)
 ```
 
 Initialize the DataFrame class. Will index the data frame
@@ -75,10 +76,20 @@ Will throw an error if the data frame does not exist.
   The path of the data frame file in the repository.
 - `host` - `str`
   The host of the oxen-server. Defaults to "hub.oxen.ai".
-- `branch` - `str`
-  The branch of the remote repo. Defaults to "main".
+- `branch` - `Optional[str]`
+  The branch of the remote repo. Defaults to None.
 - `scheme` - `str`
   The scheme of the remote repo. Defaults to "https".
+
+<a id="oxen.data_frame.DataFrame.workspace_url"></a>
+
+## workspace\_url
+
+```python
+def workspace_url(host: str = "oxen.ai", scheme: str = "https") -> str
+```
+
+Get the url of the data frame.
 
 <a id="oxen.data_frame.DataFrame.size"></a>
 
@@ -247,6 +258,26 @@ def get_by(attributes: dict)
 ```
 
 Get a single row of data by attributes.
+
+<a id="oxen.data_frame.DataFrame.get_row"></a>
+
+## get\_row
+
+```python
+def get_row(idx: int)
+```
+
+Get a single row of data by index.
+
+**Arguments**:
+
+- `idx` - `int`
+  The index of the row to get.
+  
+
+**Returns**:
+
+  A dictionary representing the row.
 
 <a id="oxen.data_frame.DataFrame.get_row_by_id"></a>
 

@@ -75,6 +75,61 @@ Create a new Workspace.
 - `path` - `Optional[str]`
   The path to the workspace. If left empty, the workspace will be created in the root of the remote repo.
 
+<a id="oxen.workspace.Workspace.id"></a>
+
+## id
+
+```python
+@property
+def id()
+```
+
+Get the id of the workspace.
+
+<a id="oxen.workspace.Workspace.name"></a>
+
+## name
+
+```python
+@property
+def name()
+```
+
+Get the name of the workspace.
+
+<a id="oxen.workspace.Workspace.branch"></a>
+
+## branch
+
+```python
+@property
+def branch()
+```
+
+Get the branch that the workspace is tied to.
+
+<a id="oxen.workspace.Workspace.commit_id"></a>
+
+## commit\_id
+
+```python
+@property
+def commit_id()
+```
+
+Get the commit id of the workspace.
+
+<a id="oxen.workspace.Workspace.repo"></a>
+
+## repo
+
+```python
+@property
+def repo() -> "RemoteRepo"
+```
+
+Get the remote repo that the workspace is tied to.
+
 <a id="oxen.workspace.Workspace.status"></a>
 
 ## status
@@ -127,7 +182,7 @@ Remove a file from the workspace
 ## commit
 
 ```python
-def commit(message: str, branch_name: Optional[str] = None)
+def commit(message: str, branch_name: Optional[str] = None) -> PyCommit
 ```
 
 Commit the workspace to a branch

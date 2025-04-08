@@ -250,7 +250,10 @@ Download a file or directory from the remote repo.
 ## add
 
 ```python
-def add(src: str, dst_dir: Optional[str] = "", branch: Optional[str] = None)
+def add(src: str,
+        dst: Optional[str] = "",
+        branch: Optional[str] = None,
+        workspace_name: Optional[str] = None)
 ```
 
 Stage a file to a workspace in the remote repo.
@@ -259,7 +262,7 @@ Stage a file to a workspace in the remote repo.
 
 - `src` - `str`
   The path to the local file to upload
-- `dst_dir` - `str | None`
+- `dst` - `str | None`
   The directory to upload the file to. If None, will upload to the root directory.
 - `branch` - `str | None`
   The branch to upload the file to. Defaults to `self.revision`
@@ -371,6 +374,31 @@ def log()
 ```
 
 Get the commit history for a remote repo
+
+<a id="oxen.remote_repo.RemoteRepo.branch_exists"></a>
+
+## branch\_exists
+
+```python
+def branch_exists(name: str) -> bool
+```
+
+Check if a branch exists in the remote repo.
+
+**Arguments**:
+
+- `name` - `str`
+  The name of the branch to check
+
+<a id="oxen.remote_repo.RemoteRepo.branch"></a>
+
+## branch
+
+```python
+def branch()
+```
+
+Get the current branch for a remote repo
 
 <a id="oxen.remote_repo.RemoteRepo.branches"></a>
 

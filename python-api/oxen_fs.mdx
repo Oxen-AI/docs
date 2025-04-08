@@ -56,6 +56,21 @@ with fs.open("data/test.txt", mode="wb") as f:
     f.write("Hello, world again!")
 ```
 
+## Writing file objects
+
+If you're integrating Oxen in a situation where you already have a file object,
+you can save it to your repo by using `shutil.copyfileobj` like this:
+
+```python
+import shutil
+
+file_object_from_somewhere = open("data.csv")
+
+with fs.open("train/data.csv", mode="wb") as output_file:
+    output_file.commit_message = "Copy from a file object"
+    shutil.copyfileobj(file_object_from_somewhere, output_file)
+```
+
 ## Integration with Third Party Libraries (Pandas, etc.)
 
 OxenFS works seamlessly with Pandas and other fsspec-compatible libraries using
@@ -161,6 +176,26 @@ def flush()
 ```
 
 Flush the file to disk.
+
+<a id="oxen.oxen_fs.OxenFSFileWriter.tell"></a>
+
+## tell
+
+```python
+def tell()
+```
+
+Return the current position of the file.
+
+<a id="oxen.oxen_fs.OxenFSFileWriter.seek"></a>
+
+## seek
+
+```python
+def seek(offset: int, whence: int = os.SEEK_SET)
+```
+
+Seek to a specific position in the file.
 
 <a id="oxen.oxen_fs.OxenFSFileWriter.commit"></a>
 
