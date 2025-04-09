@@ -1,6 +1,114 @@
 ---
-title: 🏷️ Custom Labeling Tool
-description: Rate random examples from your dataset with Oxen's DataFrame APIs
+title: 🏷️ Build a Custom Labeling Tool
+description: Rate examples from your dataset and write them back to a data frame before committing.
 ---
 
-TODO
+When building AI applications, looking at data and labeling successes and failures is an important part of the development process. This is an example of a labeling workflow using the [Oxen Python API](/python-api/data_frame) to fetch rows from a data frame one by one, then writing the results back to the same data frame. We will be labeling the text of an SMS message as "spam" or "ham" depending on the content. The interface is built with native [Marimo](https://marimo.io) UI components. 
+
+Feel free to download the code from [this Notebook](https://www.oxen.ai/datasets/MarimoNotebooks/file/main/labeling_tool.py) and run it in your own repository to follow along. The final result will look like this:
+
+![User Interface](/images/marimo/labeling/ui.png)
+
+## Fetching the Rows
+
+The `RemoteRepo` class along with the `DataFrame` class make it easy to fetch and write data from a data frame in a repository. Specify the namespace, repository name, and path to the data frame in order to fetch data.
+
+In order to write data back to the data frame, we need to specify a `workspace_name` when instantiating the `DataFrame` class. This is because the data frame will be written back to a temporary [workspace](/concepts/workspaces) before being committed. This allows you to see the changes in the UI before writing them to the commit history.
+
+```python
+from oxen import RemoteRepo, DataFrame
+
+# REPLACE WITH YOUR REPOSITORY
+repo_name = "username/repo_name"
+path = "data.tsv"
+repo = RemoteRepo(repo_name)
+remote_df = DataFrame(repo, path, workspace_name="labeling_workflow")
+```
+
+In order to fetch the rows, we can use the `get_row` method. This will return a `Row` object at the index specified.
+
+```python
+row = remote_df.get_row(0)
+```
+
+To know the number of rows in the data frame, we can use the `size()` function to determine the width and height of the data frame.
+
+```python
+width, height = remote_df.size()
+```
+
+## Setting up the UI
+
+We will keep track of which row is being labeled using the `mo.state` reactive state variable. This sets up a getter and setter for the state variable.
+
+```python
+import marimo as mo
+
+get_index, set_index = mo.state(0)
+```
+
+Then we can use a radio button for the categories and a few buttons to move between rows.
+
+```python
+# Get the current index from the state variable
+idx = get_index()
+
+# Get the row at the current index
+row = remote_df.get_row(idx)
+
+# Create a radio button for the user to select the label
+label_picker = mo.ui.radio(
+    ["spam", "ham"],
+    value=data["category"],
+    on_change=lambda v: update_category(remote_df, data['_oxen_id'], v),
+)
+
+# Create a button to move to the next row
+next_button = mo.ui.button(label="next", on_change=lambda _: increment_index())
+
+# Create a button to move to the previous row
+previous_button = mo.ui.button(label="previous", on_change=lambda _: decrement_index())
+
+# Display the UI
+mo.vstack([
+    mo.md("# Spam or Ham?"),
+    mo.md(f"Example: {idx}"),
+    mo.md(f"ID: {data['_oxen_id']}"),
+    mo.md(f"[View Changes]({remote_df.workspace_url()})"),
+    mo.ui.text_area(value=data['text'], full_width=True),
+    label_picker,
+    mo.hstack([previous_button, next_button], justify="center")
+])
+```
+
+## Updating the Rows
+
+The `label_picker` will call the `update_category` function when the user selects a new label. This function will update the category in the data frame.
+
+```python
+def update_category(remote_df, id, category):
+    remote_df.update_row(id, {"category": category})
+```
+
+## Viewing changes
+
+The changes will be written back to a temporary workspace. We can view the changes by clicking the "View Changes" link in the UI. This is populated with the `workspace_url` method on the `DataFrame` class.
+
+```python
+# https://oxen.ai/{namespace}/{repo_name}/workspaces/{workspace_id}/file/{path}
+remote_df.workspace_url()
+```
+
+Under the hood, we have indexed the data frame into a temporary read/write workspace. You can see the changes in the Oxen Diff UI and confirm them before committing.
+
+![Oxen Diff](/images/marimo/labeling/diff.png)
+
+Once you are happy with the changes, you can commit the changes to the data frame and they will be written back to the original data frame and added to the commit history.
+
+```python
+remote_df.commit("Updated the categories from the labeling tool")
+```
+
+## Full Code
+
+The full code is available [here](https://www.oxen.ai/datasets/MarimoNotebooks/file/main/labeling_tool.py).

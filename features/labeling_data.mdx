@@ -1,9 +1,21 @@
 ---
 title: "🏷️ Build Labeling Workflows"
-description: "You can now edit large datasets straight from Oxen.AI's website without downloading the dataset."
+description: "Edit data frames on Oxen.ai without downloading the full dataset."
 ---
 
-## Upload Your Dataset
+# Web UI vs. Python
+
+With Oxen.ai you can either perform your labeling workflows directly in the [web interface](https://oxen.ai), or build your own using the [Python Library](/features/labeling_data#using-the-python-library).
+
+## Using the UI
+
+Oxen.ai has a data frame interface built in that allows your to view, query and edit any csv, json, or parquet file. The data can be multimodal, allowing you to see images and text side by side.
+
+![Data Frame UI](/images/image-net-example.png)
+
+If you are using google sheets or excel for your datasets this is a great place to get started before building out more powerful workflows.
+
+### Upload Your Dataset
 
 Navigate to the repository you want to work with, or create a new one. If you need starter data, you can find example datasets on our [explore page](https://www.oxen.ai/explore). To follow along with the example, you can clone the [Synthetic Political Spam Dataset](https://www.oxen.ai/Laurence/political-spam) we are using.
 
@@ -16,13 +28,13 @@ oxen push origin main
 
 <img alt="Oxen.ai Spam Repo" classname="block" src="/images/spam_dataset.png" />
 
-## Edit File
+### Edit File
 
 Open the file you want to edit and press the *Edit* button above your data.
 
 <img alt="Where to find edit button" classname="block" src="/images/edit_button.png" />
 
-## Editing Columns
+### Editing Columns
 
 To edit columns, go to the *Schema* section on the left of your dataset. Here, there are four actions you can take:
 
@@ -36,7 +48,7 @@ To edit columns, go to the *Schema* section on the left of your dataset. Here, t
 
 <img alt="Schema picture" classname="block" src="/images/columns_edit.png" />
 
-## Editing Rows
+### Editing Rows
 
 To edit your rows, there are two actions you can take:
 
@@ -50,7 +62,7 @@ To undo a deleted row, click the revert button.
 
 <img alt="Revert Button" classname="block" src="/images/revert_button.png" />
 
-## Editing Cells
+### Editing Cells
 
 To edit cells, click on the cell you would like to edit and make any changes you would like to the data. Then click the *Save* button to save progress.
 
@@ -60,16 +72,88 @@ To undo any saved changes, click the revert button.
 
 <img alt="Revert Button for cell" classname="block" src="/images/revert_cell_changes.png" />
 
-## Committing Changes
+### Committing Changes
 
 To commit your changes, click on the *Commit* button, write your commit message, choose the branch, and click "Commit changes".
 
 <img alt="Commit section" classname="block" src="/images/commit_ed.png" />
 
-## Returning to Data Frame
+### Returning to Data Frame
 
 To return to the original dataframe, click the *Return to dataframe* button on the left of the commit button.
 
 <img alt="Return from Editing" classname="block" src="/images/return_from_edf.png" />
 
 Congratulations! You've just seen how easy it is to edit your datasets without downloading on Oxen.AI. For more examples of different uses, [click here](/use-cases/sentiment-analysis)!
+
+## Using the Python Library
+
+The web interface is built on top of [HTTP APIs](/http-api/data_frames) that are also exposed through Oxen.ai's [Python Library](/python-api/data_frame). This makes it easy to interact with data frames programatically and build your own custom labeling tools. Under the hood the dataset will be indexed into DuckDB within a Workspace to make it fast to query and update the data before fully committing it back to your repository.
+
+### Indexing a Data Frame
+
+When you instantiate a DataFrame object, the data will automatically get indexed into an Oxen Workspace in an uncommitted state. This gives you fast read/write access to the data frame without committing it.
+
+```python
+from oxen import DataFrame
+
+# Connect to the data frame with the repository name and file path
+df = DataFrame("my-username/spam-or-ham", "data.tsv")
+```
+
+### Fetching Rows
+
+To get the full size of the data frame you can use the `size()` method.
+
+```python
+width, height = df.size()
+```
+
+To get an individual row index, pass in the offset to the `get_row` method.
+
+```python
+# Get the Nth row of the data frame
+row = df.get_row(42)
+```
+
+### Insert Rows
+
+To add a row to the end of the dataset, use the `insert_row` function with a dictionary that contains the column names as keys, and the row data as values. This will return an internal `_oxen_id` that can be used to access the same row again.
+
+```python
+# Add a row
+row_id = df.insert_row({"category": "spam", "message": "CLICK HERE TO WIN INSTANTLY."})
+```
+
+The `_oxen_id` can be used to fetch the same row again.
+
+```python
+# Get a row by the internal '_oxen_id'
+row = df.get_row_by_id(row_id)
+```
+
+### Update Rows
+
+To update a row, pass in the `_oxen_id` as well as the columns you want to update as a dictionary. Only the keys that are present will be updated, leaving the rest unchanged.
+
+```python
+row = df.update_row(row_id, {"category": "new_category"})
+```
+
+### Delete Rows
+
+To delete a row, pass in the `_oxen_id` to the `delete_row` method.
+
+```python
+df.delete_row(row_id)
+```
+
+### Committing Changes
+
+Finally, when you are happy with the dataset, and have reviewed the changes, you can commit this dataset to the repositories history with `commit` and a message.
+
+```python
+df.commit("Update label")
+```
+
+To see the full set of APIs, check out the [Python Documentation](/python-api/data_frame).
