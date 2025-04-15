@@ -4,6 +4,95 @@ description: 'Welcome to [Oxen.ai](http://Oxen.ai) Feature Updates! We send out 
 This page will have a complete update with demos, photos, and top feature updates/bug squashes.'
 ---
 
+
+## April 9, 2025
+
+### Feature Updates
+
+- Now have code editor view for README and when Python Notebook has syntax errors
+<a href="https://www.oxen.ai/">
+  <img src="/images/editable_README.png" alt="Editing README" noZoom />
+</a>
+
+- Integrated image generation into [Model Inference](/features/models) 
+<a href="https://www.oxen.ai/">
+  <img src="/images/RMOD-text-image.png" alt="Generating images in Model Inference" noZoom />
+</a>
+- Integrate Anthropic and Claude into [Model Inference](/features/models) 
+<a href="https://www.oxen.ai/">
+  <img src="/images/anthropic-RMOD.png" alt="Anthropic in Model Inference" noZoom />
+</a>
+
+- Added full screen option to eval DF view
+<a href="https://www.oxen.ai/">
+  <img src="/images/full_screen_RMOD.png" alt="Full screen in Model Inference" noZoom />
+</a>
+
+- Added Support for Model Deprecation
+- Allow import of hugging face datasets into Server
+- Added a `copy prompt` button to entries in the eval list view
+- For [Notebooks](/features/notebooks) added branch indicator and now respects branches with slashes
+- Now able to merge changes on the server where there are no file conflicts (for example: a notebook is staged and a data frame is staged) 
+- GitHub Actions for python windows
+- Expanded row-view component to make viewing complex content easier
+- Added ability to define code-language in field metadata
+- Created markdown and code view renderer for Row Details view
+- Added drop down to select code language in Code view renderer
+- Added support for paging through records (forward, back arrows)
+- Updated the Model Evaluation Setup form to show developer dropdown of models
+- Now showing proper status indicators on eval cells with image metadata
+- Extended Branch Picker component to support workspaces
+- Upgraded the build caching mechanism to boost performance and compatibility. [#70](https://github.com/Oxen-AI/oxen-release/pull/70)
+- Improved file formatting for consistency.[#70](https://github.com/Oxen-AI/oxen-release/pull/70)
+- Introduced a new capability to verify branch existence, enhancing branch management. [#71](https://github.com/Oxen-AI/oxen-release/pull/71)
+- Standardized file path construction using modern utilities, improving clarity and maintainability. [#71](https://github.com/Oxen-AI/oxen-release/pull/71)
+- Enhanced branch management with improved checks to prevent conflicts. [#72](https://github.com/Oxen-AI/oxen-release/pull/72)
+- Refined file addition functionality to seamlessly support adding folders as well as individual files. [#72](https://github.com/Oxen-AI/oxen-release/pull/72)
+- Enhanced data handling by automatically creating records when needed and improving error feedback. [#73](https://github.com/Oxen-AI/oxen-release/pull/73)
+- Introduced more flexible branch management during data operations and workspace initialization for a smoother user experience. [#73](https://github.com/Oxen-AI/oxen-release/pull/73)
+- Enhanced the workspace creation process, now generating unique workspace names to help avoid naming conflicts. [#75](https://github.com/Oxen-AI/oxen-release/pull/75)
+- Introduced new properties in the Workspace class for easier access to workspace attributes: ID, name, branch, and associated repository. [#75](https://github.com/Oxen-AI/oxen-release/pull/75)
+- Modified branch switching behavior to ensure a more consistent experience when creating and switching branches. [#75](https://github.com/Oxen-AI/oxen-release/pull/75)
+- Streamlined access to repository and branch attributes in the DataFrame class for improved readability and performance. [#75](https://github.com/Oxen-AI/oxen-release/pull/75)
+- Data operations now provide immediate feedback after inserting rows. [#76](https://github.com/Oxen-AI/oxen-release/pull/76)
+- Users can specify workspace names during repository actions. [#76](https://github.com/Oxen-AI/oxen-release/pull/76)
+- Workspace summaries now display associated commit identifiers. [#76](https://github.com/Oxen-AI/oxen-release/pull/76)
+- Introduced the option to initialize empty directory listings. [#76](https://github.com/Oxen-AI/oxen-release/pull/76)
+- Added methods to generate workspace URLs and to retrieve individual dataset rows. [#77](https://github.com/Oxen-AI/oxen-release/pull/77)
+- Enhanced repository operations with improved commit tracking, merge handling, and branch management. [#77](https://github.com/Oxen-AI/oxen-release/pull/77)
+- Introduced functionality to create empty paginated directory entries. [#77](https://github.com/Oxen-AI/oxen-release/pull/77)
+- Expanded workspace interfaces to include commit identifier details. [#77](https://github.com/Oxen-AI/oxen-release/pull/77)
+- Added a new error handling mechanism for data retrieval methods. [#77](https://github.com/Oxen-AI/oxen-release/pull/77)
+
+#### By Customer Request
+- Added how to save a parquet file to a directory, and errors with to_csv in [Python](/getting-started/python) by [Mirascope's](https://www.oxen.ai/Mirascope) request
+- Added method to test if a branch already exists
+- Create data frame if it does not exist on the first insert
+
+### Fixed Bugs
+
+- Fixed `oxen pull/checkout` so it doesn't overwrite modified files
+- Fixed [Model Inference](/features/models) committing errors
+- Edit file was not working on data frames with binary data in columns
+- Was Failing to push and pull entries that are exactly `AVG_CHUNK_SIZE`
+- Fixed error on using a struct field in your [Model Inference](/features/models) prompt
+- Fixed file upload does not land in the correct place with many subdirectories
+- Fixed sample not working on branches with a slash `eval/gemini` 
+- Fixed `oxen rm -r` so it doesn't remove a directory at the root removes all directories on the remote after push
+- [Model Inference](/features/models) commits to a sub/directory/file.parquet was not working
+- DataFrame image thumbnail was not rendering properly
+- Compare Nav Tab was not being underlined when clicked
+- Long URL's in blog posts now wrap on mobile
+- Removed little scroll bar next to the tab bar nav and home page logos
+- Better handling for bad workspace state in workspaces page
+- Empty repos without any branches were breaking on the root repo page
+- Notebooks commit button was not showing commit form in full screen mode
+- On the site wide search dropdown users were listed with a slash and not navigating to the root of the user namespace
+- Embedded videos in the dives and entries pages were not being expanded to the proper height
+- Improved error handling when commit data is missing. [#76](https://github.com/Oxen-AI/oxen-release/pull/76)
+- Streamlined asynchronous repository operations for a more reliable experience. [#76](https://github.com/Oxen-AI/oxen-release/pull/76)
+
+
 ## February 25, 2025
 
 ### Feature Updates
