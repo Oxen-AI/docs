@@ -37,6 +37,32 @@ To know the number of rows in the data frame, we can use the `size()` function t
 width, height = remote_df.size()
 ```
 
+
+## Iterating through the data frame
+
+Let's add some helper functions to increment and decrement the index, and get the row at the current index.
+
+```python
+def increment_index():
+    set_index(lambda v: v+1)
+
+def decrement_index() -> int:
+    set_index(lambda v: max(0, v - 1))
+
+def get_row(remote_df, idx):
+    data = remote_df.get_row(idx)
+    return data[0]
+```
+
+## Updating the Rows
+
+The `label_picker` will call the `update_category` function when the user selects a new label. This function will update the category in the data frame.
+
+```python
+def update_category(remote_df, id, category):
+    remote_df.update_row(id, {"category": category})
+```
+
 ## Setting up the UI
 
 We will keep track of which row is being labeled using the `mo.state` reactive state variable. This sets up a getter and setter for the state variable.
@@ -79,15 +105,6 @@ mo.vstack([
     label_picker,
     mo.hstack([previous_button, next_button], justify="center")
 ])
-```
-
-## Updating the Rows
-
-The `label_picker` will call the `update_category` function when the user selects a new label. This function will update the category in the data frame.
-
-```python
-def update_category(remote_df, id, category):
-    remote_df.update_row(id, {"category": category})
 ```
 
 ## Viewing changes
