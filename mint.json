@@ -75,18 +75,27 @@
         "features/exploring_data",
         "features/labeling_data",
         "features/collaboration",
-        "features/notebooks",
-        "features/models"
-      ]
-    },
-    {
-      "group": "Tutorials",
-      "pages": [
-        "use-cases/sentiment-analysis",
-        "use-cases/text-translation",
-        "use-cases/rag-embeddings",
-        "use-cases/rag-extracting-answers",
-        "use-cases/synthetic-data-gen"
+        {
+          "group": "📝 Notebooks",
+          "pages": [
+            "features/notebooks",
+            "examples/notebooks/explore_process_version_data",
+            "examples/notebooks/build_labeling_tool",
+            "examples/notebooks/compute_text_embeddings",
+            "examples/notebooks/eval_llm/human_in_the_loop"
+          ]
+        },
+        {
+          "group": "🚀 Model Inference",
+          "pages": [
+            "features/models",
+            "use-cases/sentiment-analysis",
+            "use-cases/text-translation",
+            "use-cases/rag-embeddings",
+            "use-cases/rag-extracting-answers",
+            "use-cases/synthetic-data-gen"
+          ]
+        }
       ]
     },
     {
