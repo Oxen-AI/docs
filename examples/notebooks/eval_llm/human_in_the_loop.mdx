@@ -1,11 +1,13 @@
 ---
-title: 🕵️‍♂️ LLM Evaluation
+title: 🕵️‍♂️ LLM Evaluation w/ Human in the Loop
 description: 'How to build a human in the loop evaluation workflow.'
 ---
 
-One of the most reliable ways to evaluate an LLM and make sure it is aligned with your company's needs is to have a human in the loop reviewing each input and output pair. This tutorial will show you how to build a simple labeling tool that allows a human to review the output of an LLM, and give a thumbs up or down. You could extend this to have a reason for their answer, or even a score.
+One of the most reliable ways to evaluate an LLM is to have a human in the loop reviewing each input and output pair. Having human eyes not only will catch errors that the LLM missed, but it will also spark ideas for how to improve the model. Once you have a dataset of labeled examples, you can use it to [train a new model](/examples/notebooks/train_llm), or compare the performance of different models.
 
-Once you have a dataset of labeled examples, you can use it to [train a new model](/examples/notebooks/train_llm), or compare the performance of different models.
+This tutorial will show you how to build a simple labeling tool that allows a human to review the output of an LLM, and give a thumbs up or down (👍/👎). All your labeled data will be versioned and stored in an Oxen.ai repository so that you can always go back and see how the model's performance evolved over time and iterate on it with your team.
+
+![Oxen.ai Data Frame](/images/marimo/human-in-the-loop/oxen-data-frame.png)
 
 ## Example: Asking questions about Oxen.ai's Python Library
 
@@ -155,7 +157,7 @@ remote_df = DataFrame(repo, path)
 
 Notice the last line also creates a variable called `remote_df` that we can use in our labeling tool.
 
-## Labeling Tool
+## Building a Custom Labeling Tool
 
 Now that we have the results saved, we can build a simple labeling tool to label the results. We'll need some state to keep track of the current index of the dataframe, and the current row.
 
