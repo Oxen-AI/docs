@@ -82,6 +82,7 @@
             "examples/notebooks/explore_process_version_data",
             "examples/notebooks/build_labeling_tool",
             "examples/notebooks/compute_text_embeddings",
+            "examples/notebooks/generate_synthetic_datasets",
             "examples/notebooks/eval_llm/human_in_the_loop"
           ]
         },
