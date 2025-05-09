@@ -3,4 +3,177 @@ title: ⚖️ LLM as a Judge Evaluation
 description: 'How to build a LLM as a judge evaluation workflow.'
 ---
 
-Coming soon!
+When evaluating an LLM for a task, it can be tedious to hand label every example just to see if one model or prompt is better than another. Instead, we can automate the process using a stronger LLM with clever prompts to compare the outputs to the ground truth. It may not be perfect, but it will give us a good proxy to quickly get a score as well as find successes and failures.
+
+For each question and answer pair, an automated pipeline may look like the following:
+
+![LLM as a Judge](/images/marimo/llm-as-a-judge/workflow.png)
+
+This tutorial will walk you through the steps to build this pipeline on a test dataset, leaving you with a score and a list of successes and failures.
+
+## Example: Medical Question Answering
+
+This example is an extension of the [Medical Question Answering](/examples/notebooks/train_llm) example. If you haven't already, please follow that example to get the fine-tuned model and dataset.
+
+![Medical Question Answering](/images/marimo/llm-as-a-judge/dataset.png)
+
+Feel free to look at some examples and download the dataset here: [Medical Question Answering](https://www.oxen.ai/ox/MedQuAD/file/main/train.parquet). Within the dataset, you'll see question and answer pairs like:
+
+![Medical Question Answering Example](/images/marimo/llm-as-a-judge/question-answer-pair.png)
+
+While we have a ground truth label, it would take a long time to compare this answer to the response from a fine-tuned model. Instead, we can use an LLM to judge the quality of the fine-tuned model's responses.
+
+## Running Inference in a Notebook
+
+TODO: I think this should just link out to running inference, because this should be LLM As A Judge focused...and then it should just live in evaluations?
+
+In our previous [Fine-Tuning Notebook](/examples/notebooks/train_llm), we trained a small Qwen model on the MedQuAD dataset. Now, we will be using that model to make predictions on a test set. For this example we will be using a Notebook with a A10 GPU with 24GB of VRAM to run the model over the test set.
+
+You can find the example eval notebook here: [TODO](TODO).
+
+(TODO: Image)
+
+### Downloading a model
+
+After the training completed, the model weights were stored on a branch on Oxen.ai. Branches are a great way to store and version control your models and datasets to compare different versions and ensure reproducibility.
+
+TODO: Add screenshot of the model weights on a branch.
+
+To download the weights, you can use the `download` function from the Oxen [Python package](https://docs.oxen.ai/getting-started/python).
+
+```python
+from oxen import RemoteRepo
+
+repo_name = "ox/MedQuAD"
+branch_name = "experiment-3"
+model_name = "Qwen/Qwen2.5-1.5B-Instruct-MedQuAD"
+model_path = f"models/{model_name}/{branch_name}/checkpoints/checkpoint_2500"
+model_repo = RemoteRepo(repo_name)
+if not os.path.exists(model_path):
+    os.makedirs(model_name, exist_ok=True)
+    print(f"⬇️ Downloading {model_path}")
+    model_repo.download(model_path, dst=model_name, revision=branch_name)
+    print(f"✅ Downloaded {model_path}")
+else:
+    print(f"Already have {model_path}")
+```
+
+By default, Oxen will use a pool of threads and efficiently pull down the model weights in parallel so that you can get to inference faster.
+
+### Loading a model
+
+Once the model weights are downloaded, you can use `AutoModelForCausalLM` load them directly into the `transformers` library. The base model name is needed to load the proper tokenizer with `AutoTokenizer`.
+
+```python
+from transformers import AutoTokenizer, AutoModelForCausalLM
+
+base_model_name = "Qwen/Qwen2.5-1.5B-Instruct"
+model = AutoModelForCausalLM.from_pretrained(
+    os.path.join(model_name, model_path),
+    torch_dtype="auto", # Load model onto the GPU
+    local_files_only=True, # Don't try to download from HuggingFace
+    use_safetensors=True
+)
+tokenizer = AutoTokenizer.from_pretrained(base_model_name)
+```
+
+### Making predictions
+
+Once we have the model loaded into memory, we can make predictions. Let's define a `predict` function that will take in the model, tokenizer, and a string and return the model prediction.
+
+In this case we have hard coded the system prompt to match the system prompt the LLM was trained with. In practice you may want to version and store this system prompt in your Oxen repository, or have it be dynamic input to the model.
+
+TODO: Make these predictions in batches for 🔥
+
+```python
+def predict(tokenizer: AutoTokenizer, model: AutoModelForCausalLM, prompt: str):
+    system_prompt = "You are a medical professional who is helping a patient. Patients will ask you questions and you will answer them in plain English so that anyone can understand."
+
+    messages = [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": prompt}
+    ]
+    text = tokenizer.apply_chat_template(
+        messages,
+        tokenize=False,
+        add_generation_prompt=True
+    )
+    model_inputs = tokenizer([text], return_tensors="pt").to(model.device)
+
+    streamer = TextStreamer(tokenizer)
+    generated_ids = model.generate(
+        **model_inputs,
+        max_new_tokens=1024,
+        streamer=streamer
+    )
+    generated_ids = [
+        output_ids[len(input_ids):] for input_ids, output_ids in zip(model_inputs.input_ids, generated_ids)
+    ]
+
+    response = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)[0]
+
+    return response
+```
+
+### Running over the dataset
+
+Next comes downloading a dataset that we can make the predictions over. Let's download the validation set from the `ox/MedQuAD` dataset to get our list of questions. The following will populate a `prediction` column with the outputs from the model. It also does a little work to make sure it only fills in new predictions if they already exist. Every 10 rows we add and commit the file so that you can view the progress as it is making predictions. LLMs are slow and it is nice to *look at your data* before the entire run finishes to catch any obvious bugs or kill the job if the model is not good.
+
+```python
+data_repo = RemoteRepo("ox/MedQuAD")
+data_repo.checkout("validation")
+data_repo.download("valid.parquet")
+
+if repo.file_exists(full_path):
+    print(f"Downloading {full_path}")
+    repo.download(full_path, revision="validation")
+    df = pd.read_parquet(full_path)
+else:
+    df = pd.read_parquet('valid.parquet')
+    # Initialize the prediction column with None values
+    df['prediction'] = None
+
+# Track when we last committed
+last_commit = 0
+
+for idx, row in df.iterrows():
+    question = row['question']
+    print(f"Row {idx}: {question}")
+
+    prediction = df.at[idx, 'prediction']
+    if prediction is not None:
+        print(f"Already got prediction for idx {idx}")
+        continue
+
+    # Make prediction and store directly in the dataframe
+    df.at[idx, 'prediction'] = predict(tokenizer, model, question)
+
+    # Commit every 10 rows
+    if (idx + 1) % 10 == 0:
+        print(f"Saving checkpoint at row {idx + 1}")
+        df.to_parquet(out_file)
+        data_repo.add(out_file, dst="results")
+        data_repo.commit(f"Adding {idx} results for {model_name}")
+        last_commit = idx + 1
+
+# Final save for any remaining rows
+if len(df) > last_commit:
+    print(f"Final save with {len(df) - last_commit} additional rows")
+    df.to_parquet(out_file)
+    data_repo.add(out_file, dst="results")
+    data_repo.commit(f"Adding all results for {model_name}")
+
+print("Prediction process complete!")
+```
+
+At the end of this loop, we will make a final commit, and the values will be stored on the `validation` branch for us. Now we are ready to judge all of the responses.
+
+## LLM as a Judge
+
+Use RMOD to judge the model's performance. Use a reasoning prompt with a `<thinking>` and `<answer>` section to get the LLM to think about the answer and then compare it to the ground truth.
+
+## Extracting the Results
+
+Use another notebook to extract the results and plot them.
+
+TODO: LLM As A Judge with no ground truth (conciseness, harmless, helpful, etc)
