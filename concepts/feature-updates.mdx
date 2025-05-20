@@ -4,6 +4,51 @@ description: 'Welcome to [Oxen.ai](http://Oxen.ai) Feature Updates! We send out 
 This page will have a complete update with demos, photos, and top feature updates/bug squashes.'
 ---
 
+## May 19, 2025
+
+### Feature Updates
+
+- We now have a new [plan upgrade view](https://www.oxen.ai/settings/billing/plans) with status bars for your storage, egress, and compute usage.
+<a href="https://www.oxen.ai/">
+  <img src="/images/new-upgrade.png" alt="New Upgrade View" noZoom />
+</a>
+
+- Autosuggested commit message when creating a notebook in the UI
+<a href="https://www.oxen.ai/">
+  <img src="/images/auto-commit-message.png" alt="Auto Commit Message" noZoom />
+</a>
+
+- Retrieve files from a remote repository at a specific revision.  [#81](https://github.com/Oxen-AI/oxen-release/pull/81)
+- View paginated and filterable commit histories for remote repositories. [#81](https://github.com/Oxen-AI/oxen-release/pull/81)
+- Compute and display file diffs between revisions or branches. [#81](https://github.com/Oxen-AI/oxen-release/pull/81)
+- Inspect diff entries and their formats via Python. [#81](https://github.com/Oxen-AI/oxen-release/pull/81)
+- Access detailed pagination information for commit listings. [#81](https://github.com/Oxen-AI/oxen-release/pull/81)
+- Enhanced commit log methods with pagination and path filtering. [#81](https://github.com/Oxen-AI/oxen-release/pull/81)
+- Updated method signatures for improved revision handling flexibility. [#81](https://github.com/Oxen-AI/oxen-release/pull/81)
+- Added the ability to create and delete workspaces for specific branches. [#80](https://github.com/Oxen-AI/oxen-release/pull/80)
+- Introduced the option to delete branches from the remote repository. [#80](https://github.com/Oxen-AI/oxen-release/pull/80)
+- Improved workspace management to prevent multiple simultaneous workspaces and ensure consistent handling during file additions. [#80](https://github.com/Oxen-AI/oxen-release/pull/80)
+- Enhanced branch existence checks and streamlined branch deletion. [#80](https://github.com/Oxen-AI/oxen-release/pull/80)
+- Introduced notebook management capabilities, allowing users to start and stop notebook sessions within Oxen repositories via [Python](/getting-started/python). [#79](https://github.com/Oxen-AI/oxen-release/pull/79)
+- Added a new Python module for notebook operations and exposed these features in the public API. [#79](https://github.com/Oxen-AI/oxen-release/pull/79)
+- Enhanced error handling and user feedback when initializing workspaces and executing SQL queries. [#79](https://github.com/Oxen-AI/oxen-release/pull/79)
+- Improved performance for adding multiple files by batching operations. [#79](https://github.com/Oxen-AI/oxen-release/pull/79)
+- Added support for column introspection and modification in DataFrames, including new methods to retrieve and add columns. [#78](https://github.com/Oxen-AI/oxen-release/pull/78)
+- Introduced a new Python-exposed class for data frame columns, enabling enhanced column-level operations. [#78](https://github.com/Oxen-AI/oxen-release/pull/78)
+- You can now customize build script when starting a notebook
+- Replaced "compare" icon in the repo contents list for tabular files with "download" for all files
+- Implemented GET and POST endpoint for repository Gated access users
+- Refactored the old plan/subscription structure to new user/org plan/subscription structure
+- Added [Deepseek Eval Provider](https://www.oxen.ai/ai/models?developers=deepseek#deepseek)
+
+### Fixed Bugs
+- Improved code style and consistency with minor formatting and syntactic adjustments. [#78](https://github.com/Oxen-AI/oxen-release/pull/78)
+- New user registration does not skip onboarding anymore
+- Fixed spacing on Model Inference page at both the top title and the sides
+- Evaluations did not have default radio button selected for full evaluation run
+- Super long directory name was overflowing on uploading a file
+- The ToggleSwitch component did not correctly display when no optionLabels are present.
+- Fixed overflow on add files button with a large directory name
 
 ## April 9, 2025
 
