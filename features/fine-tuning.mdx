@@ -3,7 +3,7 @@ title: '⚙️ Fine-Tuning LLMs'
 description: 'Oxen.ai lets you fine-tune models on your own data without writing any code.'
 ---
 
-Fine-tuning unlocks powerful customization capabilities for large language models when basic prompting falls short or when you're facing throughput and latency constraints. With Oxen.ai we make it easy to fine-tune LLMs on your own data without writing any code. 
+Fine-tuning unlocks powerful customization capabilities for large language models when basic prompting falls short or when you're facing throughput and latency constraints. With Oxen.ai, we make it easy to fine-tune LLMs on your own data without writing any code. 
 
 Simply upload your data, and we will provision optimized GPU infrastructure to execute the training process, then save the fine-tuned model weights directly to your repository.
 
@@ -11,11 +11,11 @@ Simply upload your data, and we will provision optimized GPU infrastructure to e
 
 ## Uploading a Dataset
 
-To get started, you'll need to create a new repository on Oxen.ai. Once you've created a repository, you can upload your data. The dataset can be in any tabular format including CSV, json, parquet, or arrow.
+To get started, you'll need to create a new repository on Oxen.ai. Once you've created a repository, you can upload your data. The dataset can be in any tabular format including CSV, JSON, Parquet, or Arrow.
 
 ![Fine-Tuning Dataset Upload](/images/fine-tune-upload-file.png)
 
-Once you have your dataset uploaded, you can query, explore and make sure that the data is high quality before kicking off the fine-tuning process. Your model will only be as good as the data you train it on.
+Once you have your dataset uploaded, you can query, explore, and make sure that the data is high quality before kicking off the fine-tuning process. Your model will only be as good as the data you train it on.
 
 ![Fine-Tuning Dataset](/images/fine-tune-dataset.png)
 
@@ -25,19 +25,19 @@ When you feel confident that your dataset is ready, use the "Actions" button to 
 
 ![Fine-Tuning Dataset](/images/fine-tune-actions.png)
 
-This will take you to a form where you can select the model you want to fine-tune and the columns you want to use for the fine-tuning process. Right now we support fine-tuning for prompt/response single turn chat pairs.
+This will take you to a form where you can select the model you want to fine-tune and the columns you want to use for the fine-tuning process. Right now we support fine-tuning for prompt/response single-turn chat pairs.
 
 ![Fine-Tuning Model Selection](/images/fine-tune-model-selection.png)
 
-[Contact us](https://airtable.com/appDW4XBL7qTihmwi/shrQF72gHTJw8zvie) if you need to fine-tune a different model or have a more complex data formats or use cases.
+[Contact us](https://airtable.com/appDW4XBL7qTihmwi/shrQF72gHTJw8zvie) if you need to fine-tune a different model or have more complex data formats or use cases.
 
 ## Monitoring the Fine-Tune
 
-Once you have started the fine-tuning process, you can monitor the fine-tuning process. The dashboard will show you loss over time, token accuracy, the learning rate and number of tokens processed.
+Once you have started the fine-tuning process, you can monitor its progress. The dashboard will show you loss over time, token accuracy, the learning rate, and number of tokens processed.
 
 ![Fine-Tuning Monitoring](/images/fine-tune-monitoring.png)
 
-Click on the "Configuration" tab to see the fine-tuning configuration. This will include a link to the dataset version you used, and the raw model weights. It will show you the pricing for the fine-tuning process as well.
+Click on the "Configuration" tab to see the fine-tuning configuration. This will include a link to the dataset version you used and the raw model weights. It will show you the pricing for the fine-tuning process as well.
 
 If you want access to the raw model weights, you can download them from the repository using the Oxen.ai Python library or the CLI.
 
@@ -62,13 +62,11 @@ oxen download my-username/my-repo models --revision Qwen3-0.6B-experiment-1_fte7
 
 ## Deploying the Model
 
-
-
-*Coming soon* we will have a "one-click" deployment to a hosted endpoint. This will give you a URL that you can use to test out the model.
+*Coming soon:* we will have a "one-click" deployment to a hosted endpoint. This will give you a URL that you can use to test out the model.
 
 ![Fine-Tuning Configuration](/images/fine-tune-deploy-model.png)
 
-We will provide you a `/chat/completions` endpoint that you can use to test out the model.
+We will provide you with a `/chat/completions` endpoint that you can use to test out the model.
 
 ```bash
 curl https://hub.oxen.ai/api/chat/completions -H "Content-Type: application/json" -d '{
