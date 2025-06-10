@@ -75,6 +75,7 @@
         "features/exploring_data",
         "features/labeling_data",
         "features/collaboration",
+        "features/fine-tuning",
         {
           "group": "📝 Notebooks",
           "pages": [
