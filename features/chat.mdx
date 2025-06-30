@@ -1,0 +1,65 @@
+---
+title: 💬 Chat with Models
+---
+
+Whether it is a [fine-tuned model](/features/fine-tuning) or a foundation model, Oxen.ai exposes a chat interface and API endpoints to test out a variety of models with a single API key. To see the list of generally available models, visit the [models page](https://oxen.ai/ai/models).
+
+![Models Page](/images/chat/models_page.png)
+
+All of these models can be wired directly into your application using any OpenAI compatible client.
+
+# Chat Interface
+
+The Oxen.ai chat interface is a simple web interface which allows you to try a model without writing any code. This includes models that you [fine-tuned](/features/fine-tuning) yourself or foundation models from labs like OpenAI, Anthropic, and Google.
+
+![Chat Interface](/images/chat/chat_window.png)
+
+Feel free to kick around a model and see how it performs before you decide to use it in your application.
+
+# API Endpoints
+
+Once you feel confident in a model, you can use the API endpoints to integrate it into your application. The API endpoints allow you to test out a variety of models with a single API key. It is a great way to get started with a new model or to test out a new use case.
+
+The API is OpenAI compatible, so you can use any OpenAI compatible client to interact with the model. Simply prepend the model name a provider like `openai:` and use the `https://hub.oxen.ai/v1/chat/completions` endpoint.
+
+The currently supported list of providers is:
+
+- `openai`
+- `anthropic`
+- `fireworks`
+- `google`
+- `mistral`
+- `deepseek`
+- `oxenai` (for fine-tuned models)
+
+<CodeGroup>
+
+```bash curl
+curl -X POST https://hub.oxen.ai/api/chat/completionss \
+-H "Authorization: Bearer $OXEN_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{
+  "model": "openai:gpt-4o-mini",
+  "messages": [{"role": "user", "content": "Hello, how are you?"}]
+}'
+```
+
+```python Python
+import openai
+import os
+
+client = openai.OpenAI(
+    api_key=os.getenv("OXEN_API_KEY"),
+    base_url="https://hub.oxen.ai/api"
+)
+
+response = client.chat.completions.create(
+    model="openai:gpt-4o-mini",
+    messages=[{"role": "user", "content": "What is a great name for an ox that also manages your AI infrastructure?"}]
+)
+
+print(response.output['content'][0]['text'])
+```
+
+</CodeGroup>
+
