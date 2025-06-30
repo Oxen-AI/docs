@@ -1,0 +1,117 @@
+---
+title: 💻 Running Notebooks as Scripts
+description: 'How to automate workflows by running a notebook from the command line.'
+---
+
+One nice property of Marimo notebooks is that they are a just python code. This means that you can run a notebook as a `script` from the command line. This tutorial will show you best practice for setting up a notebook to parse command line arguments, and be flexible enough to run from the command line or from a "edit mode" in the UI.
+
+## CLI Argument Parsing
+
+In order to keep your code modular and easy to run, it is best to start by defining a function as the entry point. This will allow us to route to the function in `edit` or `script` mode. For this example, we will be writing a dummy training loop for a model that simply sleeps for a user provided number of epochs.
+
+```python
+import typer
+import time
+
+app = typer.Typer(help="Train a model") # Create the CLI app
+
+@app.command() # Add function to your CLI app
+def train(model_name: str, epochs:int=1):
+    for i in range(epochs):
+        time.sleep(1)
+        print(f"Training: {model_name}, epoch: {i}")
+```
+
+Marimo allows you to use any of your favorite Python libraries for argument parsing. A nice library for parsing command line arguments is `typer`. The `typer` library allows you to add a decorator to your function to turn it into a command line application. It will automagically infer the command names, types and default values from the function signature. The function is now usable from the command line without affecting it's ability to be used in other parts of your code.
+
+## Running As A Script
+
+Marimo makes it easy to detect the execution strategy of the file. Simply add a cell that checks if the `mo.app_meta().mode` is set to `script`.
+
+```python
+import marimo as mo
+
+if mo.app_meta().mode == "script":
+    # Run our CLI app
+    app()
+```
+
+These small changes make it so you can execute the file from the command line. Run the file like you would normally run a python script.
+
+```bash
+python train.py Qwen/Qwen3-32B --epochs 3
+```
+
+You should see the following output:
+
+```bash
+Training: Qwen/Qwen3-32B, epoch: 1
+Training: Qwen/Qwen3-32B, epoch: 2
+Training: Qwen/Qwen3-32B, epoch: 3
+```
+
+## Running In Edit Mode
+
+It is also nice for development of your scripts to be able to kick off the same function in edit mode. For this, using the `mo.ui.run_button` is a nice pattern. At the top of your notebook, define a cell with a button in it.
+
+```python
+import marimo as mo
+
+button = mo.ui.run_button(label="Train model")
+button
+```
+
+Then in a cell below, you can block the execution until the button has been pressed. Below the `mo.stop` method, simply call the same function we used for the CLI.
+
+```python
+mo.stop(not button.value)
+
+train("Qwen/Qwen3", epochs=3)
+```
+
+![Run Button](/images/marimo/run-as-a-script/run-button.png)
+
+Every time you press the button it will run the code that depends on the function defined in the cell.
+
+## Running on Oxen.ai
+
+What if you want to train a model, but don't have a powerful enough GPU? Oxen.ai's infrastructure allows you to run these scripts in the cloud on customizable hardware. For example, you may want to write a script to fine-tune a model on an A10G GPU with 8 cpu cores and 8GB of RAM. You could configure this script and kick it off on the command line like so:
+
+```bash
+oxen notebook start -n train.py --cpu-cores 8 --mode script \
+  --memory-mb 8192 --gpu "a10g" -- --model Qwen/Qwen3-32B \
+  --epochs 2 --learning-rate 0.03
+```
+
+Note: Currently, the `train.py` file must be committed and pushed to your Oxen.ai remote repository on https://oxen.ai for this command to work.
+
+## Stopping the Notebook
+
+When running jobs on Oxen.ai, you may want to spin down the hardware as soon as a job is finished. There is a convenient helper to stop a notebook in the Oxen Python Library.
+
+```python
+import oxen
+
+oxen.notebooks.stop()
+```
+
+This automatically has context into the current notebook that is running and will spin down the notebook when your computation is finished. For example, let's conclude our training function with the spinning down of the Notebook so that we don't incur any unneeded costs.
+
+```python
+import typer
+import time
+import oxen
+
+app = typer.Typer(help="Train a model")
+
+@app.command()
+def train(model_name: str, epochs:int=1):
+    for i in range(epochs):
+        time.sleep(1)
+        print(f"Training: {model_name}, epoch: {i}")
+
+    # Kill the notebook when it is done training
+    oxen.notebooks.stop()
+```
+
+Congratulations! You now have the power of serverless GPU infrastructure at your fingertips. Write scripts that clean data, compute embeddings, train models, evaluate models, or any other computation you can think of.
