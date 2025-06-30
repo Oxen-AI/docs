@@ -76,7 +76,13 @@
         "features/exploring_data",
         "features/labeling_data",
         "features/collaboration",
-        "features/fine_tuning",
+        {
+          "group": "🪄 Fine-Tuning",
+          "pages": [
+            "features/fine-tuning",
+            "examples/fine-tuning/solutions"
+          ]
+        },
         {
           "group": "📝 Notebooks",
           "pages": [
