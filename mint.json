@@ -65,17 +65,24 @@
         "getting-started/learn-the-basics",
         "getting-started/cli",
         "getting-started/python",
-        "getting-started/oxen-server"
+        "getting-started/oxen-server",
+        "features/performance"
       ]
     },
     {
-      "group": "Key Features",
+      "group": "Oxen Hub Features",
       "pages": [
-        "features/performance",
+        "features/chat",
         "features/exploring_data",
         "features/labeling_data",
         "features/collaboration",
-        "features/fine-tuning",
+        {
+          "group": "⚙️ Fine-Tuning",
+          "pages": [
+            "features/fine-tuning",
+            "examples/fine-tuning/solutions"
+          ]
+        },
         {
           "group": "📝 Notebooks",
           "pages": [
@@ -93,14 +100,20 @@
         {
           "group": "🚀 Model Inference",
           "pages": [
-            "features/models",
-            "use-cases/sentiment-analysis",
-            "use-cases/text-translation",
-            "use-cases/rag-embeddings",
-            "use-cases/rag-extracting-answers",
-            "use-cases/synthetic-data-gen"
+            "features/chat",
+            "features/models"
           ]
         }
+      ]
+    },
+    {
+      "group": "Use Cases",
+      "pages": [
+        "use-cases/sentiment-analysis",
+        "use-cases/text-translation",
+        "use-cases/rag-embeddings",
+        "use-cases/rag-extracting-answers",
+        "use-cases/synthetic-data-gen"
       ]
     },
     {
