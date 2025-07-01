@@ -6,21 +6,21 @@ Whether it is a [fine-tuned model](/features/fine-tuning) or a foundation model,
 
 ![Models Page](/images/chat/models_page.png)
 
-All of these models can be wired directly into your application using any OpenAI compatible client.
+All of these models can be wired directly into your application using any OpenAI-compatible client.
 
 # Chat Interface
 
-The Oxen.ai chat interface is a simple web interface which allows you to try a model without writing any code. This includes models that you [fine-tuned](/features/fine-tuning) yourself or foundation models from labs like OpenAI, Anthropic, and Google.
+The Oxen.ai chat interface is a simple web interface that allows you to try a model without writing any code. This includes models that you [fine-tuned](/features/fine-tuning) yourself or foundation models from labs like OpenAI, Anthropic, and Google.
 
 ![Chat Interface](/images/chat/chat_window.png)
 
-Feel free to kick around a model and see how it performs before you decide to use it in your application.
+Feel free to experiment with a model and see how it performs before you decide to use it in your application.
 
 # API Endpoints
 
-Once you feel confident in a model, you can use the API endpoints to integrate it into your application. The API endpoints allow you to test out a variety of models with a single API key. It is a great way to get started with a new model or to test out a new use case.
+Once you feel confident in a model, you can use the API endpoints to integrate it into your application. The API endpoints allow you to test out a variety of models with a single API key. It's a great way to get started with a new model or to test out a new use case.
 
-The API is OpenAI compatible, so you can use any OpenAI compatible client to interact with the model. Simply prepend the model name a provider like `openai:` and use the `https://hub.oxen.ai/v1/chat/completions` endpoint.
+The API is OpenAI-compatible, so you can use any OpenAI-compatible client to interact with the model. Simply prepend the model name with a provider like `openai:` and use the `https://hub.oxen.ai/api/chat/completions` endpoint.
 
 The currently supported list of providers is:
 
@@ -35,7 +35,7 @@ The currently supported list of providers is:
 <CodeGroup>
 
 ```bash curl
-curl -X POST https://hub.oxen.ai/api/chat/completionss \
+curl -X POST https://hub.oxen.ai/api/chat/completions \
 -H "Authorization: Bearer $OXEN_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
