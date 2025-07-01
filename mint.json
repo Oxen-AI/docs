@@ -77,7 +77,7 @@
         "features/labeling_data",
         "features/collaboration",
         {
-          "group": "⚙️ Fine-Tuning",
+          "group": "⚙️ Fine-Tunes",
           "pages": [
             "features/fine-tuning",
             "examples/fine-tuning/solutions"
