@@ -1,0 +1,65 @@
+---
+title: ⚡️ Model Inference
+---
+
+Whether it is a model from the labs or your own [fine-tuned model](/features/fine-tuning), Oxen.ai exposes endpoints and a chat interface to test out a variety of models with a unified interface. This allows you to start building and hot swap models in your application right away.
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST https://hub.oxen.ai/api/chat/completions \
+-H "Authorization: Bearer $OXEN_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{
+  "model": "openai:gpt-4o-mini",
+  "messages": [{"role": "user", "content": "Hello, how are you?"}]
+}'
+```
+
+```python Python
+import openai
+import os
+
+client = openai.OpenAI(
+    api_key=os.getenv("OXEN_API_KEY"),
+    base_url="https://hub.oxen.ai/api"
+)
+
+response = client.chat.completions.create(
+    model="openai:gpt-4o-mini",
+    messages=[{"role": "user", "content": "What is a great name for an ox that also manages your AI infrastructure?"}]
+)
+
+print(response.output['content'][0]['text'])
+```
+
+</CodeGroup>
+
+# Chat Interface
+
+The Oxen.ai chat interface is a simple web interface that allows you to try the latest and greatest models right away. The same interface can be used for models that you [fine-tuned](/features/fine-tuning) yourself.
+
+<img alt="Chat Interface" className="rounded-xl" src="/images/chat/chat_window.png" />
+
+Feel free to experiment with a model and see how it performs before you decide to use it in your application.
+
+# API Endpoints
+
+Once you feel confident in a model, you can use the API endpoints to integrate it into your application. The API endpoints allow you to test out a variety of models with a single API key. It's a great way to get started with a new model or to test out a new use case.
+
+The API is OpenAI-compatible, so you can use any compatible client to interact with the model. Simply prepend the model name with a provider like `openai:gpt-4o-mini` and use `https://hub.oxen.ai/api` as your `base_url`.
+
+The currently supported list of providers is:
+
+- `openai`
+- `anthropic`
+- `fireworks`
+- `google`
+- `mistral`
+- `deepseek`
+- `oxenai` (for fine-tuned models)
+
+To see the list of generally available models, visit the [models page](https://oxen.ai/ai/models).
+
+<img alt="Models Page" className="rounded-xl" src="/images/chat/models_page.png" />
+

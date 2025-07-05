@@ -61,6 +61,17 @@
       "group": "Get Started",
       "pages": [
         "getting-started/intro",
+        "getting-started/inference",
+        "getting-started/fine_tuning",
+        "getting-started/datasets",
+        "getting-started/evaluation",
+        "getting-started/notebooks",
+        "getting-started/versioning"
+      ]
+    },
+    {
+      "group": "Developer Tools",
+      "pages": [
         "getting-started/install",
         "getting-started/learn-the-basics",
         "getting-started/cli",
@@ -79,7 +90,6 @@
         {
           "group": "⚙️ Fine-Tuning",
           "pages": [
-            "features/fine-tuning",
             "examples/fine-tuning/solutions"
           ]
         },
@@ -100,8 +110,7 @@
         {
           "group": "🚀 Model Inference",
           "pages": [
-            "features/chat",
-            "features/models"
+            "features/chat"
           ]
         }
       ]
