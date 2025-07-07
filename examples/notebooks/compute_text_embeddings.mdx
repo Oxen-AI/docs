@@ -9,6 +9,13 @@ Notebooks make it easy and fast to compute embeddings for a dataset on a GPU. If
 
 ![GPU Selection](/images/marimo/embeddings/gpu.png)
 
+Of the time of writing, you need a specific version of sentence transformers and transformers for this code to work.
+
+```bash
+pip install transformers==4.51.3
+pip install sentence-transformers
+```
+
 # Setting Up The Interface
 
 [Marimo](https://marimo.io) allows you to define UI elements that can be used to define the input repository, dataset, model name and number of rows to compute embeddings for. First lets setup a simple form that allows us to kick off the embedding computation.
@@ -84,11 +91,7 @@ model = SentenceTransformer(model_name, device="cuda")
 print(f"Model Loaded: {model_name}")
 ```
 
-Now we can compute the embeddings for the dataset. We will compute them in batches to take full advantage of the GPU. In this example, we are just computing the embeddings for the `title` column, but you can compute the embeddings for any text column in the dataset. `mo.status.progress_bar` is used to show a progress bar in the UI as we compute the embeddings.
-
-![Progress Bar](/images/marimo/embeddings/progress.png)
-
-You should see the model computing over 1,000 embeddings per second 🔥
+Now we can compute the embeddings for the dataset. We will compute them in batches to take full advantage of the GPU. In this example, we are just computing the embeddings for the `title` column, but you can compute the embeddings for any text column in the dataset. The embeddings will now be in the `result_df` data frame in a new column called `embedding`.
 
 ```python
 # How many embeddings to compute at once
@@ -123,7 +126,11 @@ with mo.status.progress_bar(total=len(result_df)) as bar:
 result_df['embedding'] = computed_embeddings
 ```
 
-The embeddings will now be in the `result_df` data frame in a new column called `embedding`.
+`mo.status.progress_bar` is used to show a progress bar in the UI as we compute the embeddings.
+
+![Progress Bar](/images/marimo/embeddings/progress.png)
+
+You should see the model computing over 1,000 embeddings per second 🔥
 
 # Save the Embeddings
 

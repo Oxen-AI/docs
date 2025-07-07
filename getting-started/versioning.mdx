@@ -1,11 +1,13 @@
 ---
-title: '💾 Version Control (TODO)'
-description: 'Oxen.ai is built on top of a version control system that allows you to version, branch, and share datasets, model weights, and experiments with your team.'
+title: '💾 Version Control'
+description: 'Oxen.ai is built on top of a scalable data version control system that allows you to version, branch, and share datasets, model weights, and experiments with your team.'
 ---
 
-# 💾 Oxen Versioning 101
+Oxen's [open source data version control system](https://github.com/Oxen-AI/oxen-release) shines at workflows and data sizes that git or git-lfs fall short. The interface is inspired by git, so that it is easy to learn, but has a few core differences. Oxen is built from the ground up to handle large datasets with many files or large csvs, parquet files, or other large binary blobs like model weights.
 
-The first thing you need to know about Oxen.ai is that allows to add files directly to the remote without pulling any data locally. If you want to make a contribution to a dataset with [1 Million Files](/features/performance), you do not want to wait to clone all the files locally just to add yours.
+## Versioning 101
+
+While Oxen is inspired by git, the first thing you need to know about Oxen.ai is that it has both remote and local workflows. Remote workflows allow you to add files directly to the remote without pulling any data locally. Say we wanted to add a file to a dataset like ImageNet with [1 Million Files](/features/performance), you do not want to wait to clone all the files locally just to add yours.
 
 <CodeGroup>
   ```python Python
@@ -22,151 +24,600 @@ The first thing you need to know about Oxen.ai is that allows to add files direc
 
 This is just one example of how Oxen.ai enables a more developer friendly workflow for large datasets. There are also optimizations under the hood such as parallel file transfer, scalable merkle trees, and data deduplication to make Oxen go brrr (or mooo?).
 
-Oxen.ai's comprised of a [command line interface](/getting-started/cli), as well as bindings for [Rust](https://github.com/Oxen-AI/Oxen) 🦀, [Python](/getting-started/python) 🐍, and [HTTP interfaces](/http-api) 🌎 to make it easy to integrate into your workflow.
+## Client and Server
 
-## ✅ Features
+The open source version control tools come a server to sync data to and a client that can interact with data locally and remotely. The client and server share a common core library that is written in Rust and is used to quickly sync data between the two.
 
-Oxen.ai is built around ergonomics, ease of use, and it is easy to learn. If you know how to use git, you know how to use Oxen. The main difference is that data is a first class citizen in Oxen. The interface allows you to view, edit, query, and version your data as well as your code.
+The server exposes a REST API that can be used to interact with data. Oxen.ai's clients include a [command line interface](/getting-started/cli), as well as bindings for [Rust](https://github.com/Oxen-AI/Oxen) 🦀, [Python](/getting-started/python) 🐍, and [HTTP interfaces](/http-api) 🌎 to make it easy to integrate into your workflow.
 
-![Image Net](/images/image-net-example.png)
+## Installation
 
-### Web Hub Features
+Oxen makes versioning your datasets as easy as versioning your code. You can install through homebrew or pip or from our [releases page](https://github.com/Oxen-AI/Oxen/releases).
 
-The Oxen Web Hub is an easy to use web interface that allows you to discover and explore datasets without having to download them. You can also upload files directly, add permissions, and explore branches directly in the interface.
+<CodeGroup>
 
-* 🔎 [Explore Datasets](/features/exploring_data): View and query your data in a beautiful interface
+```bash CLI
+brew tap Oxen-AI/oxen
+brew install oxen
+```
 
-* 🏷️ [Labeling Workflows](/features/labeling_data): Edit data from the UI, or build your own labeling workflows
+```bash Python
+pip install oxenai
+```
 
-* 🤝 [Collaboration](/features/collaboration): Share datasets, models, and code with your team 
+</CodeGroup>
 
-* 📝 [Notebooks](/features/notebooks): Spin up a Python Notebook on a GPU in seconds
+## Remote vs Local Workflow
 
-* 🚀 [Model Inference](/features/models): Run an LLM on your dataset simply by writing a prompt
+Remote repository workflows are best suited for large datasets where it would be expensive to have a fully copy of the data on your local machine. This is the biggest difference between Oxen and git. Oxen can work in both a centralized and decentralized version control paradigm. 
 
-### Open Source Features
+TODO: Image of a centralized and decentralized workflow
 
-The tooling behind the Oxen.ai is open source and available on [GitHub](https://github.com/Oxen-AI/oxen-release). This includes the powerful command line interface, oxen server, python library, and the HTTP API. The Oxen.ai web interface is built on top of the open source tooling, and can be deployed on your own infrastructure as a part of our [enterprise offering](https://www.oxen.ai/pricing).
+While the decentralized nature of git makes it easy to maintain full copies of the history across many machines, this is not practical for large datasets. Oxen was designed from the ground up to be able to seamlessly switch between local and remote workflows.
 
-* 🔥 Fast: Efficient indexing and syncing of any dataset size (millions of images? no problem)
+## Remote Workflow
 
-* 🌎 [Workspaces](/concepts/workspaces): Interact with your data without downloading it
+To get started with the remote workflow, you need to setup an `oxen-server`. Oxen.ai provides both an open source server and a hosted solution that can be used to sync data between your local machine and the cloud. To try the hosted solution, you can create a free account at [https://oxen.ai](https://oxen.ai).
 
-* 🧠 Intuitive: Same commands as git
+### Read a Remote Repository
 
-* 💪 Handles large, unstructured files: images, videos, audio, text, parquet, arrow, json, models, etc
+If a remote repository already exists, you simply have to pass in the namespace/name of the remote repository you want to instantiate.
 
-* 📊 Native DataFrame processing: index, compare and serve up DataFrames
+<CodeGroup>
 
-* 📈 Versioning: Never worry about losing the state of your data
+```python Python
+from oxen import RemoteRepo
 
-* 🤝 Distributed Collaboration: sync to an oxen-server
+repo = RemoteRepo("ox/CatDogBBox")
+```
 
-## 🌾 What kind of data?
+</CodeGroup>
 
-Oxen.ai is designed to efficiently manage large datasets, including those with large individual files, for example CSV files with millions of rows. It also handles datasets comprising millions of individual files and directories such as the complete collection of ImageNet images.
+This is a cheap operation that just sets up the pointer to the remote repository. It does not download any data.
 
-The backend is agnostic to data type, so feel free to add any binary blobs. We automatically detect certain data types on upload so that we can render them within the UI. Specifically filetypes such as csv, tsv, jsonl, parquet, arrow turn into beautiful data tables. Images, audio, and video files will also play natively.
 
-## 🚀 Built for speed
+### Create a Remote Repository
 
-One of the main reasons datasets are hard to maintain is the pure performance of indexing the data and transferring the data over the network. We wanted to be able to index hundreds of thousands of images, videos, audio files, and text files in seconds.
+If you do not already have a remote repository, you can create one directly from Pyhton. You may want to start with an empty remote repository and add your data later.
 
-Watch below as we version **hundreds of thousands of images** in seconds 🔥
+<CodeGroup>
+
+```python Python
+from oxen import RemoteRepo
+
+repo = RemoteRepo.create("my-user/my-repo-name")
+```
+
+```bash CLI
+oxen create-remote --name my-user/my-repo-name
+```
+
+</CodeGroup>
+
+By default we add a `README.md` file to the repository with an initial commit. If you want to create an empty repository without adding a `README.md` you can pass `empty=True` to the `create` method.
+
+<CodeGroup>
+
+```python Python
+from oxen import RemoteRepo
+
+repo = RemoteRepo.create("my-user/my-repo-name", empty=True)
+```
+
+```bash CLI
+oxen create-remote --name my-user/my-repo-name --empty
+```
+
+</CodeGroup>
+
+The reason you may want to start with an empty repository is if you already started a local repository and want to push it to the remote repository. This local repository already has a commit history. When pushing to a remote, commit histories must match. Hence we need to start with an empty remote repository without any commits if we want to push a local repository with a commit history.
+
+### File Exploration
+
+To see the files in the remote repository you can use `ls`.
+
+<CodeGroup>
+
+```python Python
+from oxen import RemoteRepo
+
+repo = RemoteRepo("ox/CatDogBBox")
+print(repo.ls())
+```
+
+</CodeGroup>
+
+To view a specific directory you can pass the directory name to the `ls` method.
+
+Note: the directories are paginated so you will need to use the `page_num` parameter to view the next page of results.
+There are also `total_pages`, `page_number`, and `total_entries` attributes that give you information about the pagination.
+
+<CodeGroup>
+
+```python Python
+from oxen import RemoteRepo
+
+repo = RemoteRepo("ox/CatDogBBox")
+images_results = repo.ls("images", page_num=1, page_size=10)
+print(images_results)
+print(images_results.total_pages)
+print(images_results.page_number)
+print(images_results.total_entries)
+```
+
+</CodeGroup>
+
+### Downloading Data
+
+You can download individual files and folders if you do not need the entire data repository for your job.
+
+<CodeGroup>
+
+```bash CLI
+oxen download ox/CatDogBBox annotations/test.csv
+```
+
+```python Python
+from oxen import RemoteRepo
+repo = RemoteRepo("ox/CatDogBBox")
+repo.download("annotations/test.csv")
+```
+
+```bash cURL
+# URL Format: https://hub.oxen.ai/api/repos/:namespace/:repo_name/file/:revision/:path
+# :revision can be a branch name or commit hash
+curl -X GET -H "Authorization: Bearer $TOKEN" \
+    https://hub.oxen.ai/api/repos/ox/CatDogBBox/file/main/annotations/test.csv \
+    -o ~/Downloads/test.csv
+```
+
+</CodeGroup>
+
+### Checkout a Branch
+
+If you have a data on a separate branch that you want to view you can checkout a branch by passing the branch name to the `checkout` method.
+
+```python Python
+from oxen import RemoteRepo
+repo = RemoteRepo("ox/CatDogBBox")
+repo.checkout("my-branch-name")
+print(repo.ls())
+```
+
+### Create a New Branch
+
+The `checkout` method also allows you to create a new branch if the branch does not exist.
+
+```python Python
+from oxen import RemoteRepo
+repo = RemoteRepo("ox/CatDogBBox")
+repo.checkout("my-new-branch-name", create=True)
+print(repo.ls())
+```
+
+### View Branches
+
+To see all the branches in the remote repository you can use the `branches` method.
+
+```python Python
+from oxen import RemoteRepo
+repo = RemoteRepo("ox/CatDogBBox")
+print(repo.branches())
+```
+
+### Add Files
+
+You can add files to the remote repository by passing the path to the file and the destination directory. This will upload the file to the remote repository and stage it for commit.
+
+```python Python
+from oxen import RemoteRepo
+repo = RemoteRepo("ox/CatDogBBox")
+repo.add("images/000000002754.jpg", dst="images/")
+```
+
+### Commit Changes
+
+You can commit changes to the remote repository by passing a message.
+
+```python Python
+repo.commit("Adding the 1,000,001st image to the dataset")
+```
+
+### Workspaces
+
+TODO: We need a better explanation of workspaces.
+
+### Connect Local to Remote
+
+Remote repositories are identified by a remote URL. This is the URL that you can use to clone the repository.
+
+```python Python
+from oxen import RemoteRepo
+
+repo = RemoteRepo.create("my-user/my-repo-name", empty=True)
+print(repo.url())
+```
+
+You can use this URL to clone the repository.
+
+```bash Python
+# Local Repository
+from oxen import Repo
+from oxen import RemoteRepo
+
+remote_repo = RemoteRepo.create("my-user/my-repo-name", empty=True)
+repo_url = remote_repo.url()
+
+local_repo = Repo("/path/to/local/repo")
+local_repo.clone(repo_url)
+```
+
+Or you can set the remote of a local repository to the remote repository.
+
+```bash Python
+from oxen import Repo
+from oxen import RemoteRepo
+
+remote_repo = RemoteRepo.create("my-user/my-repo-name", empty=True)
+repo_url = remote_repo.url()
+
+local_repo = Repo("/path/to/local/repo")
+remote_repo.set_remote("origin", remote_repo.url())
+```
+
+## Local Workflow
+
+Local workflow looks a lot like git. The downside is that you have to duplicate all the data locally. The upside is that oxen is optimized to make local workflows fast.
+
+### Clone Dataset
+
+Clone your first Oxen repository from the [OxenHub](https://oxen.ai/explore).
+
+<CodeGroup>
+
+```bash CLI
+oxen clone https://hub.oxen.ai/ox/CatDogBBox
+```
+
+```python Python
+import oxen
+
+# Clone the repository
+repo = oxen.clone("ox/CatDogBBox")
+```
+
+</CodeGroup>
+
+### Initialize User
+
+Each change you make will be associated with a name and email. Set them before you get started so you know who changed what. The user data is saved by default in `~/.config/oxen/user_config.toml`.
+
+<CodeGroup>
+
+```bash CLI
+oxen config --name "Bessie Oxington" --email "bessie@yourcomany.com"
+```
+
+```python Python
+from oxen.user import config_user
+config_user("Bessie Oxington", "bessie@oxen.ai")
+```
+
+</CodeGroup>
+
+### Create Repository
+
+Initialize your first Oxen repository, and commit the first version of your data.
+
+<CodeGroup>
+
+```bash CLI
+# Initialize the repository
+oxen init
+# Write data to a file
+printf '%s\n' 'name,age' 'bob,12' 'jane,13' > people.csv
+# Stage the data for commit
+oxen add people.csv
+# Commit the changes with a message
+oxen commit -m "Adding my data"
+```
+
+```python Python
+import os
+from oxen import Repo
+
+# Instantiate a Repo object and create the repo directory
+repo = Repo("/path/to/data", mkdir=True)
+# Initialize the repository
+repo.init()
+# Write data to a file
+data_path = os.path.join(repo.path, "people.csv")
+with open(data_path, "w") as f:
+    f.write("name,age\nbob,12\njane,13")
+# Stage the data for commit
+repo.add(data_path)
+# Commit the changes with a message
+repo.commit("Adding my data")
+```
+
+</CodeGroup>
+
+### Version Your Data
+
+Once your data has been committed, you can always return to that version.
+
+Confidently overwrite the file, move the file, delete the file, it doesn't matter. Oxen will always have a copy of the data at the time of the previous commit.
+
+### Create Branch
+
+It is good practice to create a new branch for changes you make to your data. This will allow you to easily compare the parallel versions of your data over time.
+
+<CodeGroup>
+
+```bash CLI
+# Checkout a branch named `modify-data`
+oxen checkout -b modify-data
+# Overwrite data in existing file
+printf '%s\n' 'name,age' 'bob,12' 'jane,13' 'joe,14' > people.csv
+```
+
+```python Python
+import os
+from oxen import Repo
+
+repo = Repo("/path/to/data")
+# Create a new branch called `modify-data`
+repo.checkout("modify-data", create=True)
+# Overwrite data in existing file
+data_path = os.path.join(repo.path, "people.csv")
+with open(data_path, "w") as f:
+    f.write("name,age\nbob,12\njane,13\njoe,14")
+```
+
+</CodeGroup>
+
+### Delete Branch
+
+Once finished with a branch, you can delete it.
+
+<CodeGroup>
+
+```bash CLI
+# Checkout main branch locally
+oxen checkout main
+# Delete 'other_branch' locally
+oxen branch -d new_branch # may need -D if branch is not merged into main
+# Delete branch in remote repo
+oxen push origin --delete new_branch
+```
+
+```python Python
+import os
+from oxen import Repo
+
+# Instantiate a Repo object
+repo = Repo("/path/to/data")
+# Checkout the main branch
+repo.checkout("main")
+# Delete new_branch
+repo.branch('new_branch', delete=True)
+# Delete remote branch
+repo.push('origin', 'new_branch', delete=True)
+```
+
+</CodeGroup>
+
+### Diff Changes
+
+View the change you made with the `oxen diff` command. This will show you the changes you made to your data since the last commit.
+
+```bash CLI
+oxen diff image_classification_data.csv
+```
+
+```
+Column changes:
+   + label (str)
+
+Row changes:
+   Δ 1 (modified)
+   + 3 (added)
+   - 2 (removed)
+
+shape: (6, 7)
++-------------+-----+-----+-------+--------+-------------+-------------------+
+| file        | x   | y   | width | height | label.right | .oxen.diff.status |
+| ---         | --- | --- | ---   | ---    | ---         | ---               |
+| str         | i64 | i64 | i64   | i64    | str         | str               |
++-------------+-----+-----+-------+--------+-------------+-------------------+
+| image_0.jpg | 0   | 0   | 10    | 10     | cat         | modified          |
+| image_1.jpg | 1   | 2   | 10    | 20     | null        | removed           |
+| image_1.jpg | 200 | 100 | 10    | 20     | dog         | added             |
+| image_2.jpg | 4   | 10  | 20    | 20     | null        | removed           |
+| image_3.jpg | 4   | 10  | 20    | 20     | dog         | added             |
+| image_4.jpg | 10  | 10  | 10    | 10     | dog         | added             |
++-------------+-----+-----+-------+--------+-------------+-------------------+
+```
+
+Once you [push](#push-data) you changes to [OxenHub](https://oxen.ai), you can view the changes you made in your commit history.
 
 <p align="center">
-  <img src="https://github.com/Oxen-AI/oxen-release/raw/main/images/cli-celeba.gif?raw=true" alt="oxen cli demo" />
+    <img src="/images/diff.jpg" alt="oxen cli demo" />
 </p>
 
-But speed is only the beginning. Think of Oxen.ai as a set of building blocks to build your dream workflow on top of.
+The diff command line tool is more powerful than it looks on the surface. Oxen has the ability to diff files of many formats, and the ability to specify keys are targets in tabular diffs to make it easier to see what changed.
 
-## ⚒️ Installation
+For advanced usage, check out the [full diff documentation](/concepts/diffs).
 
-<CodeGroup>
-  ```bash CLI
-  brew tap Oxen-AI/oxen
-  brew install oxen
-  ```
+### Restore Changes
 
-  ```bash Python
-  pip install oxenai
-  ```
-</CodeGroup>
-
-## ⬇️ Cloning Datasets
-
-The fastest way to get up and running with oxen is by cloning a dataset. Explore the many public datasets we have today on the [OxenHub](https://oxen.ai/explore).
+If you are not happy with the changes you made to your data, you can restore them to the previous commit with the `oxen restore` command.
 
 <CodeGroup>
-  ```bash CLI
-  oxen clone https://hub.oxen.ai/ox/CatDogBBox
-  ```
 
-  ```python Python
-  import oxen
+```bash CLI
+oxen restore people.csv
+```
 
-  # Clone the repository
-  repo = oxen.clone("ox/CatDogBBox")
-  ```
+```python Python
+# TODO: implement python wrapper
+```
+
 </CodeGroup>
 
-## ⬆️ Pushing Datasets
+### Commit Changes
 
-Create and share your own repository to share your datasets with your team or the world by pushing them to [OxenHub](https://oxen.ai).
+Once you are happy with the changes you have made to your data, you can commit them to the repository with a new message.
 
 <CodeGroup>
-  ```bash CLI
-  # New repos can also be create in UI
-  oxen add .
-  oxen commit -m "message"
-  oxen create-remote --name <namespace>/<repo_name>
-  oxen config --set-remote origin https://hub.oxen.ai/<namespace>/<repo_name>
-  oxen push origin main
-  ```
 
-  ```python Python
-  import os
-  from oxen import Repo
+```bash CLI
+oxen add people.csv
+oxen commit -m "Adding Joe to the dataset"
+```
 
-  # Instantiate a Repo object and create the repo directory
-  repo = Repo("/path/to/data", mkdir=True)
-  # Initialize the repository
-  repo.init()
-  # Write data to a file
-  data_path = os.path.join(repo.path, "people.csv")
-  with open(data_path, "w") as f:
-      f.write("name,age\nbob,12\njane,13")
-  # Stage the data for commit
-  repo.add(data_path)
-  # Commit the changes with a message
-  repo.commit("Adding my data")
+```python Python
+from oxen import Repo
 
-  # Set where to push the data to (replace <namespace> and <repo_name> with your remote)
-  repo.set_remote("origin", "https://hub.oxen.ai/<namespace>/<repo_name>")
+repo = Repo("/path/to/data")
+# Stage the data for commit
+data_path = os.path.join(repo.path, "people.csv")
+repo.add(data_path)
+# Commit the changes with a message
+repo.commit("Adding Joe to the dataset")
+```
 
-  # Push the changes to the remote
-  repo.push()
-  ```
 </CodeGroup>
 
-## 📚 Learn The Basics
+### View History
 
-There are many ways to use Oxen. You can use the command line interface, the python library, or the OxenHub web interface. Learn the basics of each below.
+To see the commit history of your repository, you can use the `oxen log` command.
 
-<CardGroup cols={2}>
-  <Card title="Command Line Interface" icon="rectangle-terminal" href="/getting-started/cli">
-    Learn how to use the Oxen command line interface
-  </Card>
+<CodeGroup>
 
-  <Card title="Python Library" icon="python" href="/getting-started/python">
-    Get started with the python library
-  </Card>
+```bash CLI
+oxen log
+```
 
-  <Card title="Web Interface" icon="browser" href="https://oxen.ai">
-    Use the OxenHub web interface
-  </Card>
+```python Python
+from oxen import Repo
 
-  <Card title="Self Host" icon="satellite-dish" href="/getting-started/oxen-server">
-    Host Oxen in your own infrastructure
-  </Card>
-</CardGroup>
+# Instantiate a Repo object
+repo = Repo("/path/to/data")
+# Get the commit history
+commits = repo.log()
+```
+
+</CodeGroup>
+
+### Checkout Main Branch
+
+Once you are done making changes to your data, you can return to the main branch with the `oxen checkout` command.
+
+Never fear, the file now has now been reverted to the inital commit again, but your changes will be saved in the branch you created.
+
+<CodeGroup>
+
+```bash CLI
+oxen checkout main
+```
+
+```python Python
+from oxen import Repo
+
+# Instantiate a Repo object
+repo = Repo("/path/to/data")
+# Checkout the main branch
+repo.checkout("main")
+```
+
+</CodeGroup>
+
+### List Branches
+
+To see the branches in your repository, you can use the `oxen branch` command.
+
+<CodeGroup>
+
+```bash CLI
+oxen branch
+```
+
+```python Python
+from oxen import Repo
+
+# Instantiate a Repo object
+repo = Repo("/path/to/data")
+# Get the branches
+print(repo.branches())
+```
+
+</CodeGroup>
+
+### Push Data
+
+Once your data has been committed locally, you can sync it to the OxenHub.
+
+OxenHub is a free service that allows you to collaborate on your data in the cloud. You can create a free account at [https://oxen.ai](https://oxen.ai).
+
+<CodeGroup>
+
+```bash CLI
+# Go create repo at https://oxen.ai
+# ...
+oxen config --set-remote origin https://hub.oxen.ai/<namespace>/<repo_name>
+oxen config --auth hub.oxen.ai <your_auth_token>
+oxen push origin main
+# to push your other branch simply change the branch name from `main` to `modify-data`
+```
+
+```python Python
+# Go create repo at https://oxen.ai
+# ...
+# Set where to push the data to (replace <namespace> and <repo_name> with your remote)
+repo.set_remote("origin", "https://hub.oxen.ai/<namespace>/<repo_name>")
+# Set your auth token (defaults to hub.oxen.ai host)
+oxen.auth.config_auth("YOUR_AUTH_TOKEN")
+# Push the changes to the remote
+repo.push()
+```
+
+</CodeGroup>
+
+### Clone Data
+
+Clone your data faster than ever before. Oxen has been optimized to the core to make pulling large datasets as fast as possible.
+
+<CodeGroup>
+
+```bash CLI
+oxen clone https://hub.oxen.ai/ox/CatDogBBox
+```
+
+```python Python
+from oxen import Repo
+
+# Clone the repository
+repo = Repo("/path/to/dst")
+repo = Repo.clone("https://hub.oxen.ai/ox/CatDogBBox")
+```
+
+</CodeGroup>
+
+### Pull Changes
+
+Only pull the changes you need. Oxen will only pull the files that have changed since the last time you pulled.
+
+<CodeGroup>
+
+```bash CLI
+oxen pull origin main
+```
+
+```python Python
+from oxen import Repo
+repo = Repo("/path/to/repo")
+repo.pull()
+```
+
+</CodeGroup>

@@ -65,7 +65,20 @@
         "getting-started/fine_tuning",
         "getting-started/datasets",
         "getting-started/evaluation",
-        "getting-started/notebooks",
+        {
+          "group": "📝 Notebooks",
+          "pages": [
+            "getting-started/notebooks",
+            "examples/notebooks/explore_process_version_data",
+            "examples/notebooks/build_labeling_tool",
+            "examples/notebooks/compute_text_embeddings",
+            "examples/notebooks/generate_synthetic_datasets",
+            "examples/notebooks/train_llm",
+            "examples/notebooks/eval_llm/llm_as_a_judge",
+            "examples/notebooks/eval_llm/human_in_the_loop",
+            "examples/notebooks/run_as_script"
+          ]
+        },
         "getting-started/versioning"
       ]
     },
