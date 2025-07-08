@@ -1,13 +1,21 @@
 ---
-title: 'Schemas'
-description: 'Managing and validating data schemas is an important part of making robust data pipelines.'
+title: 'File Metadata'
+description: 'Oxen.ai gives you the flexibility to attach metadata to files to make them more discoverable and useful.'
 ---
 
-⚠️ This is a work in progress. Do not rely on being stable yet. ⚠️
+## Data Type Detection
 
-## Detect Schema
+By default, Oxen.ai will detect the data type of a file based on the file extension and content type. The default data types are:
 
-When you add a dataframe to Oxen, it automatically detects and versions the schema of any tabular data. This is done by using [Polars](https://www.pola.rs/) under the hood to infer the column names and datatypes.
+- `tabular` -> `csv`, `tsv`, `jsonl`, `parquet`, `arrow`
+- `text` -> `txt`
+- `image` -> `png`, `jpg`, `jpeg`, `gif`, `bmp`, `tiff`, `webp`
+- `video` -> `mp4`, `mov`
+- `audio` -> `mp3`, `wav`, `m4a`, `ogg`, `flac`
+
+## Tabular Data
+
+When you add a tabular file to Oxen, it automatically detects and versions the schema of any tabular data. This is done by using [Polars](https://www.pola.rs/) under the hood to infer the column names and datatypes.
 
 To list all the schemas that have been detected and committed, you can use the `oxen schemas` subcommand.
 

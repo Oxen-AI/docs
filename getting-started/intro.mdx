@@ -1,17 +1,17 @@
 ---
 title: 🐂 What is Oxen?
-description: 'Oxen.ai is a developer platform for fine-tuning and customizing models on your own proprietary datasets.'
+description: 'Oxen.ai is a developer platform for fine-tuning and evaluating models on your own data.'
 ---
 
 <img alt="Oxen.ai Moon Ox Hero" classname="block" src="/images/MoonOx.png" />
 
-Oxen.ai gives you the tools to select the right [model and prompt](/getting-started/inference). Bring your own [datasets](/features/datasets) to [evaluate](/features/evaluation), [fine-tune](/features/fine-tuning), and own your model end-to-end. Everything including datasets, model weights, and [notebooks](/features/notebooks) is versioned for easy iteration, comparison, and collaboration.
+Oxen.ai gives you the tools and infrastructure to build the best [model](/getting-started/inference) for your use case.
 
-Great models are built through constant iteration and clarity of goals - whether that's higher quality, lower cost, faster response, or domain-specific accuracy. Oxen.ai helps you get there, faster.
+The platform makes it easy to spin up serverless GPU infrastructure to [train models](/examples/notebooks/train_llm) or run [inference](/getting-started/inference). When you are done, the [datasets](/getting-started/datasets), [models weights](/getting-started/fine-tuning), and [code](/getting-started/notebooks) are all [versioned](/getting-started/versioning) and stored in an Oxen.ai [repository](/concepts/repositories) for easy iteration, comparison, and collaboration.
  
 ## ✅ Features
 
-Oxen.ai's platform allows you to quickly graduate from prompt engineering to custom model deployment when needed. The platform's features include:
+Whether you are iterating on your [prompts](/getting-started/inference) while using a closed source model or [fine-tuning](/features/fine-tuning) an open source model, Oxen.ai gives you the tools to focus on what matters most: building great models.
 
 * ⚡️ [Inference](/getting-started/inference) - Quickly iterate on prompts and models
 * 🚀 [Fine-Tuning](/features/fine-tuning) - Go from dataset to deployable model in a few clicks
@@ -20,13 +20,13 @@ Oxen.ai's platform allows you to quickly graduate from prompt engineering to cus
 * 📓 [Notebooks](/features/notebooks) - Write custom code to interact with your datasets and models
 * 💾 [Version Control](/features/versioning) - Sync your datasets, model weights, and code with a collaborative hub
 
-With easy-to-use developer tools, you have access to the raw model weights, datasets, and code through the [command line interface](/getting-started/cli), [python library](/python-api/index) or [HTTP API](/http-api/index). This makes it seamless to integrate Oxen into your existing workflows and train on your own private data.
+With Oxen's open source [data version control system](/features/versioning), you have access to the raw model weights, datasets, and code through the [command line interface](/getting-started/cli), [python library](/python-api/index) or [HTTP API](/http-api/index). This makes it seamless to integrate prompts, models, and datasets into your existing workflows.
 
 ### ⚡ **Quickly Iterate on Models**
 
 Whether you are making your first LLM call or need to deploy a fine-tuned model, [Oxen.ai](http://Oxen.ai) gives you the flexibility to swap models through a unified [Model API](/features/chat). The interface is OpenAI compatible and supports foundation models from Anthropic, Google, Meta, and OpenAI. See the list of [supported models](https://oxen.ai/ai/models) to get started.
 
-Closed source models not working for your use case? Fine-tune your own model, optimizing it for speed, privacy or cost, and deploy it to the same interface in minutes.
+Closed source models not working for your use case? [Fine-tune your own model](/getting-started/fine-tuning), optimizing it for accuracy, speed, or cost, and deploy it to the same interface in minutes.
 
 <img alt="Oxen.ai Chat Window" className="rounded-xl" src="/images/chat/chat_window.png" />
 
@@ -39,8 +39,6 @@ Go from dataset to model in a few clicks with Oxen.ai's fine-tuning tooling. Sel
 <img alt="Fine-Tuning" src="/images/fine_tuning/fine-tune-home.png" />
 
 Once the model has been fine-tuned, you can easily deploy the model behind an inference endpoint and start the evaluation loop over again.
-
-TODO: Form for early access to multi-node training
 
 ### 📊 **Build Datasets**
 

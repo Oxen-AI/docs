@@ -7,7 +7,7 @@ Oxen's [open source data version control system](https://github.com/Oxen-AI/oxen
 
 ## Versioning 101
 
-While Oxen is inspired by git, the first thing you need to know about Oxen.ai is that it has both remote and local workflows. Remote workflows allow you to add files directly to the remote without pulling any data locally. Say we wanted to add a file to a dataset like ImageNet with [1 Million Files](/features/performance), you do not want to wait to clone all the files locally just to add yours.
+The first thing you need to know about Oxen.ai is that it has both remote and local workflows. Remote workflows allow you to add files directly to the remote without pulling any data locally. Say we wanted to add a file to a dataset like ImageNet with [1 Million Files](/features/performance), you do not want to wait to clone all the files locally just to add yours.
 
 <CodeGroup>
   ```python Python
@@ -51,17 +51,19 @@ pip install oxenai
 
 Remote repository workflows are best suited for large datasets where it would be expensive to have a fully copy of the data on your local machine. This is the biggest difference between Oxen and git. Oxen can work in both a centralized and decentralized version control paradigm. 
 
-TODO: Image of a centralized and decentralized workflow
+<img alt="Oxen Remote and Local Workflow" className="rounded-xl" src="/images/versioning/Centralized-vs-Decentralized-VCS.png" />
 
-While the decentralized nature of git makes it easy to maintain full copies of the history across many machines, this is not practical for large datasets. Oxen was designed from the ground up to be able to seamlessly switch between local and remote workflows.
+While the decentralized nature of git makes it easy to maintain full copies of the history across many machines, this is not practical for large datasets. Oxen was designed from the ground up to be able to seamlessly switch between local and remote workflows. Only clone what you need, and contribute back to the remote repository when you are done.
 
 ## Remote Workflow
 
 To get started with the remote workflow, you need to setup an `oxen-server`. Oxen.ai provides both an open source server and a hosted solution that can be used to sync data between your local machine and the cloud. To try the hosted solution, you can create a free account at [https://oxen.ai](https://oxen.ai).
 
-### Read a Remote Repository
+To learn how to setup the open source server, check out the [server documentation](/getting-started/oxen-server).
 
-If a remote repository already exists, you simply have to pass in the namespace/name of the remote repository you want to instantiate.
+### Remote Repository
+
+If a remote repository already exists, you simply have to pass in the namespace/name of the remote repository you want to connect to.
 
 <CodeGroup>
 
@@ -111,6 +113,25 @@ oxen create-remote --name my-user/my-repo-name --empty
 </CodeGroup>
 
 The reason you may want to start with an empty repository is if you already started a local repository and want to push it to the remote repository. This local repository already has a commit history. When pushing to a remote, commit histories must match. Hence we need to start with an empty remote repository without any commits if we want to push a local repository with a commit history.
+
+
+### Add Files
+
+You can add files to the remote repository by passing the path to the file and the destination directory. This will upload the file to the remote repository and stage it for commit.
+
+```python Python
+from oxen import RemoteRepo
+repo = RemoteRepo("ox/CatDogBBox")
+repo.add("images/000000002754.jpg", dst="images/")
+```
+
+### Commit Changes
+
+You can commit changes to the remote repository by passing a message.
+
+```python Python
+repo.commit("Adding the 1,000,001st image to the dataset")
+```
 
 ### File Exploration
 
@@ -205,27 +226,35 @@ repo = RemoteRepo("ox/CatDogBBox")
 print(repo.branches())
 ```
 
-### Add Files
+### Workspaces
 
-You can add files to the remote repository by passing the path to the file and the destination directory. This will upload the file to the remote repository and stage it for commit.
+Under the hood, the way that we enable remote collaboration is through a concept called a [workspace](/concepts/workspaces). A workspace can be thought of as a working copy of changes, that is stored on the remote server. Just like you can `add` files before committing locally, you can `add` files to a workspace on the remote server before committing. This allows you to build up a set of changes remotely before committing them in bulk.
+
+<CodeGroup>
 
 ```python Python
 from oxen import RemoteRepo
+from oxen import Workspace
+
 repo = RemoteRepo("ox/CatDogBBox")
-repo.add("images/000000002754.jpg", dst="images/")
+workspace = Workspace(repo, "add-images")
+workspace.add("/path/to/image.png")
+status = workspace.status()
+print(status.added_files())
+workspace.commit("Adding the 1,000,001st image to the dataset")
 ```
 
-### Commit Changes
-
-You can commit changes to the remote repository by passing a message.
-
-```python Python
-repo.commit("Adding the 1,000,001st image to the dataset")
+```bash CLI
+oxen workspace add image.png -w my-workspace-id
+oxen workspace status -w my-workspace-id
+oxen workspace commit -w my-workspace-id -m "Adding the 1,000,001st image to the dataset"
 ```
 
-### Workspaces
+</CodeGroup>
 
-TODO: We need a better explanation of workspaces.
+The `RemoteRepo.add` method is a shortcut for creating a workspace and adding files to it. It creates a ephemeral workspace and adds the files to it, and deletes the workspace after committing.
+
+To learn more about workspaces, check out the [workspaces documentation](/concepts/workspaces).
 
 ### Connect Local to Remote
 

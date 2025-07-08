@@ -1,30 +1,21 @@
 ---
 title: 🏋️‍♀️ Fine-Tune an LLM
-description: 'How to train an LLM on your own data.'
+description: 'How to train an LLM on your own data in a Marimo Notebook.'
 ---
 
-Fine-tuning is a power tool that must be handled with care. It takes a lot of compute and time to fine-tune an LLM, so it is important to have a plan for what you are trying to achieve. 
+<Info>
+To quickly get started without writing any code, you can also use the [zero-code fine-tuning interface](/getting-started/fine-tuning) to fine-tune your model on a dataset with a few clicks.
+</Info>
 
-To get going, you should start by seeing if you can solve your problem by pure prompting alone. Oxen.ai has great tooling for trying a prompt and a model across your dataset with it's [model inference](/features/models) feature. If you find that prompting alone is not giving you the results you want, now it is time to consider fine-tuning. 
+## Notebooks for Fine-Tuning
 
-With that in mind, let's start with a few reasons you might want to fine-tune an LLM on your own data.
-
-## Three Reasons to Fine-Tune
-
-### Proprietary Data 🔒 
-If you have proprietary or private datasets that the big AI labs will never see, this is a great case for building a custom model. Fine-tuning lets you build models that understand your domain, not just everyone else's, giving you a competitive edge.
-
-### Save Costs 💰 
-Leveraging APIs like OpenAI or Anthropic can get pricey. It can be more cost effective to fine-tune a smaller model on your own data. If your task is well defined, and you have good evals, you can get a good model for a fraction of the cost per API call.
-
-### Speed Things Up ⚡ 
-Similar to cost, if you have low latency or high-throughput requirements, fine-tuned models can process data faster while staying at small parameter counts. Depending on the size of the model, the weights can be downloaded and run on in a low resource environment like a CPU.
+Oxen.ai gives you the power to write custom code in [Marimo Notebooks](https://marimo.io/) on a powerful GPU in seconds. This is a great place to write custom code and fine-tune your model. You can version your code, data and model weights all in one place, in a single repository.
 
 ## Example: Medical Question Answering
 
 The domain of medicine is a good example where you might want to fine-tune an LLM. The domain is rich with nuance, and the data often has privacy concerns and cannot be shared publicly. If you want to follow along, you can run this [example notebook](https://www.oxen.ai/datasets/MarimoNotebooks/file/main/fine_tune_llm.py) in your own Oxen.ai account with the same data and model. 
 
-As you iterate and experiment with fine-tuning, Oxen.ai will help you run experiments in parallel, version your training datasets and model checkpoints, and look at the results of your experimentation.
+### Configure the Machine
 
 Make sure to configure your notebook with an A10G GPU and the following dependencies. Allocate at least 2 hours, 8 cpu cores and 8GB of memory for the training to complete in a reasonable amount of time.
 

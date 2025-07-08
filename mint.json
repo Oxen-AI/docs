@@ -21,7 +21,7 @@
   "topbarLinks": [
     {
       "name": "Support",
-      "url": "mailto:hello@oxen.ai"
+      "url": "https://discord.com/invite/s3tBEn7Ptg"
     }
   ],
   "topbarCtaButton": {
@@ -62,11 +62,11 @@
       "pages": [
         "getting-started/intro",
         "getting-started/inference",
-        "getting-started/fine_tuning",
+        "getting-started/fine-tuning",
         "getting-started/datasets",
         "getting-started/evaluation",
         {
-          "group": "📝 Notebooks",
+          "group": "📓 Notebooks",
           "pages": [
             "getting-started/notebooks",
             "examples/notebooks/explore_process_version_data",
@@ -86,7 +86,6 @@
       "group": "Developer Tools",
       "pages": [
         "getting-started/install",
-        "getting-started/learn-the-basics",
         "getting-started/cli",
         "getting-started/python",
         "getting-started/oxen-server",
@@ -94,58 +93,16 @@
       ]
     },
     {
-      "group": "Oxen Hub Features",
-      "pages": [
-        "features/chat",
-        "features/exploring_data",
-        "features/labeling_data",
-        "features/collaboration",
-        {
-          "group": "⚙️ Fine-Tuning",
-          "pages": [
-            "examples/fine-tuning/solutions"
-          ]
-        },
-        {
-          "group": "📝 Notebooks",
-          "pages": [
-            "features/notebooks",
-            "examples/notebooks/explore_process_version_data",
-            "examples/notebooks/build_labeling_tool",
-            "examples/notebooks/compute_text_embeddings",
-            "examples/notebooks/generate_synthetic_datasets",
-            "examples/notebooks/train_llm",
-            "examples/notebooks/eval_llm/llm_as_a_judge",
-            "examples/notebooks/eval_llm/human_in_the_loop",
-            "examples/notebooks/run_as_script"
-          ]
-        },
-        {
-          "group": "🚀 Model Inference",
-          "pages": [
-            "features/chat"
-          ]
-        }
-      ]
-    },
-    {
-      "group": "Use Cases",
-      "pages": [
-        "use-cases/sentiment-analysis",
-        "use-cases/text-translation",
-        "use-cases/rag-embeddings",
-        "use-cases/rag-extracting-answers",
-        "use-cases/synthetic-data-gen"
-      ]
-    },
-    {
       "group": "Other Concepts",
       "pages": [
         "concepts/diffs",
-        "concepts/compare",
         "concepts/schemas",
-        "concepts/remote-repos",
-        "concepts/workspaces",
+        "concepts/workspaces"
+      ]
+    },
+    {
+      "group": "Release Notes",
+      "pages": [
         "concepts/feature-updates"
       ]
     },
