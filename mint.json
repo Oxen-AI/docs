@@ -96,7 +96,7 @@
       "group": "Other Concepts",
       "pages": [
         "concepts/diffs",
-        "concepts/schemas",
+        "concepts/file_metadata",
         "concepts/workspaces"
       ]
     },

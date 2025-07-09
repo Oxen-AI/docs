@@ -1,9 +1,9 @@
 ---
 title: '💾 Version Control'
-description: 'Oxen.ai is built on top of a scalable data version control system that allows you to version, branch, and share datasets, model weights, and experiments with your team.'
+description: 'Oxen.ai is built on top of a blazing fast data version control system that allows you to version, branch, and share datasets, model weights, and experiments with your team.'
 ---
 
-Oxen's [open source data version control system](https://github.com/Oxen-AI/oxen-release) shines at workflows and data sizes that git or git-lfs fall short. The interface is inspired by git, so that it is easy to learn, but has a few core differences. Oxen is built from the ground up to handle large datasets with many files or large csvs, parquet files, or other large binary blobs like model weights.
+Oxen's [open source data version control system](https://github.com/Oxen-AI/oxen-release) shines at workflows and data sizes where git or git-lfs fall short. The interface is inspired by git, so that it is easy to learn, but has a few core differences. Oxen is built from the ground up to handle large datasets with many files or large csvs, parquet files, or other large binary blobs like model weights.
 
 ## Versioning 101
 
@@ -49,11 +49,11 @@ pip install oxenai
 
 ## Remote vs Local Workflow
 
-Remote repository workflows are best suited for large datasets where it would be expensive to have a fully copy of the data on your local machine. This is the biggest difference between Oxen and git. Oxen can work in both a centralized and decentralized version control paradigm. 
+In the world of version control, there are two main paradigms: centralized and decentralized. Centralized version control systems allow you to have remote first workflows where you do not need to have a fully copy of the data on your local machine. Decentralized version control systems like git by default duplicate all the data to every node in your network.
 
 <img alt="Oxen Remote and Local Workflow" className="rounded-xl" src="/images/versioning/Centralized-vs-Decentralized-VCS.png" />
 
-While the decentralized nature of git makes it easy to maintain full copies of the history across many machines, this is not practical for large datasets. Oxen was designed from the ground up to be able to seamlessly switch between local and remote workflows. Only clone what you need, and contribute back to the remote repository when you are done.
+While the decentralized nature of git makes it easy to maintain full copies of the history across many machines, this is not practical for large datasets. Oxen was designed from the ground up to be able to seamlessly switch between local (decentralized) and remote (centralized) workflows. Only clone what you need, and contribute back to the remote repository when you are done.
 
 ## Remote Workflow
 

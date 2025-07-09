@@ -3,6 +3,16 @@ title: '🦾 Fine-Tuning'
 description: 'Oxen.ai lets you go from datasets to custom models with a few clicks.'
 ---
 
+Simply [upload your data](/getting-started/datasets), and we will provision GPU infrastructure to execute the training process, then save the fine-tuned model weights directly to your repository. Model weights and datasets are [versioned](/getting-started/versioning) so that you can always track the data that was used to train the model.
+
+<img alt="Fine-Tuning Ox" className="rounded-xl" src="/images/fine_tuning/fine-tune-ox.jpg" />
+
+Once the fine-tuning process is complete, you can [deploy the model](/getting-started/inference) and start using it in your application.
+
+<Info>
+If you are looking for a more hands-on approach to fine-tuning, you can write your own code in [Notebooks](/getting-started/notebooks).
+</Info>
+
 ## Why Fine-Tune?
 
 Fine-tuning is a great tool to reach for when basic prompting and context engineering fall short. You may need to fine-tune when:
@@ -15,19 +25,9 @@ Fine-tuning is a great tool to reach for when basic prompting and context engine
 
 With Oxen.ai, we make it easy to automate the fine-tuning process of LLMs on your own data.
 
-<img alt="Fine-Tuning Ox" className="rounded-xl" src="/images/fine_tuning/fine-tune-ox.jpg" />
+## Start by Uploading a Dataset
 
-Simply [upload your data](/getting-started/datasets), and we will provision GPU infrastructure to execute the training process, then save the fine-tuned model weights directly to your repository. Model weights and datasets are [versioned](/getting-started/versioning) so that you can always track the data that was used to train the model.
-
-Once the fine-tuning process is complete, you can [deploy the model](/getting-started/inference) and start using it in your application.
-
-<Info>
-If you are looking for a more hands-on approach to fine-tuning, you can also use [Notebooks](/getting-started/notebooks) to write custom code to fine-tune models on our GPU infrastructure.
-</Info>
-
-## Uploading a Dataset
-
-To get started, you'll need to create a new repository on Oxen.ai. Once you've created a repository, you can upload your data. The dataset can be in any tabular format including CSV, JSON, Parquet, or Arrow.
+To get started, you'll need to create a new repository on Oxen.ai. Once you've created a repository, you can upload your data. The dataset can be in any tabular format including `csv`, `jsonl`, or `parquet`.
 
 <img alt="Fine-Tuning Dataset Upload" className="rounded-xl" src="/images/fine_tuning/fine-tune-upload-file.png" />
 
@@ -35,17 +35,20 @@ Once you have your dataset uploaded, you can query, explore, and make sure that 
 
 ![Fine-Tuning Dataset](/images/fine_tuning/fine-tune-dataset.png)
 
-## Selecting a Model
-
 When you feel confident that your dataset is ready, use the "Actions" button to select the model you want to fine-tune.
 
 <img alt="Fine-Tuning Dataset" className="rounded-xl" src="/images/fine_tuning/fine-tune-actions.png" />
+
+## Selecting a Model
 
 This will take you to a form where you can select the model you want to fine-tune and the columns you want to use for the fine-tuning process. Right now we support fine-tuning for prompt/response single-turn chat pairs.
 
 <img alt="Fine-Tuning Model Selection" className="rounded-xl" src="/images/fine_tuning/fine-tune-model-selection.png" />
 
-[Contact us](https://airtable.com/appDW4XBL7qTihmwi/shrQF72gHTJw8zvie) if you need to fine-tune a different model or have more complex data formats or use cases.
+<Info>
+If you want support for any larger models or modalities like text-to-image, [contact us](https://airtable.com/appDW4XBL7qTihmwi/shrQF72gHTJw8zvie). We are actively working on support for different data formats and distributed training.
+</Info>
+
 
 ## Monitoring the Fine-Tune
 
@@ -72,18 +75,22 @@ curl https://hub.oxen.ai/api/chat/completions -H "Content-Type: application/json
 
 ## Chatting with the Model
 
-Once the model is deployed, you can also chat with it using the Oxen.ai chat interface. Learn more about the [chat interface here](/features/chat).
+Once the model is deployed, you can also chat with it using the Oxen.ai chat interface. Learn more about the [chat interface here](/getting-started/inference).
 
 <img alt="Chatting with the Model" className="rounded-xl" src="/images/chat/chat_window_powerful_coffee_chimpanzee.png" />
 
 
 ## Downloading the Model Weights
 
-If you want access to the raw model weights, you can download them from the repository using the Oxen.ai Python library or the CLI.
+If you want access to the raw model weights, you can download them from the repository using the Oxen.ai [Python Library](/getting-started/python) or the [CLI](/getting-started/cli).
 
-<img alt="Fine-Tuning Configuration" className="rounded-xl" src="/images/fine_tuning/fine-tune-model-weights.png" />
+Follow the instructions for [installing oxen](/getting-started/install) if you haven't already.
 
 <CodeGroup>
+
+```bash CLI
+oxen download my-username/my-repo models --revision Qwen3-0.6B-experiment-1_fte7562a9e
+```
 
 ```python Python
 from oxen import RemoteRepo
@@ -91,10 +98,6 @@ from oxen import RemoteRepo
 repo = RemoteRepo("my-username/my-repo")
 
 repo.download("models", revision="Qwen3-0.6B-experiment-1_fte7562a9e")
-```
-
-```bash CLI
-oxen download my-username/my-repo models --revision Qwen3-0.6B-experiment-1_fte7562a9e
 ```
 
 </CodeGroup>

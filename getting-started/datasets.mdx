@@ -85,7 +85,9 @@ oxen push
 
 </CodeGroup>
 
-Note: To perform and write operations on datasets, you need to be a collaborator on the repository and have your username and API key set. You can set your username and API key using the CLI or Python library.
+<Info>
+To perform and **write operations** on datasets, you need to be an editor on the repository and have your username and API key set. You can set your username and API key using the [CLI](/getting-started/cli) or [Python library](/python-api/index).
+</Info>
 
 ### Configure Your Username
 
@@ -185,6 +187,17 @@ You can edit your dataset directly from the UI by clicking the pencil icon in th
 The editor will not commit any changes to the repository until you use the "Commit" button to write a message and save your changes.
 
 <img alt="Editing a dataset" className="rounded-xl" src="/images/datasets/commit_data_frame.png" />
+
+## Use LLMs to Augment Your Dataset
+
+In Oxen.ai, you can generate new columns and rows using LLMs. This is a great way to automatically label your dataset or generate training data for small LLMs from larger models. Click the "Actions" button and select "Run Inference".
+
+<img alt="Oxen.ai Evaluation" className="rounded-xl" src="/images/evaluations/run_inference_dataset.png" />
+
+Simply select a model, write a prompt, and run the model row by row on the dataset.
+
+<img alt="Oxen.ai Evaluation" className="rounded-xl" src="/images/datasets/categorieze_columns.png" />
+
 
 ## Query Your Dataset
 
@@ -302,4 +315,4 @@ In order to enable the rendering, you need to edit the `render` function in the 
 
 <img alt="Edit render function" className="rounded-xl" src="/images/datasets/image_metadata.png" />
 
-This will save metadata to the repository that will be used to render the images and links.
+This will save metadata to the repository that will be used to render the images and links. To programmatically set the render function, checkout the [file metadata documentation](/concepts/file_metadata).
