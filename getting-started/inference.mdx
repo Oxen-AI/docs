@@ -1,0 +1,106 @@
+---
+title: ⚡️ Model Inference
+description: "Oxen.ai exposes endpoints and a chat interface to test out a variety of models with a unified interface."
+---
+
+## Model API
+
+Oxen.ai's Model API allows you to start building on top of the [latest and greatest models](https://oxen.ai/ai/models) from OpenAI, Anthropic, Google, Meta, and more with a single API key. 
+
+The API supports fine-tuned open-source models. If a model is too slow, costly, inaccurate, or if you want full control, you can use our [one-click interface to fine-tune](/getting-started/fine-tuning) and deploy a custom model using the same API.
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST https://hub.oxen.ai/api/chat/completions \
+-H "Authorization: Bearer $OXEN_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{
+  "model": "openai:gpt-4o-mini",
+  "messages": [{"role": "user", "content": "Hello, how are you?"}]
+}'
+```
+
+```python Python
+import openai
+import os
+
+client = openai.OpenAI(
+    api_key=os.getenv("OXEN_API_KEY"),
+    base_url="https://hub.oxen.ai/api"
+)
+
+response = client.chat.completions.create(
+    model="openai:gpt-4o-mini",
+    messages=[{"role": "user", "content": "What is a great name for an ox that also manages your AI infrastructure?"}]
+)
+
+print(response.output['content'][0]['text'])
+```
+
+</CodeGroup>
+
+
+The response format is compatible with OpenAI, so you can use any supported client to interact with the model. Simply prepend the model name with a provider like `openai:gpt-4o-mini` and use `https://hub.oxen.ai/api` as your `base_url`.
+
+The currently supported list of providers is:
+
+- `openai`
+- `anthropic`
+- `fireworks`
+- `google`
+- `mistral`
+- `deepseek`
+- `oxenai` (for fine-tuned models)
+
+To see the list of generally available models, visit the [models page](https://oxen.ai/ai/models).
+
+<img alt="Models Page" className="rounded-xl" src="/images/chat/models_page.png" />
+
+## Chat Interface
+
+To try out models without writing code, you can quickly test out the boundaries of any model by chatting with it in the UI. This is a great way to kick the tires of a model you [fine-tuned](/getting-started/fine-tuning) after deploying it.
+
+<img alt="Chat Interface" className="rounded-xl" src="/images/chat/chat_window.png" />
+
+Feel free to experiment with a model and see how it performs before you decide to use it in your application.
+
+## Run Inference on a Dataset
+
+At the end of the day, AI is about automating workflows and making sure your model performs well given your data. 
+
+With Oxen.ai, you can kick off a model to run on a [dataset](/getting-started/datasets) while you sit back and relax. This is a great way to iterate on your system prompt, [evaluate a model](/getting-started/evaluation), or to augment your dataset with new data.
+
+### How it Works
+
+You provide a prompt, choose a model, and run the evaluation on any dataset file in your repository. The system uses column values and inserts them into variables marked with `{variable_name}` to give the model context.
+
+<img alt="Dataset Inference" className="rounded-xl" src="/images/datasets/categorieze_columns.png" />
+
+### Upload a Dataset
+
+[Upload your dataset](/getting-started/datasets) to Oxen.ai and click the "Actions" button and "Run Inference" to select the model you want to run inference on.
+
+<img alt="Oxen.ai Evaluation" className="rounded-xl" src="/images/evaluations/run_inference_dataset.png" />
+
+### Select a Model and Prompt
+
+In the prompt editor you can [explore models](https://www.oxen.ai/ai/models) from a variety of developers. Setup your prompt and decide how many rows to run the model on. Click the `Run Sample` button. 
+
+<img alt="create-prompt" className="rounded-xl" src="/images/evaluations/select_model.png" />
+
+### Run a Sample
+
+This will run the model on the first N rows of data and show you the results as well as an estimated price. Make sure the output looks like what you expect. If not, you can edit the prompt and run again.
+
+<img alt="sample-prompt" className="rounded-xl" src="/images/evaluations/sample_results.png" />
+
+### Run the Inference
+
+Once you are satisfied with your prompt, you can pick a destination branch and write a commit message for once the job is finished.
+
+<img alt="Oxen.ai Evaluation" className="rounded-xl" src="/images/evaluations/save_results.png" />
+
+Now you can grab some coffee, sit back, and watch the model run. Feel free to close the tab, the job will be running in the background and committed to specified file and branch.
+
+<img alt="Oxen.ai Evaluation" className="rounded-xl" src="/images/evaluations/prompt_progress.png" />

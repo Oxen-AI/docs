@@ -1,0 +1,109 @@
+---
+title: '🦾 Fine-Tuning'
+description: 'Oxen.ai lets you go from datasets to custom models with a few clicks.'
+---
+
+Simply [upload your data](/getting-started/datasets), and we will provision GPU infrastructure to execute the training process, then save the fine-tuned model weights directly to your repository. Model weights and datasets are [versioned](/getting-started/versioning) so that you can always track the data that was used to train the model.
+
+<img alt="Fine-Tuning Ox" className="rounded-xl" src="/images/fine_tuning/fine-tune-ox.jpg" />
+
+Once the fine-tuning process is complete, you can [deploy the model](/getting-started/inference) and start using it in your application.
+
+<Info>
+If you are looking for a more hands-on approach to fine-tuning, you can write your own code in [Notebooks](/getting-started/notebooks).
+</Info>
+
+## Why Fine-Tune?
+
+Fine-tuning is a great tool to reach for when basic prompting and context engineering fall short. You may need to fine-tune when:
+
+* **Quality** is critical and the model isn't consistently producing correct outputs.
+* **Proprietary Data** gives you a unique advantage that generic models can't capture.
+* **Latency**  is a deal breaker and you need real-time responses.
+* **Throughput** limitations are bottlenecking your application's scalability.
+* **Ownership** of the model is important and you want to control your own destiny.
+
+With Oxen.ai, we make it easy to automate the fine-tuning process of LLMs on your own data.
+
+## Start by Uploading a Dataset
+
+To get started, you'll need to create a new repository on Oxen.ai. Once you've created a repository, you can upload your data. The dataset can be in any tabular format including `csv`, `jsonl`, or `parquet`.
+
+<img alt="Fine-Tuning Dataset Upload" className="rounded-xl" src="/images/fine_tuning/fine-tune-upload-file.png" />
+
+Once you have your dataset uploaded, you can query, explore, and make sure that the data is high quality before kicking off the fine-tuning process. Your model will only be as good as the data you train it on.
+
+![Fine-Tuning Dataset](/images/fine_tuning/fine-tune-dataset.png)
+
+When you feel confident that your dataset is ready, use the "Actions" button to select the model you want to fine-tune.
+
+<img alt="Fine-Tuning Dataset" className="rounded-xl" src="/images/fine_tuning/fine-tune-actions.png" />
+
+## Selecting a Model
+
+This will take you to a form where you can select the model you want to fine-tune and the columns you want to use for the fine-tuning process. Right now we support fine-tuning for prompt/response single-turn chat pairs.
+
+<img alt="Fine-Tuning Model Selection" className="rounded-xl" src="/images/fine_tuning/fine-tune-model-selection.png" />
+
+<Info>
+If you want support for any larger models or modalities like text-to-image, [contact us](https://airtable.com/appDW4XBL7qTihmwi/shrQF72gHTJw8zvie). We are actively working on support for different data formats and distributed training.
+</Info>
+
+
+## Monitoring the Fine-Tune
+
+Once you have started the fine-tuning process, you can monitor its progress. The dashboard will show you loss over time, token accuracy, the learning rate, and number of tokens processed.
+
+<img alt="Fine-Tuning Monitoring" className="rounded-xl" src="/images/fine_tuning/fine-tune-monitoring.png" />
+
+Click on the "Configuration" tab to see the fine-tuning configuration. This will include a link to the dataset version you used and the raw model weights. It will show you the pricing for the fine-tuning process as well.
+
+## Deploying the Model
+
+Once the model is fine-tuned, you can deploy it to a hosted endpoint. This will give you a `/chat/completions` endpoint that you can use to test out the model.
+
+<img alt="Fine-Tuning Configuration" className="rounded-xl" src="/images/fine_tuning/fine-tune-deploy-model.png" />
+
+Swap out the model name with the name of the model you want to use.
+
+```bash
+curl https://hub.oxen.ai/api/chat/completions -H "Content-Type: application/json" -d '{
+    "model":"oxenai:my-model-name",
+    "messages": [{"role": "user", "content": "What is the best name for a friendly ox?"}],
+}'
+```
+
+## Chatting with the Model
+
+Once the model is deployed, you can also chat with it using the Oxen.ai chat interface. Learn more about the [chat interface here](/getting-started/inference).
+
+<img alt="Chatting with the Model" className="rounded-xl" src="/images/chat/chat_window_powerful_coffee_chimpanzee.png" />
+
+
+## Downloading the Model Weights
+
+If you want access to the raw model weights, you can download them from the repository using the Oxen.ai [Python Library](/getting-started/python) or the [CLI](/getting-started/cli).
+
+Follow the instructions for [installing oxen](/getting-started/install) if you haven't already.
+
+<CodeGroup>
+
+```bash CLI
+oxen download my-username/my-repo models --revision Qwen3-0.6B-experiment-1_fte7562a9e
+```
+
+```python Python
+from oxen import RemoteRepo
+
+repo = RemoteRepo("my-username/my-repo")
+
+repo.download("models", revision="Qwen3-0.6B-experiment-1_fte7562a9e")
+```
+
+</CodeGroup>
+
+<img alt="Fine-Tuning Configuration" className="rounded-xl" src="/images/fine_tuning/fine-tune-model-weights.png" />
+
+## Need Custom Infrastructure?
+
+If you need custom or private deployments in your own VPC or want to train a larger model on distributed infrastructure, [contact us](https://airtable.com/appDW4XBL7qTihmwi/shrQF72gHTJw8zvie) and we can give you a custom deployment.
