@@ -40,6 +40,63 @@ print(response.output['content'][0]['text'])
 
 </CodeGroup>
 
+If you want to send an image to a model that supports vision such as GPT-4o or Claude, you can add a message with the `image_url` type.
+
+<CodeGroup>
+
+```bash cURL (image url)
+curl -X POST https://hub.oxen.ai/api/chat/completions \
+-H "Authorization: Bearer $OXEN_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{
+  "model": "openai:gpt-4o",
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "What is in this image?"
+        },
+        {
+          "type": "image_url",
+          "image_url": {
+            "url": "https://oxen.ai/assets/images/homepage/hero-ox.png"
+          }
+        }
+      ]
+    }
+  ]
+}'
+```
+
+```bash cURL (base64 encoded image)
+curl -X POST https://hub.oxen.ai/api/chat/completions \
+-H "Authorization: Bearer $OXEN_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{
+  "model": "anthropic:claude-3-7-sonnet",
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "What is in this image?"
+        },
+        {
+          "type": "image_url",
+          "image_url": {
+            "url": "data:image/jpeg;base64,YOUR_BASE64_ENCODED_IMAGE_HERE"
+          }
+        }
+      ]
+    }
+  ]
+}'
+```
+
+</CodeGroup>
 
 The response format is compatible with OpenAI, so you can use any supported client to interact with the model. Simply prepend the model name with a provider like `openai:gpt-4o-mini` and use `https://hub.oxen.ai/api` as your `base_url`.
 
