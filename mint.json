@@ -80,7 +80,13 @@
           "group": "⚙️ Fine-Tunes",
           "pages": [
             "features/fine-tuning",
-            "examples/fine-tuning/solutions"
+            {
+              "group": "✅ Use Cases",
+              "pages": [
+                "examples/fine-tuning/use-cases",
+                "examples/fine-tuning/chatbots"
+              ]
+            }
           ]
         },
         {

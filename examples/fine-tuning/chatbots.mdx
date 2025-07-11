@@ -1,0 +1,189 @@
+---
+title: '💬 Chatbots'
+description: 'Here we will show you how to quickly fine-tune Llama 3.2 (3B) to answer programming questions on a training dataset of 3,000 examples.'
+---
+
+# 1. Test Different Base Models
+<a href="https://www.oxen.ai/ai/models" target="_blank">
+  <img 
+    src="/images/models-page.png" 
+    alt="models-page"
+    noZoom 
+  />
+</a>
+
+While we will be using Llama 3.2 3B for this example, go through our [available models](https://www.oxen.ai/ai/models) and click the little [chat icon](/features/chat) on the top right of the model name to chat with it.
+Even if a chatbot is perfect in some areas but not all (e.g. its fast and you like the style but it's not accurate) fine-tuning is perfect on honing in on the areas you want improved.
+
+![chat-icon](/images/what-is-a-bool.png)
+
+If you don't see the model you need, [let us know](https://www.discord.gg/s3tBEn7Ptg) and we'll add it.
+
+# 2. Upload or Create Your Dataset
+Once you have found the right model, upload or create a dataset to fine-tune the model on.
+If you do not already have a dataset, you can explore new datasets in our [Datasets page](https://www.oxen.ai/explore) and augment the data with our [Model Inference tool](/features/models).
+You can also use our [Model Inference tool](/features/models) to generate synthetic data from scratch. If you already have a dataset, you can upload it easily with Oxen.ai's [CLI commands](/getting-started/cli).
+<a href="https://www.oxen.ai/explore" target="_blank">
+  <img 
+    src="/images/datasets-page.png" 
+    alt="datasets-page"
+    noZoom 
+  />
+</a>
+For this example, we are using a formatted version of the [mlabonne/FineTome-100k](https://www.oxen.ai/mathi/mlabonne-FineTome-100k) dataset from hugging face filtered to only the prompt, response, and the pair's source and limited to the first 3,000 rows.
+<a href="https://www.oxen.ai/mathi/mlabonne-FineTome-100k" target="_blank">
+  <img 
+    src="/images/FineTome-100k.png" 
+    alt="datasets-page"
+    noZoom 
+  />
+</a>
+
+# 3. Run The Base Model Through the Dataset
+Before fine-tuning, it is crucial to evaluate your base model to see if the model is actually improving.
+We can do this by using our [Model Inference tool](/features/models) again.
+First, go to your dataset, click "Actions" and select "Run Inference".
+<a href="https://www.oxen.ai/mathi/mlabonne-FineTome-100k/file/main/train.jsonl" target="_blank">
+  <img 
+    src="/images/run-inference-example.png" 
+    alt="Evaluating the base model "
+    noZoom 
+  />
+</a>
+From there, select your base model, choose your column name, and only pass in your prompt column with no extra context so we actually see how well the base model does.
+<a href="https://www.oxen.ai/mathi/mlabonne-FineTome-100k/file/main/train.jsonl" target="_blank">
+  <img 
+    src="/images/base-llama-3.2-3b-example.png" 
+    alt="Evaluating the base model "
+    noZoom 
+  />
+</a>
+
+You can quickly run samples by clicking the "Run Samples" button to see if your base model is answering the questions. 
+<a href="https://www.oxen.ai/mathi/mlabonne-FineTome-100k/file/main/train.jsonl" target="_blank">
+  <img 
+    src="/images/chatbot-evals-sample.png" 
+    alt="chatbot evals example"
+    noZoom 
+  />
+</a>
+Now we click "Next", write our commit message, name a new branch, name the file, and click "Run Evaluation" to run the base Llama 3.2 3B on the whole dataset.
+<a href="https://www.oxen.ai/mathi/mlabonne-FineTome-100k/file/main/train.jsonl" target="_blank">
+  <img 
+    src="/images/chatbot-commit-evals.png" 
+    alt="chatbot commit evals"
+    noZoom 
+  />
+</a>
+While the model is running through the dataset, you will see the progress bar, tokens, cost, rows, and time taken to go through the dataset.
+<a href="https://www.oxen.ai/mathi/mlabonne-FineTome-100k/file/main/train.jsonl" target="_blank">
+  <img 
+    src="/images/rmod-running-chatbot.png" 
+    alt="chatbot commit evals"
+    noZoom 
+  />
+</a>
+# 4. Evaluate The Base Model
+After we have the base model results, we now need to evaluate the quality of the base model's responses to compare it with the fine-tuned responses.
+While in this case, it would be best for an engineer to go through the responses and evaluate the quality of the answers for the programming questions, using LLMs as a judge is a great alternative for a quick evaluation.
+>>>
+We would use the [Model Evals tool](/features/models) again. Go through the same process of opening the dataset and clicking the "Model Inference" button. This time, choose a different model, write a prompt explaining it's judging the quality of the responses, and pass in the prompt and response column.
+We're going to be using GPT-4o mini with the prompt:
+```
+You are an expert programmer and are given the task of evaluating the quality of answers for programming questions. 
+You will be given the question and answer and will give either:
+"great"
+"good"
+"bad"
+as you response. 
+Do not use any other words as an answer, only the three options. 
+If the answer is incorrect, in any way always use "brand" even if you like the style of the answer.
+If the answer is correct but verbose, always give "good".
+If the answer is correct and as concise as possible, give "great".
+Here is your question:
+
+Here is your answer:
+
+
+Remember, only respond with either "great", "good", or "bad", no other words.
+```
+(Will add an image here later)
+>>>
+We've found that allowing LLMs to give evaluations with an adjective instead of a number has been more accurate which is why we are using "good" and "bad instead of 1, 2, or 3.
+Specifying what is a good or bad answer is also important. Telling the model the exact criteria for what is good or bad will give you more accurate evaluations and control over what the model decides is good or bad. 
+It's also best practice to use a model from a different provider to evaluate the quality of the base model's responses since LLMs have been found to prefer their own responses even if the responses aren't the best and the LLM doesn't know the same model wrote the response.
+
+(Will add an image here later)
+<a href="https://www.oxen.ai/mathi/mlabonne-FineTome-100k/file/main/train.jsonl" target="_blank">
+  <img 
+    src="/images/ADD IMAGE HERE.png" 
+    alt="chatbot commit evals"
+    noZoom 
+  />
+</a>
+
+
+# 5. Fine-Tuning The Model
+Now that we have our base model evaluated, go back to our training file, click "Actions" again, but this time click "Fine-tune a model".
+<a href="https://www.oxen.ai/mathi/mlabonne-FineTome-100k/file/main/train.jsonl" target="_blank">
+<img 
+    src="/images/Fine-Tune-button.png" 
+    alt="Fine-tune button"
+    noZoom 
+  />
+</a>
+On the first page, you will be able to select your base model, the prompt source, the response source, and if you'd like to use LoRA or not. We wrote a [blog post](https://www.oxen.ai/blog/arxiv-dives-how-lora-fine-tuning-works) on how LoRA fine-tuning works if you'd like to learn what's going on under the hood.
+<a href="https://www.oxen.ai/mathi/mlabonne-FineTome-100k/fine-tunes/68110b2f-2b3c-4008-9951-1790dd50d9d9" target="_blank">
+<img 
+    src="/images/fine-tune-first-page.png" 
+    alt="Fine-tune first page"
+    noZoom 
+  />
+</a>
+While we're fine-tuning your model, you'll be able to see the configuration, logs, and metrics of the fine-tuning.
+<a href="https://www.oxen.ai/mathi/mlabonne-FineTome-100k/fine-tunes/68110b2f-2b3c-4008-9951-1790dd50d9d9" target="_blank">
+  <img 
+    src="/images/metrics-example.png" 
+    alt="Metrics example"
+    noZoom 
+  />
+</a>
+Once your fine-tuning is complete, go to the configuration page and click "Deploy". From there you will not only have an API endpoint to use, but you will also be able to chat with your fine-tuned model to get a sense of how its doing.
+<a href="https://www.oxen.ai/mathi/mlabonne-FineTome-100k/fine-tunes/68110b2f-2b3c-4008-9951-1790dd50d9d9" target="_blank">
+  <img 
+    src="/images/deploy-example.png" 
+    alt="Deploy example"
+    noZoom 
+  />
+</a>
+(Will add an image of chatbot here later)
+So now we have out fine-tuned Llama 3.2 3B, let's ask it a question and see if we like the answer. 
+
+
+# 6. Evaluate The Fine-Tuned Model and Compare to The Base Model
+Just like running the base model through the dataset and evaluating it, go to your training file and click the "Actions" button then "Run inference". First run your new model through just the prompt column, then when you have the responses, evaluate it with the same eval model to get an accurate evaluation.
+(Will add image here later)
+<a href="https://www.oxen.ai/mathi/mlabonne-FineTome-100k/file/main/train.jsonl" target="_blank">
+  <img 
+    src="/images/ADD_IMAGE-HERE.png" 
+    alt="chatbot evals example"
+    noZoom 
+  />
+</a>
+After you have the responses and evals, you can do two things.
+1. Simply compare the ratio of great, good, or bad responses for each model to see if the fine-tuned model is improving.
+(Add image of using T2S to get percentage)
+2. Use Oxen.ai's compare tool to just have outputs side by side to see for yourself the quality of the responses. 
+(add image of compare tool)
+
+# 7. Improve Your Fine-Tuned Model
+Now that we have our fine-tuned model you can use the new answers to create a new, improved dataset and simply repeat the steps above to fine-tune the model again.
+This is all you need to create a data fly-wheel and improve your model over time.
+<a href="https://www.oxen.ai/mathi/mlabonne-FineTome-100k/fine-tunes/68110b2f-2b3c-4008-9951-1790dd50d9d9" target="_blank">
+  <img 
+    src="/images/chat-example.png" 
+    alt="Will add image here later"
+    noZoom 
+  />
+</a>
+If you're looking for a more advanced way to improve your model, reach out to us at [hello@oxen.ai](mailto:hello@oxen.ai) to set up a consultation! We're always happy to help you fine-tune your model and get the most out of your data.

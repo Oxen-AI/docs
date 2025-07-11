@@ -2,7 +2,7 @@
 title: 🐮 Learn The Basics
 ---
 
-Oxen makes versioning your datasets as easy as versioning your code. You can install through homebrew or pip or from our [releases page](https://github.com/Oxen-AI/Oxen/releases).
+Oxen.ai makes versioning your datasets as easy as versioning your code. You can install through homebrew or pip or from our [releases page](https://github.com/Oxen-AI/Oxen/releases).
 
 <CodeGroup>
 
@@ -19,7 +19,7 @@ pip install oxenai
 
 ## Clone Dataset
 
-Clone your first Oxen repository from the [OxenHub](https://oxen.ai/explore).
+Clone your first Oxen.ai repository from the [OxenHub](https://oxen.ai/explore).
 
 <CodeGroup>
 
@@ -53,9 +53,9 @@ config_user("Bessie Oxington", "bessie@oxen.ai")
 
 </CodeGroup>
 
-## Create Repository
+## Create Local Repository
 
-Initialize your first Oxen repository, and commit the first version of your data.
+Initialize your first Oxen.ai repository, and commit the first version of your data.
 
 <CodeGroup>
 
@@ -90,11 +90,46 @@ repo.commit("Adding my data")
 
 </CodeGroup>
 
+## Create Remote Repository
+
+After initialize your local Oxen.ai repository or cloning a repository from the [OxenHub](https://oxen.ai/explore), you can create a remote repository and push your data.
+
+<CodeGroup>
+
+```bash CLI
+# Create a remote Oxen.ai repository 
+oxen create-remote --name USERNAME/REPO_NAME
+# Configure an existing local repository to the remote repository
+oxen config --set-remote origin https://hub.oxen.ai/USERNAME/REPO_NAME
+# Push your data to the main branch of theremote repository
+oxen push origin main
+```
+
+```python Python
+import os
+from oxen import Repo
+
+# Instantiate a Repo object and create the repo directory
+repo = Repo("/path/to/data", mkdir=True)
+# Initialize the repository
+repo.init()
+# Write data to a file
+data_path = os.path.join(repo.path, "people.csv")
+with open(data_path, "w") as f:
+    f.write("name,age\nbob,12\njane,13")
+# Stage the data for commit
+repo.add(data_path)
+# Commit the changes with a message
+repo.commit("Adding my data")
+```
+
+</CodeGroup>
+
 ## Version Your Data
 
 Once your data has been committed, you can always return to that version.
 
-Confidently overwrite the file, move the file, delete the file, it doesn't matter. Oxen will always have a copy of the data at the time of the previous commit.
+Confidently overwrite the file, move the file, delete the file, it doesn't matter. Oxen.ai will always have a copy of the data at the time of the previous commit.
 
 ## Create Branch
 
@@ -193,7 +228,7 @@ Once you [push](#push-data) you changes to [OxenHub](https://oxen.ai), you can v
     <img src="/images/diff.jpg" alt="oxen cli demo" />
 </p>
 
-The diff command line tool is more powerful than it looks on the surface. Oxen has the ability to diff files of many formats, and the ability to specify keys are targets in tabular diffs to make it easier to see what changed.
+The diff command line tool is more powerful than it looks on the surface. Oxen.ai has the ability to diff files of many formats, and the ability to specify keys are targets in tabular diffs to make it easier to see what changed.
 
 For advanced usage, check out the [full diff documentation](/concepts/diffs).
 
@@ -334,7 +369,7 @@ repo.push()
 
 ## Clone Data
 
-Clone your data faster than ever before. Oxen has been optimized to the core to make pulling large datasets as fast as possible.
+Clone your data faster than ever before. Oxen.ai has been optimized to the core to make pulling large datasets as fast as possible.
 
 <CodeGroup>
 
@@ -354,7 +389,7 @@ repo = Repo.clone("https://hub.oxen.ai/ox/CatDogBBox")
 
 ## Pull Changes
 
-Only pull the changes you need. Oxen will only pull the files that have changed since the last time you pulled.
+Only pull the changes you need. Oxen.ai will only pull the files that have changed since the last time you pulled.
 
 <CodeGroup>
 
@@ -372,7 +407,7 @@ repo.pull()
 
 ## Download Individual Files
 
-With Oxen you do not need to download the entire dataset to your local machine. You can download only the subset of files or directories you need.
+With Oxen.ai you do not need to download the entire dataset to your local machine. You can download only the subset of files or directories you need.
 
 <CodeGroup>
 
