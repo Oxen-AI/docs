@@ -21,7 +21,7 @@
   "topbarLinks": [
     {
       "name": "Support",
-      "url": "mailto:hello@oxen.ai"
+      "url": "https://discord.com/invite/s3tBEn7Ptg"
     }
   ],
   "topbarCtaButton": {
@@ -61,8 +61,36 @@
       "group": "Get Started",
       "pages": [
         "getting-started/intro",
+        "getting-started/inference",        
+        {
+          "group": "⚙️ Fine-Tuning",
+          "pages": [
+            "getting-started/fine-tuning",
+            "examples/fine-tuning/chatbots"
+          ]
+        },
+        "getting-started/datasets",
+        "getting-started/evaluation",
+        {
+          "group": "📓 Notebooks",
+          "pages": [
+            "getting-started/notebooks",
+            "examples/notebooks/explore_process_version_data",
+            "examples/notebooks/build_labeling_tool",
+            "examples/notebooks/compute_text_embeddings",
+            "examples/notebooks/generate_synthetic_datasets",
+            "examples/notebooks/train_llm",
+            "examples/notebooks/eval_llm/human_in_the_loop",
+            "examples/notebooks/run_as_script"
+          ]
+        },
+        "getting-started/versioning"
+      ]
+    },
+    {
+      "group": "Developer Tools",
+      "pages": [
         "getting-started/install",
-        "getting-started/learn-the-basics",
         "getting-started/cli",
         "getting-started/python",
         "getting-started/oxen-server",
@@ -70,66 +98,16 @@
       ]
     },
     {
-      "group": "Oxen Hub Features",
-      "pages": [
-        "features/chat",
-        "features/exploring_data",
-        "features/labeling_data",
-        "features/collaboration",
-        {
-          "group": "⚙️ Fine-Tunes",
-          "pages": [
-            "features/fine-tuning",
-            {
-              "group": "✅ Use Cases",
-              "pages": [
-                "examples/fine-tuning/use-cases",
-                "examples/fine-tuning/chatbots"
-              ]
-            }
-          ]
-        },
-        {
-          "group": "📝 Notebooks",
-          "pages": [
-            "features/notebooks",
-            "examples/notebooks/explore_process_version_data",
-            "examples/notebooks/build_labeling_tool",
-            "examples/notebooks/compute_text_embeddings",
-            "examples/notebooks/generate_synthetic_datasets",
-            "examples/notebooks/train_llm",
-            "examples/notebooks/eval_llm/llm_as_a_judge",
-            "examples/notebooks/eval_llm/human_in_the_loop",
-            "examples/notebooks/run_as_script"
-          ]
-        },
-        {
-          "group": "🚀 Model Inference",
-          "pages": [
-            "features/chat",
-            "features/models"
-          ]
-        }
-      ]
-    },
-    {
-      "group": "Use Cases",
-      "pages": [
-        "use-cases/sentiment-analysis",
-        "use-cases/text-translation",
-        "use-cases/rag-embeddings",
-        "use-cases/rag-extracting-answers",
-        "use-cases/synthetic-data-gen"
-      ]
-    },
-    {
       "group": "Other Concepts",
       "pages": [
         "concepts/diffs",
-        "concepts/compare",
-        "concepts/schemas",
-        "concepts/remote-repos",
-        "concepts/workspaces",
+        "concepts/file_metadata",
+        "concepts/workspaces"
+      ]
+    },
+    {
+      "group": "Release Notes",
+      "pages": [
         "concepts/feature-updates"
       ]
     },
