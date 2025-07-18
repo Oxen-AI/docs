@@ -17,6 +17,36 @@ In order to push to a remote or clone private repos you will have to setup your 
 oxen config --auth hub.oxen.ai $YOUR_API_KEY
 ```
 
+## Push Your Data
+
+If you already have a dataset, you can easily create a local and remote repo from your CLI.
+
+```bash
+# Create local repo
+oxen init 
+# Add your data
+oxen add .
+```
+Before committing you can check your status with to see what files are being tracked.
+```bash
+oxen status
+```
+The commit your data with a message.
+```bash
+oxen commit -m "Initial commit"
+```
+Before pushing your data, you need to create and configure a remote repo. 
+```bash
+# Create the remote repo
+oxen create-remote --name "USERNAME"/"REPO_NAME"
+# Configure local to remote repo
+oxen config --set-remote origin https://hub.oxen.ai/"USERNAME"/"REPO_NAME"
+```
+Now you can push your data to the remote repo.
+```bash
+oxen push origin main
+```
+
 ## Clone
 
 There are a few ways that you can clone an Oxen repository, depending on the level of data transfer you want to incur. The default `oxen clone` with no flags will download the *latest commit* from the `main` branch.
