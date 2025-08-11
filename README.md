@@ -17,11 +17,11 @@ brew install gsed
 pip install pydoc-markdown
 ```
 
-Navigate into your local [oxen-release](https://github.com/Oxen-AI/oxen-release) project and into the `oxen` directory so that it can generate from the doc strings.
+Navigate into your local [Oxen](https://github.com/Oxen-AI/Oxen) project and into the `oxen-python` directory so that it can generate from the doc strings.
 
 ```
-# Nagivate into the oxen-release codebase where the python doc strings are
-cd ~/Code/Oxen/oxen-release/oxen
+# Nagivate into the Oxen codebase where the python doc strings are
+cd ~/Code/Oxen/Oxen/oxen-python
 
 # Generate the markdown for the classes
 ~/Code/Oxen/docs/generate-python-docs.sh ~/Code/Oxen/docs/
