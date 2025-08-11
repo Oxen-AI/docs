@@ -53,7 +53,7 @@
     {
       "name": "GitHub",
       "icon": "github",
-      "url": "https://github.com/Oxen-AI/oxen-release"
+      "url": "https://github.com/Oxen-AI/Oxen"
     }
   ],
   "navigation": [
@@ -61,7 +61,7 @@
       "group": "Get Started",
       "pages": [
         "getting-started/intro",
-        "getting-started/inference",        
+        "getting-started/inference",
         {
           "group": "⚙️ Fine-Tuning",
           "pages": [
@@ -194,17 +194,17 @@
             "http-api/evaluations/create_eval"
           ]
         }
-    ]
+      ]
     }
   ],
   "footerSocials": {
     "twitter": "https://twitter.com/oxen_ai",
-    "github": "https://github.com/Oxen-AI/oxen-release",
+    "github": "https://github.com/Oxen-AI/Oxen",
     "linkedin": "https://www.linkedin.com/company/oxenai/"
   },
   "analytics": {
     "posthog": {
-        "apiKey": "phc_Do6VnS78puWwBQuPcJ7TkjixBZwsV4Xxc3ABHVNvjmE"
+      "apiKey": "phc_Do6VnS78puWwBQuPcJ7TkjixBZwsV4Xxc3ABHVNvjmE"
     },
     "ga4": {
       "measurementId": "G-H6D2C08EKP"
