@@ -1,6 +1,6 @@
 ---
-title: '💡 Sentiment Analysis'
-description: 'Prompting a large foundation model to do a simple task like sentiment analysis is often overkill. You can get the same results by fine-tuning a much smaller, cheaper, and faster model. In this example, we will take a dataset of financial news statements and fine-tune Llama 3.2 3B to categorize them as bad, good, or great news.'
+title: '💡 Classification'
+description: 'Prompting a large foundation model to do a simple task like classification is often overkill. Sentiment analysis is an example of a classification task where you can get the same results by fine-tuning a much smaller, cheaper, and faster model. In this example, we will take a dataset of [financial news statements](https://www.oxen.ai/mathi/enhanced-financial-phrasebank) and fine-tune Llama 3.2 3B to categorize them as bad, good, or great news.'
 ---
 <Card href="https://airtable.com/appDW4XBL7qTihmwi/shrPIy6FeLCj1BIgZ" icon="link" cta="Click here">
 In addition to simplifying your fine-tuning pipeline, Oxen.ai offers fine-tuning consultations and services if you are struggling with training a production-ready model. Sign up here to set up a meeting with our ML experts.
@@ -28,7 +28,7 @@ If you don't see the model you need, let us know in [Discord](https://www.discor
 # 2. Upload or Create Your Dataset
 
 
-Once you have found the right model, upload or create a dataset to fine-tune the model on.
+Once you have found a model you like, upload or create a dataset to fine-tune the model on.
 If you do not already have a dataset, you can explore [new datasets](https://www.oxen.ai/explore) and augment the data with our [Model Inference tool](/getting-started/inference#run-inference-on-a-dataset).
 You can also use our Model Inference tool to generate synthetic data from scratch. If you already have a dataset, you can upload it easily with Oxen.ai's [CLI commands](/getting-started/cli#push-your-data).
 <a href="https://www.oxen.ai/explore" target="_blank">
@@ -38,8 +38,8 @@ You can also use our Model Inference tool to generate synthetic data from scratc
     noZoom 
   />
 </a>
-For this example, I found the [enhanced-financial-phrasebank](https://www.oxen.ai/mathi/enhanced-financial-phrasebank) dataset on Hugging Face. I then flattened the dataset to use the nested label and sentence keys as columns and split the main dataset into train and test datasets for training and evaluating, respectively.
-<a href="https://www.oxen.ai/mathi/IMDB-Movie-Review-Sentiment-Classification/file/main/tables/sentiment_reviews.parquet" target="_blank">
+For this example, I used the [enhanced-financial-phrasebank](https://www.oxen.ai/mathi/enhanced-financial-phrasebank) dataset. First I flattened the dataset to use the nested label and sentence keys as columns and split the main dataset into train and test datasets for training and evaluating, respectively.
+<a href="https://www.oxen.ai/mathi/enhanced-financial-phrasebank/file/main/enhanced-financial-phrasebank_full.parquet" target="_blank">
   <img 
     src="/images/sentiment-dataset.png" 
     alt="datasets-page"
@@ -96,7 +96,7 @@ As we can see, we have 216 incorrect rows out of 1,000. So our base model has an
 
 
 Next, let's fine-tune Llama 3.2 3B on our dataset. Go to the train dataset, click "Actions" and select "Fine-tune a model".
-<a href="https://www.oxen.ai/mathi/IMDB-Movie-Review-Sentiment-Classification/file/main/tables/sentiment_reviews.parquet" target="_blank">
+<a href="https://www.oxen.ai/mathi/enhanced-financial-phrasebank/fine-tunes/98a40010-a5d6-4bf5-a151-bd4f492495bf?activeTab=metrics" target="_blank">
 <img 
     src="/images/sentiment-ft-button.png" 
     alt="Fine-tune button"
@@ -136,8 +136,8 @@ After giving the model a few simple financial news statements, we can see it's d
 
 
 Now the fine-tuning is complete, let's evaluate the new model and compare it with our base model. 
-I vibe-coded a script that used the model API to run the model over the test dataset and then created a new column named after the model (in this case `mathi-unsightly-jade-crab_answers`) with the model's responses.
-A cool part about our unified API is that I was able to reuse an old evaluation script and just change the model name and the dataset it was evaluating instead of writing a new API configuration.
+I wrote a script that used the model API to run the model over the test dataset and then created a new column named after the model (in this case `mathi-unsightly-jade-crab_answers`) with the model's responses.
+The advantage of our unified API is that I was able to reuse an old evaluation script and just change the model name and the dataset it was evaluating instead of writing a new API configuration.
 >>>
 While it seems like the model is doing pretty well, we can see there are still a couple of mistakes.
 <a href="https://www.oxen.ai/mathi/enhanced-financial-phrasebank/file/main/enhanced-financial-phrasebank_test_1k.parquet" target="_blank">

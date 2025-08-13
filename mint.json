@@ -67,7 +67,7 @@
           "pages": [
             "getting-started/fine-tuning",
             "examples/fine-tuning/chatbots",
-            "examples/fine-tuning/sentiment-analysis"
+            "examples/fine-tuning/classification"
 
           ]
         },
