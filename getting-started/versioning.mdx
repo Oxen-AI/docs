@@ -26,7 +26,7 @@ This is just one example of how Oxen.ai enables a more developer friendly workfl
 
 ## Client and Server
 
-The open source version control tools come a server to sync data to and a client that can interact with data locally and remotely. The client and server share a common core library that is written in Rust and is used to quickly sync data between the two.
+The open source version control tools come with a server to sync data to and a client that can interact with data locally and remotely. The client and server share a common core library that is written in Rust and is used to quickly sync data between the two.
 
 The server exposes a REST API that can be used to interact with data. Oxen.ai's clients include a [command line interface](/getting-started/cli), as well as bindings for [Rust](https://github.com/Oxen-AI/Oxen) 🦀, [Python](/getting-started/python) 🐍, and [HTTP interfaces](/http-api) 🌎 to make it easy to integrate into your workflow.
 
@@ -485,7 +485,7 @@ If you are not happy with the changes you made to your data, you can restore the
 <CodeGroup>
 
 ```bash CLI
-oxen restore people.csv
+oxen restore --source <commit_id> tables/people.csv
 ```
 
 </CodeGroup>
