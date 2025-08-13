@@ -66,7 +66,9 @@
           "group": "⚙️ Fine-Tuning",
           "pages": [
             "getting-started/fine-tuning",
-            "examples/fine-tuning/chatbots"
+            "examples/fine-tuning/chatbots",
+            "examples/fine-tuning/classification"
+
           ]
         },
         "getting-started/datasets",
