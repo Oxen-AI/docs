@@ -1,0 +1,171 @@
+---
+title: '🖼️ Image Generation'
+description: 'How to fine-tune an image generation model in Oxen.ai'
+---
+
+Oxen.ai allows you to fine-tune an image generation model to create higher quality images with consistent brands assets characters, products, or your own style with no infrastructure setup required. Fine-tune your models with a few clicks, track results during training, and own all your weights to download and use anywhere.
+
+## The Task
+
+For this example, we are going to fine-tune [Qwen-Image](https://www.oxen.ai/ai/models/qwen-image) to be able to generate images of a models wearing a specific outfit.
+
+<img alt="Reference Image" className="rounded-xl" src="/images/fine_tuning/image-generation/nike-models.jpg" />
+
+## Dataset Format
+
+When fine-tuning image generation models, you need a dataset that contains the images and descriptions of the images. The expected format is a csv, jsonl or parquet file with a column that contains the *relative path* to the image in the repository, and a column that contains the description of the image.
+
+<img alt="Dataset Format" className="rounded-xl" src="/images/fine_tuning/image-generation/dataset-format.png" />
+
+We'll walk through the process of creating a dataset with the images and captions in the following sections.
+
+## Creating a Repository
+
+Oxen.ai repositories are used to store and version your data and models. We can create a new repository by clicking the "Create New Repository" button in your Oxen.ai dashboard.
+
+<img alt="Create Repository" className="rounded-xl" src="/images/fine_tuning/fine-tune-create-repo.png" />
+
+You will upload your dataset to the repository, and when the fine-tune is complete, the model weights will be saved to the repository on a branch. By versioning your data and models together, you can always track the data that was used to train the model.
+
+## Uploading the Images
+
+From your repository, you can click the "Add File" button to upload your dataset of images. If you upload a zip file, it will automatically be unpacked into the repository in the specified directory.
+
+<img alt="Upload Dataset" className="rounded-xl" src="/images/fine_tuning/fine-tune-images-zip.png" />
+
+## Turn Your Images into a Dataset
+
+In order to fine-tune in Oxen.ai, you need a csv, jsonl or parquet file that contains the images and their captions.
+
+With your images uploaded, you can convert the directory of images into a dataset that can be used for the fine-tune. Navigate to the directory of images and click the "Folder to Dataset" button.
+
+<img alt="Folder to Dataset" className="rounded-xl" src="/images/fine_tuning/fine-tune-folder-to-dataset-button.png" />
+
+This will grab all of the relative paths from the folder, and create a parquet file with a column called `file_path` that contains the relative path to the image.
+
+<img alt="Folder to Dataset" className="rounded-xl" src="/images/fine_tuning/fine-tune-folder-to-dataset-conversion.png" />
+
+In order to view the images, you will need to enable image rendering on the `file_path` column. Click the "✏️" edit button above the dataset, then edit the column to enable image rendering. The video below shows the whole process.
+
+<video controls className="rounded-xl">
+  <source src="/images/data-frames/image_render.mp4" type="video/mp4" />
+  Your browser does not support the video tag.
+</video>
+
+## Captioning The Images
+
+In order for the fine-tune to learn a mapping from text to images, we'll need a prompt column that contains a description of each image. Oxen.ai makes it easy to run models on each row of the dataset in order to automatically generate captions.
+
+Click the "Actions" button above the dataset, then select "Run Inference".
+
+<img alt="Run Inference" className="rounded-xl" src="/images/data-frames/run-inference.png" />
+
+You will need to select a model that is able to go from "image" to "text" from the dropdown on the left.
+
+<img alt="Run Inference" className="rounded-xl" src="/images/evaluations/image-to-text-captions.png" />
+
+Now write a prompt that describes what you want in the caption and any formatting you want to apply. 
+
+```text
+Describe the model and the clothing that the model is wearing as if you are writing a prompt for an image generation model. The prompt should be one sentence in length and include the gender as "male" or "female". Also describe their hair color and skin tone (white, tan, black, latina, asian). Only describe the person and outfit.
+
+The prompt should start with something like "A male Nike model wearing" or "A female Nike model wearing"
+
+{file_path}
+```
+
+<Info>
+Note: You must supply the curly braces `{}` around the `file_path` column in the prompt to know what column to use for the image.
+</Info>
+
+When you feed good about your prompt after looking at your samples click the "Next ->" button to decide where you want to save the results. By default, the results will create a new version of the existing file.
+
+<img alt="Run Inference" className="rounded-xl" src="/images/evaluations/image-to-text-committing.png" />
+
+Now sit back and relax as the model captions your images 😌 ☕️.
+
+<img alt="Run Inference" className="rounded-xl" src="/images/evaluations/image-to-text-progress.png" />
+
+## Kicking off the Fine-Tune
+
+With our images captioned, now we can kick off the fine-tune! Click the "Actions" button and select "Fine-Tune a Model".
+
+<img alt="Kick off Fine-Tune" className="rounded-xl" src="/images/fine_tuning/image-generation/fine-tune-a-model-button.png" />
+
+This will take you to the fine-tune page where you can select the model you want to fine-tune. Select the "Qwen-Image" model, and make sure the "Image" column is set to `file_path` column, and the "Prompt" column is set to `caption` column.
+
+<img alt="Write Prompts" className="rounded-xl" src="/images/fine_tuning/image-generation/fine-tune-write-prompts.png" />
+
+To monitor the fine-tune, you can provide a few sample prompts that will be used to generate images during the fine-tune.
+
+## Advanced Parameters
+
+Click the "Advanced Parameters" button to see the advanced parameters for the fine-tune. You can set the learning rate, batch size, number of steps, and other parameters here.
+
+One of the best parts of fine-tuning with Oxen.ai is that we track all your experiments for you, so that you can always refer back to the parameters that worked best for future fine-tunes.
+
+<img alt="Fine-Tune Parameters" className="rounded-xl" src="/images/fine_tuning/image-generation/advanced-params.png" />
+
+Click the "Start Fine-Tune" button and you are off to the races!
+
+## Monitoring the Fine-Tune
+
+As the model is training, you can monitor the progress by clicking the "Samples" tab. This will show you the images that the model has generated so far.
+
+<img alt="Monitor the Fine-Tune" className="rounded-xl" src="/images/fine_tuning/image-generation/monitor_the_fine_tune.png" />
+
+## Deploying the Model
+
+When the model has finished training, you can deploy it to a new model by clicking the "Deploy Model" button. The deployment will take a few minutes to complete.
+
+<img alt="Deploy the Model" className="rounded-xl" src="/images/fine_tuning/image-generation/model-deploying.png" />
+
+Once the model is deployed, you can use it in the playground or via the API.
+
+```bash
+curl -X POST \
+-H "Authorization: Bearer <YOUR_TOKEN>" \
+-H "Content-Type: application/json" \
+-d '{
+  "model": "oxen:ox-brave-jade-gecko",
+  "prompt": "A majestic ox standing in a field at sunset",
+  "num_inference_steps": 28
+}' https://hub.oxen.ai/api/images/generate
+```
+
+## Using the Playground
+
+Click the "Open Playground" button to use the model in the playground. This allows you to prompt the model with different images and prompts to see how it performs.
+
+<img alt="Playground" className="rounded-xl" src="/images/fine_tuning/image-generation/playground.png" />
+
+The playground will save a history of your prompts and images so that you can refer back to them later.
+
+## Exporting the Model
+
+All of the model weights are stored back in your repository when the fine-tune is complete. Navigate to the fine-tune info tab, and you will see a link to the model weights. This is helpful if you want to download the weights to run in ComfyUI or your own infrastructure.
+
+<img alt="Info Tab" className="rounded-xl" src="/images/fine_tuning/image-generation/info-tab.png" />
+
+This will take you to the file viewer where you can download the model safetensors.
+
+<img alt="File Viewer" className="rounded-xl" src="/images/fine_tuning/image-generation/file-viewer.png" />
+
+You can also automatically download the weights with the [oxen cli](/getting-started/cli) or [python library](/getting-started/python).
+
+<CodeGroup>
+
+```bash CLI
+oxen download user-name/repo-name path/to/model.safetensors --revision COMMIT_OR_BRANCH
+```
+
+```python Python
+from oxen import RemoteRepo
+repo = RemoteRepo("user-name/repo-name")
+repo.download("path/to/model.safetensors", revision="COMMIT_OR_BRANCH")
+```
+</CodeGroup>
+
+## Need Help Fine-Tuning?
+
+If you need help fine-tuning your model, [contact us](https://airtable.com/appDW4XBL7qTihmwi/shrQF72gHTJw8zvie) and we are happy to help you get started.

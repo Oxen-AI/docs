@@ -1,0 +1,85 @@
+---
+title: '💬 Text Generation'
+description: 'How to fine-tune an LLM for text generation.'
+---
+
+This tutorial will show you how to fine-tune an LLM for text generation. If you only have a single input and output you want the model to learn, this is the right fine-tuning method for you.
+
+## Create Your Dataset
+
+For this example, we are using a formatted version of the [mlabonne/FineTome-100k](https://www.oxen.ai/mathi/mlabonne-FineTome-100k) dataset filtered to only educational content and limited to the first 3,000 rows. The dataset has one column for the prompt and one for the response.
+
+Oxen supports datasets in a variety of formats, including jsonl, csv, and parquet.
+
+<a href="https://www.oxen.ai/mathi/mlabonne-FineTome-100k" target="_blank">
+  <img 
+    src="/images/fine_tuning/text-generation/dataset.png" 
+    className="rounded-xl"
+    alt="datasets-page"
+    noZoom 
+  />
+</a>
+
+## Fine-Tuning The Model
+
+Once you have uploaded your dataset, click the "Actions" button and select "Fine-tune a model".
+
+<a href="https://www.oxen.ai/mathi/mlabonne-FineTome-100k/file/main/train.jsonl" target="_blank">
+<img 
+    src="/images/Fine-Tune-button.png" 
+    alt="Fine-tune button"
+    className="rounded-xl"
+    noZoom 
+  />
+</a>
+
+Next select your base model, the prompt source, the response source, whether you'd like to use LoRA or not, and if you want advanced control over the fine-tune.
+
+<img 
+    src="/images/fine_tuning/text-generation/select-model.png" 
+    alt="Fine-tune first page"
+    className="rounded-xl"
+    noZoom 
+  />
+
+For our Advance Options, you can have control over hyper-parameters and model specifications like learning rate, batch size, and number of epochs.
+
+<img 
+    src="/images/fine_tuning/text-generation/advanced-settings.png" 
+    alt="Advanced options photo"
+    className="rounded-xl"
+    noZoom 
+  />
+
+## Monitoring the Fine-Tune
+
+While we're fine-tuning your model, you'll be able to see the configuration, logs, and metrics of the fine-tuning.
+
+  <img 
+    src="/images/fine_tuning/fine-tune-loss.png" 
+    alt="Metrics example"
+    noZoom 
+  />
+
+## Deploying the Model
+
+Once your fine-tuning is complete, go to the configuration page and click "Deploy". From there, you will not only have an API endpoint to use, but you will also be able to chat with your fine-tuned model to get a sense of how it's doing.
+<a href="https://www.oxen.ai/mathi/mlabonne-FineTome-100k/fine-tunes/68110b2f-2b3c-4008-9951-1790dd50d9d9" target="_blank">
+  <img 
+    src="/images/deploy-example.png" 
+    alt="Deploy example"
+    noZoom 
+  />
+</a>
+<a href="https://www.oxen.ai/ai/models/mathi-wild-azure-haddock/chat" target="_blank">
+  <img 
+    src="/images/fine-tuned-chatbot.png" 
+    alt="fine-tuned chatbot"
+    noZoom 
+  />
+</a>
+
+
+## Next Steps
+
+Oxen.ai makes fine-tuning easy, but if you are struggling to fine-tune your model or want us to fine-tune for you, we'd be happy to set up a [free consultation](https://airtable.com/appDW4XBL7qTihmwi/shrPIy6FeLCj1BIgZ) with our ML experts!

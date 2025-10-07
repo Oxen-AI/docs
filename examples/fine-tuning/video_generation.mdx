@@ -1,0 +1,155 @@
+---
+title: '🎥 Video Generation'
+description: 'How to fine-tune a video generation model in Oxen.ai'
+---
+
+Oxen.ai allows you to fine-tune a video generation model to generate higher quality videos with consistent brands assets characters, products, or your own style with no infrastructure setup required. Fine-tune your models with a few clicks, track results during training, and own all your weights to download and use anywhere.
+
+## Generating Videos of an Actor
+
+In this example, we are going to fine-tune WAN 2.2 to be able to generate videos of a specific character or actor. We will be using the actor "Will Smith" in our example to see if we can get the model to generate a high quality video of him eating spaghetti.
+
+You'll see in the image on the left that at the start of the fine-tune WAN has no concept of "Will Smith" the actor, and by the end (image on the right) we have captured his face and expression.
+
+<img alt="Will Smith Before and After" className="rounded-xl" src="/images/fine_tuning/text-to-video/will-smith-before-after.png" />
+
+## Creating the Training Dataset
+
+When fine-tuning video generation models, you need a dataset that contains the images and descriptions of the images. The model will learn the style and character from the image and describe alone, then can extrapolate to the rest of the video. 
+
+The expected format is a csv, jsonl or parquet file with a column that contains the *relative path* to the image in the repository, and a column that contains the description of the image.
+
+<img alt="Will Smith Dataset" className="rounded-xl" src="/images/fine_tuning/text-to-video/will-smith-dataset.png" />
+
+There are two columns where each row contains:
+
+1) `image` - the relative path to the image in the oxen repository
+2) `prompt` - the description of the image in the row
+
+In order to get started, create a repository, then click the "Add Files" button.
+
+<img alt="Add Files" className="rounded-xl" src="/images/fine_tuning/text-to-video/add-files.png" />
+
+Then you can drag and drop a zip file of images which will be automatically unzipped into your repository. Write a commit message before uploading so that your team can know why you added these images. This will be handy when iterating on your training datasets.
+
+Once your images have been uploaded, navigate into the folder and click the "Folder to Dataset" button.
+
+<img alt="Folder to Dataset" className="rounded-xl" src="/images/fine_tuning/text-to-video/folder-to-dataset-button.png" />
+
+This will grab all of the relative paths from the folder, and create a parquet file with a column called `image` that contains the relative path to the image.
+
+<img alt="Folder to Dataset" className="rounded-xl" src="/images/fine_tuning/text-to-video/folder-to-dataset.png" />
+
+To view the images, you will need to enable image rendering on the `image` column. Click the "✏️" edit button above the dataset, then edit the column to enable image rendering. The video below shows the whole process.
+
+<video controls className="rounded-xl">
+  <source src="/images/fine_tuning/text-to-video/will_smith_image_render.mp4" type="video/mp4" />
+  Your browser does not support the video tag.
+</video>
+
+## Auto-Captioning the Images
+
+Now that we have a dataset, we need to create a description for each image. We can do this by clicking the "Actions" button and selecting "Run Inference".
+
+<img alt="Run Inference" className="rounded-xl" src="/images/data-frames/run-inference.png" />
+
+You will need to select a model that is able to go from "image" to "text" from the dropdown on the left. Then write a prompt that describes what you want in the caption and any formatting you want to apply. 
+
+<img alt="Run Inference" className="rounded-xl" src="/images/fine_tuning/text-to-video/caption-dataset-sample.png" />
+
+In this case, we are using the prompt:
+
+```text
+Describe what the actor is doing and wearing in one sentence or less. Each sentence should start with "Will Smith is"
+
+{file_path}
+```
+
+<Info>
+Note: You must supply the curly braces `{}` around the `file_path` column in the prompt to know what column to use for the image.
+</Info>
+
+When you feed good about your prompt after looking at your samples click the "Next ->" button to decide where you want to save the results. By default, the results will create a new version of the existing file.
+
+Now sit back and relax as the model captions your images 😌 ☕️.
+
+<img alt="Run Inference" className="rounded-xl" src="/images/fine_tuning/text-to-video/captioning.png" />
+
+If you want to further refine your prompts, you can always click the "✏️" edit button on the dataset and hand label the captions.
+
+## Kicking off the Fine-Tune
+
+With your images labeled and you are happy with the quality and quantity, it is time to kick off your first fine-tune. 
+
+Click the "Actions" button and select "Fine-Tune a Model".
+
+<img alt="Kick off Fine-Tune" className="rounded-xl" src="/images/fine_tuning/text-to-video/fine-tune-a-model-button.png" />
+
+This will take you to the fine-tune page where you can select the model you want to fine-tune. Select the "Wan-AI/Wan2.2-T2V-A14B-Diffusers" model, and make sure the "Image" column is set to `file_path` column, and the "Prompt" column is set to `caption` column.
+
+<img alt="Write Prompts" className="rounded-xl" src="/images/fine_tuning/text-to-video/fine-tune-prompts.png" />
+
+## Watching the Model Learn
+
+As your model is training, Oxen will automatically sample videos so that you can get a feel for how it is learning. You can see that the model is starting to learn the actor's face and expression after a couple hundred steps.
+
+<video controls className="rounded-xl">
+  <source src="/images/fine_tuning/text-to-video/samples.mp4" type="video/mp4" />
+  Your browser does not support the video tag.
+</video>
+
+## Deploying the Model
+
+When the model has finished training, you can deploy it to a new model by clicking the "Deploy Model" button. The deployment will take a few minutes to complete.
+
+<img alt="Deploy the Model" className="rounded-xl" src="/images/fine_tuning/text-to-video/deploy-model.png" />
+
+Once the model is deployed, you can use it in the playground or via the API. Replace the `model` name with the name of your deployed model.
+
+```bash
+curl -X POST \
+-H "Authorization: Bearer <YOUR_TOKEN>" \
+-H "Content-Type: application/json" \
+-d '{
+  "model": "oxen:ox-comfortable-sapphire-locust",
+  "prompt": "An ox walking in a field",
+  "run_fast": true
+}' https://hub.oxen.ai/api/videos/generate
+```
+
+## Using the Playground
+
+Click the "Open Playground" button to use the model in the playground. This allows you to prompt the model with different images and prompts to see how it performs.
+
+<img alt="Playground" className="rounded-xl" src="/images/fine_tuning/text-to-video/playground.png" />
+
+The playground will save a history of your prompts and images so that you can refer back to them later.
+
+## Exporting the Model
+
+All of the model weights are stored back in your repository when the fine-tune is complete. Navigate to the fine-tune info tab, and you will see a link to the model weights. This is helpful if you want to download the weights to run in ComfyUI or your own infrastructure.
+
+<img alt="Info Tab" className="rounded-xl" src="/images/fine_tuning/text-to-video/info-tab.png" />
+
+This will take you to the file viewer where you can download the model safetensors.
+
+<img alt="File Viewer" className="rounded-xl" src="/images/fine_tuning/image-generation/file-viewer.png" />
+
+You can also automatically download the weights with the [oxen cli](/getting-started/cli) or [python library](/getting-started/python).
+
+<CodeGroup>
+
+```bash CLI
+oxen download user-name/repo-name path/to/model.safetensors --revision COMMIT_OR_BRANCH
+```
+
+```python Python
+from oxen import RemoteRepo
+repo = RemoteRepo("user-name/repo-name")
+repo.download("path/to/model.safetensors", revision="COMMIT_OR_BRANCH")
+```
+</CodeGroup>
+
+## Need Help Fine-Tuning?
+
+If you need help fine-tuning your model, [contact us](https://airtable.com/appDW4XBL7qTihmwi/shrQF72gHTJw8zvie) and we are happy to help you get started.

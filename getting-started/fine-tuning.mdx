@@ -1,17 +1,13 @@
 ---
-title: '🦾 Fine-Tuning'
+title: '📖 How it works'
 description: 'Oxen.ai lets you go from datasets to custom models with a few clicks.'
 ---
 
-Simply [upload your data](/getting-started/datasets), and we will provision GPU infrastructure to execute the training process, then save the fine-tuned model weights directly to your repository. Model weights and datasets are [versioned](/getting-started/versioning) so that you can always track the data that was used to train the model.
+Simply [upload your data](/getting-started/datasets), and we will provision GPU infrastructure and run the fine-tune. When it's done, Oxen.ai will save the fine-tuned model weights directly to your repository. You can deploy your model to a dedicated endpoint and use the [inference endpoints](/getting-started/inference) to test it out. Model weights and datasets are [versioned](/getting-started/versioning) so that you can always track the data that was used to train the model.
 
 <img alt="Fine-Tuning Ox" className="rounded-xl" src="/images/fine_tuning/fine-tune-ox.jpg" />
 
 Once the fine-tuning process is complete, you can [deploy the model](/getting-started/inference) and start using it in your application.
-
-<Info>
-If you are looking for a more hands-on approach to fine-tuning, you can write your own code in [Notebooks](/getting-started/notebooks).
-</Info>
 
 ## Why Fine-Tune?
 
@@ -26,17 +22,40 @@ Fine-tuning is a great tool to reach for when basic prompting and context engine
 
 With Oxen.ai, we make it easy to automate the fine-tuning process of LLMs on your own data.
 
-## Examples
+## Tasks
+
+Oxen.ai supports many data types and tasks for fine-tuning.
+
+<CardGroup cols={4}>
+  <Card title="Text Generation" icon="headphones" href="/examples/fine-tuning/text_generation">
+    Train a model to take a user input as text and generate a response as text.
+  </Card>
+
+  <Card title="Image Generation" icon="palette" href="/examples/fine-tuning/image_generation">
+    Train a model to go from text descriptions to images.
+  </Card>
+
+  <Card title="Image Editing" icon="palette" href="/examples/fine-tuning/image_editing">
+    Train a model to take a prompt and a reference image and generate a new image.
+  </Card>
+
+  <Card title="Video Generation" icon="palette" href="/examples/fine-tuning/video_generation">
+    Train a model to take in a prompt and generate a video.
+  </Card>
+</CardGroup>
+
+{/* ## Examples
+
 Here are specific examples of how fine-tuning can be used to solve real-world problems. From coding agents to opitmizing tool calling for your agent, there are a lot of use cases for fine-tuning.
-- [💬 Chatbot](/examples/fine-tuning/chatbots)
-- [💡 Classification](/examples/fine-tuning/classification)
+
+- [💬 Programming Chatbot](/examples/fine-tuning/chatbots)
 - 🤖 Agents -- <em>**Coming soon**</em>
 - 📄 PDF Extraction -- <em>**Coming soon**</em>
 - 📞 24/7 Customer Support Agents -- <em>**Coming soon**</em>
 - 🔍 Enterprise Search and Q&A -- <em>**Coming soon**</em>
 - 🎨 Brand-Specific Content Creation -- <em>**Coming soon**</em>
 - 📝 Automated Report Generation -- <em>**Coming soon**</em>
-- 🪛 Quality Control & Anomaly Detection -- <em>**Coming soon**</em>
+- 🪛 Quality Control & Anomaly Detection -- <em>**Coming soon**</em> */}
 
 ## Start by Uploading a Dataset
 
@@ -54,26 +73,32 @@ When you feel confident that your dataset is ready, use the "Actions" button to 
 
 ## Selecting a Model
 
-This will take you to a form where you can select the model you want to fine-tune and the columns you want to use for the fine-tuning process. Right now we support fine-tuning for prompt/response single-turn chat pairs.
+This will take you to a form where you can select the model you want to fine-tune and the columns you want to use for the fine-tuning process. We support fine-tuning for [text generation](/examples/fine-tuning/text_generation), [image generation](/examples/fine-tuning/image_generation), [image editing](/examples/fine-tuning/image_editing), and [video generation](/examples/fine-tuning/video_generation) with a variety of models.
 
 <img alt="Fine-Tuning Model Selection" className="rounded-xl" src="/images/fine_tuning/fine-tune-model-selection.png" />
 
 <Info>
-If you want support for any larger models or modalities like text-to-image, [contact us](https://airtable.com/appDW4XBL7qTihmwi/shrQF72gHTJw8zvie). We are actively working on support for different data formats and distributed training.
+If you want support for any specific models, data formats, training methods [contact us](https://airtable.com/appDW4XBL7qTihmwi/shrQF72gHTJw8zvie). We are actively working on support for new models and distributed training.
 </Info>
 
 
 ## Monitoring the Fine-Tune
 
-Once you have started the fine-tuning process, you can monitor its progress. The dashboard will show you loss over time, token accuracy, the learning rate, and number of tokens processed.
+Once you have started the fine-tuning process, you can monitor its progress. The dashboard will show you loss over time and token accuracy processed.
 
-<img alt="Fine-Tuning Monitoring" className="rounded-xl" src="/images/fine_tuning/fine-tune-monitoring.png" />
+<img alt="Fine-Tuning Monitoring" className="rounded-xl" src="/images/fine_tuning/fine-tune-loss.png" />
 
-Click on the "Configuration" tab to see the fine-tuning configuration. This will include a link to the dataset version you used and the raw model weights. It will show you the pricing for the fine-tuning process as well.
+If you are fine-tuning an [image](/examples/fine-tuning/image_generation) or [video](/examples/fine-tuning/video_generation) generation model, you can view the generated images or videos in the "Samples" tab to get a feel for the model's performance.
+
+<img alt="Fine-Tuning Samples" className="rounded-xl" src="/images/fine_tuning/fine-tune-samples.png" />
+
+Click on the "Info" tab to see the fine-tuning configuration and all the hyper-parameters used. This will include a link to the [dataset version](/getting-started/versioning) you used and the raw model weights for downloading and running locally.
+
+<img alt="Fine-Tuning Samples" className="rounded-xl" src="/images/fine_tuning/fine-tune-info-tab.png" />
 
 ## Deploying the Model
 
-Once the model is fine-tuned, you can deploy it to a hosted endpoint. This will give you a `/chat/completions` endpoint that you can use to test out the model.
+Once the model is fine-tuned, you can deploy it to a dedicated endpoint. This will give you a `/chat/completions` api that you can use to test out the model.
 
 <img alt="Fine-Tuning Configuration" className="rounded-xl" src="/images/fine_tuning/fine-tune-deploy-model.png" />
 
@@ -81,19 +106,22 @@ Swap out the model name with the name of the model you want to use.
 
 ```bash
 curl https://hub.oxen.ai/api/chat/completions -H "Content-Type: application/json" -d '{
-    "model":"oxenai:my-model-name",
+    "model":"oxen:my-model-name",
     "messages": [{"role": "user", "content": "What is the best name for a friendly ox?"}],
 }'
 ```
 
-## Chatting with the Model
+## Using the Model
 
 Once the model is deployed, you can also chat with it using the Oxen.ai chat interface. Learn more about the [chat interface here](/getting-started/inference).
 
 <img alt="Chatting with the Model" className="rounded-xl" src="/images/chat/chat_window_powerful_coffee_chimpanzee.png" />
 
+For image and video generation, you can use the [playground](https://oxen.ai/ai/models) to generate images and videos.
 
-## Downloading the Model Weights
+<img alt="Chatting with the Model" className="rounded-xl" src="/images/fine_tuning/model-playground.png" />
+
+## Downloading the Model
 
 If you want access to the raw model weights, you can download them from the repository using the Oxen.ai [Python Library](/getting-started/python) or the [CLI](/getting-started/cli).
 
@@ -102,7 +130,7 @@ Follow the instructions for [installing oxen](/getting-started/install) if you h
 <CodeGroup>
 
 ```bash CLI
-oxen download my-username/my-repo models --revision Qwen3-0.6B-experiment-1_fte7562a9e
+oxen download my-username/my-repo models/ox-artistic-cyan-elephant/model.safetensors --revision models/ox-artistic-cyan-elephant
 ```
 
 ```python Python
@@ -110,7 +138,7 @@ from oxen import RemoteRepo
 
 repo = RemoteRepo("my-username/my-repo")
 
-repo.download("models", revision="Qwen3-0.6B-experiment-1_fte7562a9e")
+repo.download("models/ox-artistic-cyan-elephant/model.safetensors", revision="models/ox-artistic-cyan-elephant")
 ```
 
 </CodeGroup>

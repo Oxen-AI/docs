@@ -1,0 +1,155 @@
+---
+title: '🏛️ Text Classification'
+description: 'How to train a small language model to classify text.'
+---
+
+Sentiment analysis is an example of a classification task where you can get the high quality results by fine-tuning a much smaller, cheaper, and faster model. In this example, we will take a dataset of [financial news statements](https://www.oxen.ai/mathi/enhanced-financial-phrasebank) and fine-tune Llama 3.2 3B to categorize them as bad, good, or great news.
+
+## Creating Your Dataset
+
+Once you have found a model you like, upload or create a dataset to fine-tune the model on.
+If you do not already have a dataset, you can explore [new datasets](https://www.oxen.ai/explore) and augment the data with our [Model Inference tool](/getting-started/inference#run-inference-on-a-dataset).
+You can also use our Model Inference tool to generate synthetic data from scratch. If you already have a dataset, you can upload it easily with Oxen.ai's [CLI commands](/getting-started/cli#push-your-data).
+<a href="https://www.oxen.ai/explore" target="_blank">
+  <img 
+    src="/images/datasets-page.png" 
+    alt="datasets-page"
+    noZoom 
+  />
+</a>
+For this example, I used the [enhanced-financial-phrasebank](https://www.oxen.ai/mathi/enhanced-financial-phrasebank) dataset. First I flattened the dataset to use the nested label and sentence keys as columns and split the main dataset into train and test datasets for training and evaluating, respectively.
+<a href="https://www.oxen.ai/mathi/enhanced-financial-phrasebank/file/main/enhanced-financial-phrasebank_full.parquet" target="_blank">
+  <img 
+    src="/images/sentiment-dataset.png" 
+    alt="datasets-page"
+    noZoom 
+  />
+</a>
+
+
+# 3. Evaluate the Base Model
+
+
+Before fine-tuning, let's evaluate Llama 3.2 3B to see if fine-tuning improves it.
+We can do this with our [Model Inference tool](/getting-started/inference).
+First, go to your test dataset (not your training dataset, as you would be evaluating your fine-tuned model on the test dataset), click "Actions" and select "Run Inference".
+
+<a href="https://www.oxen.ai/mathi/enhanced-financial-phrasebank/file/main/enhanced-financial-phrasebank_test_1k.parquet" target="_blank">
+  <img 
+    src="/images/sentiment-base-eval.png" 
+    alt="Evaluating the base model "
+    noZoom 
+  />
+</a>
+From there, select your base model, choose your new column name, write your prompt while passing in the sentence column, and quickly run samples by clicking the "Run Samples" button to see how well your prompt works.
+<a href="https://www.oxen.ai/mathi/enhanced-financial-phrasebank/evaluations/47e809e3-957d-4d97-a6bb-944c2dccde24" target="_blank">
+  <img 
+    src="/images/sentiment-base-model.png" 
+    alt="Evaluating the base model "
+    noZoom 
+  />
+</a>
+
+Now we click "Next", write our commit message, name the file, and click "Run Evaluation" to run the base Llama 3.2 3B on the whole dataset (you can also name a new branch if you want to track different experiments with different models).
+<a href="https://www.oxen.ai/mathi/enhanced-financial-phrasebank/evaluations/47e809e3-957d-4d97-a6bb-944c2dccde24" target="_blank">
+  <img 
+    src="/images/sentiment-eval-commit.png" 
+    alt="chatbot commit evals"
+    noZoom 
+  />
+</a>
+While the model is running through the dataset, you will see the progress bar, tokens, cost, rows, and time taken to go through the dataset.
+<a href="https://www.oxen.ai/mathi/enhanced-financial-phrasebank/evaluations/47e809e3-957d-4d97-a6bb-944c2dccde24" target="_blank">
+  <img 
+    src="/images/sentiment-status-bar.png" 
+    alt="chatbot commit evals"
+    noZoom 
+  />
+</a>
+Once we have the results, let's get an accuracy score. We can go to our text-to-SQL engine available at every table. Then simply ask for the rows where the columns "labels" and "base_model_labels" are different.
+![chat-icon](/images/sentiment_base_model_t2s.png)
+As we can see, we have 216 incorrect rows out of 1,000. So our base model has an accuracy score of 78.4%, let's see if we're able to improve that with fine-tuning.
+
+
+# 4. Fine-Tuning Llama 3.2 3B
+
+
+Next, let's fine-tune Llama 3.2 3B on our dataset. Go to the train dataset, click "Actions" and select "Fine-tune a model".
+<a href="https://www.oxen.ai/mathi/enhanced-financial-phrasebank/fine-tunes/98a40010-a5d6-4bf5-a151-bd4f492495bf?activeTab=metrics" target="_blank">
+<img 
+    src="/images/sentiment-ft-button.png" 
+    alt="Fine-tune button"
+    noZoom 
+  />
+</a>
+Here, you'll be able to select your script type (in this case text generation), base model, the prompt source, the response source, if you'd like to use [LoRA](https://www.oxen.ai/blog/arxiv-dives-how-lora-fine-tuning-works), and if you want advanced control (like learning rate, batch size, and number of epochs) over the fine-tune.
+Since we are fine-tuning a small model, we won't use LoRA and stick to the default settings. After evaluating the fine-tuned model, we can tweak parameters, like training for more than 1 epoch, to see if there are any improvements.
+![chat-icon](/images/sentiment-fine-tune.png)
+While the model is training, we can see the configuration, logs, and metrics.
+<a href="https://www.oxen.ai/mathi/enhanced-financial-phrasebank/fine-tunes/98a40010-a5d6-4bf5-a151-bd4f492495bf?activeTab=metrics" target="_blank">
+  <img 
+    src="/images/sentiment-metrics-example.png" 
+    alt="Metrics example"
+    noZoom 
+  />
+</a>
+Once your fine-tuning is complete, go to the configuration page and click "Deploy". From there, you will not only have a unified API endpoint with a funny model name, but you will also be able to chat with your fine-tuned model to get a sense of how it's doing.
+<a href="https://www.oxen.ai/mathi/enhanced-financial-phrasebank/fine-tunes/98a40010-a5d6-4bf5-a151-bd4f492495bf?activeTab=metrics" target="_blank">
+  <img 
+    src="/images/sentiment-deploy-page.png" 
+    alt="Deploy example"
+    noZoom 
+  />
+</a>
+After giving the model a few simple financial news statements, we can see it's doing pretty well at giving us a label of 0, 1, or 2.
+<a href="https://www.oxen.ai/ai/models/mathi-unsightly-jade-crab/chat" target="_blank">
+  <img 
+    src="/images/sentiment-chat.png" 
+    alt="fine-tuned chatbot"
+    noZoom 
+  />
+</a>
+
+
+# 5. Evaluate the Fine-Tuned Model
+
+
+Now the fine-tuning is complete, let's evaluate the new model and compare it with our base model. 
+I wrote a script that used the model API to run the model over the test dataset and then created a new column named after the model (in this case `mathi-unsightly-jade-crab_answers`) with the model's responses.
+The advantage of our unified API is that I was able to reuse an old evaluation script and just change the model name and the dataset it was evaluating instead of writing a new API configuration.
+>>>
+While it seems like the model is doing pretty well, we can see there are still a couple of mistakes.
+<a href="https://www.oxen.ai/mathi/enhanced-financial-phrasebank/file/main/enhanced-financial-phrasebank_test_1k.parquet" target="_blank">
+  <img 
+    src="/images/sentiment-test-set.png" 
+    alt="base model evals"
+    noZoom 
+  />
+</a>
+
+Now let's use our text to SQL engine again to get an accuracy score.
+<a href="https://www.oxen.ai/mathi/enhanced-financial-phrasebank/file/main/enhanced-financial-phrasebank_test_1k.parquet" target="_blank">
+  <img 
+    src="/images/sentiment-t2s.png" 
+    alt="base model evals"
+    noZoom 
+  />
+</a>
+110 of 1,000 rows were incorrect, so our fine-tuned model has an accuracy score of 89% from 78.4%. Not bad at all for a small model. 
+
+
+# 6. Next Steps
+
+
+If you are happy with the results, start using the [model API](/getting-started/inference#model-api).
+If not, there are many ways we can try to improve the model:
+- Plow through the data and see if you need to clean, augment, or transform it.
+- Keep fine-tuning different models to see which works best for your use case and data.
+- Tweak the advanced settings to see if you can get a better model.
+
+In this case, some of the financial news statements were a bit ambiguous as to whether they were good or neutral news, so when the labels say 2 and our new fine-tuned model says 1, it may not be an inaccuracy, but we simply need to clarify or create more detailed labels. 
+Try fine-tuning today and let us know how it goes!
+
+<Card href="https://airtable.com/appDW4XBL7qTihmwi/shrPIy6FeLCj1BIgZ" icon="link" cta="Click here">
+In addition to simplifying your fine-tuning pipeline, Oxen.ai offers fine-tuning consultations and services if you are struggling with training a production-ready model. Sign up here to set up a meeting with our ML experts.
+</Card>

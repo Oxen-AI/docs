@@ -2,214 +2,202 @@
   "$schema": "https://mintlify.com/schema.json",
   "name": "Oxen.ai",
   "logo": {
-    "dark": "/logo/dark.svg",
-    "light": "/logo/light.svg"
+      "dark": "/logo/dark.svg",
+      "light": "/logo/light.svg"
   },
   "favicon": "/favicon.png",
   "colors": {
-    "primary": "#0E87CB",
-    "light": "#0E87CB",
-    "dark": "#161616",
-    "background": {
-      "dark": "#0A0A0A"
-    },
-    "anchors": {
-      "from": "#0E87CB",
-      "to": "#0E87CB"
-    }
+      "primary": "#0E87CB",
+      "light": "#0E87CB",
+      "dark": "#161616",
+      "background": {
+          "dark": "#0A0A0A"
+      },
+      "anchors": {
+          "from": "#0E87CB",
+          "to": "#0E87CB"
+      }
   },
   "topbarLinks": [
-    {
-      "name": "Support",
-      "url": "https://discord.com/invite/s3tBEn7Ptg"
-    }
+      {
+          "name": "Support",
+          "url": "https://discord.com/invite/s3tBEn7Ptg"
+      }
   ],
   "topbarCtaButton": {
-    "name": "Sign Up",
-    "url": "https://oxen.ai/register"
+      "name": "Sign Up",
+      "url": "https://oxen.ai/register"
   },
   "tabs": [
-    {
-      "name": "Python API",
-      "url": "python-api"
-    },
-    {
-      "name": "HTTP API",
-      "url": "http-api",
-      "openapi": "https://hub.oxen.ai/oxen-server-openapi-spec.json"
-    }
+      {
+          "name": "Python API",
+          "url": "python-api"
+      },
+      {
+          "name": "HTTP API",
+          "url": "http-api",
+          "openapi": "https://hub.oxen.ai/oxen-server-openapi-spec.json"
+      }
   ],
   "anchors": [
-    {
-      "name": "Documentation",
-      "icon": "book-open-cover",
-      "url": "https://docs.oxen.ai"
-    },
-    {
-      "name": "Blog",
-      "icon": "newspaper",
-      "url": "https://blog.oxen.ai"
-    },
-    {
-      "name": "GitHub",
-      "icon": "github",
-      "url": "https://github.com/Oxen-AI/Oxen"
-    }
+      {
+          "name": "Documentation",
+          "icon": "book-open-cover",
+          "url": "https://docs.oxen.ai"
+      },
+      {
+          "name": "Blog",
+          "icon": "newspaper",
+          "url": "https://blog.oxen.ai"
+      },
+      {
+          "name": "GitHub",
+          "icon": "github",
+          "url": "https://github.com/Oxen-AI/Oxen"
+      }
   ],
   "navigation": [
-    {
-      "group": "Get Started",
-      "pages": [
-        "getting-started/intro",
-        "getting-started/inference",
-        {
-          "group": "⚙️ Fine-Tuning",
+      {
+          "group": "Get Started",
           "pages": [
-            "getting-started/fine-tuning",
-            "examples/fine-tuning/chatbots",
-            "examples/fine-tuning/classification"
-
+              "getting-started/intro",
+              "getting-started/inference",
+              {
+                  "group": "⚙️ Fine-Tuning",
+                  "pages": [
+                      "getting-started/fine-tuning",
+                      "examples/fine-tuning/image_generation",
+                      "examples/fine-tuning/image_editing",
+                      "examples/fine-tuning/video_generation",
+                      "examples/fine-tuning/text_generation"
+                  ]
+              },
+              "getting-started/datasets",
+              "getting-started/batch_inference",
+              "getting-started/versioning"
           ]
-        },
-        "getting-started/datasets",
-        "getting-started/evaluation",
-        {
-          "group": "📓 Notebooks",
+      },
+      {
+          "group": "Developer Tools",
           "pages": [
-            "getting-started/notebooks",
-            "examples/notebooks/explore_process_version_data",
-            "examples/notebooks/build_labeling_tool",
-            "examples/notebooks/compute_text_embeddings",
-            "examples/notebooks/generate_synthetic_datasets",
-            "examples/notebooks/train_llm",
-            "examples/notebooks/eval_llm/human_in_the_loop",
-            "examples/notebooks/run_as_script"
+              "getting-started/install",
+              "getting-started/cli",
+              "getting-started/python",
+              "getting-started/oxen-server",
+              "features/performance"
           ]
-        },
-        "getting-started/versioning"
-      ]
-    },
-    {
-      "group": "Developer Tools",
-      "pages": [
-        "getting-started/install",
-        "getting-started/cli",
-        "getting-started/python",
-        "getting-started/oxen-server",
-        "features/performance"
-      ]
-    },
-    {
-      "group": "Other Concepts",
-      "pages": [
-        "concepts/diffs",
-        "concepts/file_metadata",
-        "concepts/workspaces"
-      ]
-    },
-    {
-      "group": "Release Notes",
-      "pages": [
-        "concepts/feature-updates"
-      ]
-    },
-    {
-      "group": "Python API",
-      "pages": [
-        "python-api/index",
-        "python-api/clone",
-        "python-api/data_frame",
-        "python-api/datasets",
-        "python-api/df_utils",
-        "python-api/diff/diff",
-        "python-api/diff/line_diff",
-        "python-api/diff/tabular_diff",
-        "python-api/diff/text_diff",
-        "python-api/init",
-        "python-api/oxen_fs",
-        "python-api/remote_repo",
-        "python-api/repo",
-        "python-api/repositories",
-        "python-api/workspace"
-      ]
-    },
-    {
-      "group": "HTTP API",
-      "pages": [
-        "http-api/index",
-        {
-          "group": "Namespaces",
+      },
+      {
+          "group": "Other Concepts",
           "pages": [
-            "http-api/namespaces/list_namespaces"
+              "concepts/diffs",
+              "concepts/file_metadata",
+              "concepts/workspaces"
           ]
-        },
-        {
-          "group": "Repository",
+      },
+      {
+          "group": "Release Notes",
           "pages": [
-            "http-api/repositories/list_repos",
-            "http-api/repositories/get_repo",
-            "http-api/repositories/create_repo",
-            "http-api/repositories/update_repo",
-            "http-api/repositories/delete_repo"
+              "concepts/feature-updates"
           ]
-        },
-        {
-          "group": "Branches",
+      },
+      {
+          "group": "Python API",
           "pages": [
-            "http-api/branches/get_branches",
-            "http-api/branches/create_branch"
+              "python-api/index",
+              "python-api/clone",
+              "python-api/data_frame",
+              "python-api/datasets",
+              "python-api/df_utils",
+              "python-api/diff/diff",
+              "python-api/diff/line_diff",
+              "python-api/diff/tabular_diff",
+              "python-api/diff/text_diff",
+              "python-api/init",
+              "python-api/oxen_fs",
+              "python-api/remote_repo",
+              "python-api/repo",
+              "python-api/repositories",
+              "python-api/workspace"
           ]
-        },
-        {
-          "group": "Commits",
+      },
+      {
+          "group": "HTTP API",
           "pages": [
-            "http-api/commits/list_commits"
+              "http-api/index",
+              {
+                  "group": "Namespaces",
+                  "pages": [
+                      "http-api/namespaces/list_namespaces"
+                  ]
+              },
+              {
+                  "group": "Repository",
+                  "pages": [
+                      "http-api/repositories/list_repos",
+                      "http-api/repositories/get_repo",
+                      "http-api/repositories/create_repo",
+                      "http-api/repositories/update_repo",
+                      "http-api/repositories/delete_repo"
+                  ]
+              },
+              {
+                  "group": "Branches",
+                  "pages": [
+                      "http-api/branches/get_branches",
+                      "http-api/branches/create_branch"
+                  ]
+              },
+              {
+                  "group": "Commits",
+                  "pages": [
+                      "http-api/commits/list_commits"
+                  ]
+              },
+              {
+                  "group": "Files",
+                  "pages": [
+                      "http-api/files/list_entries",
+                      "http-api/files/file_metadata",
+                      "http-api/files/download_file"
+                  ]
+              },
+              {
+                  "group": "Data Frames",
+                  "pages": [
+                      "http-api/data_frames/get_data_frame"
+                  ]
+              },
+              {
+                  "group": "Workspaces",
+                  "pages": [
+                      "http-api/workspaces/list_workspaces",
+                      "http-api/workspaces/create_workspace",
+                      "http-api/workspaces/index_dataframe",
+                      "http-api/workspaces/query_dataframe",
+                      "http-api/workspaces/index_embeddings"
+                  ]
+              },
+              {
+                  "group": "Evaluations",
+                  "pages": [
+                      "http-api/evaluations/create_eval"
+                  ]
+              }
           ]
-        },
-        {
-          "group": "Files",
-          "pages": [
-            "http-api/files/list_entries",
-            "http-api/files/file_metadata",
-            "http-api/files/download_file"
-          ]
-        },
-        {
-          "group": "Data Frames",
-          "pages": [
-            "http-api/data_frames/get_data_frame"
-          ]
-        },
-        {
-          "group": "Workspaces",
-          "pages": [
-            "http-api/workspaces/list_workspaces",
-            "http-api/workspaces/create_workspace",
-            "http-api/workspaces/index_dataframe",
-            "http-api/workspaces/query_dataframe",
-            "http-api/workspaces/index_embeddings"
-          ]
-        },
-        {
-          "group": "Evaluations",
-          "pages": [
-            "http-api/evaluations/create_eval"
-          ]
-        }
-      ]
-    }
+      }
   ],
   "footerSocials": {
-    "twitter": "https://twitter.com/oxen_ai",
-    "github": "https://github.com/Oxen-AI/Oxen",
-    "linkedin": "https://www.linkedin.com/company/oxenai/"
+      "twitter": "https://twitter.com/oxen_ai",
+      "github": "https://github.com/Oxen-AI/Oxen",
+      "linkedin": "https://www.linkedin.com/company/oxenai/"
   },
   "analytics": {
-    "posthog": {
-      "apiKey": "phc_Do6VnS78puWwBQuPcJ7TkjixBZwsV4Xxc3ABHVNvjmE"
-    },
-    "ga4": {
-      "measurementId": "G-H6D2C08EKP"
-    }
+      "posthog": {
+          "apiKey": "phc_Do6VnS78puWwBQuPcJ7TkjixBZwsV4Xxc3ABHVNvjmE"
+      },
+      "ga4": {
+          "measurementId": "G-H6D2C08EKP"
+      }
   }
 }
