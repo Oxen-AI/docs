@@ -89,6 +89,14 @@ Lastly, if you want to clone the entire commit history locally, you can use the 
 oxen clone https://hub.oxen.ai/ox/CatDogBBox --all
 ```
 
+## Download Data
+
+If you want to download a specific file or directory from a remote repo, you can use the `oxen download` command. This is useful if you only need a specific set of files and directories for training or testing, but do not need to push back any changes to the remote repo.
+
+```bash
+oxen download ox/CatDogBBox path/to/folder --revision commit_or_branch_name
+```
+
 ## Initialize Local Repository
 
 If you do not have a remote dataset, you can initialize one locally.
