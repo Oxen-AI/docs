@@ -1,0 +1,103 @@
+---
+title: 'Oxen Prune'
+description: 'Remove orphaned nodes and version files from your repository'
+---
+
+The `oxen prune` command removes orphaned nodes and version files that are not referenced by any commit in your repository. This helps reclaim disk space by cleaning up unreferenced data that accumulates over time.
+
+## Basic Usage
+
+To prune your repository and remove orphaned files:
+
+```bash
+oxen prune
+```
+
+This will scan your repository, identify unreferenced nodes and version files, and remove them to free up disk space.
+
+<Warning>
+In large repositories, the prune operation can take a while to run as it needs to scan all nodes and version files. Consider using `--dry-run` first to estimate the scope of the operation.
+</Warning>
+
+## Dry Run Mode
+
+Before actually removing files, you can preview what would be deleted using the `--dry-run` flag:
+
+```bash
+oxen prune --dry-run
+```
+
+Or using the short form:
+
+```bash
+oxen prune -n
+```
+
+This is useful to see how much space would be freed without making any changes to your repository.
+
+## Understanding Prune Statistics
+
+After running `oxen prune`, you'll see detailed statistics about the operation:
+
+```bash
+Prune Statistics:
+  Nodes:
+    Scanned:  1250
+    Kept:     1100
+    Removed:  150
+  Version Files:
+    Scanned:  3400
+    Kept:     3200
+    Removed:  200
+  Disk Space Freed: 1.2 GB
+```
+
+- **Nodes**: Internal data structures that track file metadata
+  - **Scanned**: Total number of nodes examined
+  - **Kept**: Nodes still referenced by commits
+  - **Removed**: Orphaned nodes that were deleted
+  
+- **Version Files**: Actual file content stored in the repository
+  - **Scanned**: Total number of version files examined
+  - **Kept**: Files still referenced by commits
+  - **Removed**: Orphaned files that were deleted
+
+- **Disk Space Freed**: Total amount of storage reclaimed
+
+## When to Use Prune
+
+You should consider running `oxen prune` when:
+
+- You've deleted or modified many files across multiple commits
+- You've rebased or reset your commit history
+- You've removed large files from your repository
+- Your `.oxen` directory is taking up more space than expected
+- You want to optimize repository storage before sharing or archiving
+
+## Safety
+
+The prune operation only removes files that are not referenced by any commit in your repository. It will never delete:
+
+- Files referenced by any commit
+- Files in your working directory
+- Staged files
+- The `.oxen` directory structure itself
+
+This makes it safe to run without worrying about losing committed data.
+
+## Example Workflow
+
+A typical workflow for pruning your repository:
+
+```bash
+# First, check what would be removed
+oxen prune --dry-run
+
+# Review the statistics
+# If everything looks good, run the actual prune
+oxen prune
+
+# Verify your repository is still intact
+oxen status
+oxen log
+```
