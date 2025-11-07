@@ -8,13 +8,13 @@ Oxen.ai has built in tools to help you find differences in your datasets. It is 
 <CodeGroup>
 
 ```bash CLI
-oxen diff dataset1.csv dataset2.csv -o diff.csv
+oxen diff dataset.csv -o diff.csv
 ```
 
 ```bash Python
 import oxen
 
-result = oxen.diff("dataset1.csv", "dataset2.csv")
+result = oxen.diff("dataset.csv")
 print(result.get()) # .get() will resolve the diff data type
 ```
 
@@ -51,6 +51,21 @@ Under the hood Oxen.ai is using a combination of hashing and diffing algorithms 
 Oxen.ai currently supports a [TextDiff](/python-api/diff/text_diff) and a [TabularDiff](/python-api/diff/tabular_diff) data type.
 
 The `TabularDiff` data type is used to represent the differences in tabular data, such as CSV, TSV, or Parquet files. The `TextDiff` data type is used to represent the differences in text files, such as markdown, code, or configuration files. In the future, we plan to add support for other data types such as images, audio, and video.
+
+# Diff Command Syntax
+
+The `oxen diff` command supports multiple syntax patterns similar to Git:
+
+- `oxen diff` - Compare working tree with HEAD
+- `oxen diff <path>` - Compare specific file in working tree with HEAD
+- `oxen diff <commit>` - Compare commit with HEAD
+- `oxen diff <commit>..<commit>` - Compare two commits using range syntax
+- `oxen diff <commit> <commit>` - Compare two commits
+- `oxen diff <commit> [--] [<path>...]` - Compare commit with HEAD for specific paths
+- `oxen diff <commit>..<commit> [--] [<path>...]` - Compare two commits for specific paths
+- `oxen diff file1 file2` - Compare two local files (not in repository)
+
+The `..` separator can be used to specify commit ranges, making it easy to compare different versions of your data.
 
 # Pick Your Tooling
 
@@ -145,7 +160,7 @@ Let's start with a completely additive workflow as if we are collecting a large 
 echo "20*20,math" >> dataset.csv
 ```
 
-If you want to see the changes between the current version of your file and the previous version, you can use the `oxen diff` command. If you only specify one file, Oxen will compare the current version of the file with the last committed version.
+If you want to see the changes between the current version of your file and the previous version, you can use the `oxen diff` command. By default, Oxen compares the working tree with the HEAD commit (the last committed version).
 
 <CodeGroup>
 
@@ -785,9 +800,11 @@ This now narrows down the scope of the diff to only the `response` and `is_corre
 
 ## Next Up: Comparing Different Files
 
-Now that you understand the basics of the diff command, you may be wondering if you can compare different files. The answer is yes! You can compare different files by simply passing in the paths to the files you want to compare.
+Now that you understand the basics of the diff command, you may be wondering if you can compare different files or different commits. The answer is yes!
 
-Imagine you had two parallel set of results from two different models, `model_results_1.csv` and `model_results_2.csv`, and you wanted to compare them.
+## Comparing Different Files
+
+You can compare two local files (that may not be in the repository) by passing both file paths:
 
 <CodeGroup>
 
@@ -804,10 +821,38 @@ print(result.get())
 
 </CodeGroup>
 
-Upcoming: Guides for how comparing different files can be used for finding the best model given multiple results datasets.
+## Comparing Different Commits
+
+You can also compare the same file across different commits or branches using commit identifiers:
+
+<CodeGroup>
+
+```bash CLI
+# Compare a specific commit with HEAD
+oxen diff abc123 dataset.csv
+
+# Compare two commits using range syntax
+oxen diff abc123..def456 dataset.csv
+
+# Compare two commits
+oxen diff abc123 def456 dataset.csv
+
+# Compare branches
+oxen diff main..feature-branch dataset.csv
+```
+
+```python Python
+import oxen
+
+# Compare specific commit with HEAD
+result = oxen.diff("dataset.csv", revision="abc123")
+print(result.get())
+```
+
+</CodeGroup>
+
+This is useful for tracking how your dataset has evolved over time, comparing different versions of model results, or understanding what changed between branches.
 
 You can find all the example data used in this guide in the [datasets/diff-examples repository](https://www.oxen.ai/datasets/diff-examples).
-
-In the next section we will see how this is useful for finding the best model given multiple results datasets.
 
 [Next: Comparing Different Files](/concepts/compare)
