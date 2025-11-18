@@ -1,0 +1,56 @@
+---
+title: '🎥 Video Generation'
+description: 'How to use the video generation API on Oxen.ai.'
+---
+
+### Video Generation
+
+The video generation endpoint allows you to generate videos from text prompts. Simply provide a prompt describing the video you want to create. To see the list of models that support video generation, visit the [Models](https://www.oxen.ai/ai/models?modalities=text-to-video) page and filter by "Text to Video".
+
+<Info>
+Video generation can take a few minutes to generate, depending on the model. So we recommend using the `run_fast` parameter to speed up the process. We are working on async video generation, reach out at [support@oxen.ai](mailto:support@oxen.ai) if you want early access.
+</Info>
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST \
+  https://hub.oxen.ai/api/videos/generate \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -d '{
+    "model": "wan-2.2-t2v-fast",
+    "prompt": "An ox walking in a field",
+    "run_fast": true
+  }'
+```
+
+```python Python
+import requests
+import os
+
+response = requests.post(
+    "https://hub.oxen.ai/api/videos/generate",
+    headers={
+        "Authorization": f"Bearer {os.getenv('OXEN_API_KEY')}",
+        "Content-Type": "application/json"
+    },
+    json={
+        "model": "wan-2.2-t2v-fast",
+        "prompt": "An ox walking in a field",
+        "run_fast": True
+    }
+)
+
+# The response contains the generated video URL
+video_url = response.json()["video_url"]
+print(f"Generated video: {video_url}")
+```
+
+</CodeGroup>
+
+## Parameters
+
+- **model**: The model identifier to use for video generation (e.g., `wan-2.2-t2v-fast`)
+- **prompt**: Text description of the video you want to generate
+- **run_fast**: Whether to use fast generation mode (optional, defaults to `true`)

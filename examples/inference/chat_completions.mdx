@@ -1,0 +1,105 @@
+---
+title: '💬 Chat Completions'
+description: 'How to integrate an LLM into your application through the chat completions endpoint.'
+---
+
+### Chat Completions
+
+The chat completions API is compatible with OpenAI, so you can use any supported client to interact with the model. Simply pass in the model you want to use and use https://hub.oxen.ai/api as your base_url.
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST https://hub.oxen.ai/api/chat/completions \
+-H "Authorization: Bearer $OXEN_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{
+  "model": "moonshotai/Kimi-K2-Thinking",
+  "messages": [{"role": "user", "content": "Hello, how are you?"}]
+}'
+```
+
+```python Python
+import openai
+import os
+
+client = openai.OpenAI(
+    api_key=os.getenv("OXEN_API_KEY"),
+    base_url="https://hub.oxen.ai/api"
+)
+
+response = client.chat.completions.create(
+    model="moonshotai/Kimi-K2-Thinking",
+    messages=[{"role": "user", "content": "What is a great name for an ox that also manages your AI infrastructure?"}]
+)
+
+print(response.output['content'][0]['text'])
+```
+
+</CodeGroup>
+
+If you want to send an image to a model that supports vision such as GPT-4o or Claude, you can add a message with the `image_url` type.
+
+<CodeGroup>
+
+```bash cURL (image url)
+curl -X POST https://hub.oxen.ai/api/chat/completions \
+-H "Authorization: Bearer $OXEN_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{
+  "model": "gpt-4o",
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "What is in this image?"
+        },
+        {
+          "type": "image_url",
+          "image_url": {
+            "url": "https://oxen.ai/assets/images/homepage/hero-ox.png"
+          }
+        }
+      ]
+    }
+  ]
+}'
+```
+
+```bash cURL (base64 encoded image)
+curl -X POST https://hub.oxen.ai/api/chat/completions \
+-H "Authorization: Bearer $OXEN_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{
+  "model": "claude-3-7-sonnet",
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "What is in this image?"
+        },
+        {
+          "type": "image_url",
+          "image_url": {
+            "url": "data:image/jpeg;base64,YOUR_BASE64_ENCODED_IMAGE_HERE"
+          }
+        }
+      ]
+    }
+  ]
+}'
+```
+
+</CodeGroup>
+
+## Playground Interface
+
+The model playground allows you to quickly test out the boundaries of any model by chatting with it in the UI. This is a great way to kick the tires of a model you [fine-tuned](/getting-started/fine-tuning) after deploying it.
+
+<img alt="Chat Interface" className="rounded-xl" src="/images/chat/chat_window.png" />
+
+

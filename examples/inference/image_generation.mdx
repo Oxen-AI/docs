@@ -1,0 +1,52 @@
+---
+title: '🖼️ Image Generation'
+description: 'How to use the image generation API on Oxen.ai.'
+---
+
+### Image Generation
+
+The image generation endpoint allows you to generate images from text prompts. Simply provide a prompt describing the image you want to create. To see the list of models that support image generation, visit the [Models](https://www.oxen.ai/ai/models?modalities=text-to-image) page and filter by "Text to Image".
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST \
+  https://hub.oxen.ai/api/images/generate \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -d '{
+    "model": "Qwen/Qwen-Image",
+    "prompt": "A majestic ox standing in a field at sunset",
+    "num_inference_steps": 28
+  }'
+```
+
+```python Python
+import requests
+import os
+
+response = requests.post(
+    "https://hub.oxen.ai/api/images/generate",
+    headers={
+        "Authorization": f"Bearer {os.getenv('OXEN_API_KEY')}",
+        "Content-Type": "application/json"
+    },
+    json={
+        "model": "Qwen/Qwen-Image",
+        "prompt": "A majestic ox standing in a field at sunset",
+        "num_inference_steps": 28
+    }
+)
+
+# The response contains the generated image URL
+image_url = response.json()["image_url"]
+print(f"Generated image: {image_url}")
+```
+
+</CodeGroup>
+
+## Parameters
+
+- **model**: The model identifier to use for image generation (e.g., `Qwen/Qwen-Image`)
+- **prompt**: Text description of the image you want to generate
+- **num_inference_steps**: Number of inference steps (optional, defaults vary by model)

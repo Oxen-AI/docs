@@ -61,15 +61,25 @@
           "group": "Get Started",
           "pages": [
               "getting-started/intro",
-              "getting-started/inference",
+              {
+                  "group": "⚡️ Models",
+                  "pages": [
+                      "getting-started/inference",
+                      "examples/inference/chat_completions",
+                      "examples/inference/image_generation",
+                      "examples/inference/image_editing",
+                      "examples/inference/video_generation"
+                  ]
+              },
               {
                   "group": "⚙️ Fine-Tuning",
                   "pages": [
                       "getting-started/fine-tuning",
+                      "examples/fine-tuning/text_generation",
+                      "examples/fine-tuning/chat_completions",
                       "examples/fine-tuning/image_generation",
                       "examples/fine-tuning/image_editing",
-                      "examples/fine-tuning/video_generation",
-                      "examples/fine-tuning/text_generation"
+                      "examples/fine-tuning/video_generation"
                   ]
               },
               "getting-started/datasets",

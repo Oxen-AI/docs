@@ -1,13 +1,16 @@
 ---
-title: '📖 How it works'
-description: 'Oxen.ai lets you go from datasets to custom models with a few clicks.'
+title: 'Fine-Tuning Models on Oxen.ai'
+sidebarTitle: 📖 Overview
+description: 'Oxen.ai allows you to fine-tune text, image, and video models with a few clicks.'
 ---
 
-Simply [upload your data](/getting-started/datasets), and we will provision GPU infrastructure and run the fine-tune. When it's done, Oxen.ai will save the fine-tuned model weights directly to your repository. You can deploy your model to a dedicated endpoint and use the [inference endpoints](/getting-started/inference) to test it out. Model weights and datasets are [versioned](/getting-started/versioning) so that you can always track the data that was used to train the model.
+Simply [upload your data](/getting-started/datasets), and we will provision GPU infrastructure and run the fine-tune. When it's done, Oxen.ai will save the fine-tuned model weights directly to your repository, and we spin down the GPU for you. No worrying about run away costs or having to manage your own infrastructure. 
+
+Once the fine-tuning process is complete, you can deploy your model to a dedicated endpoint and use the [inference endpoints](/getting-started/inference) to integrate it into your application. 
 
 <img alt="Fine-Tuning Ox" className="rounded-xl" src="/images/fine_tuning/fine-tune-ox.jpg" />
 
-Once the fine-tuning process is complete, you can [deploy the model](/getting-started/inference) and start using it in your application.
+Oxen.ai automatically [versions](/getting-started/versioning) and manages the raw model weights and datasets, so that you can always track the data that was used to train the model, or download the model to run locally.
 
 ## Why Fine-Tune?
 
@@ -22,25 +25,29 @@ Fine-tuning is a great tool to reach for when basic prompting and context engine
 
 With Oxen.ai, we make it easy to automate the fine-tuning process of LLMs on your own data.
 
-## Tasks
+## Modalities
 
 Oxen.ai supports many data types and tasks for fine-tuning.
 
-<CardGroup cols={4}>
-  <Card title="Text Generation" icon="headphones" href="/examples/fine-tuning/text_generation">
-    Train a model to take a user input as text and generate a response as text.
+<CardGroup cols={3}>
+  <Card title="Text Generation" icon="file-pen" href="/examples/fine-tuning/text_generation">
+    Fine-tune a model to take a user input as text and generate a single response as text.
+  </Card>
+
+  <Card title="Chat Completions" icon="message" href="/examples/fine-tuning/chat_completions">
+    Fine-tune a model on chat messages to have a conversation with a user.
   </Card>
 
   <Card title="Image Generation" icon="palette" href="/examples/fine-tuning/image_generation">
-    Train a model to go from text descriptions to images.
+    Fine-tune a model to go from text descriptions to images.
   </Card>
 
-  <Card title="Image Editing" icon="palette" href="/examples/fine-tuning/image_editing">
-    Train a model to take a prompt and a reference image and generate a new image.
+  <Card title="Image Editing" icon="paintbrush" href="/examples/fine-tuning/image_editing">
+    Fine-tune a model to take a prompt and a reference image and generate a new image.
   </Card>
 
-  <Card title="Video Generation" icon="palette" href="/examples/fine-tuning/video_generation">
-    Train a model to take in a prompt and generate a video.
+  <Card title="Video Generation" icon="video" href="/examples/fine-tuning/video_generation">
+    Fine-tune a model to take in a prompt and generate a video.
   </Card>
 </CardGroup>
 

@@ -1,0 +1,115 @@
+---
+title: '🎨 Image Editing'
+description: 'How to use the image editing API on Oxen.ai.'
+---
+
+### Image Editing
+
+The image editing endpoint allows you to edit images using AI models. Simply provide an input image URL and a prompt describing the edits you want to make. To see the list of models that support image editing, visit the [Models](https://www.oxen.ai/ai/models?modalities=image-to-image) page and filter by "Image to Image".
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST \
+  https://hub.oxen.ai/api/images/edit \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -d '{
+    "model": "Qwen/Qwen-Image-Edit",
+    "input_image": "https://example.com/image.png",
+    "prompt": "Add a funny hat to the ox",
+    "num_inference_steps": 28
+  }'
+```
+
+```python Python
+import requests
+import os
+
+response = requests.post(
+    "https://hub.oxen.ai/api/images/edit",
+    headers={
+        "Authorization": f"Bearer {os.getenv('OXEN_API_KEY')}",
+        "Content-Type": "application/json"
+    },
+    json={
+        "model": "Qwen/Qwen-Image-Edit",
+        "input_image": "https://example.com/image.png",
+        "prompt": "Add a funny hat to the ox",
+        "num_inference_steps": 28
+    }
+)
+
+# The response contains the edited image URL
+edited_image_url = response.json()["image_url"]
+print(f"Edited image: {edited_image_url}")
+```
+
+</CodeGroup>
+
+For models that support multiple input images, you can pass an array of image URLs:
+
+<CodeGroup>
+
+```bash cURL (multiple images)
+curl -X POST \
+  https://hub.oxen.ai/api/images/edit \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -d '{
+    "model": "Qwen/Qwen-Image-Edit",
+    "input_image": [
+      "https://example.com/image1.png",
+      "https://example.com/image2.png"
+    ],
+    "prompt": "Add a funny hat to the ox",
+    "num_inference_steps": 28
+  }'
+```
+
+```python Python (multiple images)
+import requests
+import os
+
+response = requests.post(
+    "https://hub.oxen.ai/api/images/edit",
+    headers={
+        "Authorization": f"Bearer {os.getenv('OXEN_API_KEY')}",
+        "Content-Type": "application/json"
+    },
+    json={
+        "model": "Qwen/Qwen-Image-Edit",
+        "input_image": [
+            "https://example.com/image1.png",
+            "https://example.com/image2.png"
+        ],
+        "prompt": "Add a funny hat to the ox",
+        "num_inference_steps": 28
+    }
+)
+
+edited_image_url = response.json()["image_url"]
+print(f"Edited image: {edited_image_url}")
+```
+
+</CodeGroup>
+
+## Parameters
+
+- **model**: The model identifier to use for image editing (e.g., `Qwen/Qwen-Image-Edit`)
+- **input_image**: URL of the input image(s) you want to edit. Can be a string (single image URL) or an array of strings (multiple image URLs) for models that support multiple images as input
+- **prompt**: Text description of the edits you want to make
+- **num_inference_steps**: Number of inference steps (optional, defaults vary by model)
+
+## Playground Interface
+
+The model playground allows you to quickly test out the boundaries of any model in the UI. This is a great way to experiment with different prompts and see how the model performs before integrating it into your application.
+
+<img 
+  src="/images/inference/image-editing/playground.png" 
+  alt="Image editing playground"
+  className="rounded-xl"
+  noZoom 
+/>
+
+The generated images automatically get saved to a dataset that you can share with your team, download and use to train your own model, or use in your application.

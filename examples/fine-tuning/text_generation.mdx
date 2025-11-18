@@ -3,40 +3,40 @@ title: '💬 Text Generation'
 description: 'How to fine-tune an LLM for text generation.'
 ---
 
-This tutorial will show you how to fine-tune an LLM for text generation. If you only have a single input and output you want the model to learn, this is the right fine-tuning method for you.
+This tutorial will show you how to fine-tune an LLM for text generation. Text generation is useful for tasks like classification like sentiment analysis where you have a single input and output you want the model to learn. Small language models are great for tasks like this because they are fast and cheap to fine-tune and run.
 
-## Create Your Dataset
+<Info>
+If your application needs to maintain a history of chat messages[] as context for the model, you should follow the [Chat Completions](/examples/fine-tuning/chat_completions) tutorial.
+</Info>
 
-For this example, we are using a formatted version of the [mlabonne/FineTome-100k](https://www.oxen.ai/mathi/mlabonne-FineTome-100k) dataset filtered to only educational content and limited to the first 3,000 rows. The dataset has one column for the prompt and one for the response.
+## Upload Your Dataset
+
+For this example, we are teaching the model to classify financial sentiment from text. You can follow along with the [Tutorials/FinancialSentiment](https://www.oxen.ai/Tutorials/FinancialSentiment/file/main/train_financial_sentiment.parquet) dataset containing 2000 rows of text and their corresponding sentiment labels. The dataset has one column for the prompt and one for the sentiment label (positive, negative, or neutral).
 
 Oxen supports datasets in a variety of formats, including jsonl, csv, and parquet.
 
-<a href="https://www.oxen.ai/mathi/mlabonne-FineTome-100k" target="_blank">
-  <img 
-    src="/images/fine_tuning/text-generation/dataset.png" 
-    className="rounded-xl"
-    alt="datasets-page"
-    noZoom 
-  />
-</a>
+<img 
+  src="/images/fine_tuning/text-generation/dataset.png" 
+  className="rounded-xl"
+  alt="datasets-page"
+  noZoom 
+/>
 
 ## Fine-Tuning The Model
 
 Once you have uploaded your dataset, click the "Actions" button and select "Fine-tune a model".
 
-<a href="https://www.oxen.ai/mathi/mlabonne-FineTome-100k/file/main/train.jsonl" target="_blank">
 <img 
-    src="/images/Fine-Tune-button.png" 
+    src="/images/fine_tuning/text-generation/fine-tune-action.png" 
     alt="Fine-tune button"
     className="rounded-xl"
     noZoom 
   />
-</a>
 
-Next select your base model, the prompt source, the response source, whether you'd like to use LoRA or not, and if you want advanced control over the fine-tune.
+Next select your base model, the prompt source, the response source, whether you'd like to use LoRA or not, and if you want advanced control over the fine-tune. For this example, we are using the [Qwen3-0.6B](https://www.oxen.ai/ai/models/qwen-qwen3-0-6b) model, which is small and fast to fine-tune.
 
 <img 
-    src="/images/fine_tuning/text-generation/select-model.png" 
+    src="/images/fine_tuning/text-generation/fine-tune-qwen3-0.6b.png"
     alt="Fine-tune first page"
     className="rounded-xl"
     noZoom 
@@ -58,28 +58,55 @@ While we're fine-tuning your model, you'll be able to see the configuration, log
   <img 
     src="/images/fine_tuning/fine-tune-loss.png" 
     alt="Metrics example"
+    className="rounded-xl"
     noZoom 
   />
 
 ## Deploying the Model
 
-Once your fine-tuning is complete, go to the configuration page and click "Deploy". From there, you will not only have an API endpoint to use, but you will also be able to chat with your fine-tuned model to get a sense of how it's doing.
-<a href="https://www.oxen.ai/mathi/mlabonne-FineTome-100k/fine-tunes/68110b2f-2b3c-4008-9951-1790dd50d9d9" target="_blank">
-  <img 
-    src="/images/deploy-example.png" 
-    alt="Deploy example"
-    noZoom 
-  />
-</a>
-<a href="https://www.oxen.ai/ai/models/mathi-wild-azure-haddock/chat" target="_blank">
-  <img 
-    src="/images/fine-tuned-chatbot.png" 
-    alt="fine-tuned chatbot"
-    noZoom 
-  />
-</a>
+Once your fine-tuning is complete, go to the info page and click "Deploy". Oxen.ai will spin up a dedicated endpoint for your model to access via a chat interface or through the API.
 
+  <img 
+    src="/images/fine_tuning/text-generation/deploy-button.png" 
+    alt="Deploy example"
+    className="rounded-xl"
+    noZoom 
+  />
+
+After the model is deployed, you can click the "Chat with this model" button to open a chat interface.
+
+<img 
+  src="/images/fine_tuning/text-generation/chat-button.png" 
+  alt="fine-tuned chatbot"
+  className="rounded-xl"
+  noZoom 
+/>
+
+This will bring up a chat interface where you can test your model to see how it performs.
+
+<img 
+  src="/images/fine_tuning/text-generation/chat-interface.png" 
+  alt="fine-tuned chatbot"
+  className="rounded-xl"
+  noZoom 
+/>
+
+## Model API
+
+You can integrate it into your application using the API. The API is OpenAI compatible, so you can use any OpenAI client library to interact with it. The base URL for the API is `https://hub.oxen.ai/api`.
+
+```bash
+curl -X POST https://hub.oxen.ai/api/chat/completions \
+-H "Authorization: Bearer $API_KEY" \
+-H "Content-Type: application/json" \
+-d '{
+  "model": "your-model-id",
+  "messages": [{"role": "user", "content": "The company went bankrupt last week."}]
+}'
+```
+
+Make sure to replace `your-model-id` with the ID of your fine-tuned model.
 
 ## Next Steps
 
-Oxen.ai makes fine-tuning easy, but if you are struggling to fine-tune your model or want us to fine-tune for you, we'd be happy to set up a [free consultation](https://airtable.com/appDW4XBL7qTihmwi/shrPIy6FeLCj1BIgZ) with our ML experts!
+Feel free to join our [Discord](https://discord.com/invite/s3tBEn7Ptg) and ask us or the community any questions you have, we have a community of developers and machine learning experts who are happy to help you out.
