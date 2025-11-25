@@ -91,13 +91,15 @@ Click the "Actions" button and select "Fine-Tune a Model".
 
 <img alt="Kick off Fine-Tune" className="rounded-xl" src="/images/fine_tuning/text-to-video/fine-tune-a-model-button.png" />
 
-This will take you to the fine-tune page where you can select the model you want to fine-tune. Select the "Wan-AI/Wan2.2-T2V-A14B-Diffusers" model, and make sure the "Image" column is set to `file_path` column, and the "Prompt" column is set to `caption` column.
+This will take you to the fine-tune page where you can select the model you want to fine-tune. First select the "Fine-Tune Task" of `Video Generation`. Then select the `Wan-AI/Wan2.2-T2V-A14B-Diffusers` model. Make sure the "Image" column is set to `file_path` column, and the "Prompt" column is set to `caption` column.
+
+In the "Samples" section you can specify a few prompts that you want to test out as the model is training. This will help you get a feel for how the model is performing and make sure it is learning what you want.
 
 <img alt="Write Prompts" className="rounded-xl" src="/images/fine_tuning/text-to-video/fine-tune-prompts.png" />
 
 ## Watching the Model Learn
 
-As your model is training, Oxen will automatically sample videos so that you can get a feel for how it is learning. You can see that the model is starting to learn the actor's face and expression after a couple hundred steps.
+As your model is training, Oxen will automatically sample videos that you specified in the "Samples" section in the previous step. You can see that the model is starting to learn the actor's face and expression after a couple hundred steps.
 
 <video controls className="rounded-xl">
   <source src="/images/fine_tuning/text-to-video/samples.mp4" type="video/mp4" />
@@ -114,7 +116,7 @@ Once the model is deployed, you can use it in the playground or via the API. Rep
 
 ```bash
 curl -X POST \
--H "Authorization: Bearer <YOUR_TOKEN>" \
+-H "Authorization: Bearer $API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
   "model": "oxen:ox-comfortable-sapphire-locust",
@@ -158,4 +160,4 @@ repo.download("path/to/model.safetensors", revision="COMMIT_OR_BRANCH")
 
 ## Need Help Fine-Tuning?
 
-If you need help fine-tuning your model, [contact us](https://airtable.com/appDW4XBL7qTihmwi/shrQF72gHTJw8zvie) and we are happy to help you get started.
+If you need help fine-tuning your model, contact us at hello@oxen.ai and we are happy to help you get started.

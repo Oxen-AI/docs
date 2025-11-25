@@ -66,6 +66,7 @@
                   "pages": [
                       "getting-started/inference",
                       "examples/inference/chat_completions",
+                      "examples/inference/vision_language_models",
                       "examples/inference/image_generation",
                       "examples/inference/image_editing",
                       "examples/inference/video_generation"
@@ -77,6 +78,7 @@
                       "getting-started/fine-tuning",
                       "examples/fine-tuning/text_generation",
                       "examples/fine-tuning/chat_completions",
+                      "examples/fine-tuning/image_understanding",
                       "examples/fine-tuning/image_generation",
                       "examples/fine-tuning/image_editing",
                       "examples/fine-tuning/video_generation"
