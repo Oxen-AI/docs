@@ -105,11 +105,23 @@ Click on the "Info" tab to see the fine-tuning configuration and all the hyper-p
 
 ## Deploying the Model
 
-Once the model is fine-tuned, you can deploy it to a dedicated endpoint. This will give you a `/chat/completions` api that you can use to test out the model.
+Once the model is fine-tuned, you can deploy it to a dedicated endpoint or in the playground. 
 
+This will give you a `/chat/completions` api and a playgroud that you can use to test out the model.
+
+Start by using the "playgroud" button.
 <img alt="Fine-Tuning Configuration" className="rounded-xl" src="/images/fine_tuning/fine-tune-deploy-model.png" />
 
-Swap out the model name with the name of the model you want to use.
+if the model is not loaded you'll see an "inactive" button on the top right of the playgroud.
+
+<img alt="Fine-Tuning Configuration" className="rounded-xl" src="/images/fine_tuning/fine-tune-deploy-model-inactive.png" />
+
+use the activate button to load the model.
+
+<img alt="Fine-Tuning Configuration" className="rounded-xl" src="/images/fine_tuning/fine-tune-deploy-model-active.png" />
+
+
+To use the API Swap out the model name with the name of the model you want to use.
 
 ```bash
 curl https://hub.oxen.ai/api/chat/completions -H "Content-Type: application/json" -d '{
@@ -120,7 +132,7 @@ curl https://hub.oxen.ai/api/chat/completions -H "Content-Type: application/json
 
 ## Using the Model
 
-Once the model is deployed, you can also chat with it using the Oxen.ai chat interface. Learn more about the [chat interface here](/getting-started/inference).
+Once the model is deployed, you can also chat with it using the Oxen.ai chat interface at the playgroud. Learn more about the [chat interface here](/getting-started/inference).
 
 <img alt="Chatting with the Model" className="rounded-xl" src="/images/chat/chat_window_powerful_coffee_chimpanzee.png" />
 
