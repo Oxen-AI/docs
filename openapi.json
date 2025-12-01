@@ -1,0 +1,1788 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Oxen",
+    "description": "Oxen is a fast, unstructured data version control, to help version large machine learning datasets written in Rust.",
+    "license": {
+      "name": ""
+    },
+    "version": "0.39.1"
+  },
+  "paths": {
+    "/{namespace}/{repo_name}/branches": {
+      "get": {
+        "tags": [
+          "Branches"
+        ],
+        "operationId": "list_branches",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "description": "Namespace of the repository",
+            "required": true
+          },
+          {
+            "name": "repo_name",
+            "in": "path",
+            "description": "Name of the repository",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of branches",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListBranchesResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Repository not found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Branches"
+        ],
+        "operationId": "create_branch",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "description": "Namespace of the repository",
+            "required": true
+          },
+          {
+            "name": "repo_name",
+            "in": "path",
+            "description": "Name of the repository",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BranchNewFromBranchName"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Branch created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BranchResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request body"
+          },
+          "404": {
+            "description": "Repository or source branch not found"
+          }
+        }
+      }
+    },
+    "/{namespace}/{repo_name}/branches/{branch_name}": {
+      "get": {
+        "tags": [
+          "Branches"
+        ],
+        "operationId": "get_branch",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "description": "Namespace of the repository",
+            "required": true
+          },
+          {
+            "name": "repo_name",
+            "in": "path",
+            "description": "Name of the repository",
+            "required": true
+          },
+          {
+            "name": "branch_name",
+            "in": "path",
+            "description": "Name of the branch",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Branch found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BranchResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Branch not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Branches"
+        ],
+        "operationId": "update_branch",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "description": "Namespace of the repository",
+            "required": true
+          },
+          {
+            "name": "repo_name",
+            "in": "path",
+            "description": "Name of the repository",
+            "required": true
+          },
+          {
+            "name": "branch_name",
+            "in": "path",
+            "description": "Name of the branch",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BranchUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Branch updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BranchResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Branch not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Branches"
+        ],
+        "operationId": "delete_branch",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "description": "Namespace of the repository",
+            "required": true
+          },
+          {
+            "name": "repo_name",
+            "in": "path",
+            "description": "Name of the repository",
+            "required": true
+          },
+          {
+            "name": "branch_name",
+            "in": "path",
+            "description": "Name of the branch",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Branch deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BranchResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Branch not found"
+          }
+        }
+      }
+    },
+    "/{namespace}/{repo_name}/branches/{branch_name}/latest_synced_commit": {
+      "get": {
+        "tags": [
+          "Branches"
+        ],
+        "operationId": "get_latest_synced_commit",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "description": "Namespace of the repository",
+            "required": true
+          },
+          {
+            "name": "repo_name",
+            "in": "path",
+            "description": "Name of the repository",
+            "required": true
+          },
+          {
+            "name": "branch_name",
+            "in": "path",
+            "description": "Name of the branch",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Latest synced commit found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommitResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Branch not found"
+          }
+        }
+      }
+    },
+    "/{namespace}/{repo_name}/branches/{branch_name}/lock": {
+      "get": {
+        "tags": [
+          "Branches"
+        ],
+        "operationId": "is_branch_locked",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "description": "Namespace of the repository",
+            "required": true
+          },
+          {
+            "name": "repo_name",
+            "in": "path",
+            "description": "Name of the repository",
+            "required": true
+          },
+          {
+            "name": "branch_name",
+            "in": "path",
+            "description": "Name of the branch",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Branch lock status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BranchLockResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Branches"
+        ],
+        "operationId": "lock_branch",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "description": "Namespace of the repository",
+            "required": true
+          },
+          {
+            "name": "repo_name",
+            "in": "path",
+            "description": "Name of the repository",
+            "required": true
+          },
+          {
+            "name": "branch_name",
+            "in": "path",
+            "description": "Name of the branch",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Branch locked",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BranchLockResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Failed to lock branch",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BranchLockResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{namespace}/{repo_name}/branches/{branch_name}/merge": {
+      "put": {
+        "tags": [
+          "Branches"
+        ],
+        "operationId": "merge_branch",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "description": "Namespace of the repository",
+            "required": true
+          },
+          {
+            "name": "repo_name",
+            "in": "path",
+            "description": "Name of the repository",
+            "required": true
+          },
+          {
+            "name": "branch_name",
+            "in": "path",
+            "description": "Name of the branch to merge into",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BranchRemoteMerge"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Merge successful or conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommitResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Branch or Commit not found"
+          }
+        }
+      }
+    },
+    "/{namespace}/{repo_name}/branches/{branch_name}/unlock": {
+      "post": {
+        "tags": [
+          "Branches"
+        ],
+        "operationId": "unlock_branch",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "description": "Namespace of the repository",
+            "required": true
+          },
+          {
+            "name": "repo_name",
+            "in": "path",
+            "description": "Name of the repository",
+            "required": true
+          },
+          {
+            "name": "branch_name",
+            "in": "path",
+            "description": "Name of the branch",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Branch unlocked",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BranchLockResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{namespace}/{repo_name}/branches/{branch_name}/versions/{path}": {
+      "get": {
+        "tags": [
+          "Branches"
+        ],
+        "operationId": "list_entry_versions",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "description": "Namespace of the repository",
+            "required": true
+          },
+          {
+            "name": "repo_name",
+            "in": "path",
+            "description": "Name of the repository",
+            "required": true
+          },
+          {
+            "name": "branch_name",
+            "in": "path",
+            "description": "Name of the branch",
+            "required": true
+          },
+          {
+            "name": "path",
+            "in": "path",
+            "description": "Path to the file/entry",
+            "required": true
+          },
+          {
+            "name": "page",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of entry versions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedEntryVersionsResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Repository, branch or path not found"
+          }
+        }
+      }
+    },
+    "/{namespace}/{repo_name}/workspaces/{workspace_id}/files/batch/{directory}": {
+      "post": {
+        "tags": [
+          "Workspaces"
+        ],
+        "operationId": "add_version_files",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "description": "The namespace of the repository",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "repo_name",
+            "in": "path",
+            "description": "The name of the repository",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "path",
+            "description": "The UUID of the workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "directory",
+            "in": "path",
+            "description": "The directory to stage the files into",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "List of files and their pre-calculated hashes to stage",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/FileWithHash"
+                }
+              },
+              "example": [
+                {
+                  "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                  "path": "images/train/dog.jpg"
+                },
+                {
+                  "hash": "82e35a63ceba37e9646434c5dd412ea577147f1e4a41ccde1614253187e3dbf9",
+                  "path": "annotations/labels.csv"
+                }
+              ]
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Files staged successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorFilesResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Workspace not found"
+          }
+        }
+      }
+    },
+    "/{namespace}/{repo_name}/workspaces/{workspace_id}/files/delete": {
+      "post": {
+        "tags": [
+          "Workspaces"
+        ],
+        "summary": "Batch delete files (Stage removal)",
+        "operationId": "rm_files",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "description": "The namespace of the repository",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "repo_name",
+            "in": "path",
+            "description": "The name of the repository",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "path",
+            "description": "The UUID of the workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "List of paths to remove",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "example": [
+                "images/train/001.jpg",
+                "annotations/incorrect.xml"
+              ]
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Files successfully removed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilePathsResponse"
+                }
+              }
+            }
+          },
+          "206": {
+            "description": "Some files could not be found/removed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilePathsResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Workspace not found"
+          }
+        }
+      }
+    },
+    "/{namespace}/{repo_name}/workspaces/{workspace_id}/files/restore": {
+      "post": {
+        "tags": [
+          "Workspaces"
+        ],
+        "summary": "Unstage files (restore from staging)",
+        "operationId": "rm_files_from_staged",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "description": "The namespace of the repository",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "repo_name",
+            "in": "path",
+            "description": "The name of the repository",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "path",
+            "description": "The UUID of the workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "List of paths to restore/unstage",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "example": [
+                "images/train/revert_me.jpg",
+                "data/config.json"
+              ]
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Files restored from staging",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusMessage"
+                }
+              }
+            }
+          },
+          "206": {
+            "description": "Some files could not be restored",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilePathsResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Workspace not found"
+          }
+        }
+      }
+    },
+    "/{namespace}/{repo_name}/workspaces/{workspace_id}/files/{path}": {
+      "get": {
+        "tags": [
+          "Workspaces"
+        ],
+        "operationId": "get",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "description": "The namespace of the repository",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "repo_name",
+            "in": "path",
+            "description": "The name of the repository",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "path",
+            "description": "The UUID of the workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "path",
+            "in": "path",
+            "description": "The path to the file in the workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "width",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "format": "int32",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "height",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "format": "int32",
+              "minimum": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "File content returned as a stream",
+            "headers": {
+              "oxen-revision-id": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "The commit ID of the file version"
+              }
+            },
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "format": "int32",
+                    "minimum": 0
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters"
+          },
+          "404": {
+            "description": "Workspace or File not found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Workspaces"
+        ],
+        "operationId": "add",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "description": "The namespace of the repository",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "repo_name",
+            "in": "path",
+            "description": "The name of the repository",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "path",
+            "description": "The UUID of the workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "path",
+            "in": "path",
+            "description": "The directory to upload the file to",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Multipart upload of file. Form field 'file' should be the file content.",
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/FileUpload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "File successfully uploaded to workspace",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilePathsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid upload request"
+          },
+          "404": {
+            "description": "Workspace not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Workspaces"
+        ],
+        "operationId": "delete",
+        "parameters": [
+          {
+            "name": "namespace",
+            "in": "path",
+            "description": "The namespace of the repository",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "repo_name",
+            "in": "path",
+            "description": "The name of the repository",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "workspace_id",
+            "in": "path",
+            "description": "The UUID of the workspace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "path",
+            "in": "path",
+            "description": "The path to the file to delete",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "File marked for deletion",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusMessage"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Workspace or File not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Branch": {
+        "type": "object",
+        "required": [
+          "name",
+          "commit_id"
+        ],
+        "properties": {
+          "commit_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "BranchLockResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/StatusMessage"
+          },
+          {
+            "type": "object",
+            "required": [
+              "branch_name",
+              "is_locked"
+            ],
+            "properties": {
+              "branch_name": {
+                "type": "string"
+              },
+              "is_locked": {
+                "type": "boolean"
+              }
+            }
+          }
+        ]
+      },
+      "BranchNewFromBranchName": {
+        "type": "object",
+        "required": [
+          "new_name",
+          "from_name"
+        ],
+        "properties": {
+          "from_name": {
+            "type": "string"
+          },
+          "new_name": {
+            "type": "string"
+          }
+        }
+      },
+      "BranchNewFromCommitId": {
+        "type": "object",
+        "required": [
+          "new_name",
+          "commit_id"
+        ],
+        "properties": {
+          "commit_id": {
+            "type": "string"
+          },
+          "new_name": {
+            "type": "string"
+          }
+        }
+      },
+      "BranchRemoteMerge": {
+        "type": "object",
+        "required": [
+          "client_commit_id",
+          "server_commit_id"
+        ],
+        "properties": {
+          "client_commit_id": {
+            "type": "string"
+          },
+          "server_commit_id": {
+            "type": "string"
+          }
+        }
+      },
+      "BranchResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/StatusMessage"
+          },
+          {
+            "type": "object",
+            "required": [
+              "branch"
+            ],
+            "properties": {
+              "branch": {
+                "$ref": "#/components/schemas/Branch"
+              }
+            }
+          }
+        ]
+      },
+      "BranchUpdate": {
+        "type": "object",
+        "required": [
+          "commit_id"
+        ],
+        "properties": {
+          "commit_id": {
+            "type": "string"
+          }
+        }
+      },
+      "Changes": {
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "previous": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/PreviousField"
+              }
+            ]
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "Commit": {
+        "type": "object",
+        "required": [
+          "id",
+          "parent_ids",
+          "message",
+          "author",
+          "email",
+          "timestamp"
+        ],
+        "properties": {
+          "author": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "parent_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CommitEntryVersion": {
+        "type": "object",
+        "required": [
+          "commit",
+          "resource"
+        ],
+        "properties": {
+          "commit": {
+            "$ref": "#/components/schemas/Commit"
+          },
+          "resource": {
+            "$ref": "#/components/schemas/ResourceVersion"
+          },
+          "schema_hash": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "CommitResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/StatusMessage"
+          },
+          {
+            "type": "object",
+            "required": [
+              "commit"
+            ],
+            "properties": {
+              "commit": {
+                "$ref": "#/components/schemas/Commit"
+              }
+            }
+          }
+        ]
+      },
+      "DataTypeCount": {
+        "type": "object",
+        "required": [
+          "count",
+          "data_type"
+        ],
+        "properties": {
+          "count": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "data_type": {
+            "type": "string"
+          }
+        }
+      },
+      "ErrorFileInfo": {
+        "type": "object",
+        "required": [
+          "hash",
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "type": "string"
+          },
+          "hash": {
+            "type": "string"
+          },
+          "path": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "ErrorFilesResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/StatusMessage"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "err_files": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ErrorFileInfo"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Field": {
+        "type": "object",
+        "required": [
+          "name",
+          "dtype"
+        ],
+        "properties": {
+          "changes": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/Changes"
+              }
+            ]
+          },
+          "dtype": {
+            "type": "string"
+          },
+          "metadata": {
+
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "FilePathsResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/StatusMessage"
+          },
+          {
+            "type": "object",
+            "required": [
+              "paths"
+            ],
+            "properties": {
+              "paths": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "FileUpload": {
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary"
+          }
+        }
+      },
+      "FileWithHash": {
+        "type": "object",
+        "required": [
+          "hash",
+          "path"
+        ],
+        "properties": {
+          "hash": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          }
+        }
+      },
+      "GenericMetadata": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/MetadataDir"
+          },
+          {
+            "$ref": "#/components/schemas/MetadataText"
+          },
+          {
+            "$ref": "#/components/schemas/MetadataImage"
+          },
+          {
+            "$ref": "#/components/schemas/MetadataVideo"
+          },
+          {
+            "$ref": "#/components/schemas/MetadataAudio"
+          },
+          {
+            "$ref": "#/components/schemas/MetadataTabular"
+          }
+        ]
+      },
+      "ImgColorSpace": {
+        "type": "string",
+        "enum": [
+          "RGB",
+          "RGBA",
+          "Grayscale",
+          "GrayscaleAlpha",
+          "Rgb16",
+          "Rgba16",
+          "Grayscale16",
+          "GrayscaleAlpha16",
+          "Rgb32F",
+          "Rgba32F",
+          "Unknown"
+        ]
+      },
+      "ImgResize": {
+        "type": "object",
+        "properties": {
+          "height": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32",
+            "minimum": 0
+          },
+          "width": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32",
+            "minimum": 0
+          }
+        }
+      },
+      "ListBranchesResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/StatusMessage"
+          },
+          {
+            "type": "object",
+            "required": [
+              "branches"
+            ],
+            "properties": {
+              "branches": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Branch"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "MetadataAudio": {
+        "type": "object",
+        "required": [
+          "audio"
+        ],
+        "properties": {
+          "audio": {
+            "$ref": "#/components/schemas/MetadataAudioImpl"
+          }
+        }
+      },
+      "MetadataAudioImpl": {
+        "type": "object",
+        "required": [
+          "num_seconds",
+          "num_channels",
+          "sample_rate"
+        ],
+        "properties": {
+          "num_channels": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "num_seconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "sample_rate": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      },
+      "MetadataDir": {
+        "type": "object",
+        "required": [
+          "dir"
+        ],
+        "properties": {
+          "dir": {
+            "$ref": "#/components/schemas/MetadataDirImpl"
+          }
+        }
+      },
+      "MetadataDirImpl": {
+        "type": "object",
+        "required": [
+          "data_types"
+        ],
+        "properties": {
+          "data_types": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DataTypeCount"
+            }
+          }
+        }
+      },
+      "MetadataImage": {
+        "type": "object",
+        "required": [
+          "image"
+        ],
+        "properties": {
+          "image": {
+            "$ref": "#/components/schemas/MetadataImageImpl"
+          }
+        }
+      },
+      "MetadataImageImpl": {
+        "type": "object",
+        "required": [
+          "width",
+          "height"
+        ],
+        "properties": {
+          "color_space": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/ImgColorSpace"
+              }
+            ]
+          },
+          "height": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "width": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          }
+        }
+      },
+      "MetadataTabular": {
+        "type": "object",
+        "required": [
+          "tabular"
+        ],
+        "properties": {
+          "tabular": {
+            "$ref": "#/components/schemas/MetadataTabularImpl"
+          }
+        }
+      },
+      "MetadataTabularImpl": {
+        "type": "object",
+        "required": [
+          "width",
+          "height",
+          "schema"
+        ],
+        "properties": {
+          "height": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "schema": {
+            "$ref": "#/components/schemas/Schema"
+          },
+          "width": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      },
+      "MetadataText": {
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "properties": {
+          "text": {
+            "$ref": "#/components/schemas/MetadataTextImpl"
+          }
+        }
+      },
+      "MetadataTextImpl": {
+        "type": "object",
+        "required": [
+          "num_lines",
+          "num_chars"
+        ],
+        "properties": {
+          "num_chars": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "num_lines": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      },
+      "MetadataVideo": {
+        "type": "object",
+        "required": [
+          "video"
+        ],
+        "properties": {
+          "video": {
+            "$ref": "#/components/schemas/MetadataVideoImpl"
+          }
+        }
+      },
+      "MetadataVideoImpl": {
+        "type": "object",
+        "required": [
+          "num_seconds",
+          "width",
+          "height"
+        ],
+        "properties": {
+          "height": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "num_seconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "width": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      },
+      "PaginatedEntryVersions": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Pagination"
+          },
+          {
+            "type": "object",
+            "required": [
+              "versions"
+            ],
+            "properties": {
+              "versions": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CommitEntryVersion"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "PaginatedEntryVersionsResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/StatusMessage"
+          },
+          {
+            "$ref": "#/components/schemas/PaginatedEntryVersions"
+          },
+          {
+            "type": "object",
+            "required": [
+              "branch",
+              "path"
+            ],
+            "properties": {
+              "branch": {
+                "$ref": "#/components/schemas/Branch"
+              },
+              "path": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "Pagination": {
+        "type": "object",
+        "required": [
+          "page_size",
+          "page_number",
+          "total_pages",
+          "total_entries"
+        ],
+        "properties": {
+          "page_number": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "page_size": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "total_entries": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "total_pages": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      },
+      "PreviousField": {
+        "type": "object",
+        "required": [
+          "name",
+          "dtype"
+        ],
+        "properties": {
+          "dtype": {
+            "type": "string"
+          },
+          "metadata": {
+
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "ResourceVersion": {
+        "type": "object",
+        "required": [
+          "path",
+          "version"
+        ],
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        }
+      },
+      "Schema": {
+        "type": "object",
+        "required": [
+          "hash",
+          "fields"
+        ],
+        "properties": {
+          "fields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Field"
+            }
+          },
+          "hash": {
+            "type": "string"
+          },
+          "metadata": {
+
+          }
+        }
+      },
+      "StatusMessage": {
+        "type": "object",
+        "required": [
+          "status",
+          "status_message"
+        ],
+        "properties": {
+          "oxen_version": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": "string"
+          },
+          "status_message": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Oxen",
+      "description": "Oxen Data Management API"
+    },
+    {
+      "name": "Branches",
+      "description": "Branch management and version control"
+    }
+  ]
+}
