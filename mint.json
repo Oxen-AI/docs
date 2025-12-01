@@ -36,7 +36,7 @@
       {
           "name": "HTTP API",
           "url": "http-api",
-          "openapi": "https://hub.oxen.ai/oxen-server-openapi-spec.json"
+          "openapi": "http://localhost:3000/api/_spec/openapi.json"
       }
   ],
   "anchors": [
@@ -132,70 +132,154 @@
           ]
       },
       {
-          "group": "HTTP API",
-          "pages": [
-              "http-api/index",
-              {
-                  "group": "Namespaces",
-                  "pages": [
-                      "http-api/namespaces/list_namespaces"
-                  ]
-              },
-              {
-                  "group": "Repository",
-                  "pages": [
-                      "http-api/repositories/list_repos",
-                      "http-api/repositories/get_repo",
-                      "http-api/repositories/create_repo",
-                      "http-api/repositories/update_repo",
-                      "http-api/repositories/delete_repo"
-                  ]
-              },
-              {
-                  "group": "Branches",
-                  "pages": [
-                      "http-api/branches/get_branches",
-                      "http-api/branches/create_branch"
-                  ]
-              },
-              {
-                  "group": "Commits",
-                  "pages": [
-                      "http-api/commits/list_commits"
-                  ]
-              },
-              {
-                  "group": "Files",
-                  "pages": [
-                      "http-api/files/list_entries",
-                      "http-api/files/file_metadata",
-                      "http-api/files/download_file"
-                  ]
-              },
-              {
-                  "group": "Data Frames",
-                  "pages": [
-                      "http-api/data_frames/get_data_frame"
-                  ]
-              },
-              {
-                  "group": "Workspaces",
-                  "pages": [
-                      "http-api/workspaces/list_workspaces",
-                      "http-api/workspaces/create_workspace",
-                      "http-api/workspaces/index_dataframe",
-                      "http-api/workspaces/query_dataframe",
-                      "http-api/workspaces/index_embeddings"
-                  ]
-              },
-              {
-                  "group": "Evaluations",
-                  "pages": [
-                      "http-api/evaluations/create_eval"
-                  ]
-              }
-          ]
-      }
+         "group": "HTTP API",
+         "pages": [
+             "http-api/index",
+             {
+                 "group": "Namespaces",
+                 "pages": [
+                     "http-api/namespaces/list_namespaces",
+                     "http-api/namespaces/get_namespace"
+                 ]
+             },
+             {
+                 "group": "Repository",
+                 "pages": [
+                     "http-api/repositories/list_repos",
+                     "http-api/repositories/get_repo",
+                     "http-api/repositories/create_repo",
+                     "http-api/repositories/update_repo",
+                     "http-api/repositories/delete_repo",
+                     "http-api/repositories/stats",
+                     "http-api/repositories/update_repo_size",
+                     "http-api/repositories/get_repo_size",
+                     "http-api/repositories/transfer_namespace"
+                 ]
+             },
+             {
+                 "group": "Workspaces",
+                 "pages": [
+                     "http-api/workspaces/list_workspaces",
+                     "http-api/workspaces/create_workspace",
+                     "http-api/workspaces/get_or_create_workspace",
+                     "http-api/workspaces/get_workspace",
+                     "http-api/workspaces/create_workspace",
+                     "http-api/workspaces/create_with_new_branch",
+                     "http-api/workspaces/clear_workspace",
+                     "http-api/workspaces/delete_workspace",
+                     "http-api/workspaces/workspace_mergeability",
+                     "http-api/workspaces/commit_workspace",
+                     "http-api/workspaces/index_dataframe",
+                     "http-api/workspaces/query_dataframe",
+                     "http-api/workspaces/index_embeddings"
+                 ]
+             },
+             {
+                 "group": "Workspace Files",
+                 "pages": [
+                     "http-api/workspaces/files/get_workspace_file",
+                     "http-api/workspaces/files/add",
+                     "http-api/workspaces/files/stage_files",
+                     "http-api/workspaces/files/remove_files",
+                     "http-api/workspaces/files/unstage_files"
+                 ]
+             },
+             {
+                 "group": "Branches",
+                 "pages": [
+                     "http-api/branches/get_branches",
+                     "http-api/branches/create_branch",
+                     "http-api/branches/delete_branch",
+                     "http-api/branches/get_latest_commit",
+                     "http-api/branches/get_branches",
+                     "http-api/branches/update_branch",
+                     "http-api/branches/merge_commit_into_branch",
+                     "http-api/branches/lock_branch",
+                     "http-api/branches/unlock_branch",
+                     "http-api/branches/is_locked",
+                     "http-api/branches/list_entry_versions"
+                 ]
+             },
+             {
+                 "group": "Commits",
+                 "pages": [
+                     "http-api/commits/get_commit",
+                     "http-api/commits/list_commit_history",
+                     "http-api/commits/list_all_commits",
+                     "http-api/commits/list_missing_commits",
+                     "http-api/commits/list_missing_files",
+                     "http-api/commits/mark_commits_as_synced",
+                     "http-api/commits/commit_parents",
+                     "http-api/commits/download_commits_db",
+                     "http-api/commits/download_dir_hashes_db",
+                     "http-api/commits/download_commit_entries_db",
+                     "http-api/commits/create_commit",
+                     "http-api/commits/upload_file_chunk",
+                     "http-api/commits/upload_tree",
+                     "http-api/commits/root_commit",
+                     "http-api/commits/notify_upload_complete"
+                 ]
+             },
+             {
+                 "group": "Merge",
+                 "pages": [
+                     "http-api/merge/check_mergeability",
+                     "http-api/merge/merge_branches"
+                 ]
+             },
+             {
+                 "group": "Compare",
+                 "pages": [
+                     "http-api/compare/list_between",
+                     "http-api/compare/dir_tree",
+                     "http-api/compare/diff_file",
+                     "http-api/compare/create_df_diff",
+                     "http-api/compare/update_df_diff",
+                     "http-api/compare/get_df_diff",
+                     "http-api/compare/delete_df_diff",
+                     "http-api/compare/get_derived_df"
+                 ]
+             },
+             {
+                 "group": "Fork",
+                 "pages": [
+                     "http-api/fork/fork_repository",
+                     "http-api/fork/fork_status"
+                 ]
+             },
+             {
+                 "group": "Files",
+                 "pages": [
+                     "http-api/files/list_entries",
+                     "http-api/files/download_file",
+                     "http-api/files/upload_file",
+                     "http-api/files/upload_zip",
+                     "http-api/files/import_file"
+                 ]
+             },
+             {
+                 "group": "Data Frames",
+                 "pages": [
+                     "http-api/data_frames/get_data_frame",
+                     "http-api/data_frames/index_data_frame",
+                     "http-api/data_frames/from_directory"
+                 ]
+             },
+             {
+                 "group": "Metadata",
+                 "pages": [
+                     "http-api/metadata/file_metadata",
+                     "http-api/metadata/update_metadata"
+                 ]
+             },
+             {
+                 "group": "Evaluations",
+                 "pages": [
+                     "http-api/evaluations/create_eval"
+                 ]
+             }
+        ]
+       }
   ],
   "footerSocials": {
       "twitter": "https://twitter.com/oxen_ai",
