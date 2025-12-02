@@ -1,0 +1,67 @@
+---
+title: 'Monitoring a Fine-Tune'
+description: 'APIs to monitor a fine-tune.'
+---
+
+## HTTP API: Get Fine-Tune Status
+
+You can monitor the status and progress of a specific fine-tune job via the HTTP API.
+
+**Endpoint**
+
+- `GET /v1/fine_tunes/{fine_tune_id}`
+
+**Path Parameters**
+
+- `fine_tune_id` – Unique identifier of the fine-tune job you want to monitor.
+
+**Headers**
+
+- `Authorization` – Bearer token used to authenticate the request (for example `Bearer $API_KEY`).
+- `Content-Type` – Must be set to `application/json`.
+
+**Example Request**
+
+```bash
+curl -X GET "https://api.yourprovider.com/v1/fine_tunes/$FINETUNE_ID" \
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json"
+```
+
+**Response**
+
+The endpoint returns a JSON object with the following structure:
+
+- `status` *(string)* – Overall request status (for example `"success"`).
+- `status_message` *(string)* – Human-readable description of the status.
+- `fine_tune` *(object)* – Details about the fine-tune job.
+
+The `fine_tune` object contains (non-exhaustive):
+
+- `id` *(string)* – Fine-tune job ID.
+- `name` *(string)* – Human-readable name for the fine-tune run.
+- `status` *(string)* – Current status (for example `"pending"`, `"running"`, `"completed"`, `"failed"`).
+- `base_model` *(string)* – Identifier of the base model (for example `"Qwen/Qwen3-0.6B"`).
+- `repository_id` *(string)* – ID of the repository the dataset/model belong to.
+- `resource` *(object)* – Input dataset reference:
+  - `path` *(string)* – Path to the dataset inside the repo.
+  - `version` *(string)* – Dataset version or commit hash.
+- `training_params` *(object)* – Training configuration used for this fine-tune, including:
+  - `question_column` *(string)* – Dataset column used as the prompt/input.
+  - `answer_column` *(string)* – Dataset column used as the target/label.
+  - `batch_size` *(integer)* – Batch size.
+  - `epochs` *(integer)* – Number of epochs.
+  - `learning_rate` *(number)* – Learning rate.
+  - `seq_length` *(integer)* – Maximum sequence length.
+  - `use_lora` *(boolean)* – Whether LoRA fine-tuning is enabled.
+- `gpu_count` *(integer)* – Number of GPUs used.
+- `gpu_model` *(string)* – GPU type (for example `"A10G"`).
+- `total_token_count` *(integer)* – Total number of tokens processed so far.
+- `created_by` *(object)* – User who created the fine-tune (ID, username, name, etc.).
+- `source_model` *(object)* – Metadata about the source/base model (ID, name, slug, capabilities, pricing, etc.).
+- `inserted_at` *(string, ISO 8601)* – Time the job was created.
+- `started_at` *(string, ISO 8601 | null)* – Time the job started running.
+- `finished_at` *(string, ISO 8601 | null)* – Time the job finished (if completed/failed).
+- `updated_at` *(string, ISO 8601)* – Last time the job metadata was updated.
+
+Other fields such as `queue_position`, `rate_per_second`, `use_lora`, and model pricing/infra metadata may also be present and can be used for advanced monitoring or billing.
