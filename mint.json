@@ -58,6 +58,13 @@
   ],
   "navigation": [
       {
+          "group": "Fine-Tuning API",
+          "pages": [
+              "fine-tuning-api/01_fine_tuning",
+              "fine-tuning-api/02_monitoring_fine_tune"
+          ]
+      },
+      {
           "group": "Get Started",
           "pages": [
               "getting-started/intro",

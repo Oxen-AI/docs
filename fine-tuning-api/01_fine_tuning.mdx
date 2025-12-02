@@ -1,0 +1,56 @@
+---
+title: 'Fine-Tuning'
+description: 'APIs to fine-tune models on Oxen.ai.'
+---
+
+## HTTP API: Start a Fine-Tune
+
+You can start a fine-tune directly against a repository via the HTTP API.
+
+**Endpoint**
+
+- `POST /api/repos/{owner}/{repo}/fine_tunes/`
+
+**Path Parameters**
+
+- `owner` – Namespace or username that owns the repo.
+- `repo` – Repository name.
+
+**Request Body**
+
+- `resource` – Path to the dataset within the repository (for example `main/suriya-images/images.parquet`).
+- `base_model` – Base model identifier to fine-tune (for example `meta-llama/Llama-3.2-1B-Instruct`).
+- `script_type` – Type of training script to run (for example `text_generation`).
+- `training_params` – Object containing training hyperparameters such as:
+  - `question_column` – Column in the dataset to use as the input/question.
+  - `answer_column` – Column in the dataset to use as the label/answer.
+  - `batch_size`, `epochs`, `learning_rate`, `logging_steps`, `seq_length`, etc.
+  - LoRA-related options like `use_lora`, `lora_alpha`, `lora_rank`.
+
+Below is an example of starting a fine-tune for a text generation model:
+
+```bash
+curl --location 'http://localhost:3001/api/repos/surya/random/fine_tunes/' \
+--data '{
+    "resource": "main/suriya-images/images.parquet",
+    "training_params": {
+      "answer_column": "file_path",
+      "batch_size": 1,
+      "enable_thinking": false,
+      "epochs": 1,
+      "grad_accum": 1,
+      "learning_rate": 0.0001,
+      "logging_steps": 10,
+      "lora_alpha": 16,
+      "lora_rank": 16,
+      "neftune_noise_alpha": 0,
+      "question_column": "file_path",
+      "save_steps_ratio": 0.25,
+      "save_strategy": "epoch",
+      "seq_length": 1024,
+      "use_lora": true
+    },
+    "base_model": "meta-llama/Llama-3.2-1B-Instruct",
+    "script_type": "text_generation"
+  }'
+
