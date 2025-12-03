@@ -1,0 +1,303 @@
+---
+title: 'Fine-Tuning an Image Editing Model with API'
+description: 'This page shows how to fine-tune an **image editing** model on Oxen.ai using **only the HTTP API and `curl`**.'
+---
+
+
+With this guide, you will:
+
+- **Create** an image-editing fine-tune
+- **Start** the fine-tune run
+- **Monitor** the fine-tune until it completes
+- **Deploy** the fine-tuned model
+- **Run inference** with the deployed model
+
+We will use one of the Qwen image-editing models described in
+[`Available Fine-Tuning Models`](/fine-tuning-api/03_available_fine_tune_models):
+
+- `base_model`: `Qwen/Qwen-Image-Edit`
+- `script_type`: `image_editing`
+
+Your dataset should follow the schema described there:
+
+- `control_image_column` – Input/reference image to edit
+- `caption_column` – Text prompt describing the desired edit
+- `image_column` – Target/output image after the edit
+
+---
+
+## Prerequisites
+
+- **Repository** on Oxen with your training data committed, for example:
+  - Namespace: `Tutorials`
+  - Repository: `ProductImageEdits`
+- **Dataset resource** inside that repo, for example:
+  - `main/train_image_edits.parquet`
+  - Each row contains paths to the control image and edited image, plus a caption.
+- **API key** with access to the repo:
+  - Exported as `OXEN_API_KEY`
+- **Base URL** for the Oxen API:
+  - Cloud example: `https://hub.oxen.ai`
+  - Exported as `OXEN_BASE_URL` (optional, defaults shown below)
+
+You can set these in your shell:
+
+```bash
+export OXEN_API_KEY="YOUR_API_KEY_HERE"
+export OXEN_BASE_URL="https://hub.oxen.ai"
+export OXEN_NAMESPACE="Tutorials"
+export OXEN_REPO="ProductImageEdits"
+```
+
+For the examples below, we will use:
+
+- `resource`: `main/train_image_edits.parquet`
+- `base_model`: `Qwen/Qwen-Image-Edit`
+- `script_type`: `image_editing`
+
+Training parameters (you can adjust these to your needs):
+
+- `control_image_column`: `control_image`
+- `caption_column`: `caption`
+- `image_column`: `edited_image`
+- `epochs`: `1`
+- `batch_size`: `1`
+- `learning_rate`: `0.0001`
+- `grad_accum`: `1`
+- `lora_alpha`: `16`
+- `lora_rank`: `16`
+- `seq_length`: `1024`
+- `logging_steps`: `10`
+- `enable_thinking`: `false`
+- `neftune_noise_alpha`: `0.0`
+- `save_steps_ratio`: `0.25`
+- `save_strategy`: `epoch`
+- `use_lora`: `true`
+
+---
+
+## Step 1 – Create an Image Editing Fine-Tune
+
+**Endpoint**
+
+- `POST /api/repos/{owner}/{repo}/fine_tunes`
+
+**Example `curl` request**:
+
+```bash
+curl --location "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/repos/${OXEN_NAMESPACE:-Tutorials}/${OXEN_REPO:-ProductImageEdits}/fine_tunes" \
+  -H "Authorization: Bearer ${OXEN_API_KEY}" \
+  -H "Content-Type: application/json" \
+  --data '{
+    "resource": "main/train_image_edits.parquet",
+    "base_model": "Qwen/Qwen-Image-Edit",
+    "script_type": "image_editing",
+    "training_params": {
+      "control_image_column": "control_image",
+      "caption_column": "caption",
+      "image_column": "edited_image",
+      "epochs": 1,
+      "batch_size": 1,
+      "learning_rate": 0.0001,
+      "grad_accum": 1,
+      "lora_alpha": 16,
+      "lora_rank": 16,
+      "seq_length": 1024,
+      "logging_steps": 10,
+      "enable_thinking": false,
+      "neftune_noise_alpha": 0.0,
+      "save_steps_ratio": 0.25,
+      "save_strategy": "epoch",
+      "use_lora": true
+    }
+  }'
+```
+
+The response will include a `fine_tune` object. For example:
+
+```json
+{
+  "fine_tune": {
+    "id": "ft_img_12345",
+    "status": "created",
+    "resource": "main/train_image_edits.parquet",
+    "base_model": "Qwen/Qwen-Image-Edit",
+    "script_type": "image_editing",
+    "training_params": { ... }
+  }
+}
+```
+
+Save the `id` (for example `ft_img_12345`) for the next steps.
+
+If you have `jq` installed, you can capture it directly:
+
+```bash
+FT_ID=$(curl --silent --location "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/repos/${OXEN_NAMESPACE:-Tutorials}/${OXEN_REPO:-ProductImageEdits}/fine_tunes" \
+  -H "Authorization: Bearer ${OXEN_API_KEY}" \
+  -H "Content-Type: application/json" \
+  --data '{
+    "resource": "main/train_image_edits.parquet",
+    "base_model": "Qwen/Qwen-Image-Edit",
+    "script_type": "image_editing",
+    "training_params": {
+      "control_image_column": "control_image",
+      "caption_column": "caption",
+      "image_column": "edited_image",
+      "epochs": 1,
+      "batch_size": 1,
+      "learning_rate": 0.0001,
+      "grad_accum": 1,
+      "lora_alpha": 16,
+      "lora_rank": 16,
+      "seq_length": 1024,
+      "logging_steps": 10,
+      "enable_thinking": false,
+      "neftune_noise_alpha": 0.0,
+      "save_steps_ratio": 0.25,
+      "save_strategy": "epoch",
+      "use_lora": true
+    }
+  }' | jq -r '.fine_tune.id')
+
+echo "Created image-edit fine-tune: $FT_ID"
+```
+
+---
+
+## Step 2 – Start the Fine-Tune Run
+
+Once you have a `fine_tune.id`, trigger the run.
+
+**Endpoint**
+
+- `POST /api/repos/{owner}/{repo}/fine_tunes/{fine_tune_id}/actions/run`
+
+**Example `curl` request**:
+
+```bash
+curl --location "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/repos/${OXEN_NAMESPACE:-Tutorials}/${OXEN_REPO:-ProductImageEdits}/fine_tunes/${FT_ID}/actions/run" \
+  -H "Authorization: Bearer ${OXEN_API_KEY}" \
+  -X POST
+```
+
+---
+
+## Step 3 – Monitor Fine-Tune Status
+
+You can poll the fine-tune to see when it completes.
+
+**Endpoint**
+
+- `GET /api/repos/{owner}/{repo}/fine_tunes/{fine_tune_id}`
+
+**Example `curl` loop** (bash):
+
+```bash
+while true; do
+  RESP=$(curl --silent "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/repos/${OXEN_NAMESPACE:-Tutorials}/${OXEN_REPO:-ProductImageEdits}/fine_tunes/${FT_ID}" \
+    -H "Authorization: Bearer ${OXEN_API_KEY}")
+
+  echo "$RESP" | jq '.'
+
+  STATUS=$(echo "$RESP" | jq -r '.fine_tune.status')
+  echo "Status: $STATUS"
+
+  if [ "$STATUS" = "completed" ]; then
+    OUTPUT_RESOURCE=$(echo "$RESP" | jq -r '.fine_tune.output_resource')
+    echo "Fine-tune completed! Output: $OUTPUT_RESOURCE"
+    break
+  elif [ "$STATUS" = "errored" ]; then
+    ERROR_MSG=$(echo "$RESP" | jq -r '.fine_tune.error')
+    echo "Fine-tune failed: $ERROR_MSG"
+    exit 1
+  elif [ "$STATUS" = "stopped" ]; then
+    echo "Fine-tune was stopped"
+    break
+  fi
+
+  # Wait 30 seconds before checking again
+  sleep 30
+done
+```
+
+---
+
+## Step 4 – Deploy the Fine-Tuned Image Model
+
+Once the fine-tune completes, you can deploy it to a dedicated GPU-backed endpoint via the deploy API.
+
+**Endpoint**
+
+- `POST /api/repos/{owner}/{repo}/fine_tunes/{fine_tune_id}/deploy`
+
+**Example `curl` request**:
+
+```bash
+DEPLOY_RESPONSE=$(curl --silent --location "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/repos/${OXEN_NAMESPACE:-Tutorials}/${OXEN_REPO:-ProductImageEdits}/fine_tunes/${FT_ID}/deploy" \
+  -H "Authorization: Bearer ${OXEN_API_KEY}" \
+  -X POST)
+
+echo "$DEPLOY_RESPONSE" | jq '.'
+```
+
+The response will include information about the deployment, including the **model identifier** you can pass to the image editing inference API (for example, a slug such as `oxen:your-fine-tuned-image-edit-model`).
+
+If the response contains a field like `model_slug`, you can capture it with `jq`:
+
+```bash
+DEPLOYED_MODEL=$(echo "$DEPLOY_RESPONSE" | jq -r '.deployment.model_slug')
+echo "Deployed model: $DEPLOYED_MODEL"
+```
+
+---
+
+## Step 5 – Run Inference with the Deployed Model
+
+With the deployment live, you can call the **image editing** inference endpoint using the deployed model identifier.
+
+**Endpoint**
+
+- `POST /api/images/edit`
+
+**Example `curl` request** (single input image):
+
+```bash
+export DEPLOYED_MODEL="${DEPLOYED_MODEL:-oxen:your-fine-tuned-image-edit-model}"
+
+curl -X POST \
+  "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/images/edit" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer ${OXEN_API_KEY}" \
+  -d "{
+    \"model\": \"${DEPLOYED_MODEL}\",
+    \"input_image\": \"https://example.com/image.png\",
+    \"prompt\": \"Apply the same style as in my training data\",
+    \"num_inference_steps\": 28
+  }"
+```
+
+For models that support **multiple input images** (for example when using a multi-image editing base model), you can pass an array of image URLs:
+
+```bash
+curl -X POST \
+  "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/images/edit" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer ${OXEN_API_KEY}" \
+  -d "{
+    \"model\": \"${DEPLOYED_MODEL}\",
+    \"input_image\": [
+      \"https://example.com/control_image.png\",
+      \"https://example.com/style_reference.png\"
+    ],
+    \"prompt\": \"Apply the reference style to the control image, matching the fine-tuned behavior\",
+    \"num_inference_steps\": 28
+  }"
+```
+
+These requests mirror the general image editing examples, but use your **fine-tuned image model** as the `model` value instead of a base model.
+
+For more background on the image editing inference API, see the
+[`Image Editing` examples](/examples/inference/image_editing).
+
+With these five steps, you have a complete end-to-end image fine-tuning, deployment, and inference workflow using only `curl`, fully scriptable from the command line.

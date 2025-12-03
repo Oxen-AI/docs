@@ -1,56 +1,231 @@
 ---
-title: 'Fine-Tuning'
-description: 'APIs to fine-tune models on Oxen.ai.'
+title: 'Fine-Tuning text generation model'
+description: 'Example of how to fine-tune text generation models on Oxen.ai using the HTTP API and `curl`.'
 ---
 
-## HTTP API: Start a Fine-Tune
+## End-to-End Fine-Tuning of a Text Generation Model
 
-You can start a fine-tune directly against a repository via the HTTP API.
+This page walks through a complete fine-tuning run using the HTTP API and `curl`, mirroring the minimal Python example you provided.
+
+You will:
+
+- **Create** a fine-tune
+- **Start** the fine-tune run
+- **Monitor** the fine-tune until it completes
+
+All calls are made against a specific repository, similar to this Python snippet:
+
+- `NAMESPACE = "Tutorials"`
+- `REPO = "FinancialSentiment"`
+
+---
+## Prerequisites
+
+- **Repository** on Oxen with your training data committed, for example:
+  - Namespace: `Tutorials`
+  - Repository: `FinancialSentiment`
+- **Dataset resource** inside that repo, for example:
+  - `main/train_financial_sentiment.parquet`
+  - You can view this example dataset (including columns like `text` and `sentiment`) and its repository here: [Tutorials / FinancialSentiment dataset](https://www.oxen.ai/Tutorials/FinancialSentiment/file/main/train_financial_sentiment.parquet)
+- **API key** with access to the repo:
+  - Exported as `OXEN_API_KEY`
+- **Base URL** for the Oxen API:
+  - Local dev example: `https://hub.oxen.ai`
+  - Exported as `OXEN_BASE_URL` (optional, defaults shown below)
+
+You can set these in your shell:
+
+```bash
+export OXEN_API_KEY="YOUR_API_KEY_HERE"
+export OXEN_BASE_URL="https://hub.oxen.ai"
+export OXEN_NAMESPACE="Tutorials"
+export OXEN_REPO="FinancialSentiment"
+```
+
+For the examples below, we will use:
+
+- `resource`: `main/train_financial_sentiment.parquet`
+- `base_model`: `Qwen/Qwen3-0.6B`
+- `script_type`: `text_generation`
+
+Training parameters mirror the Python example:
+
+- `question_column`: `text`
+- `answer_column`: `sentiment`
+- `epochs`: `1`
+- `batch_size`: `1`
+- `learning_rate`: `0.0001`
+- `grad_accum`: `1`
+- `lora_alpha`: `16`
+- `lora_rank`: `16`
+- `seq_length`: `1024`
+- `logging_steps`: `10`
+- `enable_thinking`: `false`
+- `neftune_noise_alpha`: `0.0`
+- `save_steps_ratio`: `0.25`
+- `save_strategy`: `epoch`
+- `use_lora`: `true`
+
+---
+## Step 1 – Create a Fine-Tune
 
 **Endpoint**
 
-- `POST /api/repos/{owner}/{repo}/fine_tunes/`
+- `POST /api/repos/{owner}/{repo}/fine_tunes`
 
-**Path Parameters**
-
-- `owner` – Namespace or username that owns the repo.
-- `repo` – Repository name.
-
-**Request Body**
-
-- `resource` – Path to the dataset within the repository (for example `main/suriya-images/images.parquet`).
-- `base_model` – Base model identifier to fine-tune (for example `meta-llama/Llama-3.2-1B-Instruct`).
-- `script_type` – Type of training script to run (for example `text_generation`).
-- `training_params` – Object containing training hyperparameters such as:
-  - `question_column` – Column in the dataset to use as the input/question.
-  - `answer_column` – Column in the dataset to use as the label/answer.
-  - `batch_size`, `epochs`, `learning_rate`, `logging_steps`, `seq_length`, etc.
-  - LoRA-related options like `use_lora`, `lora_alpha`, `lora_rank`.
-
-Below is an example of starting a fine-tune for a text generation model:
+**Example `curl` request** (mirrors the Python payload):
 
 ```bash
-curl --location 'http://localhost:3001/api/repos/surya/random/fine_tunes/' \
---data '{
-    "resource": "main/suriya-images/images.parquet",
+curl --location "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/repos/${OXEN_NAMESPACE:-Tutorials}/${OXEN_REPO:-FinancialSentiment}/fine_tunes" \
+  -H "Authorization: Bearer ${OXEN_API_KEY}" \
+  -H "Content-Type: application/json" \
+  --data '{
+    "resource": "main/train_financial_sentiment.parquet",
+    "base_model": "Qwen/Qwen3-0.6B",
+    "script_type": "text_generation",
     "training_params": {
-      "answer_column": "file_path",
-      "batch_size": 1,
-      "enable_thinking": false,
+      "question_column": "text",
+      "answer_column": "sentiment",
       "epochs": 1,
-      "grad_accum": 1,
+      "batch_size": 1,
       "learning_rate": 0.0001,
-      "logging_steps": 10,
+      "grad_accum": 1,
       "lora_alpha": 16,
       "lora_rank": 16,
-      "neftune_noise_alpha": 0,
-      "question_column": "file_path",
+      "seq_length": 1024,
+      "logging_steps": 10,
+      "enable_thinking": false,
+      "neftune_noise_alpha": 0.0,
       "save_steps_ratio": 0.25,
       "save_strategy": "epoch",
-      "seq_length": 1024,
       "use_lora": true
-    },
-    "base_model": "meta-llama/Llama-3.2-1B-Instruct",
-    "script_type": "text_generation"
+    }
   }'
+```
 
+The response will include a `fine_tune` object. For example:
+
+```json
+{
+  "fine_tune": {
+    "id": "ft_12345",
+    "status": "created",
+    "resource": "main/train_financial_sentiment.parquet",
+    "base_model": "Qwen/Qwen3-0.6B",
+    "script_type": "text_generation",
+    "training_params": { ... }
+  }
+}
+```
+
+Save the `id` (for example `ft_12345`) for the next steps.
+
+If you have `jq` installed, you can capture it directly:
+
+```bash
+FT_ID=$(curl --silent --location "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/repos/${OXEN_NAMESPACE:-Tutorials}/${OXEN_REPO:-FinancialSentiment}/fine_tunes" \
+  -H "Authorization: Bearer ${OXEN_API_KEY}" \
+  -H "Content-Type: application/json" \
+  --data '{
+    "resource": "main/train_financial_sentiment.parquet",
+    "base_model": "Qwen/Qwen3-0.6B",
+    "script_type": "text_generation",
+    "training_params": {
+      "question_column": "text",
+      "answer_column": "sentiment",
+      "epochs": 1,
+      "batch_size": 1,
+      "learning_rate": 0.0001,
+      "grad_accum": 1,
+      "lora_alpha": 16,
+      "lora_rank": 16,
+      "seq_length": 1024,
+      "logging_steps": 10,
+      "enable_thinking": false,
+      "neftune_noise_alpha": 0.0,
+      "save_steps_ratio": 0.25,
+      "save_strategy": "epoch",
+      "use_lora": true
+    }
+  }' | jq -r '.fine_tune.id')
+
+echo "Created fine-tune: $FT_ID"
+```
+
+---
+## Step 2 – Start the Fine-Tune Run
+
+Once you have a `fine_tune.id`, trigger the run.
+
+**Endpoint**
+
+- `POST /api/repos/{owner}/{repo}/fine_tunes/{fine_tune_id}/actions/run`
+
+**Example `curl` request**:
+
+```bash
+curl --location "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/repos/${OXEN_NAMESPACE:-Tutorials}/${OXEN_REPO:-FinancialSentiment}/fine_tunes/${FT_ID}/actions/run" \
+  -H "Authorization: Bearer ${OXEN_API_KEY}" \
+  -X POST
+```
+
+This mirrors the Python example:
+
+```python
+run_url = f"{BASE_URL}/api/repos/{NAMESPACE}/{REPO}/fine_tunes/{fine_tune_id}/actions/run"
+requests.post(run_url, headers=headers)
+```
+
+---
+## Step 3 – Monitor Fine-Tune Status
+
+You can poll the fine-tune to see when it completes.
+
+**Endpoint**
+
+- `GET /api/repos/{owner}/{repo}/fine_tunes/{fine_tune_id}`
+
+**Example `curl` loop** (bash):
+
+```bash
+while true; do
+  RESP=$(curl --silent "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/repos/${OXEN_NAMESPACE:-Tutorials}/${OXEN_REPO:-FinancialSentiment}/fine_tunes/${FT_ID}" \
+    -H "Authorization: Bearer ${OXEN_API_KEY}")
+
+  echo "$RESP" | jq '.'
+
+  STATUS=$(echo "$RESP" | jq -r '.fine_tune.status')
+  echo "Status: $STATUS"
+
+  if [ "$STATUS" = "completed" ]; then
+    OUTPUT_RESOURCE=$(echo "$RESP" | jq -r '.fine_tune.output_resource')
+    echo "Fine-tune completed! Output: $OUTPUT_RESOURCE"
+    break
+  elif [ "$STATUS" = "errored" ]; then
+    ERROR_MSG=$(echo "$RESP" | jq -r '.fine_tune.error')
+    echo "Fine-tune failed: $ERROR_MSG"
+    exit 1
+  elif [ "$STATUS" = "stopped" ]; then
+    echo "Fine-tune was stopped"
+    break
+  fi
+
+  # Wait 30 seconds before checking again (matches Python example)
+  sleep 30
+done
+```
+
+This shell loop is the `curl` equivalent of the Python monitoring loop:
+
+```python
+status_url = f"{BASE_URL}/api/repos/{NAMESPACE}/{REPO}/fine_tunes/{fine_tune_id}"
+while True:
+    response = requests.get(status_url, headers=headers)
+    fine_tune = response.json()["fine_tune"]
+    status = fine_tune["status"]
+    ...
+    time.sleep(30)
+```
+
+---
+With these three steps, you have a complete end-to-end fine-tuning run using only `curl`, matching the minimal Python example but fully scriptable from the command line.
