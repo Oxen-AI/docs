@@ -37,6 +37,10 @@
           "name": "HTTP API",
           "url": "http-api",
           "openapi": "https://hub.oxen.ai/oxen-server-openapi-spec.json"
+      },
+      {
+          "name": "Fine-Tuning API",
+          "url": "fine-tuning-api"
       }
   ],
   "anchors": [
@@ -57,13 +61,6 @@
       }
   ],
   "navigation": [
-      {
-          "group": "Fine-Tuning API",
-          "pages": [
-              "fine-tuning-api/01_fine_tuning",
-              "fine-tuning-api/02_monitoring_fine_tune"
-          ]
-      },
       {
           "group": "Get Started",
           "pages": [
@@ -203,6 +200,13 @@
                       "http-api/evaluations/create_eval"
                   ]
               }
+          ]
+      },
+      {
+          "group": "Fine-Tuning API",
+          "pages": [
+              "fine-tuning-api/01_fine_tuning",
+              "fine-tuning-api/02_monitoring_fine_tune"
           ]
       }
   ],
