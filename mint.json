@@ -36,7 +36,7 @@
       {
           "name": "HTTP API",
           "url": "http-api",
-          "openapi": "http://localhost:3000/api/_spec/openapi.json"
+          "openapi": "http://hub.oxen.ai/api/_spec/oxen_server_openapi.json"
       }
   ],
   "anchors": [
