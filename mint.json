@@ -41,7 +41,7 @@
       {
           "name": "Fine-Tuning API",
           "url": "fine-tuning-api",
-          "openapi": "https://7a9f157a3079.ngrok-free.app/api/openapi"
+          "openapi": "https://dev.hub.oxen.ai/api/_spec/oxen_hub_api.json"
       }
   ],
   "anchors": [
