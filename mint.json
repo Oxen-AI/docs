@@ -36,7 +36,7 @@
       {
           "name": "HTTP API",
           "url": "http-api",
-          "openapi": "http://hub.oxen.ai/api/_spec/oxen_server_openapi.json"
+          "openapi": "https://hub.oxen.ai/api/_spec/oxen_server_openapi.json"
       }
   ],
   "anchors": [
@@ -253,8 +253,18 @@
                      "http-api/files/list_entries",
                      "http-api/files/download_file",
                      "http-api/files/upload_file",
+                     "http-api/files/delete_file",
                      "http-api/files/upload_zip",
                      "http-api/files/import_file"
+                 ]
+             },
+             {
+                 "group": "Versions",
+                 "pages": [
+                     "http-api/versions/metadata",
+                     "http-api/versions/download",
+                     "http-api/versions/batch_download",
+                     "http-api/versions/batch_upload"
                  ]
              },
              {
