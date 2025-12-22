@@ -5,31 +5,23 @@ description: Infrastructure for collaborating on datasets and fine-tuning open s
 
 <img alt="Oxen.ai Moon Ox Hero" className="rounded-xl" classname="block" src="/images/MoonOx.png" />
 
-Oxen.ai gives you the tools to fine-tune open source [models](/getting-started/inference) on your own data. We believe that your data is your differentiator, and training models on your own data should be easy, fast, and approachable for everyone.
+Oxen.ai gives you the tools to [fine-tune](/getting-started/fine-tuning) open source [models](/getting-started/inference) on your own [datasets](/getting-started/datasets). We believe that your data is your differentiator, and training models on your own data should be easy, fast, and approachable for everyone.
 
-The platform makes it easy to spin up GPU infrastructure to [train models](/examples/notebooks/train_llm) or run [inference](/getting-started/inference) at scale. The [datasets](/getting-started/datasets) and [models weights](/getting-started/fine-tuning) are all [versioned](/getting-started/versioning) and stored in an Oxen.ai [repository](/getting-started/versioning) for easy iteration, comparison, and collaboration with your team.
+The platform makes it easy to spin up GPU infrastructure to [train models](/examples/notebooks/train_llm) or run [inference](/getting-started/inference) at scale. Never lose track of which [dataset](/getting-started/datasets) trained which [model](/getting-started/fine-tuning) because all files are [version controlled](/getting-started/versioning) in a [repository](/getting-started/versioning). Oxen.ai allows you kick off experiments in parallel and easily collaborate with your team.
 
 ## ✅ Features
 
 Oxen.ai allows you to own your model end to end, from curating datasets to fine-tuning models to deploying them at scale. Start by trying out the latest and greatest open source [LLM](/examples/inference/chat_completions), [video generation](/examples/inference/video_generation), or [image editing](/examples/inference/image_editing) models, then graduate to [fine-tuning](/getting-started/fine-tuning) your own models.
 
-* ⚡️ [Inference APIs](/getting-started/inference) - Quickly iterate on prompts and models for many modalities
-  * [💬 Language Models](/examples/inference/chat_completions) - Generate and understand text
-  * [👁️ Vision Language Models](/examples/inference/vision_language_models) - Understand image and video data
-  * [🖼️ Image Generation](/examples/inference/image_generation) - Generate images from prompts
-  * [🎨 Image Editing](/examples/inference/image_editing) - Edit images with prompts
-  * [🎥 Video Generation](/examples/inference/video_generation) - Generate videos from prompts
-* ⚙️ [Fine-Tuning](/getting-started/fine-tuning) - Go from dataset to deployable model in a few clicks
+* ⚙️ [Fine-Tuning](/getting-started/fine-tuning) - Train models for many modalities (text, images, videos)
+  * [💬 Language Models](/examples/fine-tuning/chat_completions) - Generate and understand text
+  * [👁️ Vision Language Models](/examples/fine-tuning/image_understanding) - Understand image and video data
+  * [🖼️ Image Generation](/examples/fine-tuning/image_generation) - Generate images from prompts
+  * [🎨 Image Editing](/examples/fine-tuning/image_editing) - Edit images with prompts
+  * [🎥 Video Generation](/examples/fine-tuning/video_generation) - Generate videos from prompts
 * 📊 [Datasets](/getting-started/datasets) - Build datasets for training, fine-tuning, or evaluating models
+* ⚡️ [Inference APIs](/getting-started/inference) - Deploy fine-tuned models to an API endpoint
 * 🚀 [Batch Inference](/getting-started/evaluation) - Run your model at scale over large datasets, to label data, generate synthetic data or evaluate model performance
-
-### ⚡ **Model Inference**
-
-Whether you are making your first LLM call or need to deploy a fine-tuned model, [Oxen.ai](http://Oxen.ai) gives you the flexibility to swap models through a unified [model inference API](/getting-started/inference). The API is OpenAI compatible and supports a variety of foundation models as well as fine-tunable models. See the list of [supported models](https://oxen.ai/ai/models) to get started.
-
-<img alt="Oxen.ai Chat Window" className="rounded-xl" src="/images/chat/chat_window.png" />
-
-The while calling inference API is a great place to start, the real power of Oxen.ai is being able to take an open source model and [fine-tune](/getting-started/fine-tuning) it on your own data, optimizing it for accuracy, speed, or quality. Once it's fine-tuned, you can deploy it to the same interface in minutes. No DevOps or MLOps experience required.
 
 ### ⚙️ **Fine-Tune Models**
 
@@ -43,11 +35,19 @@ Once the model has been fine-tuned, you can easily deploy the model behind an in
 
 ### 📊 **Build Datasets**
 
-Quality datasets are the difference between prototypes and production models. Collaborate on multi-modal datasets used for training, fine-tuning, or evaluating models. Backed by Oxen.ai's [version control](https://github.com/Oxen-AI/Oxen), you'll never worry about remembering what data a model was trained or evaluated on.
+Quality datasets are what bring your unique style and differentiation to the model. Collaborate on multi-modal datasets used for training, fine-tuning, or evaluating models. Backed by Oxen.ai's [version control](https://github.com/Oxen-AI/Oxen), you'll never worry about remembering what data a model was trained or evaluated on.
 
-Learn how to interface with datasets in the [Oxen Python Library](/getting-started/python) or more about supported dataset types and formats [here](/getting-started/datasets).
+Learn how to interface with datasets in the Oxen.ai [python library](/getting-started/python) or more about supported dataset types and formats [here](/getting-started/datasets).
 
 <img alt="Image Net" className="rounded-xl" src="/images/datasets/image_net_train.png" />
+
+### ⚡ **Model Inference**
+
+Whether you are making your first LLM call or need to deploy a fine-tuned model, [Oxen.ai](http://Oxen.ai) gives you the flexibility to swap models through a unified [model inference API](/getting-started/inference). The API is OpenAI compatible and supports a variety of foundation models as well as fine-tunable models. See the list of [supported models](https://oxen.ai/ai/models) to get started.
+
+<img alt="Oxen.ai Chat Window" className="rounded-xl" src="/images/chat/chat_window.png" />
+
+The while calling inference API is a great place to start, the real power of Oxen.ai is being able to take an open source model and [fine-tune](/getting-started/fine-tuning) it on your own data, optimizing it for accuracy, speed, or quality. Once it's fine-tuned, you can deploy it to the same interface in minutes. No DevOps or MLOps experience required.
 
 ### 🚀 **Run Models at Scale**
 
@@ -63,15 +63,15 @@ We built the version control system to be [blazing fast](/features/performance),
 
 ## 🔒 Own Your AI
 
-At Oxen.ai, we believe you should **own your AI, don't rent it**. Own your AI by training models on your data and downloading the weights for your applications. For image or video generation, create high-quality LoRAs and deploy to ComfyUI. For language models, optimize for speed, cost, or privacy and deploy to Ollama or vLLM.
+At Oxen.ai, we believe you should **own your AI, don't rent it**. Owning your AI means that you can easily differentiate and extend a model's capabilities. You are not reliant on what the model was originally trained on. This means you can create models that are smarter in your domain, higher quality, more consistent, and better than the competition.
 
-Don't want to host your own infrastructure? Oxen.ai also offers a [managed service](/examples/inference/deploying_models) for deploying models at scale.
+For image or video generation, you may differentiate by bringing your own unique style to a model and make sure the generations are consistent. For language models, optimize for speed, cost, privacy, or custom domain knowledge. What ever type of model you are using, you should have the flexibility to train and deploy the model anywhere.
 
 ## 🌾 Why Build Oxen?
 
 Oxen was built by a team of machine learning engineers, who have spent countless hours in their careers managing datasets and training models. We have used many different tools, but none of them were as easy to use and as ergonomic as we would like. 
 
-Production grade AI applications are constantly juggling models, datasets, and code, and it's easy to get lost. Let alone the late nights installing the proper cuda and pytorch versions. If you have every been stuck syncing massive model weights, datasets, or aligning them with the code that was used to train them, we feel your pain.
+Production grade AI applications are constantly juggling models, datasets, and code, and it's easy to get lost. Let alone the late nights installing the proper cuda and pytorch versions. If you have every been stuck dumping massive model weights and datasets to S3 in tarballs with little visibility, we feel your pain.
 
 Oxen is the tool we wish we had to abstract away the infrastructure and focus on the fun parts of building AI applications.
 
