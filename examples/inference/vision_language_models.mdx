@@ -9,11 +9,13 @@ Vision language models extend the ability of language models to understand image
 
 For example, instead of training a classifier from scratch, you can pass in your list of categories and a description what to look for in the prompt, and let the VLM take care of the rest.
 
-Here is the [list of supported models](https://www.oxen.ai/ai/models?modalities=image-to-text).
+Here is the [list of supported models](https://www.oxen.ai/ai/models?modalities=image-to-text,video-to-text).
 
-## Using the API
+## Image Understanding
 
-The `/chat/completions` endpoint supports vision language models as well as language models. If you want to send an image to a model that supports vision such as Qwen3-VL or gpt-4o you can add a message with the `image_url` type.
+The `/chat/completions` endpoint supports vision language models for image understanding. If you want to send an image to a model that supports vision such as Qwen3-VL or gpt-4o, you can add a message with the `image_url` type.
+
+### Using Image URLs
 
 <CodeGroup>
 
@@ -45,7 +47,9 @@ curl -X POST https://hub.oxen.ai/api/chat/completions \
 
 </CodeGroup>
 
-Or you can directly pass in the base64 encoded image.
+### Using Base64 Encoded Images
+
+You can also directly pass in the base64 encoded image.
 
 <CodeGroup>
 ```bash cURL (base64 encoded image)
@@ -74,6 +78,8 @@ curl -X POST https://hub.oxen.ai/api/chat/completions \
 }'
 ```
 </CodeGroup>
+
+### Python Example
 
 From python this would look like:
 
@@ -112,6 +118,124 @@ response = client.chat.completions.create(
                     "type": "image_url",
                     "image_url": {
                         "url": f"data:image/jpeg;base64,{base64_image}"
+                    }
+                }
+            ]
+        }
+    ]
+)
+
+print(response.choices[0].message.content)
+```
+</CodeGroup>
+
+## Video Understanding
+
+The `/chat/completions` endpoint also supports video understanding through vision language models. To send a video to a model that supports video understanding, you can add a message with the `video_url` type.
+
+### Using Video URLs
+
+<CodeGroup>
+
+```bash cURL (video url)
+curl -X POST https://hub.oxen.ai/api/chat/completions \
+-H "Authorization: Bearer $OXEN_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{
+  "model": "gemini-3-flash-preview",
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "What is happening in this video?"
+        },
+        {
+          "type": "video_url",
+          "video_url": {
+            "url": "https://example.com/path/to/video.mp4"
+          }
+        }
+      ]
+    }
+  ]
+}'
+```
+
+</CodeGroup>
+
+### Using Base64 Encoded Videos
+
+You can also directly pass in the base64 encoded video.
+
+<CodeGroup>
+```bash cURL (base64 encoded video)
+curl -X POST https://hub.oxen.ai/api/chat/completions \
+-H "Authorization: Bearer $OXEN_API_KEY" \
+-H "Content-Type: application/json" \
+-d '{
+  "model": "gemini-3-flash-preview",
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "Describe the main events in this video."
+        },
+        {
+          "type": "video_url",
+          "video_url": {
+            "url": "data:video/mp4;base64,YOUR_BASE64_ENCODED_VIDEO_HERE"
+          }
+        }
+      ]
+    }
+  ]
+}'
+```
+</CodeGroup>
+
+### Python Example
+
+From python this would look like:
+
+<CodeGroup>
+```python Python
+import openai
+import os
+import base64
+
+# Read and encode the video to base64
+def encode_video(video_path):
+    with open(video_path, "rb") as video_file:
+        return base64.b64encode(video_file.read()).decode('utf-8')
+
+# Initialize the client
+client = openai.OpenAI(
+    api_key=os.getenv("OXEN_API_KEY"),
+    base_url="https://hub.oxen.ai/api"
+)
+
+# Encode your video
+base64_video = encode_video("path/to/your/video.mp4")
+
+# Send the request with base64 encoded video
+response = client.chat.completions.create(
+    model="gemini-3-flash-preview",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "What is happening in this video?"
+                },
+                {
+                    "type": "video_url",
+                    "video_url": {
+                        "url": f"data:video/mp4;base64,{base64_video}"
                     }
                 }
             ]
