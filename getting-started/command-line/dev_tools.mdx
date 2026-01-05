@@ -1,6 +1,6 @@
 ---
 title: '🔌 Dev Tools'
-description: 'Oxen provides multiple '
+description: 'Oxen provides multiple tools to debug and configure the CLI'
 ---
 
 ## Oxen Node
@@ -39,6 +39,12 @@ When uploading or downloading data, if any files fail to transfer, oxen will wai
 export NUM_HTTP_RETRIES="10"
 ```
 
+All HTTP requests oxen makes timeout after 120 seconds by default. You can configure this the OXEN_TIMEOUT_SECS variable.
+
+```bash 
+export OXEN_TIMEOUT_SECS="10"
+```
+
 ## Chunk Size
 
 Under the hood, oxen groups files into `small files` and `large files` for more efficient transfer in `oxen push`, `oxen workspace add`, etc. Files are considered `large` if they're larger than `AVG_CHUNK_SIZE`, which is set to 10 MB by default. This can be configured via the `AVG_CHUNK_SIZE` environment variable
@@ -46,3 +52,13 @@ Under the hood, oxen groups files into `small files` and `large files` for more 
 ```bash
 export AVG_CHUNK_SIZE="20_000_000" 
 ```
+
+## Debug Logs
+
+The oxen codebase contains plenty of debug logs, which you can turn on with the RUST_LOG variable.
+
+```bash
+export RUST_LOG="debug"
+```
+
+You can also set RUST_LOG to `info` or `warn` for more restrictive debug logs

@@ -101,6 +101,17 @@ If you want to change the default `IP ADDRESS` and `PORT` you can do so by passi
 oxen-server start -i 0.0.0.0 -p 4321
 ```
 
+## 🐞 Debug Logs
+
+The oxen server provides debug logs, which are turned off by default. You can turn on with the RUST_LOG variable.
+
+```bash
+export RUST_LOG="debug"
+```
+
+You can also set RUST_LOG to `info` or `warn` for more restrictive debug logs
+
+
 ## 📁 Create a Repository
 
 Assuming you have already installed the `oxen` CLI, you can create a remote repository on the server.
