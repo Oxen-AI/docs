@@ -91,7 +91,12 @@
           "group": "Developer Tools",
           "pages": [
               "getting-started/install",
-              "getting-started/cli",
+              {
+                "group": "💻 Command Line Interface",
+                "pages": [
+                    "getting-started/command-line/CLI"
+                ]
+              },
               "getting-started/python",
               "getting-started/oxen-server",
               "features/performance"
