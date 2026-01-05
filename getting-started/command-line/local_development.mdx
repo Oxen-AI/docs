@@ -1,0 +1,238 @@
+---
+title: '🏗️ Local Development'
+description: 'Oxen provides numerous tools to work with and version your data from the command line.'
+---
+
+## Creating a repository
+
+You can initialize an Oxen repository locally with `oxen init`
+
+```bash
+oxen init
+```
+
+This will create a `.oxen` folder in your working directory, which contains the metadata for the repository. It's also where each commit's [Merkle Tree](https://ghost.oxen.ai/merkle-tree-101/) will be stored new files are added and committed. 
+
+## Add files
+
+Add files to a repository with `oxen add`. This copies the files' contents to the repository's `version store` and stages the changes to the `staged_db`. 
+You can add files and directories (Added recursively) using either absolute paths or their relative paths to the repo root.
+
+```bash
+oxen add path/to/file.txt
+```
+
+```bash
+oxen add images/
+```
+
+You can also add with glob paths or wildcards. This will add all files matching the glob pattern that aren't ignored in `.oxenignore`
+
+```bash 
+oxen add images/f* # Adds all files starting with an 'f' in the images dir
+``` 
+
+```bash
+oxen add . # Adds the current directory
+```
+
+`oxen add` can stage new, modified, or removed files and directories to the repo. You can view staged changes with `oxen status` 
+
+
+``` bash
+oxen status
+```
+```
+On branch main -> 113b00a451ac07d284b29ce5604d6891
+
+Files to be committed:
+  (use "oxen restore --staged <file> ..." to unstage)
+  modified: modified_file.txt
+  new file: new_file.txt
+  removed: removed_file
+```
+
+
+## Commit Changes
+
+To commit the changes that are staged with a message you can use
+
+```bash
+oxen commit -m "Some informative commit message"
+```
+
+This creates a new commit on the current branch. If the repository was previosuly empty, this also creates the `main` branch
+
+Once you've committed a file, a copy of its contents will be stored in the repository's `version store`. By default, the version files will be located in `.oxen/versions/files`. File and directory metadata are stored in the [Merkle Tree](https://ghost.oxen.ai/merkle-tree-101/), which mimics the structure of the working directory
+
+## View History
+
+You can see the history of changes on your current branch by running:
+
+```bash
+oxen log
+```
+
+```
+commit 6b958e268656b0c5
+
+Author: Ox
+Date:   Fri, 21 Oct 2022 16:08:39 -0700
+
+    adding 10,000 training images
+
+commit e76dd52a4fc13a6f
+
+Author: Ox
+Date:   Fri, 21 Oct 2022 16:05:22 -0700
+
+    Initialized Repo 🐂
+```
+
+## List Branches
+
+To view the branch you're on, use `oxen branch`. This will list all of the repo's branches, highlighting the current one.
+
+```bash
+oxen branch
+```
+
+You can also view the branches that exist on a repo's remotes with `oxen branch --remote`
+
+```bash
+oxen branch --remote 
+``` 
+To delete a branch, use `oxen branch --delete`. This will fail if the branch is not safe to delete (i.e., it has changes that aren't merged to main)
+
+```bash
+oxen branch --delete feature
+```
+
+```bash
+oxen branch -D feature # use -D to force delete a branch
+```
+
+## View Status
+
+To see what data is tracked, staged, modified, removed, or not yet added to the repository you can use `oxen status` 
+
+Note: since we are dealing with large datasets with many files, `status` rolls up the changes and summarizes them for you.
+
+```bash
+oxen status
+```
+
+```
+On branch main -> e76dd52a4fc13a6f
+
+Directories to be committed
+  added: images with added 8108 files
+
+Files to be committed:
+  new file: images/000000000042.jpg
+  new file: images/000000000074.jpg
+  new file: images/000000000109.jpg
+  new file: images/000000000307.jpg
+  new file: images/000000000309.jpg
+  new file: images/000000000394.jpg
+  new file: images/000000000400.jpg
+  new file: images/000000000443.jpg
+  new file: images/000000000490.jpg
+  new file: images/000000000575.jpg
+  ... and 8098 others
+
+Untracked Directories
+  (use "oxen add <dir>..." to update what will be committed)
+  annotations/ (3 items)
+```
+
+You can paginate through the changes with the `-s` (skip) and `-l` (limit) params on the status command. Run `oxen status --help` for more info.
+
+## Restore Files
+
+If you want to revert changes you've made to a file in the working directory, you can use `oxen restore` to restore the file to its version in the HEAD commit. This works with deleted or modified files
+
+```bash
+oxen restore path/to/file.txt
+```
+
+You can also use `oxen restore` on directories to recursively restore their files 
+
+If you want to restore to a specific version in your commit history, you can supply the commit id or branch name with the `--source` flag.
+
+```bash
+$ oxen restore path/to/file.txt --source COMMIT_ID
+```
+
+As with git, you can also restore files from the `staged_db` using `oxen restore --staged`
+
+```bash
+$ oxen restore --staged path/to/dir
+```
+
+## Removing Data
+
+To stage a file to be removed from the next commit, use the `oxen rm` command.
+
+```bash
+oxen rm path/to/file.txt
+```
+
+Note: the file must be committed in the history for this to work. If you want to remove a file that has not been committed yet, simple use your /bin/rm command.
+
+To recursively remove a directory use the `-r` flag.
+
+```bash
+oxen rm -r path/to/dir
+```
+
+You can also remove entries from the `staged_db` using `oxen rm --staged` 
+
+```bash
+oxen rm --staged -r path/to/dir
+```
+
+## Checkout Revision
+
+You can create a new branch with `oxen checkout --branch`
+
+```bash
+oxen checkout -b feature
+```
+
+Once you have multiple branches, you can use `oxen checkout` to safely move between them. This will restore the working directory to head commit of the branch you're checking out
+
+```bash
+oxen checkout main
+```
+You can also checkout a commit ID  
+
+```bash
+oxen checkout COMMIT_ID
+```
+
+## Merge Commits
+
+You can create a merge commit with `oxen merge`. This will merge the current branch into the target, or fail if there are merge conflicts
+
+```bash
+oxen merge TARGET_BRANCH  
+```
+
+If you're collaborating with on a repo, you may instead want to create a merge request. You can do this through the UI on [Oxen.ai](https://oxen.ai)
+
+<img
+  className="block"
+  src="/images/merge_request.png"
+  alt="Oxen.ai merge request"
+/>
+
+## Prune Commits
+
+If you've accidentally committed sensitive data or have a bloated commit history with many orphaned files, you can use [oxen prune](/commands/prune). to cleanup the repository.
+
+```bash
+oxen prune
+```
+
+

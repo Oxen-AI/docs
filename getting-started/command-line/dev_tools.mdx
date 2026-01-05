@@ -1,0 +1,48 @@
+---
+title: '🔌 Dev Tools'
+description: 'Oxen provides multiple '
+---
+
+## Oxen Node
+
+`oxen node` can be used to inspect file and dir nodes in the merkle tree. This can be used to check whether nodes exist and have been created properly in the merkle tree. You can search for a node by hash or by path.
+
+```bash
+oxen node -h e3817ab123be09cd0b3d
+```
+
+```bash
+oxen node path/to/file.txt
+```
+
+## Oxen Tree
+
+You can use `oxen tree` to view the current state of the merkle tree for a commit.
+
+```bash
+oxen tree
+```
+
+## Concurrency
+
+By default, oxen will use up to 8 threads for its parallelized operations (`oxen add`, `oxen push`, etc.). This can be configured via the `OXEN_NUM_THREADS` environment variable. If `OXEN_NUM_THREADS` is set, oxen will instead use that many threads, so long as they are available on the local machine.
+
+```bash
+export OXEN_NUM_THREADS="16"
+```
+
+## HTTP Requests
+
+When uploading or downloading data, if any files fail to transfer, oxen will wait and retry the request. By default, oxen will allow up to 10 retries before cancelling the operation. This can be configured via the enviornment variable `NUM_HTTP_REQUESTS`/
+
+```bash 
+export NUM_HTTP_RETRIES="10"
+```
+
+## Chunk Size
+
+Under the hood, oxen groups files into `small files` and `large files` for more efficient transfer in `oxen push`, `oxen workspace add`, etc. Files are considered `large` if they're larger than `AVG_CHUNK_SIZE`, which is set to 10 MB by default. This can be configured via the `AVG_CHUNK_SIZE` environment variable
+
+```bash
+export AVG_CHUNK_SIZE="20_000_000" 
+```

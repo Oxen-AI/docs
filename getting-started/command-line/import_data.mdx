@@ -1,0 +1,106 @@
+---
+title: '📥 Import Data'
+description: "If you're working with a repository that's hosted remotely, there are several options to download the data."
+---
+
+## Clone Repository
+
+There's a few ways to clone an Oxen repository, depending on the level of data transfer you want to incur. The default `oxen clone` with no flags will download the *latest commit* from the `main` branch.
+
+```bash
+oxen clone https://hub.oxen.ai/ox/CatDogBBox
+```
+To clone from a specific branch, you can use the `-b` flag.
+
+```bash
+oxen clone https://hub.oxen.ai/ox/CatDogBBox -b my-pets
+```
+This creates a new directory `CatDogBBox` in which the files from the latest commit are downloaded, and a `.oxen` folder containing the [Merkle Tree](https://ghost.oxen.ai/merkle-tree-101/) for each commit in the branch's history and metadata for the repository. 
+
+### Clone all
+
+To clone the commit history for every branch, you can use the `--all` flag.
+
+```bash
+oxen clone https://hub.oxen.ai/ox/CatDogBBox --all
+```
+
+This is useful if you want to migrate a repository to a new remote.
+
+### Cloning a subtree
+
+If you're only working with a subset of the repository, you can use the `--filter` and `--depth` flags to limit the clone to a subsection of the full tree. `--filter` selects the directories to be cloned, while `--depth` limits how many subdirectories can be recursed into. 
+
+```bash
+oxen clone https://hub.oxen.ai/ox/CatDogBBox --filter annotations --depth 1
+```
+
+This clones the subtree of the commit that starts at annotations directory, without recursing into any new subdirectories. Only the files and [Merkle Nodes](https://ghost.oxen.ai/merkle-tree-vnodes/) from the `annotations` directory will be pulled locally. 
+
+### Remote Mode
+
+If you're working with a larger repository than you can store on your local device, you can clone the repository in Remote Mode to get the commit merkle trees without downloading the files.
+
+```bash
+oxen clone --remote https://hub.oxen.ai/ox/CatDogBBox 
+```
+
+In remote-mode repositories, you can download individual files or directories with `oxen restore`. 
+
+```bash 
+oxen restore path/to/file
+```
+
+This is useful if you want to view the state of the repository locally without waiting for all its files to download. 
+
+## Set Remote
+
+If create a repo locally, you can use `oxen config --set-remote` to point it to a repository that's hosted remotely. This allows you to `fetch` or `pull` from that repository.
+
+```bash
+oxen config --set-remote origin https://hub.oxen.ai/ox/CatDogBBox
+```
+To set a remote, use the URL of the remote repository and specify a name to associate it with on the local repo. By default, cloned repositories will use the name 'origin' for their remote.
+
+You can use this command to change a local repository's remotes or add new ones. A repo can have multiple remotes, although most oxen commands that interact with a remote repository will default to 'origin' if no remote is specified.
+
+## Pull Changes
+
+Once you have a local repo with a remote, you can `pull` the latest changes for a branch. This fetches any new commits, downloading their files and commit merkle trees, and then checks out the latest commit in the working directory
+
+```bash
+oxen pull origin main
+```
+
+If no arguments are provided, the remote defaults to `origin` and branch defaults to `main`
+
+```bash
+oxen pull
+```
+
+As with `clone`, you can pull all branches with `--all`
+
+```bash
+oxen pull --all 
+```
+
+## Fetch Changes
+
+If you want to fetch the latest changes without checking them out in the working directory, you can use `oxen fetch`
+
+```bash
+oxen fetch
+```
+
+## Download Data
+
+If you want to download specific files or directories with the `oxen download` command.
+
+```bash
+oxen download ox/CatDogBBox test.csv
+```
+You can download from a specific revision (either a branch or commit id) with the `--revision` flag
+
+```bash
+oxen download ox/CatDogBBox path/to/folder --revision commit_or_branch_name
+```

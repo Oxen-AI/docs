@@ -72,7 +72,7 @@
                   ]
               },
               {
-                  "group": "⚙️ Fine-Tuning",
+                  "group": "🛠️ Fine-Tuning",
                   "pages": [
                       "getting-started/fine-tuning",
                       "examples/fine-tuning/text_generation",
@@ -94,7 +94,11 @@
               {
                 "group": "💻 Command Line Interface",
                 "pages": [
-                    "getting-started/command-line/CLI"
+                    "getting-started/command-line/config",
+                    "getting-started/command-line/import_data",
+                    "getting-started/command-line/local_development",
+                    "getting-started/command-line/push_changes",
+                    "getting-started/command-line/dev_tools"
                 ]
               },
               "getting-started/python",

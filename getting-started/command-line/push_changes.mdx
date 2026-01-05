@@ -1,0 +1,65 @@
+---
+title: '⬆️ Push Changes'
+description: "After you make changes locally, push them to update the remote"
+---
+
+## Push Changes
+
+Once you've committed changes to a local repository, you can push them to a remote with `oxen push`
+
+```bash
+oxen push origin main
+```
+
+If you don't supply a remote name or branch, they default to `origin` and the current branch respectively.
+
+```bash
+oxen push
+```
+
+### Resume Push
+
+If a push is cancelled partway through, you can use the `--missing-files` flag to resume push progress and upload the remaining files
+
+```bash
+oxen push --missing-files
+```
+## Set Remote
+
+You can use `oxen config --set-remote` to set the remote for a repository. This allows you to push changes to that remote, provided you've set the API key and have permission.
+
+```bash
+oxen config --set-remote origin https://hub.oxen.ai/ox/CatDogBBox
+```
+
+## Create Remote
+
+You can also create a remote from the CLI with `oxen create-remote`.
+
+```bash
+oxen create-remote --host hub.oxen.ai --scheme https --name ox/SampleRepo
+```
+
+## Workspaces
+
+You can also stage changes to a remote by using a [Workspace](concepts\workspaces.mdx). This allows you to skip copying files to the local repository, making it ideal for bulk imports.
+
+Create a workspace on a branch with `oxen workspace create`
+
+```bash
+oxen workspace create
+```
+
+You can then add the files with `oxen workspace add`, uploading their contents to the remote and staging them for commit
+
+```bash
+oxen workspace add images --workspace-id 117abd2d-3363-497d-ac93-a5cb3c280234
+```
+
+Then, commit the changes with `oxen workspace commit`
+
+```bash
+oxen workspace commit -m "Uploading Images" --workspace-id 117abd2d-3363-497d-ac93-a5cb3c280234
+```
+
+
