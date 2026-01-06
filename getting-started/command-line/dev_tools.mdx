@@ -1,0 +1,119 @@
+---
+title: '🔌 Dev Tools'
+description: 'Oxen provides multiple tools to debug and configure the CLI'
+---
+
+## Oxen Tree
+
+You can use `oxen tree` to view the current state of the merkle tree for a commit. This gives you a view of the metadata contained in the tree for each file and directory, as well as how many [VNodes](https://ghost.oxen.ai/merkle-tree-vnodes/) are present.
+
+```bash
+oxen tree
+```
+```
+[Commit] 74bb3ece2ccfa3f23420ef5c0be84865 (0.36.0) "Add Data" -> Daisy daisy@oxen.ai parent_ids ""
+  [Dir] 65d46b6d56 "" (3.5 MB) (4 files) (commit 74bb3ece2c)  (3 entries)
+    [VNode] 4f677b731c  (3 entries)
+      [File] d29aed6e8d "README.md" (text/markdown) 28 B [d29aed6e8d] (commit 74bb3ece2c) MetadataText(2 lines, 28 chars)
+      [Dir] 5be82041ff "dir" (95.1 KB) (2 files) (commit 74bb3ece2c)  (2 entries)
+        [VNode] dca3063656  (2 entries)
+          [File] 17caf6d759 "binary" (application/octet-stream) 8 B [17caf6d759] (commit 74bb3ece2c)
+          [File] b04c7235e3 "image.png" (image/png) 95.1 KB [b04c7235e3] (commit 74bb3ece2c) MetadataImage(1798x839)
+      [Dir] b8fc85925c "other" (3.4 MB) (1 files) (commit 74bb3ece2c)  (1 entries)
+        [VNode] c36eb4516e  (1 entries)
+          [File] 1fc24f94e0 "audio.mp3" (audio/mpeg) 3.4 MB [1fc24f94e0] (commit 74bb3ece2c) MetadataVideo(2x44100 143.491s)
+Time to load tree: 4.8259ms
+```
+
+## Oxen Node
+
+`oxen node` can be used to inspect file and dir nodes in the merkle tree. This can be used to check whether nodes exist and have been created properly in the merkle tree. You can search for a node by hash or by path.
+
+```bash
+oxen node -n 65d46b6d5616364ba975320b5768c63c
+```
+```
+[Dir] 65d46b6d56 "" (3.5 MB) (4 files) (commit 74bb3ece2c)  (3 entries)
+=============
+hash: 65d46b6d5616364ba975320b5768c63c
+node: Directory(DirNode(0.36.0)
+        hash: 65d46b6d5616364ba975320b5768c63c
+        name: 
+        num_bytes: 3.5 MB
+        num_entries: 3
+        num_files: 4
+        data_type_counts: {"audio": 1, "text": 1, "binary": 1, "image": 1}
+        data_type_sizes: {"audio": 3443832, "binary": 8, "text": 28, "image": 95080}
+)
+parent_id: 74bb3ece2ccfa3f23420ef5c0be84865
+children.len(): 1
+=============
+[VNode] 4f677b731c  (3 entries)
+```
+
+```bash 
+oxen node -p dir/image.png
+```
+```
+[File] b04c7235e3 "image.png" (image/png) 95.1 KB [b04c7235e3] (commit 74bb3ece2c) MetadataImage(1798x839)
+=============
+hash: b04c7235e38d8e9b4eb1f802d0fe7e60
+node: File(FileNode(0.36.0)
+        hash: b04c7235e38d8e9b4eb1f802d0fe7e60
+        name: image.png
+        num_bytes: 95.1 KB
+        data_type: Image
+        metadata: Some(MetadataImage(MetadataImage { image: MetadataImageImpl { width: 1798, height: 839, color_space: None } }))
+        mime_type: image/png
+        extension: png
+        chunk_hashes: [234341058283605499288244061100413189728]
+        chunk_type: SingleFile
+        storage_backend: Disk
+        last_commit_id: 74bb3ece2ccfa3f23420ef5c0be84865
+        last_modified_seconds: 1766177016
+        last_modified_nanoseconds: 995509200
+        metadata: Some(MetadataImage(MetadataImage { image: MetadataImageImpl { width: 1798, height: 839, color_space: None } }))
+)
+parent_id: dca3063656d08a4ecdd1644fb64f8de
+children.len(): 0
+```
+
+## Concurrency
+
+By default, oxen will use up to 8 threads for its parallelized operations (`oxen add`, `oxen push`, etc.). This can be configured via the `OXEN_NUM_THREADS` environment variable. If `OXEN_NUM_THREADS` is set, oxen will instead use that many threads, so long as they are available on the local machine.
+
+```bash
+export OXEN_NUM_THREADS="16"
+```
+
+## HTTP Requests
+
+When uploading or downloading data, if any files fail to transfer, oxen will wait and retry the request. By default, oxen will allow up to 10 retries before cancelling the operation. This can be configured via the enviornment variable `NUM_HTTP_REQUESTS`
+
+```bash 
+export NUM_HTTP_RETRIES="10"
+```
+
+All HTTP requests oxen makes timeout after 120 seconds by default. You can configure this the OXEN_TIMEOUT_SECS variable.
+
+```bash 
+export OXEN_TIMEOUT_SECS="10"
+```
+
+## Chunk Size
+
+Under the hood, oxen groups files into small files and large files for more efficient transfer in `oxen push`, `oxen workspace add`, etc. Files are considered large if they're larger than `AVG_CHUNK_SIZE`, which is set to 10 MB by default. This can be configured via the `AVG_CHUNK_SIZE` environment variable
+
+```bash
+export AVG_CHUNK_SIZE="20_000_000" 
+```
+
+## Debug Logs
+
+The oxen codebase contains plenty of debug logs, which you can turn on with the RUST_LOG variable.
+
+```bash
+export RUST_LOG="debug"
+```
+
+You can also set RUST_LOG to `info` or `warn` for more restrictive debug logs
