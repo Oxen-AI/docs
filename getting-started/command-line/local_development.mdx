@@ -3,7 +3,7 @@ title: '🏗️ Local Development'
 description: 'Oxen provides numerous tools to work with and version your data from the command line.'
 ---
 
-## Creating a repository
+## Create a repository
 
 You can initialize an Oxen repository locally with `oxen init`
 
@@ -16,7 +16,7 @@ This will create a `.oxen` folder in your working directory, which contains the 
 ## Add files
 
 Add files to a repository with `oxen add`. This copies the files' contents to the repository's `version store` and stages the changes to the `staged_db`. 
-You can add files and directories (Added recursively) using either absolute paths or their relative paths to the repo root.
+You can add files and directories (added recursively) using either absolute paths or their relative paths to the repo root.
 
 ```bash
 oxen add path/to/file.txt
@@ -36,7 +36,7 @@ oxen add images/f* # Adds all files starting with an 'f' in the images dir
 oxen add . # Adds the current directory
 ```
 
-`oxen add` can stage new, modified, or removed files and directories to the repo. You can view staged changes with `oxen status` 
+This can be used to stage new, modified, or removed files and directories to the repo. You can view staged changes with `oxen status` 
 
 
 ``` bash
@@ -49,9 +49,9 @@ Files to be committed:
   (use "oxen restore --staged <file> ..." to unstage)
   modified: modified_file.txt
   new file: new_file.txt
-  removed: removed_file
+  removed: removed_file.txt
 ```
-
+Oxen allows you to stage and version many different data types in the same repository, accessing them the same at the level of the CLI. That means you don't have to worry about what kind of data you're working with when you're using `oxen` commands. Under the hood, oxen stores different [File Metadata](/concepts/file_metadata) for different types for additional functionality
 
 ## Commit Changes
 
@@ -211,6 +211,16 @@ You can also checkout a commit ID
 oxen checkout COMMIT_ID
 ```
 
+## View Diffs
+
+Oxen can compute and display the diff between files using the [oxen diff](/concepts/diffs) command
+
+```bash
+oxen diff dataset.csv
+```
+
+This will compare the file `dataset.csv` in the working directory with its version in the HEAD commit. You can also compare different files, compare files across revisions, and compare different revisions with each other
+
 ## Merge Commits
 
 You can create a merge commit with `oxen merge`. This will merge the current branch into the target, or fail if there are merge conflicts
@@ -229,7 +239,7 @@ If you're collaborating with on a repo, you may instead want to create a merge r
 
 ## Prune Commits
 
-If you've accidentally committed sensitive data or have a bloated commit history with many orphaned files, you can use [oxen prune](/commands/prune). to cleanup the repository.
+If you've accidentally committed sensitive data or have a bloated commit history with many orphaned files, you can use [oxen prune](/commands/prune) to cleanup the repository.
 
 ```bash
 oxen prune

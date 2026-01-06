@@ -103,13 +103,13 @@ oxen-server start -i 0.0.0.0 -p 4321
 
 ## 🐞 Debug Logs
 
-The oxen server provides debug logs, which are turned off by default. You can turn on with the RUST_LOG variable.
+The oxen server provides debug logs, which are off by default. You can turn these on with the RUST_LOG variable.
 
 ```bash
 export RUST_LOG="debug"
 ```
 
-You can also set RUST_LOG to `info` or `warn` for more restrictive debug logs
+You can also set RUST_LOG to `info` or `warn` for more restrictive debug logs. Be aware, turning on debug logs can significantly slow down some metadata-heavy operations like `oxen commit`
 
 
 ## 📁 Create a Repository
