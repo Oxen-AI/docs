@@ -36,7 +36,7 @@
       {
           "name": "HTTP API",
           "url": "http-api",
-          "openapi": "https://hub.oxen.ai/api/_spec/oxen-server-openapi.json"
+          "openapi": "https://dev.hub.oxen.ai/api/_spec/oxen-server-openapi.json"
       },
       {
           "name": "Fine-Tuning API",
