@@ -150,6 +150,7 @@
       {
           "group": "Repository API",
           "pages": [
+            "http-api/example",
               "http-api/index",
               {
                   "group": "Namespaces",

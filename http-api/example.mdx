@@ -1,0 +1,591 @@
+---
+title: "File Upload Example"
+description: "Complete guide to uploading files to Oxen repositories via HTTP API"
+---
+
+This guide demonstrates how to upload files to an Oxen repository using the HTTP API. We'll break down the process into simple, manageable steps.
+
+## Overview
+
+Uploading a file to Oxen involves three main steps:
+
+1. **Create a repository** (if it doesn't exist)
+2. **Upload the file** to a specific branch
+3. **Optionally create additional branches** from the uploaded content
+
+## Prerequisites
+
+Before you begin, you'll need:
+
+- **API Key**: Authentication token for your Oxen account
+- **Server URL**: The Oxen server endpoint (e.g., `https://hub.oxen.ai` or your local server)
+- **File to upload**: The local file you want to add to your repository
+
+## Configuration
+
+First, set up your configuration variables:
+
+<CodeGroup>
+
+```python Python
+# Server Configuration
+SERVER_URL = "https://hub.oxen.ai"
+API_KEY = "your-api-key-here"
+
+# Repository Configuration
+NAMESPACE = "your-username"
+REPO_NAME = "my-dataset"
+DESCRIPTION = "Example dataset created via HTTP API"
+
+# User Configuration (for commits)
+USER_NAME = "Your Name"
+USER_EMAIL = "your.email@example.com"
+
+# Branch Configuration
+SOURCE_BRANCH = "main"
+
+# File Upload Configuration
+LOCAL_FILE_PATH = "./example.txt"
+REMOTE_FILE_PATH = "data/example.txt"
+COMMIT_MESSAGE = "Add file via HTTP API"
+```
+
+
+</CodeGroup>
+
+## Step 1: Create a Repository
+
+Create a new repository to store your files. If the repository already exists, this step will return a 409 status code and you can continue.
+
+### Endpoint
+
+```
+POST /api/repos
+```
+
+### Example
+
+<CodeGroup>
+
+```python Python
+import requests
+
+def create_repository(base_url, api_key, namespace, name, user_name, user_email, description):
+    url = f"{base_url}/api/repos"
+    
+    headers = {
+        'Authorization': f'Bearer {api_key}'
+    }
+    
+    payload = {
+        "namespace": namespace,
+        "name": name,
+        "user": {
+            "name": user_name,
+            "email": user_email
+        },
+        "description": description
+    }
+    
+    response = requests.post(url, json=payload, headers=headers)
+    
+    if response.status_code == 200:
+        print("✓ Repository created successfully")
+        return response.json()
+    elif response.status_code == 409:
+        print("⚠ Repository already exists")
+        return response.json()
+    else:
+        print(f"✗ Failed: {response.status_code}")
+        print(response.text)
+        return None
+
+# Usage
+create_repository(
+    base_url="https://hub.oxen.ai",
+    api_key="your-api-key",
+    namespace="your-username",
+    name="my-dataset",
+    user_name="Your Name",
+    user_email="your.email@example.com",
+    description="Example dataset"
+)
+```
+
+```bash cURL
+curl -X POST https://hub.oxen.ai/api/repos \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "namespace": "your-username",
+    "name": "my-dataset",
+    "user": {
+      "name": "Your Name",
+      "email": "your.email@example.com"
+    },
+    "description": "Example dataset created via HTTP API"
+  }'
+```
+
+</CodeGroup>
+
+### Request Body
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `namespace` | string | Yes | Your username or organization name |
+| `name` | string | Yes | Repository name |
+| `user.name` | string | Yes | Author name for commits |
+| `user.email` | string | Yes | Author email for commits |
+| `description` | string | No | Repository description |
+
+### Response
+
+```json
+{
+  "namespace": "your-username",
+  "name": "my-dataset",
+  "description": "Example dataset created via HTTP API",
+  "created_at": "2026-01-08T21:28:00Z"
+}
+```
+
+## Step 2: Upload a File
+
+Upload a file to your repository. This creates a commit on the specified branch with your file.
+
+### Endpoint
+
+```
+PUT /api/repos/{namespace}/{repo_name}/file/{branch}/{path}
+```
+
+### Path Parameters
+
+| Parameter | Description | Example |
+|-----------|-------------|---------|
+| `namespace` | Your username or organization | `your-username` |
+| `repo_name` | Repository name | `my-dataset` |
+| `branch` | Target branch name | `main` |
+| `path` | Destination path in repository | `data/example.txt` |
+
+### Example
+
+<CodeGroup>
+
+```python Python
+import os
+import requests
+
+def upload_file(base_url, api_key, namespace, repo_name, branch, 
+                local_file_path, remote_file_path, commit_message, 
+                author_name, author_email):
+    # Check if file exists
+    if not os.path.exists(local_file_path):
+        print(f"✗ File not found: {local_file_path}")
+        return None
+    
+    # Construct URL with branch and directory path
+    resource = f"{branch}/{remote_file_path}"
+    url = f"{base_url}/api/repos/{namespace}/{repo_name}/file/{resource}"
+    
+    headers = {
+        'Authorization': f'Bearer {api_key}'
+    }
+    
+    # Prepare file for upload
+    files = [
+        ("file", (os.path.basename(local_file_path), open(local_file_path, 'rb')))
+    ]
+    
+    payload = {
+        'message': commit_message,
+        'name': author_name,
+        'email': author_email
+    }
+    
+    response = requests.put(url, data=payload, files=files, headers=headers)
+    
+    # Close the file
+    files[0][1][1].close()
+    
+    if response.status_code == 200:
+        result = response.json()
+        print(f"✓ File uploaded successfully")
+        if 'commit' in result:
+            print(f"  Commit ID: {result['commit'].get('id', 'N/A')}")
+        return result
+    else:
+        print(f"✗ Failed: {response.status_code}")
+        print(response.text)
+        return None
+
+# Usage
+upload_file(
+    base_url="https://hub.oxen.ai",
+    api_key="your-api-key",
+    namespace="your-username",
+    repo_name="my-dataset",
+    branch="main",
+    local_file_path="./example.txt",
+    remote_file_path="data/example.txt",
+    commit_message="Add example file",
+    author_name="Your Name",
+    author_email="your.email@example.com"
+)
+```
+
+```bash cURL
+curl -X PUT \
+  "https://hub.oxen.ai/api/repos/your-username/my-dataset/file/main/data/example.txt" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -F "file=@./example.txt" \
+  -F "message=Add example file" \
+  -F "name=Your Name" \
+  -F "email=your.email@example.com"
+```
+
+```python Multiple Files
+import requests
+
+namespace = "your-username"
+repo_name = "my-dataset"
+api_key = "your-api-key"
+resource = "main/images"  # branch/directory
+
+url = f"https://hub.oxen.ai/api/repos/{namespace}/{repo_name}/file/{resource}"
+
+files = [
+    ("file", ("image_1.jpg", open("image_1.jpg", "rb"))),
+    ("file", ("image_2.jpg", open("image_2.jpg", "rb"))),
+    ("file", ("image_3.jpg", open("image_3.jpg", "rb")))
+]
+
+payload = {
+    "email": "your.email@example.com",
+    "message": "Adding images",
+    "name": "Your Name"
+}
+
+headers = {"Authorization": f"Bearer {api_key}"}
+
+response = requests.put(url, data=payload, files=files, headers=headers)
+
+print(response.text)
+```
+
+</CodeGroup>
+
+### Request Body (Multipart Form Data)
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `file` | file | Yes | The file(s) to upload. Can be multiple files with the same field name |
+| `message` | string | Yes | Commit message |
+| `name` | string | Yes | Author name |
+| `email` | string | Yes | Author email |
+
+**Note:** You can upload multiple files in a single request by including multiple `file` fields with different filenames.
+
+### Response
+
+```json
+{
+  "commit": {
+    "id": "abc123def456...",
+    "message": "Add example file",
+    "author": {
+      "name": "Your Name",
+      "email": "your.email@example.com"
+    },
+    "timestamp": "2026-01-08T21:28:00Z"
+  },
+  "file": {
+    "path": "data/example.txt",
+    "size": 1024,
+    "hash": "sha256:..."
+  }
+}
+```
+
+## Step 3: Create a Branch (Optional)
+
+After uploading files, you can create additional branches from your main branch.
+
+### Endpoint
+
+```
+POST /api/repos/{namespace}/{repo_name}/branches
+```
+
+### Example
+
+<CodeGroup>
+
+```python Python
+import requests
+
+def create_branch(base_url, api_key, namespace, repo_name, 
+                  new_branch_name, from_branch):
+    url = f"{base_url}/api/repos/{namespace}/{repo_name}/branches"
+    
+    headers = {
+        'Authorization': f'Bearer {api_key}'
+    }
+    
+    payload = {
+        "new_name": new_branch_name,
+        "from_name": from_branch
+    }
+    
+    response = requests.post(url, json=payload, headers=headers)
+    
+    if response.status_code == 200:
+        print(f"✓ Branch '{new_branch_name}' created")
+        return response.json()
+    else:
+        print(f"✗ Failed: {response.status_code}")
+        print(response.text)
+        return None
+
+# Usage
+create_branch(
+    base_url="https://hub.oxen.ai",
+    api_key="your-api-key",
+    namespace="your-username",
+    repo_name="my-dataset",
+    new_branch_name="development",
+    from_branch="main"
+)
+```
+
+```bash cURL
+curl -X POST \
+  https://hub.oxen.ai/api/repos/your-username/my-dataset/branches \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "new_name": "development",
+    "from_name": "main"
+  }'
+```
+
+</CodeGroup>
+
+### Request Body
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `new_name` | string | Yes | Name of the new branch |
+| `from_name` | string | Yes | Source branch to create from |
+
+### Response
+
+```json
+{
+  "name": "development",
+  "commit_id": "abc123def456...",
+  "created_at": "2026-01-08T21:28:00Z"
+}
+```
+
+## Complete Example
+
+Here's a complete Python script that ties everything together:
+
+```python
+import os
+import sys
+import requests
+
+# Configuration
+SERVER_URL = "https://hub.oxen.ai"
+API_KEY = "your-api-key-here"
+NAMESPACE = "your-username"
+REPO_NAME = "my-dataset"
+USER_NAME = "Your Name"
+USER_EMAIL = "your.email@example.com"
+DESCRIPTION = "Example dataset created via HTTP API"
+
+# File configuration
+LOCAL_FILE_PATH = "./example.txt"
+REMOTE_FILE_PATH = "data/example.txt"
+COMMIT_MESSAGE = "Add file via HTTP API"
+SOURCE_BRANCH = "main"
+
+def main():
+    print("=" * 70)
+    print("Oxen File Upload Pipeline")
+    print("=" * 70)
+    
+    base_url = SERVER_URL.rstrip('/')
+    
+    # Step 1: Create Repository
+    print(f"\n[Step 1/2] Creating repository: {NAMESPACE}/{REPO_NAME}")
+    create_repository(
+        base_url=base_url,
+        api_key=API_KEY,
+        namespace=NAMESPACE,
+        name=REPO_NAME,
+        user_name=USER_NAME,
+        user_email=USER_EMAIL,
+        description=DESCRIPTION
+    )
+    
+    # Step 2: Upload File
+    print(f"\n[Step 2/2] Uploading file to '{SOURCE_BRANCH}' branch")
+    print(f"           {LOCAL_FILE_PATH} → {REMOTE_FILE_PATH}")
+    upload_file(
+        base_url=base_url,
+        api_key=API_KEY,
+        namespace=NAMESPACE,
+        repo_name=REPO_NAME,
+        branch=SOURCE_BRANCH,
+        local_file_path=LOCAL_FILE_PATH,
+        remote_file_path=REMOTE_FILE_PATH,
+        commit_message=COMMIT_MESSAGE,
+        author_name=USER_NAME,
+        author_email=USER_EMAIL
+    )
+    
+    print("\n" + "=" * 70)
+    print("✓ Upload completed successfully!")
+    print("=" * 70)
+    print(f"\nRepository: {SERVER_URL}/{NAMESPACE}/{REPO_NAME}")
+    print(f"File location: {SOURCE_BRANCH} → {REMOTE_FILE_PATH}")
+    print("=" * 70 + "\n")
+
+if __name__ == '__main__':
+    main()
+```
+
+## Authentication
+
+All API requests require authentication using a Bearer token in the Authorization header:
+
+```
+Authorization: Bearer YOUR_API_KEY
+```
+
+### Getting an API Key
+
+1. Log in to your Oxen account at [hub.oxen.ai](https://hub.oxen.ai)
+2. Navigate to your account settings
+3. Generate a new API key
+
+
+
+## Advanced Usage
+
+### Uploading Multiple Files
+
+You can upload multiple files in a single request by including multiple `file` fields:
+
+```python
+import requests
+
+namespace = "your-username"
+repo_name = "my-dataset"
+api_key = "your-api-key"
+resource = "main/data"  # branch/directory
+
+url = f"https://hub.oxen.ai/api/repos/{namespace}/{repo_name}/file/{resource}"
+
+# Multiple files in one request
+files = [
+    ("file", ("file1.txt", open("./data/file1.txt", "rb"))),
+    ("file", ("file2.csv", open("./data/file2.csv", "rb"))),
+    ("file", ("photo.jpg", open("./images/photo.jpg", "rb")))
+]
+
+payload = {
+    "email": "your.email@example.com",
+    "message": "Add multiple files",
+    "name": "Your Name"
+}
+
+headers = {"Authorization": f"Bearer {api_key}"}
+
+response = requests.put(url, data=payload, files=files, headers=headers)
+
+# Close all files
+for _, (_, file_obj) in files:
+    file_obj.close()
+
+if response.status_code == 200:
+    print("✓ All files uploaded successfully")
+    print(response.json())
+else:
+    print(f"✗ Upload failed: {response.status_code}")
+    print(response.text)
+```
+
+Or upload files one at a time:
+
+```python
+files_to_upload = [
+    ("./data/file1.txt", "data/file1.txt"),
+    ("./data/file2.csv", "data/file2.csv"),
+    ("./images/photo.jpg", "images/photo.jpg"),
+]
+
+for local_path, remote_path in files_to_upload:
+    print(f"Uploading {local_path}...")
+    upload_file(
+        base_url=SERVER_URL,
+        api_key=API_KEY,
+        namespace=NAMESPACE,
+        repo_name=REPO_NAME,
+        branch="main",
+        local_file_path=local_path,
+        remote_file_path=remote_path,
+        commit_message=f"Add {os.path.basename(local_path)}",
+        author_name=USER_NAME,
+        author_email=USER_EMAIL
+    )
+```
+
+### Uploading to Different Branches
+
+```python
+# Upload to development branch
+upload_file(
+    base_url=SERVER_URL,
+    api_key=API_KEY,
+    namespace=NAMESPACE,
+    repo_name=REPO_NAME,
+    branch="development",  # Different branch
+    local_file_path="./experiment.txt",
+    remote_file_path="experiments/test1.txt",
+    commit_message="Add experimental data",
+    author_name=USER_NAME,
+    author_email=USER_EMAIL
+)
+```
+
+### Organizing Files in Directories
+
+Files are automatically organized based on the `remote_file_path`:
+
+```python
+# Creates nested directory structure
+upload_paths = {
+    "./raw_data.csv": "datasets/raw/data.csv",
+    "./processed.csv": "datasets/processed/data.csv",
+    "./model.pt": "models/v1/checkpoint.pt",
+    "./readme.md": "docs/README.md",
+}
+```
+
+## Next Steps
+
+- [Download Files](/http-api/files/download_file) - Learn how to retrieve files
+- [List Files](/http-api/files/list_entries) - Browse repository contents
+- [Workspaces](/http-api/workspaces/list_workspaces) - Work with remote data without downloading
+- [Branches](/http-api/branches/get_branches) - Manage repository branches
+
+## Related Resources
+
+- [HTTP API Overview](/http-api)
+- [Python SDK](/python-api/remote_repo)
+- [Authentication Guide](/getting-started/authentication)
