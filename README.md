@@ -6,6 +6,13 @@
 mintlify dev --port 3333
 ```
 
+## Finetune API Documentation Generation
+
+initialize uv environment by running `uv init` and then run `uv sync` to install dependencies.
+then `uv run generate-finetune-docs.py` to generate the finetune api documentation.
+
+This will fetch the new models from https://hub.oxen.ai/api/evaluations/models and generate the documentation from them. The documentation will be generated in the `fine-tuning-api/reference` directory.
+
 ## Python Doc Generation
 
 To generate/update the python documentation for the `/python-api` directory there is a `./generate-python-docs.sh` script.

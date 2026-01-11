@@ -216,8 +216,38 @@
       {
           "group": "Fine-Tuning API",
           "pages": [
-              "fine-tuning-api/01_fine_tuning",
-              "fine-tuning-api/02_fine_tuning_image"
+              "fine-tuning-api/overview",
+              {
+                  "group": "Quick Starts",
+                  "pages": [
+                      "fine-tuning-api/quickstart/text",
+                      "fine-tuning-api/quickstart/image-generation",
+                      "fine-tuning-api/quickstart/image-editing",
+                      "fine-tuning-api/quickstart/video"
+                  ]
+              },
+              {
+                  "group": "Tutorials",
+                  "pages": [
+                      "fine-tuning-api/tutorials/01_fine_tuning",
+                      "fine-tuning-api/tutorials/03_fine_tuning_image_generation",
+                      "fine-tuning-api/tutorials/02_fine_tuning_image"
+                  ]
+              },
+              {
+                  "group": "API Reference",
+                  "pages": [
+                      "fine-tuning-api/reference/text_generation",
+                      "fine-tuning-api/reference/text_chat_messages",
+                      "fine-tuning-api/reference/image_generation",
+                      "fine-tuning-api/reference/image_editing",
+                      "fine-tuning-api/reference/multi_image_editing",
+                      "fine-tuning-api/reference/image_to_text",
+                      "fine-tuning-api/reference/image_to_video",
+                      "fine-tuning-api/reference/text_to_video"
+                  ]
+              },
+              "fine-tuning-api/parameters"
           ]
       }
   ],

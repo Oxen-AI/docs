@@ -1,0 +1,179 @@
+---
+title: "Image Editing"
+description: "Fine-tune an image editing model for custom transformations"
+---
+
+## Overview
+
+Fine-tune image editing models to learn specific transformations: style transfer, object manipulation, background changes, or any image-to-image task.
+
+## Your Data
+
+Your training data needs three columns:
+
+- **Control/Input image** - The original image
+- **Target/Output image** - The transformed image
+- **Caption** - Text describing the transformation
+
+Example data in `edits.parquet`:
+
+| control_image | edited_image | caption |
+|---------------|--------------|---------|
+| inputs/001.jpg | outputs/001.jpg | add sunglasses to the person |
+| inputs/002.jpg | outputs/002.jpg | change background to beach |
+| inputs/003.jpg | outputs/003.jpg | apply vintage filter |
+
+## Minimal Example
+
+<CodeGroup>
+
+```python Python
+import requests
+
+url = "https://hub.oxen.ai/api/repos/YOUR_NAMESPACE/YOUR_REPO/fine_tunes"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+
+# Create fine-tune
+data = {
+    "resource": "main/edits.parquet",
+    "base_model": "black-forest-labs/FLUX.1-Kontext-dev",
+    "script_type": "image_editing",
+    "training_params": {
+        "control_image_column": "control_image",  # Input image column
+        "image_column": "edited_image",           # Output image column
+        "caption_column": "caption",              # Description column
+        "steps": 3000
+    }
+}
+
+response = requests.post(url, headers=headers, json=data)
+fine_tune_id = response.json()["fine_tune"]["id"]
+
+# Start training
+run_url = f"{url}/{fine_tune_id}/actions/run"
+requests.post(run_url, headers=headers)
+
+print(f"Fine-tune started: {fine_tune_id}")
+```
+
+```bash cURL
+# Create fine-tune
+curl -X POST https://hub.oxen.ai/api/repos/YOUR_NAMESPACE/YOUR_REPO/fine_tunes \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "resource": "main/edits.parquet",
+    "base_model": "black-forest-labs/FLUX.1-Kontext-dev",
+    "script_type": "image_editing",
+    "training_params": {
+      "control_image_column": "control_image",
+      "image_column": "edited_image",
+      "caption_column": "caption",
+      "steps": 3000
+    }
+  }'
+
+# Start training (use the ID from the response)
+curl -X POST https://hub.oxen.ai/api/repos/YOUR_NAMESPACE/YOUR_REPO/fine_tunes/FINE_TUNE_ID/actions/run \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+</CodeGroup>
+
+## Key Parameters
+
+Only these fields are required to start:
+
+| Parameter | Description | Example |
+|-----------|-------------|---------|
+| `control_image_column` | Input/original image column | `"control_image"`, `"input"`, `"source"` |
+| `image_column` | Output/transformed image column | `"edited_image"`, `"output"`, `"target"` |
+| `caption_column` | Transformation description column | `"caption"`, `"prompt"`, `"description"` |
+| `steps` | Number of training steps (2000-5000 typical) | `3000` |
+
+All other parameters use sensible defaults.
+
+## Supported Models
+
+Popular choices for image editing:
+
+- `black-forest-labs/FLUX.1-Kontext-dev` - High quality, versatile
+- `Qwen/Qwen-Image-Edit` - Fast, good for quick iterations
+
+<Note>
+See the [full model list](/fine-tuning-api/reference/image_editing#supported-models) for all available options.
+</Note>
+
+## Data Requirements
+
+For best results:
+
+- **Quantity**: 20-100 image pairs minimum
+- **Quality**: High resolution, aligned transformations
+- **Captions**: Clear descriptions of what changed between input and output
+- **Consistency**: Transformations should follow a consistent pattern or style
+
+## Sample During Training
+
+Add sample prompts to see progress during training:
+
+```python
+data = {
+    "resource": "main/edits.parquet",
+    "base_model": "black-forest-labs/FLUX.1-Kontext-dev",
+    "script_type": "image_editing",
+    "training_params": {
+        "control_image_column": "control_image",
+        "image_column": "edited_image",
+        "caption_column": "caption",
+        "steps": 3000,
+        "samples": [
+            {
+                "ctrl_img_url": "https://your-repo.com/test_image.jpg",
+                "prompt": "apply the trained style transformation"
+            }
+        ],
+        "sample_every": 200  # Generate sample every 200 steps
+    }
+}
+```
+
+## Monitor Progress
+
+```python
+status_url = f"https://hub.oxen.ai/api/repos/YOUR_NAMESPACE/YOUR_REPO/fine_tunes/{fine_tune_id}"
+response = requests.get(status_url, headers=headers)
+fine_tune = response.json()["fine_tune"]
+
+print(f"Status: {fine_tune['status']}")
+print(f"Current step: {fine_tune.get('current_step', 0)}")
+```
+
+## Next Steps
+
+- [Advanced parameters](/fine-tuning-api/reference/image_editing) - Resolution, LoRA, sampling settings
+- [Deploy your model](/getting-started/inference) - Use your fine-tuned model
+- [Full tutorial](/fine-tuning-api/tutorials/02_fine_tuning_image) - Complete walkthrough with deployment
+
+## Common Issues
+
+<AccordionGroup>
+  <Accordion title="Images not aligned">
+    Ensure input and output images show the same scene/subject. The model learns the transformation between them.
+  </Accordion>
+
+  <Accordion title="Edits too subtle or too strong">
+    Adjust `learning_rate` (lower for subtle, higher for stronger). Default is 0.0002.
+  </Accordion>
+
+  <Accordion title="Out of memory error">
+    Reduce `batch_size` to 1 and `sample_height`/`sample_width` to 512 or 768.
+  </Accordion>
+
+  <Accordion title="Model not learning the style">
+    Ensure your captions consistently describe the transformation. Train for more steps (4000-5000) or increase dataset size.
+  </Accordion>
+</AccordionGroup>

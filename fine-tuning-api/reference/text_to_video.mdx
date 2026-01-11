@@ -1,0 +1,234 @@
+---
+title: "Fine-Tune: Text To Video"
+description: "Fine-tune a model to generate video from text"
+---
+
+## Overview
+
+This schema is used for fine-tuning models with **text to video** capabilities.
+
+### Schema Type
+
+When creating a fine-tune with this schema, use:
+
+```json
+{
+  "resource": "main/your-dataset.parquet",
+  "base_model": "<model-canonical-name>",
+  "script_type": "text_to_video",
+  "training_params": {
+    ...
+  }
+}
+```
+
+**Key Parameters:**
+- `script_type`: `text_to_video` (the fine-tune type)
+- `base_model`: One of the supported model canonical names below
+
+### Supported Models
+
+- Wan2.1 1.3B - Text to Video (`Wan-AI/Wan2.1-T2V-1.3B-Diffusers`)
+- Wan2.2 A14B - Text to Video (`Wan-AI/Wan2.2-T2V-A14B-Diffusers`)
+- Wan2.1 14B - Text to Video (`Wan-AI/Wan2.1-T2V-14B-Diffusers`)
+
+
+## Request Schema
+
+### Required Fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `batch_size` | integer | No | (default: 1) (min: 1) |
+| `caption_column` | string | Yes | caption_column (DataFrame column name) |
+| `gradient_accumulation` | integer | No | (default: 1) (min: 1) |
+| `image_column` | string | Yes | image_column (DataFrame column name) |
+| `learning_rate` | number | No | (default: 0.0002) |
+| `lora_alpha` | integer | No | (default: 16) (min: 1) |
+| `lora_rank` | integer | No | (default: 16) (min: 1) |
+| `sample_every` | integer | No | (default: 200) (min: 1) |
+| `samples` | array | No | Samples (array of object) |
+| `steps` | integer | No | (default: 3000) (min: 1) |
+| `timestep_type` | string | No | (options: weighted, linear, sigmoid) |
+| `use_lora` | boolean | No | use_lora |
+
+## Example Request
+
+<CodeGroup>
+
+```json Request Body
+{
+  "resource": "main/your-dataset.parquet",
+  "base_model": "<model-canonical-name>",
+  "script_type": "text_to_video",
+  "training_params": {
+    "batch_size": 1,
+    "caption_column": "<caption_column>",
+    "gradient_accumulation": 1,
+    "image_column": "<image_column>",
+    "learning_rate": 0.0002,
+    "lora_alpha": 16,
+    "lora_rank": 16,
+    "sample_every": 200,
+    "samples": [
+      {
+        "prompt": "an ox holding a sign that says 'Oxen.ai'"
+      },
+      {
+        "prompt": "a herd of oxen running in a field"
+      }
+    ],
+    "steps": 3000,
+    "timestep_type": "weighted",
+    "use_lora": true
+  }
+}
+```
+
+```python Python
+import requests
+
+url = "https://hub.oxen.ai/api/repos/{namespace}/{repo_name}/fine_tunes"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+
+data = {{
+  "resource": "main/your-dataset.parquet",
+  "base_model": "<model-canonical-name>",
+  "script_type": "text_to_video",
+  "training_params": {{
+    "batch_size": 1,
+    "caption_column": "<caption_column>",
+    "gradient_accumulation": 1,
+    "image_column": "<image_column>",
+    "learning_rate": 0.0002,
+    "lora_alpha": 16,
+    "lora_rank": 16,
+    "sample_every": 200,
+    "samples": [
+      {{
+        "prompt": "an ox holding a sign that says 'Oxen.ai'"
+      }},
+      {{
+        "prompt": "a herd of oxen running in a field"
+      }}
+    ],
+    "steps": 3000,
+    "timestep_type": "weighted",
+    "use_lora": true
+  }}
+}}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X POST https://hub.oxen.ai/api/repos/{namespace}/{repo_name}/fine_tunes \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{   "resource": "main/your-dataset.parquet",   "base_model": "<model-canonical-name>",   "script_type": "text_to_video",   "training_params": {     "batch_size": 1,     "caption_column": "<caption_column>",     "gradient_accumulation": 1,     "image_column": "<image_column>",     "learning_rate": 0.0002,     "lora_alpha": 16,     "lora_rank": 16,     "sample_every": 200,     "samples": [       {         "prompt": "an ox holding a sign that says 'Oxen.ai'"       },       {         "prompt": "a herd of oxen running in a field"       }     ],     "steps": 3000,     "timestep_type": "weighted",     "use_lora": true   } }'
+```
+
+</CodeGroup>
+
+## Field Details
+
+
+### `batch_size`
+
+**Type:** `integer`
+
+**Default:** `1`
+
+**Minimum:** `1`
+
+
+### `caption_column`
+
+**Type:** `string`
+
+
+### `gradient_accumulation`
+
+**Type:** `integer`
+
+**Default:** `1`
+
+**Minimum:** `1`
+
+
+### `image_column`
+
+**Type:** `string`
+
+
+### `learning_rate`
+
+**Type:** `number`
+
+**Default:** `0.0002`
+
+
+### `lora_alpha`
+
+**Type:** `integer`
+
+**Default:** `16`
+
+**Minimum:** `1`
+
+
+### `lora_rank`
+
+**Type:** `integer`
+
+**Default:** `16`
+
+**Minimum:** `1`
+
+
+### `sample_every`
+
+**Type:** `integer`
+
+**Default:** `200`
+
+**Minimum:** `1`
+
+
+### `samples`
+
+**Samples**
+
+**Type:** `array`
+
+Used to show progress during the fine-tuning process
+
+**Default:** `[{"prompt": "an ox holding a sign that says 'Oxen.ai'"}, {"prompt": "a herd of oxen running in a field"}]`
+
+
+### `steps`
+
+**Type:** `integer`
+
+**Default:** `3000`
+
+**Minimum:** `1`
+
+
+### `timestep_type`
+
+**Type:** `string`
+
+**Default:** `"weighted"`
+
+**Options:** `weighted`, `linear`, `sigmoid`
+
+
+### `use_lora`
+
+**Type:** `boolean`
+
