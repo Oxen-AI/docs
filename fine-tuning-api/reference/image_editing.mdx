@@ -1,0 +1,319 @@
+---
+title: "Fine-Tune: Image Editing"
+description: "Fine-tune a model to edit images"
+---
+
+## Overview
+
+This schema is used for fine-tuning models with **image editing** capabilities.
+
+### Schema Type
+
+When creating a fine-tune with this schema, use:
+
+```json
+{
+  "resource": "main/your-dataset.parquet",
+  "base_model": "<model-canonical-name>",
+  "script_type": "image_editing",
+  "training_params": {
+    ...
+  }
+}
+```
+
+**Key Parameters:**
+- `script_type`: `image_editing` (the fine-tune type)
+- `base_model`: One of the supported model canonical names below
+
+### Supported Models
+
+- Qwen Image Edit (`Qwen/Qwen-Image-Edit`)
+- FLUX.1-Kontext [dev] (`black-forest-labs/FLUX.1-Kontext-dev`)
+
+
+## Request Schema
+
+### Required Fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `batch_size` | integer | No | Batch Size (default: 1) (min: 1) |
+| `cache_text_embeddings` | boolean | No | Cache Text Embeddings |
+| `caption_column` | string | Yes | Caption Column (prompt) (DataFrame column name) |
+| `control_image_column` | string | Yes | Control Image Column (input) (DataFrame column name) |
+| `gradient_accumulation` | integer | No | Gradient Accumulation (default: 1) (min: 1) |
+| `image_column` | string | Yes | Target Image Column (output) (DataFrame column name) |
+| `learning_rate` | number | No | Learning Rate (default: 0.0002) |
+| `lora_alpha` | integer | No | LoRA Alpha (default: 16) (min: 1) |
+| `lora_rank` | integer | No | LoRA Rank (default: 16) (min: 1) |
+| `sample_every` | integer | No | Sample Every (default: 200) (min: 1) |
+| `sample_height` | integer | No | Sample Height (default: 1024) (min: 1) |
+| `sample_width` | integer | No | Sample Width (default: 1024) (min: 1) |
+| `samples` | array | No | Samples (array of object) |
+| `steps` | integer | No | Steps (default: 3000) (min: 1) |
+| `timestep_type` | string | No | Timestep Type (options: weighted, sigmoid, linear) |
+| `use_lora` | boolean | No | Use LoRA |
+
+## Example Request
+
+<CodeGroup>
+
+```json Request Body
+{
+  "resource": "main/your-dataset.parquet",
+  "base_model": "<model-canonical-name>",
+  "script_type": "image_editing",
+  "training_params": {
+    "batch_size": 1,
+    "cache_text_embeddings": false,
+    "caption_column": "",
+    "control_image_column": "",
+    "gradient_accumulation": 1,
+    "image_column": "",
+    "learning_rate": 0.0002,
+    "lora_alpha": 16,
+    "lora_rank": 16,
+    "sample_every": 200,
+    "sample_height": 1024,
+    "sample_width": 1024,
+    "samples": [
+      {
+        "ctrl_img_url": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png",
+        "prompt": "an ox holding a sign that says 'Oxen.ai'"
+      },
+      {
+        "ctrl_img_url": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png",
+        "prompt": "a herd of oxen running in a field"
+      }
+    ],
+    "steps": 3000,
+    "timestep_type": "weighted",
+    "use_lora": true
+  }
+}
+```
+
+```python Python
+import requests
+
+url = "https://hub.oxen.ai/api/repos/{namespace}/{repo_name}/fine_tunes"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+
+data = {{
+  "resource": "main/your-dataset.parquet",
+  "base_model": "<model-canonical-name>",
+  "script_type": "image_editing",
+  "training_params": {{
+    "batch_size": 1,
+    "cache_text_embeddings": false,
+    "caption_column": "",
+    "control_image_column": "",
+    "gradient_accumulation": 1,
+    "image_column": "",
+    "learning_rate": 0.0002,
+    "lora_alpha": 16,
+    "lora_rank": 16,
+    "sample_every": 200,
+    "sample_height": 1024,
+    "sample_width": 1024,
+    "samples": [
+      {{
+        "ctrl_img_url": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png",
+        "prompt": "an ox holding a sign that says 'Oxen.ai'"
+      }},
+      {{
+        "ctrl_img_url": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png",
+        "prompt": "a herd of oxen running in a field"
+      }}
+    ],
+    "steps": 3000,
+    "timestep_type": "weighted",
+    "use_lora": true
+  }}
+}}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+```
+
+```bash cURL
+curl -X POST https://hub.oxen.ai/api/repos/{namespace}/{repo_name}/fine_tunes \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{   "resource": "main/your-dataset.parquet",   "base_model": "<model-canonical-name>",   "script_type": "image_editing",   "training_params": {     "batch_size": 1,     "cache_text_embeddings": false,     "caption_column": "",     "control_image_column": "",     "gradient_accumulation": 1,     "image_column": "",     "learning_rate": 0.0002,     "lora_alpha": 16,     "lora_rank": 16,     "sample_every": 200,     "sample_height": 1024,     "sample_width": 1024,     "samples": [       {         "ctrl_img_url": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png",         "prompt": "an ox holding a sign that says 'Oxen.ai'"       },       {         "ctrl_img_url": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png",         "prompt": "a herd of oxen running in a field"       }     ],     "steps": 3000,     "timestep_type": "weighted",     "use_lora": true   } }'
+```
+
+</CodeGroup>
+
+## Field Details
+
+
+### `batch_size`
+
+**Batch Size**
+
+**Type:** `integer`
+
+**Default:** `1`
+
+**Minimum:** `1`
+
+
+### `cache_text_embeddings`
+
+**Cache Text Embeddings**
+
+**Type:** `boolean`
+
+**Default:** `false`
+
+
+### `caption_column`
+
+**Caption Column (prompt)**
+
+**Type:** `string`
+
+**Default:** `""`
+
+
+### `control_image_column`
+
+**Control Image Column (input)**
+
+**Type:** `string`
+
+**Default:** `""`
+
+
+### `gradient_accumulation`
+
+**Gradient Accumulation**
+
+**Type:** `integer`
+
+**Default:** `1`
+
+**Minimum:** `1`
+
+
+### `image_column`
+
+**Target Image Column (output)**
+
+**Type:** `string`
+
+**Default:** `""`
+
+
+### `learning_rate`
+
+**Learning Rate**
+
+**Type:** `number`
+
+**Default:** `0.0002`
+
+
+### `lora_alpha`
+
+**LoRA Alpha**
+
+**Type:** `integer`
+
+**Default:** `16`
+
+**Minimum:** `1`
+
+
+### `lora_rank`
+
+**LoRA Rank**
+
+**Type:** `integer`
+
+**Default:** `16`
+
+**Minimum:** `1`
+
+
+### `sample_every`
+
+**Sample Every**
+
+**Type:** `integer`
+
+How often to generate samples during training (n steps)
+
+**Default:** `200`
+
+**Minimum:** `1`
+
+
+### `sample_height`
+
+**Sample Height**
+
+**Type:** `integer`
+
+**Default:** `1024`
+
+**Minimum:** `1`
+
+
+### `sample_width`
+
+**Sample Width**
+
+**Type:** `integer`
+
+**Default:** `1024`
+
+**Minimum:** `1`
+
+
+### `samples`
+
+**Samples**
+
+**Type:** `array`
+
+Used to show progress during the fine-tuning process
+
+**Default:** `[{"ctrl_img_url": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png", "prompt": "an ox holding a sign that says 'Oxen.ai'"}, {"ctrl_img_url": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png", "prompt": "a herd of oxen running in a field"}]`
+
+
+### `steps`
+
+**Steps**
+
+**Type:** `integer`
+
+**Default:** `3000`
+
+**Minimum:** `1`
+
+
+### `timestep_type`
+
+**Timestep Type**
+
+**Type:** `string`
+
+**Default:** `"weighted"`
+
+**Options:** `weighted`, `sigmoid`, `linear`
+
+
+### `use_lora`
+
+**Use LoRA**
+
+**Type:** `boolean`
+
+**Default:** `true`
+

@@ -1,0 +1,543 @@
+---
+title: 'Fine-Tuning an Image Generation Model with API'
+description: 'Complete end-to-end guide to fine-tune an image generation model on Oxen.ai using the HTTP API and `curl`.'
+---
+
+## Overview
+
+This guide walks you through fine-tuning an image generation model to create images in your custom style. You'll learn how to:
+
+- **Create** an image generation fine-tune
+- **Start** the fine-tune run
+- **Monitor** training progress with sample outputs
+- **Deploy** the fine-tuned model
+- **Run inference** to generate images in your style
+
+We'll use one of the FLUX models, which are state-of-the-art for image generation:
+
+- `base_model`: `black-forest-labs/FLUX.1-dev`
+- `script_type`: `image_generation`
+
+Your dataset should have two columns:
+- `image_column` – Training images showing your desired style
+- `caption_column` – Text descriptions of each image
+
+<Tip>
+For a quick minimal example, see the [Image Generation Quick Start](/fine-tuning-api/quickstart-image-generation).
+</Tip>
+
+---
+
+## Prerequisites
+
+- **Repository** on Oxen with your training data committed, for example:
+  - Namespace: `Tutorials`
+  - Repository: `CyberpunkArt`
+- **Dataset resource** inside that repo, for example:
+  - `main/train_images.parquet`
+  - Each row contains an image path and descriptive caption
+  - Example: [view sample dataset structure](/fine-tuning-api/quickstart-image-generation#your-data)
+- **API key** with access to the repo:
+  - Exported as `OXEN_API_KEY`
+- **Base URL** for the Oxen API:
+  - Cloud: `https://hub.oxen.ai`
+  - Exported as `OXEN_BASE_URL`
+
+Set these in your shell:
+
+```bash
+export OXEN_API_KEY="YOUR_API_KEY_HERE"
+export OXEN_BASE_URL="https://hub.oxen.ai"
+export OXEN_NAMESPACE="Tutorials"
+export OXEN_REPO="CyberpunkArt"
+```
+
+## Data Requirements
+
+For best results with image generation fine-tuning:
+
+- **Quantity**: 10-50 images minimum, 100-500 images ideal
+- **Quality**: High resolution (1024x1024 or higher), consistent style
+- **Captions**: Descriptive prompts that explain what makes your images unique
+- **Consistency**: Images should share common elements (style, subject matter, theme)
+
+Example dataset structure in `train_images.parquet`:
+
+| image | caption |
+|-------|---------|
+| images/001.jpg | a red sports car in cyberpunk style with neon lights |
+| images/002.jpg | a cyberpunk city street at night with rain |
+| images/003.jpg | a person wearing futuristic cyberpunk clothing |
+
+<Note>
+See the [Parameter Guide](/fine-tuning-api/parameters#duration) to understand training duration and the [Data Requirements section](/fine-tuning-api/quickstart-image-generation#data-requirements) for detailed guidelines.
+</Note>
+
+---
+
+## Step 1 – Create an Image Generation Fine-Tune
+
+**Endpoint**
+
+- `POST /api/repos/{owner}/{repo}/fine_tunes`
+
+For this example, we'll use:
+- `resource`: `main/train_images.parquet`
+- `base_model`: `black-forest-labs/FLUX.1-dev`
+- `script_type`: `image_generation`
+
+Training parameters:
+- `image_column`: `image` (your image column name)
+- `caption_column`: `caption` (your caption column name)
+- `steps`: `2000` (standard training duration)
+- `learning_rate`: `0.0002` (default for image models)
+- `lora_rank`: `16` (balanced capacity)
+- `sample_every`: `200` (generate samples every 200 steps to monitor progress)
+
+**Example `curl` request**:
+
+```bash
+curl --location "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/repos/${OXEN_NAMESPACE:-Tutorials}/${OXEN_REPO:-CyberpunkArt}/fine_tunes" \
+  -H "Authorization: Bearer ${OXEN_API_KEY}" \
+  -H "Content-Type: application/json" \
+  --data '{
+    "resource": "main/train_images.parquet",
+    "base_model": "black-forest-labs/FLUX.1-dev",
+    "script_type": "image_generation",
+    "training_params": {
+      "image_column": "image",
+      "caption_column": "caption",
+      "steps": 2000,
+      "batch_size": 1,
+      "learning_rate": 0.0002,
+      "lora_alpha": 16,
+      "lora_rank": 16,
+      "sample_every": 200,
+      "samples": [
+        {
+          "prompt": "a sports car in cyberpunk style"
+        },
+        {
+          "prompt": "a futuristic city street at night"
+        }
+      ],
+      "timestep_type": "sigmoid",
+      "use_lora": true
+    }
+  }'
+```
+
+<Info>
+The `samples` array allows you to specify test prompts that will be generated during training. This helps you monitor how well the model is learning your style.
+</Info>
+
+The response will include a `fine_tune` object:
+
+```json
+{
+  "fine_tune": {
+    "id": "ft_img_gen_12345",
+    "status": "created",
+    "resource": "main/train_images.parquet",
+    "base_model": "black-forest-labs/FLUX.1-dev",
+    "script_type": "image_generation",
+    "training_params": { ... }
+  }
+}
+```
+
+**Capture the fine-tune ID** for the next steps:
+
+```bash
+FT_ID=$(curl --silent --location "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/repos/${OXEN_NAMESPACE:-Tutorials}/${OXEN_REPO:-CyberpunkArt}/fine_tunes" \
+  -H "Authorization: Bearer ${OXEN_API_KEY}" \
+  -H "Content-Type: application/json" \
+  --data '{
+    "resource": "main/train_images.parquet",
+    "base_model": "black-forest-labs/FLUX.1-dev",
+    "script_type": "image_generation",
+    "training_params": {
+      "image_column": "image",
+      "caption_column": "caption",
+      "steps": 2000,
+      "batch_size": 1,
+      "learning_rate": 0.0002,
+      "lora_alpha": 16,
+      "lora_rank": 16,
+      "sample_every": 200,
+      "samples": [
+        {
+          "prompt": "a sports car in cyberpunk style"
+        },
+        {
+          "prompt": "a futuristic city street at night"
+        }
+      ],
+      "timestep_type": "sigmoid",
+      "use_lora": true
+    }
+  }' | jq -r '.fine_tune.id')
+
+echo "Created fine-tune: $FT_ID"
+```
+
+---
+
+## Step 2 – Start the Fine-Tune Run
+
+Once you have the `fine_tune.id`, trigger the training run.
+
+**Endpoint**
+
+- `POST /api/repos/{owner}/{repo}/fine_tunes/{fine_tune_id}/actions/run`
+
+**Example `curl` request**:
+
+```bash
+curl --location "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/repos/${OXEN_NAMESPACE:-Tutorials}/${OXEN_REPO:-CyberpunkArt}/fine_tunes/${FT_ID}/actions/run" \
+  -H "Authorization: Bearer ${OXEN_API_KEY}" \
+  -X POST
+```
+
+The fine-tune will now begin training. This typically takes 1-2 hours for 2000 steps on a GPU.
+
+<Note>
+For FLUX models, expect approximately 30-60 minutes per 1000 steps, depending on GPU availability and image complexity.
+</Note>
+
+---
+
+## Step 3 – Monitor Fine-Tune Status and Sample Outputs
+
+You can poll the fine-tune to check progress and view sample outputs generated during training.
+
+**Endpoint**
+
+- `GET /api/repos/{owner}/{repo}/fine_tunes/{fine_tune_id}`
+
+**Example monitoring script** (bash):
+
+```bash
+while true; do
+  RESP=$(curl --silent "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/repos/${OXEN_NAMESPACE:-Tutorials}/${OXEN_REPO:-CyberpunkArt}/fine_tunes/${FT_ID}" \
+    -H "Authorization: Bearer ${OXEN_API_KEY}")
+
+  echo "$RESP" | jq '.'
+
+  STATUS=$(echo "$RESP" | jq -r '.fine_tune.status')
+  CURRENT_STEP=$(echo "$RESP" | jq -r '.fine_tune.current_step // 0')
+
+  echo "Status: $STATUS"
+  echo "Current Step: $CURRENT_STEP / 2000"
+
+  # Check for sample outputs (generated every 200 steps)
+  SAMPLES=$(echo "$RESP" | jq -r '.fine_tune.sample_outputs // empty')
+  if [ ! -z "$SAMPLES" ]; then
+    echo "Sample outputs available:"
+    echo "$SAMPLES" | jq -r '.[] | "  - \(.url)"'
+  fi
+
+  if [ "$STATUS" = "completed" ]; then
+    OUTPUT_RESOURCE=$(echo "$RESP" | jq -r '.fine_tune.output_resource')
+    echo "Fine-tune completed! Output: $OUTPUT_RESOURCE"
+    break
+  elif [ "$STATUS" = "errored" ]; then
+    ERROR_MSG=$(echo "$RESP" | jq -r '.fine_tune.error')
+    echo "Fine-tune failed: $ERROR_MSG"
+    exit 1
+  elif [ "$STATUS" = "stopped" ]; then
+    echo "Fine-tune was stopped"
+    break
+  fi
+
+  # Wait 30 seconds before checking again
+  sleep 30
+done
+```
+
+### Understanding Training Progress
+
+As training progresses, you'll see:
+- **Status updates**: `created` → `running` → `completed`
+- **Current step**: Progress counter (e.g., 400/2000)
+- **Sample outputs**: Generated images at steps 200, 400, 600, etc.
+
+Review the sample outputs to see how well the model is learning your style. The images should progressively match your training style better as training continues.
+
+<Tip>
+If sample outputs aren't matching your style by step 1000, consider adjusting `learning_rate` or training for more steps. See the [Parameter Guide](/fine-tuning-api/parameters#learning-rate) for tuning advice.
+</Tip>
+
+---
+
+## Step 4 – Deploy the Fine-Tuned Model
+
+Once training completes, deploy your model to a GPU-backed inference endpoint.
+
+**Endpoint**
+
+- `POST /api/repos/{owner}/{repo}/fine_tunes/{fine_tune_id}/deploy`
+
+**Example `curl` request**:
+
+```bash
+DEPLOY_RESPONSE=$(curl --silent --location "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/repos/${OXEN_NAMESPACE:-Tutorials}/${OXEN_REPO:-CyberpunkArt}/fine_tunes/${FT_ID}/deploy" \
+  -H "Authorization: Bearer ${OXEN_API_KEY}" \
+  -X POST)
+
+echo "$DEPLOY_RESPONSE" | jq '.'
+```
+
+The response will include deployment information with a **model identifier** you'll use for inference:
+
+```json
+{
+  "deployment": {
+    "model_slug": "oxen:tutorials/cyberpunkart-ft_img_gen_12345",
+    "status": "deploying",
+    "endpoint": "https://hub.oxen.ai/api/images/generate"
+  }
+}
+```
+
+**Capture the model slug**:
+
+```bash
+DEPLOYED_MODEL=$(echo "$DEPLOY_RESPONSE" | jq -r '.deployment.model_slug')
+echo "Deployed model: $DEPLOYED_MODEL"
+```
+
+<Warning>
+Deployment may take 2-5 minutes as the model is loaded onto a GPU instance. You can check deployment status by polling the fine-tune endpoint.
+</Warning>
+
+---
+
+## Step 5 – Generate Images with Your Fine-Tuned Model
+
+Now you can generate images in your custom style using the inference API.
+
+**Endpoint**
+
+- `POST /api/images/generate`
+
+**Example `curl` request** (text-to-image):
+
+```bash
+curl -X POST \
+  "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/images/generate" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer ${OXEN_API_KEY}" \
+  -d "{
+    \"model\": \"${DEPLOYED_MODEL}\",
+    \"prompt\": \"a motorcycle racing through the city in cyberpunk style\",
+    \"num_inference_steps\": 28,
+    \"guidance_scale\": 7.5,
+    \"width\": 1024,
+    \"height\": 1024
+  }"
+```
+
+### Generate Multiple Images
+
+You can generate multiple variations by setting `num_images`:
+
+```bash
+curl -X POST \
+  "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/images/generate" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer ${OXEN_API_KEY}" \
+  -d "{
+    \"model\": \"${DEPLOYED_MODEL}\",
+    \"prompt\": \"a futuristic building in cyberpunk style with neon signs\",
+    \"num_inference_steps\": 28,
+    \"guidance_scale\": 7.5,
+    \"num_images\": 4,
+    \"width\": 1024,
+    \"height\": 1024
+  }"
+```
+
+### Inference Parameters
+
+| Parameter | Description | Typical Values |
+|-----------|-------------|----------------|
+| `prompt` | Text description of desired image | Any descriptive text |
+| `num_inference_steps` | Quality vs speed (higher = better) | 20-50 (28 is balanced) |
+| `guidance_scale` | How closely to follow prompt | 5-10 (7.5 is balanced) |
+| `width` / `height` | Output resolution | 512, 768, 1024 |
+| `num_images` | Number of variations to generate | 1-4 |
+| `seed` | Random seed for reproducibility | Any integer |
+
+<Tip>
+Use higher `num_inference_steps` (40-50) for final production images, and lower values (20-28) for quick iterations during testing.
+</Tip>
+
+### Example Response
+
+```json
+{
+  "images": [
+    {
+      "url": "https://hub.oxen.ai/api/files/...",
+      "width": 1024,
+      "height": 1024
+    }
+  ],
+  "parameters": {
+    "model": "oxen:tutorials/cyberpunkart-ft_img_gen_12345",
+    "prompt": "a motorcycle racing through the city in cyberpunk style",
+    "num_inference_steps": 28,
+    "guidance_scale": 7.5
+  }
+}
+```
+
+---
+
+## Complete Python Example
+
+Here's a complete Python script that ties everything together:
+
+```python
+import requests
+import time
+
+BASE_URL = "https://hub.oxen.ai"
+API_KEY = "YOUR_API_KEY"
+NAMESPACE = "Tutorials"
+REPO = "CyberpunkArt"
+
+headers = {
+    "Authorization": f"Bearer {API_KEY}",
+    "Content-Type": "application/json"
+}
+
+# Step 1: Create fine-tune
+print("Creating fine-tune...")
+create_url = f"{BASE_URL}/api/repos/{NAMESPACE}/{REPO}/fine_tunes"
+data = {
+    "resource": "main/train_images.parquet",
+    "base_model": "black-forest-labs/FLUX.1-dev",
+    "script_type": "image_generation",
+    "training_params": {
+        "image_column": "image",
+        "caption_column": "caption",
+        "steps": 2000,
+        "batch_size": 1,
+        "learning_rate": 0.0002,
+        "lora_rank": 16,
+        "lora_alpha": 16,
+        "sample_every": 200,
+        "samples": [
+            {"prompt": "a sports car in cyberpunk style"},
+            {"prompt": "a futuristic city street at night"}
+        ],
+        "timestep_type": "sigmoid",
+        "use_lora": True
+    }
+}
+
+response = requests.post(create_url, headers=headers, json=data)
+fine_tune_id = response.json()["fine_tune"]["id"]
+print(f"Created fine-tune: {fine_tune_id}")
+
+# Step 2: Start training
+print("Starting training...")
+run_url = f"{create_url}/{fine_tune_id}/actions/run"
+requests.post(run_url, headers=headers)
+
+# Step 3: Monitor progress
+print("Monitoring progress...")
+status_url = f"{create_url}/{fine_tune_id}"
+while True:
+    response = requests.get(status_url, headers=headers)
+    fine_tune = response.json()["fine_tune"]
+    status = fine_tune["status"]
+    current_step = fine_tune.get("current_step", 0)
+
+    print(f"Status: {status}, Step: {current_step}/2000")
+
+    if status == "completed":
+        print(f"Training completed! Output: {fine_tune['output_resource']}")
+        break
+    elif status == "errored":
+        print(f"Training failed: {fine_tune.get('error')}")
+        exit(1)
+
+    time.sleep(30)
+
+# Step 4: Deploy model
+print("Deploying model...")
+deploy_url = f"{status_url}/deploy"
+response = requests.post(deploy_url, headers=headers)
+deployed_model = response.json()["deployment"]["model_slug"]
+print(f"Deployed: {deployed_model}")
+
+# Wait for deployment
+time.sleep(60)
+
+# Step 5: Generate image
+print("Generating image...")
+generate_url = f"{BASE_URL}/api/images/generate"
+gen_data = {
+    "model": deployed_model,
+    "prompt": "a motorcycle racing through the city in cyberpunk style",
+    "num_inference_steps": 28,
+    "guidance_scale": 7.5,
+    "width": 1024,
+    "height": 1024
+}
+
+response = requests.post(generate_url, headers=headers, json=gen_data)
+image_url = response.json()["images"][0]["url"]
+print(f"Generated image: {image_url}")
+```
+
+---
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Images not loading during training">
+    Ensure image paths in your parquet file are relative to your repository root, or use full URLs. Verify that all images are committed to your Oxen repository with `oxen status`.
+  </Accordion>
+
+  <Accordion title="Out of memory errors">
+    Reduce `batch_size` to 1 (default). If still failing, try reducing `lora_rank` to 8. See the [Batch Size guide](/fine-tuning-api/parameters#batch-size) for more memory optimization tips.
+  </Accordion>
+
+  <Accordion title="Sample outputs don't match my style">
+    - Train for more steps (3000-5000 instead of 2000)
+    - Ensure captions clearly describe the unique aspects of your style
+    - Increase dataset size (100+ images recommended)
+    - Try adjusting `learning_rate` (see [Learning Rate guide](/fine-tuning-api/parameters#learning-rate))
+  </Accordion>
+
+  <Accordion title="Training taking too long">
+    - FLUX.1-dev takes ~1-2 hours for 2000 steps on GPU
+    - Start with 1000 steps for quick testing
+    - Consider using a faster model like `Qwen/Qwen-Image` for iteration
+    - See [supported models](/fine-tuning-api/reference/image_generation#supported-models)
+  </Accordion>
+
+  <Accordion title="Generated images have artifacts or low quality">
+    - Ensure training images are high resolution and consistent quality
+    - Increase `num_inference_steps` to 40-50 during generation
+    - Try different `guidance_scale` values (7.0-9.0)
+    - Train for more steps to improve model quality
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## Next Steps
+
+- **Advanced Parameters**: See the [Image Generation API Reference](/fine-tuning-api/reference/image_generation) for all available parameters
+- **Parameter Tuning**: Learn about [LoRA configuration](/fine-tuning-api/parameters#lora) and [learning rate optimization](/fine-tuning-api/parameters#learning-rate)
+- **More Examples**: Check out the [Quick Start guide](/fine-tuning-api/quickstart-image-generation) for simplified examples
+- **Other Modalities**: Explore [Image Editing](/fine-tuning-api/quickstart-image-editing) or [Video Generation](/fine-tuning-api/quickstart-video)
+
+---
+
+With these skills, you can now fine-tune image generation models for any visual style, brand identity, or artistic direction!

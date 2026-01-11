@@ -1,0 +1,433 @@
+---
+title: "Parameter Guide"
+description: "Understanding fine-tuning parameters and how to tune them"
+---
+
+## Overview
+
+This guide explains common training parameters across all fine-tuning operations. Use this reference to understand what each parameter does and how to adjust them for your use case.
+
+## LoRA (Low-Rank Adaptation)
+
+LoRA is a technique for efficient fine-tuning that drastically reduces memory requirements and training time.
+
+### `use_lora`
+
+**Type:** `boolean`
+**Default:** `true`
+**Applies to:** All models
+
+Whether to use LoRA for fine-tuning. Almost always recommended.
+
+- `true` - Use LoRA (faster, less memory, recommended)
+- `false` - Full fine-tuning (slower, more memory, rarely needed)
+
+```json
+{
+  "training_params": {
+    "use_lora": true
+  }
+}
+```
+
+### `lora_rank`
+
+**Type:** `integer`
+**Default:** `16`
+**Range:** `1-128` (typical: `8-64`)
+**Applies to:** All models when `use_lora: true`
+
+The rank of LoRA matrices. Lower rank = faster training and less memory, but potentially less expressive.
+
+**When to adjust:**
+- **Reduce to 8** if you're out of memory or want faster training
+- **Increase to 32-64** if you have a large, complex dataset and need more capacity
+
+```json
+{
+  "training_params": {
+    "use_lora": true,
+    "lora_rank": 16
+  }
+}
+```
+
+### `lora_alpha`
+
+**Type:** `integer`
+**Default:** `16`
+**Typical:** Same as `lora_rank`
+**Applies to:** All models when `use_lora: true`
+
+Scaling factor for LoRA updates. Typically set equal to `lora_rank`.
+
+**When to adjust:**
+- Keep equal to `lora_rank` in most cases
+- Increase to make LoRA updates stronger (rare)
+- Decrease to make updates more subtle (rare)
+
+```json
+{
+  "training_params": {
+    "use_lora": true,
+    "lora_rank": 16,
+    "lora_alpha": 16
+  }
+}
+```
+
+## Learning Rate and Optimization
+
+### `learning_rate`
+
+**Type:** `number`
+**Default:** `0.0001` (text), `0.0002` (image)
+**Typical range:** `0.00001-0.001`
+**Applies to:** All models
+
+The step size for parameter updates. Too high = unstable training, too low = slow convergence.
+
+**When to adjust:**
+- **Decrease by 10x** if training is unstable or loss is spiking
+- **Increase by 2-3x** if training is too slow or plateau early
+- **Text models**: Start with `0.0001`
+- **Image models**: Start with `0.0002`
+
+```json
+{
+  "training_params": {
+    "learning_rate": 0.0001
+  }
+}
+```
+
+<Tip>
+If you're unsure, stick with the defaults. Learning rate is the most sensitive parameter.
+</Tip>
+
+## Batch Size and Memory
+
+### `batch_size`
+
+**Type:** `integer`
+**Default:** `1`
+**Typical range:** `1-8`
+**Applies to:** All models
+
+Number of samples processed together in one training step.
+
+**Trade-offs:**
+- **Larger batch size** = faster training, more stable, but more memory
+- **Smaller batch size** = slower training, less stable, but less memory
+
+**When to adjust:**
+- **Reduce to 1** if you get out-of-memory errors
+- **Increase to 2-4** if you have GPU memory to spare and want faster training
+
+```json
+{
+  "training_params": {
+    "batch_size": 1
+  }
+}
+```
+
+### `gradient_accumulation` / `grad_accum`
+
+**Type:** `integer`
+**Default:** `1`
+**Typical range:** `1-16`
+**Applies to:** All models
+
+Accumulate gradients over multiple steps before updating parameters. This simulates a larger batch size without using more memory.
+
+**When to use:**
+- Set to 4-8 if you want the stability of larger batches but don't have the memory
+- Effective batch size = `batch_size × gradient_accumulation`
+
+```json
+{
+  "training_params": {
+    "batch_size": 1,
+    "gradient_accumulation": 4  // Effective batch size = 4
+  }
+}
+```
+
+## Training Duration
+
+### `epochs` (Text Models)
+
+**Type:** `integer`
+**Default:** `1`
+**Typical range:** `1-5`
+**Applies to:** Text generation models
+
+Number of complete passes through the training dataset.
+
+**Guidelines:**
+- **1 epoch** - Good starting point, often sufficient
+- **2-3 epochs** - For better learning on small datasets
+- **>5 epochs** - Risk of overfitting
+
+```json
+{
+  "training_params": {
+    "epochs": 1
+  }
+}
+```
+
+### `steps` (Image/Video Models)
+
+**Type:** `integer`
+**Default:** `2000` (image), `3000` (editing)
+**Typical range:** `1000-5000`
+**Applies to:** Image and video generation models
+
+Total number of training steps (optimizer updates).
+
+**Guidelines:**
+- **1000 steps** - Quick test runs
+- **2000-3000 steps** - Standard training
+- **4000-5000 steps** - Complex styles or large datasets
+
+```json
+{
+  "training_params": {
+    "steps": 2000
+  }
+}
+```
+
+## Logging and Checkpointing
+
+### `logging_steps`
+
+**Type:** `integer`
+**Default:** `10`
+**Applies to:** Text models
+
+How often to log training metrics (loss, learning rate, etc.).
+
+```json
+{
+  "training_params": {
+    "logging_steps": 10
+  }
+}
+```
+
+### `save_steps_ratio`
+
+**Type:** `number`
+**Default:** `0.25`
+**Range:** `0.0-1.0`
+**Applies to:** Text models
+
+Save checkpoints at this fraction of total training. For example, `0.25` with 4 epochs saves after each epoch.
+
+```json
+{
+  "training_params": {
+    "save_steps_ratio": 0.25
+  }
+}
+```
+
+### `save_strategy`
+
+**Type:** `string`
+**Default:** `"epoch"`
+**Options:** `"epoch"`, `"steps"`
+**Applies to:** Text models
+
+When to save checkpoints:
+- `"epoch"` - Save at the end of each epoch
+- `"steps"` - Save based on `save_steps_ratio`
+
+```json
+{
+  "training_params": {
+    "save_strategy": "epoch"
+  }
+}
+```
+
+### `sample_every` (Image/Video Models)
+
+**Type:** `integer`
+**Default:** `200`
+**Applies to:** Image and video models
+
+Generate sample outputs every N steps to monitor progress visually.
+
+```json
+{
+  "training_params": {
+    "sample_every": 200
+  }
+}
+```
+
+## Model-Specific Parameters
+
+### Text Generation
+
+#### `seq_length`
+
+**Type:** `integer`
+**Default:** `1024`
+**Range:** `128-4096`
+
+Maximum sequence length for text. Longer = more context, but more memory.
+
+```json
+{
+  "training_params": {
+    "seq_length": 1024
+  }
+}
+```
+
+#### `neftune_noise_alpha`
+
+**Type:** `number`
+**Default:** `0`
+**Range:** `0-15`
+
+Add noise during training for better generalization (NEFTune). Set to 5-15 to enable.
+
+```json
+{
+  "training_params": {
+    "neftune_noise_alpha": 0
+  }
+}
+```
+
+### Image Generation/Editing
+
+#### `timestep_type`
+
+**Type:** `string`
+**Default:** `"sigmoid"` (generation), `"weighted"` (editing)
+**Options:** `"weighted"`, `"sigmoid"`, `"linear"`
+
+How to sample timesteps during diffusion training.
+
+- `"sigmoid"` - Focus on mid-range timesteps (balanced)
+- `"weighted"` - Focus on difficult timesteps
+- `"linear"` - Uniform sampling (simple)
+
+```json
+{
+  "training_params": {
+    "timestep_type": "sigmoid"
+  }
+}
+```
+
+#### `sample_width` / `sample_height`
+
+**Type:** `integer`
+**Default:** `1024`
+**Applies to:** Image editing
+
+Resolution for sample generation during training.
+
+```json
+{
+  "training_params": {
+    "sample_width": 1024,
+    "sample_height": 1024
+  }
+}
+```
+
+#### `cache_text_embeddings`
+
+**Type:** `boolean`
+**Default:** `false`
+**Applies to:** Image models
+
+Pre-compute and cache text embeddings for faster training.
+
+```json
+{
+  "training_params": {
+    "cache_text_embeddings": false
+  }
+}
+```
+
+## Quick Reference Tables
+
+### Common Parameter Sets
+
+**Fast Iteration (Test Runs):**
+```json
+{
+  "batch_size": 1,
+  "learning_rate": 0.0001,
+  "epochs": 1,  // or steps: 1000
+  "lora_rank": 8
+}
+```
+
+**Standard Training:**
+```json
+{
+  "batch_size": 1,
+  "learning_rate": 0.0001,
+  "epochs": 2,  // or steps: 2000
+  "lora_rank": 16
+}
+```
+
+**High Quality (Large Dataset):**
+```json
+{
+  "batch_size": 2,
+  "learning_rate": 0.0001,
+  "gradient_accumulation": 4,
+  "epochs": 3,  // or steps: 4000
+  "lora_rank": 32
+}
+```
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Out of memory errors">
+    1. Reduce `batch_size` to 1
+    2. Reduce `lora_rank` to 8
+    3. Reduce `seq_length` (text) or `sample_width`/`sample_height` (image)
+    4. Enable `cache_text_embeddings` (image models)
+  </Accordion>
+
+  <Accordion title="Training loss not decreasing">
+    1. Increase `learning_rate` by 2-3x
+    2. Check your data quality and column mappings
+    3. Increase training duration (`epochs` or `steps`)
+  </Accordion>
+
+  <Accordion title="Loss spiking or unstable">
+    1. Decrease `learning_rate` by 10x
+    2. Increase `gradient_accumulation` to smooth updates
+    3. Reduce `batch_size` to 1
+  </Accordion>
+
+  <Accordion title="Results not matching my style">
+    1. Increase training duration (more `epochs` or `steps`)
+    2. Increase `lora_rank` to 32 or 64
+    3. Ensure your captions clearly describe the unique aspects
+    4. Add more training data
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+- [Quick Start Guides](/fine-tuning-api/overview#quick-start-guides) - Apply these parameters
+- [API Reference](/fine-tuning-api/overview#detailed-api-reference) - Complete parameter lists
+- [Examples](/getting-started/fine-tuning) - See parameters in action

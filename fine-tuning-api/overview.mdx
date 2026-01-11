@@ -1,0 +1,155 @@
+---
+title: "Fine-Tuning Overview"
+description: "Learn how to fine-tune models on Oxen.ai to customize them for your specific use cases"
+---
+
+## What is Fine-Tuning?
+
+Fine-tuning allows you to customize pre-trained models with your own data, adapting them to your specific use cases. On Oxen.ai, you can fine-tune models for:
+
+- **Text Generation** - Chatbots, Q&A systems, content generation
+- **Image Generation** - Custom image styles, branded content
+- **Image Editing** - Style transfer, image-to-image transformations
+- **Video Generation** - Custom video styles and content
+- **Vision-Language Tasks** - Image captioning, visual Q&A
+
+## Getting Started
+
+### Prerequisites
+
+Before fine-tuning, you need:
+
+1. **An Oxen.ai account** - [Sign up](https://oxen.ai/register) if you haven't already
+2. **A repository** with your training data
+3. **Training data** in a supported format (Parquet, CSV, etc.)
+4. **An API key** for authentication
+
+### Authentication
+
+All fine-tuning API requests require authentication using a bearer token:
+
+```bash
+curl -H "Authorization: Bearer YOUR_API_KEY" \
+  https://hub.oxen.ai/api/repos/{namespace}/{repo}/fine_tunes
+```
+
+Get your API key from your [account settings](https://oxen.ai/settings).
+
+## Request Structure
+
+All fine-tuning requests follow the same base structure:
+
+```json
+{
+  "resource": "main/your-dataset.parquet",
+  "base_model": "<model-canonical-name>",
+  "script_type": "<operation-type>",
+  "training_params": {
+    // Operation-specific parameters
+  }
+}
+```
+
+### Common Fields
+
+| Field | Description | Required |
+|-------|-------------|----------|
+| `resource` | Path to your training data (e.g., `main/train.parquet`) | Yes |
+| `base_model` | The model to fine-tune (e.g., `meta-llama/Llama-3.2-1B-Instruct`) | Yes |
+| `script_type` | The type of fine-tuning operation | Yes |
+| `training_params` | Operation-specific training parameters | Yes |
+
+### Operation Types (`script_type`)
+
+The `script_type` determines what kind of fine-tuning you're doing:
+
+- `text_generation` - For text-based models (Q&A, chatbots, completion)
+- `text_chat_messages` - For conversational chat models
+- `image_generation` - For text-to-image models
+- `image_editing` - For image-to-image transformation
+- `image_to_text` - For image captioning and VLMs
+- `image_to_video` - For image-to-video generation
+- `text_to_video` - For text-to-video generation
+- `multi_image_editing` - For multi-image editing models
+
+## Common Training Parameters
+
+While each operation type has specific parameters, many share common training configuration:
+
+### LoRA Parameters
+
+Most fine-tuning uses LoRA (Low-Rank Adaptation) for efficient training:
+
+- `use_lora` - Enable LoRA (typically `true`)
+- `lora_rank` - Rank of LoRA matrices (default: 16, lower = faster/less memory)
+- `lora_alpha` - LoRA scaling factor (default: 16)
+
+### Training Configuration
+
+- `batch_size` - Number of samples per training step (default: 1)
+- `learning_rate` - Step size for optimization (typical: 0.0001-0.0002)
+- `epochs` or `steps` - Training duration (text models use epochs, image models use steps)
+- `gradient_accumulation` or `grad_accum` - Accumulate gradients across multiple steps
+
+### Data Configuration
+
+Each operation type requires specific data columns:
+
+**Text models:**
+- `question_column` - Input text column
+- `answer_column` - Output/response column
+
+**Image models:**
+- `image_column` - Output image column
+- `caption_column` - Text prompt column
+- `control_image_column` - Input image column (for editing)
+
+## Quick Start Guides
+
+Choose your use case to get started with minimal examples:
+
+<CardGroup cols={2}>
+  <Card title="Text Generation" icon="message" href="/fine-tuning-api/quickstart-text">
+    Fine-tune chatbots and Q&A models
+  </Card>
+  <Card title="Image Generation" icon="image" href="/fine-tuning-api/quickstart-image-generation">
+    Create custom image styles
+  </Card>
+  <Card title="Image Editing" icon="wand-magic-sparkles" href="/fine-tuning-api/quickstart-image-editing">
+    Fine-tune image transformation models
+  </Card>
+  <Card title="Video Generation" icon="video" href="/fine-tuning-api/quickstart-video">
+    Generate custom videos
+  </Card>
+</CardGroup>
+
+## Detailed API Reference
+
+For complete parameter documentation and advanced configuration:
+
+- [Text Generation Reference](/fine-tuning-api/reference/text_generation)
+- [Text Chat Messages Reference](/fine-tuning-api/reference/text_chat_messages)
+- [Image Generation Reference](/fine-tuning-api/reference/image_generation)
+- [Image Editing Reference](/fine-tuning-api/reference/image_editing)
+- [Image to Text Reference](/fine-tuning-api/reference/image_to_text)
+- [Image to Video Reference](/fine-tuning-api/reference/image_to_video)
+- [Text to Video Reference](/fine-tuning-api/reference/text_to_video)
+- [Multi-Image Editing Reference](/fine-tuning-api/reference/multi_image_editing)
+
+## Parameter Guide
+
+Learn about common training parameters and how to tune them:
+
+- [Understanding LoRA](/fine-tuning-api/parameters#lora)
+- [Learning Rate and Optimization](/fine-tuning-api/parameters#learning-rate)
+- [Batch Size and Memory Management](/fine-tuning-api/parameters#batch-size)
+- [Training Duration](/fine-tuning-api/parameters#duration)
+
+## Next Steps
+
+1. **Choose your use case** from the Quick Start guides above
+2. **Prepare your data** in the required format
+3. **Start your first fine-tune** using the API
+4. **Monitor progress** and deploy your model
+
+Need help? Join our [Discord community](https://discord.com/invite/s3tBEn7Ptg) or check out the [detailed examples](/getting-started/fine-tuning).

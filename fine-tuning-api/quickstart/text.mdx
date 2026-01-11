@@ -1,0 +1,141 @@
+---
+title: "Text Generation"
+description: "Fine-tune a text generation model in minutes"
+---
+
+## Overview
+
+Fine-tune text generation models for chatbots, Q&A systems, or content generation. This guide shows the minimal setup to get started.
+
+## Your Data
+
+Your training data should have two columns:
+
+- **Input column** - The user prompt or question
+- **Output column** - The expected response or answer
+
+Example data in `train.parquet`:
+
+| text | sentiment |
+|------|-----------|
+| The product exceeded expectations | positive |
+| Terrible customer service | negative |
+| Average experience, nothing special | neutral |
+
+## Minimal Example
+
+<CodeGroup>
+
+```python Python
+import requests
+
+url = "https://hub.oxen.ai/api/repos/YOUR_NAMESPACE/YOUR_REPO/fine_tunes"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+
+# Create fine-tune
+data = {
+    "resource": "main/train.parquet",
+    "base_model": "meta-llama/Llama-3.2-1B-Instruct",
+    "script_type": "text_generation",
+    "training_params": {
+        "question_column": "text",        # Your input column name
+        "answer_column": "sentiment",      # Your output column name
+        "epochs": 1
+    }
+}
+
+response = requests.post(url, headers=headers, json=data)
+fine_tune_id = response.json()["fine_tune"]["id"]
+
+# Start training
+run_url = f"{url}/{fine_tune_id}/actions/run"
+requests.post(run_url, headers=headers)
+
+print(f"Fine-tune started: {fine_tune_id}")
+```
+
+```bash cURL
+# Create fine-tune
+curl -X POST https://hub.oxen.ai/api/repos/YOUR_NAMESPACE/YOUR_REPO/fine_tunes \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "resource": "main/train.parquet",
+    "base_model": "meta-llama/Llama-3.2-1B-Instruct",
+    "script_type": "text_generation",
+    "training_params": {
+      "question_column": "text",
+      "answer_column": "sentiment",
+      "epochs": 1
+    }
+  }'
+
+# Start training (use the ID from the response)
+curl -X POST https://hub.oxen.ai/api/repos/YOUR_NAMESPACE/YOUR_REPO/fine_tunes/FINE_TUNE_ID/actions/run \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+</CodeGroup>
+
+## Key Parameters
+
+Only these fields are required to start:
+
+| Parameter | Description | Example |
+|-----------|-------------|---------|
+| `question_column` | Name of your input/prompt column | `"text"`, `"question"`, `"prompt"` |
+| `answer_column` | Name of your output/response column | `"sentiment"`, `"answer"`, `"response"` |
+| `epochs` | Number of training passes (1-3 typical) | `1` |
+
+All other parameters use sensible defaults.
+
+## Supported Models
+
+Popular choices for text generation:
+
+- `meta-llama/Llama-3.2-1B-Instruct` - Fast, good for Q&A
+- `meta-llama/Llama-3.2-3B-Instruct` - Balanced performance
+- `meta-llama/Llama-3.1-8B-Instruct` - Higher quality, slower
+- `Qwen/Qwen3-0.6B` - Very fast, lightweight
+
+<Note>
+See the [full model list](/fine-tuning-api/reference/text_generation#supported-models) for all available options.
+</Note>
+
+## Monitor Progress
+
+Check the status of your fine-tune:
+
+```python
+status_url = f"https://hub.oxen.ai/api/repos/YOUR_NAMESPACE/YOUR_REPO/fine_tunes/{fine_tune_id}"
+response = requests.get(status_url, headers=headers)
+status = response.json()["fine_tune"]["status"]
+print(f"Status: {status}")
+```
+
+Status values: `created`, `running`, `completed`, `errored`
+
+## Next Steps
+
+- [Advanced parameters](/fine-tuning-api/reference/text_generation) - Learning rate, batch size, LoRA configuration
+- [Deploy your model](/getting-started/inference) - Use your fine-tuned model for inference
+- [Full tutorial](/fine-tuning-api/tutorials/01_fine_tuning) - End-to-end walkthrough with monitoring
+
+## Common Issues
+
+<AccordionGroup>
+  <Accordion title="Column not found error">
+    Double-check your `question_column` and `answer_column` names match your data exactly. Column names are case-sensitive.
+  </Accordion>
+
+  <Accordion title="Out of memory error">
+    Reduce `batch_size` to 1 or try a smaller model like `Llama-3.2-1B-Instruct`.
+  </Accordion>
+
+  <Accordion title="Training taking too long">
+    Start with 1 epoch. If results aren't good enough, try 2-3 epochs. More isn't always better.
+  </Accordion>
+</AccordionGroup>
