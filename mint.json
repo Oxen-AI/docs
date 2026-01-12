@@ -41,7 +41,7 @@
       {
           "name": "Fine-Tuning API",
           "url": "fine-tuning-api",
-          "openapi": "https://dev.hub.oxen.ai/api/_spec/oxen_hub_api.json"
+          "openapi": "https://hub.oxen.ai/api/_spec/oxen_hub_api.json"
       }
   ],
   "anchors": [
