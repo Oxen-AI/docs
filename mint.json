@@ -36,7 +36,7 @@
       {
           "name": "Repository API",
           "url": "http-api",
-          "openapi": "http://localhost:3000/api/_spec/oxen_server_openapi.json"
+          "openapi": "https://hub.oxen.ai/api/_spec/oxen_server_openapi.json"
       },
       {
           "name": "Fine-Tuning API",
@@ -155,12 +155,6 @@
                     "pages": [
                         "http-api/index",
                         "http-api/example"
-                    ]
-                },
-                {
-                    "group": "Evaluations",
-                    "pages": [
-                        "http-api/evaluations/create_eval"
                     ]
                 }
           ]
