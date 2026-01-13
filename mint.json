@@ -36,7 +36,7 @@
       {
           "name": "Repository API",
           "url": "http-api",
-          "openapi": "https://hub.oxen.ai/api/_spec/oxen_server_openapi.json"
+          "openapi": "http://localhost:3000/api/_spec/oxen_server_openapi.json"
       },
       {
           "name": "Fine-Tuning API",
@@ -150,67 +150,19 @@
       {
           "group": "Repository API",
           "pages": [
-            "http-api/example",
-              "http-api/index",
-              {
-                  "group": "Namespaces",
-                  "pages": [
-                      "http-api/namespaces/list_namespaces"
-                  ]
-              },
-              {
-                  "group": "Repository",
-                  "pages": [
-                      "http-api/repositories/list_repos",
-                      "http-api/repositories/get_repo",
-                      "http-api/repositories/create_repo",
-                      "http-api/repositories/update_repo",
-                      "http-api/repositories/delete_repo"
-                  ]
-              },
-              {
-                  "group": "Branches",
-                  "pages": [
-                      "http-api/branches/get_branches",
-                      "http-api/branches/create_branch"
-                  ]
-              },
-              {
-                  "group": "Commits",
-                  "pages": [
-                      "http-api/commits/list_commits"
-                  ]
-              },
-              {
-                  "group": "Files",
-                  "pages": [
-                      "http-api/files/list_entries",
-                      "http-api/files/file_metadata",
-                      "http-api/files/download_file"
-                  ]
-              },
-              {
-                  "group": "Data Frames",
-                  "pages": [
-                      "http-api/data_frames/get_data_frame"
-                  ]
-              },
-              {
-                  "group": "Workspaces",
-                  "pages": [
-                      "http-api/workspaces/list_workspaces",
-                      "http-api/workspaces/create_workspace",
-                      "http-api/workspaces/index_dataframe",
-                      "http-api/workspaces/query_dataframe",
-                      "http-api/workspaces/index_embeddings"
-                  ]
-              },
-              {
-                  "group": "Evaluations",
-                  "pages": [
-                      "http-api/evaluations/create_eval"
-                  ]
-              }
+                { 
+                    "group": "Getting Started",
+                    "pages": [
+                        "http-api/index",
+                        "http-api/example"
+                    ]
+                },
+                {
+                    "group": "Evaluations",
+                    "pages": [
+                        "http-api/evaluations/create_eval"
+                    ]
+                }
           ]
       },
       {

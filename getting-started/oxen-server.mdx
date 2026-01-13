@@ -140,7 +140,15 @@ versions/
 
 All of the metadata and versioned files for a repository are stored in the `.oxen` directory. This directory mirrors the `.oxen` directory in your local repository, so that logic can be reused between the client and server.
 
-TODO: We are working on adding support for other storage backends, like S3 and MinIO. If you would like to contribute, please see the [Oxen-AI/Oxen](https://github.com/Oxen-AI/Oxen) repo on GitHub.
+## 💾 Configureable Storage Backend
+
+Oxen allows you to configure the storage backend of self-hosted oxen servers. By default, a repository's version files are stored in the `.oxen/versions/files` folder, but this can be changed by using the `--storage-backend` and `--storage-backend-path` parameters
+
+```bash
+oxen create-remote --name ox/test_repo --host localhost:3000 --scheme http --storage-backend local --storage-backend-path ~/mountpoint/ox/test_repo/version/files
+```
+
+This is useful if you have a large amount of data and you want to store it on a virtual file system. If you set `--storage-backend-path` to a location on your VFS, files that you push to the remote will be stored there. Depending on your VFS, this can slow down some upload and download operations.
 
 ## ⬆️ Upload Data
 
