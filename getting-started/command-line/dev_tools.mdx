@@ -88,7 +88,7 @@ export OXEN_NUM_THREADS="16"
 
 ## HTTP Requests
 
-When uploading or downloading data, if any files fail to transfer, oxen will wait and retry the request. By default, oxen will allow up to 10 retries before cancelling the operation. This can be configured via the enviornment variable `OXEN_NUM_RETRIES`
+When uploading or downloading data, if any files fail to transfer, oxen will wait and retry the request. By default, oxen will allow up to 5 retries before cancelling the operation. This can be configured via the enviornment variable `OXEN_NUM_RETRIES`
 
 ```bash 
 export OXEN_NUM_RETRIES="10"
