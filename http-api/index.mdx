@@ -4,13 +4,18 @@ title: "Endpoints"
 
 Here lives all the HTTP APIs for all the Domains in [oxen-server](/getting-started/oxen-server).
 
-- [Namespaces](/http-api/namespaces/list_namespaces): Namespaces are a way to organize groups of repositories.
-- [Repositories](/http-api/repositories/list_repos): Repositories are the primary way to store and manage data in Oxen.
-- [Branches](/http-api/branches/get_branches): Branches are a way to manage different versions of a repository.
-- [Commits](/http-api/commits/list_commits): Commits are a way to manage different versions of a repository.
-- [Files](/http-api/files/list_entries): List the files and folders in a repository, given a specific revision.
-- [Data Frames](/http-api/data_frames/get_data_frame): Data Frames are a way to manage tabular data in a repository.
-- [Workspaces](/http-api/workspaces/list_workspaces): Workspaces enable the ability to work on the remote repository as if it were local.
+- [Branches](/http-api/branches/get_branches): Manage branches in a repository
+- [Commits](/http-api/commits/list_commits): Upload or download commits and their contents 
+- [Compare](/http-api/compare/get-file-diff): Calculate the diff between commits or different versions of a file
+- [Data Frames](/http-api/data_frames/get_data_frame): Manage tabular data in a repository using data frames
+- [Directories](/http-api/directories/list-directory-contents): List directory contents
+- [Files](/http-api/files/list_entries): Upload, download, or delete specific files from a repository
+- [Fork](/http-api/commits/list_commits): Create a server-side copy of an existing repository in a new namespace
+- [Namespaces](/http-api/namespaces/list_namespaces): Fetch namespaces that exist on the server
+- [Merge](/http-api/merge/merge-branches): Merge branches on the server
+- [Repositories](/http-api/repositories/list_repos): CRUD interface for repositories and repository stats
+- [Versions](/http-api/version-files/batch-upload-files-multipart): Bulk uploads and downloads of data files
+- [Workspaces](/http-api/workspaces/list_workspaces): CRUD interface for a repository's workspaces
 {/* - [Evaluations](/http-api/list_evaluations): Evaluations are a way to run models on data in a repository. */}
 
 
