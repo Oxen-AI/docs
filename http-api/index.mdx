@@ -1,22 +1,10 @@
 ---
-title: "Endpoints"
+title: "Repository API"
 ---
 
-Here lives all the HTTP APIs for all the Domains in [oxen-server](/getting-started/oxen-server).
+The Repository API drives all the versioning (VCS) functionality for [oxen.ai](https://oxen.ai) and the open-source [oxen-server](/getting-started/oxen-server).
 
-- [Branches](/http-api/branches/get_branches): Manage branches in a repository
-- [Commits](/http-api/commits/list_commits): Upload or download commits and their contents 
-- [Compare](/http-api/compare/get-file-diff): Calculate the diff between commits or different versions of a file
-- [Data Frames](/http-api/data_frames/get_data_frame): Manage tabular data in a repository using data frames
-- [Directories](/http-api/directories/list-directory-contents): List directory contents
-- [Files](/http-api/files/list_entries): Upload, download, or delete specific files from a repository
-- [Fork](/http-api/commits/list_commits): Create a server-side copy of an existing repository in a new namespace
-- [Namespaces](/http-api/namespaces/list_namespaces): Fetch namespaces that exist on the server
-- [Merge](/http-api/merge/merge-branches): Merge branches on the server
-- [Repositories](/http-api/repositories/list_repos): CRUD interface for repositories and repository stats
-- [Versions](/http-api/version-files/batch-upload-files-multipart): Bulk uploads and downloads of data files
-- [Workspaces](/http-api/workspaces/list_workspaces): CRUD interface for a repository's workspaces
-{/* - [Evaluations](/http-api/list_evaluations): Evaluations are a way to run models on data in a repository. */}
-
-
-
+It handles managing repositories, branches, and files among other things. Browse
+the API endpoints in the sidebar to the left to see what's available. You can
+also look at the [File Upload Example](/http-api/example) to see one possible
+workflow for chaining these requests together.

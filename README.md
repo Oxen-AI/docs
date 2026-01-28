@@ -1,5 +1,7 @@
 # Oxen.ai Documentation 🐂 🌾
 
+Install the mintlify CLI tool: https://www.mintlify.com/docs/installation
+
 ## Running Locally
 
 ```bash
