@@ -1,105 +1,265 @@
 ---
 title: '💬 Chat Completions'
-description: 'How to integrate an LLM into your application through the chat completions endpoint.'
+description: 'Generate text responses using the OpenAI-compatible `/chat/completions` API.'
 ---
 
-### Chat Completions
+The Oxen.ai chat completions API is fully [OpenAI-compatible](https://platform.openai.com/docs/api-reference/chat). You can use the OpenAI SDK, `curl`, or any HTTP client that speaks the OpenAI chat format.
 
-The chat completions API is compatible with OpenAI, so you can use any supported client to interact with the model. Simply pass in the model you want to use and use https://hub.oxen.ai/api as your base_url.
+**Base URL:** `https://hub.oxen.ai/api`
+
+**Endpoint:** `POST /chat/completions`
+
+Browse [all available models](https://www.oxen.ai/ai/models).
+
+## Authentication
+
+Every request requires a Bearer token in the `Authorization` header. You can find your API key in your [account settings](https://www.oxen.ai/settings).
+
+```bash
+Authorization: Bearer $OXEN_API_KEY
+```
+
+## Quick Start
 
 <CodeGroup>
 
 ```bash cURL
 curl -X POST https://hub.oxen.ai/api/chat/completions \
--H "Authorization: Bearer $OXEN_API_KEY" \
--H "Content-Type: application/json" \
--d '{
-  "model": "moonshotai/Kimi-K2-Thinking",
-  "messages": [{"role": "user", "content": "Hello, how are you?"}]
-}'
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "claude-sonnet-4-6",
+    "messages": [
+      {"role": "user", "content": "What is a great name for an ox?"}
+    ],
+    "max_tokens": 256
+  }'
 ```
 
-```python Python
-import openai
+```python Python (OpenAI SDK)
+from openai import OpenAI
 import os
 
-client = openai.OpenAI(
-    api_key=os.getenv("OXEN_API_KEY"),
-    base_url="https://hub.oxen.ai/api"
+client = OpenAI(
+    api_key=os.environ["OXEN_API_KEY"],
+    base_url="https://hub.oxen.ai/api",
 )
 
 response = client.chat.completions.create(
-    model="moonshotai/Kimi-K2-Thinking",
-    messages=[{"role": "user", "content": "What is a great name for an ox that also manages your AI infrastructure?"}]
+    model="claude-sonnet-4-6",
+    messages=[
+        {"role": "user", "content": "What is a great name for an ox?"}
+    ],
+    max_tokens=256,
 )
 
-print(response.output['content'][0]['text'])
+print(response.choices[0].message.content)
 ```
 
 </CodeGroup>
 
-If you want to send an image to a model that supports vision such as GPT-4o or Claude, you can add a message with the `image_url` type.
+## Response Format
+
+The API returns an OpenAI-compatible JSON response:
+
+```json
+{
+  "id": "chatcmpl-af41f027-e4d5-4c4b-ac40-625fb4ebfb1e",
+  "object": "chat.completion",
+  "created": 1774040155,
+  "model": "claude-sonnet-4-6",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "How about \"Beauregard\"?"
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 11,
+    "completion_tokens": 4,
+    "total_tokens": 15
+  }
+}
+```
+
+| Field | Description |
+|---|---|
+| `id` | Unique identifier for the completion |
+| `object` | Always `"chat.completion"` |
+| `created` | Unix timestamp of when the completion was created |
+| `model` | The model that generated the response |
+| `choices` | Array of completion choices (typically one) |
+| `choices[].message.content` | The generated text |
+| `choices[].finish_reason` | Why generation stopped: `"stop"` (natural end) or `"length"` (hit `max_tokens`) |
+| `usage` | Token counts for the request |
+
+## Parameters
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `model` | string | *required* | Model name, e.g. `"claude-sonnet-4-6"`, `"gpt-4o"`, `"gemini-3-flash-preview"` |
+| `messages` | array | *required* | Array of message objects with `role` and `content` |
+| `max_tokens` | integer | model default | Maximum number of tokens to generate |
+| `temperature` | float | model default | Sampling temperature (0-2). Lower is more deterministic. |
+| `stream` | boolean | `false` | Enable [streaming](#streaming) with server-sent events |
+
+### Messages
+
+Each message in the `messages` array has a `role` and `content`:
+
+| Role | Description |
+|---|---|
+| `system` | Sets the behavior and context for the model |
+| `user` | The user's input |
+| `assistant` | Previous model responses (for multi-turn conversations) |
+
+```json
+{
+  "messages": [
+    {"role": "system", "content": "You are a helpful assistant."},
+    {"role": "user", "content": "What is the capital of France?"},
+    {"role": "assistant", "content": "The capital of France is Paris."},
+    {"role": "user", "content": "What is its population?"}
+  ]
+}
+```
+
+## Streaming
+
+Set `"stream": true` to receive responses as server-sent events (SSE). Each event is a `chat.completion.chunk` object with a `delta` instead of a `message`.
 
 <CodeGroup>
 
-```bash cURL (image url)
+```bash cURL
 curl -X POST https://hub.oxen.ai/api/chat/completions \
--H "Authorization: Bearer $OXEN_API_KEY" \
--H "Content-Type: application/json" \
--d '{
-  "model": "gpt-4o",
-  "messages": [
-    {
-      "role": "user",
-      "content": [
-        {
-          "type": "text",
-          "text": "What is in this image?"
-        },
-        {
-          "type": "image_url",
-          "image_url": {
-            "url": "https://oxen.ai/assets/images/homepage/hero-ox.png"
-          }
-        }
-      ]
-    }
-  ]
-}'
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "claude-sonnet-4-6",
+    "messages": [
+      {"role": "user", "content": "Write a haiku about data."}
+    ],
+    "max_tokens": 256,
+    "stream": true
+  }'
 ```
 
-```bash cURL (base64 encoded image)
-curl -X POST https://hub.oxen.ai/api/chat/completions \
--H "Authorization: Bearer $OXEN_API_KEY" \
--H "Content-Type: application/json" \
--d '{
-  "model": "claude-3-7-sonnet",
-  "messages": [
-    {
-      "role": "user",
-      "content": [
-        {
-          "type": "text",
-          "text": "What is in this image?"
-        },
-        {
-          "type": "image_url",
-          "image_url": {
-            "url": "data:image/jpeg;base64,YOUR_BASE64_ENCODED_IMAGE_HERE"
-          }
-        }
-      ]
-    }
-  ]
-}'
+```python Python (OpenAI SDK)
+from openai import OpenAI
+import os
+
+client = OpenAI(
+    api_key=os.environ["OXEN_API_KEY"],
+    base_url="https://hub.oxen.ai/api",
+)
+
+stream = client.chat.completions.create(
+    model="claude-sonnet-4-6",
+    messages=[
+        {"role": "user", "content": "Write a haiku about data."}
+    ],
+    max_tokens=256,
+    stream=True,
+)
+
+for chunk in stream:
+    if chunk.choices[0].delta.content:
+        print(chunk.choices[0].delta.content, end="", flush=True)
+print()
 ```
 
 </CodeGroup>
 
-## Playground Interface
+Each SSE line is prefixed with `data: ` and contains a JSON chunk:
 
-The model playground allows you to quickly test out the boundaries of any model by chatting with it in the UI. This is a great way to kick the tires of a model you [fine-tuned](/getting-started/fine-tuning) after deploying it.
+```json
+data: {"id":"chatcmpl-...","object":"chat.completion.chunk","created":1774040190,"model":"claude-sonnet-4-6","choices":[{"index":0,"delta":{"content":"hello"},"finish_reason":null}]}
+```
+
+The stream ends with:
+
+```
+data: [DONE]
+```
+
+## Vision
+
+Models that support vision (such as `gpt-4o` or `claude-sonnet-4-6`) accept images in the `messages` array. For full details and examples including base64 encoding and video understanding, see [Vision Language Models](/examples/inference/vision_language_models).
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST https://hub.oxen.ai/api/chat/completions \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-4o",
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {"type": "text", "text": "What is in this image?"},
+          {"type": "image_url", "image_url": {"url": "https://oxen.ai/assets/images/homepage/hero-ox.png"}}
+        ]
+      }
+    ],
+    "max_tokens": 256
+  }'
+```
+
+```python Python (OpenAI SDK)
+from openai import OpenAI
+import os
+
+client = OpenAI(
+    api_key=os.environ["OXEN_API_KEY"],
+    base_url="https://hub.oxen.ai/api",
+)
+
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "What is in this image?"},
+                {"type": "image_url", "image_url": {"url": "https://oxen.ai/assets/images/homepage/hero-ox.png"}},
+            ],
+        }
+    ],
+    max_tokens=256,
+)
+
+print(response.choices[0].message.content)
+```
+
+</CodeGroup>
+
+## Errors
+
+The API returns errors as JSON with an `error` object and a standard HTTP status code.
+
+| Status | Meaning |
+|---|---|
+| `400` | Bad request (missing model, empty messages, invalid parameters) |
+| `401` | Invalid or missing API key |
+| `429` | Rate limit exceeded |
+| `500` | Internal server error |
+
+```json
+{
+  "error": {
+    "message": "You must specify a model to call"
+  }
+}
+```
+
+## Playground
+
+The [model playground](https://www.oxen.ai/ai/models) lets you test any model interactively before writing code. This is also a great way to test models you've [fine-tuned](/getting-started/fine-tuning) after deploying them.
 
 <img alt="Chat Interface" className="rounded-xl" src="/images/chat/chat_window.png" />
-
-
