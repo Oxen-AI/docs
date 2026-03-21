@@ -1,11 +1,15 @@
 # Oxen.ai Documentation 🐂 🌾
 
-Install the mintlify CLI tool: https://www.mintlify.com/docs/installation
+Install the mint CLI tool: https://www.mintlify.com/docs/installation
+
+```bash
+npm i -g mint
+```
 
 ## Running Locally
 
 ```bash
-mintlify dev --port 3333
+mint dev --port 3333
 ```
 
 ## Finetune API Documentation Generation
