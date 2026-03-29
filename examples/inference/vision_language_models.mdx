@@ -1,6 +1,6 @@
 ---
 title: '👁️ Vision Language Models'
-description: 'How to integrate a vision language model into your application through the `/chat/completions` endpoint.'
+description: 'Leverage image understanding with the `/chat/completions` endpoint.'
 ---
 
 ## What are VLMs?
@@ -13,7 +13,7 @@ Here is the [list of supported models](https://www.oxen.ai/ai/models?modalities=
 
 ## Image Understanding
 
-The `/chat/completions` endpoint supports vision language models for image understanding. If you want to send an image to a model that supports vision such as Qwen3-VL or gpt-4o, you can add a message with the `image_url` type.
+The `/chat/completions` endpoint supports vision language models for image understanding. If you want to send an image to a model that supports vision such as Qwen3-VL, Qwen3.5, or Gemini 3 Pro/Flash, you can add a message with the `image_url` type.
 
 ### Using Image URLs
 
@@ -24,7 +24,7 @@ curl -X POST https://hub.oxen.ai/api/chat/completions \
 -H "Authorization: Bearer $OXEN_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-  "model": "gpt-4o",
+  "model": "gemini-3-1-pro-preview",
   "messages": [
     {
       "role": "user",
@@ -57,7 +57,7 @@ curl -X POST https://hub.oxen.ai/api/chat/completions \
 -H "Authorization: Bearer $OXEN_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-  "model": "claude-3-7-sonnet",
+  "model": "claude-sonnet-4-6",
   "messages": [
     {
       "role": "user",
@@ -105,7 +105,7 @@ base64_image = encode_image("path/to/your/image.jpg")
 
 # Send the request with base64 encoded image
 response = client.chat.completions.create(
-    model="claude-3-7-sonnet",
+    model="claude-sonnet-4-6",
     messages=[
         {
             "role": "user",
@@ -250,7 +250,7 @@ print(response.choices[0].message.content)
 
 ## Playground Interface
 
-Want to test out prompts without writing any code? You can use the [playground interface](https://www.oxen.ai/ai/models/gpt-4o) to chat with a model. This is a great way to kick the tires of a base model or a model you [fine-tuned](/getting-started/fine-tuning) after deploying it.
+Want to test out prompts without writing any code? You can use the [playground interface](https://www.oxen.ai/ai/models/claude-sonnet-4-6) to chat with a model. This is a great way to kick the tires of a base model or a model you [fine-tuned](/getting-started/fine-tuning) after deploying it.
 
 <img alt="Chat Interface" className="rounded-xl" src="/images/inference/image-to-text/playground.png" />
 
@@ -262,5 +262,5 @@ Oxen.ai also allows you to fine-tune vision language models on your own data. Th
 
 Once the model has been fine-tuned, you can easily deploy the model behind an inference endpoint and start the evaluation loop over again.
 
-Learn more about [fine-tuning VLMs](/examples/fine-tuning/image_generation).
+Learn more about [fine-tuning VLMs](/examples/fine-tuning/image_understanding).
 
