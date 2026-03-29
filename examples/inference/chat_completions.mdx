@@ -1,7 +1,9 @@
 ---
 title: '💬 Chat Completions'
-description: 'Generate text responses using the OpenAI-compatible `/chat/completions` API.'
+description: 'Integrate an LLM into your application through the `/chat/completions` API.'
 ---
+
+## Quick Start
 
 The Oxen.ai chat completions API is fully [OpenAI-compatible](https://platform.openai.com/docs/api-reference/chat). You can use the OpenAI SDK, `curl`, or any HTTP client that speaks the OpenAI chat format.
 
@@ -10,16 +12,6 @@ The Oxen.ai chat completions API is fully [OpenAI-compatible](https://platform.o
 **Endpoint:** `POST /chat/completions`
 
 Browse [all available models](https://www.oxen.ai/ai/models).
-
-## Authentication
-
-Every request requires a Bearer token in the `Authorization` header. You can find your API key in your [account settings](https://www.oxen.ai/settings).
-
-```bash
-Authorization: Bearer $OXEN_API_KEY
-```
-
-## Quick Start
 
 <CodeGroup>
 
@@ -31,8 +23,7 @@ curl -X POST https://hub.oxen.ai/api/chat/completions \
     "model": "claude-sonnet-4-6",
     "messages": [
       {"role": "user", "content": "What is a great name for an ox?"}
-    ],
-    "max_tokens": 256
+    ]
   }'
 ```
 
@@ -49,14 +40,29 @@ response = client.chat.completions.create(
     model="claude-sonnet-4-6",
     messages=[
         {"role": "user", "content": "What is a great name for an ox?"}
-    ],
-    max_tokens=256,
+    ]
 )
 
 print(response.choices[0].message.content)
 ```
 
 </CodeGroup>
+
+
+## Authentication
+
+Every request requires a Bearer token in the `Authorization` header. You can find your API key in your [account settings](https://www.oxen.ai/settings/profile).
+
+```bash
+Authorization: Bearer $OXEN_API_KEY
+```
+
+<img 
+  src="/images/auth_key.png"
+  alt="API key"
+  className="rounded-xl"
+  noZoom 
+/>
 
 ## Response Format
 
@@ -143,7 +149,6 @@ curl -X POST https://hub.oxen.ai/api/chat/completions \
     "messages": [
       {"role": "user", "content": "Write a haiku about data."}
     ],
-    "max_tokens": 256,
     "stream": true
   }'
 ```
@@ -162,8 +167,7 @@ stream = client.chat.completions.create(
     messages=[
         {"role": "user", "content": "Write a haiku about data."}
     ],
-    max_tokens=256,
-    stream=True,
+    stream=True
 )
 
 for chunk in stream:
@@ -206,8 +210,7 @@ curl -X POST https://hub.oxen.ai/api/chat/completions \
           {"type": "image_url", "image_url": {"url": "https://oxen.ai/assets/images/homepage/hero-ox.png"}}
         ]
       }
-    ],
-    "max_tokens": 256
+    ]
   }'
 ```
 
@@ -230,11 +233,216 @@ response = client.chat.completions.create(
                 {"type": "image_url", "image_url": {"url": "https://oxen.ai/assets/images/homepage/hero-ox.png"}},
             ],
         }
-    ],
-    max_tokens=256,
+    ]
 )
 
 print(response.choices[0].message.content)
+```
+
+</CodeGroup>
+
+## Tool use
+
+Tool calling (function calling) follows the same [OpenAI Chat Completions tool format](https://platform.openai.com/docs/guides/function-calling). You send a `tools` array describing each function’s JSON Schema; the model may reply with `tool_calls` instead of plain text. You execute those functions in your app, then send the results back in new `tool` messages so the model can finish the answer.
+
+| Concept | Description |
+|---|---|
+| `tools` | Array of `{ "type": "function", "function": { "name", "description", "parameters" } }` objects. `parameters` is a JSON Schema object for the arguments. |
+| `tool_choice` | Optional. `"auto"` (default) lets the model decide; `"none"` disables tools; or force a specific function with `{"type": "function", "function": {"name": "..."}}`. |
+| Assistant `tool_calls` | When `finish_reason` is `"tool_calls"`, `choices[0].message.tool_calls` lists each call with `id`, `function.name`, and `function.arguments` (a JSON string). |
+| `tool` messages | Each result uses `role: "tool"`, `tool_call_id` matching the call’s `id`, and `content` as a string (often JSON your tool returned). |
+
+### Raw `curl`: first request (tools only)
+
+The model may respond with `tool_calls` instead of user-facing `content`:
+
+```bash
+curl -X POST https://hub.oxen.ai/api/chat/completions \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "claude-sonnet-4-6",
+    "messages": [
+      {"role": "user", "content": "What is the weather in Paris?"}
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "function": {
+          "name": "get_weather",
+          "description": "Get current weather for a city",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "city": {"type": "string", "description": "City name"}
+            },
+            "required": ["city"]
+          }
+        }
+      }
+    ]
+  }'
+```
+
+Example assistant payload (abbreviated):
+
+```json
+{
+  "choices": [
+    {
+      "finish_reason": "tool_calls",
+      "index": 0,
+      "message": {
+        "content": "I'll check the current weather in Paris for you right away!",
+        "role": "assistant",
+        "tool_calls": [
+          {
+            "function": {
+              "arguments": "{\"city\":\"Paris\"}",
+              "name": "get_weather"
+            },
+            "id": "toolu_014F6XpjMvKbTgV7D5wBzqCn",
+            "index": 1,
+            "type": "function"
+          }
+        ]
+      }
+    }
+  ],
+  "created": 1774809792,
+  "id": "chatcmpl-1ce4aeac-6c34-468a-ba6b-b96c5372a1dc",
+  "model": "claude-sonnet-4-6",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 67,
+    "prompt_tokens": 572,
+    "total_tokens": 639
+  }
+}
+```
+
+Run your function locally, then call the API again with the full transcript: original messages, the assistant message including `tool_calls`, and one `tool` message per call. Replace IDs and `tool_calls` with values from the first response. Repeat until `finish_reason` is `"stop"` (or `"length"`) and there are no new `tool_calls`.
+
+### Follow-up request: `curl` and OpenAI Python SDK
+
+The follow-up HTTP body matches what the OpenAI SDK builds when you append assistant and `tool` messages in a loop.
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST https://hub.oxen.ai/api/chat/completions \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "claude-sonnet-4-6",
+    "messages": [
+      {
+        "role": "user",
+        "content": "What is the weather in Paris?"
+      },
+      {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "toolu_01ABC",
+            "type": "function",
+            "function": {
+              "name": "get_weather",
+              "arguments": "{\"city\": \"Paris\"}"
+            }
+          }
+        ]
+      },
+      {
+        "role": "tool",
+        "tool_call_id": "toolu_01ABC",
+        "content": "{\"temperature_c\": 18, \"conditions\": \"Partly cloudy\"}"
+      }
+    ],
+    "tools": [
+      {
+        "type": "function",
+        "function": {
+          "name": "get_weather",
+          "description": "Get current weather for a city",
+          "parameters": {
+            "type": "object",
+            "properties": {
+              "city": {
+                "type": "string",
+                "description": "City name"
+              }
+            },
+            "required": ["city"]
+          }
+        }
+      }
+    ]
+  }'
+```
+
+```python Python (OpenAI SDK)
+from openai import OpenAI
+import json
+import os
+
+client = OpenAI(
+    api_key=os.environ["OXEN_API_KEY"],
+    base_url="https://hub.oxen.ai/api",
+)
+
+tools = [
+    {
+        "type": "function",
+        "function": {
+            "name": "get_weather",
+            "description": "Get current weather for a city",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "city": {"type": "string", "description": "City name"},
+                },
+                "required": ["city"],
+            },
+        },
+    },
+]
+
+messages = [{"role": "user", "content": "What is the weather in Paris?"}]
+
+def get_weather(city: str) -> str:
+    # Your real implementation would call a weather API.
+    return json.dumps({"temperature_c": 18, "conditions": "Partly cloudy"})
+
+while True:
+    response = client.chat.completions.create(
+        model="claude-sonnet-4-6",
+        messages=messages,
+        tools=tools
+    )
+    choice = response.choices[0]
+    msg = choice.message
+
+    if not msg.tool_calls:
+        print(msg.content)
+        break
+
+    messages.append(msg)
+    for call in msg.tool_calls:
+        name = call.function.name
+        args = json.loads(call.function.arguments or "{}")
+        if name == "get_weather":
+            output = get_weather(args["city"])
+        else:
+            output = json.dumps({"error": f"unknown tool: {name}"})
+        messages.append(
+            {
+                "role": "tool",
+                "tool_call_id": call.id,
+                "content": output,
+            }
+        )
 ```
 
 </CodeGroup>
