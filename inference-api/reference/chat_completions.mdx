@@ -72,7 +72,27 @@ Image and video URLs must be publicly accessible.
 
 ### Basic text generation
 
-```bash
+<CodeGroup>
+
+```python Python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://hub.oxen.ai/api",
+    api_key="YOUR_API_KEY",
+)
+
+response = client.chat.completions.create(
+    model="gpt-4-1-nano-2025-04-14",
+    messages=[{"role": "user", "content": "Say hello in exactly 3 words."}],
+    max_tokens=50,
+    temperature=0.1,
+)
+
+print(response.choices[0].message.content)
+```
+
+```bash cURL
 curl -X POST https://hub.oxen.ai/api/chat/completions \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
@@ -83,6 +103,8 @@ curl -X POST https://hub.oxen.ai/api/chat/completions \
     "temperature": 0.1
   }'
 ```
+
+</CodeGroup>
 
 ### Response
 
@@ -112,7 +134,30 @@ curl -X POST https://hub.oxen.ai/api/chat/completions \
 
 ### Streaming
 
-```bash
+<CodeGroup>
+
+```python Python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://hub.oxen.ai/api",
+    api_key="YOUR_API_KEY",
+)
+
+stream = client.chat.completions.create(
+    model="gpt-4-1-nano-2025-04-14",
+    messages=[{"role": "user", "content": "Say hello"}],
+    stream=True,
+)
+
+for chunk in stream:
+    content = chunk.choices[0].delta.content
+    if content:
+        print(content, end="", flush=True)
+print()
+```
+
+```bash cURL
 curl -X POST https://hub.oxen.ai/api/chat/completions \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
@@ -122,6 +167,8 @@ curl -X POST https://hub.oxen.ai/api/chat/completions \
     "stream": true
   }'
 ```
+
+</CodeGroup>
 
 Returns server-sent events. Each chunk has a `delta` instead of a full `message`:
 
@@ -135,7 +182,41 @@ data: [DONE]
 
 ### Tool calling
 
-```bash
+<CodeGroup>
+
+```python Python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://hub.oxen.ai/api",
+    api_key="YOUR_API_KEY",
+)
+
+response = client.chat.completions.create(
+    model="gpt-4-1-nano-2025-04-14",
+    messages=[
+        {"role": "system", "content": "Use tools when appropriate."},
+        {"role": "user", "content": "What is the weather in San Francisco?"},
+    ],
+    tools=[{
+        "type": "function",
+        "function": {
+            "name": "get_weather",
+            "description": "Get current weather",
+            "parameters": {
+                "type": "object",
+                "properties": {"location": {"type": "string"}},
+                "required": ["location"],
+            },
+        },
+    }],
+)
+
+tool_call = response.choices[0].message.tool_calls[0]
+print(f"{tool_call.function.name}({tool_call.function.arguments})")
+```
+
+```bash cURL
 curl -X POST https://hub.oxen.ai/api/chat/completions \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
@@ -159,6 +240,8 @@ curl -X POST https://hub.oxen.ai/api/chat/completions \
     }]
   }'
 ```
+
+</CodeGroup>
 
 When the model uses a tool, `finish_reason` is `"tool_calls"`:
 
@@ -184,7 +267,27 @@ When the model uses a tool, `finish_reason` is `"tool_calls"`:
 
 ### Structured output (JSON mode)
 
-```bash
+<CodeGroup>
+
+```python Python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://hub.oxen.ai/api",
+    api_key="YOUR_API_KEY",
+)
+
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": "List 3 colors as a JSON array"}],
+    response_format={"type": "json_object"},
+    max_tokens=100,
+)
+
+print(response.choices[0].message.content)
+```
+
+```bash cURL
 curl -X POST https://hub.oxen.ai/api/chat/completions \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
@@ -195,6 +298,8 @@ curl -X POST https://hub.oxen.ai/api/chat/completions \
     "max_tokens": 100
   }'
 ```
+
+</CodeGroup>
 
 ## Errors
 

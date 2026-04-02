@@ -120,58 +120,177 @@ Maximum 4 total images across all elements and `input_image` references.
 
 `input_image` is optional. Without it the model generates purely from the prompt.
 
-```json
-{
-  "model": "kling-video-o3-pro-reference-to-video",
-  "prompt": "A puppy runs through a park"
-}
+<CodeGroup>
+
+```python Python
+import requests
+
+response = requests.post(
+    "https://hub.oxen.ai/api/videos/generate",
+    headers={
+        "Authorization": "Bearer YOUR_API_KEY",
+        "Content-Type": "application/json",
+    },
+    json={
+        "model": "kling-video-o3-pro-reference-to-video",
+        "prompt": "A puppy runs through a park",
+    },
+)
+
+data = response.json()
+print("Video URL:", data["videos"][0]["url"])
 ```
+
+```bash cURL
+curl -X POST https://hub.oxen.ai/api/videos/generate \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "kling-video-o3-pro-reference-to-video",
+    "prompt": "A puppy runs through a park"
+  }'
+```
+
+</CodeGroup>
 
 ### Single prompt with reference image
 
-```json
-{
-  "model": "kling-video-o3-pro-reference-to-video",
-  "prompt": "A dog runs across a sunny field",
-  "input_image": ["https://example.com/dog.jpg"]
-}
+<CodeGroup>
+
+```python Python
+import requests
+
+response = requests.post(
+    "https://hub.oxen.ai/api/videos/generate",
+    headers={
+        "Authorization": "Bearer YOUR_API_KEY",
+        "Content-Type": "application/json",
+    },
+    json={
+        "model": "kling-video-o3-pro-reference-to-video",
+        "prompt": "A dog runs across a sunny field",
+        "input_image": ["https://example.com/dog.jpg"],
+    },
+)
+
+data = response.json()
+print("Video URL:", data["videos"][0]["url"])
 ```
+
+```bash cURL
+curl -X POST https://hub.oxen.ai/api/videos/generate \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "kling-video-o3-pro-reference-to-video",
+    "prompt": "A dog runs across a sunny field",
+    "input_image": ["https://example.com/dog.jpg"]
+  }'
+```
+
+</CodeGroup>
 
 ### Multi-shot with reference image
 
-```json
-{
-  "model": "kling-video-o3-pro-reference-to-video",
-  "multi_prompt": [
-    {"prompt": "A woman walks toward the camera smiling, cinematic lighting", "duration": 5},
-    {"prompt": "She turns and looks out a window, soft focus background", "duration": 5}
-  ],
-  "input_image": ["https://example.com/reference-face.jpg"]
-}
+<CodeGroup>
+
+```python Python
+import requests
+
+response = requests.post(
+    "https://hub.oxen.ai/api/videos/generate",
+    headers={
+        "Authorization": "Bearer YOUR_API_KEY",
+        "Content-Type": "application/json",
+    },
+    json={
+        "model": "kling-video-o3-pro-reference-to-video",
+        "multi_prompt": [
+            {"prompt": "A woman walks toward the camera smiling, cinematic lighting", "duration": 5},
+            {"prompt": "She turns and looks out a window, soft focus background", "duration": 5},
+        ],
+        "input_image": ["https://example.com/reference-face.jpg"],
+    },
+)
+
+data = response.json()
+print("Video URL:", data["videos"][0]["url"])
 ```
+
+```bash cURL
+curl -X POST https://hub.oxen.ai/api/videos/generate \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "kling-video-o3-pro-reference-to-video",
+    "multi_prompt": [
+      {"prompt": "A woman walks toward the camera smiling, cinematic lighting", "duration": 5},
+      {"prompt": "She turns and looks out a window, soft focus background", "duration": 5}
+    ],
+    "input_image": ["https://example.com/reference-face.jpg"]
+  }'
+```
+
+</CodeGroup>
 
 ### With start/end frames and elements
 
-```json
-{
-  "model": "kling-video-o3-pro-reference-to-video",
-  "multi_prompt": [
-    {"prompt": "@Element1 picks up a coffee cup from the table", "duration": 5}
-  ],
-  "start_image_url": "https://example.com/first-frame.jpg",
-  "tail_image_url": "https://example.com/last-frame.jpg",
-  "elements": [
-    {
-      "frontal_image_url": "https://example.com/character-front.jpg",
-      "reference_image_urls": [
-        "https://example.com/character-side.jpg"
-      ]
-    }
-  ],
-  "aspect_ratio": "16:9",
-  "generate_audio": true
-}
+<CodeGroup>
+
+```python Python
+import requests
+
+response = requests.post(
+    "https://hub.oxen.ai/api/videos/generate",
+    headers={
+        "Authorization": "Bearer YOUR_API_KEY",
+        "Content-Type": "application/json",
+    },
+    json={
+        "model": "kling-video-o3-pro-reference-to-video",
+        "multi_prompt": [
+            {"prompt": "@Element1 picks up a coffee cup from the table", "duration": 5},
+        ],
+        "start_image_url": "https://example.com/first-frame.jpg",
+        "tail_image_url": "https://example.com/last-frame.jpg",
+        "elements": [
+            {
+                "frontal_image_url": "https://example.com/character-front.jpg",
+                "reference_image_urls": ["https://example.com/character-side.jpg"],
+            }
+        ],
+        "aspect_ratio": "16:9",
+        "generate_audio": True,
+    },
+)
+
+data = response.json()
+print("Video URL:", data["videos"][0]["url"])
 ```
+
+```bash cURL
+curl -X POST https://hub.oxen.ai/api/videos/generate \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "kling-video-o3-pro-reference-to-video",
+    "multi_prompt": [
+      {"prompt": "@Element1 picks up a coffee cup from the table", "duration": 5}
+    ],
+    "start_image_url": "https://example.com/first-frame.jpg",
+    "tail_image_url": "https://example.com/last-frame.jpg",
+    "elements": [
+      {
+        "frontal_image_url": "https://example.com/character-front.jpg",
+        "reference_image_urls": ["https://example.com/character-side.jpg"]
+      }
+    ],
+    "aspect_ratio": "16:9",
+    "generate_audio": true
+  }'
+```
+
+</CodeGroup>
 
 ### Response (`response_format: "url"`)
 
@@ -209,7 +328,31 @@ Recommended for video generation. Returns immediately, processes in the backgrou
 
 ### Enqueue
 
-```bash
+<CodeGroup>
+
+```python Python
+import requests
+
+response = requests.post(
+    "https://hub.oxen.ai/api/ai/queue",
+    headers={
+        "Authorization": "Bearer YOUR_API_KEY",
+        "Content-Type": "application/json",
+    },
+    json={
+        "model": "kling-video-o3-pro-reference-to-video",
+        "multi_prompt": [{"prompt": "A person speaking into a microphone", "duration": 5}],
+        "generate_audio": True,
+        "num_generations": 2,
+    },
+)
+
+generations = response.json()["generations"]
+for g in generations:
+    print(f"ID: {g['generation_id']}, Status: {g['status']}")
+```
+
+```bash cURL
 curl -X POST https://hub.oxen.ai/api/ai/queue \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
@@ -221,21 +364,54 @@ curl -X POST https://hub.oxen.ai/api/ai/queue \
   }'
 ```
 
+</CodeGroup>
+
 ### Poll
 
-```bash
+<CodeGroup>
+
+```python Python
+import requests
+
+response = requests.get(
+    "https://hub.oxen.ai/api/media/generations/status/YOUR_USERNAME/kling-video-o3-pro-reference-to-video",
+    headers={"Authorization": "Bearer YOUR_API_KEY"},
+)
+
+status = response.json()
+print(f"Remaining: {status['count']}")
+```
+
+```bash cURL
 curl -H "Authorization: Bearer $OXEN_API_KEY" \
   "https://hub.oxen.ai/api/media/generations/status/YOUR_USERNAME/kling-video-o3-pro-reference-to-video"
 ```
+
+</CodeGroup>
 
 When finished, the generation disappears from the list. A `count` of `0` means all generations are complete.
 
 ### Cancel
 
-```bash
+<CodeGroup>
+
+```python Python
+import requests
+
+response = requests.delete(
+    "https://hub.oxen.ai/api/media/generations/YOUR_USERNAME/4ef840a4-...",
+    headers={"Authorization": "Bearer YOUR_API_KEY"},
+)
+
+print(response.json())
+```
+
+```bash cURL
 curl -X DELETE -H "Authorization: Bearer $OXEN_API_KEY" \
   "https://hub.oxen.ai/api/media/generations/YOUR_USERNAME/4ef840a4-..."
 ```
+
+</CodeGroup>
 
 ## Errors
 

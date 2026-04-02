@@ -29,7 +29,30 @@ Available parameters vary by model. Use the model detail endpoint (`GET /api/eva
 
 ### Basic generation
 
-```bash
+<CodeGroup>
+
+```python Python
+import requests
+
+response = requests.post(
+    "https://hub.oxen.ai/api/images/generate",
+    headers={
+        "Authorization": "Bearer YOUR_API_KEY",
+        "Content-Type": "application/json",
+    },
+    json={
+        "model": "black-forest-labs-flux-2-klein-4b",
+        "prompt": "A red cube on a white background",
+        "image_size": "square_hd",
+        "seed": 42,
+    },
+)
+
+data = response.json()
+print("Image URL:", data["images"][0]["url"])
+```
+
+```bash cURL
 curl -X POST https://hub.oxen.ai/api/images/generate \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
@@ -40,6 +63,8 @@ curl -X POST https://hub.oxen.ai/api/images/generate \
     "seed": 42
   }'
 ```
+
+</CodeGroup>
 
 ### Response (`response_format: "url"`)
 

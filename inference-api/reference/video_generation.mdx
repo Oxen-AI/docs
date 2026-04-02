@@ -19,7 +19,7 @@ For long-running or batch generation, consider using the [async queue](/inferenc
 |---|---|---|---|---|
 | `model` | string | **yes** | -- | Video model name (e.g. `kling-video-v2-6-pro-text-to-video`, `kling-video-o3-pro-reference-to-video`) |
 | `prompt` | string | **one of** | -- | Text prompt. Use this or `multi_prompt`, not both. |
-| `multi_prompt` | array | **one of** | -- | Multi-shot prompts with per-shot duration. See [Kling O3 Pro reference](/inference-api/reference/kling_o3_pro_reference_to_video) for details. |
+| `multi_prompt` | array | **one of** | -- | Multi-shot prompts with per-shot duration. See [Kling O3 Pro reference](/inference-api/reference/models/kling_o3_pro_reference_to_video) for details. |
 | `duration` | integer | no | 5 | Video duration in seconds (when using `prompt`). |
 | `aspect_ratio` | string | no | `"16:9"` | Aspect ratio (e.g. `"16:9"`, `"9:16"`, `"1:1"`). |
 | `input_image` | string/array | no | -- | Reference image(s) for image-to-video or reference-to-video models. |
@@ -46,7 +46,29 @@ Sending neither returns:
 
 ### Basic text-to-video
 
-```bash
+<CodeGroup>
+
+```python Python
+import requests
+
+response = requests.post(
+    "https://hub.oxen.ai/api/videos/generate",
+    headers={
+        "Authorization": "Bearer YOUR_API_KEY",
+        "Content-Type": "application/json",
+    },
+    json={
+        "model": "kling-video-v2-6-pro-text-to-video",
+        "prompt": "A red balloon floating upward through blue sky",
+        "duration": 5,
+    },
+)
+
+data = response.json()
+print("Video URL:", data["videos"][0]["url"])
+```
+
+```bash cURL
 curl -X POST https://hub.oxen.ai/api/videos/generate \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
@@ -56,6 +78,8 @@ curl -X POST https://hub.oxen.ai/api/videos/generate \
     "duration": 5
   }'
 ```
+
+</CodeGroup>
 
 ### Response (`response_format: "url"`)
 
@@ -89,7 +113,32 @@ The URL is a temporary link that expires after a period of time.
 
 ### Multi-shot video
 
-```bash
+<CodeGroup>
+
+```python Python
+import requests
+
+response = requests.post(
+    "https://hub.oxen.ai/api/videos/generate",
+    headers={
+        "Authorization": "Bearer YOUR_API_KEY",
+        "Content-Type": "application/json",
+    },
+    json={
+        "model": "kling-video-o3-pro-reference-to-video",
+        "multi_prompt": [
+            {"prompt": "Wide shot: a bird takes off from a branch", "duration": 5},
+            {"prompt": "Tracking shot: the bird soars through clouds", "duration": 5},
+        ],
+        "aspect_ratio": "16:9",
+    },
+)
+
+data = response.json()
+print("Video URL:", data["videos"][0]["url"])
+```
+
+```bash cURL
 curl -X POST https://hub.oxen.ai/api/videos/generate \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
@@ -102,6 +151,8 @@ curl -X POST https://hub.oxen.ai/api/videos/generate \
     "aspect_ratio": "16:9"
   }'
 ```
+
+</CodeGroup>
 
 ## Important Notes
 
