@@ -1,0 +1,94 @@
+---
+title: "Image Generation"
+description: "Generate images from text prompts in minutes"
+---
+
+## Overview
+
+Generate images from text descriptions using models like FLUX and DALL-E.
+
+## Minimal Example
+
+<CodeGroup>
+
+```python Python
+import requests
+
+response = requests.post(
+    "https://hub.oxen.ai/api/images/generate",
+    headers={
+        "Authorization": "Bearer YOUR_API_KEY",
+        "Content-Type": "application/json",
+    },
+    json={
+        "model": "black-forest-labs-flux-2-klein-4b",
+        "prompt": "A red cube on a white background, minimal",
+    },
+)
+
+data = response.json()
+print("Image URL:", data["images"][0]["url"])
+```
+
+```bash cURL
+curl -X POST https://hub.oxen.ai/api/images/generate \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "black-forest-labs-flux-2-klein-4b",
+    "prompt": "A red cube on a white background, minimal"
+  }'
+```
+
+</CodeGroup>
+
+## With Base64 Response
+
+Set `response_format` to `"b64_json"` to get the image bytes directly instead of a URL:
+
+<CodeGroup>
+
+```python Python
+import requests
+import base64
+
+response = requests.post(
+    "https://hub.oxen.ai/api/images/generate",
+    headers={
+        "Authorization": "Bearer YOUR_API_KEY",
+        "Content-Type": "application/json",
+    },
+    json={
+        "model": "black-forest-labs-flux-2-klein-4b",
+        "prompt": "A blue sphere on grey background",
+        "response_format": "b64_json",
+    },
+)
+
+data = response.json()
+image_bytes = base64.b64decode(data["images"][0]["b64_json"])
+
+with open("output.png", "wb") as f:
+    f.write(image_bytes)
+
+print("Saved to output.png")
+```
+
+```bash cURL
+curl -X POST https://hub.oxen.ai/api/images/generate \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "black-forest-labs-flux-2-klein-4b",
+    "prompt": "A blue sphere on grey background",
+    "response_format": "b64_json"
+  }'
+```
+
+</CodeGroup>
+
+## What's Next
+
+- [Image Generation Reference](/inference-api/reference/image_generation) for the full parameter list
+- [Image Editing Reference](/inference-api/reference/image_editing) to edit existing images
+- [Async Queue](/inference-api/reference/async_queue) to generate multiple images in parallel

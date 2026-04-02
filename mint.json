@@ -168,6 +168,14 @@
           "pages": [
               "inference-api/overview",
               {
+                  "group": "Quick Starts",
+                  "pages": [
+                      "inference-api/quickstart/chat",
+                      "inference-api/quickstart/image-generation",
+                      "inference-api/quickstart/video-generation"
+                  ]
+              },
+              {
                   "group": "API Reference",
                   "pages": [
                       "inference-api/reference/chat_completions",
