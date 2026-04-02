@@ -1,0 +1,62 @@
+---
+title: "Image Editing"
+description: "Edit images using text prompts"
+---
+
+## Endpoint
+
+```
+POST /api/images/edit
+```
+
+Edit an existing image using a text prompt. The request blocks until the edited image is ready.
+
+## Request Parameters
+
+| Parameter | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `model` | string | **yes** | -- | Image editing model (e.g. `qwen-image-edit`, `nano-banana-2-edit`, `xai-grok-imagine-image-edit`) |
+| `prompt` | string | **yes** | -- | Description of the edit to apply. |
+| `input_image` | string (URL) | **yes** | -- | URL of the image to edit. Must be publicly accessible. |
+| `response_format` | string | no | `"url"` | `"url"` returns a hosted URL. `"b64_json"` returns base64-encoded image bytes inline. |
+| `target_namespace` | string | no | current user | Namespace to save results and bill to. Can be an organization name. |
+
+## Examples
+
+### Basic edit
+
+```bash
+curl -X POST https://hub.oxen.ai/api/images/edit \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "qwen-image-edit",
+    "prompt": "Make the background blue",
+    "input_image": "https://example.com/my-photo.jpg"
+  }'
+```
+
+### Response
+
+Same format as `/images/generate`:
+
+```json
+{
+  "model": "qwen-image-edit",
+  "created": 1775090400,
+  "images": [
+    {
+      "url": "https://hub.oxen.ai/api/repos/.../files/.../image.png?..."
+    }
+  ]
+}
+```
+
+## Errors
+
+| Condition | Error |
+|---|---|
+| Image URL not accessible | `"... 403 Client Error: Forbidden for url: ..."` |
+| Model not found | `"Model not found: <name>"` |
+
+The `input_image` URL must be publicly downloadable. URLs that require authentication or block automated access will fail.

@@ -1,0 +1,206 @@
+---
+title: "Chat Completions"
+description: "Generate text responses from language models with support for streaming, vision, and tool calling"
+---
+
+## Endpoint
+
+```
+POST /api/chat/completions
+```
+
+Compatible with the OpenAI chat completions format. Supports streaming, multimodal input (images and video), tool calling, and structured output.
+
+## Request Parameters
+
+| Parameter | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `model` | string | **yes** | -- | Model name (e.g. `gpt-4o-mini`, `claude-sonnet-4-6`, `gpt-4-1-nano-2025-04-14`) |
+| `messages` | array | **yes** | -- | Array of message objects. Must not be empty. |
+| `stream` | boolean | no | `false` | Stream the response as server-sent events. |
+| `max_tokens` | integer | no | varies | Maximum tokens in the response. |
+| `temperature` | number | no | varies | Sampling temperature (0-2). |
+| `top_p` | number | no | -- | Nucleus sampling parameter. |
+| `frequency_penalty` | number | no | -- | Penalize repeated tokens. |
+| `presence_penalty` | number | no | -- | Penalize tokens already present. |
+| `tools` | array | no | -- | Tool/function definitions for tool calling. |
+| `tool_choice` | string/object | no | -- | Control tool selection behavior. |
+| `parallel_tool_calls` | boolean | no | -- | Allow parallel tool calls. |
+| `response_format` | object | no | -- | Constrain response format (e.g. `{"type": "json_object"}`). |
+
+## Message Format
+
+Each message has a `role` and `content`:
+
+```json
+[
+  {"role": "system", "content": "You are a helpful assistant."},
+  {"role": "user", "content": "Hello!"},
+  {"role": "assistant", "content": "Hi there!"}
+]
+```
+
+### Vision (multimodal)
+
+Use a content array to include images or video:
+
+```json
+{
+  "role": "user",
+  "content": [
+    {"type": "text", "text": "What's in this image?"},
+    {"type": "image_url", "image_url": {"url": "https://example.com/photo.jpg"}}
+  ]
+}
+```
+
+Video input:
+
+```json
+{
+  "role": "user",
+  "content": [
+    {"type": "text", "text": "Describe this video"},
+    {"type": "video_url", "video_url": {"url": "https://example.com/clip.mp4"}}
+  ]
+}
+```
+
+Image and video URLs must be publicly accessible.
+
+## Examples
+
+### Basic text generation
+
+```bash
+curl -X POST https://hub.oxen.ai/api/chat/completions \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-4-1-nano-2025-04-14",
+    "messages": [{"role": "user", "content": "Say hello in exactly 3 words."}],
+    "max_tokens": 50,
+    "temperature": 0.1
+  }'
+```
+
+### Response
+
+```json
+{
+  "id": "chatcmpl-97eab7db-fe67-4b29-900c-ed5260c654d4",
+  "object": "chat.completion",
+  "created": 1775090332,
+  "model": "gpt-4-1-nano-2025-04-14",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "Hello, how are?"
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 15,
+    "completion_tokens": 5,
+    "total_tokens": 20
+  }
+}
+```
+
+### Streaming
+
+```bash
+curl -X POST https://hub.oxen.ai/api/chat/completions \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-4-1-nano-2025-04-14",
+    "messages": [{"role": "user", "content": "Say hello"}],
+    "stream": true
+  }'
+```
+
+Returns server-sent events. Each chunk has a `delta` instead of a full `message`:
+
+```
+data: {"choices":[{"delta":{"content":"Hello"},"finish_reason":null,"index":0}],"created":1775090334,"id":"chatcmpl-...","model":"gpt-4-1-nano-2025-04-14","object":"chat.completion.chunk"}
+
+data: {"choices":[{"delta":{"content":" there"},"finish_reason":null,"index":0}],...}
+
+data: [DONE]
+```
+
+### Tool calling
+
+```bash
+curl -X POST https://hub.oxen.ai/api/chat/completions \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-4-1-nano-2025-04-14",
+    "messages": [
+      {"role": "system", "content": "Use tools when appropriate."},
+      {"role": "user", "content": "What is the weather in San Francisco?"}
+    ],
+    "tools": [{
+      "type": "function",
+      "function": {
+        "name": "get_weather",
+        "description": "Get current weather",
+        "parameters": {
+          "type": "object",
+          "properties": {"location": {"type": "string"}},
+          "required": ["location"]
+        }
+      }
+    }]
+  }'
+```
+
+When the model uses a tool, `finish_reason` is `"tool_calls"`:
+
+```json
+{
+  "choices": [{
+    "finish_reason": "tool_calls",
+    "message": {
+      "content": null,
+      "role": "assistant",
+      "tool_calls": [{
+        "id": "call_GRNwPXnbuQW4Sa3QNB3FYkYw",
+        "type": "function",
+        "function": {
+          "name": "get_weather",
+          "arguments": "{\"location\":\"San Francisco\"}"
+        }
+      }]
+    }
+  }]
+}
+```
+
+### Structured output (JSON mode)
+
+```bash
+curl -X POST https://hub.oxen.ai/api/chat/completions \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-4o-mini",
+    "messages": [{"role": "user", "content": "List 3 colors as a JSON array"}],
+    "response_format": {"type": "json_object"},
+    "max_tokens": 100
+  }'
+```
+
+## Errors
+
+| Condition | Error |
+|---|---|
+| No model specified | `"You must specify a model to call"` |
+| Model not found | `"Model not found: <name>"` |
+| Empty messages | `"Messages array cannot be empty"` |
+| Insufficient credits | Credit-related error message |

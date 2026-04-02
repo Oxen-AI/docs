@@ -1,0 +1,210 @@
+---
+title: "Async Queue"
+description: "Enqueue image and video generation jobs that process in the background"
+---
+
+## Why Use the Async Queue
+
+The synchronous endpoints (`/images/generate`, `/videos/generate`) block until the result is ready. For video generation, this can be 1-10+ minutes. The async queue returns immediately with generation IDs so you can:
+
+- Generate up to 4 images or videos in parallel
+- Avoid long-lived HTTP connections
+- Build progress-tracking UIs
+
+## Workflow
+
+```
+1. POST /ai/queue                              → Get generation IDs
+2. GET /media/generations/status/:ns/*model     → Poll until count = 0
+3. Results accessible via URLs in your account
+```
+
+---
+
+## Enqueue: POST /api/ai/queue
+
+### Request Parameters
+
+| Parameter | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `model` | string | **yes** | -- | Must be an image or video model. Text-only models are rejected. |
+| `prompt` | string | no | -- | Text prompt. |
+| `num_generations` | integer | no | `1` | How many generations to run in parallel. Range: 1-4. |
+
+All other model-specific parameters are passed through (e.g. `multi_prompt`, `duration`, `aspect_ratio`, `input_image`, `generate_audio`, `seed`, `response_format`, `target_namespace`, etc.).
+
+### Response
+
+```json
+{
+  "generations": [
+    {"generation_id": "bb8f5eb7-361e-4e13-ab73-67457bc8057e", "status": "processing"},
+    {"generation_id": "e9bede09-cd0e-46cf-bbcd-cb1a50099351", "status": "processing"}
+  ]
+}
+```
+
+### Validation
+
+The API validates at enqueue time that:
+- The model exists and has image or video output capability
+- `num_generations` is 1-4
+- The user is authenticated with sufficient credits
+
+Model-specific parameter validation (prompt content, duration ranges, aspect ratio values) happens **when the generation runs**, not at enqueue time. If a parameter is invalid, the generation fails silently (it disappears from the status list without producing a result). To validate parameters and get immediate error feedback, use `/images/generate` or `/videos/generate` instead.
+
+---
+
+## Poll Status: GET /api/media/generations/status/:namespace/\*model_name
+
+Check the status of queued generations for a specific model.
+
+- `:namespace`: Your username (e.g. `myuser`)
+- `*model_name`: The model name used to enqueue (e.g. `kling-video-o3-pro-reference-to-video`)
+
+### Response (jobs in progress)
+
+```json
+{
+  "status": "success",
+  "count": 1,
+  "generations": [
+    {
+      "generation_id": "7cf9b23a-...",
+      "model": "kling-video-o3-pro-reference-to-video",
+      "model_name": "kling-video-o3-pro-reference-to-video",
+      "enqueued_at": 1775091431,
+      "multi_prompt": [{"duration": 10, "prompt": "An astronaut walking on Mars"}],
+      "aspect_ratio": "16:9"
+    }
+  ]
+}
+```
+
+The response echoes back the parameters you submitted along with metadata:
+
+| Field | Always Present | Description |
+|---|---|---|
+| `generation_id` | yes | Unique ID for this generation |
+| `model` | yes | Model name |
+| `model_name` | yes | Same as `model` |
+| `enqueued_at` | yes | Unix timestamp when the job was enqueued |
+| `prompt` | if submitted | Your text prompt |
+| `multi_prompt` | if submitted | Your multi-shot prompts |
+| other params | if submitted | Any other parameters you passed |
+
+### Response (all jobs complete)
+
+```json
+{
+  "status": "success",
+  "count": 0,
+  "generations": []
+}
+```
+
+### How Completion Works
+
+When a generation finishes, it is removed from the status list. There is no "completed" status. Generations are either in the list (still processing) or gone (done). Poll until `count` reaches 0.
+
+### Polling Strategy
+
+- **Image generation** (FLUX, etc.): typically completes in 5-30 seconds. Poll every 2-5 seconds.
+- **Video generation** (Kling, etc.): typically takes 1-5 minutes. Poll every 10-30 seconds.
+- Generations expire after 24 hours regardless of completion.
+
+---
+
+## Cancel: DELETE /api/media/generations/:namespace/:generation_id
+
+Cancel a queued or in-progress generation.
+
+### Response (success)
+
+```json
+{
+  "status": "success",
+  "generation_id": "bb8f5eb7-361e-4e13-ab73-67457bc8057e"
+}
+```
+
+### Response (already completed or not found)
+
+Returns 404:
+
+```json
+{
+  "error": {
+    "type": "resource_not_found",
+    "title": "The requested resource could not be found"
+  },
+  "status": "error"
+}
+```
+
+You can only cancel generations that are still processing. Once a generation completes and leaves the status list, the DELETE endpoint returns 404.
+
+---
+
+## Examples
+
+### Batch image generation with polling
+
+```bash
+# Enqueue 4 images
+curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "black-forest-labs-flux-2-klein-4b",
+    "prompt": "Abstract geometric pattern in blue and gold",
+    "num_generations": 4
+  }'
+
+# Poll until done
+while true; do
+  STATUS=$(curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+    "https://hub.oxen.ai/api/media/generations/status/myuser/black-forest-labs-flux-2-klein-4b")
+  COUNT=$(echo "$STATUS" | python3 -c "import json,sys; print(json.load(sys.stdin)['count'])")
+  echo "Remaining: $COUNT"
+  [ "$COUNT" -eq 0 ] && break
+  sleep 5
+done
+
+echo "All images generated!"
+```
+
+### Async video generation
+
+```bash
+curl -X POST https://hub.oxen.ai/api/ai/queue \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "kling-video-o3-pro-reference-to-video",
+    "multi_prompt": [
+      {"prompt": "Aerial view of waves crashing on a rocky shore", "duration": 5},
+      {"prompt": "Camera pulls back to reveal the full coastline", "duration": 5}
+    ],
+    "aspect_ratio": "16:9"
+  }'
+```
+
+### Text model (rejected)
+
+```bash
+curl -X POST https://hub.oxen.ai/api/ai/queue \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"model": "gpt-4o-mini", "prompt": "Hello"}'
+# Returns: {"error": {"detail": ":unsupported_media_type"}}
+```
+
+## Errors
+
+| Condition | Error |
+|---|---|
+| `num_generations` out of range | `"num_generations must be an integer between 1 and 4"` |
+| Model not found | `"Model not found: <name>"` |
+| Text-only model | `":unsupported_media_type"` |
+| 404 on DELETE | Generation already completed or doesn't exist |

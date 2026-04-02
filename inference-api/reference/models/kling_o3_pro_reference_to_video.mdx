@@ -1,0 +1,263 @@
+---
+title: "Kling O3 Pro: Reference to Video"
+description: "Generate videos from text prompts with optional reference images, multi-shot support, and native audio"
+---
+
+Transforms reference images into dynamic video sequences. Preserves identity, layout, and text from reference images while adding realistic motion, camera movements, and scene progression. Supports multi-shot generation with per-shot prompts and durations, and optional native audio (Chinese/English).
+
+**Model name:** `kling-video-o3-pro-reference-to-video`
+**Pricing:** $0.224/second of output video (same rate with audio)
+**Input:** image + text | **Output:** video
+
+## Endpoint
+
+```
+POST /api/videos/generate
+```
+
+Video generation is synchronous, the request blocks until the video is ready (typically 1-5 minutes). Billing is calculated as `total video duration x $0.224/s`. A default 5-second video costs ~$1.12.
+
+For fire-and-forget or batch generation, use [`/ai/queue`](/inference-api/reference/async_queue) instead.
+
+## Request Parameters
+
+| Parameter | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `model` | string | **yes** | -- | `"kling-video-o3-pro-reference-to-video"` |
+| `prompt` | string | **one of** | -- | Single prompt for the video. Use this or `multi_prompt`, not both. Max 512 characters. |
+| `multi_prompt` | array | **one of** | -- | Multi-shot prompts. See [multi_prompt](#multi_prompt) below. |
+| `duration` | integer | no | 5 | Duration in seconds when using `prompt`. |
+| `input_image` | array of URIs | no | -- | Reference images for style/appearance (max 4 combined with elements). Reference in prompts as `@Image1`, `@Image2`, etc. |
+| `start_image_url` | string (URI) | no | -- | First frame of the video. The model extends from this image. |
+| `tail_image_url` | string (URI) | no | -- | Last frame of the video. Requires `start_image_url`. The model fills in between the frames. |
+| `elements` | array of objects | no | -- | Structured element references for characters/objects. See [elements](#elements) below. |
+| `negative_prompt` | string | no | `"blur, distort, and low quality"` | Text describing what to avoid in the generated video. |
+| `aspect_ratio` | string | no | `"16:9"` | `"9:16"`, `"1:1"`, or `"16:9"`. |
+| `generate_audio` | boolean | no | `false` | Generate native audio. Supports Chinese and English voice output. |
+| `response_format` | string | no | `"url"` | `"url"` returns a hosted URL. `"b64_json"` returns base64-encoded video bytes inline. |
+| `target_namespace` | string | no | current user | Namespace to save results and bill to. Can be an organization name. |
+
+### prompt vs multi_prompt
+
+Use **either** `prompt` or `multi_prompt`, not both. Sending both returns:
+
+```
+"Cannot provide both 'prompt' and 'multi_prompt'."
+```
+
+Sending neither (or an empty `multi_prompt: []`) returns:
+
+```
+"Either 'prompt' or 'multi_prompt' must be provided."
+```
+
+When using `prompt`, the duration defaults to 5 seconds. Override with `duration`:
+
+```json
+{"model": "kling-video-o3-pro-reference-to-video", "prompt": "A flower blooming in timelapse", "duration": 10}
+```
+
+### multi_prompt
+
+Array of shot objects. Each shot generates a segment of the video.
+
+| Field | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `prompt` | string | **yes** | -- | Prompt for this shot. Max 512 characters. |
+| `duration` | integer | no | 5 | Duration of this shot in seconds (1-15). |
+
+### Duration Constraints
+
+| Constraint | Value |
+|---|---|
+| Minimum total duration | **3 seconds** |
+| Maximum total duration | **15 seconds** |
+| Maximum per shot | 15 seconds |
+| Default per shot | 5 seconds |
+
+Individual shots can be as short as 1 second, as long as the total across all shots is between 3 and 15 seconds.
+
+| Configuration | Total | Result |
+|---|---|---|
+| Single shot, `duration: 1` | 1s | **Fails** |
+| Single shot, `duration: 2` | 2s | **Fails** |
+| Single shot, `duration: 3` | 3s | Works |
+| Two shots: `duration: 2` + `duration: 1` | 3s | Works |
+| Two shots: `duration: 1` + `duration: 1` | 2s | **Fails** |
+| Single shot, `duration: 15` | 15s | Works |
+| Three shots: `duration: 5` + `duration: 5` + `duration: 5` | 15s | Works |
+| Three shots: `duration: 5` + `duration: 5` + `duration: 6` | 16s | **Fails** |
+
+When total duration is too short:
+```
+"duration value '2' is invalid. Try using duration='5' instead, as duration support may vary by model and mode."
+```
+
+When total duration exceeds 15 seconds:
+```
+"Total shot duration (16s) exceeds maximum allowed (15s)."
+```
+
+When a single shot exceeds 15 seconds:
+```
+"Input should be '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14' or '15'"
+```
+
+### elements
+
+Array of element objects for character/object reference. Use `@Element1`, `@Element2`, etc. in prompts.
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `frontal_image_url` | string (URI) | **yes** | Front view of the reference object or character. |
+| `reference_image_urls` | array of URIs | no | Additional angles. Max 3 images per element. |
+
+Maximum 4 total images across all elements and `input_image` references.
+
+## Examples
+
+### Minimal: text only
+
+`input_image` is optional. Without it the model generates purely from the prompt.
+
+```json
+{
+  "model": "kling-video-o3-pro-reference-to-video",
+  "prompt": "A puppy runs through a park"
+}
+```
+
+### Single prompt with reference image
+
+```json
+{
+  "model": "kling-video-o3-pro-reference-to-video",
+  "prompt": "A dog runs across a sunny field",
+  "input_image": ["https://example.com/dog.jpg"]
+}
+```
+
+### Multi-shot with reference image
+
+```json
+{
+  "model": "kling-video-o3-pro-reference-to-video",
+  "multi_prompt": [
+    {"prompt": "A woman walks toward the camera smiling, cinematic lighting", "duration": 5},
+    {"prompt": "She turns and looks out a window, soft focus background", "duration": 5}
+  ],
+  "input_image": ["https://example.com/reference-face.jpg"]
+}
+```
+
+### With start/end frames and elements
+
+```json
+{
+  "model": "kling-video-o3-pro-reference-to-video",
+  "multi_prompt": [
+    {"prompt": "@Element1 picks up a coffee cup from the table", "duration": 5}
+  ],
+  "start_image_url": "https://example.com/first-frame.jpg",
+  "tail_image_url": "https://example.com/last-frame.jpg",
+  "elements": [
+    {
+      "frontal_image_url": "https://example.com/character-front.jpg",
+      "reference_image_urls": [
+        "https://example.com/character-side.jpg"
+      ]
+    }
+  ],
+  "aspect_ratio": "16:9",
+  "generate_audio": true
+}
+```
+
+### Response (`response_format: "url"`)
+
+```json
+{
+  "created": 1775090723,
+  "model": "kling-video-o3-pro-reference-to-video",
+  "videos": [
+    {
+      "url": "https://hub.oxen.ai/api/repos/.../files/.../video.mp4?..."
+    }
+  ]
+}
+```
+
+The URL is a temporary link that expires after a period of time.
+
+### Response (`response_format: "b64_json"`)
+
+```json
+{
+  "created": 1775090723,
+  "model": "kling-video-o3-pro-reference-to-video",
+  "videos": [
+    {
+      "b64_json": "<base64-encoded mp4 bytes>"
+    }
+  ]
+}
+```
+
+## Using with /ai/queue
+
+Recommended for video generation. Returns immediately, processes in the background.
+
+### Enqueue
+
+```bash
+curl -X POST https://hub.oxen.ai/api/ai/queue \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "kling-video-o3-pro-reference-to-video",
+    "multi_prompt": [{"prompt": "A person speaking into a microphone", "duration": 5}],
+    "generate_audio": true,
+    "num_generations": 2
+  }'
+```
+
+### Poll
+
+```bash
+curl -H "Authorization: Bearer $OXEN_API_KEY" \
+  "https://hub.oxen.ai/api/media/generations/status/YOUR_USERNAME/kling-video-o3-pro-reference-to-video"
+```
+
+When finished, the generation disappears from the list. A `count` of `0` means all generations are complete.
+
+### Cancel
+
+```bash
+curl -X DELETE -H "Authorization: Bearer $OXEN_API_KEY" \
+  "https://hub.oxen.ai/api/media/generations/YOUR_USERNAME/4ef840a4-..."
+```
+
+## Errors
+
+| Error | Cause | Fix |
+|---|---|---|
+| `Cannot provide both 'prompt' and 'multi_prompt'` | Sent both fields | Use one or the other |
+| `Either 'prompt' or 'multi_prompt' must be provided` | Neither sent, or empty array | Provide at least one |
+| `Field required` | `multi_prompt` item missing `prompt` | Every shot needs a `prompt` string |
+| `duration value '2' is invalid` | Total duration < 3 seconds | Ensure total across shots >= 3 |
+| `Total shot duration (16s) exceeds maximum allowed (15s)` | Total duration > 15 seconds | Keep total at 15 seconds or less |
+| `Input should be '1', '2', ... or '15'` | Single shot > 15 | Keep each shot at 15 seconds or less |
+| `num_generations must be an integer between 1 and 4` | Invalid count (via `/ai/queue`) | Use 1-4 |
+
+## Other Kling Models
+
+| Model | Input | Use Case | Cost/sec |
+|---|---|---|---|
+| `kling-video-v2-6-pro-text-to-video` | Text only | Simple text-to-video | $0.070 |
+| `kling-video-v2-6-pro-image-to-video` | Image | Animate a single image | $0.070 |
+| `kling-video-o3-pro-image-to-video` | Image + text | Higher quality image animation | $0.224 |
+| `kling-video-o3-pro-reference-to-video` | Images + text | Reference-conditioned, multi-shot | $0.224 |
+| `kling-video-o3-pro-video-to-video-edit` | Video | Edit existing video | $0.336 |
+| `kling-video-v3-pro-motion-control` | Text + image + video | Camera/motion control | $0.168 |
+
+The O3 Pro models produce higher quality output than v2.x but cost roughly 3x more per second.

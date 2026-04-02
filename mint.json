@@ -42,6 +42,10 @@
           "name": "Fine-Tuning API",
           "url": "fine-tuning-api",
           "openapi": "https://hub.oxen.ai/api/_spec/oxen_hub_api.json"
+      },
+      {
+          "name": "Inference API",
+          "url": "inference-api"
       }
   ],
   "anchors": [
@@ -157,6 +161,28 @@
                         "http-api/example"
                     ]
                 }
+          ]
+      },
+      {
+          "group": "Inference API",
+          "pages": [
+              "inference-api/overview",
+              {
+                  "group": "API Reference",
+                  "pages": [
+                      "inference-api/reference/chat_completions",
+                      "inference-api/reference/image_generation",
+                      "inference-api/reference/image_editing",
+                      "inference-api/reference/video_generation",
+                      "inference-api/reference/async_queue"
+                  ]
+              },
+              {
+                  "group": "Model References",
+                  "pages": [
+                      "inference-api/reference/models/kling_o3_pro_reference_to_video"
+                  ]
+              }
           ]
       },
       {

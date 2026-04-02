@@ -1,0 +1,139 @@
+---
+title: "Inference API Overview"
+description: "Run inference on hundreds of AI models through a unified API for text, image, and video generation"
+---
+
+## What is the Inference API?
+
+The Inference API gives you access to hundreds of AI models through a single, consistent interface. Generate text, images, and videos without managing infrastructure or juggling multiple provider SDKs.
+
+**Capabilities:**
+
+- **Text Generation**: Chat completions, tool calling, vision, structured output
+- **Image Generation**: Text-to-image, image-to-image editing
+- **Video Generation**: Text-to-video, image-to-video, reference-to-video, video-to-video editing
+
+## Authentication
+
+All requests require a bearer token:
+
+```bash
+curl -H "Authorization: Bearer YOUR_API_KEY" \
+  https://hub.oxen.ai/api/...
+```
+
+Get your API key from your [account settings](https://oxen.ai/settings).
+
+## Endpoints
+
+| Endpoint | Method | Description |
+|---|---|---|
+| `/chat/completions` | POST | Text generation (chat, vision, tool use) |
+| `/images/generate` | POST | Image generation |
+| `/images/edit` | POST | Image editing |
+| `/videos/generate` | POST | Video generation |
+| `/ai/queue` | POST | Async image/video generation |
+| `/media/generations/status/:namespace/*model_name` | GET | Poll async generation status |
+| `/media/generations/:namespace/:generation_id` | DELETE | Cancel a queued generation |
+| `/evaluations/models` | GET | List available models |
+| `/evaluations/models/:id` | GET | Get model details and parameter schema |
+
+## Common Parameters
+
+These parameters are accepted across multiple endpoints:
+
+| Parameter | Type | Description |
+|---|---|---|
+| `model` | string | Required. The model to use (e.g. `gpt-4o-mini`, `flux-2-dev`, `kling-video-o3-pro-reference-to-video`). |
+| `response_format` | string | `"url"` (default) returns a hosted URL. `"b64_json"` returns base64-encoded bytes inline. Supported on image and video endpoints. |
+| `target_namespace` | string | Namespace to save results and bill to. Defaults to your user. Can be an organization name. |
+
+## Discovering Models
+
+List all models, optionally filtered by capability:
+
+```bash
+# All video models
+curl -H "Authorization: Bearer $OXEN_API_KEY" \
+  "https://hub.oxen.ai/api/evaluations/models?output_capability=video"
+
+# Search by name
+curl -H "Authorization: Bearer $OXEN_API_KEY" \
+  "https://hub.oxen.ai/api/evaluations/models/search?search=kling"
+```
+
+Get full details for a specific model (including its parameter schema):
+
+```bash
+curl -H "Authorization: Bearer $OXEN_API_KEY" \
+  "https://hub.oxen.ai/api/evaluations/models/kling-video-o3-pro-reference-to-video"
+```
+
+The response includes a `json_request_schema` field with the complete parameter definitions, types, defaults, and constraints for that model.
+
+## Pricing
+
+Pricing varies by model:
+
+| Method | How it works | Examples |
+|---|---|---|
+| `token` | Per input/output token | GPT, Claude, Gemini |
+| `per_image` | Fixed cost per image | FLUX, DALL-E |
+| `per_video_output_second` | Cost per second of output video | Kling, Sora |
+
+Check the model detail endpoint for exact pricing. Relevant fields: `input_cost_per_token`, `output_cost_per_token`, `cost_per_image`, `video_cost_per_second`, `video_cost_per_second_with_audio`, `video_cost_per_second_high_res`.
+
+## Error Format
+
+Errors use one of two formats:
+
+```json
+{
+  "error": {
+    "type": "invalid_params",
+    "title": "Invalid parameters supplied, please check your request and try again.",
+    "detail": "Specific error details"
+  },
+  "status": "error"
+}
+```
+
+```json
+{
+  "error": {
+    "message": "Model not found: bad-model-name"
+  }
+}
+```
+
+Common error types: `unauthenticated`, `invalid_params`, `resource_not_found`, `unknown_error`.
+
+## API Reference
+
+<CardGroup cols={2}>
+  <Card title="Chat Completions" icon="message" href="/inference-api/reference/chat_completions">
+    Text generation, vision, tool calling
+  </Card>
+  <Card title="Image Generation" icon="image" href="/inference-api/reference/image_generation">
+    Text-to-image generation
+  </Card>
+  <Card title="Image Editing" icon="wand-magic-sparkles" href="/inference-api/reference/image_editing">
+    Edit images with text prompts
+  </Card>
+  <Card title="Video Generation" icon="video" href="/inference-api/reference/video_generation">
+    Text-to-video, image-to-video, multi-shot
+  </Card>
+  <Card title="Async Queue" icon="layer-group" href="/inference-api/reference/async_queue">
+    Background image/video generation
+  </Card>
+</CardGroup>
+
+## Model-Specific Guides
+
+<CardGroup cols={2}>
+  <Card title="Kling O3 Pro: Reference to Video" icon="film" href="/inference-api/reference/kling_o3_pro_reference_to_video">
+    Multi-shot video with reference images, elements, and audio
+  </Card>
+</CardGroup>
+
+Need help? Join our [Discord community](https://discord.com/invite/s3tBEn7Ptg).

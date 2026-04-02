@@ -1,0 +1,79 @@
+---
+title: "Image Generation"
+description: "Generate images from text prompts"
+---
+
+## Endpoint
+
+```
+POST /api/images/generate
+```
+
+Generates images synchronously. The request blocks until the image is ready (typically 5-30 seconds depending on the model).
+
+## Request Parameters
+
+| Parameter | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `model` | string | **yes** | -- | Image model name (e.g. `black-forest-labs-flux-2-klein-4b`, `flux-2-dev`) |
+| `prompt` | string | **yes** | -- | Text description of the image to generate. |
+| `response_format` | string | no | `"url"` | `"url"` returns a hosted URL. `"b64_json"` returns base64-encoded image bytes inline. |
+| `target_namespace` | string | no | current user | Namespace to save results and bill to. Can be an organization name. |
+| `image_size` | string or object | no | -- | Size preset (e.g. `square_hd`, `portrait_4_3`) or `{"width": 1024, "height": 1024}`. |
+| `num_inference_steps` | integer | no | -- | Number of denoising steps. |
+| `seed` | integer | no | -- | Reproducibility seed. |
+
+Available parameters vary by model. Use the model detail endpoint (`GET /api/evaluations/models/:id`) to see the `json_request_schema` for model-specific parameters.
+
+## Examples
+
+### Basic generation
+
+```bash
+curl -X POST https://hub.oxen.ai/api/images/generate \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "black-forest-labs-flux-2-klein-4b",
+    "prompt": "A red cube on a white background",
+    "image_size": "square_hd",
+    "seed": 42
+  }'
+```
+
+### Response (`response_format: "url"`)
+
+```json
+{
+  "model": "black-forest-labs-flux-2-klein-4b",
+  "created": 1775090372,
+  "images": [
+    {
+      "url": "https://hub.oxen.ai/api/repos/.../files/.../image.png?..."
+    }
+  ]
+}
+```
+
+The URL is a temporary link that expires after a period of time.
+
+### Response (`response_format: "b64_json"`)
+
+```json
+{
+  "model": "black-forest-labs-flux-2-klein-4b",
+  "created": 1775090372,
+  "images": [
+    {
+      "b64_json": "<base64-encoded image bytes>"
+    }
+  ]
+}
+```
+
+## Errors
+
+| Condition | Error |
+|---|---|
+| No prompt | `"Prompt cannot be empty"` |
+| Model not found | `"Model not found: <name>"` |
