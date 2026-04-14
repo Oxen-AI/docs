@@ -25,13 +25,13 @@ Lists all available models. OpenAI-compatible.
   "object": "list",
   "data": [
     {
-      "id": "gpt-4o-mini",
+      "id": "claude-sonnet-4-6",
       "object": "model",
-      "created": 1720000000,
+      "created": 1750000000,
       "owned_by": "oxen",
-      "display_name": "GPT-4o Mini",
-      "description": "Fast, affordable small model for lightweight tasks",
-      "summary": "Fast and affordable small model",
+      "display_name": "Claude Sonnet 4.6",
+      "description": "Anthropic's balanced model for a wide range of tasks",
+      "summary": "Balanced performance and speed",
       "model_type": "base",
       "endpoint": "/chat/completions",
       "capabilities": {
@@ -53,12 +53,12 @@ Lists all available models. OpenAI-compatible.
       },
       "deployments": [],
       "developer": {
-        "name": "OpenAI",
+        "name": "Anthropic",
         "logo": "https://..."
       },
       "source_model": null,
       "image_url": null,
-      "released_at": "2024-07-18T00:00:00Z",
+      "released_at": "2025-06-19T00:00:00Z",
       "request_schema": null
     }
   ]
@@ -147,7 +147,7 @@ Retrieves a model by name. Returns the full model object including the `request_
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `id` | string | **yes** | Model name (e.g. `gpt-4o-mini`, `flux-2-dev`) |
+| `id` | string | **yes** | Model name (e.g. `claude-sonnet-4-6`, `flux-2-dev`) |
 
 ### Query Parameters
 
@@ -273,7 +273,7 @@ Every endpoint above returns one or more model objects with this schema:
 
 | Field | Type | Description |
 |---|---|---|
-| `id` | string | Model identifier used in API calls (e.g. `gpt-4o-mini`) |
+| `id` | string | Model identifier used in API calls (e.g. `claude-sonnet-4-6`) |
 | `object` | string | Always `"model"` |
 | `created` | integer | Unix timestamp when the model was registered |
 | `owned_by` | string | `"oxen"` for base models, owner namespace for custom models |

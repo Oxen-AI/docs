@@ -20,7 +20,7 @@ client = OpenAI(
 )
 
 response = client.chat.completions.create(
-    model="gpt-4o-mini",
+    model="claude-sonnet-4-6",
     messages=[{"role": "user", "content": "What is Oxen.ai?"}],
     max_tokens=200,
 )
@@ -33,7 +33,7 @@ curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "gpt-4o-mini",
+    "model": "claude-sonnet-4-6",
     "messages": [{"role": "user", "content": "What is Oxen.ai?"}],
     "max_tokens": 200
   }'
@@ -54,7 +54,7 @@ client = OpenAI(
 )
 
 stream = client.chat.completions.create(
-    model="gpt-4o-mini",
+    model="gemini-3-1-flash-lite-preview",
     messages=[{"role": "user", "content": "Write a haiku about data"}],
     stream=True,
 )
@@ -71,7 +71,7 @@ curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "gpt-4o-mini",
+    "model": "gemini-3-1-flash-lite-preview",
     "messages": [{"role": "user", "content": "Write a haiku about data"}],
     "stream": true
   }'

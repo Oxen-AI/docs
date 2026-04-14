@@ -107,7 +107,7 @@ The API returns an OpenAI-compatible JSON response:
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `model` | string | *required* | Model name, e.g. `"claude-sonnet-4-6"`, `"gpt-4o"`, `"gemini-3-flash-preview"` |
+| `model` | string | *required* | Model name, e.g. `"claude-sonnet-4-6"`, `"gpt-5-4-2026-03-05"`, `"gemini-3-1-flash-lite-preview"` |
 | `messages` | array | *required* | Array of message objects with `role` and `content` |
 | `max_tokens` | integer | model default | Maximum number of tokens to generate |
 | `temperature` | float | model default | Sampling temperature (0-2). Lower is more deterministic. |
@@ -145,7 +145,7 @@ curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "claude-sonnet-4-6",
+    "model": "gemini-3-1-flash-lite-preview",
     "messages": [
       {"role": "user", "content": "Write a haiku about data."}
     ],
@@ -163,7 +163,7 @@ client = OpenAI(
 )
 
 stream = client.chat.completions.create(
-    model="claude-sonnet-4-6",
+    model="gemini-3-1-flash-lite-preview",
     messages=[
         {"role": "user", "content": "Write a haiku about data."}
     ],
@@ -181,7 +181,7 @@ print()
 Each SSE line is prefixed with `data: ` and contains a JSON chunk:
 
 ```json
-data: {"id":"chatcmpl-...","object":"chat.completion.chunk","created":1774040190,"model":"claude-sonnet-4-6","choices":[{"index":0,"delta":{"content":"hello"},"finish_reason":null}]}
+data: {"id":"chatcmpl-...","object":"chat.completion.chunk","created":1774040190,"model":"gemini-3-1-flash-lite-preview","choices":[{"index":0,"delta":{"content":"hello"},"finish_reason":null}]}
 ```
 
 The stream ends with:
@@ -192,7 +192,7 @@ data: [DONE]
 
 ## Vision
 
-Models that support vision (such as `gpt-4o` or `claude-sonnet-4-6`) accept images in the `messages` array. For full details and examples including base64 encoding and video understanding, see [Vision Language Models](/examples/inference/vision_language_models).
+Models that support vision (such as `gemini-3-1-pro-preview` or `claude-sonnet-4-6`) accept images in the `messages` array. For full details and examples including base64 encoding and video understanding, see [Vision Language Models](/examples/inference/vision_language_models).
 
 <CodeGroup>
 
@@ -201,7 +201,7 @@ curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "gpt-4o",
+    "model": "gemini-3-1-pro-preview",
     "messages": [
       {
         "role": "user",
@@ -224,7 +224,7 @@ client = OpenAI(
 )
 
 response = client.chat.completions.create(
-    model="gpt-4o",
+    model="gemini-3-1-pro-preview",
     messages=[
         {
             "role": "user",
@@ -261,7 +261,7 @@ curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "claude-sonnet-4-6",
+    "model": "gpt-5-4-2026-03-05",
     "messages": [
       {"role": "user", "content": "What is the weather in Paris?"}
     ],
@@ -293,7 +293,7 @@ Example assistant payload (abbreviated):
       "finish_reason": "tool_calls",
       "index": 0,
       "message": {
-        "content": "I'll check the current weather in Paris for you right away!",
+        "content": null,
         "role": "assistant",
         "tool_calls": [
           {
@@ -301,8 +301,8 @@ Example assistant payload (abbreviated):
               "arguments": "{\"city\":\"Paris\"}",
               "name": "get_weather"
             },
-            "id": "toolu_014F6XpjMvKbTgV7D5wBzqCn",
-            "index": 1,
+            "id": "call_GRNwPXnbuQW4Sa3QNB3FYkYw",
+            "index": 0,
             "type": "function"
           }
         ]
@@ -311,7 +311,7 @@ Example assistant payload (abbreviated):
   ],
   "created": 1774809792,
   "id": "chatcmpl-1ce4aeac-6c34-468a-ba6b-b96c5372a1dc",
-  "model": "claude-sonnet-4-6",
+  "model": "gpt-5-4-2026-03-05",
   "object": "chat.completion",
   "usage": {
     "completion_tokens": 67,
@@ -334,7 +334,7 @@ curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "claude-sonnet-4-6",
+    "model": "gpt-5-4-2026-03-05",
     "messages": [
       {
         "role": "user",
@@ -345,7 +345,7 @@ curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
         "content": null,
         "tool_calls": [
           {
-            "id": "toolu_01ABC",
+            "id": "call_01ABC",
             "type": "function",
             "function": {
               "name": "get_weather",
@@ -356,7 +356,7 @@ curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
       },
       {
         "role": "tool",
-        "tool_call_id": "toolu_01ABC",
+        "tool_call_id": "call_01ABC",
         "content": "{\"temperature_c\": 18, \"conditions\": \"Partly cloudy\"}"
       }
     ],
@@ -417,7 +417,7 @@ def get_weather(city: str) -> str:
 
 while True:
     response = client.chat.completions.create(
-        model="claude-sonnet-4-6",
+        model="gpt-5-4-2026-03-05",
         messages=messages,
         tools=tools
     )
