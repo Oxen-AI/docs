@@ -6,7 +6,7 @@ description: "Edit images using text prompts"
 ## Endpoint
 
 ```
-POST /api/images/edit
+POST /api/ai/images/edit
 ```
 
 Edit an existing image using a text prompt. The request blocks until the edited image is ready.
@@ -31,7 +31,7 @@ Edit an existing image using a text prompt. The request blocks until the edited 
 import requests
 
 response = requests.post(
-    "https://hub.oxen.ai/api/images/edit",
+    "https://hub.oxen.ai/api/ai/images/edit",
     headers={
         "Authorization": "Bearer YOUR_API_KEY",
         "Content-Type": "application/json",
@@ -48,7 +48,7 @@ print("Image URL:", data["images"][0]["url"])
 ```
 
 ```bash cURL
-curl -X POST https://hub.oxen.ai/api/images/edit \
+curl -X POST https://hub.oxen.ai/api/ai/images/edit \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -62,7 +62,7 @@ curl -X POST https://hub.oxen.ai/api/images/edit \
 
 ### Response
 
-Same format as `/images/generate`:
+Same format as `/ai/images/generate`:
 
 ```json
 {
