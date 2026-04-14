@@ -12,7 +12,7 @@ Transforms reference images into dynamic video sequences. Preserves identity, la
 ## Endpoint
 
 ```
-POST /api/videos/generate
+POST /api/ai/videos/generate
 ```
 
 Video generation is synchronous, the request blocks until the video is ready (typically 1-5 minutes). Billing is calculated as `total video duration x $0.224/s`. A default 5-second video costs ~$1.12.
@@ -126,7 +126,7 @@ Maximum 4 total images across all elements and `input_image` references.
 import requests
 
 response = requests.post(
-    "https://hub.oxen.ai/api/videos/generate",
+    "https://hub.oxen.ai/api/ai/videos/generate",
     headers={
         "Authorization": "Bearer YOUR_API_KEY",
         "Content-Type": "application/json",
@@ -142,7 +142,7 @@ print("Video URL:", data["videos"][0]["url"])
 ```
 
 ```bash cURL
-curl -X POST https://hub.oxen.ai/api/videos/generate \
+curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -161,7 +161,7 @@ curl -X POST https://hub.oxen.ai/api/videos/generate \
 import requests
 
 response = requests.post(
-    "https://hub.oxen.ai/api/videos/generate",
+    "https://hub.oxen.ai/api/ai/videos/generate",
     headers={
         "Authorization": "Bearer YOUR_API_KEY",
         "Content-Type": "application/json",
@@ -178,7 +178,7 @@ print("Video URL:", data["videos"][0]["url"])
 ```
 
 ```bash cURL
-curl -X POST https://hub.oxen.ai/api/videos/generate \
+curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -198,7 +198,7 @@ curl -X POST https://hub.oxen.ai/api/videos/generate \
 import requests
 
 response = requests.post(
-    "https://hub.oxen.ai/api/videos/generate",
+    "https://hub.oxen.ai/api/ai/videos/generate",
     headers={
         "Authorization": "Bearer YOUR_API_KEY",
         "Content-Type": "application/json",
@@ -218,7 +218,7 @@ print("Video URL:", data["videos"][0]["url"])
 ```
 
 ```bash cURL
-curl -X POST https://hub.oxen.ai/api/videos/generate \
+curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -241,7 +241,7 @@ curl -X POST https://hub.oxen.ai/api/videos/generate \
 import requests
 
 response = requests.post(
-    "https://hub.oxen.ai/api/videos/generate",
+    "https://hub.oxen.ai/api/ai/videos/generate",
     headers={
         "Authorization": "Bearer YOUR_API_KEY",
         "Content-Type": "application/json",
@@ -269,7 +269,7 @@ print("Video URL:", data["videos"][0]["url"])
 ```
 
 ```bash cURL
-curl -X POST https://hub.oxen.ai/api/videos/generate \
+curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -374,8 +374,9 @@ curl -X POST https://hub.oxen.ai/api/ai/queue \
 import requests
 
 response = requests.get(
-    "https://hub.oxen.ai/api/media/generations/status/YOUR_USERNAME/kling-video-o3-pro-reference-to-video",
+    "https://hub.oxen.ai/api/ai/queue",
     headers={"Authorization": "Bearer YOUR_API_KEY"},
+    params={"model": "kling-video-o3-pro-reference-to-video"},
 )
 
 status = response.json()
@@ -384,7 +385,7 @@ print(f"Remaining: {status['count']}")
 
 ```bash cURL
 curl -H "Authorization: Bearer $OXEN_API_KEY" \
-  "https://hub.oxen.ai/api/media/generations/status/YOUR_USERNAME/kling-video-o3-pro-reference-to-video"
+  "https://hub.oxen.ai/api/ai/queue?model=kling-video-o3-pro-reference-to-video"
 ```
 
 </CodeGroup>
@@ -398,8 +399,9 @@ When finished, the generation disappears from the list. A `count` of `0` means a
 ```python Python
 import requests
 
+generation_id = "4ef840a4-..."
 response = requests.delete(
-    "https://hub.oxen.ai/api/media/generations/YOUR_USERNAME/4ef840a4-...",
+    f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
     headers={"Authorization": "Bearer YOUR_API_KEY"},
 )
 
@@ -408,7 +410,7 @@ print(response.json())
 
 ```bash cURL
 curl -X DELETE -H "Authorization: Bearer $OXEN_API_KEY" \
-  "https://hub.oxen.ai/api/media/generations/YOUR_USERNAME/4ef840a4-..."
+  "https://hub.oxen.ai/api/ai/queue/4ef840a4-..."
 ```
 
 </CodeGroup>

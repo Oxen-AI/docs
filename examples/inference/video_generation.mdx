@@ -15,7 +15,7 @@ Video generation can take a few minutes to generate, depending on the model. So 
 
 ```bash cURL
 curl -X POST \
-  https://hub.oxen.ai/api/videos/generate \
+  https://hub.oxen.ai/api/ai/videos/generate \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -d '{
@@ -30,7 +30,7 @@ import requests
 import os
 
 response = requests.post(
-    "https://hub.oxen.ai/api/videos/generate",
+    "https://hub.oxen.ai/api/ai/videos/generate",
     headers={
         "Authorization": f"Bearer {os.getenv('OXEN_API_KEY')}",
         "Content-Type": "application/json"
