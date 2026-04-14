@@ -19,24 +19,38 @@ All requests require a bearer token:
 
 ```bash
 curl -H "Authorization: Bearer YOUR_API_KEY" \
-  https://hub.oxen.ai/api/...
+  https://hub.oxen.ai/api/ai/...
 ```
 
 Get your API key from your [account settings](https://oxen.ai/settings).
+
+## Base URL
+
+All inference endpoints live under:
+
+```
+https://hub.oxen.ai/api/ai
+```
+
+If you're using the OpenAI SDK, set the base URL to `https://hub.oxen.ai/api/ai` — the SDK appends `/chat/completions` automatically.
 
 ## Endpoints
 
 | Endpoint | Method | Description |
 |---|---|---|
-| `/chat/completions` | POST | Text generation (chat, vision, tool use) |
-| `/images/generate` | POST | Image generation |
-| `/images/edit` | POST | Image editing |
-| `/videos/generate` | POST | Video generation |
+| `/ai/chat/completions` | POST | Text generation (chat, vision, tool use) |
+| `/ai/images/generate` | POST | Image generation |
+| `/ai/images/edit` | POST | Image editing |
+| `/ai/videos/generate` | POST | Video generation |
 | `/ai/queue` | POST | Async image/video generation |
-| `/media/generations/status/:namespace/*model_name` | GET | Poll async generation status |
-| `/media/generations/:namespace/:generation_id` | DELETE | Cancel a queued generation |
-| `/evaluations/models` | GET | List available models |
-| `/evaluations/models/:id` | GET | Get model details and parameter schema |
+| `/ai/queue` | GET | List queued generations |
+| `/ai/queue/:generation_id` | GET | Get generation status |
+| `/ai/queue/:generation_id` | DELETE | Cancel a queued generation |
+| `/ai/models` | GET | List available models |
+| `/ai/models/:id` | GET | Get model details and parameter schema |
+| `/ai/models/search` | GET | Search models by name |
+| `/ai/models/:id/activate` | POST | Activate a custom model deployment |
+| `/ai/models/:id/deactivate` | POST | Deactivate a custom model deployment |
 
 ## Common Parameters
 
@@ -50,26 +64,26 @@ These parameters are accepted across multiple endpoints:
 
 ## Discovering Models
 
-List all models, optionally filtered by capability:
+List all models, optionally filtered by developer:
 
 ```bash
-# All video models
+# All models
 curl -H "Authorization: Bearer $OXEN_API_KEY" \
-  "https://hub.oxen.ai/api/evaluations/models?output_capability=video"
+  "https://hub.oxen.ai/api/ai/models"
 
 # Search by name
 curl -H "Authorization: Bearer $OXEN_API_KEY" \
-  "https://hub.oxen.ai/api/evaluations/models/search?search=kling"
+  "https://hub.oxen.ai/api/ai/models/search?search=kling"
 ```
 
 Get full details for a specific model (including its parameter schema):
 
 ```bash
 curl -H "Authorization: Bearer $OXEN_API_KEY" \
-  "https://hub.oxen.ai/api/evaluations/models/kling-video-o3-pro-reference-to-video"
+  "https://hub.oxen.ai/api/ai/models/kling-video-o3-pro-reference-to-video"
 ```
 
-The response includes a `json_request_schema` field with the complete parameter definitions, types, defaults, and constraints for that model.
+The response includes a `request_schema` field with the complete parameter definitions, types, defaults, and constraints for that model.
 
 ## Pricing
 
@@ -81,7 +95,7 @@ Pricing varies by model:
 | `per_image` | Fixed cost per image | FLUX, DALL-E |
 | `per_video_output_second` | Cost per second of output video | Kling, Sora |
 
-Check the model detail endpoint for exact pricing. Relevant fields: `input_cost_per_token`, `output_cost_per_token`, `cost_per_image`, `video_cost_per_second`, `video_cost_per_second_with_audio`, `video_cost_per_second_high_res`.
+Check the [model detail endpoint](/inference-api/reference/models#retrieve-model) for exact pricing. Relevant fields: `input_cost_per_token`, `output_cost_per_token`, `cost_per_image`, `cost_per_second`, `cost_per_second_with_audio`, `cost_per_second_high_res`.
 
 ## Error Format
 
@@ -124,7 +138,7 @@ Common error types: `unauthenticated`, `invalid_params`, `resource_not_found`, `
 
 ## API Reference
 
-<CardGroup cols={2}>
+<CardGroup cols={3}>
   <Card title="Chat Completions" icon="message" href="/inference-api/reference/chat_completions">
     Text generation, vision, tool calling
   </Card>
@@ -139,6 +153,9 @@ Common error types: `unauthenticated`, `invalid_params`, `resource_not_found`, `
   </Card>
   <Card title="Async Queue" icon="layer-group" href="/inference-api/reference/async_queue">
     Background image/video generation
+  </Card>
+  <Card title="Models" icon="cube" href="/inference-api/reference/models">
+    List, search, and manage models
   </Card>
 </CardGroup>
 
