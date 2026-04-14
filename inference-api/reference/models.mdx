@@ -1,0 +1,314 @@
+---
+title: "Models"
+description: "List, search, and manage AI models available for inference and fine-tuning"
+---
+
+## List Models
+
+```
+GET /api/ai/models
+```
+
+Lists all available models. OpenAI-compatible.
+
+### Query Parameters
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `developer_name` | string | no | Filter by developer (e.g. `openai`, `anthropic`, `google`) |
+| `action` | string | no | Filter by fine-tuning action type |
+
+### Response
+
+```json
+{
+  "object": "list",
+  "data": [
+    {
+      "id": "gpt-4o-mini",
+      "object": "model",
+      "created": 1720000000,
+      "owned_by": "oxen",
+      "display_name": "GPT-4o Mini",
+      "description": "Fast, affordable small model for lightweight tasks",
+      "summary": "Fast and affordable small model",
+      "model_type": "base",
+      "endpoint": "/chat/completions",
+      "capabilities": {
+        "input": ["text", "image"],
+        "output": ["text"]
+      },
+      "pricing": {
+        "method": "token",
+        "input_cost_per_token": 1.5e-7,
+        "output_cost_per_token": 6.0e-7,
+        "cost_per_second": null,
+        "cost_per_image": null,
+        "cost_per_second_high_res": null,
+        "cost_per_second_with_audio": null
+      },
+      "fine_tuning": {
+        "actions": ["text_generation", "text_chat_messages"],
+        "cost_per_second": 0.001
+      },
+      "deployments": [],
+      "developer": {
+        "name": "OpenAI",
+        "logo": "https://..."
+      },
+      "source_model": null,
+      "image_url": null,
+      "released_at": "2024-07-18T00:00:00Z",
+      "request_schema": null
+    }
+  ]
+}
+```
+
+### Examples
+
+<CodeGroup>
+
+```python Python
+import requests
+
+response = requests.get(
+    "https://hub.oxen.ai/api/ai/models",
+    headers={"Authorization": "Bearer YOUR_API_KEY"},
+)
+
+for model in response.json()["data"]:
+    print(f"{model['id']} ({model['endpoint']})")
+```
+
+```bash cURL
+# All models
+curl -H "Authorization: Bearer $OXEN_API_KEY" \
+  "https://hub.oxen.ai/api/ai/models"
+
+# Filter by developer
+curl -H "Authorization: Bearer $OXEN_API_KEY" \
+  "https://hub.oxen.ai/api/ai/models?developer_name=openai"
+```
+
+</CodeGroup>
+
+---
+
+## Search Models
+
+```
+GET /api/ai/models/search
+```
+
+Search models by name.
+
+### Query Parameters
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `search` | string | **yes** | Search query |
+
+### Examples
+
+<CodeGroup>
+
+```python Python
+import requests
+
+response = requests.get(
+    "https://hub.oxen.ai/api/ai/models/search",
+    headers={"Authorization": "Bearer YOUR_API_KEY"},
+    params={"search": "kling"},
+)
+
+for model in response.json()["data"]:
+    print(f"{model['id']} - {model['display_name']}")
+```
+
+```bash cURL
+curl -H "Authorization: Bearer $OXEN_API_KEY" \
+  "https://hub.oxen.ai/api/ai/models/search?search=kling"
+```
+
+</CodeGroup>
+
+---
+
+## Retrieve Model
+
+```
+GET /api/ai/models/:id
+```
+
+Retrieves a model by name. Returns the full model object including the `request_schema` describing model-specific parameters.
+
+### Path Parameters
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `id` | string | **yes** | Model name (e.g. `gpt-4o-mini`, `flux-2-dev`) |
+
+### Query Parameters
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `deployment_status` | string | no | Pass `"live"` to refresh deployment status from provider before responding |
+
+### Examples
+
+<CodeGroup>
+
+```python Python
+import requests
+
+response = requests.get(
+    "https://hub.oxen.ai/api/ai/models/kling-video-o3-pro-reference-to-video",
+    headers={"Authorization": "Bearer YOUR_API_KEY"},
+)
+
+model = response.json()
+print(f"Endpoint: {model['endpoint']}")
+print(f"Pricing: {model['pricing']}")
+
+# Get the model's parameter schema
+if model.get("request_schema"):
+    print(f"Parameters: {model['request_schema']}")
+```
+
+```bash cURL
+curl -H "Authorization: Bearer $OXEN_API_KEY" \
+  "https://hub.oxen.ai/api/ai/models/kling-video-o3-pro-reference-to-video"
+
+# With live deployment status refresh
+curl -H "Authorization: Bearer $OXEN_API_KEY" \
+  "https://hub.oxen.ai/api/ai/models/my-custom-model?deployment_status=live"
+```
+
+</CodeGroup>
+
+---
+
+## Activate Model
+
+```
+POST /api/ai/models/:id/activate
+```
+
+Activates an inactive custom model deployment. Base models are always active and do not need activation.
+
+### Path Parameters
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `id` | string | **yes** | Model name |
+
+### Examples
+
+<CodeGroup>
+
+```python Python
+import requests
+
+response = requests.post(
+    "https://hub.oxen.ai/api/ai/models/my-custom-model/activate",
+    headers={"Authorization": "Bearer YOUR_API_KEY"},
+)
+
+model = response.json()
+print(f"Status: {model['deployments'][0]['status']}")
+```
+
+```bash cURL
+curl -X POST https://hub.oxen.ai/api/ai/models/my-custom-model/activate \
+  -H "Authorization: Bearer $OXEN_API_KEY"
+```
+
+</CodeGroup>
+
+---
+
+## Deactivate Model
+
+```
+POST /api/ai/models/:id/deactivate
+```
+
+Deactivates an active custom model deployment to stop billing.
+
+### Path Parameters
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `id` | string | **yes** | Model name |
+
+### Examples
+
+<CodeGroup>
+
+```python Python
+import requests
+
+response = requests.post(
+    "https://hub.oxen.ai/api/ai/models/my-custom-model/deactivate",
+    headers={"Authorization": "Bearer YOUR_API_KEY"},
+)
+
+model = response.json()
+print(f"Status: {model['deployments'][0]['status']}")
+```
+
+```bash cURL
+curl -X POST https://hub.oxen.ai/api/ai/models/my-custom-model/deactivate \
+  -H "Authorization: Bearer $OXEN_API_KEY"
+```
+
+</CodeGroup>
+
+---
+
+## Model Object
+
+Every endpoint above returns one or more model objects with this schema:
+
+| Field | Type | Description |
+|---|---|---|
+| `id` | string | Model identifier used in API calls (e.g. `gpt-4o-mini`) |
+| `object` | string | Always `"model"` |
+| `created` | integer | Unix timestamp when the model was registered |
+| `owned_by` | string | `"oxen"` for base models, owner namespace for custom models |
+| `display_name` | string | Human-readable name |
+| `description` | string/null | Full description |
+| `summary` | string/null | Brief summary |
+| `model_type` | string | `"base"` or `"custom"` |
+| `endpoint` | string | API endpoint to call: `"/chat/completions"`, `"/images/generate"`, or `"/videos/generate"` |
+| `capabilities` | object | `{ "input": ["text", ...], "output": ["text", ...] }` — supported input/output modalities |
+| `pricing` | object | See [Pricing](#pricing) below |
+| `fine_tuning` | object/null | `{ "actions": [...], "cost_per_second": number }` or `null` if not fine-tuneable |
+| `deployments` | array | `[{ "status": "active" | "inactive" | "deploying" | "deactivating" | "error" | "unknown" }]`. Empty for base models. |
+| `developer` | object/null | `{ "name": string, "logo": string/null }` |
+| `source_model` | string/null | Base model this was fine-tuned from |
+| `image_url` | string/null | Image asset URL |
+| `released_at` | string/null | Release timestamp |
+| `request_schema` | object/null | JSON Schema describing model-specific request parameters |
+
+### Pricing
+
+The `pricing` object describes how the model is billed:
+
+| Field | Type | Description |
+|---|---|---|
+| `method` | string | `"token"`, `"time"`, `"per_image"`, or `"per_video_output_second"` |
+| `input_cost_per_token` | number/null | Cost per input token (token-based models) |
+| `output_cost_per_token` | number/null | Cost per output token (token-based models) |
+| `cost_per_second` | number/null | Cost per second (time-based models) |
+| `cost_per_image` | number/null | Fixed cost per image (image generation models) |
+| `cost_per_second_high_res` | number/null | High-resolution video cost per second |
+| `cost_per_second_with_audio` | number/null | Video with audio cost per second |
+
+## Errors
+
+| Condition | Status | Error |
+|---|---|---|
+| Model not found | 404 | `"Model not found: <name>"` |
+| Not authenticated | 401 | `"unauthenticated"` |
