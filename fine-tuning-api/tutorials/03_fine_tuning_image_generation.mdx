@@ -295,7 +295,7 @@ The response will include deployment information with a **model identifier** you
   "deployment": {
     "model_slug": "oxen:tutorials/cyberpunkart-ft_img_gen_12345",
     "status": "deploying",
-    "endpoint": "https://hub.oxen.ai/api/images/generate"
+    "endpoint": "https://hub.oxen.ai/api/ai/images/generate"
   }
 }
 ```
@@ -319,13 +319,13 @@ Now you can generate images in your custom style using the inference API.
 
 **Endpoint**
 
-- `POST /api/images/generate`
+- `POST /api/ai/images/generate`
 
 **Example `curl` request** (text-to-image):
 
 ```bash
 curl -X POST \
-  "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/images/generate" \
+  "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/ai/images/generate" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer ${OXEN_API_KEY}" \
   -d "{
@@ -344,7 +344,7 @@ You can generate multiple variations by setting `num_images`:
 
 ```bash
 curl -X POST \
-  "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/images/generate" \
+  "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/ai/images/generate" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer ${OXEN_API_KEY}" \
   -d "{
@@ -479,7 +479,7 @@ time.sleep(60)
 
 # Step 5: Generate image
 print("Generating image...")
-generate_url = f"{BASE_URL}/api/images/generate"
+generate_url = f"{BASE_URL}/api/ai/images/generate"
 gen_data = {
     "model": deployed_model,
     "prompt": "a motorcycle racing through the city in cyberpunk style",

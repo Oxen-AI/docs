@@ -15,7 +15,7 @@ Generate images from text descriptions using models like FLUX and DALL-E.
 import requests
 
 response = requests.post(
-    "https://hub.oxen.ai/api/images/generate",
+    "https://hub.oxen.ai/api/ai/images/generate",
     headers={
         "Authorization": "Bearer YOUR_API_KEY",
         "Content-Type": "application/json",
@@ -31,7 +31,7 @@ print("Image URL:", data["images"][0]["url"])
 ```
 
 ```bash cURL
-curl -X POST https://hub.oxen.ai/api/images/generate \
+curl -X POST https://hub.oxen.ai/api/ai/images/generate \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -53,7 +53,7 @@ import requests
 import base64
 
 response = requests.post(
-    "https://hub.oxen.ai/api/images/generate",
+    "https://hub.oxen.ai/api/ai/images/generate",
     headers={
         "Authorization": "Bearer YOUR_API_KEY",
         "Content-Type": "application/json",
@@ -75,7 +75,7 @@ print("Saved to output.png")
 ```
 
 ```bash cURL
-curl -X POST https://hub.oxen.ai/api/images/generate \
+curl -X POST https://hub.oxen.ai/api/ai/images/generate \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
