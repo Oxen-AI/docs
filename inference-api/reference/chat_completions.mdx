@@ -6,7 +6,7 @@ description: "Generate text responses from language models with support for stre
 ## Endpoint
 
 ```
-POST /api/chat/completions
+POST /api/ai/chat/completions
 ```
 
 Compatible with the OpenAI chat completions format. Supports streaming, multimodal input (images and video), tool calling, and structured output.
@@ -78,7 +78,7 @@ Image and video URLs must be publicly accessible.
 from openai import OpenAI
 
 client = OpenAI(
-    base_url="https://hub.oxen.ai/api",
+    base_url="https://hub.oxen.ai/api/ai",
     api_key="YOUR_API_KEY",
 )
 
@@ -93,7 +93,7 @@ print(response.choices[0].message.content)
 ```
 
 ```bash cURL
-curl -X POST https://hub.oxen.ai/api/chat/completions \
+curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -140,7 +140,7 @@ curl -X POST https://hub.oxen.ai/api/chat/completions \
 from openai import OpenAI
 
 client = OpenAI(
-    base_url="https://hub.oxen.ai/api",
+    base_url="https://hub.oxen.ai/api/ai",
     api_key="YOUR_API_KEY",
 )
 
@@ -158,7 +158,7 @@ print()
 ```
 
 ```bash cURL
-curl -X POST https://hub.oxen.ai/api/chat/completions \
+curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -188,7 +188,7 @@ data: [DONE]
 from openai import OpenAI
 
 client = OpenAI(
-    base_url="https://hub.oxen.ai/api",
+    base_url="https://hub.oxen.ai/api/ai",
     api_key="YOUR_API_KEY",
 )
 
@@ -217,7 +217,7 @@ print(f"{tool_call.function.name}({tool_call.function.arguments})")
 ```
 
 ```bash cURL
-curl -X POST https://hub.oxen.ai/api/chat/completions \
+curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -273,7 +273,7 @@ When the model uses a tool, `finish_reason` is `"tool_calls"`:
 from openai import OpenAI
 
 client = OpenAI(
-    base_url="https://hub.oxen.ai/api",
+    base_url="https://hub.oxen.ai/api/ai",
     api_key="YOUR_API_KEY",
 )
 
@@ -288,7 +288,7 @@ print(response.choices[0].message.content)
 ```
 
 ```bash cURL
-curl -X POST https://hub.oxen.ai/api/chat/completions \
+curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{

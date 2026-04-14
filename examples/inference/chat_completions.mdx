@@ -1,22 +1,22 @@
 ---
 title: '💬 Chat Completions'
-description: 'Integrate an LLM into your application through the `/chat/completions` API.'
+description: 'Integrate an LLM into your application through the `/ai/chat/completions` API.'
 ---
 
 ## Quick Start
 
 The Oxen.ai chat completions API is fully [OpenAI-compatible](https://platform.openai.com/docs/api-reference/chat). You can use the OpenAI SDK, `curl`, or any HTTP client that speaks the OpenAI chat format.
 
-**Base URL:** `https://hub.oxen.ai/api`
+**Base URL:** `https://hub.oxen.ai/api/ai`
 
-**Endpoint:** `POST /chat/completions`
+**Endpoint:** `POST /ai/chat/completions`
 
 Browse [all available models](https://www.oxen.ai/ai/models).
 
 <CodeGroup>
 
 ```bash cURL
-curl -X POST https://hub.oxen.ai/api/chat/completions \
+curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -33,7 +33,7 @@ import os
 
 client = OpenAI(
     api_key=os.environ["OXEN_API_KEY"],
-    base_url="https://hub.oxen.ai/api",
+    base_url="https://hub.oxen.ai/api/ai",
 )
 
 response = client.chat.completions.create(
@@ -141,7 +141,7 @@ Set `"stream": true` to receive responses as server-sent events (SSE). Each even
 <CodeGroup>
 
 ```bash cURL
-curl -X POST https://hub.oxen.ai/api/chat/completions \
+curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -159,7 +159,7 @@ import os
 
 client = OpenAI(
     api_key=os.environ["OXEN_API_KEY"],
-    base_url="https://hub.oxen.ai/api",
+    base_url="https://hub.oxen.ai/api/ai",
 )
 
 stream = client.chat.completions.create(
@@ -197,7 +197,7 @@ Models that support vision (such as `gpt-4o` or `claude-sonnet-4-6`) accept imag
 <CodeGroup>
 
 ```bash cURL
-curl -X POST https://hub.oxen.ai/api/chat/completions \
+curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -220,7 +220,7 @@ import os
 
 client = OpenAI(
     api_key=os.environ["OXEN_API_KEY"],
-    base_url="https://hub.oxen.ai/api",
+    base_url="https://hub.oxen.ai/api/ai",
 )
 
 response = client.chat.completions.create(
@@ -257,7 +257,7 @@ Tool calling (function calling) follows the same [OpenAI Chat Completions tool f
 The model may respond with `tool_calls` instead of user-facing `content`:
 
 ```bash
-curl -X POST https://hub.oxen.ai/api/chat/completions \
+curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -330,7 +330,7 @@ The follow-up HTTP body matches what the OpenAI SDK builds when you append assis
 <CodeGroup>
 
 ```bash cURL
-curl -X POST https://hub.oxen.ai/api/chat/completions \
+curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -389,7 +389,7 @@ import os
 
 client = OpenAI(
     api_key=os.environ["OXEN_API_KEY"],
-    base_url="https://hub.oxen.ai/api",
+    base_url="https://hub.oxen.ai/api/ai",
 )
 
 tools = [

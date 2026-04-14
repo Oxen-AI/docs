@@ -15,7 +15,7 @@ Generate text responses from language models using the OpenAI-compatible chat co
 from openai import OpenAI
 
 client = OpenAI(
-    base_url="https://hub.oxen.ai/api",
+    base_url="https://hub.oxen.ai/api/ai",
     api_key="YOUR_API_KEY",
 )
 
@@ -29,7 +29,7 @@ print(response.choices[0].message.content)
 ```
 
 ```bash cURL
-curl -X POST https://hub.oxen.ai/api/chat/completions \
+curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -49,7 +49,7 @@ curl -X POST https://hub.oxen.ai/api/chat/completions \
 from openai import OpenAI
 
 client = OpenAI(
-    base_url="https://hub.oxen.ai/api",
+    base_url="https://hub.oxen.ai/api/ai",
     api_key="YOUR_API_KEY",
 )
 
@@ -67,7 +67,7 @@ print()
 ```
 
 ```bash cURL
-curl -X POST https://hub.oxen.ai/api/chat/completions \
+curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
