@@ -282,11 +282,11 @@ Every endpoint above returns one or more model objects with this schema:
 | `summary` | string/null | Brief summary |
 | `model_type` | string | `"base"` or `"custom"` |
 | `endpoint` | string | API endpoint to call: `"/chat/completions"`, `"/images/generate"`, or `"/videos/generate"` |
-| `capabilities` | object | `{ "input": ["text", ...], "output": ["text", ...] }` — supported input/output modalities |
+| `capabilities` | object | Input/output modalities, e.g. `input: ["text", "image"]`, `output: ["text"]` |
 | `pricing` | object | See [Pricing](#pricing) below |
-| `fine_tuning` | object/null | `{ "actions": [...], "cost_per_second": number }` or `null` if not fine-tuneable |
-| `deployments` | array | `[{ "status": "active" | "inactive" | "deploying" | "deactivating" | "error" | "unknown" }]`. Empty for base models. |
-| `developer` | object/null | `{ "name": string, "logo": string/null }` |
+| `fine_tuning` | object/null | Fine-tuning config with `actions` and `cost_per_second`, or `null` if not fine-tuneable |
+| `deployments` | array | Deployment status objects. Possible statuses: `active`, `inactive`, `deploying`, `deactivating`, `error`, `unknown`. Empty for base models. |
+| `developer` | object/null | Developer info with `name` and `logo` fields |
 | `source_model` | string/null | Base model this was fine-tuned from |
 | `image_url` | string/null | Image asset URL |
 | `released_at` | string/null | Release timestamp |

@@ -183,7 +183,7 @@
                       "inference-api/reference/image_editing",
                       "inference-api/reference/video_generation",
                       "inference-api/reference/async_queue",
-                      "inference-api/reference/models"
+                      "inference-api/reference/models/overview"
                   ]
               },
               {

@@ -28,7 +28,7 @@ For long-running or batch generation, consider using the [async queue](/inferenc
 | `response_format` | string | no | `"url"` | `"url"` returns a hosted URL. `"b64_json"` returns base64-encoded video bytes inline. |
 | `target_namespace` | string | no | current user | Namespace to save results and bill to. Can be an organization name. |
 
-Additional parameters vary by model. Use the [model detail endpoint](/inference-api/reference/models#retrieve-model) (`GET /api/ai/models/:id`) to see the `request_schema` for model-specific parameters.
+Additional parameters vary by model. Use the [model detail endpoint](/inference-api/reference/models/overview#retrieve-model) (`GET /api/ai/models/:id`) to see the `request_schema` for model-specific parameters.
 
 Either `prompt` or `multi_prompt` is required. Sending both returns an error:
 
