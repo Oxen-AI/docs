@@ -70,7 +70,7 @@ Example dataset structure in `train_images.parquet`:
 | images/003.jpg | a person wearing futuristic cyberpunk clothing |
 
 <Note>
-See the [Parameter Guide](/fine-tuning-api/parameters#duration) to understand training duration and the [Data Requirements section](/fine-tuning-api/quickstart-image-generation#data-requirements) for detailed guidelines.
+See the [Parameter Guide](/fine-tuning-api/parameters#training-duration) to understand training duration and the [Data Requirements section](/fine-tuning-api/quickstart-image-generation#data-requirements) for detailed guidelines.
 </Note>
 
 ---
@@ -265,7 +265,7 @@ As training progresses, you'll see:
 Review the sample outputs to see how well the model is learning your style. The images should progressively match your training style better as training continues.
 
 <Tip>
-If sample outputs aren't matching your style by step 1000, consider adjusting `learning_rate` or training for more steps. See the [Parameter Guide](/fine-tuning-api/parameters#learning-rate) for tuning advice.
+If sample outputs aren't matching your style by step 1000, consider adjusting `learning_rate` or training for more steps. See the [Parameter Guide](/fine-tuning-api/parameters#learning-rate-and-optimization) for tuning advice.
 </Tip>
 
 ---
@@ -504,14 +504,14 @@ print(f"Generated image: {image_url}")
   </Accordion>
 
   <Accordion title="Out of memory errors">
-    Reduce `batch_size` to 1 (default). If still failing, try reducing `lora_rank` to 8. See the [Batch Size guide](/fine-tuning-api/parameters#batch-size) for more memory optimization tips.
+    Reduce `batch_size` to 1 (default). If still failing, try reducing `lora_rank` to 8. See the [Batch Size guide](/fine-tuning-api/parameters#batch-size-and-memory) for more memory optimization tips.
   </Accordion>
 
   <Accordion title="Sample outputs don't match my style">
     - Train for more steps (3000-5000 instead of 2000)
     - Ensure captions clearly describe the unique aspects of your style
     - Increase dataset size (100+ images recommended)
-    - Try adjusting `learning_rate` (see [Learning Rate guide](/fine-tuning-api/parameters#learning-rate))
+    - Try adjusting `learning_rate` (see [Learning Rate guide](/fine-tuning-api/parameters#learning-rate-and-optimization))
   </Accordion>
 
   <Accordion title="Training taking too long">
@@ -534,7 +534,7 @@ print(f"Generated image: {image_url}")
 ## Next Steps
 
 - **Advanced Parameters**: See the [Image Generation API Reference](/fine-tuning-api/reference/image_generation) for all available parameters
-- **Parameter Tuning**: Learn about [LoRA configuration](/fine-tuning-api/parameters#lora) and [learning rate optimization](/fine-tuning-api/parameters#learning-rate)
+- **Parameter Tuning**: Learn about [LoRA configuration](/fine-tuning-api/parameters#lora-low-rank-adaptation) and [learning rate optimization](/fine-tuning-api/parameters#learning-rate-and-optimization)
 - **More Examples**: Check out the [Quick Start guide](/fine-tuning-api/quickstart-image-generation) for simplified examples
 - **Other Modalities**: Explore [Image Editing](/fine-tuning-api/quickstart-image-editing) or [Video Generation](/fine-tuning-api/quickstart-video)
 
