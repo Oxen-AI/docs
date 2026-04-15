@@ -23,7 +23,7 @@ Your dataset should have two columns:
 - `caption_column` – Text descriptions of each image
 
 <Tip>
-For a quick minimal example, see the [Image Generation Quick Start](/fine-tuning-api/quickstart-image-generation).
+For a quick minimal example, see the [Image Generation Quick Start](/fine-tuning-api/quickstart/image-generation).
 </Tip>
 
 ---
@@ -36,7 +36,7 @@ For a quick minimal example, see the [Image Generation Quick Start](/fine-tuning
 - **Dataset resource** inside that repo, for example:
   - `main/train_images.parquet`
   - Each row contains an image path and descriptive caption
-  - Example: [view sample dataset structure](/fine-tuning-api/quickstart-image-generation#your-data)
+  - Example: [view sample dataset structure](/fine-tuning-api/quickstart/image-generation#your-data)
 - **API key** with access to the repo:
   - Exported as `OXEN_API_KEY`
 - **Base URL** for the Oxen API:
@@ -70,7 +70,7 @@ Example dataset structure in `train_images.parquet`:
 | images/003.jpg | a person wearing futuristic cyberpunk clothing |
 
 <Note>
-See the [Parameter Guide](/fine-tuning-api/parameters#training-duration) to understand training duration and the [Data Requirements section](/fine-tuning-api/quickstart-image-generation#data-requirements) for detailed guidelines.
+See the [Parameter Guide](/fine-tuning-api/parameters#training-duration) to understand training duration and the [Data Requirements section](/fine-tuning-api/quickstart/image-generation#data-requirements) for detailed guidelines.
 </Note>
 
 ---
@@ -535,8 +535,8 @@ print(f"Generated image: {image_url}")
 
 - **Advanced Parameters**: See the [Image Generation API Reference](/fine-tuning-api/reference/image_generation) for all available parameters
 - **Parameter Tuning**: Learn about [LoRA configuration](/fine-tuning-api/parameters#lora-low-rank-adaptation) and [learning rate optimization](/fine-tuning-api/parameters#learning-rate-and-optimization)
-- **More Examples**: Check out the [Quick Start guide](/fine-tuning-api/quickstart-image-generation) for simplified examples
-- **Other Modalities**: Explore [Image Editing](/fine-tuning-api/quickstart-image-editing) or [Video Generation](/fine-tuning-api/quickstart-video)
+- **More Examples**: Check out the [Quick Start guide](/fine-tuning-api/quickstart/image-generation) for simplified examples
+- **Other Modalities**: Explore [Image Editing](/fine-tuning-api/quickstart/image-editing) or [Video Generation](/fine-tuning-api/quickstart/video)
 
 ---
 
