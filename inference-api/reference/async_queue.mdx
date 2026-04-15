@@ -23,7 +23,11 @@ A Server-Sent Events stream at `GET /api/events` can also deliver completion not
 
 ---
 
-## Enqueue: POST /api/ai/queue
+## Enqueue
+
+```
+POST /api/ai/queue
+```
 
 Submit an async image or video generation job.
 
@@ -63,7 +67,11 @@ Model-specific parameter validation (prompt content, duration ranges, aspect rat
 
 ---
 
-## List Generations: GET /api/ai/queue
+## List Generations
+
+```
+GET /api/ai/queue
+```
 
 Lists all in-progress generations. Only actively-processing generations are returned; completed, failed, or cancelled generations are not retained.
 
@@ -135,7 +143,11 @@ The output file URL is not returned by this endpoint. See [Completion Events](#c
 
 ---
 
-## Get Generation: GET /api/ai/queue/:generation_id
+## Get Generation
+
+```
+GET /api/ai/queue/:generation_id
+```
 
 Retrieves metadata for a single in-progress generation.
 
@@ -175,7 +187,11 @@ Returns 404 when the generation has reached a terminal state (completed, failed,
 
 ---
 
-## Cancel Generation: DELETE /api/ai/queue/:generation_id
+## Cancel Generation
+
+```
+DELETE /api/ai/queue/:generation_id
+```
 
 Cancels a queued or in-progress generation.
 
