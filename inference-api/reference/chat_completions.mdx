@@ -6,7 +6,7 @@ description: "Generate text responses from language models with support for stre
 ## Endpoint
 
 ```
-POST /api/chat/completions
+POST /api/ai/chat/completions
 ```
 
 Compatible with the OpenAI chat completions format. Supports streaming, multimodal input (images and video), tool calling, and structured output.
@@ -15,7 +15,7 @@ Compatible with the OpenAI chat completions format. Supports streaming, multimod
 
 | Parameter | Type | Required | Default | Description |
 |---|---|---|---|---|
-| `model` | string | **yes** | -- | Model name (e.g. `gpt-4o-mini`, `claude-sonnet-4-6`, `gpt-4-1-nano-2025-04-14`) |
+| `model` | string | **yes** | -- | Model name (e.g. `claude-sonnet-4-6`, `gpt-5-4-2026-03-05`, `gemini-3-1-flash-lite-preview`) |
 | `messages` | array | **yes** | -- | Array of message objects. Must not be empty. |
 | `stream` | boolean | no | `false` | Stream the response as server-sent events. |
 | `max_tokens` | integer | no | varies | Maximum tokens in the response. |
@@ -26,7 +26,7 @@ Compatible with the OpenAI chat completions format. Supports streaming, multimod
 | `tools` | array | no | -- | Tool/function definitions for tool calling. |
 | `tool_choice` | string/object | no | -- | Control tool selection behavior. |
 | `parallel_tool_calls` | boolean | no | -- | Allow parallel tool calls. |
-| `response_format` | object | no | -- | Constrain response format (e.g. `{"type": "json_object"}`). |
+| `response_format` | object | no | -- | Constrain response format (e.g. `{"type": "json_object"}`). Support varies by provider. |
 
 ## Message Format
 
@@ -78,12 +78,12 @@ Image and video URLs must be publicly accessible.
 from openai import OpenAI
 
 client = OpenAI(
-    base_url="https://hub.oxen.ai/api",
+    base_url="https://hub.oxen.ai/api/ai",
     api_key="YOUR_API_KEY",
 )
 
 response = client.chat.completions.create(
-    model="gpt-4-1-nano-2025-04-14",
+    model="claude-sonnet-4-6",
     messages=[{"role": "user", "content": "Say hello in exactly 3 words."}],
     max_tokens=50,
     temperature=0.1,
@@ -93,11 +93,11 @@ print(response.choices[0].message.content)
 ```
 
 ```bash cURL
-curl -X POST https://hub.oxen.ai/api/chat/completions \
+curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "gpt-4-1-nano-2025-04-14",
+    "model": "claude-sonnet-4-6",
     "messages": [{"role": "user", "content": "Say hello in exactly 3 words."}],
     "max_tokens": 50,
     "temperature": 0.1
@@ -113,13 +113,13 @@ curl -X POST https://hub.oxen.ai/api/chat/completions \
   "id": "chatcmpl-97eab7db-fe67-4b29-900c-ed5260c654d4",
   "object": "chat.completion",
   "created": 1775090332,
-  "model": "gpt-4-1-nano-2025-04-14",
+  "model": "claude-sonnet-4-6",
   "choices": [
     {
       "index": 0,
       "message": {
         "role": "assistant",
-        "content": "Hello, how are?"
+        "content": "Hello, how are you?"
       },
       "finish_reason": "stop"
     }
@@ -140,12 +140,12 @@ curl -X POST https://hub.oxen.ai/api/chat/completions \
 from openai import OpenAI
 
 client = OpenAI(
-    base_url="https://hub.oxen.ai/api",
+    base_url="https://hub.oxen.ai/api/ai",
     api_key="YOUR_API_KEY",
 )
 
 stream = client.chat.completions.create(
-    model="gpt-4-1-nano-2025-04-14",
+    model="gemini-3-1-flash-lite-preview",
     messages=[{"role": "user", "content": "Say hello"}],
     stream=True,
 )
@@ -158,11 +158,11 @@ print()
 ```
 
 ```bash cURL
-curl -X POST https://hub.oxen.ai/api/chat/completions \
+curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "gpt-4-1-nano-2025-04-14",
+    "model": "gemini-3-1-flash-lite-preview",
     "messages": [{"role": "user", "content": "Say hello"}],
     "stream": true
   }'
@@ -173,7 +173,7 @@ curl -X POST https://hub.oxen.ai/api/chat/completions \
 Returns server-sent events. Each chunk has a `delta` instead of a full `message`:
 
 ```
-data: {"choices":[{"delta":{"content":"Hello"},"finish_reason":null,"index":0}],"created":1775090334,"id":"chatcmpl-...","model":"gpt-4-1-nano-2025-04-14","object":"chat.completion.chunk"}
+data: {"choices":[{"delta":{"content":"Hello"},"finish_reason":null,"index":0}],"created":1775090334,"id":"chatcmpl-...","model":"gemini-3-1-flash-lite-preview","object":"chat.completion.chunk"}
 
 data: {"choices":[{"delta":{"content":" there"},"finish_reason":null,"index":0}],...}
 
@@ -188,12 +188,12 @@ data: [DONE]
 from openai import OpenAI
 
 client = OpenAI(
-    base_url="https://hub.oxen.ai/api",
+    base_url="https://hub.oxen.ai/api/ai",
     api_key="YOUR_API_KEY",
 )
 
 response = client.chat.completions.create(
-    model="gpt-4-1-nano-2025-04-14",
+    model="gpt-5-4-2026-03-05",
     messages=[
         {"role": "system", "content": "Use tools when appropriate."},
         {"role": "user", "content": "What is the weather in San Francisco?"},
@@ -217,11 +217,11 @@ print(f"{tool_call.function.name}({tool_call.function.arguments})")
 ```
 
 ```bash cURL
-curl -X POST https://hub.oxen.ai/api/chat/completions \
+curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "gpt-4-1-nano-2025-04-14",
+    "model": "gpt-5-4-2026-03-05",
     "messages": [
       {"role": "system", "content": "Use tools when appropriate."},
       {"role": "user", "content": "What is the weather in San Francisco?"}
@@ -254,6 +254,7 @@ When the model uses a tool, `finish_reason` is `"tool_calls"`:
       "role": "assistant",
       "tool_calls": [{
         "id": "call_GRNwPXnbuQW4Sa3QNB3FYkYw",
+        "index": 0,
         "type": "function",
         "function": {
           "name": "get_weather",
@@ -273,12 +274,12 @@ When the model uses a tool, `finish_reason` is `"tool_calls"`:
 from openai import OpenAI
 
 client = OpenAI(
-    base_url="https://hub.oxen.ai/api",
+    base_url="https://hub.oxen.ai/api/ai",
     api_key="YOUR_API_KEY",
 )
 
 response = client.chat.completions.create(
-    model="gpt-4o-mini",
+    model="gpt-5-4-2026-03-05",
     messages=[{"role": "user", "content": "List 3 colors as a JSON array"}],
     response_format={"type": "json_object"},
     max_tokens=100,
@@ -288,11 +289,11 @@ print(response.choices[0].message.content)
 ```
 
 ```bash cURL
-curl -X POST https://hub.oxen.ai/api/chat/completions \
+curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "gpt-4o-mini",
+    "model": "gpt-5-4-2026-03-05",
     "messages": [{"role": "user", "content": "List 3 colors as a JSON array"}],
     "response_format": {"type": "json_object"},
     "max_tokens": 100

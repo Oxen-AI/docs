@@ -5,9 +5,11 @@ description: "Generate videos from text prompts in minutes"
 
 ## Overview
 
-Generate videos from text descriptions, reference images, or existing videos. Video generation takes 1-5 minutes depending on the model and duration.
+Generate videos from text descriptions, reference images, or existing videos.
 
-## Minimal Example
+## Minimal Example (Synchronous)
+
+Note: Synchronous generation can take 5-15 minutes to complete for certain models, we recommend using the async queue and polling for long-running jobs (See Below).
 
 <CodeGroup>
 
@@ -15,7 +17,7 @@ Generate videos from text descriptions, reference images, or existing videos. Vi
 import requests
 
 response = requests.post(
-    "https://hub.oxen.ai/api/videos/generate",
+    "https://hub.oxen.ai/api/ai/videos/generate",
     headers={
         "Authorization": "Bearer YOUR_API_KEY",
         "Content-Type": "application/json",
@@ -32,7 +34,7 @@ print("Video URL:", data["videos"][0]["url"])
 ```
 
 ```bash cURL
-curl -X POST https://hub.oxen.ai/api/videos/generate \
+curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -55,7 +57,6 @@ import requests
 import time
 
 API_KEY = "YOUR_API_KEY"
-NAMESPACE = "YOUR_USERNAME"
 MODEL = "kling-video-v2-6-pro-text-to-video"
 HEADERS = {
     "Authorization": f"Bearer {API_KEY}",
@@ -78,8 +79,9 @@ print(f"Enqueued {len(generations)} generation(s)")
 # 2. Poll until done
 while True:
     status = requests.get(
-        f"https://hub.oxen.ai/api/media/generations/status/{NAMESPACE}/{MODEL}",
+        "https://hub.oxen.ai/api/ai/queue",
         headers=HEADERS,
+        params={"model": MODEL},
     ).json()
     if status["count"] == 0:
         break
@@ -100,9 +102,9 @@ curl -X POST https://hub.oxen.ai/api/ai/queue \
     "duration": 5
   }'
 
-# 2. Poll until done (replace YOUR_USERNAME)
+# 2. Poll until done
 curl -H "Authorization: Bearer YOUR_API_KEY" \
-  "https://hub.oxen.ai/api/media/generations/status/YOUR_USERNAME/kling-video-v2-6-pro-text-to-video"
+  "https://hub.oxen.ai/api/ai/queue?model=kling-video-v2-6-pro-text-to-video"
 ```
 
 </CodeGroup>

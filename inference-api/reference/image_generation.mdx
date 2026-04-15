@@ -6,7 +6,7 @@ description: "Generate images from text prompts"
 ## Endpoint
 
 ```
-POST /api/images/generate
+POST /api/ai/images/generate
 ```
 
 Generates images synchronously. The request blocks until the image is ready (typically 5-30 seconds depending on the model).
@@ -19,11 +19,11 @@ Generates images synchronously. The request blocks until the image is ready (typ
 | `prompt` | string | **yes** | -- | Text description of the image to generate. |
 | `response_format` | string | no | `"url"` | `"url"` returns a hosted URL. `"b64_json"` returns base64-encoded image bytes inline. |
 | `target_namespace` | string | no | current user | Namespace to save results and bill to. Can be an organization name. |
-| `image_size` | string or object | no | -- | Size preset (e.g. `square_hd`, `portrait_4_3`) or `{"width": 1024, "height": 1024}`. |
+| `aspect_ratio` | string | no | -- | Aspect ratio (e.g. `"1:1"`, `"16:9"`, `"9:16"`, `"4:3"`, `"3:4"`). |
 | `num_inference_steps` | integer | no | -- | Number of denoising steps. |
 | `seed` | integer | no | -- | Reproducibility seed. |
 
-Available parameters vary by model. Use the model detail endpoint (`GET /api/evaluations/models/:id`) to see the `json_request_schema` for model-specific parameters.
+Available parameters vary by model. Use the [model detail endpoint](/inference-api/reference/models/overview#retrieve-model) (`GET /api/ai/models/:id`) to see the `request_schema` for model-specific parameters.
 
 ## Examples
 
@@ -35,7 +35,7 @@ Available parameters vary by model. Use the model detail endpoint (`GET /api/eva
 import requests
 
 response = requests.post(
-    "https://hub.oxen.ai/api/images/generate",
+    "https://hub.oxen.ai/api/ai/images/generate",
     headers={
         "Authorization": "Bearer YOUR_API_KEY",
         "Content-Type": "application/json",
@@ -43,7 +43,7 @@ response = requests.post(
     json={
         "model": "black-forest-labs-flux-2-klein-4b",
         "prompt": "A red cube on a white background",
-        "image_size": "square_hd",
+        "aspect_ratio": "1:1",
         "seed": 42,
     },
 )
@@ -53,13 +53,13 @@ print("Image URL:", data["images"][0]["url"])
 ```
 
 ```bash cURL
-curl -X POST https://hub.oxen.ai/api/images/generate \
+curl -X POST https://hub.oxen.ai/api/ai/images/generate \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "model": "black-forest-labs-flux-2-klein-4b",
     "prompt": "A red cube on a white background",
-    "image_size": "square_hd",
+    "aspect_ratio": "1:1",
     "seed": 42
   }'
 ```
