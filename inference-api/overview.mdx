@@ -13,19 +13,6 @@ The Inference API gives you access to hundreds of AI models through a single, co
 - **Image Generation**: Text-to-image, image-to-image editing
 - **Video Generation**: Text-to-video, image-to-video, reference-to-video, video-to-video editing
 
-## Try It
-
-Get your API key from your [account settings](https://oxen.ai/settings), then:
-
-```bash
-curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"model": "claude-sonnet-4-6", "messages": [{"role": "user", "content": "Hello!"}]}'
-```
-
-That's it. The API is OpenAI-compatible, so any OpenAI SDK works too. Just set the base URL to `https://hub.oxen.ai/api/ai`.
-
 ## Quick Starts
 
 <CardGroup cols={3}>
@@ -71,6 +58,80 @@ That's it. The API is OpenAI-compatible, so any OpenAI SDK works too. Just set t
   </Card>
 </CardGroup>
 
+---
+
+## Authentication
+
+All requests require a bearer token:
+
+```bash
+curl -H "Authorization: Bearer YOUR_API_KEY" \
+  https://hub.oxen.ai/api/ai/...
+```
+
+Get your API key from your [account settings](https://oxen.ai/settings).
+
+## Base URL
+
+All inference endpoints live under:
+
+```
+https://hub.oxen.ai/api/ai
+```
+
+If you're using the OpenAI SDK, set the base URL to `https://hub.oxen.ai/api/ai`. The SDK appends `/chat/completions` automatically.
+
+## Endpoints
+
+| Endpoint | Method | Description |
+|---|---|---|
+| `/ai/chat/completions` | POST | Text generation (chat, vision, tool use) |
+| `/ai/images/generate` | POST | Image generation |
+| `/ai/images/edit` | POST | Image editing |
+| `/ai/videos/generate` | POST | Video generation |
+| `/ai/queue` | POST | Async image/video generation |
+| `/ai/queue` | GET | List queued generations |
+| `/ai/queue/:generation_id` | GET | Get generation status |
+| `/ai/queue/:generation_id` | DELETE | Cancel a queued generation |
+| `/ai/models` | GET | List available models |
+| `/ai/models/:id` | GET | Get model details and parameter schema |
+| `/ai/models/search` | GET | Search models by name |
+| `/ai/models/:id/activate` | POST | Activate a custom model deployment |
+| `/ai/models/:id/deactivate` | POST | Deactivate a custom model deployment |
+
+## Common Parameters
+
+These parameters are accepted across multiple endpoints:
+
+| Parameter | Type | Description |
+|---|---|---|
+| `model` | string | Required. The model to use (e.g. `claude-sonnet-4-6`, `flux-2-dev`, `kling-video-o3-pro-reference-to-video`). |
+| `response_format` | string | `"url"` (default) returns a hosted URL. `"b64_json"` returns base64-encoded bytes inline. Supported on image and video endpoints. |
+| `target_namespace` | string | Namespace to save results and bill to. Defaults to your user. Can be an organization name. |
+
+## Discovering Models
+
+List all models, optionally filtered by developer:
+
+```bash
+# All models
+curl -H "Authorization: Bearer $OXEN_API_KEY" \
+  "https://hub.oxen.ai/api/ai/models"
+
+# Search by name
+curl -H "Authorization: Bearer $OXEN_API_KEY" \
+  "https://hub.oxen.ai/api/ai/models/search?search=kling"
+```
+
+Get full details for a specific model (including its parameter schema):
+
+```bash
+curl -H "Authorization: Bearer $OXEN_API_KEY" \
+  "https://hub.oxen.ai/api/ai/models/kling-video-o3-pro-reference-to-video"
+```
+
+The response includes a `request_schema` field with the complete parameter definitions, types, defaults, and constraints for that model.
+
 ## Pricing
 
 Pricing varies by model:
@@ -81,6 +142,31 @@ Pricing varies by model:
 | `per_image` | Fixed cost per image | FLUX, DALL-E |
 | `per_video_output_second` | Cost per second of output video | Kling, Sora |
 
-Check the [model detail endpoint](/inference-api/reference/models/overview#retrieve-model) for exact pricing.
+Check the [model detail endpoint](/inference-api/reference/models/overview#retrieve-model) for exact pricing. Relevant fields: `input_cost_per_token`, `output_cost_per_token`, `cost_per_image`, `cost_per_second`, `cost_per_second_with_audio`, `cost_per_second_high_res`.
+
+## Error Format
+
+Errors use one of two formats:
+
+```json
+{
+  "error": {
+    "type": "invalid_params",
+    "title": "Invalid parameters supplied, please check your request and try again.",
+    "detail": "Specific error details"
+  },
+  "status": "error"
+}
+```
+
+```json
+{
+  "error": {
+    "message": "Model not found: bad-model-name"
+  }
+}
+```
+
+Common error types: `unauthenticated`, `invalid_params`, `resource_not_found`, `unknown_error`.
 
 Need help? Join our [Discord community](https://discord.com/invite/s3tBEn7Ptg).
