@@ -114,7 +114,7 @@ You can integrate it into your application using the API. The API is OpenAI comp
 For chat completions, you'll send a list of messages that includes the conversation history. Each message should have a `role` (either "user", "assistant", or "system") and `content`.
 
 ```bash
-curl -X POST https://hub.oxen.ai/api/chat/completions \
+curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
 -H "Authorization: Bearer $API_KEY" \
 -H "Content-Type: application/json" \
 -d '{

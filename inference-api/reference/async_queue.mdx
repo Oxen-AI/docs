@@ -1,0 +1,368 @@
+---
+title: "Async Queue"
+description: "Enqueue image and video generation jobs that process in the background"
+---
+
+## Why Use the Async Queue
+
+The synchronous endpoints (`/ai/images/generate`, `/ai/videos/generate`) block until the result is ready. For video generation, this can be 1-10+ minutes. The async queue returns immediately with generation IDs so you can:
+
+- Generate up to 4 images or videos in parallel
+- Avoid long-lived HTTP connections
+- Build progress-tracking UIs
+
+## Workflow
+
+```
+1. POST /ai/queue                       → Get generation IDs
+2. GET  /ai/queue  or  /ai/queue/:id    → Poll until done
+3. Results accessible via URLs in your account
+```
+
+---
+
+## Enqueue: POST /api/ai/queue
+
+Submit an async image or video generation job.
+
+### Request Parameters
+
+| Parameter | Type | Required | Default | Description |
+|---|---|---|---|---|
+| `model` | string | **yes** | -- | Must be an image or video model. Text-only models are rejected. |
+| `prompt` | string | **one of** | -- | Text prompt. Use this or `multi_prompt` for video models. |
+| `num_generations` | integer | no | `1` | How many generations to run in parallel. Range: 1-4. |
+| `target_namespace` | string | no | your username | Namespace to store results and bill to. |
+| `seed` | integer | no | -- | Random seed for reproducibility. |
+| `aspect_ratio` | string | no | -- | Aspect ratio (e.g. `"16:9"`, `"1:1"`). |
+| `duration` | integer | no | -- | Video duration in seconds. |
+
+All other model-specific parameters are passed through (e.g. `multi_prompt`, `input_image`, `generate_audio`, `response_format`, etc.).
+
+### Response
+
+```json
+{
+  "generations": [
+    {"generation_id": "bb8f5eb7-361e-4e13-ab73-67457bc8057e", "status": "processing"},
+    {"generation_id": "e9bede09-cd0e-46cf-bbcd-cb1a50099351", "status": "processing"}
+  ]
+}
+```
+
+### Validation
+
+The API validates at enqueue time that:
+- The model exists and has image or video output capability
+- `num_generations` is 1-4
+- The user is authenticated with sufficient credits
+
+Model-specific parameter validation (prompt content, duration ranges, aspect ratio values) happens **when the generation runs**, not at enqueue time. If a parameter is invalid, the generation fails silently (it disappears from the queue without producing a result). To validate parameters and get immediate error feedback, use `/ai/images/generate` or `/ai/videos/generate` instead.
+
+---
+
+## List Generations: GET /api/ai/queue
+
+Lists all in-progress generations. Only actively-processing generations are returned; completed, failed, or cancelled generations are not retained.
+
+### Query Parameters
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `namespace` | string | no | Namespace to query. Defaults to the authenticated user. |
+| `model` | string | no | Filter by model name. |
+
+### Response (jobs in progress)
+
+```json
+{
+  "count": 2,
+  "generations": [
+    {
+      "generation_id": "7cf9b23a-1234-5678-9abc-def012345678",
+      "model": "kling-video-o3-pro-reference-to-video",
+      "prompt": "An astronaut walking on Mars",
+      "media_type": "video",
+      "enqueued_at": 1775091431,
+      "aspect_ratio": "16:9",
+      "duration": 10
+    },
+    {
+      "generation_id": "bb8f5eb7-361e-4e13-ab73-67457bc8057e",
+      "model": "black-forest-labs-flux-2-klein-4b",
+      "prompt": "Abstract geometric pattern in blue and gold",
+      "media_type": "image",
+      "enqueued_at": 1775091440
+    }
+  ]
+}
+```
+
+| Field | Always Present | Description |
+|---|---|---|
+| `count` | yes | Number of in-progress generations |
+| `generation_id` | yes | Unique ID for this generation |
+| `model` | yes | Model name |
+| `prompt` | yes | Text prompt |
+| `media_type` | yes | `"image"` or `"video"` |
+| `enqueued_at` | yes | Unix timestamp when the job was enqueued |
+| `seed` | if submitted | Random seed |
+| `aspect_ratio` | if submitted | Aspect ratio |
+| `duration` | if submitted | Video duration |
+
+### Response (all jobs complete)
+
+```json
+{
+  "count": 0,
+  "generations": []
+}
+```
+
+### How Completion Works
+
+When a generation finishes, it is removed from the queue. There is no "completed" status on this endpoint. Generations are either in the list (still processing) or gone (done). Poll until `count` reaches 0.
+
+### Polling Strategy
+
+- **Image generation** (FLUX, etc.): typically completes in 5-30 seconds. Poll every 2-5 seconds.
+- **Video generation** (Kling, etc.): typically takes 1-5 minutes. Poll every 10-30 seconds.
+- Generations expire after 24 hours regardless of completion.
+
+---
+
+## Get Generation: GET /api/ai/queue/:generation_id
+
+Retrieves metadata for a single in-progress generation.
+
+### Path Parameters
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `generation_id` | string (UUID) | **yes** | The generation ID returned by the enqueue endpoint. |
+
+### Response (in progress)
+
+```json
+{
+  "generation_id": "7cf9b23a-1234-5678-9abc-def012345678",
+  "model": "kling-video-o3-pro-reference-to-video",
+  "prompt": "An astronaut walking on Mars",
+  "media_type": "video",
+  "enqueued_at": 1775091431,
+  "aspect_ratio": "16:9",
+  "duration": 10
+}
+```
+
+### Response (completed or not found)
+
+Returns 404 when the generation has reached a terminal state (completed, failed, cancelled, or expired after 24h):
+
+```json
+{
+  "error": {
+    "type": "resource_not_found",
+    "title": "The requested resource could not be found"
+  },
+  "status": "error"
+}
+```
+
+---
+
+## Cancel Generation: DELETE /api/ai/queue/:generation_id
+
+Cancels a queued or in-progress generation.
+
+### Path Parameters
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `generation_id` | string (UUID) | **yes** | The generation ID to cancel. |
+
+### Response (success)
+
+```json
+{
+  "status": "success",
+  "generation_id": "bb8f5eb7-361e-4e13-ab73-67457bc8057e"
+}
+```
+
+### Response (already completed or not found)
+
+Returns 404:
+
+```json
+{
+  "error": {
+    "type": "resource_not_found",
+    "title": "The requested resource could not be found"
+  },
+  "status": "error"
+}
+```
+
+You can only cancel generations that are still processing. Once a generation completes and leaves the queue, the DELETE endpoint returns 404.
+
+---
+
+## Examples
+
+### Batch image generation with polling
+
+<CodeGroup>
+
+```python Python
+import requests
+import time
+
+API_KEY = "YOUR_API_KEY"
+HEADERS = {
+    "Authorization": f"Bearer {API_KEY}",
+    "Content-Type": "application/json",
+}
+
+# Enqueue 4 images
+response = requests.post(
+    "https://hub.oxen.ai/api/ai/queue",
+    headers=HEADERS,
+    json={
+        "model": "black-forest-labs-flux-2-klein-4b",
+        "prompt": "Abstract geometric pattern in blue and gold",
+        "num_generations": 4,
+    },
+)
+generations = response.json()["generations"]
+print(f"Enqueued {len(generations)} generations")
+
+# Poll until done
+while True:
+    status = requests.get(
+        "https://hub.oxen.ai/api/ai/queue",
+        headers=HEADERS,
+        params={"model": "black-forest-labs-flux-2-klein-4b"},
+    ).json()
+    print(f"Remaining: {status['count']}")
+    if status["count"] == 0:
+        break
+    time.sleep(5)
+
+print("All images generated!")
+```
+
+```bash cURL
+# Enqueue 4 images
+curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "black-forest-labs-flux-2-klein-4b",
+    "prompt": "Abstract geometric pattern in blue and gold",
+    "num_generations": 4
+  }'
+
+# Poll until done
+while true; do
+  STATUS=$(curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+    "https://hub.oxen.ai/api/ai/queue?model=black-forest-labs-flux-2-klein-4b")
+  COUNT=$(echo "$STATUS" | python3 -c "import json,sys; print(json.load(sys.stdin)['count'])")
+  echo "Remaining: $COUNT"
+  [ "$COUNT" -eq 0 ] && break
+  sleep 5
+done
+
+echo "All images generated!"
+```
+
+</CodeGroup>
+
+### Async video generation
+
+<CodeGroup>
+
+```python Python
+import requests
+
+response = requests.post(
+    "https://hub.oxen.ai/api/ai/queue",
+    headers={
+        "Authorization": "Bearer YOUR_API_KEY",
+        "Content-Type": "application/json",
+    },
+    json={
+        "model": "kling-video-o3-pro-reference-to-video",
+        "multi_prompt": [
+            {"prompt": "Aerial view of waves crashing on a rocky shore", "duration": 5},
+            {"prompt": "Camera pulls back to reveal the full coastline", "duration": 5},
+        ],
+        "aspect_ratio": "16:9",
+    },
+)
+
+print(response.json())
+```
+
+```bash cURL
+curl -X POST https://hub.oxen.ai/api/ai/queue \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "kling-video-o3-pro-reference-to-video",
+    "multi_prompt": [
+      {"prompt": "Aerial view of waves crashing on a rocky shore", "duration": 5},
+      {"prompt": "Camera pulls back to reveal the full coastline", "duration": 5}
+    ],
+    "aspect_ratio": "16:9"
+  }'
+```
+
+</CodeGroup>
+
+### Poll a single generation by ID
+
+<CodeGroup>
+
+```python Python
+import requests
+import time
+
+API_KEY = "YOUR_API_KEY"
+HEADERS = {"Authorization": f"Bearer {API_KEY}"}
+
+# After enqueuing, grab a generation ID
+generation_id = "bb8f5eb7-361e-4e13-ab73-67457bc8057e"
+
+while True:
+    resp = requests.get(
+        f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
+        headers=HEADERS,
+    )
+    if resp.status_code == 404:
+        print("Generation complete (or cancelled/expired)")
+        break
+    print(f"Still processing: {resp.json()['model']}")
+    time.sleep(10)
+```
+
+```bash cURL
+# Check a specific generation
+curl -H "Authorization: Bearer $OXEN_API_KEY" \
+  "https://hub.oxen.ai/api/ai/queue/bb8f5eb7-361e-4e13-ab73-67457bc8057e"
+
+# Cancel a generation
+curl -X DELETE -H "Authorization: Bearer $OXEN_API_KEY" \
+  "https://hub.oxen.ai/api/ai/queue/bb8f5eb7-361e-4e13-ab73-67457bc8057e"
+```
+
+</CodeGroup>
+
+## Errors
+
+| Condition | Error |
+|---|---|
+| `num_generations` out of range | `"num_generations must be an integer between 1 and 4"` |
+| Model not found | `"Model not found: <name>"` |
+| Text-only model | `":unsupported_media_type"` |
+| 404 on GET/DELETE | Generation completed, cancelled, expired, or doesn't exist |

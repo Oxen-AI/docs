@@ -1,6 +1,6 @@
 ---
 title: '👁️ Vision Language Models'
-description: 'Leverage image understanding with the `/chat/completions` endpoint.'
+description: 'Leverage image understanding with the `/ai/chat/completions` endpoint.'
 ---
 
 ## What are VLMs?
@@ -13,14 +13,14 @@ Here is the [list of supported models](https://www.oxen.ai/ai/models?modalities=
 
 ## Image Understanding
 
-The `/chat/completions` endpoint supports vision language models for image understanding. If you want to send an image to a model that supports vision such as Qwen3-VL, Qwen3.5, or Gemini 3 Pro/Flash, you can add a message with the `image_url` type.
+The `/ai/chat/completions` endpoint supports vision language models for image understanding. If you want to send an image to a model that supports vision such as Qwen3-VL, Qwen3.5, or Gemini 3 Pro/Flash, you can add a message with the `image_url` type.
 
 ### Using Image URLs
 
 <CodeGroup>
 
 ```bash cURL (image url)
-curl -X POST https://hub.oxen.ai/api/chat/completions \
+curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
 -H "Authorization: Bearer $OXEN_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -53,7 +53,7 @@ You can also directly pass in the base64 encoded image.
 
 <CodeGroup>
 ```bash cURL (base64 encoded image)
-curl -X POST https://hub.oxen.ai/api/chat/completions \
+curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
 -H "Authorization: Bearer $OXEN_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -97,7 +97,7 @@ def encode_image(image_path):
 # Initialize the client
 client = openai.OpenAI(
     api_key=os.getenv("OXEN_API_KEY"),
-    base_url="https://hub.oxen.ai/api"
+    base_url="https://hub.oxen.ai/api/ai"
 )
 
 # Encode your image
@@ -131,14 +131,14 @@ print(response.choices[0].message.content)
 
 ## Video Understanding
 
-The `/chat/completions` endpoint also supports video understanding through vision language models. To send a video to a model that supports video understanding, you can add a message with the `video_url` type.
+The `/ai/chat/completions` endpoint also supports video understanding through vision language models. To send a video to a model that supports video understanding, you can add a message with the `video_url` type.
 
 ### Using Video URLs
 
 <CodeGroup>
 
 ```bash cURL (video url)
-curl -X POST https://hub.oxen.ai/api/chat/completions \
+curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
 -H "Authorization: Bearer $OXEN_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -171,7 +171,7 @@ You can also directly pass in the base64 encoded video.
 
 <CodeGroup>
 ```bash cURL (base64 encoded video)
-curl -X POST https://hub.oxen.ai/api/chat/completions \
+curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
 -H "Authorization: Bearer $OXEN_API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
@@ -215,7 +215,7 @@ def encode_video(video_path):
 # Initialize the client
 client = openai.OpenAI(
     api_key=os.getenv("OXEN_API_KEY"),
-    base_url="https://hub.oxen.ai/api"
+    base_url="https://hub.oxen.ai/api/ai"
 )
 
 # Encode your video

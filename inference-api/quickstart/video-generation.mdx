@@ -1,0 +1,116 @@
+---
+title: "Video Generation"
+description: "Generate videos from text prompts in minutes"
+---
+
+## Overview
+
+Generate videos from text descriptions, reference images, or existing videos.
+
+## Minimal Example (Synchronous)
+
+Note: Synchronous generation can take 5-15 minutes to complete for certain models, we recommend using the async queue and polling for long-running jobs (See Below).
+
+<CodeGroup>
+
+```python Python
+import requests
+
+response = requests.post(
+    "https://hub.oxen.ai/api/ai/videos/generate",
+    headers={
+        "Authorization": "Bearer YOUR_API_KEY",
+        "Content-Type": "application/json",
+    },
+    json={
+        "model": "kling-video-v2-6-pro-text-to-video",
+        "prompt": "A red balloon floating upward through blue sky",
+        "duration": 5,
+    },
+)
+
+data = response.json()
+print("Video URL:", data["videos"][0]["url"])
+```
+
+```bash cURL
+curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "kling-video-v2-6-pro-text-to-video",
+    "prompt": "A red balloon floating upward through blue sky",
+    "duration": 5
+  }'
+```
+
+</CodeGroup>
+
+## Async Generation (Recommended)
+
+For video generation, using the async queue avoids long-lived HTTP connections:
+
+<CodeGroup>
+
+```python Python
+import requests
+import time
+
+API_KEY = "YOUR_API_KEY"
+MODEL = "kling-video-v2-6-pro-text-to-video"
+HEADERS = {
+    "Authorization": f"Bearer {API_KEY}",
+    "Content-Type": "application/json",
+}
+
+# 1. Enqueue
+response = requests.post(
+    "https://hub.oxen.ai/api/ai/queue",
+    headers=HEADERS,
+    json={
+        "model": MODEL,
+        "prompt": "A sunset timelapse over the ocean",
+        "duration": 5,
+    },
+)
+generations = response.json()["generations"]
+print(f"Enqueued {len(generations)} generation(s)")
+
+# 2. Poll until done
+while True:
+    status = requests.get(
+        "https://hub.oxen.ai/api/ai/queue",
+        headers=HEADERS,
+        params={"model": MODEL},
+    ).json()
+    if status["count"] == 0:
+        break
+    print(f"Still processing: {status['count']} remaining")
+    time.sleep(10)
+
+print("Done!")
+```
+
+```bash cURL
+# 1. Enqueue
+curl -X POST https://hub.oxen.ai/api/ai/queue \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "kling-video-v2-6-pro-text-to-video",
+    "prompt": "A sunset timelapse over the ocean",
+    "duration": 5
+  }'
+
+# 2. Poll until done
+curl -H "Authorization: Bearer YOUR_API_KEY" \
+  "https://hub.oxen.ai/api/ai/queue?model=kling-video-v2-6-pro-text-to-video"
+```
+
+</CodeGroup>
+
+## What's Next
+
+- [Video Generation Reference](/inference-api/reference/video_generation) for the full parameter list
+- [Kling O3 Pro: Reference to Video](/inference-api/reference/models/kling_o3_pro_reference_to_video) for multi-shot video with reference images
+- [Async Queue Reference](/inference-api/reference/async_queue) for batch generation

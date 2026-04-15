@@ -11,7 +11,7 @@ The image generation endpoint allows you to generate images from text prompts. S
 
 ```bash cURL
 curl -X POST \
-  https://hub.oxen.ai/api/images/generate \
+  https://hub.oxen.ai/api/ai/images/generate \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -d '{
@@ -26,7 +26,7 @@ import requests
 import os
 
 response = requests.post(
-    "https://hub.oxen.ai/api/images/generate",
+    "https://hub.oxen.ai/api/ai/images/generate",
     headers={
         "Authorization": f"Bearer {os.getenv('OXEN_API_KEY')}",
         "Content-Type": "application/json"

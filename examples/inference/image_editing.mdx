@@ -11,7 +11,7 @@ The image editing endpoint allows you to edit images using AI models. Simply pro
 
 ```bash cURL
 curl -X POST \
-  https://hub.oxen.ai/api/images/edit \
+  https://hub.oxen.ai/api/ai/images/edit \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -d '{
@@ -27,7 +27,7 @@ import requests
 import os
 
 response = requests.post(
-    "https://hub.oxen.ai/api/images/edit",
+    "https://hub.oxen.ai/api/ai/images/edit",
     headers={
         "Authorization": f"Bearer {os.getenv('OXEN_API_KEY')}",
         "Content-Type": "application/json"
@@ -53,7 +53,7 @@ For models that support multiple input images, you can pass an array of image UR
 
 ```bash cURL (multiple images)
 curl -X POST \
-  https://hub.oxen.ai/api/images/edit \
+  https://hub.oxen.ai/api/ai/images/edit \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -d '{
@@ -72,7 +72,7 @@ import requests
 import os
 
 response = requests.post(
-    "https://hub.oxen.ai/api/images/edit",
+    "https://hub.oxen.ai/api/ai/images/edit",
     headers={
         "Authorization": f"Bearer {os.getenv('OXEN_API_KEY')}",
         "Content-Type": "application/json"

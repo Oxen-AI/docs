@@ -107,7 +107,7 @@ Click on the "Info" tab to see the fine-tuning configuration and all the hyper-p
 
 Once the model is fine-tuned, you can deploy it to a dedicated endpoint or in the playground. 
 
-This will give you a `/chat/completions` api and a playgroud that you can use to test out the model.
+This will give you a `/ai/chat/completions` api and a playground that you can use to test out the model.
 
 Start by using the "playgroud" button.
 <img alt="Fine-Tuning Configuration" className="rounded-xl" src="/images/fine_tuning/fine-tune-deploy-model.png" />
@@ -124,7 +124,7 @@ use the activate button to load the model.
 To use the API Swap out the model name with the name of the model you want to use.
 
 ```bash
-curl https://hub.oxen.ai/api/chat/completions -H "Content-Type: application/json" -d '{
+curl https://hub.oxen.ai/api/ai/chat/completions -H "Content-Type: application/json" -d '{
     "model":"oxen:my-model-name",
     "messages": [{"role": "user", "content": "What is the best name for a friendly ox?"}],
 }'

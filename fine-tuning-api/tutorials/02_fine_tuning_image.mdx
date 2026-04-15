@@ -258,7 +258,7 @@ With the deployment live, you can call the **image editing** inference endpoint 
 
 **Endpoint**
 
-- `POST /api/images/edit`
+- `POST /api/ai/images/edit`
 
 **Example `curl` request** (single input image):
 
@@ -266,7 +266,7 @@ With the deployment live, you can call the **image editing** inference endpoint 
 export DEPLOYED_MODEL="${DEPLOYED_MODEL:-oxen:your-fine-tuned-image-edit-model}"
 
 curl -X POST \
-  "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/images/edit" \
+  "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/ai/images/edit" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer ${OXEN_API_KEY}" \
   -d "{
@@ -281,7 +281,7 @@ For models that support **multiple input images** (for example when using a mult
 
 ```bash
 curl -X POST \
-  "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/images/edit" \
+  "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/ai/images/edit" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer ${OXEN_API_KEY}" \
   -d "{

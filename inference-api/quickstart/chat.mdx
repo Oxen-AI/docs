@@ -1,0 +1,86 @@
+---
+title: "Chat Completions"
+description: "Generate text with language models in minutes"
+---
+
+## Overview
+
+Generate text responses from language models using the OpenAI-compatible chat completions API. Supports streaming, vision, tool calling, and structured output.
+
+## Minimal Example
+
+<CodeGroup>
+
+```python Python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://hub.oxen.ai/api/ai",
+    api_key="YOUR_API_KEY",
+)
+
+response = client.chat.completions.create(
+    model="claude-sonnet-4-6",
+    messages=[{"role": "user", "content": "What is Oxen.ai?"}],
+    max_tokens=200,
+)
+
+print(response.choices[0].message.content)
+```
+
+```bash cURL
+curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "claude-sonnet-4-6",
+    "messages": [{"role": "user", "content": "What is Oxen.ai?"}],
+    "max_tokens": 200
+  }'
+```
+
+</CodeGroup>
+
+## With Streaming
+
+<CodeGroup>
+
+```python Python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://hub.oxen.ai/api/ai",
+    api_key="YOUR_API_KEY",
+)
+
+stream = client.chat.completions.create(
+    model="gemini-3-1-flash-lite-preview",
+    messages=[{"role": "user", "content": "Write a haiku about data"}],
+    stream=True,
+)
+
+for chunk in stream:
+    content = chunk.choices[0].delta.content
+    if content:
+        print(content, end="", flush=True)
+print()
+```
+
+```bash cURL
+curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gemini-3-1-flash-lite-preview",
+    "messages": [{"role": "user", "content": "Write a haiku about data"}],
+    "stream": true
+  }'
+```
+
+</CodeGroup>
+
+## What's Next
+
+- [Chat Completions Reference](/inference-api/reference/chat_completions) for the full parameter list
+- [Image Generation Quick Start](/inference-api/quickstart/image-generation) to generate images
+- [Video Generation Quick Start](/inference-api/quickstart/video-generation) to generate videos
