@@ -56,6 +56,15 @@ The Inference API gives you access to hundreds of AI models through a single, co
   <Card title="Kling O3 Pro: Reference to Video" icon="film" href="/inference-api/reference/models/kling_o3_pro_reference_to_video">
     Multi-shot video with reference images, elements, and audio
   </Card>
+  <Card title="Kling O3 Pro: Video to Video Edit" icon="pen-to-square" href="/inference-api/reference/models/kling_o3_pro_video_to_video_edit">
+    Edit existing videos with text instructions and reference images
+  </Card>
+  <Card title="Seedance 2.0: Reference to Video" icon="seedling" href="/inference-api/reference/models/seedance_2_reference_to_video">
+    Generate video from text, images, video, and audio references
+  </Card>
+  <Card title="Topaz Starlight Precise 2.5" icon="arrow-up-right-dots" href="/inference-api/reference/models/topaz_starlight_precise_2_5">
+    Video upscaling and restoration up to 4K
+  </Card>
 </CardGroup>
 
 ---
@@ -139,6 +148,7 @@ Pricing varies by model:
 | Method | How it works | Examples |
 |---|---|---|
 | `token` | Per input/output token | GPT, Claude, Gemini |
+| `time` | Per second of compute time | Custom models, Llama, Qwen |
 | `per_image` | Fixed cost per image | FLUX, DALL-E |
 | `per_video_output_second` | Cost per second of output video | Kling, Sora |
 
@@ -155,7 +165,8 @@ Errors use one of two formats:
     "title": "Invalid parameters supplied, please check your request and try again.",
     "detail": "Specific error details"
   },
-  "status": "error"
+  "status": "error",
+  "status_message": "invalid_params"
 }
 ```
 

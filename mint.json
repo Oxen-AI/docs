@@ -189,7 +189,10 @@
               {
                   "group": "Model References",
                   "pages": [
-                      "inference-api/reference/models/kling_o3_pro_reference_to_video"
+                      "inference-api/reference/models/kling_o3_pro_reference_to_video",
+                      "inference-api/reference/models/kling_o3_pro_video_to_video_edit",
+                      "inference-api/reference/models/seedance_2_reference_to_video",
+                      "inference-api/reference/models/topaz_starlight_precise_2_5"
                   ]
               }
           ]

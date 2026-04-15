@@ -15,9 +15,7 @@ Transforms reference images into dynamic video sequences. Preserves identity, la
 POST /api/ai/videos/generate
 ```
 
-Video generation is synchronous, the request blocks until the video is ready (typically 1-5 minutes). Billing is calculated as `total video duration x $0.224/s`. A default 5-second video costs ~$1.12.
-
-For fire-and-forget or batch generation, use [`/ai/queue`](/inference-api/reference/async_queue) instead.
+Video generation is synchronous, the request blocks until the video is ready (typically 1-5 minutes). It is recommended to use [`/ai/queue`](/inference-api/reference/async_queue) instead for long-running jobs, so that you don't have long running http requests.
 
 ## Request Parameters
 
@@ -419,8 +417,8 @@ curl -X DELETE -H "Authorization: Bearer $OXEN_API_KEY" \
 
 | Error | Cause | Fix |
 |---|---|---|
-| `Cannot provide both 'prompt' and 'multi_prompt'` | Sent both fields | Use one or the other |
-| `Either 'prompt' or 'multi_prompt' must be provided` | Neither sent, or empty array | Provide at least one |
+| `Getting model response error: 422 - Value error, Cannot provide both 'prompt' and 'multi_prompt'.` | Sent both fields | Use one or the other |
+| `Getting model response error: 422 - Value error, Either 'prompt' or 'multi_prompt' must be provided.` | Neither sent, or empty array | Provide at least one |
 | `Field required` | `multi_prompt` item missing `prompt` | Every shot needs a `prompt` string |
 | `duration value '2' is invalid` | Total duration < 3 seconds | Ensure total across shots >= 3 |
 | `Total shot duration (16s) exceeds maximum allowed (15s)` | Total duration > 15 seconds | Keep total at 15 seconds or less |

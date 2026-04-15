@@ -33,13 +33,13 @@ Additional parameters vary by model. Use the [model detail endpoint](/inference-
 Either `prompt` or `multi_prompt` is required. Sending both returns an error:
 
 ```
-"Cannot provide both 'prompt' and 'multi_prompt'."
+"Getting model response error: 422 - Value error, Cannot provide both 'prompt' and 'multi_prompt'."
 ```
 
 Sending neither returns:
 
 ```
-"Either 'prompt' or 'multi_prompt' must be provided."
+"Getting model response error: 422 - Value error, Either 'prompt' or 'multi_prompt' must be provided."
 ```
 
 ## Examples
@@ -163,6 +163,6 @@ curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
 
 | Condition | Error |
 |---|---|
-| Both `prompt` and `multi_prompt` | `"Cannot provide both 'prompt' and 'multi_prompt'."` |
-| Neither `prompt` nor `multi_prompt` | `"Either 'prompt' or 'multi_prompt' must be provided."` |
+| Both `prompt` and `multi_prompt` | `"Getting model response error: 422 - Value error, Cannot provide both 'prompt' and 'multi_prompt'."` |
+| Neither `prompt` nor `multi_prompt` | `"Getting model response error: 422 - Value error, Either 'prompt' or 'multi_prompt' must be provided."` |
 | Model not found | `"Model not found: <name>"` |

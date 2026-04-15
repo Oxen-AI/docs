@@ -30,7 +30,7 @@ Submit an async image or video generation job.
 | Parameter | Type | Required | Default | Description |
 |---|---|---|---|---|
 | `model` | string | **yes** | -- | Must be an image or video model. Text-only models are rejected. |
-| `prompt` | string | **yes** | -- | Text prompt. |
+| `prompt` | string | **one of** | -- | Text prompt. Use this or `multi_prompt` for video models. |
 | `num_generations` | integer | no | `1` | How many generations to run in parallel. Range: 1-4. |
 | `target_namespace` | string | no | your username | Namespace to store results and bill to. |
 | `seed` | integer | no | -- | Random seed for reproducibility. |

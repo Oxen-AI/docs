@@ -7,7 +7,7 @@ description: "Generate images from text prompts in minutes"
 
 Generate images from text descriptions using models like FLUX and DALL-E.
 
-## Minimal Example
+## Minimal Example (Synchronous)
 
 <CodeGroup>
 
@@ -83,6 +83,67 @@ curl -X POST https://hub.oxen.ai/api/ai/images/generate \
     "prompt": "A blue sphere on grey background",
     "response_format": "b64_json"
   }'
+```
+
+</CodeGroup>
+
+## Async Generation (Recommended)
+
+For longer-running image generation jobs, using the async queue avoids long-lived HTTP connections:
+
+<CodeGroup>
+
+```python Python
+import requests
+import time
+
+API_KEY = "YOUR_API_KEY"
+MODEL = "black-forest-labs-flux-2-klein-4b"
+HEADERS = {
+    "Authorization": f"Bearer {API_KEY}",
+    "Content-Type": "application/json",
+}
+
+# 1. Enqueue
+response = requests.post(
+    "https://hub.oxen.ai/api/ai/queue",
+    headers=HEADERS,
+    json={
+        "model": MODEL,
+        "prompt": "A watercolor painting of a mountain landscape",
+    },
+)
+generations = response.json()["generations"]
+print(f"Enqueued {len(generations)} generation(s)")
+
+# 2. Poll until done
+while True:
+    status = requests.get(
+        "https://hub.oxen.ai/api/ai/queue",
+        headers=HEADERS,
+        params={"model": MODEL},
+    ).json()
+    if status["count"] == 0:
+        break
+    print(f"Still processing: {status['count']} remaining")
+    time.sleep(10)
+
+print("Done!")
+```
+
+```bash cURL
+# 1. Enqueue
+curl -X POST https://hub.oxen.ai/api/ai/queue \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "black-forest-labs-flux-2-klein-4b",
+    "prompt": "A watercolor painting of a mountain landscape"
+  }'
+
+# 2. Poll until done
+curl -H "Authorization: Bearer YOUR_API_KEY" \
+  "https://hub.oxen.ai/api/ai/queue?model=black-forest-labs-flux-2-klein-4b"
 ```
 
 </CodeGroup>

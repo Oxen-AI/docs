@@ -119,7 +119,7 @@ curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
       "index": 0,
       "message": {
         "role": "assistant",
-        "content": "Hello, how are?"
+        "content": "Hello, how are you?"
       },
       "finish_reason": "stop"
     }
@@ -254,6 +254,7 @@ When the model uses a tool, `finish_reason` is `"tool_calls"`:
       "role": "assistant",
       "tool_calls": [{
         "id": "call_GRNwPXnbuQW4Sa3QNB3FYkYw",
+        "index": 0,
         "type": "function",
         "function": {
           "name": "get_weather",
