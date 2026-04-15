@@ -19,6 +19,8 @@ The synchronous endpoints (`/ai/images/generate`, `/ai/videos/generate`) block u
 3. Results accessible via URLs in your account
 ```
 
+A Server-Sent Events stream at `GET /api/events` can also deliver completion notifications with the output file URL. See [Completion Events](#completion-events-get-api-events).
+
 ---
 
 ## Enqueue: POST /api/ai/queue
@@ -123,6 +125,8 @@ Lists all in-progress generations. Only actively-processing generations are retu
 
 When a generation finishes, it is removed from the queue. There is no "completed" status on this endpoint. Generations are either in the list (still processing) or gone (done). Poll until `count` reaches 0.
 
+The output file URL is not returned by this endpoint. See [Completion Events](#completion-events-get-api-events) for receiving URLs via SSE.
+
 ### Polling Strategy
 
 - **Image generation** (FLUX, etc.): typically completes in 5-30 seconds. Poll every 2-5 seconds.
@@ -205,6 +209,130 @@ Returns 404:
 ```
 
 You can only cancel generations that are still processing. Once a generation completes and leaves the queue, the DELETE endpoint returns 404.
+
+---
+
+## Completion Events: GET /api/events
+
+Server-Sent Events stream that emits `media_generation_completed` events when generations reach a terminal state.
+
+### Connect
+
+```
+GET /api/events
+Authorization: Bearer $OXEN_API_KEY
+```
+
+Response is `Content-Type: text/event-stream`. The server sends `: keep-alive\n\n` every 15 seconds when idle.
+
+Events are broadcast to currently-connected subscribers with no buffering. Anything that fires before you connect is lost. Subscribe before calling `POST /ai/queue` to avoid missing events.
+
+### Event: media_generation_completed
+
+Fires once per generation on terminal state.
+
+Success wire format:
+
+```
+event: media_generation_completed
+data: {"generation_id":"bb8f5eb7-...","status":"succeeded","media_type":"video","model":"kling-video-o3-pro-reference-to-video","url":"https://hub.oxen.ai/api/repos/..."}
+
+```
+
+Failure:
+
+```
+event: media_generation_completed
+data: {"generation_id":"bb8f5eb7-...","status":"failed","media_type":"video","error":"Insufficient credits"}
+
+```
+
+### Fields
+
+| Field | succeeded | failed | Description |
+|---|---|---|---|
+| `generation_id` | yes | yes | Matches the ID returned by `POST /ai/queue` |
+| `status` | `"succeeded"` | `"failed"` | Only these two values appear |
+| `media_type` | yes | yes | `"image"` or `"video"` |
+| `model` | yes | no | Model name |
+| `url` | yes | no | Presigned URL to the output file. Expires after a limited time. |
+| `error` | no | yes | Human-readable failure reason |
+
+### Terminal states without events
+
+`media_generation_completed` does not fire for:
+
+- Cancelled generations (you called `DELETE /ai/queue/:id`)
+- Expired generations (24h TTL with no worker pickup)
+
+### Other events on this stream
+
+`GET /api/events` is a user-scoped stream that may carry unrelated event types (e.g. deployment events). Filter on the `event:` line and ignore anything other than `media_generation_completed`.
+
+### Example
+
+<CodeGroup>
+
+```python Python
+import json
+import requests
+import threading
+
+API_KEY = "YOUR_API_KEY"
+HEADERS = {"Authorization": f"Bearer {API_KEY}"}
+
+def listen(results):
+    with requests.get(
+        "https://hub.oxen.ai/api/events",
+        headers=HEADERS,
+        stream=True,
+    ) as resp:
+        event_name = None
+        for line in resp.iter_lines(decode_unicode=True):
+            if line is None or line == "":
+                event_name = None
+                continue
+            if line.startswith(":"):
+                continue  # keep-alive comment
+            if line.startswith("event:"):
+                event_name = line[6:].strip()
+            elif line.startswith("data:") and event_name == "media_generation_completed":
+                payload = json.loads(line[5:].strip())
+                results[payload["generation_id"]] = payload
+                # break when you've received everything you care about
+
+# Start listening BEFORE enqueuing
+results = {}
+threading.Thread(target=listen, args=(results,), daemon=True).start()
+
+# Enqueue
+resp = requests.post(
+    "https://hub.oxen.ai/api/ai/queue",
+    headers={**HEADERS, "Content-Type": "application/json"},
+    json={
+        "model": "black-forest-labs-flux-2-klein-4b",
+        "prompt": "A red cube",
+    },
+)
+gen_id = resp.json()["generations"][0]["generation_id"]
+
+# Wait for completion event
+while gen_id not in results:
+    pass
+
+event = results[gen_id]
+if event["status"] == "succeeded":
+    print("URL:", event["url"])
+else:
+    print("Failed:", event["error"])
+```
+
+```bash cURL
+curl -N -H "Authorization: Bearer $OXEN_API_KEY" \
+  https://hub.oxen.ai/api/events
+```
+
+</CodeGroup>
 
 ---
 
