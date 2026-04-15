@@ -19,7 +19,7 @@ The synchronous endpoints (`/ai/images/generate`, `/ai/videos/generate`) block u
 3. Results accessible via URLs in your account
 ```
 
-A Server-Sent Events stream at `GET /api/events` can also deliver completion notifications with the output file URL. See [Completion Events](#completion-events-get-api-events).
+A Server-Sent Events stream at `GET /api/events` can also deliver completion notifications with the output file URL. See [Completion Events](#completion-events).
 
 ---
 
@@ -125,7 +125,7 @@ Lists all in-progress generations. Only actively-processing generations are retu
 
 When a generation finishes, it is removed from the queue. There is no "completed" status on this endpoint. Generations are either in the list (still processing) or gone (done). Poll until `count` reaches 0.
 
-The output file URL is not returned by this endpoint. See [Completion Events](#completion-events-get-api-events) for receiving URLs via SSE.
+The output file URL is not returned by this endpoint. See [Completion Events](#completion-events) for receiving URLs via SSE.
 
 ### Polling Strategy
 
@@ -212,7 +212,11 @@ You can only cancel generations that are still processing. Once a generation com
 
 ---
 
-## Completion Events: GET /api/events
+## Completion Events
+
+```
+GET /api/events
+```
 
 Server-Sent Events stream that emits `media_generation_completed` events when generations reach a terminal state.
 
