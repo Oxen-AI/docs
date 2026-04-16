@@ -36,7 +36,7 @@ Submit an async image or video generation job.
 | Parameter | Type | Required | Default | Description |
 |---|---|---|---|---|
 | `model` | string | **yes** | -- | Must be an image or video model. Text-only models are rejected. |
-| `prompt` | string | **one of** | -- | Text prompt. Use this or `multi_prompt` for video models. |
+| `prompt` | string | no | -- | Text prompt. Required for successful generation unless the model takes `multi_prompt` instead; not enforced at enqueue time. |
 | `num_generations` | integer | no | `1` | How many generations to run in parallel. Range: 1-4. |
 | `target_namespace` | string | no | your username | Namespace to store results and bill to. |
 | `seed` | integer | no | -- | Random seed for reproducibility. |
@@ -181,7 +181,8 @@ Returns 404 when the generation has reached a terminal state (completed, failed,
     "type": "resource_not_found",
     "title": "The requested resource could not be found"
   },
-  "status": "error"
+  "status": "error",
+  "status_message": "resource_not_found"
 }
 ```
 
@@ -220,7 +221,8 @@ Returns 404:
     "type": "resource_not_found",
     "title": "The requested resource could not be found"
   },
-  "status": "error"
+  "status": "error",
+  "status_message": "resource_not_found"
 }
 ```
 
