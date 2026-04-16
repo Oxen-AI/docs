@@ -506,6 +506,64 @@ curl -X DELETE -H "Authorization: Bearer $OXEN_API_KEY" \
 
 </CodeGroup>
 
+### End-to-end: enqueue, wait for SSE, download
+
+```python Python
+import json
+import queue
+import requests
+import threading
+
+API_KEY = "YOUR_API_KEY"
+HEADERS = {"Authorization": f"Bearer {API_KEY}"}
+
+def listen(events):
+    with requests.get(
+        "https://hub.oxen.ai/api/events",
+        headers=HEADERS,
+        stream=True,
+    ) as resp:
+        event_name = None
+        for line in resp.iter_lines(decode_unicode=True):
+            if not line:
+                event_name = None
+                continue
+            if line.startswith(":"):
+                continue
+            if line.startswith("event:"):
+                event_name = line[6:].strip()
+            elif line.startswith("data:") and event_name == "media_generation_completed":
+                events.put(json.loads(line[5:]))
+
+# Subscribe before enqueuing so no events are missed
+events = queue.Queue()
+threading.Thread(target=listen, args=(events,), daemon=True).start()
+
+# Enqueue
+resp = requests.post(
+    "https://hub.oxen.ai/api/ai/queue",
+    headers={**HEADERS, "Content-Type": "application/json"},
+    json={
+        "model": "black-forest-labs-flux-2-klein-4b",
+        "prompt": "A cathedral in the clouds",
+    },
+).json()
+gen_id = resp["generations"][0]["generation_id"]
+
+# Wait for the matching completion event
+while True:
+    event = events.get()
+    if event["generation_id"] == gen_id:
+        break
+
+if event["status"] == "succeeded":
+    with open("output.png", "wb") as f:
+        f.write(requests.get(event["url"]).content)
+    print("Saved output.png")
+else:
+    print(f"Failed: {event['error']}")
+```
+
 ## Errors
 
 | Condition | Error |
