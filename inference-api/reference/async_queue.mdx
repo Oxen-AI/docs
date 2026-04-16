@@ -31,17 +31,22 @@ POST /api/ai/queue
 
 Submit an async image or video generation job.
 
-### Request Parameters
+### Required Parameters
 
-| Parameter | Type | Required | Default | Description |
-|---|---|---|---|---|
-| `model` | string | **yes** | -- | Must be an image or video model. Text-only models are rejected. |
-| `prompt` | string | no | -- | Text prompt. Required for successful generation unless the model takes `multi_prompt` instead; not enforced at enqueue time. |
-| `num_generations` | integer | no | `1` | How many generations to run in parallel. Range: 1-4. |
-| `target_namespace` | string | no | your username | Namespace to store results and bill to. |
-| `seed` | integer | no | -- | Random seed for reproducibility. |
-| `aspect_ratio` | string | no | -- | Aspect ratio (e.g. `"16:9"`, `"1:1"`). |
-| `duration` | integer | no | -- | Video duration in seconds. |
+| Parameter | Type | Description |
+|---|---|---|
+| `model` | string | Must be an image or video model. Text-only models are rejected. |
+
+### Additional Parameters
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `prompt` | string | -- | Text prompt. Required for successful generation unless the model takes `multi_prompt` instead; not enforced at enqueue time. |
+| `num_generations` | integer | `1` | How many generations to run in parallel. Range: 1-4. |
+| `target_namespace` | string | your username | Namespace to store results and bill to. |
+| `seed` | integer | -- | Random seed for reproducibility. |
+| `aspect_ratio` | string | -- | Aspect ratio (e.g. `"16:9"`, `"1:1"`). |
+| `duration` | integer | -- | Video duration in seconds. |
 
 All other model-specific parameters are passed through (e.g. `multi_prompt`, `input_image`, `generate_audio`, `response_format`, etc.).
 
