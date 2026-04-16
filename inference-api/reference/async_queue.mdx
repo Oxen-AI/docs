@@ -278,13 +278,6 @@ data: {"generation_id":"bb8f5eb7-...","status":"failed","media_type":"video","er
 | `url` | yes | no | Presigned URL to the output file. Expires after a limited time. |
 | `error` | no | yes | Human-readable failure reason |
 
-### Terminal states without events
-
-`media_generation_completed` does not fire for:
-
-- Cancelled generations (you called `DELETE /ai/queue/:id`)
-- Expired generations (24h TTL with no worker pickup)
-
 ### Other events on this stream
 
 `GET /api/events` is a user-scoped stream that may carry unrelated event types (e.g. deployment events). Filter on the `event:` line and ignore anything other than `media_generation_completed`.
@@ -353,6 +346,13 @@ curl -N -H "Authorization: Bearer $OXEN_API_KEY" \
 ```
 
 </CodeGroup>
+
+### Terminal states without events
+
+`media_generation_completed` does not fire for:
+
+- Cancelled generations (you called `DELETE /ai/queue/:id`)
+- Expired generations (24h TTL with no worker pickup)
 
 ---
 
