@@ -293,6 +293,7 @@ data: {"generation_id":"bb8f5eb7-...","status":"failed","media_type":"video","er
 import json
 import requests
 import threading
+import time
 
 API_KEY = "YOUR_API_KEY"
 HEADERS = {"Authorization": f"Bearer {API_KEY}"}
@@ -315,32 +316,43 @@ def listen(results):
             elif line.startswith("data:") and event_name == "media_generation_completed":
                 payload = json.loads(line[5:].strip())
                 results[payload["generation_id"]] = payload
-                # break when you've received everything you care about
 
 # Start listening BEFORE enqueuing
 results = {}
 threading.Thread(target=listen, args=(results,), daemon=True).start()
+print("SSE listener connected, waiting for events...")
 
 # Enqueue
+prompt = "A red cube"
+model = "black-forest-labs-flux-2-klein-4b"
+print(f"\nEnqueuing {model}")
+print(f"  prompt: \"{prompt}\"")
 resp = requests.post(
     "https://hub.oxen.ai/api/ai/queue",
     headers={**HEADERS, "Content-Type": "application/json"},
     json={
-        "model": "black-forest-labs-flux-2-klein-4b",
-        "prompt": "A red cube",
+        "model": model,
+        "prompt": prompt,
     },
 )
 gen_id = resp.json()["generations"][0]["generation_id"]
+print(f"  generation_id: {gen_id}")
 
 # Wait for completion event
+start = time.time()
 while gen_id not in results:
-    pass
+    elapsed = time.time() - start
+    print(f"  Waiting for SSE completion event... ({elapsed:.1f}s)")
+    time.sleep(2)
 
+elapsed = time.time() - start
 event = results[gen_id]
 if event["status"] == "succeeded":
-    print("URL:", event["url"])
+    print(f"\nGeneration succeeded in {elapsed:.1f}s")
+    print(f"  URL: {event['url']}")
 else:
-    print("Failed:", event["error"])
+    print(f"\nGeneration failed after {elapsed:.1f}s")
+    print(f"  Error: {event['error']}")
 ```
 
 ```bash cURL
@@ -376,31 +388,41 @@ HEADERS = {
 }
 
 # Enqueue 4 images
+model = "black-forest-labs-flux-2-klein-4b"
+prompt = "Abstract geometric pattern in blue and gold"
+print(f"Enqueuing 4 generations of {model}")
+print(f"  prompt: \"{prompt}\"")
 response = requests.post(
     "https://hub.oxen.ai/api/ai/queue",
     headers=HEADERS,
     json={
-        "model": "black-forest-labs-flux-2-klein-4b",
-        "prompt": "Abstract geometric pattern in blue and gold",
+        "model": model,
+        "prompt": prompt,
         "num_generations": 4,
     },
 )
 generations = response.json()["generations"]
-print(f"Enqueued {len(generations)} generations")
+for gen in generations:
+    print(f"  generation_id: {gen['generation_id']}")
 
 # Poll until done
+start = time.time()
 while True:
     status = requests.get(
         "https://hub.oxen.ai/api/ai/queue",
         headers=HEADERS,
-        params={"model": "black-forest-labs-flux-2-klein-4b"},
+        params={"model": model},
     ).json()
-    print(f"Remaining: {status['count']}")
-    if status["count"] == 0:
+    elapsed = time.time() - start
+    remaining = status["count"]
+    completed = len(generations) - remaining
+    print(f"  [{elapsed:5.1f}s] {completed}/{len(generations)} complete, {remaining} remaining...")
+    if remaining == 0:
         break
     time.sleep(5)
 
-print("All images generated!")
+elapsed = time.time() - start
+print(f"\nAll {len(generations)} images generated in {elapsed:.1f}s!")
 ```
 
 ```bash cURL
@@ -484,16 +506,22 @@ HEADERS = {"Authorization": f"Bearer {API_KEY}"}
 
 # After enqueuing, grab a generation ID
 generation_id = "bb8f5eb7-361e-4e13-ab73-67457bc8057e"
+print(f"Polling generation {generation_id}")
 
+start = time.time()
+poll_count = 0
 while True:
+    poll_count += 1
     resp = requests.get(
         f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
         headers=HEADERS,
     )
+    elapsed = time.time() - start
     if resp.status_code == 404:
-        print("Generation complete (or cancelled/expired)")
+        print(f"  [{elapsed:5.1f}s] Generation complete (or cancelled/expired)")
         break
-    print(f"Still processing: {resp.json()['model']}")
+    data = resp.json()
+    print(f"  [{elapsed:5.1f}s] Poll #{poll_count} — still processing ({data['model']}, {data['media_type']})")
     time.sleep(10)
 ```
 
@@ -516,6 +544,7 @@ import json
 import queue
 import requests
 import threading
+import time
 
 API_KEY = "YOUR_API_KEY"
 HEADERS = {"Authorization": f"Bearer {API_KEY}"}
@@ -541,30 +570,46 @@ def listen(events):
 # Subscribe before enqueuing so no events are missed
 events = queue.Queue()
 threading.Thread(target=listen, args=(events,), daemon=True).start()
+print("SSE listener connected, waiting for events...")
 
 # Enqueue
+model = "black-forest-labs-flux-2-klein-4b"
+prompt = "A cathedral in the clouds"
+print(f"\nEnqueuing {model}")
+print(f"  prompt: \"{prompt}\"")
 resp = requests.post(
     "https://hub.oxen.ai/api/ai/queue",
     headers={**HEADERS, "Content-Type": "application/json"},
     json={
-        "model": "black-forest-labs-flux-2-klein-4b",
-        "prompt": "A cathedral in the clouds",
+        "model": model,
+        "prompt": prompt,
     },
 ).json()
 gen_id = resp["generations"][0]["generation_id"]
+print(f"  generation_id: {gen_id}")
 
 # Wait for the matching completion event
+start = time.time()
+print(f"\nWaiting for SSE completion event...")
 while True:
-    event = events.get()
-    if event["generation_id"] == gen_id:
-        break
+    try:
+        event = events.get(timeout=3)
+        if event["generation_id"] == gen_id:
+            break
+        print(f"  [{time.time() - start:5.1f}s] Received event for different generation, skipping...")
+    except queue.Empty:
+        print(f"  [{time.time() - start:5.1f}s] Still waiting...")
 
+elapsed = time.time() - start
 if event["status"] == "succeeded":
+    print(f"\nGeneration succeeded in {elapsed:.1f}s")
+    print(f"  Downloading {event['url']}")
     with open("output.png", "wb") as f:
         f.write(requests.get(event["url"]).content)
-    print("Saved output.png")
+    print("  Saved output.png")
 else:
-    print(f"Failed: {event['error']}")
+    print(f"\nGeneration failed after {elapsed:.1f}s")
+    print(f"  Error: {event['error']}")
 ```
 
 ## Errors
