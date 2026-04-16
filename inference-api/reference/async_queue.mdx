@@ -19,25 +19,32 @@ The synchronous endpoints (`/ai/images/generate`, `/ai/videos/generate`) block u
 3. Results accessible via URLs in your account
 ```
 
+A Server-Sent Events stream at `GET /api/events` can also deliver completion notifications with the output file URL. See [Completion Events](#completion-events).
+
 ---
 
-## Enqueue: POST /api/ai/queue
+## Enqueue
+
+```
+POST /api/ai/queue
+```
 
 Submit an async image or video generation job.
 
-### Request Parameters
+### Required Parameters
 
-| Parameter | Type | Required | Default | Description |
-|---|---|---|---|---|
-| `model` | string | **yes** | -- | Must be an image or video model. Text-only models are rejected. |
-| `prompt` | string | **one of** | -- | Text prompt. Use this or `multi_prompt` for video models. |
-| `num_generations` | integer | no | `1` | How many generations to run in parallel. Range: 1-4. |
-| `target_namespace` | string | no | your username | Namespace to store results and bill to. |
-| `seed` | integer | no | -- | Random seed for reproducibility. |
-| `aspect_ratio` | string | no | -- | Aspect ratio (e.g. `"16:9"`, `"1:1"`). |
-| `duration` | integer | no | -- | Video duration in seconds. |
+| Parameter | Type | Description |
+|---|---|---|
+| `model` | string | Must be an image or video model. Text-only models are rejected. |
 
-All other model-specific parameters are passed through (e.g. `multi_prompt`, `input_image`, `generate_audio`, `response_format`, etc.).
+### Additional Parameters
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `num_generations` | integer | `1` | How many generations to run in parallel. Range: 1-4. |
+| `target_namespace` | string | your username | Namespace to store results and bill to. |
+
+All other parameters (e.g. `prompt`, `multi_prompt`, `input_image`, `input_video`, `aspect_ratio`, `duration`, `seed`, `generate_audio`, `response_format`) are passed through to the model. Consult the model's `request_schema` via `GET /api/ai/models/:id` for supported parameters and their constraints.
 
 ### Response
 
@@ -61,7 +68,11 @@ Model-specific parameter validation (prompt content, duration ranges, aspect rat
 
 ---
 
-## List Generations: GET /api/ai/queue
+## List Generations
+
+```
+GET /api/ai/queue
+```
 
 Lists all in-progress generations. Only actively-processing generations are returned; completed, failed, or cancelled generations are not retained.
 
@@ -123,6 +134,8 @@ Lists all in-progress generations. Only actively-processing generations are retu
 
 When a generation finishes, it is removed from the queue. There is no "completed" status on this endpoint. Generations are either in the list (still processing) or gone (done). Poll until `count` reaches 0.
 
+The output file URL is not returned by this endpoint. See [Completion Events](#completion-events) for receiving URLs via SSE.
+
 ### Polling Strategy
 
 - **Image generation** (FLUX, etc.): typically completes in 5-30 seconds. Poll every 2-5 seconds.
@@ -131,7 +144,11 @@ When a generation finishes, it is removed from the queue. There is no "completed
 
 ---
 
-## Get Generation: GET /api/ai/queue/:generation_id
+## Get Generation
+
+```
+GET /api/ai/queue/:generation_id
+```
 
 Retrieves metadata for a single in-progress generation.
 
@@ -165,13 +182,18 @@ Returns 404 when the generation has reached a terminal state (completed, failed,
     "type": "resource_not_found",
     "title": "The requested resource could not be found"
   },
-  "status": "error"
+  "status": "error",
+  "status_message": "resource_not_found"
 }
 ```
 
 ---
 
-## Cancel Generation: DELETE /api/ai/queue/:generation_id
+## Cancel Generation
+
+```
+DELETE /api/ai/queue/:generation_id
+```
 
 Cancels a queued or in-progress generation.
 
@@ -200,11 +222,152 @@ Returns 404:
     "type": "resource_not_found",
     "title": "The requested resource could not be found"
   },
-  "status": "error"
+  "status": "error",
+  "status_message": "resource_not_found"
 }
 ```
 
 You can only cancel generations that are still processing. Once a generation completes and leaves the queue, the DELETE endpoint returns 404.
+
+---
+
+## Completion Events
+
+```
+GET /api/events
+```
+
+Server-Sent Events stream that emits `media_generation_completed` events when generations reach a terminal state.
+
+### Connect
+
+```
+GET /api/events
+Authorization: Bearer $OXEN_API_KEY
+```
+
+Response is `Content-Type: text/event-stream`. The server sends `: keep-alive\n\n` every 15 seconds when idle.
+
+Events are broadcast to currently-connected subscribers with no buffering. Anything that fires before you connect is lost. Subscribe before calling `POST /ai/queue` to avoid missing events.
+
+### Event: media_generation_completed
+
+Fires once per generation on terminal state.
+
+Success wire format:
+
+```
+event: media_generation_completed
+data: {"generation_id":"bb8f5eb7-...","status":"succeeded","media_type":"video","model":"kling-video-o3-pro-reference-to-video","url":"https://hub.oxen.ai/api/repos/..."}
+
+```
+
+Failure:
+
+```
+event: media_generation_completed
+data: {"generation_id":"bb8f5eb7-...","status":"failed","media_type":"video","error":"Insufficient credits"}
+
+```
+
+### Fields
+
+| Field | succeeded | failed | Description |
+|---|---|---|---|
+| `generation_id` | yes | yes | Matches the ID returned by `POST /ai/queue` |
+| `status` | `"succeeded"` | `"failed"` | Only these two values appear |
+| `media_type` | yes | yes | `"image"` or `"video"` |
+| `model` | yes | no | Model name |
+| `url` | yes | no | Presigned URL to the output file. Expires after a limited time. |
+| `error` | no | yes | Human-readable failure reason |
+
+### Other events on this stream
+
+`GET /api/events` is a user-scoped stream that may carry unrelated event types (e.g. deployment events). Filter on the `event:` line and ignore anything other than `media_generation_completed`.
+
+### Example
+
+<CodeGroup>
+
+```python Python
+import json
+import requests
+import threading
+import time
+
+API_KEY = "YOUR_API_KEY"
+HEADERS = {"Authorization": f"Bearer {API_KEY}"}
+
+def listen(results):
+    with requests.get(
+        "https://hub.oxen.ai/api/events",
+        headers=HEADERS,
+        stream=True,
+    ) as resp:
+        event_name = None
+        for line in resp.iter_lines(decode_unicode=True):
+            if line is None or line == "":
+                event_name = None
+                continue
+            if line.startswith(":"):
+                continue  # keep-alive comment
+            if line.startswith("event:"):
+                event_name = line[6:].strip()
+            elif line.startswith("data:") and event_name == "media_generation_completed":
+                payload = json.loads(line[5:].strip())
+                results[payload["generation_id"]] = payload
+
+# Start listening BEFORE enqueuing
+results = {}
+threading.Thread(target=listen, args=(results,), daemon=True).start()
+print("SSE listener connected, waiting for events...")
+
+# Enqueue
+prompt = "A red cube"
+model = "black-forest-labs-flux-2-klein-4b"
+print(f"\nEnqueuing {model}")
+print(f"  prompt: \"{prompt}\"")
+resp = requests.post(
+    "https://hub.oxen.ai/api/ai/queue",
+    headers={**HEADERS, "Content-Type": "application/json"},
+    json={
+        "model": model,
+        "prompt": prompt,
+    },
+)
+gen_id = resp.json()["generations"][0]["generation_id"]
+print(f"  generation_id: {gen_id}")
+
+# Wait for completion event
+start = time.time()
+while gen_id not in results:
+    elapsed = time.time() - start
+    print(f"  Waiting for SSE completion event... ({elapsed:.1f}s)")
+    time.sleep(2)
+
+elapsed = time.time() - start
+event = results[gen_id]
+if event["status"] == "succeeded":
+    print(f"\nGeneration succeeded in {elapsed:.1f}s")
+    print(f"  URL: {event['url']}")
+else:
+    print(f"\nGeneration failed after {elapsed:.1f}s")
+    print(f"  Error: {event['error']}")
+```
+
+```bash cURL
+curl -N -H "Authorization: Bearer $OXEN_API_KEY" \
+  https://hub.oxen.ai/api/events
+```
+
+</CodeGroup>
+
+### Terminal states without events
+
+`media_generation_completed` does not fire for:
+
+- Cancelled generations (you called `DELETE /ai/queue/:id`)
+- Expired generations (24h TTL with no worker pickup)
 
 ---
 
@@ -225,31 +388,41 @@ HEADERS = {
 }
 
 # Enqueue 4 images
+model = "black-forest-labs-flux-2-klein-4b"
+prompt = "Abstract geometric pattern in blue and gold"
+print(f"Enqueuing 4 generations of {model}")
+print(f"  prompt: \"{prompt}\"")
 response = requests.post(
     "https://hub.oxen.ai/api/ai/queue",
     headers=HEADERS,
     json={
-        "model": "black-forest-labs-flux-2-klein-4b",
-        "prompt": "Abstract geometric pattern in blue and gold",
+        "model": model,
+        "prompt": prompt,
         "num_generations": 4,
     },
 )
 generations = response.json()["generations"]
-print(f"Enqueued {len(generations)} generations")
+for gen in generations:
+    print(f"  generation_id: {gen['generation_id']}")
 
 # Poll until done
+start = time.time()
 while True:
     status = requests.get(
         "https://hub.oxen.ai/api/ai/queue",
         headers=HEADERS,
-        params={"model": "black-forest-labs-flux-2-klein-4b"},
+        params={"model": model},
     ).json()
-    print(f"Remaining: {status['count']}")
-    if status["count"] == 0:
+    elapsed = time.time() - start
+    remaining = status["count"]
+    completed = len(generations) - remaining
+    print(f"  [{elapsed:5.1f}s] {completed}/{len(generations)} complete, {remaining} remaining...")
+    if remaining == 0:
         break
     time.sleep(5)
 
-print("All images generated!")
+elapsed = time.time() - start
+print(f"\nAll {len(generations)} images generated in {elapsed:.1f}s!")
 ```
 
 ```bash cURL
@@ -333,16 +506,22 @@ HEADERS = {"Authorization": f"Bearer {API_KEY}"}
 
 # After enqueuing, grab a generation ID
 generation_id = "bb8f5eb7-361e-4e13-ab73-67457bc8057e"
+print(f"Polling generation {generation_id}")
 
+start = time.time()
+poll_count = 0
 while True:
+    poll_count += 1
     resp = requests.get(
         f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
         headers=HEADERS,
     )
+    elapsed = time.time() - start
     if resp.status_code == 404:
-        print("Generation complete (or cancelled/expired)")
+        print(f"  [{elapsed:5.1f}s] Generation complete (or cancelled/expired)")
         break
-    print(f"Still processing: {resp.json()['model']}")
+    data = resp.json()
+    print(f"  [{elapsed:5.1f}s] Poll #{poll_count} — still processing ({data['model']}, {data['media_type']})")
     time.sleep(10)
 ```
 
@@ -357,6 +536,81 @@ curl -X DELETE -H "Authorization: Bearer $OXEN_API_KEY" \
 ```
 
 </CodeGroup>
+
+### End-to-end: enqueue, wait for SSE, download
+
+```python Python
+import json
+import queue
+import requests
+import threading
+import time
+
+API_KEY = "YOUR_API_KEY"
+HEADERS = {"Authorization": f"Bearer {API_KEY}"}
+
+def listen(events):
+    with requests.get(
+        "https://hub.oxen.ai/api/events",
+        headers=HEADERS,
+        stream=True,
+    ) as resp:
+        event_name = None
+        for line in resp.iter_lines(decode_unicode=True):
+            if not line:
+                event_name = None
+                continue
+            if line.startswith(":"):
+                continue
+            if line.startswith("event:"):
+                event_name = line[6:].strip()
+            elif line.startswith("data:") and event_name == "media_generation_completed":
+                events.put(json.loads(line[5:]))
+
+# Subscribe before enqueuing so no events are missed
+events = queue.Queue()
+threading.Thread(target=listen, args=(events,), daemon=True).start()
+print("SSE listener connected, waiting for events...")
+
+# Enqueue
+model = "black-forest-labs-flux-2-klein-4b"
+prompt = "A cathedral in the clouds"
+print(f"\nEnqueuing {model}")
+print(f"  prompt: \"{prompt}\"")
+resp = requests.post(
+    "https://hub.oxen.ai/api/ai/queue",
+    headers={**HEADERS, "Content-Type": "application/json"},
+    json={
+        "model": model,
+        "prompt": prompt,
+    },
+).json()
+gen_id = resp["generations"][0]["generation_id"]
+print(f"  generation_id: {gen_id}")
+
+# Wait for the matching completion event
+start = time.time()
+print(f"\nWaiting for SSE completion event...")
+while True:
+    try:
+        event = events.get(timeout=3)
+        if event["generation_id"] == gen_id:
+            break
+        print(f"  [{time.time() - start:5.1f}s] Received event for different generation, skipping...")
+    except queue.Empty:
+        print(f"  [{time.time() - start:5.1f}s] Still waiting...")
+
+elapsed = time.time() - start
+if event["status"] == "succeeded":
+    print(f"\nGeneration succeeded in {elapsed:.1f}s")
+    print(f"  Downloading {event['url']}")
+    with open("output.png", "wb") as f:
+        f.write(requests.get(event["url"]).content)
+    print("  Saved output.png")
+else:
+    print(f"\nGeneration failed after {elapsed:.1f}s")
+    print(f"  Error: {event['error']}")
+```
 
 ## Errors
 
