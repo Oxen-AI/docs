@@ -41,7 +41,7 @@ Submit an async image or video generation job.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `prompt` | string | -- | Text prompt. Required for successful generation unless the model takes `multi_prompt` instead; not enforced at enqueue time. |
+| `prompt` | string | -- | Text prompt. Per-model requirements vary (some models use `multi_prompt`; upscalers and video-to-video models use `input_image` or `input_video` instead). Not enforced at enqueue time; consult the model's `request_schema`. |
 | `num_generations` | integer | `1` | How many generations to run in parallel. Range: 1-4. |
 | `target_namespace` | string | your username | Namespace to store results and bill to. |
 | `seed` | integer | -- | Random seed for reproducibility. |
