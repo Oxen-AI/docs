@@ -19,6 +19,14 @@ then `uv run generate-finetune-docs.py` to generate the finetune api documentati
 
 This will fetch the new models from https://hub.oxen.ai/api/evaluations/models and generate the documentation from them. The documentation will be generated in the `fine-tuning-api/reference` directory.
 
+## Per-Model Inference API Reference Pages
+
+```
+uv run generate-model-docs.py
+```
+
+Fetches the same `/api/evaluations/models` list, writes one `.mdx` page per inference-capable model under `inference-api/reference/models/`, and rewrites the `Model References` group in `mint.json` to match. Each page links to the corresponding Workbench URL and embeds a machine-readable `oxen-model-schema` block so agents can parse the request schema directly. Pass `--input path/to/models.json` to run offline against a saved payload.
+
 ## Python Doc Generation
 
 To generate/update the python documentation for the `/python-api` directory there is a `./generate-python-docs.sh` script.
