@@ -187,12 +187,12 @@
                     ]
                 },
                 {
-                    "group": "Featured Models",
+                    "group": "Model Walkthroughs",
                     "pages": [
-                        "inference-api/reference/models/featured/kling_o3_pro_reference_to_video",
-                        "inference-api/reference/models/featured/kling_o3_pro_video_to_video_edit",
-                        "inference-api/reference/models/featured/seedance_2_reference_to_video",
-                        "inference-api/reference/models/featured/topaz_starlight_precise_2_5"
+                        "inference-api/reference/models/walkthroughs/kling_o3_pro_reference_to_video",
+                        "inference-api/reference/models/walkthroughs/kling_o3_pro_video_to_video_edit",
+                        "inference-api/reference/models/walkthroughs/seedance_2_reference_to_video",
+                        "inference-api/reference/models/walkthroughs/topaz_starlight_precise_2_5"
                     ]
                 },
                 {
