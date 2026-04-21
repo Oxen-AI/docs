@@ -25,7 +25,7 @@ This will fetch the new models from https://hub.oxen.ai/api/evaluations/models a
 uv run generate-model-docs.py
 ```
 
-Fetches the same `/api/evaluations/models` list, writes one `.mdx` page per inference-capable model under `inference-api/reference/models/`, and rewrites the `Model References` group in `mint.json` to match. Each page links to the corresponding Workbench URL and embeds a machine-readable `oxen-model-schema` block so agents can parse the request schema directly. Pass `--input path/to/models.json` to run offline against a saved payload.
+Fetches the same `/api/evaluations/models` list and writes one `.mdx` page per inference-capable model under `inference-api/reference/models/`. Each page links to the corresponding Workbench URL. The generated pages are intentionally not listed in `mint.json`; Mintlify eagerly renders every page under an expanded tab, which made the Inference API tab slow to load. The pages are still served at their direct URL and referenced from the per-model `## Documentation` section in the workbench. Pass `--input path/to/models.json` to run offline against a saved payload.
 
 ## Python Doc Generation
 

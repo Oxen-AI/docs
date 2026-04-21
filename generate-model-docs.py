@@ -350,77 +350,13 @@ def write_pages(models: list[dict[str, Any]], output_dir: Path, workbench_base: 
     return written
 
 
-def _developer_label(model: dict[str, Any]) -> str:
-    """Extract a display label to group models under in the nav."""
-    dev = model.get("developer")
-    if isinstance(dev, dict):
-        name = dev.get("display_name") or dev.get("name")
-        if name:
-            return str(name)
-    provider = model.get("provider")
-    if isinstance(provider, dict):
-        name = provider.get("display_name") or provider.get("name")
-        if name:
-            return str(name)
-    return "Other"
-
-
-def build_nav_groups(
-    generated: list[tuple[str, dict[str, Any]]], nav_prefix: str
-) -> list[dict[str, Any]]:
-    """Build a list of {group, pages} nav entries, one per developer, alphabetically sorted.
-
-    Grouping keeps each Mintlify nav group small so the sidebar stays responsive on
-    expand, instead of rendering ~130 leaves in one flat list.
-    """
-    buckets: dict[str, list[str]] = {}
-    for path, model in generated:
-        label = _developer_label(model)
-        page_id = f"{nav_prefix}/{Path(path).stem}"
-        buckets.setdefault(label, []).append(page_id)
-
-    return [
-        {"group": label, "pages": sorted(set(pages))}
-        for label, pages in sorted(buckets.items(), key=lambda entry: entry[0].lower())
-    ]
-
-
-def update_mint_nav(
-    mint_path: Path,
-    nav_groups: list[dict[str, Any]],
-) -> bool:
-    """Rewrite the ``Model References`` group in mint.json to contain the given sub-groups.
-
-    Returns ``True`` if the file changed on disk, ``False`` otherwise.
-    """
-    if not mint_path.exists():
-        return False
-
-    with mint_path.open() as fh:
-        config = json.load(fh)
-
-    changed = False
-
-    def walk(node: Any) -> Any:
-        nonlocal changed
-        if isinstance(node, dict):
-            if node.get("group") == "Model References" and "pages" in node:
-                if node["pages"] != nav_groups:
-                    node["pages"] = nav_groups
-                    changed = True
-            return {k: walk(v) for k, v in node.items()}
-        if isinstance(node, list):
-            return [walk(item) for item in node]
-        return node
-
-    updated = walk(config)
-
-    if changed:
-        with mint_path.open("w") as fh:
-            json.dump(updated, fh, indent=4)
-            fh.write("\n")
-
-    return changed
+# Note: the 130+ generated pages used to be listed under a "Model References"
+# group in mint.json. Mintlify renders every page under an expanded tab eagerly,
+# which made the Inference API tab unusable to load. We now leave the generated
+# pages out of the sidebar entirely — they're still served at their direct URL
+# and linked to from the models overview, the per-model docs in the workbench,
+# and external references. If we want a discovery surface later, an overview
+# index page is cheap; the flat nav is not.
 
 
 def main() -> None:
@@ -444,16 +380,6 @@ def main() -> None:
         default=DEFAULT_WORKBENCH_BASE,
         help=f"Base URL for workbench links (default: {DEFAULT_WORKBENCH_BASE}).",
     )
-    parser.add_argument(
-        "--mint-config",
-        default="mint.json",
-        help="Path to the Mintlify config file. Use '' to skip nav update.",
-    )
-    parser.add_argument(
-        "--nav-prefix",
-        default="inference-api/reference/models",
-        help="Prefix used when registering generated pages in mint.json.",
-    )
     args = parser.parse_args()
 
     models = load_models(args)
@@ -463,15 +389,6 @@ def main() -> None:
     print(f"Wrote {len(written)} model reference page(s) under {output_dir}", file=sys.stderr)
     for path, _ in written:
         print(path)
-
-    if args.mint_config:
-        nav_groups = build_nav_groups(written, args.nav_prefix)
-        mint_changed = update_mint_nav(Path(args.mint_config), nav_groups)
-        print(
-            f"mint.json {'updated' if mint_changed else 'already in sync'} "
-            f"({len(nav_groups)} developer groups)",
-            file=sys.stderr,
-        )
 
 
 if __name__ == "__main__":
