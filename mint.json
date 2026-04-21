@@ -1,251 +1,387 @@
 {
-  "$schema": "https://mintlify.com/schema.json",
-  "name": "Oxen.ai",
-  "logo": {
-      "dark": "/logo/dark.svg",
-      "light": "/logo/light.svg"
-  },
-  "favicon": "/favicon.png",
-  "colors": {
-      "primary": "#0E87CB",
-      "light": "#0E87CB",
-      "dark": "#161616",
-      "background": {
-          "dark": "#0A0A0A"
-      },
-      "anchors": {
-          "from": "#0E87CB",
-          "to": "#0E87CB"
-      }
-  },
-  "topbarLinks": [
-      {
-          "name": "Support",
-          "url": "https://discord.com/invite/s3tBEn7Ptg"
-      }
-  ],
-  "topbarCtaButton": {
-      "name": "Sign Up",
-      "url": "https://oxen.ai/register"
-  },
-  "tabs": [
-      {
-          "name": "Python API",
-          "url": "python-api"
-      },
-      {
-          "name": "Repository API",
-          "url": "http-api",
-          "openapi": "https://hub.oxen.ai/api/_spec/oxen_server_openapi.json"
-      },
-      {
-          "name": "Fine-Tuning API",
-          "url": "fine-tuning-api",
-          "openapi": "https://hub.oxen.ai/api/_spec/oxen_hub_api.json"
-      },
-      {
-          "name": "Inference API",
-          "url": "inference-api"
-      }
-  ],
-  "anchors": [
-      {
-          "name": "Documentation",
-          "icon": "book-open-cover",
-          "url": "https://docs.oxen.ai"
-      },
-      {
-          "name": "Blog",
-          "icon": "newspaper",
-          "url": "https://blog.oxen.ai"
-      },
-      {
-          "name": "GitHub",
-          "icon": "github",
-          "url": "https://github.com/Oxen-AI/Oxen"
-      }
-  ],
-  "navigation": [
-      {
-          "group": "Get Started",
-          "pages": [
-              "getting-started/intro",
-              {
-                  "group": "⚡️ Models",
-                  "pages": [
-                      "getting-started/inference",
-                      "examples/inference/chat_completions",
-                      "examples/inference/vision_language_models",
-                      "examples/inference/image_generation",
-                      "examples/inference/image_editing",
-                      "examples/inference/video_generation"
-                  ]
-              },
-              {
-                  "group": "🛠️ Fine-Tuning",
-                  "pages": [
-                      "getting-started/fine-tuning",
-                      "examples/fine-tuning/text_generation",
-                      "examples/fine-tuning/chat_completions",
-                      "examples/fine-tuning/image_understanding",
-                      "examples/fine-tuning/image_generation",
-                      "examples/fine-tuning/image_editing",
-                      "examples/fine-tuning/video_generation"
-                  ]
-              },
-              "getting-started/datasets",
-              "getting-started/batch_inference",
-              "getting-started/versioning"
-          ]
-      },
-      {
-          "group": "Developer Tools",
-          "pages": [
-              "getting-started/install",
-              {
-                "group": "💻 Command Line Interface",
-                "pages": [
-                    "getting-started/command-line/config",
-                    "getting-started/command-line/import_data",
-                    "getting-started/command-line/local_development",
-                    "getting-started/command-line/push_changes",
-                    "getting-started/command-line/dev_tools"
-                ]
-              },
-              "getting-started/python",
-              "getting-started/oxen-server",
-              "features/performance"
-          ]
-      },
-      {
-          "group": "Other Concepts",
-          "pages": [
-              "concepts/diffs",
-              "concepts/file_metadata",
-              "concepts/workspaces"
-          ]
-      },
-      {
-          "group": "Release Notes",
-          "pages": [
-              "concepts/feature-updates"
-          ]
-      },
-      {
-          "group": "Python API",
-          "pages": [
-              "python-api/index",
-              "python-api/clone",
-              "python-api/data_frame",
-              "python-api/datasets",
-              "python-api/df_utils",
-              "python-api/diff/diff",
-              "python-api/diff/line_diff",
-              "python-api/diff/tabular_diff",
-              "python-api/diff/text_diff",
-              "python-api/init",
-              "python-api/oxen_fs",
-              "python-api/remote_repo",
-              "python-api/repo",
-              "python-api/repositories",
-              "python-api/workspace"
-          ]
-      },
-      {
-          "group": "Repository API",
-          "pages": [
-                { 
+    "$schema": "https://mintlify.com/schema.json",
+    "name": "Oxen.ai",
+    "logo": {
+        "dark": "/logo/dark.svg",
+        "light": "/logo/light.svg"
+    },
+    "favicon": "/favicon.png",
+    "colors": {
+        "primary": "#0E87CB",
+        "light": "#0E87CB",
+        "dark": "#161616",
+        "background": {
+            "dark": "#0A0A0A"
+        },
+        "anchors": {
+            "from": "#0E87CB",
+            "to": "#0E87CB"
+        }
+    },
+    "topbarLinks": [
+        {
+            "name": "Support",
+            "url": "https://discord.com/invite/s3tBEn7Ptg"
+        }
+    ],
+    "topbarCtaButton": {
+        "name": "Sign Up",
+        "url": "https://oxen.ai/register"
+    },
+    "tabs": [
+        {
+            "name": "Python API",
+            "url": "python-api"
+        },
+        {
+            "name": "Repository API",
+            "url": "http-api",
+            "openapi": "https://dev.hub.oxen.ai/api/_spec/oxen_server_openapi.json"
+        },
+        {
+            "name": "Fine-Tuning API",
+            "url": "fine-tuning-api",
+            "openapi": "https://dev.hub.oxen.ai/api/_spec/oxen_hub_api.json"
+        },
+        {
+            "name": "Inference API",
+            "url": "inference-api"
+        }
+    ],
+    "anchors": [
+        {
+            "name": "Documentation",
+            "icon": "book-open-cover",
+            "url": "https://docs.oxen.ai"
+        },
+        {
+            "name": "Blog",
+            "icon": "newspaper",
+            "url": "https://blog.oxen.ai"
+        },
+        {
+            "name": "GitHub",
+            "icon": "github",
+            "url": "https://github.com/Oxen-AI/Oxen"
+        }
+    ],
+    "navigation": [
+        {
+            "group": "Get Started",
+            "pages": [
+                "getting-started/intro",
+                {
+                    "group": "\u26a1\ufe0f Models",
+                    "pages": [
+                        "getting-started/inference",
+                        "examples/inference/chat_completions",
+                        "examples/inference/vision_language_models",
+                        "examples/inference/image_generation",
+                        "examples/inference/image_editing",
+                        "examples/inference/video_generation"
+                    ]
+                },
+                {
+                    "group": "\ud83d\udee0\ufe0f Fine-Tuning",
+                    "pages": [
+                        "getting-started/fine-tuning",
+                        "examples/fine-tuning/text_generation",
+                        "examples/fine-tuning/chat_completions",
+                        "examples/fine-tuning/image_understanding",
+                        "examples/fine-tuning/image_generation",
+                        "examples/fine-tuning/image_editing",
+                        "examples/fine-tuning/video_generation"
+                    ]
+                },
+                "getting-started/datasets",
+                "getting-started/batch_inference",
+                "getting-started/versioning"
+            ]
+        },
+        {
+            "group": "Developer Tools",
+            "pages": [
+                "getting-started/install",
+                {
+                    "group": "\ud83d\udcbb Command Line Interface",
+                    "pages": [
+                        "getting-started/command-line/config",
+                        "getting-started/command-line/import_data",
+                        "getting-started/command-line/local_development",
+                        "getting-started/command-line/push_changes",
+                        "getting-started/command-line/dev_tools"
+                    ]
+                },
+                "getting-started/python",
+                "getting-started/oxen-server",
+                "features/performance"
+            ]
+        },
+        {
+            "group": "Other Concepts",
+            "pages": [
+                "concepts/diffs",
+                "concepts/file_metadata",
+                "concepts/workspaces"
+            ]
+        },
+        {
+            "group": "Release Notes",
+            "pages": [
+                "concepts/feature-updates"
+            ]
+        },
+        {
+            "group": "Python API",
+            "pages": [
+                "python-api/index",
+                "python-api/clone",
+                "python-api/data_frame",
+                "python-api/datasets",
+                "python-api/df_utils",
+                "python-api/diff/diff",
+                "python-api/diff/line_diff",
+                "python-api/diff/tabular_diff",
+                "python-api/diff/text_diff",
+                "python-api/init",
+                "python-api/oxen_fs",
+                "python-api/remote_repo",
+                "python-api/repo",
+                "python-api/repositories",
+                "python-api/workspace"
+            ]
+        },
+        {
+            "group": "Repository API",
+            "pages": [
+                {
                     "group": "Getting Started",
                     "pages": [
                         "http-api/index",
                         "http-api/example"
                     ]
                 }
-          ]
-      },
-      {
-          "group": "Inference API",
-          "pages": [
-              "inference-api/overview",
-              {
-                  "group": "Quick Starts",
-                  "pages": [
-                      "inference-api/quickstart/chat",
-                      "inference-api/quickstart/image-generation",
-                      "inference-api/quickstart/video-generation"
-                  ]
-              },
-              {
-                  "group": "API Reference",
-                  "pages": [
-                      "inference-api/reference/chat_completions",
-                      "inference-api/reference/image_generation",
-                      "inference-api/reference/image_editing",
-                      "inference-api/reference/video_generation",
-                      "inference-api/reference/async_queue",
-                      "inference-api/reference/models/overview"
-                  ]
-              },
-              {
-                  "group": "Model References",
-                  "pages": [
-                      "inference-api/reference/models/kling_o3_pro_reference_to_video",
-                      "inference-api/reference/models/kling_o3_pro_video_to_video_edit",
-                      "inference-api/reference/models/seedance_2_reference_to_video",
-                      "inference-api/reference/models/topaz_starlight_precise_2_5"
-                  ]
-              }
-          ]
-      },
-      {
-          "group": "Fine-Tuning API",
-          "pages": [
-              "fine-tuning-api/overview",
-              {
-                  "group": "Quick Starts",
-                  "pages": [
-                      "fine-tuning-api/quickstart/text",
-                      "fine-tuning-api/quickstart/image-generation",
-                      "fine-tuning-api/quickstart/image-editing",
-                      "fine-tuning-api/quickstart/video"
-                  ]
-              },
-              {
-                  "group": "Tutorials",
-                  "pages": [
-                      "fine-tuning-api/tutorials/01_fine_tuning",
-                      "fine-tuning-api/tutorials/03_fine_tuning_image_generation",
-                      "fine-tuning-api/tutorials/02_fine_tuning_image"
-                  ]
-              },
-              {
-                  "group": "API Reference",
-                  "pages": [
-                      "fine-tuning-api/reference/text_generation",
-                      "fine-tuning-api/reference/text_chat_messages",
-                      "fine-tuning-api/reference/image_generation",
-                      "fine-tuning-api/reference/image_editing",
-                      "fine-tuning-api/reference/multi_image_editing",
-                      "fine-tuning-api/reference/image_to_text",
-                      "fine-tuning-api/reference/image_to_video",
-                      "fine-tuning-api/reference/text_to_video"
-                  ]
-              },
-              "fine-tuning-api/parameters"
-          ]
-      }
-  ],
-  "footerSocials": {
-      "twitter": "https://twitter.com/oxen_ai",
-      "github": "https://github.com/Oxen-AI/Oxen",
-      "linkedin": "https://www.linkedin.com/company/oxenai/"
-  },
-  "analytics": {
-      "posthog": {
-          "apiKey": "phc_Do6VnS78puWwBQuPcJ7TkjixBZwsV4Xxc3ABHVNvjmE"
-      },
-      "ga4": {
-          "measurementId": "G-H6D2C08EKP"
-      }
-  }
+            ]
+        },
+        {
+            "group": "Inference API",
+            "pages": [
+                "inference-api/overview",
+                {
+                    "group": "Quick Starts",
+                    "pages": [
+                        "inference-api/quickstart/chat",
+                        "inference-api/quickstart/image-generation",
+                        "inference-api/quickstart/video-generation"
+                    ]
+                },
+                {
+                    "group": "API Reference",
+                    "pages": [
+                        "inference-api/reference/chat_completions",
+                        "inference-api/reference/image_generation",
+                        "inference-api/reference/image_editing",
+                        "inference-api/reference/video_generation",
+                        "inference-api/reference/async_queue",
+                        "inference-api/reference/models/overview"
+                    ]
+                },
+                {
+                    "group": "Featured Models",
+                    "pages": [
+                        "inference-api/reference/models/featured/kling_o3_pro_reference_to_video",
+                        "inference-api/reference/models/featured/kling_o3_pro_video_to_video_edit",
+                        "inference-api/reference/models/featured/seedance_2_reference_to_video",
+                        "inference-api/reference/models/featured/topaz_starlight_precise_2_5"
+                    ]
+                },
+                {
+                    "group": "Model References",
+                    "pages": [
+                        "inference-api/reference/models/black-forest-labs-flux-2-klein-4b",
+                        "inference-api/reference/models/black-forest-labs-flux-2-klein-9b",
+                        "inference-api/reference/models/bytedance-depth-anything-video",
+                        "inference-api/reference/models/bytedance-seedance-2-0-fast-image-to-video",
+                        "inference-api/reference/models/bytedance-seedance-2-0-fast-reference-to-video",
+                        "inference-api/reference/models/bytedance-seedance-2-0-image-to-video",
+                        "inference-api/reference/models/bytedance-seedance-2-0-reference-to-video",
+                        "inference-api/reference/models/bytedance-seedance-2-0-text-to-video",
+                        "inference-api/reference/models/bytedance-seedream-4",
+                        "inference-api/reference/models/bytedance-seedream-4-5",
+                        "inference-api/reference/models/bytedance-seedream-5-lite",
+                        "inference-api/reference/models/claude-opus-4-1-20250805",
+                        "inference-api/reference/models/claude-opus-4-20250514",
+                        "inference-api/reference/models/claude-opus-4-5-20251101",
+                        "inference-api/reference/models/claude-opus-4-6",
+                        "inference-api/reference/models/claude-sonnet-4-20250514",
+                        "inference-api/reference/models/claude-sonnet-4-5",
+                        "inference-api/reference/models/claude-sonnet-4-6",
+                        "inference-api/reference/models/flux-1-dev",
+                        "inference-api/reference/models/flux-2-dev",
+                        "inference-api/reference/models/flux-2-flex",
+                        "inference-api/reference/models/flux-2-pro",
+                        "inference-api/reference/models/flux-kontext-dev",
+                        "inference-api/reference/models/gemini-2-0-flash-001",
+                        "inference-api/reference/models/gemini-2-5-flash",
+                        "inference-api/reference/models/gemini-2-5-flash-lite-preview-09-2025",
+                        "inference-api/reference/models/gemini-2-5-pro",
+                        "inference-api/reference/models/gemini-3-1-flash-lite-preview",
+                        "inference-api/reference/models/gemini-3-1-pro-preview",
+                        "inference-api/reference/models/gemini-3-flash-preview",
+                        "inference-api/reference/models/gemma-3-27b-it",
+                        "inference-api/reference/models/gemma-4-31b-it",
+                        "inference-api/reference/models/google-nano-banana-pro",
+                        "inference-api/reference/models/google-veo-3",
+                        "inference-api/reference/models/google-veo-3-1",
+                        "inference-api/reference/models/google-veo-3-1-fast",
+                        "inference-api/reference/models/google-veo-3-1-lite",
+                        "inference-api/reference/models/gpt-4-1-2025-04-14",
+                        "inference-api/reference/models/gpt-4-1-mini-2025-04-14",
+                        "inference-api/reference/models/gpt-4-1-nano-2025-04-14",
+                        "inference-api/reference/models/gpt-4o",
+                        "inference-api/reference/models/gpt-4o-mini",
+                        "inference-api/reference/models/gpt-5-1-2025-11-13",
+                        "inference-api/reference/models/gpt-5-2-2025-12-11",
+                        "inference-api/reference/models/gpt-5-2-chat-latest",
+                        "inference-api/reference/models/gpt-5-2025-08-07",
+                        "inference-api/reference/models/gpt-5-3-chat-latest",
+                        "inference-api/reference/models/gpt-5-4-2026-03-05",
+                        "inference-api/reference/models/gpt-5-4-mini",
+                        "inference-api/reference/models/gpt-5-mini",
+                        "inference-api/reference/models/gpt-5-nano",
+                        "inference-api/reference/models/gpt-image-1-5",
+                        "inference-api/reference/models/gpt-oss-120b",
+                        "inference-api/reference/models/kling-video-o1-image-to-video",
+                        "inference-api/reference/models/kling-video-o1-reference-to-video",
+                        "inference-api/reference/models/kling-video-o1-video-to-video-edit",
+                        "inference-api/reference/models/kling-video-o3-pro-image-to-video",
+                        "inference-api/reference/models/kling-video-o3-pro-reference-to-video",
+                        "inference-api/reference/models/kling-video-o3-pro-video-to-video-edit",
+                        "inference-api/reference/models/kling-video-v2-5-turbo-pro-image-to-video",
+                        "inference-api/reference/models/kling-video-v2-6-pro-image-to-video",
+                        "inference-api/reference/models/kling-video-v2-6-pro-text-to-video",
+                        "inference-api/reference/models/kling-video-v3-pro-motion-control",
+                        "inference-api/reference/models/lightricks-ltx-2-retake",
+                        "inference-api/reference/models/ltx-2-19b-image-to-video",
+                        "inference-api/reference/models/ltx-2-3-pro",
+                        "inference-api/reference/models/ltx-2-3-pro-22b-IC-LoRA-Union-Control",
+                        "inference-api/reference/models/ltx-2-3-pro-audio-to-video",
+                        "inference-api/reference/models/ltx-2-3-pro-retake",
+                        "inference-api/reference/models/ltx-2-3-pro-text-to-video",
+                        "inference-api/reference/models/ministral-3b-latest",
+                        "inference-api/reference/models/ministral-8b-latest",
+                        "inference-api/reference/models/mistral-large-2407",
+                        "inference-api/reference/models/mistral-small-2503",
+                        "inference-api/reference/models/moonshotai-kimi-k2-5",
+                        "inference-api/reference/models/nano-banana",
+                        "inference-api/reference/models/nano-banana-2",
+                        "inference-api/reference/models/nano-banana-2-edit",
+                        "inference-api/reference/models/nvidia-nemotron-120b-a12b",
+                        "inference-api/reference/models/o1",
+                        "inference-api/reference/models/o3-2025-04-16",
+                        "inference-api/reference/models/o3-mini",
+                        "inference-api/reference/models/o4-mini-2025-04-16",
+                        "inference-api/reference/models/open-mistral-7b",
+                        "inference-api/reference/models/open-mixtral-8x22b",
+                        "inference-api/reference/models/open-mixtral-8x7b",
+                        "inference-api/reference/models/openai-gpt-oss-20b",
+                        "inference-api/reference/models/openai-sora-2-pro",
+                        "inference-api/reference/models/pixtral-12b",
+                        "inference-api/reference/models/qwen-image",
+                        "inference-api/reference/models/qwen-image-2",
+                        "inference-api/reference/models/qwen-image-2512",
+                        "inference-api/reference/models/qwen-image-edit",
+                        "inference-api/reference/models/qwen-image-edit-2511",
+                        "inference-api/reference/models/qwen-image-edit-plus",
+                        "inference-api/reference/models/qwen3-6-plus",
+                        "inference-api/reference/models/qwen3-vl-2b-instruct",
+                        "inference-api/reference/models/qwen3-vl-4b-instruct",
+                        "inference-api/reference/models/qwen3-vl-8b-instruct",
+                        "inference-api/reference/models/sam-3-image",
+                        "inference-api/reference/models/sam-3-video",
+                        "inference-api/reference/models/sonar",
+                        "inference-api/reference/models/sonar-deep-research",
+                        "inference-api/reference/models/sonar-pro",
+                        "inference-api/reference/models/sonar-reasoning-pro",
+                        "inference-api/reference/models/text-embedding-004",
+                        "inference-api/reference/models/text-embedding-3-large",
+                        "inference-api/reference/models/text-embedding-3-small",
+                        "inference-api/reference/models/topazlabs-image-upscale",
+                        "inference-api/reference/models/topazlabs-iris-mq-video",
+                        "inference-api/reference/models/topazlabs-proteus-video",
+                        "inference-api/reference/models/topazlabs-rhea-video",
+                        "inference-api/reference/models/topazlabs-upscale-starlight-2-5-video",
+                        "inference-api/reference/models/topazlabs-video-upscale",
+                        "inference-api/reference/models/wan-ai-wan2-1-t2v-1-3b-diffusers",
+                        "inference-api/reference/models/wan-ai-wan2-1-t2v-14b-diffusers",
+                        "inference-api/reference/models/wan-ai-wan2-2-t2v-a14b-diffusers",
+                        "inference-api/reference/models/wan-ai-wan2-2-ti2v-5b-diffusers",
+                        "inference-api/reference/models/wan-v2-6-image-to-video",
+                        "inference-api/reference/models/wan-v2-6-reference-to-video",
+                        "inference-api/reference/models/wan-v2-7-edit-video",
+                        "inference-api/reference/models/wan-v2-7-image-to-video",
+                        "inference-api/reference/models/wan-v2-7-reference-to-video",
+                        "inference-api/reference/models/wan-v2-7-text-to-video",
+                        "inference-api/reference/models/whipcrack_mp3-probable-azure-pinniped",
+                        "inference-api/reference/models/xai-grok-imagine-image",
+                        "inference-api/reference/models/xai-grok-imagine-image-edit",
+                        "inference-api/reference/models/xai-grok-imagine-video-edit-video",
+                        "inference-api/reference/models/xai-grok-imagine-video-image-to-video",
+                        "inference-api/reference/models/z-image-turbo",
+                        "inference-api/reference/models/zai-org-glm-5"
+                    ]
+                }
+            ]
+        },
+        {
+            "group": "Fine-Tuning API",
+            "pages": [
+                "fine-tuning-api/overview",
+                {
+                    "group": "Quick Starts",
+                    "pages": [
+                        "fine-tuning-api/quickstart/text",
+                        "fine-tuning-api/quickstart/image-generation",
+                        "fine-tuning-api/quickstart/image-editing",
+                        "fine-tuning-api/quickstart/video"
+                    ]
+                },
+                {
+                    "group": "Tutorials",
+                    "pages": [
+                        "fine-tuning-api/tutorials/01_fine_tuning",
+                        "fine-tuning-api/tutorials/03_fine_tuning_image_generation",
+                        "fine-tuning-api/tutorials/02_fine_tuning_image"
+                    ]
+                },
+                {
+                    "group": "API Reference",
+                    "pages": [
+                        "fine-tuning-api/reference/text_generation",
+                        "fine-tuning-api/reference/text_chat_messages",
+                        "fine-tuning-api/reference/image_generation",
+                        "fine-tuning-api/reference/image_editing",
+                        "fine-tuning-api/reference/multi_image_editing",
+                        "fine-tuning-api/reference/image_to_text",
+                        "fine-tuning-api/reference/image_to_video",
+                        "fine-tuning-api/reference/text_to_video"
+                    ]
+                },
+                "fine-tuning-api/parameters"
+            ]
+        }
+    ],
+    "footerSocials": {
+        "twitter": "https://twitter.com/oxen_ai",
+        "github": "https://github.com/Oxen-AI/Oxen",
+        "linkedin": "https://www.linkedin.com/company/oxenai/"
+    },
+    "analytics": {
+        "posthog": {
+            "apiKey": "phc_Do6VnS78puWwBQuPcJ7TkjixBZwsV4Xxc3ABHVNvjmE"
+        },
+        "ga4": {
+            "measurementId": "G-H6D2C08EKP"
+        }
+    }
 }
