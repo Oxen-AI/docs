@@ -73,6 +73,27 @@ def pick_endpoint(model: dict[str, Any]) -> tuple[str, str]:
     return "/api/ai/chat/completions", "chat"
 
 
+def _x_order(field: dict[str, Any] | None) -> float:
+    if not isinstance(field, dict):
+        return float("inf")
+    order = field.get("x-order")
+    return order if isinstance(order, (int, float)) else float("inf")
+
+
+def _primary_rank(name: str, required: set[str], basic: set[str]) -> int:
+    return 0 if name in required or name in basic else 1
+
+
+def sorted_schema_properties(schema: dict[str, Any]) -> list[tuple[str, dict[str, Any]]]:
+    """Return (name, field) pairs ordered by (basic-or-required first, then advanced), then by x-order."""
+    properties = schema.get("properties") or {}
+    required = set(schema.get("required") or [])
+    basic = set(schema.get("basic") or [])
+    items: list[tuple[str, dict[str, Any]]] = list(properties.items())
+    items.sort(key=lambda entry: (_primary_rank(entry[0], required, basic), _x_order(entry[1])))
+    return items
+
+
 def example_body(model: dict[str, Any], endpoint_type: str) -> dict[str, Any]:
     name = model.get("name", "")
     schema = (model.get("json_request_schema") or {})
@@ -85,7 +106,10 @@ def example_body(model: dict[str, Any], endpoint_type: str) -> dict[str, Any]:
         }
 
     body: dict[str, Any] = {"model": name}
-    required_fields = schema.get("required") or []
+    required_fields = sorted(
+        schema.get("required") or [],
+        key=lambda f: _x_order(properties.get(f)),
+    )
 
     for field in required_fields:
         schema_field = properties.get(field, {})
@@ -140,20 +164,31 @@ def field_placeholder(name: str, schema_field: dict[str, Any]) -> Any:
     return f"<{name}>"
 
 
-def render_schema_table(model: dict[str, Any]) -> str:
+def render_schema_tables(model: dict[str, Any]) -> str:
     schema = model.get("json_request_schema") or {}
-    properties = schema.get("properties") or {}
-    required = set(schema.get("required") or [])
-
-    if not properties:
+    if not (schema.get("properties") or {}):
         return ""
 
+    required = set(schema.get("required") or [])
+    ordered = sorted_schema_properties(schema)
+    required_rows = [entry for entry in ordered if entry[0] in required]
+    optional_rows = [entry for entry in ordered if entry[0] not in required]
+
+    sections: list[str] = []
+    if required_rows:
+        sections.append("### Required parameters\n\n" + _render_parameter_table(required_rows))
+    if optional_rows:
+        sections.append("### Optional parameters\n\n" + _render_parameter_table(optional_rows))
+    return "\n\n".join(sections)
+
+
+def _render_parameter_table(rows: list[tuple[str, dict[str, Any]]]) -> str:
     lines = [
-        "| Field | Type | Required | Default | Description |",
-        "|-------|------|----------|---------|-------------|",
+        "| Field | Type | Default | Description |",
+        "|-------|------|---------|-------------|",
     ]
 
-    for prop_name, prop_schema in properties.items():
+    for prop_name, prop_schema in rows:
         field_type = prop_schema.get("type", "any")
         if field_type == "array":
             items_type = (prop_schema.get("items") or {}).get("type", "any")
@@ -176,9 +211,7 @@ def render_schema_table(model: dict[str, Any]) -> str:
             description = (description + f" Format: {fmt}.").strip()
 
         lines.append(
-            f"| `{prop_name}` | `{field_type}` | "
-            f"{'Yes' if prop_name in required else 'No'} | "
-            f"{default_cell} | {description.strip() or ' '} |"
+            f"| `{prop_name}` | `{field_type}` | {default_cell} | {description.strip() or ' '} |"
         )
 
     return "\n".join(lines)
@@ -266,13 +299,13 @@ def render_page(model: dict[str, Any], workbench_base: str) -> str:
         "</CodeGroup>",
     ]
 
-    schema_table = render_schema_table(model)
-    if schema_table:
+    schema_tables = render_schema_tables(model)
+    if schema_tables:
         body_md += [
             "",
             "## Request parameters",
             "",
-            schema_table,
+            schema_tables,
         ]
     else:
         body_md += [
