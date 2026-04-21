@@ -283,20 +283,10 @@ def render_page(model: dict[str, Any], workbench_base: str) -> str:
             " [chat completions reference](../inference-api.mdx) for the full parameter list.",
         ]
 
-    # Machine-readable metadata block that agents can parse directly.
-    metadata = {
-        "model": name,
-        "endpoint": f"https://hub.oxen.ai{endpoint}",
-        "endpoint_type": endpoint_type,
-        "capabilities": capabilities,
-        "request_schema": model.get("json_request_schema"),
-        "workbench_url": workbench_url,
-    }
     body_md += [
         "",
-        "<!-- oxen-model-schema:start " + name,
-        json.dumps(metadata, indent=2),
-        "oxen-model-schema:end -->",
+        "To fetch this schema programmatically, see"
+        f" [the models overview](./overview) and call `GET /api/ai/models/{name}`.",
         "",
     ]
 
