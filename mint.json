@@ -95,7 +95,8 @@
               },
               "getting-started/datasets",
               "getting-started/batch_inference",
-              "getting-started/versioning"
+              "getting-started/versioning",
+              "features/deploy_from_directory"
           ]
       },
       {
