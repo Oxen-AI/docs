@@ -337,23 +337,61 @@ def iter_inference_models(models: Iterable[dict[str, Any]]) -> Iterable[dict[str
         yield model
 
 
-def write_pages(models: list[dict[str, Any]], output_dir: Path, workbench_base: str) -> list[str]:
+def write_pages(models: list[dict[str, Any]], output_dir: Path, workbench_base: str) -> list[tuple[str, dict[str, Any]]]:
+    """Write one .mdx per model and return (file_path, model) pairs for nav building."""
     output_dir.mkdir(parents=True, exist_ok=True)
-    written: list[str] = []
+    written: list[tuple[str, dict[str, Any]]] = []
 
     for model in iter_inference_models(models):
         slug = slugify(model["name"])
         path = output_dir / f"{slug}.mdx"
         path.write_text(render_page(model, workbench_base))
-        written.append(str(path))
+        written.append((str(path), model))
     return written
 
 
-def update_mint_nav(mint_path: Path, generated_pages: list[str], nav_prefix: str) -> bool:
-    """Rewrite the ``Model References`` group in mint.json so it lists every generated page.
+def _developer_label(model: dict[str, Any]) -> str:
+    """Extract a display label to group models under in the nav."""
+    dev = model.get("developer")
+    if isinstance(dev, dict):
+        name = dev.get("display_name") or dev.get("name")
+        if name:
+            return str(name)
+    provider = model.get("provider")
+    if isinstance(provider, dict):
+        name = provider.get("display_name") or provider.get("name")
+        if name:
+            return str(name)
+    return "Other"
 
-    Preserves ordering (alphabetical by slug) and leaves other groups untouched. Returns
-    ``True`` if the file changed on disk, ``False`` otherwise.
+
+def build_nav_groups(
+    generated: list[tuple[str, dict[str, Any]]], nav_prefix: str
+) -> list[dict[str, Any]]:
+    """Build a list of {group, pages} nav entries, one per developer, alphabetically sorted.
+
+    Grouping keeps each Mintlify nav group small so the sidebar stays responsive on
+    expand, instead of rendering ~130 leaves in one flat list.
+    """
+    buckets: dict[str, list[str]] = {}
+    for path, model in generated:
+        label = _developer_label(model)
+        page_id = f"{nav_prefix}/{Path(path).stem}"
+        buckets.setdefault(label, []).append(page_id)
+
+    return [
+        {"group": label, "pages": sorted(set(pages))}
+        for label, pages in sorted(buckets.items(), key=lambda entry: entry[0].lower())
+    ]
+
+
+def update_mint_nav(
+    mint_path: Path,
+    nav_groups: list[dict[str, Any]],
+) -> bool:
+    """Rewrite the ``Model References`` group in mint.json to contain the given sub-groups.
+
+    Returns ``True`` if the file changed on disk, ``False`` otherwise.
     """
     if not mint_path.exists():
         return False
@@ -361,15 +399,14 @@ def update_mint_nav(mint_path: Path, generated_pages: list[str], nav_prefix: str
     with mint_path.open() as fh:
         config = json.load(fh)
 
-    page_ids = sorted({f"{nav_prefix}/{Path(p).stem}" for p in generated_pages})
     changed = False
 
     def walk(node: Any) -> Any:
         nonlocal changed
         if isinstance(node, dict):
             if node.get("group") == "Model References" and "pages" in node:
-                if node["pages"] != page_ids:
-                    node["pages"] = page_ids
+                if node["pages"] != nav_groups:
+                    node["pages"] = nav_groups
                     changed = True
             return {k: walk(v) for k, v in node.items()}
         if isinstance(node, list):
@@ -424,13 +461,15 @@ def main() -> None:
     written = write_pages(models, output_dir, args.workbench_base)
 
     print(f"Wrote {len(written)} model reference page(s) under {output_dir}", file=sys.stderr)
-    for path in written:
+    for path, _ in written:
         print(path)
 
     if args.mint_config:
-        mint_changed = update_mint_nav(Path(args.mint_config), written, args.nav_prefix)
+        nav_groups = build_nav_groups(written, args.nav_prefix)
+        mint_changed = update_mint_nav(Path(args.mint_config), nav_groups)
         print(
-            f"mint.json {'updated' if mint_changed else 'already in sync'}",
+            f"mint.json {'updated' if mint_changed else 'already in sync'} "
+            f"({len(nav_groups)} developer groups)",
             file=sys.stderr,
         )
 
