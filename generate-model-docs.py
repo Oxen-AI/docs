@@ -84,31 +84,12 @@ def _primary_rank(name: str, required: set[str], basic: set[str]) -> int:
     return 0 if name in required or name in basic else 1
 
 
-def _is_hidden(field: Any) -> bool:
-    """Mirror the form renderer's hidden-field detection so generated docs don't surface
-    internal fields (e.g. `end_user_id`) that users never set themselves.
-    """
-    if not isinstance(field, dict):
-        return False
-    return bool(
-        field.get("x-hidden")
-        or field.get("x-ui-hidden")
-        or field.get("writeOnly")
-        or field.get("format") == "hidden"
-    )
-
-
 def sorted_schema_properties(schema: dict[str, Any]) -> list[tuple[str, dict[str, Any]]]:
-    """Return (name, field) pairs ordered by (basic-or-required first, then advanced), then by x-order.
-
-    Hidden fields are omitted.
-    """
+    """Return (name, field) pairs ordered by (basic-or-required first, then advanced), then by x-order."""
     properties = schema.get("properties") or {}
     required = set(schema.get("required") or [])
     basic = set(schema.get("basic") or [])
-    items: list[tuple[str, dict[str, Any]]] = [
-        (name, field) for name, field in properties.items() if not _is_hidden(field)
-    ]
+    items: list[tuple[str, dict[str, Any]]] = list(properties.items())
     items.sort(key=lambda entry: (_primary_rank(entry[0], required, basic), _x_order(entry[1])))
     return items
 
@@ -126,7 +107,7 @@ def example_body(model: dict[str, Any], endpoint_type: str) -> dict[str, Any]:
 
     body: dict[str, Any] = {"model": name}
     required_fields = sorted(
-        [f for f in (schema.get("required") or []) if not _is_hidden(properties.get(f))],
+        schema.get("required") or [],
         key=lambda f: _x_order(properties.get(f)),
     )
 
