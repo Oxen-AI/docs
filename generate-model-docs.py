@@ -380,33 +380,56 @@ def render_page(model: dict[str, Any], workbench_base: str) -> str:
     if description:
         body_md += ["", description]
 
-    body_md += [
-        "",
-        "## Example request",
-        "",
-        "<Tabs>",
-    ]
+    # Drop any variant whose body is identical to the previous kept variant so we
+    # don't render duplicate tabs (e.g. a model with no `basic` fields would otherwise
+    # show identical Required and Basic tabs).
+    kept_variants: list[tuple[str, dict[str, Any]]] = []
     for variant in EXAMPLE_VARIANTS:
         variant_body = example_body(model, endpoint_type, variant)
+        if kept_variants and variant_body == kept_variants[-1][1]:
+            continue
+        kept_variants.append((variant, variant_body))
+
+    body_md += ["", "## Example request", ""]
+
+    if len(kept_variants) == 1:
+        _, only_body = kept_variants[0]
         body_md += [
-            f'  <Tab title="{EXAMPLE_VARIANT_TITLES[variant]}">',
+            "<CodeGroup>",
             "",
-            "    <CodeGroup>",
+            "```bash cURL",
+            render_curl(endpoint, only_body),
+            "```",
             "",
-            "    ```bash cURL",
-            _indent(render_curl(endpoint, variant_body), "    "),
-            "    ```",
+            "```python Python",
+            render_python(endpoint, only_body),
+            "```",
             "",
-            "    ```python Python",
-            _indent(render_python(endpoint, variant_body), "    "),
-            "    ```",
-            "",
-            "    </CodeGroup>",
-            "",
-            "  </Tab>",
+            "</CodeGroup>",
         ]
+    else:
+        body_md.append("<Tabs>")
+        for variant, variant_body in kept_variants:
+            body_md += [
+                f'  <Tab title="{EXAMPLE_VARIANT_TITLES[variant]}">',
+                "",
+                "    <CodeGroup>",
+                "",
+                "    ```bash cURL",
+                _indent(render_curl(endpoint, variant_body), "    "),
+                "    ```",
+                "",
+                "    ```python Python",
+                _indent(render_python(endpoint, variant_body), "    "),
+                "    ```",
+                "",
+                "    </CodeGroup>",
+                "",
+                "  </Tab>",
+            ]
+        body_md.append("</Tabs>")
+
     body_md += [
-        "</Tabs>",
         "",
         "## Fetch model details",
         "",
