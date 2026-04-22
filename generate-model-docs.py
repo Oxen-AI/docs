@@ -541,6 +541,14 @@ def render_page(model: dict[str, Any], workbench_base: str) -> str:
         kept_variants.append((variant, variant_body))
 
     body_md += ["", "## Example request", ""]
+    if endpoint_type == "video_generate":
+        body_md += [
+            "This example is synchronous: the HTTP request blocks until the video is ready,"
+            " which can take 5-15 minutes. For anything but quick experimentation, prefer the"
+            " [Async example](#async-example) below so you don't have to hold a long-lived"
+            " connection open.",
+            "",
+        ]
     body_md += _render_example_block(
         kept_variants,
         lambda body: render_curl(endpoint, body),
