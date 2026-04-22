@@ -267,8 +267,18 @@ def _render_parameter_table(rows: list[tuple[str, dict[str, Any]]]) -> str:
     return "\n".join(lines)
 
 
+def _shell_escape_single_quoted(text: str) -> str:
+    """Make `text` safe to embed inside a `'...'` bash literal.
+
+    Replaces each `'` with `'\\''`: close the surrounding quote, include a
+    backslash-escaped apostrophe, then reopen the surrounding quote. Without this,
+    a prompt containing an apostrophe aborts the shell parse with `unexpected EOF`.
+    """
+    return text.replace("'", "'\\''")
+
+
 def render_curl(endpoint: str, body: dict[str, Any]) -> str:
-    pretty = json.dumps(body, indent=2)
+    pretty = _shell_escape_single_quoted(json.dumps(body, indent=2))
     return (
         f"curl -X POST https://hub.oxen.ai{endpoint} \\\n"
         "  -H \"Content-Type: application/json\" \\\n"
@@ -304,7 +314,7 @@ ASYNC_ENDPOINT_TYPES = {"image_generate", "image_edit", "video_generate"}
 
 
 def render_async_curl(body: dict[str, Any], model_name: str) -> str:
-    pretty = json.dumps(body, indent=2)
+    pretty = _shell_escape_single_quoted(json.dumps(body, indent=2))
     quoted_name = quote(model_name, safe="")
     return (
         "# Enqueue\n"
