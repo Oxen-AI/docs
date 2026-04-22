@@ -250,10 +250,52 @@ def render_python(endpoint: str, body: dict[str, Any]) -> str:
     )
 
 
+def _frontmatter_description(model: dict[str, Any]) -> str:
+    """A single clean sentence to render as the page subtitle.
+
+    The `description` field can be multiple paragraphs, which gets awkwardly
+    truncated mid-word by Mintlify. We prefer the short `summary` field if the
+    model provides one, then fall back to the first sentence of the description.
+    """
+    summary = (model.get("summary") or "").strip()
+    if summary:
+        return _one_line(summary, limit=160)
+
+    description = (model.get("description") or "").strip()
+    if not description:
+        return "Auto-generated API reference."
+
+    first_sentence = description.split(". ")[0].strip()
+    if len(first_sentence) < len(description) and not first_sentence.endswith("."):
+        first_sentence += "."
+    return _one_line(first_sentence, limit=160)
+
+
+def _one_line(text: str, *, limit: int) -> str:
+    """Collapse whitespace and cap length at a word boundary."""
+    collapsed = " ".join(text.split())
+    if len(collapsed) <= limit:
+        return collapsed
+    truncated = collapsed[: limit - 1].rsplit(" ", 1)[0]
+    return truncated.rstrip(",;:-") + "…"
+
+
+def _yaml_escape(text: str) -> str:
+    return text.replace("\\", "\\\\").replace('"', '\\"')
+
+
+def render_models_endpoint_curl(model_name: str) -> str:
+    return (
+        "```bash\n"
+        f'curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/{model_name}\n'
+        "```"
+    )
+
+
 def render_page(model: dict[str, Any], workbench_base: str) -> str:
     name = model.get("name") or ""
     display_name = model.get("display_name") or name
-    description = (model.get("description") or model.get("summary") or "").strip()
+    description = (model.get("description") or "").strip()
     endpoint, endpoint_type = pick_endpoint(model)
     body = example_body(model, endpoint_type)
     workbench_url = f"{workbench_base}?model={slugify(name)}"
@@ -263,15 +305,19 @@ def render_page(model: dict[str, Any], workbench_base: str) -> str:
 
     front_matter = (
         "---\n"
-        f"title: \"{display_name}\"\n"
-        f"description: \"{description[:150] if description else 'Auto-generated API reference.'}\"\n"
+        f'title: "{_yaml_escape(display_name)}"\n'
+        f'description: "{_yaml_escape(_frontmatter_description(model))}"\n'
         "---\n"
     )
 
     body_md = [
         front_matter,
         "",
-        f"[Try **{display_name}** in the Workbench]({workbench_url}) &rarr;",
+        "<CardGroup cols={1}>",
+        f'  <Card title="Try {display_name} in the Workbench" icon="flask" href="{workbench_url}">',
+        "    Run this model interactively, tune parameters, and compare outputs.",
+        "  </Card>",
+        "</CardGroup>",
         "",
         f"**Model ID:** `{name}`  ",
         f"**Endpoint:** `POST https://hub.oxen.ai{endpoint}`  ",
@@ -297,6 +343,13 @@ def render_page(model: dict[str, Any], workbench_base: str) -> str:
         "```",
         "",
         "</CodeGroup>",
+        "",
+        "## Fetch model details",
+        "",
+        "The [models endpoint](./models/overview) returns the full model object, including its"
+        " `json_request_schema`. Useful for discovering parameters at runtime.",
+        "",
+        render_models_endpoint_curl(name),
     ]
 
     schema_tables = render_schema_tables(model)
@@ -316,12 +369,7 @@ def render_page(model: dict[str, Any], workbench_base: str) -> str:
             " [chat completions reference](../inference-api.mdx) for the full parameter list.",
         ]
 
-    body_md += [
-        "",
-        "To fetch this schema programmatically, see"
-        f" [the models overview](./overview) and call `GET /api/ai/models/{name}`.",
-        "",
-    ]
+    body_md += [""]
 
     return "\n".join(body_md)
 
