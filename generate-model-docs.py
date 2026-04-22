@@ -687,15 +687,11 @@ def render_page(model: dict[str, Any], workbench_base: str) -> str:
         "---\n"
     )
 
-    # Render the model id in a fenced code block so Mintlify surfaces a copy
-    # button on it. The display name is already the page title.
+    # Layout: capability pills sit tight under the subtitle, then the
+    # workbench card, then the copy-pasteable model id and long description.
+    # The "Workbench as request builder" tip lives inside Example request below.
     body_md = [
         front_matter,
-        "",
-        "```",
-        name,
-        "```",
-        "",
         _render_capabilities_line(inputs, outputs),
         "",
         "<CardGroup cols={1}>",
@@ -704,11 +700,9 @@ def render_page(model: dict[str, Any], workbench_base: str) -> str:
         "  </Card>",
         "</CardGroup>",
         "",
-        "<Tip>",
-        f"  Use the [Workbench]({workbench_url}) as a request builder: configure parameters"
-        " for this model in the UI, then open the **API** tab to copy the exact cURL or"
-        " Python call.",
-        "</Tip>",
+        "```",
+        name,
+        "```",
     ]
 
     if description:
@@ -725,6 +719,14 @@ def render_page(model: dict[str, Any], workbench_base: str) -> str:
         kept_variants.append((variant, variant_body))
 
     body_md += ["", "## Example request", ""]
+    body_md += [
+        "<Tip>",
+        f"  Use the [Workbench]({workbench_url}) as a request builder: configure parameters"
+        " for this model in the UI, then open the **API** tab to copy the exact cURL or"
+        " Python call.",
+        "</Tip>",
+        "",
+    ]
     if endpoint_type in ASYNC_ENDPOINT_TYPES:
         body_md += _render_sync_async_sse_tabs(endpoint, endpoint_type, kept_variants)
     else:
