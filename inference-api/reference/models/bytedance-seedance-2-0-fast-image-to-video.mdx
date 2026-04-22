@@ -121,8 +121,7 @@ ByteDance Seedance 2 Fast image-to-video animates a starting frame from a text m
           "resolution": "720p",
           "duration": "auto",
           "aspect_ratio": "auto",
-          "generate_audio": true,
-          "end_user_id": "fill_me_in"
+          "generate_audio": true
         }'
         ```
 
@@ -144,8 +143,7 @@ ByteDance Seedance 2 Fast image-to-video animates a starting frame from a text m
                 "resolution": "720p",
                 "duration": "auto",
                 "aspect_ratio": "auto",
-                "generate_audio": true,
-                "end_user_id": "fill_me_in"
+                "generate_audio": true
             },
         )
         response.raise_for_status()
@@ -302,8 +300,7 @@ ByteDance Seedance 2 Fast image-to-video animates a starting frame from a text m
           "resolution": "720p",
           "duration": "auto",
           "aspect_ratio": "auto",
-          "generate_audio": true,
-          "end_user_id": "fill_me_in"
+          "generate_audio": true
         }' | jq -r '.generations[0].generation_id')
 
         # Poll the single generation until it 404s (terminal state).
@@ -336,8 +333,7 @@ ByteDance Seedance 2 Fast image-to-video animates a starting frame from a text m
                 "resolution": "720p",
                 "duration": "auto",
                 "aspect_ratio": "auto",
-                "generate_audio": true,
-                "end_user_id": "fill_me_in"
+                "generate_audio": true
             },
         )
         enqueue.raise_for_status()
@@ -518,8 +514,7 @@ ByteDance Seedance 2 Fast image-to-video animates a starting frame from a text m
           "resolution": "720p",
           "duration": "auto",
           "aspect_ratio": "auto",
-          "generate_audio": true,
-          "end_user_id": "fill_me_in"
+          "generate_audio": true
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -554,8 +549,7 @@ ByteDance Seedance 2 Fast image-to-video animates a starting frame from a text m
                 "resolution": "720p",
                 "duration": "auto",
                 "aspect_ratio": "auto",
-                "generate_audio": true,
-                "end_user_id": "fill_me_in"
+                "generate_audio": true
             },
         )
         enqueue.raise_for_status()
@@ -612,4 +606,3 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | `aspect_ratio` | `string` | `"auto"` | The aspect ratio of the generated video. Use 16:9 for landscape, 9:16 for portrait/vertical, 1:1 for square, 21:9 for ultrawide cinematic, or auto to infer from the input image. One of: auto, 21:9, 16:9, 4:3, 1:1, 3:4, 9:16. |
 | `generate_audio` | `boolean` | `true` | Whether to generate synchronized audio for the video, including sound effects, ambient sounds, and lip-synced speech. The cost of video generation is the same regardless of whether audio is generated or not. |
 | `seed` | `integer` | &mdash; | Random seed for reproducibility. Note that results may still vary slightly even with the same seed. |
-| `end_user_id` | `string` | `"fill_me_in"` | The unique user ID of the end user. |
