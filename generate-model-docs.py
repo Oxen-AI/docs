@@ -300,6 +300,66 @@ def render_python(endpoint: str, body: dict[str, Any]) -> str:
     )
 
 
+ASYNC_ENDPOINT_TYPES = {"image_generate", "image_edit", "video_generate"}
+
+
+def render_async_curl(body: dict[str, Any], model_name: str) -> str:
+    pretty = json.dumps(body, indent=2)
+    quoted_name = quote(model_name, safe="")
+    return (
+        "# Enqueue\n"
+        "curl -X POST https://hub.oxen.ai/api/ai/queue \\\n"
+        "  -H \"Content-Type: application/json\" \\\n"
+        "  -H \"Authorization: Bearer $OXEN_API_KEY\" \\\n"
+        f"  -d '{pretty}'\n"
+        "\n"
+        "# Poll until the generation drops off the list\n"
+        "curl -H \"Authorization: Bearer $OXEN_API_KEY\" \\\n"
+        f"  \"https://hub.oxen.ai/api/ai/queue?model={quoted_name}\""
+    )
+
+
+def render_async_python(body: dict[str, Any], model_name: str) -> str:
+    pretty = json.dumps(body, indent=4)
+    indented = "\n".join(
+        line if i == 0 else f"    {line}"
+        for i, line in enumerate(pretty.splitlines())
+    )
+    escaped_name = model_name.replace('"', '\\"')
+    return (
+        "import os\n"
+        "import time\n"
+        "import requests\n"
+        "\n"
+        "HEADERS = {\n"
+        "    \"Content-Type\": \"application/json\",\n"
+        "    \"Authorization\": f\"Bearer {os.environ['OXEN_API_KEY']}\",\n"
+        "}\n"
+        "\n"
+        "# Enqueue\n"
+        "response = requests.post(\n"
+        "    \"https://hub.oxen.ai/api/ai/queue\",\n"
+        "    headers=HEADERS,\n"
+        f"    json={indented},\n"
+        ")\n"
+        "generations = response.json()[\"generations\"]\n"
+        "print(f\"Enqueued {len(generations)} generation(s)\")\n"
+        "\n"
+        "# Poll until done\n"
+        "while True:\n"
+        "    status = requests.get(\n"
+        "        \"https://hub.oxen.ai/api/ai/queue\",\n"
+        "        headers=HEADERS,\n"
+        f"        params={{\"model\": \"{escaped_name}\"}},\n"
+        "    ).json()\n"
+        "    if status[\"count\"] == 0:\n"
+        "        break\n"
+        "    time.sleep(10)\n"
+        "\n"
+        "print(\"Done!\")"
+    )
+
+
 def _frontmatter_description(model: dict[str, Any]) -> str:
     """A single clean sentence to render as the page subtitle.
 
@@ -429,6 +489,30 @@ def render_page(model: dict[str, Any], workbench_base: str) -> str:
                 "  </Tab>",
             ]
         body_md.append("</Tabs>")
+
+    if endpoint_type in ASYNC_ENDPOINT_TYPES:
+        async_body = {k: v for k, v in kept_variants[-1][1].items()}
+        body_md += [
+            "",
+            "## Async example",
+            "",
+            "For image and video models, the async queue avoids long-lived HTTP connections and"
+            " lets you run up to 4 generations in parallel. Enqueue the same body and poll until"
+            " the generation falls off the queue. See the [Async Queue quick start]"
+            "(/inference-api/quickstart/async-queue) for more.",
+            "",
+            "<CodeGroup>",
+            "",
+            "```bash cURL",
+            render_async_curl(async_body, name),
+            "```",
+            "",
+            "```python Python",
+            render_async_python(async_body, name),
+            "```",
+            "",
+            "</CodeGroup>",
+        ]
 
     body_md += [
         "",
