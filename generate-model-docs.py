@@ -500,7 +500,10 @@ def render_index_page(
         " with a sample request, Python snippet, and the full request schema. Models are"
         " grouped below by developer.",
         "",
-        "<CardGroup cols={1}>",
+        "<CardGroup cols={2}>",
+        '  <Card title="Models API endpoint" icon="code" href="/inference-api/reference/models/overview">',
+        "    List, search, and fetch model details programmatically via `GET /api/ai/models`.",
+        "  </Card>",
         '  <Card title="Discover models on our Models page" icon="compass" href="https://www.oxen.ai/ai/models">',
         "    Filter by modality, search by name, and preview every model side-by-side before diving into a reference page.",
         "  </Card>",
