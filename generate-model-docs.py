@@ -162,14 +162,15 @@ def _chat_example_body(model_name: str, variant: str) -> dict[str, Any]:
     if variant == "basic":
         body["temperature"] = 0.7
         body["max_tokens"] = 1024
+        body["stream"] = False
         return body
     # "all"
     body["temperature"] = 0.7
     body["max_tokens"] = 1024
+    body["stream"] = False
     body["top_p"] = 1.0
     body["frequency_penalty"] = 0
     body["presence_penalty"] = 0
-    body["stream"] = False
     return body
 
 
