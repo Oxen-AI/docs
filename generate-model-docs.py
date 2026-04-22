@@ -198,7 +198,11 @@ def _chat_example_body(model: dict[str, Any], variant: str) -> dict[str, Any]:
 
 
 def field_placeholder(name: str, schema_field: dict[str, Any]) -> Any:
-    if "default" in schema_field:
+    # Some schemas declare `default: ""` for a required string (e.g. `prompt`).
+    # Using that verbatim produces an example that sends an empty prompt, which
+    # the upstream provider rejects. Fall through to placeholder inference
+    # instead so the example shows a usable stub like `<prompt>`.
+    if "default" in schema_field and schema_field["default"] != "":
         return schema_field["default"]
 
     if schema_field.get("enum"):
