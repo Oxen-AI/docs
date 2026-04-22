@@ -125,7 +125,7 @@ def example_body(model: dict[str, Any], endpoint_type: str, variant: str = "basi
     schema = (model.get("json_request_schema") or {})
 
     if endpoint_type == "chat":
-        return _chat_example_body(name, variant)
+        return _chat_example_body(model, variant)
 
     required = set(schema.get("required") or [])
     basic = set(schema.get("basic") or [])
@@ -152,25 +152,48 @@ def example_body(model: dict[str, Any], endpoint_type: str, variant: str = "basi
     return body
 
 
-def _chat_example_body(model_name: str, variant: str) -> dict[str, Any]:
+# Chat providers don't all accept the same parameter set. Anthropic and Google,
+# for example, reject `frequency_penalty`/`presence_penalty` with a 400 error.
+# Keep this keyed on provider name so per-model examples only advertise params
+# the upstream provider actually accepts.
+_CHAT_PARAM_DEFAULTS: dict[str, Any] = {
+    "temperature": 0.7,
+    "max_tokens": 1024,
+    "stream": False,
+    "top_p": 1.0,
+    "frequency_penalty": 0,
+    "presence_penalty": 0,
+}
+
+_CHAT_PARAMS_BASIC = ("temperature", "max_tokens", "stream")
+_CHAT_PARAMS_ALL_COMMON = ("temperature", "max_tokens", "stream", "top_p")
+
+# Providers with an OpenAI-compatible interface that accept the full param set.
+_CHAT_PARAMS_ALL_BY_PROVIDER = {
+    "openai": _CHAT_PARAMS_ALL_COMMON + ("frequency_penalty", "presence_penalty"),
+    "fireworks": _CHAT_PARAMS_ALL_COMMON + ("frequency_penalty", "presence_penalty"),
+    "groq": _CHAT_PARAMS_ALL_COMMON + ("frequency_penalty", "presence_penalty"),
+    "cerebras": _CHAT_PARAMS_ALL_COMMON + ("frequency_penalty", "presence_penalty"),
+    "perplexity": _CHAT_PARAMS_ALL_COMMON + ("frequency_penalty", "presence_penalty"),
+}
+
+
+def _chat_param_names(model: dict[str, Any], variant: str) -> tuple[str, ...]:
+    if variant == "basic":
+        return _CHAT_PARAMS_BASIC
+    provider = ((model.get("provider") or {}).get("name") or "").lower()
+    return _CHAT_PARAMS_ALL_BY_PROVIDER.get(provider, _CHAT_PARAMS_ALL_COMMON)
+
+
+def _chat_example_body(model: dict[str, Any], variant: str) -> dict[str, Any]:
     body: dict[str, Any] = {
-        "model": model_name,
+        "model": model.get("name", ""),
         "messages": [{"role": "user", "content": "Hello, what can you do?"}],
     }
     if variant == "required":
         return body
-    if variant == "basic":
-        body["temperature"] = 0.7
-        body["max_tokens"] = 1024
-        body["stream"] = False
-        return body
-    # "all"
-    body["temperature"] = 0.7
-    body["max_tokens"] = 1024
-    body["stream"] = False
-    body["top_p"] = 1.0
-    body["frequency_penalty"] = 0
-    body["presence_penalty"] = 0
+    for param in _chat_param_names(model, variant):
+        body[param] = _CHAT_PARAM_DEFAULTS[param]
     return body
 
 
