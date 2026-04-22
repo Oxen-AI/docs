@@ -410,8 +410,8 @@ def render_page(model: dict[str, Any], workbench_base: str) -> str:
         "",
         "## Fetch model details",
         "",
-        "The [models endpoint](./models/overview) returns the full model object, including its"
-        " `json_request_schema`.",
+        "The [models endpoint](/inference-api/reference/models/overview) returns the full model"
+        " object, including its `json_request_schema`.",
         "",
         render_models_endpoint_curl(name),
     ]
