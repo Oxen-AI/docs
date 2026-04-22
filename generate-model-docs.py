@@ -597,6 +597,11 @@ def iter_inference_models(models: Iterable[dict[str, Any]]) -> Iterable[dict[str
             continue
         if not model.get("name"):
             continue
+        # Only publish references for base models. Custom (user-deployed) models
+        # can be listed on hub.oxen.ai but aren't callable for everyone, so their
+        # generated pages 404 for anyone else.
+        if model.get("model_type") != "base":
+            continue
         # Embedding models have no public chat/image/video endpoint in the
         # inference API; pick_endpoint would misroute them to /chat/completions
         # and the generated example would return 404 from the upstream provider.
