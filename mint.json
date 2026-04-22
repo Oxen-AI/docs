@@ -172,7 +172,8 @@
                     "pages": [
                         "inference-api/quickstart/chat",
                         "inference-api/quickstart/image-generation",
-                        "inference-api/quickstart/video-generation"
+                        "inference-api/quickstart/video-generation",
+                        "inference-api/quickstart/async-queue"
                     ]
                 },
                 {
