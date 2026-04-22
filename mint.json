@@ -191,6 +191,7 @@
                 {
                     "group": "Model Walkthroughs",
                     "pages": [
+                        "inference-api/reference/models/walkthroughs/overview",
                         "inference-api/reference/models/walkthroughs/kling_o3_pro_reference_to_video",
                         "inference-api/reference/models/walkthroughs/kling_o3_pro_video_to_video_edit",
                         "inference-api/reference/models/walkthroughs/seedance_2_reference_to_video",
