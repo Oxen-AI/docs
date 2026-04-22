@@ -398,6 +398,55 @@ def _indent(text: str, prefix: str) -> str:
     return "\n".join(prefix + line if line else line for line in text.split("\n"))
 
 
+def _render_example_block(
+    variants: list[tuple[str, dict[str, Any]]],
+    render_bash: Any,
+    render_python_fn: Any,
+) -> list[str]:
+    """Render a CodeGroup (single variant) or Tabs (multiple variants) using the given renderers.
+
+    Callers pass different renderers for sync vs. async so the same Minimal/Basic/All tab
+    structure can be reused for both.
+    """
+    if len(variants) == 1:
+        _, only_body = variants[0]
+        return [
+            "<CodeGroup>",
+            "",
+            "```bash cURL",
+            render_bash(only_body),
+            "```",
+            "",
+            "```python Python",
+            render_python_fn(only_body),
+            "```",
+            "",
+            "</CodeGroup>",
+        ]
+
+    lines: list[str] = ["<Tabs>"]
+    for variant, variant_body in variants:
+        lines += [
+            f'  <Tab title="{EXAMPLE_VARIANT_TITLES[variant]}">',
+            "",
+            "    <CodeGroup>",
+            "",
+            "    ```bash cURL",
+            _indent(render_bash(variant_body), "    "),
+            "    ```",
+            "",
+            "    ```python Python",
+            _indent(render_python_fn(variant_body), "    "),
+            "    ```",
+            "",
+            "    </CodeGroup>",
+            "",
+            "  </Tab>",
+        ]
+    lines.append("</Tabs>")
+    return lines
+
+
 def render_models_endpoint_curl(model_name: str) -> str:
     return (
         "```bash\n"
@@ -452,67 +501,28 @@ def render_page(model: dict[str, Any], workbench_base: str) -> str:
         kept_variants.append((variant, variant_body))
 
     body_md += ["", "## Example request", ""]
-
-    if len(kept_variants) == 1:
-        _, only_body = kept_variants[0]
-        body_md += [
-            "<CodeGroup>",
-            "",
-            "```bash cURL",
-            render_curl(endpoint, only_body),
-            "```",
-            "",
-            "```python Python",
-            render_python(endpoint, only_body),
-            "```",
-            "",
-            "</CodeGroup>",
-        ]
-    else:
-        body_md.append("<Tabs>")
-        for variant, variant_body in kept_variants:
-            body_md += [
-                f'  <Tab title="{EXAMPLE_VARIANT_TITLES[variant]}">',
-                "",
-                "    <CodeGroup>",
-                "",
-                "    ```bash cURL",
-                _indent(render_curl(endpoint, variant_body), "    "),
-                "    ```",
-                "",
-                "    ```python Python",
-                _indent(render_python(endpoint, variant_body), "    "),
-                "    ```",
-                "",
-                "    </CodeGroup>",
-                "",
-                "  </Tab>",
-            ]
-        body_md.append("</Tabs>")
+    body_md += _render_example_block(
+        kept_variants,
+        lambda body: render_curl(endpoint, body),
+        lambda body: render_python(endpoint, body),
+    )
 
     if endpoint_type in ASYNC_ENDPOINT_TYPES:
-        async_body = {k: v for k, v in kept_variants[-1][1].items()}
         body_md += [
             "",
             "## Async example",
             "",
-            "For image and video models, the async queue avoids long-lived HTTP connections and"
-            " lets you run up to 4 generations in parallel. Enqueue the same body and poll until"
-            " the generation falls off the queue. See the [Async Queue quick start]"
-            "(/inference-api/quickstart/async-queue) for more.",
+            "Enqueue the same body and poll the queue instead of waiting synchronously. The async"
+            " queue avoids long-lived HTTP connections and lets you run up to 4 generations in"
+            " parallel. See the [Async Queue quick start](/inference-api/quickstart/async-queue)"
+            " for the full workflow.",
             "",
-            "<CodeGroup>",
-            "",
-            "```bash cURL",
-            render_async_curl(async_body, name),
-            "```",
-            "",
-            "```python Python",
-            render_async_python(async_body, name),
-            "```",
-            "",
-            "</CodeGroup>",
         ]
+        body_md += _render_example_block(
+            kept_variants,
+            lambda body: render_async_curl(body, name),
+            lambda body: render_async_python(body, name),
+        )
 
     body_md += [
         "",
