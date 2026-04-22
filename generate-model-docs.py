@@ -704,6 +704,13 @@ def render_page(model: dict[str, Any], workbench_base: str) -> str:
         kept_variants.append((variant, variant_body))
 
     body_md += ["", "## Example request", ""]
+    body_md += [
+        "<Tip>",
+        f"  Use the Workbench as a request builder: configure parameters for {display_name}"
+        " in the UI, then open the **API** tab to copy the exact cURL or Python call.",
+        "</Tip>",
+        "",
+    ]
     if endpoint_type in ASYNC_ENDPOINT_TYPES:
         body_md += _render_sync_async_sse_tabs(endpoint, endpoint_type, kept_variants)
     else:
