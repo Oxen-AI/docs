@@ -672,11 +672,15 @@ def render_page(model: dict[str, Any], workbench_base: str) -> str:
         "---\n"
     )
 
-    # Inline code for the model id is tight (no full-width fenced block) and
-    # users can still select + copy. The display name is already the page H1.
     body_md = [
         front_matter,
-        f"`{name}`",
+        "<CardGroup cols={1}>",
+        f'  <Card title="Try {display_name} in the Workbench" icon="flask" href="{workbench_url}">',
+        "    Run this model interactively, tune parameters, and compare outputs.",
+        "  </Card>",
+        "</CardGroup>",
+        "",
+        f"**Model ID:** `{name}`",
     ]
 
     if description:
@@ -692,24 +696,15 @@ def render_page(model: dict[str, Any], workbench_base: str) -> str:
             continue
         kept_variants.append((variant, variant_body))
 
-    # Workbench CTA + request-builder tip sit adjacent to the Example request
-    # section: the CTA invites the user to the workbench, the tip explains how
-    # the workbench's API tab becomes the very examples that follow.
     body_md += [
         "",
-        "<CardGroup cols={1}>",
-        f'  <Card title="Try {display_name} in the Workbench" icon="flask" href="{workbench_url}">',
-        "    Run this model interactively, tune parameters, and compare outputs.",
-        "  </Card>",
-        "</CardGroup>",
+        "## Example request",
         "",
         "<Tip>",
         f"  Use the [Workbench]({workbench_url}) as a request builder: configure parameters"
         " for this model in the UI, then open the **API** tab to copy the exact cURL or"
         " Python call.",
         "</Tip>",
-        "",
-        "## Example request",
         "",
     ]
     if endpoint_type in ASYNC_ENDPOINT_TYPES:
