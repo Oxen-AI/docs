@@ -30,6 +30,18 @@ DEFAULT_MODELS_URL = "https://hub.oxen.ai/api/evaluations/models"
 DEFAULT_WORKBENCH_BASE = "https://www.oxen.ai/ai/workbench"
 DEFAULT_OUTPUT_DIR = Path("inference-api/reference/models")
 
+# Fallback URLs when a schema field has no `default`. Point at real files on
+# hub.oxen.ai (or a plausible analogue) so the copy-paste examples work with
+# minimal substitution.
+FALLBACK_IMAGE_URL = (
+    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+)
+FALLBACK_VIDEO_URL = (
+    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+)
+# No model currently ships a default audio URL; keep a generic placeholder.
+FALLBACK_AUDIO_URL = "https://example.com/audio.mp3"
+
 SLUG_UNSAFE = re.compile(r"[^A-Za-z0-9_-]+")
 
 
@@ -122,7 +134,7 @@ def example_body(model: dict[str, Any], endpoint_type: str) -> dict[str, Any]:
         body["prompt"] = field_placeholder("prompt", properties["prompt"])
 
     if endpoint_type == "audio_transcribe" and "audio_url" not in body:
-        body["audio_url"] = "https://example.com/recording.mp3"
+        body["audio_url"] = FALLBACK_AUDIO_URL
     if endpoint_type == "audio_speech" and "input" not in body:
         body["input"] = "Welcome to Oxen"
 
@@ -137,17 +149,18 @@ def field_placeholder(name: str, schema_field: dict[str, Any]) -> Any:
         return schema_field["enum"][0]
 
     field_type = schema_field.get("type")
+    render_type = schema_field.get("renderType") or ""
 
     if field_type == "string":
         fmt = schema_field.get("format") or ""
-        if fmt == "uri" or "url" in name:
-            if "audio" in name:
-                return "https://example.com/recording.mp3"
-            if "video" in name:
-                return "https://example.com/video.mp4"
-            if "image" in name:
-                return "https://example.com/image.png"
-            return "https://example.com/input.bin"
+        if fmt == "uri" or "url" in name or render_type.endswith("-url"):
+            if render_type == "audio-url" or "audio" in name:
+                return FALLBACK_AUDIO_URL
+            if render_type == "video-url" or "video" in name:
+                return FALLBACK_VIDEO_URL
+            if render_type == "image-url" or "image" in name:
+                return FALLBACK_IMAGE_URL
+            return FALLBACK_IMAGE_URL
         return f"<{name}>"
 
     if field_type == "integer":
@@ -157,8 +170,11 @@ def field_placeholder(name: str, schema_field: dict[str, Any]) -> Any:
     if field_type == "boolean":
         return False
     if field_type == "array":
-        item_type = (schema_field.get("items") or {}).get("type", "string")
-        return [field_placeholder(f"{name}_item", {"type": item_type})]
+        items_schema = schema_field.get("items") or {}
+        item_render_type = items_schema.get("renderType") or render_type
+        if item_render_type.endswith("-url") or any(tag in name for tag in ("image", "video", "audio")):
+            return [field_placeholder(name, {"type": "string", "format": "uri", "renderType": item_render_type})]
+        return [field_placeholder(f"{name}_item", {"type": items_schema.get("type", "string")})]
     if field_type == "object":
         return {}
 
