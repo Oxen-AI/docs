@@ -492,7 +492,7 @@ def render_index_page(
 
     lines = [
         "---",
-        'title: "Model References"',
+        'title: "Model API References"',
         'description: "Browse the full list of models available in the Oxen.AI inference API."',
         "---",
         "",
