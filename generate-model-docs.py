@@ -350,13 +350,65 @@ def write_pages(models: list[dict[str, Any]], output_dir: Path, workbench_base: 
     return written
 
 
-# Note: the 130+ generated pages used to be listed under a "Model References"
-# group in mint.json. Mintlify renders every page under an expanded tab eagerly,
-# which made the Inference API tab unusable to load. We now leave the generated
-# pages out of the sidebar entirely — they're still served at their direct URL
-# and linked to from the models overview, the per-model docs in the workbench,
-# and external references. If we want a discovery surface later, an overview
-# index page is cheap; the flat nav is not.
+def _developer_label(model: dict[str, Any]) -> str:
+    """Pick a display label to bucket a model under on the index page."""
+    dev = model.get("developer")
+    if isinstance(dev, dict):
+        name = dev.get("display_name") or dev.get("name")
+        if name:
+            return str(name)
+    provider = model.get("provider")
+    if isinstance(provider, dict):
+        name = provider.get("display_name") or provider.get("name")
+        if name:
+            return str(name)
+    return "Other"
+
+
+def render_index_page(
+    generated: list[tuple[str, dict[str, Any]]],
+    nav_prefix: str,
+) -> str:
+    """Render a single index page that links to every generated model reference.
+
+    Each developer gets a subsection. One page in the sidebar avoids Mintlify's
+    eager render of a flat 130-leaf nav under an expanded tab.
+    """
+    buckets: dict[str, list[tuple[str, dict[str, Any]]]] = {}
+    for path, model in generated:
+        buckets.setdefault(_developer_label(model), []).append((path, model))
+
+    lines = [
+        "---",
+        'title: "Model References"',
+        'description: "Browse the full list of models available in the Oxen.AI inference API."',
+        "---",
+        "",
+        "Every model exposed by the Oxen.AI inference API has a dedicated reference page"
+        " with a sample request, Python snippet, and the full request schema. Models are"
+        " grouped below by developer.",
+        "",
+    ]
+
+    for label in sorted(buckets.keys(), key=lambda l: l.lower()):
+        lines.append(f"## {label}")
+        lines.append("")
+        for path, model in sorted(buckets[label], key=lambda entry: entry[1].get("name", "")):
+            slug = Path(path).stem
+            display_name = model.get("display_name") or model.get("name")
+            lines.append(f"- [{display_name}](/{nav_prefix}/{slug})")
+        lines.append("")
+
+    return "\n".join(lines)
+
+
+def write_index_page(
+    generated: list[tuple[str, dict[str, Any]]],
+    index_path: Path,
+    nav_prefix: str,
+) -> None:
+    index_path.parent.mkdir(parents=True, exist_ok=True)
+    index_path.write_text(render_index_page(generated, nav_prefix))
 
 
 def main() -> None:
@@ -380,6 +432,16 @@ def main() -> None:
         default=DEFAULT_WORKBENCH_BASE,
         help=f"Base URL for workbench links (default: {DEFAULT_WORKBENCH_BASE}).",
     )
+    parser.add_argument(
+        "--index-path",
+        default="inference-api/reference/model-references.mdx",
+        help="Path to the generated index page that links to every model reference.",
+    )
+    parser.add_argument(
+        "--nav-prefix",
+        default="inference-api/reference/models",
+        help="Doc path prefix used when linking to generated pages from the index.",
+    )
     args = parser.parse_args()
 
     models = load_models(args)
@@ -389,6 +451,11 @@ def main() -> None:
     print(f"Wrote {len(written)} model reference page(s) under {output_dir}", file=sys.stderr)
     for path, _ in written:
         print(path)
+
+    if args.index_path:
+        index_path = Path(args.index_path)
+        write_index_page(written, index_path, args.nav_prefix)
+        print(f"Wrote index page {index_path}", file=sys.stderr)
 
 
 if __name__ == "__main__":
