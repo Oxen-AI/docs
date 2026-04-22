@@ -169,12 +169,15 @@ _CHAT_PARAMS_BASIC = ("temperature", "max_tokens", "stream")
 _CHAT_PARAMS_ALL_COMMON = ("temperature", "max_tokens", "stream", "top_p")
 
 # Providers with an OpenAI-compatible interface that accept the full param set.
+# Anthropic rejects `temperature` + `top_p` together with a 400, so drop `top_p`
+# there (which also collapses the "All" tab into the "Basic" tab via dedup).
 _CHAT_PARAMS_ALL_BY_PROVIDER = {
     "openai": _CHAT_PARAMS_ALL_COMMON + ("frequency_penalty", "presence_penalty"),
     "fireworks": _CHAT_PARAMS_ALL_COMMON + ("frequency_penalty", "presence_penalty"),
     "groq": _CHAT_PARAMS_ALL_COMMON + ("frequency_penalty", "presence_penalty"),
     "cerebras": _CHAT_PARAMS_ALL_COMMON + ("frequency_penalty", "presence_penalty"),
     "perplexity": _CHAT_PARAMS_ALL_COMMON + ("frequency_penalty", "presence_penalty"),
+    "anthropic": ("temperature", "max_tokens", "stream"),
 }
 
 
