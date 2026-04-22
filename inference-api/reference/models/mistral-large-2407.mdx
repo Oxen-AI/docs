@@ -1,0 +1,197 @@
+---
+title: "Mistral Large 2"
+description: "Powerful LLM with 123B parameters, excelling in multilingual tasks, coding, and reasoning, optimized for single-node inference and long-context applications."
+---
+
+<CardGroup cols={1}>
+  <Card title="Try Mistral Large 2 in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=mistral-large-2407">
+    Run this model interactively, tune parameters, and compare outputs.
+  </Card>
+</CardGroup>
+
+**Model ID:** `mistral-large-2407`
+
+Mistral Large 2 is an LLM with 123 billion parameters, designed for high-throughput and long-context applications. It excels in reasoning, coding, and instruction following.
+
+| Metric             | Value              |
+|--------------------|--------------------|
+| Parameter Count    | 123 billion        |
+| Mixture of Experts | No                 |
+| Context Length     | 128,000 tokens     |
+| Multilingual       | Yes                |
+| Quantized*         | No                 |
+
+*_Quantization is specific to the inference provider and the model may be offered with different quantization levels by other providers._
+
+## Example request
+
+<Tip>
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=mistral-large-2407) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+</Tip>
+
+<Tabs>
+  <Tab title="Minimal">
+
+    <CodeGroup>
+
+    ```bash cURL
+    curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $OXEN_API_KEY" \
+      -d '{
+      "model": "mistral-large-2407",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Hello, what can you do?"
+        }
+      ]
+    }'
+    ```
+
+    ```python Python
+    import os
+    import requests
+
+    response = requests.post(
+        "https://hub.oxen.ai/api/ai/chat/completions",
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        },
+        json={
+            "model": "mistral-large-2407",
+            "messages": [
+                {
+                    "role": "user",
+                    "content": "Hello, what can you do?"
+                }
+            ]
+        },
+    )
+    response.raise_for_status()
+    print(response.json())
+    ```
+
+    </CodeGroup>
+
+  </Tab>
+  <Tab title="Basic parameters">
+
+    <CodeGroup>
+
+    ```bash cURL
+    curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $OXEN_API_KEY" \
+      -d '{
+      "model": "mistral-large-2407",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Hello, what can you do?"
+        }
+      ],
+      "temperature": 0.7,
+      "max_tokens": 1024,
+      "stream": false
+    }'
+    ```
+
+    ```python Python
+    import os
+    import requests
+
+    response = requests.post(
+        "https://hub.oxen.ai/api/ai/chat/completions",
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        },
+        json={
+            "model": "mistral-large-2407",
+            "messages": [
+                {
+                    "role": "user",
+                    "content": "Hello, what can you do?"
+                }
+            ],
+            "temperature": 0.7,
+            "max_tokens": 1024,
+            "stream": false
+        },
+    )
+    response.raise_for_status()
+    print(response.json())
+    ```
+
+    </CodeGroup>
+
+  </Tab>
+  <Tab title="All parameters">
+
+    <CodeGroup>
+
+    ```bash cURL
+    curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $OXEN_API_KEY" \
+      -d '{
+      "model": "mistral-large-2407",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Hello, what can you do?"
+        }
+      ],
+      "temperature": 0.7,
+      "max_tokens": 1024,
+      "stream": false,
+      "top_p": 1.0
+    }'
+    ```
+
+    ```python Python
+    import os
+    import requests
+
+    response = requests.post(
+        "https://hub.oxen.ai/api/ai/chat/completions",
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        },
+        json={
+            "model": "mistral-large-2407",
+            "messages": [
+                {
+                    "role": "user",
+                    "content": "Hello, what can you do?"
+                }
+            ],
+            "temperature": 0.7,
+            "max_tokens": 1024,
+            "stream": false,
+            "top_p": 1.0
+        },
+    )
+    response.raise_for_status()
+    print(response.json())
+    ```
+
+    </CodeGroup>
+
+  </Tab>
+</Tabs>
+
+## Fetch model details
+
+The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
+
+```bash
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/mistral-large-2407
+```
+
+## Request parameters
+
+This model follows the standard OpenAI chat completions request body. See the [chat completions reference](../inference-api.mdx) for the full parameter list.

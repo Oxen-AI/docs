@@ -1,0 +1,457 @@
+---
+title: "FLUX.1 [dev]"
+description: "Open-weight text-to-image model with advanced prompt adherence, anatomically accurate details, and powerful tools for inpainting, outpainting, and structural…"
+---
+
+<CardGroup cols={1}>
+  <Card title="Try FLUX.1 [dev] in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=flux-1-dev">
+    Run this model interactively, tune parameters, and compare outputs.
+  </Card>
+</CardGroup>
+
+**Model ID:** `flux-1-dev`
+
+black-forest-labs/FLUX.1-dev is a 12 billion parameter image generation model (rectified flow transformer, guidance-distilled) designed for non-commercial, research, and personal use.
+
+It excels in **generating high-quality, diverse images from text prompts**, with strong prompt adherence and competitive performance on challenging details such as hands and faces. Its **open weights** and **efficiency** make it particularly valuable for researchers and developers who need transparency, adaptability, and the ability to fine-tune for specialized domains.
+
+Some other noteworthy features of black-forest-labs/FLUX.1-dev include advanced control tools—such as inpainting, outpainting, structural guidance (depth and edge conditioning), and image remixing—enabling precise editing and re-creation of both real and generated images for research and creative workflows.
+
+| Metric             | Value              |
+|--------------------|--------------------|
+| Parameter Count    | 12 billion         |
+| Mixture of Experts | No                 |
+| Context Length     | Unknown            |
+| Multilingual       | No                 |
+| Quantized*         | No                 |
+
+*_Quantization is specific to the inference provider and the model may be offered with different quantization levels by other providers._
+
+## Example request
+
+<Tip>
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=flux-1-dev) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+</Tip>
+
+<Tabs>
+  <Tab title="Sync">
+
+    See the [image generation reference](/inference-api/reference/image_generation) for more details.
+
+    <Tabs>
+      <Tab title="Minimal">
+
+        <CodeGroup>
+
+        ```bash cURL
+        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "flux-1-dev",
+          "prompt": "A beautiful landscape painting of a serene lake with mountains in the background"
+        }'
+        ```
+
+        ```python Python
+        import os
+        import requests
+
+        response = requests.post(
+            "https://hub.oxen.ai/api/ai/images/generate",
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+            },
+            json={
+                "model": "flux-1-dev",
+                "prompt": "A beautiful landscape painting of a serene lake with mountains in the background"
+            },
+        )
+        response.raise_for_status()
+        print(response.json())
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+      <Tab title="All parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "flux-1-dev",
+          "prompt": "A beautiful landscape painting of a serene lake with mountains in the background",
+          "negative_prompt": " ",
+          "aspect_ratio": "16:9",
+          "image_size": "optimize_for_quality",
+          "num_inference_steps": 30,
+          "guidance": 3,
+          "output_format": "webp",
+          "output_quality": 80,
+          "disable_safety_checker": false
+        }'
+        ```
+
+        ```python Python
+        import os
+        import requests
+
+        response = requests.post(
+            "https://hub.oxen.ai/api/ai/images/generate",
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+            },
+            json={
+                "model": "flux-1-dev",
+                "prompt": "A beautiful landscape painting of a serene lake with mountains in the background",
+                "negative_prompt": " ",
+                "aspect_ratio": "16:9",
+                "image_size": "optimize_for_quality",
+                "num_inference_steps": 30,
+                "guidance": 3,
+                "output_format": "webp",
+                "output_quality": 80,
+                "disable_safety_checker": false
+            },
+        )
+        response.raise_for_status()
+        print(response.json())
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+    </Tabs>
+
+  </Tab>
+  <Tab title="Async">
+
+    See the [async queue reference](/inference-api/reference/async_queue) for more details.
+
+    <Tabs>
+      <Tab title="Minimal">
+
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "flux-1-dev",
+          "prompt": "A beautiful landscape painting of a serene lake with mountains in the background"
+        }' | jq -r '.generations[0].generation_id')
+
+        # Poll the single generation until it 404s (terminal state).
+        while curl -s -o /dev/null -w "%{http_code}" \
+            -H "Authorization: Bearer $OXEN_API_KEY" \
+            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | grep -q "^200$"; do
+          sleep 5
+        done
+        echo "Done. See the 'Async with SSE' tab to receive the result URL."
+        ```
+
+        ```python Python
+        import os
+        import time
+        import requests
+
+        HEADERS = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        }
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers=HEADERS,
+            json={
+                "model": "flux-1-dev",
+                "prompt": "A beautiful landscape painting of a serene lake with mountains in the background"
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        while True:
+            resp = requests.get(
+                f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
+                headers=HEADERS,
+            )
+            if resp.status_code == 404:
+                break
+            time.sleep(5)
+        print("Done. See the 'Async with SSE' tab to receive the result URL.")
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+      <Tab title="All parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "flux-1-dev",
+          "prompt": "A beautiful landscape painting of a serene lake with mountains in the background",
+          "negative_prompt": " ",
+          "aspect_ratio": "16:9",
+          "image_size": "optimize_for_quality",
+          "num_inference_steps": 30,
+          "guidance": 3,
+          "output_format": "webp",
+          "output_quality": 80,
+          "disable_safety_checker": false
+        }' | jq -r '.generations[0].generation_id')
+
+        # Poll the single generation until it 404s (terminal state).
+        while curl -s -o /dev/null -w "%{http_code}" \
+            -H "Authorization: Bearer $OXEN_API_KEY" \
+            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | grep -q "^200$"; do
+          sleep 5
+        done
+        echo "Done. See the 'Async with SSE' tab to receive the result URL."
+        ```
+
+        ```python Python
+        import os
+        import time
+        import requests
+
+        HEADERS = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        }
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers=HEADERS,
+            json={
+                "model": "flux-1-dev",
+                "prompt": "A beautiful landscape painting of a serene lake with mountains in the background",
+                "negative_prompt": " ",
+                "aspect_ratio": "16:9",
+                "image_size": "optimize_for_quality",
+                "num_inference_steps": 30,
+                "guidance": 3,
+                "output_format": "webp",
+                "output_quality": 80,
+                "disable_safety_checker": false
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        while True:
+            resp = requests.get(
+                f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
+                headers=HEADERS,
+            )
+            if resp.status_code == 404:
+                break
+            time.sleep(5)
+        print("Done. See the 'Async with SSE' tab to receive the result URL.")
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+    </Tabs>
+
+  </Tab>
+  <Tab title="Async with SSE">
+
+    See the [async queue reference](/inference-api/reference/async_queue) for more details.
+
+    <Tabs>
+      <Tab title="Minimal">
+
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "flux-1-dev",
+          "prompt": "A beautiful landscape painting of a serene lake with mountains in the background"
+        }' | jq -r '.generations[0].generation_id')
+
+        # Stream the SSE channel, grab the data line that follows a
+        # media_generation_completed event for our id, and pretty-print it.
+        curl -sN -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/events \
+          | awk -v id="$GEN_ID" '
+            /^event: media_generation_completed$/ { expect=1; next }
+            /^data: / && expect {
+              payload = substr($0, 7)
+              if (index(payload, "\"generation_id\":\"" id "\"")) { print payload; exit }
+              expect = 0
+            }
+          ' | jq .
+        ```
+
+        ```python Python
+        import json
+        import os
+        import requests
+
+        API_KEY = os.environ["OXEN_API_KEY"]
+        AUTH = {"Authorization": f"Bearer {API_KEY}"}
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers={**AUTH, "Content-Type": "application/json"},
+            json={
+                "model": "flux-1-dev",
+                "prompt": "A beautiful landscape painting of a serene lake with mountains in the background"
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        with requests.get(
+            "https://hub.oxen.ai/api/events",
+            headers=AUTH,
+            stream=True,
+        ) as stream:
+            event_name = None
+            for line in stream.iter_lines(decode_unicode=True):
+                if line.startswith("event: "):
+                    event_name = line.removeprefix("event: ")
+                elif line.startswith("data: ") and event_name == "media_generation_completed":
+                    payload = json.loads(line.removeprefix("data: "))
+                    if payload.get("generation_id") == generation_id:
+                        print(payload)
+                        break
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+      <Tab title="All parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "flux-1-dev",
+          "prompt": "A beautiful landscape painting of a serene lake with mountains in the background",
+          "negative_prompt": " ",
+          "aspect_ratio": "16:9",
+          "image_size": "optimize_for_quality",
+          "num_inference_steps": 30,
+          "guidance": 3,
+          "output_format": "webp",
+          "output_quality": 80,
+          "disable_safety_checker": false
+        }' | jq -r '.generations[0].generation_id')
+
+        # Stream the SSE channel, grab the data line that follows a
+        # media_generation_completed event for our id, and pretty-print it.
+        curl -sN -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/events \
+          | awk -v id="$GEN_ID" '
+            /^event: media_generation_completed$/ { expect=1; next }
+            /^data: / && expect {
+              payload = substr($0, 7)
+              if (index(payload, "\"generation_id\":\"" id "\"")) { print payload; exit }
+              expect = 0
+            }
+          ' | jq .
+        ```
+
+        ```python Python
+        import json
+        import os
+        import requests
+
+        API_KEY = os.environ["OXEN_API_KEY"]
+        AUTH = {"Authorization": f"Bearer {API_KEY}"}
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers={**AUTH, "Content-Type": "application/json"},
+            json={
+                "model": "flux-1-dev",
+                "prompt": "A beautiful landscape painting of a serene lake with mountains in the background",
+                "negative_prompt": " ",
+                "aspect_ratio": "16:9",
+                "image_size": "optimize_for_quality",
+                "num_inference_steps": 30,
+                "guidance": 3,
+                "output_format": "webp",
+                "output_quality": 80,
+                "disable_safety_checker": false
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        with requests.get(
+            "https://hub.oxen.ai/api/events",
+            headers=AUTH,
+            stream=True,
+        ) as stream:
+            event_name = None
+            for line in stream.iter_lines(decode_unicode=True):
+                if line.startswith("event: "):
+                    event_name = line.removeprefix("event: ")
+                elif line.startswith("data: ") and event_name == "media_generation_completed":
+                    payload = json.loads(line.removeprefix("data: "))
+                    if payload.get("generation_id") == generation_id:
+                        print(payload)
+                        break
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+    </Tabs>
+
+  </Tab>
+</Tabs>
+
+## Fetch model details
+
+The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
+
+```bash
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/flux-1-dev
+```
+
+## Request parameters
+
+### Required parameters
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `prompt` | `string` | `"A beautiful landscape painting of a serene lake with mountains in the background"` | Prompt for generated image |
+
+### Optional parameters
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `negative_prompt` | `string` | `" "` | Negative prompt for generated image |
+| `aspect_ratio` | `string` | `"16:9"` | Aspect ratio for the generated image One of: 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3. |
+| `image_size` | `string` | `"optimize_for_quality"` | Image size for the generated image One of: optimize_for_quality, optimize_for_speed. |
+| `num_inference_steps` | `integer` | `30` | Number of denoising steps. Recommended range is 28-50, and lower number of steps produce lower quality outputs, faster. Range: 1 – 50. |
+| `guidance` | `number` | `3` | Guidance for generated image. Lower values can give more realistic images. Good values to try are 2, 2.5, 3 and 3.5 Range: 0 – 10. |
+| `seed` | `integer` | &mdash; | Random seed. Set for reproducible generation |
+| `output_format` | `string` | `"webp"` | Format of the output images One of: webp, jpg, png. |
+| `output_quality` | `integer` | `80` | Quality when saving the output images, from 0 to 100. 100 is best quality, 0 is lowest quality. Not relevant for .png outputs Range: 0 – 100. |
+| `disable_safety_checker` | `boolean` | `false` | Disable safety checker for generated images. |

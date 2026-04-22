@@ -1,0 +1,202 @@
+---
+title: "Gemini 2.0 Flash"
+description: "Multimodal LLM for agentic applications, handling real-time data integration and multi-step tasks with enhanced reasoning via Thinking Mode, integrating…"
+---
+
+<CardGroup cols={1}>
+  <Card title="Try Gemini 2.0 Flash in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=gemini-2-0-flash-001">
+    Run this model interactively, tune parameters, and compare outputs.
+  </Card>
+</CardGroup>
+
+**Model ID:** `gemini-2-0-flash-001`
+
+Gemini 2.0 Flash is a **Multimodal LLM** designed for building advanced agentic applications, excelling in multi-step task execution and real-time data integration. It supports multimodal inputs (text, images, audio, video) and outputs (text, images, speech), with enhanced reasoning capabilities through its Thinking Mode that reduces hallucinations and improves accuracy. Key strengths include integration with Google tools (Search, Maps, code execution) and third-party functions via the Multimodal Live API.
+
+Some noteworthy use cases include:
+- **Real-time media analysis** leveraging multimodal inputs and outputs
+- **Complex query handling** with advanced reasoning for context-aware responses
+- **Dynamic decision-making** through live data interaction and tool integration
+
+| Metric             | Value              |
+|--------------------|--------------------|
+| Parameter Count    | Unknown            |
+| Mixture of Experts | No                |
+| Context Length     | 1,048,576 tokens  |
+| Multilingual       | Yes               |
+| Quantized*         | Unknown           |
+
+*_Quantization details are provider-specific and not disclosed for this model._
+
+## Example request
+
+<Tip>
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=gemini-2-0-flash-001) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+</Tip>
+
+<Tabs>
+  <Tab title="Minimal">
+
+    <CodeGroup>
+
+    ```bash cURL
+    curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $OXEN_API_KEY" \
+      -d '{
+      "model": "gemini-2-0-flash-001",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Hello, what can you do?"
+        }
+      ]
+    }'
+    ```
+
+    ```python Python
+    import os
+    import requests
+
+    response = requests.post(
+        "https://hub.oxen.ai/api/ai/chat/completions",
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        },
+        json={
+            "model": "gemini-2-0-flash-001",
+            "messages": [
+                {
+                    "role": "user",
+                    "content": "Hello, what can you do?"
+                }
+            ]
+        },
+    )
+    response.raise_for_status()
+    print(response.json())
+    ```
+
+    </CodeGroup>
+
+  </Tab>
+  <Tab title="Basic parameters">
+
+    <CodeGroup>
+
+    ```bash cURL
+    curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $OXEN_API_KEY" \
+      -d '{
+      "model": "gemini-2-0-flash-001",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Hello, what can you do?"
+        }
+      ],
+      "temperature": 0.7,
+      "max_tokens": 1024,
+      "stream": false
+    }'
+    ```
+
+    ```python Python
+    import os
+    import requests
+
+    response = requests.post(
+        "https://hub.oxen.ai/api/ai/chat/completions",
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        },
+        json={
+            "model": "gemini-2-0-flash-001",
+            "messages": [
+                {
+                    "role": "user",
+                    "content": "Hello, what can you do?"
+                }
+            ],
+            "temperature": 0.7,
+            "max_tokens": 1024,
+            "stream": false
+        },
+    )
+    response.raise_for_status()
+    print(response.json())
+    ```
+
+    </CodeGroup>
+
+  </Tab>
+  <Tab title="All parameters">
+
+    <CodeGroup>
+
+    ```bash cURL
+    curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $OXEN_API_KEY" \
+      -d '{
+      "model": "gemini-2-0-flash-001",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Hello, what can you do?"
+        }
+      ],
+      "temperature": 0.7,
+      "max_tokens": 1024,
+      "stream": false,
+      "top_p": 1.0
+    }'
+    ```
+
+    ```python Python
+    import os
+    import requests
+
+    response = requests.post(
+        "https://hub.oxen.ai/api/ai/chat/completions",
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        },
+        json={
+            "model": "gemini-2-0-flash-001",
+            "messages": [
+                {
+                    "role": "user",
+                    "content": "Hello, what can you do?"
+                }
+            ],
+            "temperature": 0.7,
+            "max_tokens": 1024,
+            "stream": false,
+            "top_p": 1.0
+        },
+    )
+    response.raise_for_status()
+    print(response.json())
+    ```
+
+    </CodeGroup>
+
+  </Tab>
+</Tabs>
+
+## Fetch model details
+
+The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
+
+```bash
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/gemini-2-0-flash-001
+```
+
+## Request parameters
+
+This model follows the standard OpenAI chat completions request body. See the [chat completions reference](../inference-api.mdx) for the full parameter list.

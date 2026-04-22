@@ -1,0 +1,203 @@
+---
+title: "Perplexity Sonar"
+description: "Optimized for search-augmented tasks, delivering fast, accurate answers with real-time web data and detailed citations. Excels in research and fact-checking."
+---
+
+<CardGroup cols={1}>
+  <Card title="Try Perplexity Sonar in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=sonar">
+    Run this model interactively, tune parameters, and compare outputs.
+  </Card>
+</CardGroup>
+
+**Model ID:** `sonar`
+
+Perplexity Sonar is an LLM built on top of Llama 3.3 70B and further trained in-house by Perplexity to optimize answer quality, factuality, and readability for search-augmented tasks. It excels in delivering fast, accurate answers grounded in real-time web data with detailed citations—making it especially effective for research, fact-checking, and obtaining up-to-date information.
+
+Some other noteworthy features of Perplexity Sonar include its ability to provide concise responses with source attribution at high speed (up to 1,200 tokens per second), seamless integration with Perplexity’s search engine for enhanced user experience, and a context window suitable for handling complex queries. 
+
+| Metric             | Value              |
+|--------------------|--------------------|
+| Parameter Count    | 70 billion         |
+| Mixture of Experts | No                 |
+| Context Length     | 128,000 tokens     |
+| Multilingual       | Yes                |
+| Quantized*         | No                 |
+
+*_Quantization is specific to the inference provider and the model may be offered with different quantization levels by other providers._
+
+## Example request
+
+<Tip>
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=sonar) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+</Tip>
+
+<Tabs>
+  <Tab title="Minimal">
+
+    <CodeGroup>
+
+    ```bash cURL
+    curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $OXEN_API_KEY" \
+      -d '{
+      "model": "sonar",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Hello, what can you do?"
+        }
+      ]
+    }'
+    ```
+
+    ```python Python
+    import os
+    import requests
+
+    response = requests.post(
+        "https://hub.oxen.ai/api/ai/chat/completions",
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        },
+        json={
+            "model": "sonar",
+            "messages": [
+                {
+                    "role": "user",
+                    "content": "Hello, what can you do?"
+                }
+            ]
+        },
+    )
+    response.raise_for_status()
+    print(response.json())
+    ```
+
+    </CodeGroup>
+
+  </Tab>
+  <Tab title="Basic parameters">
+
+    <CodeGroup>
+
+    ```bash cURL
+    curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $OXEN_API_KEY" \
+      -d '{
+      "model": "sonar",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Hello, what can you do?"
+        }
+      ],
+      "temperature": 0.7,
+      "max_tokens": 1024,
+      "stream": false
+    }'
+    ```
+
+    ```python Python
+    import os
+    import requests
+
+    response = requests.post(
+        "https://hub.oxen.ai/api/ai/chat/completions",
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        },
+        json={
+            "model": "sonar",
+            "messages": [
+                {
+                    "role": "user",
+                    "content": "Hello, what can you do?"
+                }
+            ],
+            "temperature": 0.7,
+            "max_tokens": 1024,
+            "stream": false
+        },
+    )
+    response.raise_for_status()
+    print(response.json())
+    ```
+
+    </CodeGroup>
+
+  </Tab>
+  <Tab title="All parameters">
+
+    <CodeGroup>
+
+    ```bash cURL
+    curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $OXEN_API_KEY" \
+      -d '{
+      "model": "sonar",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Hello, what can you do?"
+        }
+      ],
+      "temperature": 0.7,
+      "max_tokens": 1024,
+      "stream": false,
+      "top_p": 1.0,
+      "frequency_penalty": 0,
+      "presence_penalty": 0
+    }'
+    ```
+
+    ```python Python
+    import os
+    import requests
+
+    response = requests.post(
+        "https://hub.oxen.ai/api/ai/chat/completions",
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        },
+        json={
+            "model": "sonar",
+            "messages": [
+                {
+                    "role": "user",
+                    "content": "Hello, what can you do?"
+                }
+            ],
+            "temperature": 0.7,
+            "max_tokens": 1024,
+            "stream": false,
+            "top_p": 1.0,
+            "frequency_penalty": 0,
+            "presence_penalty": 0
+        },
+    )
+    response.raise_for_status()
+    print(response.json())
+    ```
+
+    </CodeGroup>
+
+  </Tab>
+</Tabs>
+
+## Fetch model details
+
+The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
+
+```bash
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/sonar
+```
+
+## Request parameters
+
+This model follows the standard OpenAI chat completions request body. See the [chat completions reference](../inference-api.mdx) for the full parameter list.

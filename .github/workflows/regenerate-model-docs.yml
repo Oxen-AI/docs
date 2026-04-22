@@ -29,8 +29,13 @@ jobs:
       - name: Install generator deps
         run: pip install requests
 
-      - name: Clean existing model reference pages
-        run: rm -rf inference-api/reference/models/*.mdx
+      - name: Clean stale generated pages
+        # overview.mdx and walkthroughs/ are hand-written; only wipe the
+        # per-model files the generator owns so deletions for removed models
+        # show up as diffs in the PR.
+        run: |
+          find inference-api/reference/models \
+            -maxdepth 1 -type f -name '*.mdx' ! -name 'overview.mdx' -delete
 
       - name: Regenerate
         run: python generate-model-docs.py --models-url "${{ inputs.models_url }}"
