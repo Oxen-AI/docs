@@ -411,7 +411,7 @@ def render_page(model: dict[str, Any], workbench_base: str) -> str:
         "## Fetch model details",
         "",
         "The [models endpoint](./models/overview) returns the full model object, including its"
-        " `json_request_schema`. Useful for discovering parameters at runtime.",
+        " `json_request_schema`.",
         "",
         render_models_endpoint_curl(name),
     ]
