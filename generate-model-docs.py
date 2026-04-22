@@ -21,12 +21,13 @@ import re
 import sys
 from pathlib import Path
 from typing import Any, Iterable
+from urllib.parse import quote
 
 import requests
 
 
 DEFAULT_MODELS_URL = "https://hub.oxen.ai/api/evaluations/models"
-DEFAULT_WORKBENCH_BASE = "https://hub.oxen.ai/ai/workbench"
+DEFAULT_WORKBENCH_BASE = "https://www.oxen.ai/ai/workbench"
 DEFAULT_OUTPUT_DIR = Path("inference-api/reference/models")
 
 SLUG_UNSAFE = re.compile(r"[^A-Za-z0-9_-]+")
@@ -298,7 +299,7 @@ def render_page(model: dict[str, Any], workbench_base: str) -> str:
     description = (model.get("description") or "").strip()
     endpoint, endpoint_type = pick_endpoint(model)
     body = example_body(model, endpoint_type)
-    workbench_url = f"{workbench_base}?model={slugify(name)}"
+    workbench_url = f"{workbench_base}?model={quote(name, safe='')}"
     capabilities = model.get("capabilities") or {}
     inputs = ", ".join(capabilities.get("input") or []) or "—"
     outputs = ", ".join(capabilities.get("output") or []) or "—"
