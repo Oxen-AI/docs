@@ -348,29 +348,42 @@ def render_python(endpoint: str, body: dict[str, Any]) -> str:
 ASYNC_ENDPOINT_TYPES = {"image_generate", "image_edit", "video_generate"}
 
 
-def render_async_curl(body: dict[str, Any], model_name: str) -> str:
-    pretty = _shell_escape_single_quoted(json.dumps(body, indent=2))
-    quoted_name = quote(model_name, safe="")
-    return (
-        "# Enqueue\n"
-        "curl -X POST https://hub.oxen.ai/api/ai/queue \\\n"
-        "  -H \"Content-Type: application/json\" \\\n"
-        "  -H \"Authorization: Bearer $OXEN_API_KEY\" \\\n"
-        f"  -d '{pretty}'\n"
-        "\n"
-        "# Poll until the generation drops off the list\n"
-        "curl -H \"Authorization: Bearer $OXEN_API_KEY\" \\\n"
-        f"  \"https://hub.oxen.ai/api/ai/queue?model={quoted_name}\""
-    )
-
-
-def render_async_python(body: dict[str, Any], model_name: str) -> str:
+def _json_body_py(body: dict[str, Any], *, indent_prefix: str = "    ") -> str:
+    """Render the body as a Python dict literal, indented to nest cleanly inside a call."""
     pretty = json.dumps(body, indent=4)
-    indented = "\n".join(
-        line if i == 0 else f"    {line}"
+    return "\n".join(
+        line if i == 0 else f"{indent_prefix}{line}"
         for i, line in enumerate(pretty.splitlines())
     )
-    escaped_name = model_name.replace('"', '\\"')
+
+
+def render_async_poll_curl(body: dict[str, Any]) -> str:
+    """Enqueue the job, capture the generation id, and poll that id until it 404s.
+
+    The queue endpoint drops finished generations, so a 404 means "done"; the
+    actual result URL is only emitted over SSE (see the SSE variant) or persisted
+    to the caller's namespace.
+    """
+    pretty = _shell_escape_single_quoted(json.dumps(body, indent=2))
+    return (
+        "# Enqueue, capture the generation id.\n"
+        "GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \\\n"
+        "  -H \"Content-Type: application/json\" \\\n"
+        "  -H \"Authorization: Bearer $OXEN_API_KEY\" \\\n"
+        f"  -d '{pretty}' | python3 -c 'import json,sys;print(json.load(sys.stdin)[\"generations\"][0][\"generation_id\"])')\n"
+        "\n"
+        "# Poll the single generation until it 404s (terminal state).\n"
+        "while curl -s -o /dev/null -w \"%{http_code}\" \\\n"
+        "    -H \"Authorization: Bearer $OXEN_API_KEY\" \\\n"
+        "    \"https://hub.oxen.ai/api/ai/queue/$GEN_ID\" | grep -q \"^200$\"; do\n"
+        "  sleep 5\n"
+        "done\n"
+        "echo \"Done. See the 'Async with SSE' tab to receive the result URL.\""
+    )
+
+
+def render_async_poll_python(body: dict[str, Any]) -> str:
+    indented = _json_body_py(body)
     return (
         "import os\n"
         "import time\n"
@@ -381,27 +394,87 @@ def render_async_python(body: dict[str, Any], model_name: str) -> str:
         "    \"Authorization\": f\"Bearer {os.environ['OXEN_API_KEY']}\",\n"
         "}\n"
         "\n"
-        "# Enqueue\n"
-        "response = requests.post(\n"
+        "enqueue = requests.post(\n"
         "    \"https://hub.oxen.ai/api/ai/queue\",\n"
         "    headers=HEADERS,\n"
         f"    json={indented},\n"
         ")\n"
-        "generations = response.json()[\"generations\"]\n"
-        "print(f\"Enqueued {len(generations)} generation(s)\")\n"
+        "enqueue.raise_for_status()\n"
+        "generation_id = enqueue.json()[\"generations\"][0][\"generation_id\"]\n"
         "\n"
-        "# Poll until done\n"
         "while True:\n"
-        "    status = requests.get(\n"
-        "        \"https://hub.oxen.ai/api/ai/queue\",\n"
+        "    resp = requests.get(\n"
+        "        f\"https://hub.oxen.ai/api/ai/queue/{generation_id}\",\n"
         "        headers=HEADERS,\n"
-        f"        params={{\"model\": \"{escaped_name}\"}},\n"
-        "    ).json()\n"
-        "    if status[\"count\"] == 0:\n"
+        "    )\n"
+        "    if resp.status_code == 404:\n"
         "        break\n"
-        "    time.sleep(10)\n"
+        "    time.sleep(5)\n"
+        "print(\"Done. See the 'Async with SSE' tab to receive the result URL.\")"
+    )
+
+
+def render_async_sse_curl(body: dict[str, Any]) -> str:
+    """Enqueue, then stream GET /api/events and print the matching completion payload."""
+    pretty = _shell_escape_single_quoted(json.dumps(body, indent=2))
+    return (
+        "# Enqueue, capture the generation id.\n"
+        "GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \\\n"
+        "  -H \"Content-Type: application/json\" \\\n"
+        "  -H \"Authorization: Bearer $OXEN_API_KEY\" \\\n"
+        f"  -d '{pretty}' | python3 -c 'import json,sys;print(json.load(sys.stdin)[\"generations\"][0][\"generation_id\"])')\n"
         "\n"
-        "print(\"Done!\")"
+        "# Open the SSE stream and print the completion payload for that id.\n"
+        "curl -sN -H \"Authorization: Bearer $OXEN_API_KEY\" https://hub.oxen.ai/api/events \\\n"
+        "  | python3 -c \"\n"
+        "import json, sys\n"
+        "gen_id = '$GEN_ID'\n"
+        "event = None\n"
+        "for line in sys.stdin:\n"
+        "    line = line.rstrip('\\n')\n"
+        "    if line.startswith('event: '):\n"
+        "        event = line[len('event: '):]\n"
+        "    elif line.startswith('data: ') and event == 'media_generation_completed':\n"
+        "        payload = json.loads(line[len('data: '):])\n"
+        "        if payload.get('generation_id') == gen_id:\n"
+        "            print(json.dumps(payload))\n"
+        "            break\n"
+        "\""
+    )
+
+
+def render_async_sse_python(body: dict[str, Any]) -> str:
+    indented = _json_body_py(body)
+    return (
+        "import json\n"
+        "import os\n"
+        "import requests\n"
+        "\n"
+        "API_KEY = os.environ[\"OXEN_API_KEY\"]\n"
+        "AUTH = {\"Authorization\": f\"Bearer {API_KEY}\"}\n"
+        "\n"
+        "enqueue = requests.post(\n"
+        "    \"https://hub.oxen.ai/api/ai/queue\",\n"
+        "    headers={**AUTH, \"Content-Type\": \"application/json\"},\n"
+        f"    json={indented},\n"
+        ")\n"
+        "enqueue.raise_for_status()\n"
+        "generation_id = enqueue.json()[\"generations\"][0][\"generation_id\"]\n"
+        "\n"
+        "with requests.get(\n"
+        "    \"https://hub.oxen.ai/api/events\",\n"
+        "    headers=AUTH,\n"
+        "    stream=True,\n"
+        ") as stream:\n"
+        "    event_name = None\n"
+        "    for line in stream.iter_lines(decode_unicode=True):\n"
+        "        if line.startswith(\"event: \"):\n"
+        "            event_name = line.removeprefix(\"event: \")\n"
+        "        elif line.startswith(\"data: \") and event_name == \"media_generation_completed\":\n"
+        "            payload = json.loads(line.removeprefix(\"data: \"))\n"
+        "            if payload.get(\"generation_id\") == generation_id:\n"
+        "                print(payload)\n"
+        "                break"
     )
 
 
@@ -441,6 +514,23 @@ def _yaml_escape(text: str) -> str:
 
 def _indent(text: str, prefix: str) -> str:
     return "\n".join(prefix + line if line else line for line in text.split("\n"))
+
+
+def _indent_lines(lines: list[str], prefix: str) -> list[str]:
+    """Indent every logical line in `lines`, including ones that are themselves multiline blocks."""
+    return [_indent(line, prefix) for line in lines]
+
+
+# Where each endpoint's top-level reference doc lives, for the per-tab
+# "See the X reference for more details" link.
+_ENDPOINT_REFERENCE_DOCS = {
+    "chat": ("chat completions reference", "/inference-api/reference/chat_completions"),
+    "image_generate": ("image generation reference", "/inference-api/reference/image_generation"),
+    "image_edit": ("image editing reference", "/inference-api/reference/image_editing"),
+    "video_generate": ("video generation reference", "/inference-api/reference/video_generation"),
+}
+
+_ASYNC_QUEUE_DOC = ("async queue reference", "/inference-api/reference/async_queue")
 
 
 def _render_example_block(
@@ -500,6 +590,74 @@ def render_models_endpoint_curl(model_name: str) -> str:
     )
 
 
+def _reference_link_md(entry: tuple[str, str]) -> str:
+    title, href = entry
+    return f"See the [{title}]({href}) for more details."
+
+
+def _wrap_in_tab(title: str, header_paragraphs: list[str], inner_block: list[str]) -> list[str]:
+    """Put `header_paragraphs` + the indented inner block under a single `<Tab>`.
+
+    Each header_paragraph is rendered on its own line with a blank line between it
+    and the next paragraph (and between it and the inner block), so adjacent
+    paragraphs render as distinct paragraphs rather than wrapping into one.
+    """
+    lines = [f'  <Tab title="{title}">', ""]
+    for i, paragraph in enumerate(header_paragraphs):
+        if i > 0:
+            lines.append("")
+        lines.append(f"    {paragraph}" if paragraph else "")
+    if header_paragraphs:
+        lines.append("")
+    lines += _indent_lines(inner_block, "    ")
+    lines += ["", "  </Tab>"]
+    return lines
+
+
+def _render_sync_async_sse_tabs(
+    endpoint: str,
+    endpoint_type: str,
+    kept_variants: list[tuple[str, dict[str, Any]]],
+) -> list[str]:
+    """Render a Sync / Async / Async-with-SSE outer Tabs block.
+
+    Each outer tab nests the existing Minimal/Basic/All variant block, so readers
+    pick their execution mode first and their parameter depth second.
+    """
+    sync_header: list[str] = []
+    if endpoint_type == "video_generate":
+        sync_header.append(
+            "This blocks until the video is ready (typically 5-15 minutes)."
+            " Prefer **Async** or **Async with SSE** for anything beyond quick experimentation."
+        )
+    sync_header.append(_reference_link_md(_ENDPOINT_REFERENCE_DOCS[endpoint_type]))
+
+    sync_block = _render_example_block(
+        kept_variants,
+        lambda body: render_curl(endpoint, body),
+        lambda body: render_python(endpoint, body),
+    )
+    async_poll_block = _render_example_block(
+        kept_variants,
+        lambda body: render_async_poll_curl(body),
+        lambda body: render_async_poll_python(body),
+    )
+    async_sse_block = _render_example_block(
+        kept_variants,
+        lambda body: render_async_sse_curl(body),
+        lambda body: render_async_sse_python(body),
+    )
+
+    async_link = [_reference_link_md(_ASYNC_QUEUE_DOC)]
+
+    lines = ["<Tabs>"]
+    lines += _wrap_in_tab("Sync", sync_header, sync_block)
+    lines += _wrap_in_tab("Async", async_link, async_poll_block)
+    lines += _wrap_in_tab("Async with SSE", async_link, async_sse_block)
+    lines.append("</Tabs>")
+    return lines
+
+
 def render_page(model: dict[str, Any], workbench_base: str) -> str:
     name = model.get("name") or ""
     display_name = model.get("display_name") or name
@@ -546,35 +704,13 @@ def render_page(model: dict[str, Any], workbench_base: str) -> str:
         kept_variants.append((variant, variant_body))
 
     body_md += ["", "## Example request", ""]
-    if endpoint_type == "video_generate":
-        body_md += [
-            "This example is synchronous: the HTTP request blocks until the video is ready,"
-            " which can take 5-15 minutes. For anything but quick experimentation, prefer the"
-            " [Async example](#async-example) below so you don't have to hold a long-lived"
-            " connection open.",
-            "",
-        ]
-    body_md += _render_example_block(
-        kept_variants,
-        lambda body: render_curl(endpoint, body),
-        lambda body: render_python(endpoint, body),
-    )
-
     if endpoint_type in ASYNC_ENDPOINT_TYPES:
-        body_md += [
-            "",
-            "## Async example",
-            "",
-            "Enqueue the same body and poll the queue instead of waiting synchronously. The async"
-            " queue avoids long-lived HTTP connections and lets you run up to 4 generations in"
-            " parallel. See the [Async Queue quick start](/inference-api/quickstart/async-queue)"
-            " for the full workflow.",
-            "",
-        ]
+        body_md += _render_sync_async_sse_tabs(endpoint, endpoint_type, kept_variants)
+    else:
         body_md += _render_example_block(
             kept_variants,
-            lambda body: render_async_curl(body, name),
-            lambda body: render_async_python(body, name),
+            lambda body: render_curl(endpoint, body),
+            lambda body: render_python(endpoint, body),
         )
 
     body_md += [
