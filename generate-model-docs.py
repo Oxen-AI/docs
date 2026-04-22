@@ -107,37 +107,69 @@ def sorted_schema_properties(schema: dict[str, Any]) -> list[tuple[str, dict[str
     return items
 
 
-def example_body(model: dict[str, Any], endpoint_type: str) -> dict[str, Any]:
+# Variants control how many fields each example request includes.
+#   required -> minimum viable request (required fields only)
+#   basic    -> required + fields the workbench surfaces by default (`basic` in the schema)
+#   all      -> required + every field that has a schema default
+EXAMPLE_VARIANTS = ("required", "basic", "all")
+
+EXAMPLE_VARIANT_TITLES = {
+    "required": "Required parameters",
+    "basic": "Basic parameters",
+    "all": "All parameters with defaults",
+}
+
+
+def example_body(model: dict[str, Any], endpoint_type: str, variant: str = "basic") -> dict[str, Any]:
     name = model.get("name", "")
     schema = (model.get("json_request_schema") or {})
-    properties = schema.get("properties") or {}
 
     if endpoint_type == "chat":
-        return {
-            "model": name,
-            "messages": [{"role": "user", "content": "Hello, what can you do?"}],
-        }
+        return _chat_example_body(name, variant)
+
+    required = set(schema.get("required") or [])
+    basic = set(schema.get("basic") or [])
+
+    def include(field_name: str, field_schema: dict[str, Any]) -> bool:
+        if variant == "required":
+            return field_name in required
+        if variant == "basic":
+            return field_name in required or field_name in basic
+        # "all"
+        return field_name in required or "default" in field_schema
 
     body: dict[str, Any] = {"model": name}
-    required_fields = sorted(
-        schema.get("required") or [],
-        key=lambda f: _x_order(properties.get(f)),
-    )
-
-    for field in required_fields:
-        schema_field = properties.get(field, {})
-        body[field] = field_placeholder(field, schema_field)
-
-    # Include `prompt` by default even when not strictly required — it's the most
-    # common parameter and users recognize it.
-    if "prompt" in properties and "prompt" not in body:
-        body["prompt"] = field_placeholder("prompt", properties["prompt"])
+    for field_name, field_schema in sorted_schema_properties(schema):
+        if not include(field_name, field_schema):
+            continue
+        body[field_name] = field_placeholder(field_name, field_schema)
 
     if endpoint_type == "audio_transcribe" and "audio_url" not in body:
         body["audio_url"] = FALLBACK_AUDIO_URL
     if endpoint_type == "audio_speech" and "input" not in body:
         body["input"] = "Welcome to Oxen"
 
+    return body
+
+
+def _chat_example_body(model_name: str, variant: str) -> dict[str, Any]:
+    body: dict[str, Any] = {
+        "model": model_name,
+        "messages": [{"role": "user", "content": "Hello, what can you do?"}],
+    }
+    if variant == "required":
+        return body
+    if variant == "basic":
+        body["temperature"] = 0.7
+        body["max_tokens"] = 1024
+        return body
+    # "all"
+    body["temperature"] = 0.7
+    body["max_tokens"] = 1024
+    body["top_p"] = 1.0
+    body["frequency_penalty"] = 0
+    body["presence_penalty"] = 0
+    body["stream"] = False
     return body
 
 
@@ -301,6 +333,10 @@ def _yaml_escape(text: str) -> str:
     return text.replace("\\", "\\\\").replace('"', '\\"')
 
 
+def _indent(text: str, prefix: str) -> str:
+    return "\n".join(prefix + line if line else line for line in text.split("\n"))
+
+
 def render_models_endpoint_curl(model_name: str) -> str:
     return (
         "```bash\n"
@@ -314,7 +350,6 @@ def render_page(model: dict[str, Any], workbench_base: str) -> str:
     display_name = model.get("display_name") or name
     description = (model.get("description") or "").strip()
     endpoint, endpoint_type = pick_endpoint(model)
-    body = example_body(model, endpoint_type)
     workbench_url = f"{workbench_base}?model={quote(name, safe='')}"
     capabilities = model.get("capabilities") or {}
     inputs = ", ".join(capabilities.get("input") or []) or "—"
@@ -349,17 +384,29 @@ def render_page(model: dict[str, Any], workbench_base: str) -> str:
         "",
         "## Example request",
         "",
-        "<CodeGroup>",
-        "",
-        "```bash cURL",
-        render_curl(endpoint, body),
-        "```",
-        "",
-        "```python Python",
-        render_python(endpoint, body),
-        "```",
-        "",
-        "</CodeGroup>",
+        "<Tabs>",
+    ]
+    for variant in EXAMPLE_VARIANTS:
+        variant_body = example_body(model, endpoint_type, variant)
+        body_md += [
+            f'  <Tab title="{EXAMPLE_VARIANT_TITLES[variant]}">',
+            "",
+            "    <CodeGroup>",
+            "",
+            "    ```bash cURL",
+            _indent(render_curl(endpoint, variant_body), "    "),
+            "    ```",
+            "",
+            "    ```python Python",
+            _indent(render_python(endpoint, variant_body), "    "),
+            "    ```",
+            "",
+            "    </CodeGroup>",
+            "",
+            "  </Tab>",
+        ]
+    body_md += [
+        "</Tabs>",
         "",
         "## Fetch model details",
         "",
