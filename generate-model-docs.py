@@ -370,7 +370,7 @@ def render_async_poll_curl(body: dict[str, Any]) -> str:
         "GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \\\n"
         "  -H \"Content-Type: application/json\" \\\n"
         "  -H \"Authorization: Bearer $OXEN_API_KEY\" \\\n"
-        f"  -d '{pretty}' | python3 -c 'import json,sys;print(json.load(sys.stdin)[\"generations\"][0][\"generation_id\"])')\n"
+        f"  -d '{pretty}' | jq -r '.generations[0].generation_id')\n"
         "\n"
         "# Poll the single generation until it 404s (terminal state).\n"
         "while curl -s -o /dev/null -w \"%{http_code}\" \\\n"
@@ -415,31 +415,31 @@ def render_async_poll_python(body: dict[str, Any]) -> str:
 
 
 def render_async_sse_curl(body: dict[str, Any]) -> str:
-    """Enqueue, then stream GET /api/events and print the matching completion payload."""
+    """Enqueue, then stream GET /api/events and print the matching completion payload.
+
+    SSE framing (`event: ...\\ndata: ...\\n\\n`) isn't JSON-lines, so we need a
+    small awk preprocessor to pull the `data:` payload that follows the
+    `media_generation_completed` event before handing it to jq for filtering.
+    """
     pretty = _shell_escape_single_quoted(json.dumps(body, indent=2))
     return (
         "# Enqueue, capture the generation id.\n"
         "GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \\\n"
         "  -H \"Content-Type: application/json\" \\\n"
         "  -H \"Authorization: Bearer $OXEN_API_KEY\" \\\n"
-        f"  -d '{pretty}' | python3 -c 'import json,sys;print(json.load(sys.stdin)[\"generations\"][0][\"generation_id\"])')\n"
+        f"  -d '{pretty}' | jq -r '.generations[0].generation_id')\n"
         "\n"
-        "# Open the SSE stream and print the completion payload for that id.\n"
+        "# Stream the SSE channel, grab the data line that follows a\n"
+        "# media_generation_completed event for our id, and pretty-print it.\n"
         "curl -sN -H \"Authorization: Bearer $OXEN_API_KEY\" https://hub.oxen.ai/api/events \\\n"
-        "  | python3 -c \"\n"
-        "import json, sys\n"
-        "gen_id = '$GEN_ID'\n"
-        "event = None\n"
-        "for line in sys.stdin:\n"
-        "    line = line.rstrip('\\n')\n"
-        "    if line.startswith('event: '):\n"
-        "        event = line[len('event: '):]\n"
-        "    elif line.startswith('data: ') and event == 'media_generation_completed':\n"
-        "        payload = json.loads(line[len('data: '):])\n"
-        "        if payload.get('generation_id') == gen_id:\n"
-        "            print(json.dumps(payload))\n"
-        "            break\n"
-        "\""
+        "  | awk -v id=\"$GEN_ID\" '\n"
+        "    /^event: media_generation_completed$/ { expect=1; next }\n"
+        "    /^data: / && expect {\n"
+        "      payload = substr($0, 7)\n"
+        "      if (index(payload, \"\\\"generation_id\\\":\\\"\" id \"\\\"\")) { print payload; exit }\n"
+        "      expect = 0\n"
+        "    }\n"
+        "  ' | jq ."
     )
 
 
