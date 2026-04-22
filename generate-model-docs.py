@@ -110,13 +110,13 @@ def sorted_schema_properties(schema: dict[str, Any]) -> list[tuple[str, dict[str
 # Variants control how many fields each example request includes.
 #   required -> minimum viable request (required fields only)
 #   basic    -> required + fields the workbench surfaces by default (`basic` in the schema)
-#   all      -> required + every field that has a schema default
+#   all      -> basic + every other field that has a schema default (strict superset of basic)
 EXAMPLE_VARIANTS = ("required", "basic", "all")
 
 EXAMPLE_VARIANT_TITLES = {
     "required": "Minimal",
     "basic": "Basic parameters",
-    "all": "All parameters with defaults",
+    "all": "All parameters",
 }
 
 
@@ -135,8 +135,13 @@ def example_body(model: dict[str, Any], endpoint_type: str, variant: str = "basi
             return field_name in required
         if variant == "basic":
             return field_name in required or field_name in basic
-        # "all"
-        return field_name in required or "default" in field_schema
+        # "all" -- strict superset of basic so readers never see the "all" tab
+        # missing an example input that the "basic" tab showed.
+        return (
+            field_name in required
+            or field_name in basic
+            or "default" in field_schema
+        )
 
     body: dict[str, Any] = {"model": name}
     for field_name, field_schema in sorted_schema_properties(schema):
