@@ -590,6 +590,29 @@ def render_models_endpoint_curl(model_name: str) -> str:
     )
 
 
+def _capability_pills(modalities: list[str]) -> str:
+    if not modalities:
+        return "&mdash;"
+    # Render each modality as an inline code span so it reads as a pill/chip.
+    return " ".join(f"`{m}`" for m in modalities)
+
+
+def _render_capabilities_card(inputs: list[str], outputs: list[str]) -> str:
+    """Render inputs/outputs as two compact cards side-by-side."""
+    return "\n".join(
+        [
+            "<CardGroup cols={2}>",
+            '  <Card title="Inputs" icon="arrow-right-to-bracket">',
+            f"    {_capability_pills(inputs)}",
+            "  </Card>",
+            '  <Card title="Outputs" icon="arrow-right-from-bracket">',
+            f"    {_capability_pills(outputs)}",
+            "  </Card>",
+            "</CardGroup>",
+        ]
+    )
+
+
 def _reference_link_md(entry: tuple[str, str]) -> str:
     title, href = entry
     return f"See the [{title}]({href}) for more details."
@@ -665,8 +688,8 @@ def render_page(model: dict[str, Any], workbench_base: str) -> str:
     endpoint, endpoint_type = pick_endpoint(model)
     workbench_url = f"{workbench_base}?model={quote(name, safe='')}"
     capabilities = model.get("capabilities") or {}
-    inputs = ", ".join(capabilities.get("input") or []) or "—"
-    outputs = ", ".join(capabilities.get("output") or []) or "—"
+    inputs = capabilities.get("input") or []
+    outputs = capabilities.get("output") or []
 
     front_matter = (
         "---\n"
@@ -675,8 +698,16 @@ def render_page(model: dict[str, Any], workbench_base: str) -> str:
         "---\n"
     )
 
+    # Render the model id in a fenced code block so Mintlify surfaces a copy
+    # button on it. The display name is already the page title.
     body_md = [
         front_matter,
+        "",
+        "```",
+        name,
+        "```",
+        "",
+        _render_capabilities_card(inputs, outputs),
         "",
         "<CardGroup cols={1}>",
         f'  <Card title="Try {display_name} in the Workbench" icon="flask" href="{workbench_url}">',
@@ -689,11 +720,6 @@ def render_page(model: dict[str, Any], workbench_base: str) -> str:
         " for this model in the UI, then open the **API** tab to copy the exact cURL or"
         " Python call.",
         "</Tip>",
-        "",
-        f"**Model ID:** `{name}`  ",
-        f"**Endpoint:** `POST https://hub.oxen.ai{endpoint}`  ",
-        f"**Inputs:** {inputs}  ",
-        f"**Outputs:** {outputs}",
     ]
 
     if description:
