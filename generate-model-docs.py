@@ -500,6 +500,12 @@ def render_index_page(
         " with a sample request, Python snippet, and the full request schema. Models are"
         " grouped below by developer.",
         "",
+        "<CardGroup cols={1}>",
+        '  <Card title="Discover models on our Models page" icon="compass" href="https://www.oxen.ai/ai/models">',
+        "    Filter by modality, search by name, and preview every model side-by-side before diving into a reference page.",
+        "  </Card>",
+        "</CardGroup>",
+        "",
     ]
 
     for label in sorted(buckets.keys(), key=lambda l: l.lower()):
