@@ -590,18 +590,6 @@ def render_models_endpoint_curl(model_name: str) -> str:
     )
 
 
-def _capability_pills(modalities: list[str]) -> str:
-    if not modalities:
-        return "&mdash;"
-    # Render each modality as an inline code span so it reads as a pill/chip.
-    return " ".join(f"`{m}`" for m in modalities)
-
-
-def _render_capabilities_line(inputs: list[str], outputs: list[str]) -> str:
-    """One-line flow: inputs → outputs, rendered as code-span pills."""
-    return f"{_capability_pills(inputs)} &rarr; {_capability_pills(outputs)}"
-
-
 def _reference_link_md(entry: tuple[str, str]) -> str:
     title, href = entry
     return f"See the [{title}]({href}) for more details."
@@ -676,9 +664,6 @@ def render_page(model: dict[str, Any], workbench_base: str) -> str:
     description = (model.get("description") or "").strip()
     endpoint, endpoint_type = pick_endpoint(model)
     workbench_url = f"{workbench_base}?model={quote(name, safe='')}"
-    capabilities = model.get("capabilities") or {}
-    inputs = capabilities.get("input") or []
-    outputs = capabilities.get("output") or []
 
     front_matter = (
         "---\n"
@@ -687,16 +672,11 @@ def render_page(model: dict[str, Any], workbench_base: str) -> str:
         "---\n"
     )
 
-    # Layout: capability pills sit tight under the subtitle, then the
-    # workbench card, then the copy-pasteable model id and long description.
-    # The "Workbench as request builder" tip lives inside Example request below.
+    # Inline code for the model id is tight (no full-width fenced block) and
+    # users can still select + copy. The display name is already the page H1.
     body_md = [
         front_matter,
-        _render_capabilities_line(inputs, outputs),
-        "",
-        "```",
-        name,
-        "```",
+        f"`{name}`",
     ]
 
     if description:
