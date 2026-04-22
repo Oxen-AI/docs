@@ -114,7 +114,7 @@ def sorted_schema_properties(schema: dict[str, Any]) -> list[tuple[str, dict[str
 EXAMPLE_VARIANTS = ("required", "basic", "all")
 
 EXAMPLE_VARIANT_TITLES = {
-    "required": "Required parameters",
+    "required": "Minimal",
     "basic": "Basic parameters",
     "all": "All parameters with defaults",
 }
