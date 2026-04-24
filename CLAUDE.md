@@ -50,6 +50,11 @@ shape: (4_774, 2)
 
 The "don't" version makes the copy button copy `$ oxen df data.tsv` plus the whole table.
 
+Equally wrong — and much more common in practice — is leaving the command and output in
+*separate* blocks but tagging the output block as `` ```bash ``. The copy button still sits
+on it, and readers who click it paste a table or log into their shell. If a block contains
+no runnable command, it must be untagged.
+
 ### Multiple command/output pairs
 
 If a section demonstrates several commands in sequence, make each one its own

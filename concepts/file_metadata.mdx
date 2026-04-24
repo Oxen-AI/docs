@@ -23,7 +23,7 @@ To list all the schemas that have been detected and committed, you can use the `
 oxen schemas
 ```
 
-```bash
+```
 +-----------------------+------+----------------------------------+------------------------+
 | path                  | name | hash                             | fields                 |
 +==========================================================================================+
@@ -43,7 +43,7 @@ To view a specific schema, you can pass in a schema hash, name, or path to the `
 oxen schemas annotations/train.csv
 ```
 
-```bash
+```
 +--------+-------+----------+
 | name   | dtype | metadata |
 +===========================+
@@ -70,7 +70,7 @@ oxen add annotations/train.csv
 oxen status
 ```
 
-```bash
+```
 On branch main -> 503591398980c485
 
 Directories to be committed
@@ -91,7 +91,7 @@ To view more detailed information about the detected schema, use the `--staged` 
 oxen schemas --staged annotations/train.csv
 ```
 
-```bash
+```
 annotations/train.csv 23d86a4c1481b817b57ee8ccd7d9016b
 +-----------+-------+----------+
 | name      | dtype | metadata |
@@ -120,7 +120,7 @@ To view how Polars interprets the schema before adding the file, you can use the
 oxen df annotations/train.csv --schema
 ```
 
-```bash
+```
 +-----------+-------+
 | column    | dtype |
 +===================+
@@ -237,7 +237,7 @@ To view the schemas staged for commit, you can use the `--staged` flag.
 oxen schemas --staged
 ```
 
-```bash
+```
 +-----------------------+------+----------------------------------+--------------------+
 | path                  | name | hash                             | fields             |
 +======================================================================================+
