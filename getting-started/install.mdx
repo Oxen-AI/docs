@@ -25,17 +25,17 @@ First, download the release for your system's architecture.
 
 For x86-64
 ```bash
-$ wget https://github.com/Oxen-AI/Oxen/releases/latest/download/oxen-linux-x86_64.deb
+wget https://github.com/Oxen-AI/Oxen/releases/latest/download/oxen-linux-x86_64.deb
 ```
 
 For ARM64
 ```bash
-$ wget https://github.com/Oxen-AI/Oxen/releases/latest/download/oxen-linux-arm64.deb
+wget https://github.com/Oxen-AI/Oxen/releases/latest/download/oxen-linux-arm64.deb
 ```
 
 Then run
 ```bash
-$ sudo dpkg -i oxen-linux-*.deb
+sudo dpkg -i oxen-linux-*.deb
 ```
 
 #### Other distributions
@@ -45,24 +45,24 @@ First, download the release for your system's architecture.
 
 For x86-64
 ```bash
-$ wget https://github.com/Oxen-AI/Oxen/releases/latest/download/oxen-linux-x86_64.tar.gz
+wget https://github.com/Oxen-AI/Oxen/releases/latest/download/oxen-linux-x86_64.tar.gz
 ```
 
 For ARM64
 ```bash
-$ wget https://github.com/Oxen-AI/Oxen/releases/latest/download/oxen-linux-arm64.tar.gz
+wget https://github.com/Oxen-AI/Oxen/releases/latest/download/oxen-linux-arm64.tar.gz
 ```
 
 ```bash
-$ tar -xzvf oxen-linux-*.tar.gz
-$ chmod +x oxen
-$ mv oxen /usr/local/bin
+tar -xzvf oxen-linux-*.tar.gz
+chmod +x oxen
+mv oxen /usr/local/bin
 ```
 
 ### Windows
 We provide Windows binaries as a .exe.
 ```bash
-$ wget https://github.com/Oxen-AI/Oxen/releases/latest/download/oxen-windows-x86_64.exe.zip
+wget https://github.com/Oxen-AI/Oxen/releases/latest/download/oxen-windows-x86_64.exe.zip
 ```
 
 ## Python Package
@@ -72,20 +72,20 @@ The easiest way to get started with the Oxen Python library is to use `uv`. [Ins
 Install a supported Python version
 
 ```bash
-$ uv python install 3.13
+uv python install 3.13
 ```
 
 Then, create and init a new uv project.
 ```bash
-$ mkdir my-python-script/ && cd my-python-script/
-$ uv init
+mkdir my-python-script/ && cd my-python-script/
+uv init
 ```
 
 This will create a virtual environment with the latest installed Python version.
 
 Next, add the oxen library to the project
 ```bash
-$ uv add oxenai
+uv add oxenai
 ```
 
 Then, to test that everything is working, update `main.py` with the following code.
@@ -96,7 +96,7 @@ oxen.clone("ox/SpanishToEnglish")
 
 Then run the script with `uv run` so it executes in the virtual environment.
 ```bash
-$ uv run main.py
+uv run main.py
 ```
 
 Note that this will only install the Python library and not the command line tool.
@@ -131,8 +131,8 @@ The Oxen server binary can be deployed where ever you want to store and backup y
 ### Mac
 
 ```bash
-$ brew tap Oxen-AI/oxen-server
-$ brew install oxen-server
+brew tap Oxen-AI/oxen-server
+brew install oxen-server
 ```
 
 ### Docker
@@ -141,12 +141,12 @@ First, download the Docker image based on the host architecture.
 
 For x86-64
 ```bash
-$ wget https://github.com/Oxen-AI/Oxen/releases/latest/download/oxen-server-docker-x86_64.tar
+wget https://github.com/Oxen-AI/Oxen/releases/latest/download/oxen-server-docker-x86_64.tar
 ```
 
 For ARM64
 ```bash
-$ wget https://github.com/Oxen-AI/Oxen/releases/latest/download/oxen-server-docker-arm64.tar
+wget https://github.com/Oxen-AI/Oxen/releases/latest/download/oxen-server-docker-arm64.tar
 ```
 
 Then, load the image into Docker.
@@ -167,17 +167,17 @@ First, download the release for your system's architecture.
 
 For x86-64
 ```bash
-$ wget https://github.com/Oxen-AI/Oxen/releases/latest/download/oxen-server-linux-x86_64.deb
+wget https://github.com/Oxen-AI/Oxen/releases/latest/download/oxen-server-linux-x86_64.deb
 ```
 
 For ARM64
 ```bash
-$ wget https://github.com/Oxen-AI/Oxen/releases/latest/download/oxen-server-linux-arm64.deb
+wget https://github.com/Oxen-AI/Oxen/releases/latest/download/oxen-server-linux-arm64.deb
 ```
 
 Then run
 ```bash
-$ sudo dpkg -i oxen-server-linux-*.deb
+sudo dpkg -i oxen-server-linux-*.deb
 ```
 
 #### Other distributions
@@ -185,25 +185,25 @@ First, download the release for your system's architecture.
 
 For x86-64
 ```bash
-$ wget https://github.com/Oxen-AI/Oxen/releases/latest/download/oxen-server-linux-x86_64.tar.gz
+wget https://github.com/Oxen-AI/Oxen/releases/latest/download/oxen-server-linux-x86_64.tar.gz
 ```
 
 For ARM64
 ```bash
-$ wget https://github.com/Oxen-AI/Oxen/releases/latest/download/oxen-server-linux-arm64.tar.gz
+wget https://github.com/Oxen-AI/Oxen/releases/latest/download/oxen-server-linux-arm64.tar.gz
 ```
 
 ```bash
-$ tar -xzvf oxen-server-linux-*.tar.gz
-$ chmod +x oxen-server
-$ mv oxen-server /usr/local/bin
+tar -xzvf oxen-server-linux-*.tar.gz
+chmod +x oxen-server
+mv oxen-server /usr/local/bin
 ```
 
 ### Windows
 We provide Windows binaries as a .exe.
 
 ```bash
-$ wget https://github.com/Oxen-AI/Oxen/releases/latest/download/oxen-server-windows-x86_64.exe.zip
+wget https://github.com/Oxen-AI/Oxen/releases/latest/download/oxen-server-windows-x86_64.exe.zip
 ```
 
 To get up and running using the client and server, you can follow the [getting started docs](https://github.com/Oxen-AI/oxen).

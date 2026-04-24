@@ -20,8 +20,10 @@ oxen download datasets/SpamOrHam data.tsv
 Oxen uses the `df` command for all CLI actions involving data frames. For example, `oxen df <FILENAME>` displays the contents of tabular data files. 
 
 ```bash
-$ oxen df data.tsv
+oxen df data.tsv
+```
 
+```
 shape: (4_774, 2)
 +-----------+---------------------------------+
 | dcategory | text                            |
@@ -48,8 +50,10 @@ You can also use `oxen df` options to view your data with modifications. These c
 
 ```bash
 # Add extra column
-$ oxen df data.tsv --add-col 'language:English:str'
+oxen df data.tsv --add-col 'language:English:str'
+```
 
+```
 shape: (4_774, 3)
 +----------+---------------------------------+----------+
 | category | text                            | language |
@@ -68,10 +72,14 @@ shape: (4_774, 3)
 | ham      | Mark works tomorrow. He gets o… | English  |
 | ham      | Keep ur problems in ur heart, … | English  |
 +----------+---------------------------------+----------+
+```
 
+```bash
 # Filter out spam messages, view text only
-$ oxen df data.tsv --filter 'category == ham' --columns 'text'
+oxen df data.tsv --filter 'category == ham' --columns 'text'
+```
 
+```
 shape: (4_124, 1)
 +---------------------------------+
 | text                            |
@@ -90,10 +98,14 @@ shape: (4_124, 1)
 | Mark works tomorrow. He gets o… |
 | Keep ur problems in ur heart, … |
 +---------------------------------+
+```
 
+```bash
 # Randomize the data, then view the first 5 entries
-$ oxen df data.tsv --head 5 --randomize
+oxen df data.tsv --head 5 --randomize
+```
 
+```
 shape: (5, 2)
 +----------+---------------------------------+
 | category | text                            |
@@ -196,8 +208,10 @@ All of these operations are exposed over HTTP, so you are not limited to using t
 You can also edit data files locally with `oxen df --write`. Any modifications you make with this flag set will be written back to the original file and register as 'modified' in your Oxen repository. 
 
 ```bash
-$ oxen df data.tsv --filter 'category == spam' --write
+oxen df data.tsv --filter 'category == spam' --write
+```
 
+```
 shape: (650, 2)
 +----------+---------------------------------+
 | category | text                            |
@@ -217,9 +231,13 @@ shape: (650, 2)
 | spam     | Do you want a New Nokia 3510i … |
 +----------+---------------------------------+
 Writing "data.tsv"
+```
 
-$ oxen df data.tsv 
+```bash
+oxen df data.tsv
+```
 
+```
 shape: (650, 2)
 +----------+---------------------------------+
 | category | text                            |
