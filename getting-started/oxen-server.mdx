@@ -62,6 +62,8 @@ To enable authentication, generate a token to give it to the user to access to t
 oxen-server add-user --email YOUR_EMAIL --name YOUR_NAME
 ```
 
+Output:
+
 ```
 User access token created:
 
@@ -91,6 +93,8 @@ The default directory that Oxen stores data is `/tmp/oxen_sync`, which is not a 
 export SYNC_DIR=/var/oxen/data
 oxen-server start -a
 ```
+
+Output:
 
 ```
 Running 🐂 server on 0.0.0.0:3000
@@ -135,6 +139,8 @@ When you create a remote repository, Oxen will create a directory for it on the 
 ```bash
 ls /var/oxen/data/my_namespace/repo_name/.oxen
 ```
+
+Output:
 
 ```
 config.toml
@@ -182,6 +188,8 @@ If you look in your local repository, you will see the `.oxen` directory.
 ls .oxen
 ```
 
+Output:
+
 ```
 config.toml
 history/
@@ -200,6 +208,8 @@ If you look at the `config.toml` file, you will see the remote set.
 ```bash
 cat .oxen/config.toml
 ```
+
+Output:
 
 ```toml
 remote_name = "origin"

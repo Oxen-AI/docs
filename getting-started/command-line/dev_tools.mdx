@@ -10,6 +10,9 @@ You can use `oxen tree` to view the current state of the merkle tree for a commi
 ```bash
 oxen tree
 ```
+
+Output:
+
 ```
 [Commit] 74bb3ece2ccfa3f23420ef5c0be84865 (0.36.0) "Add Data" -> Daisy daisy@oxen.ai parent_ids ""
   [Dir] 65d46b6d56 "" (3.5 MB) (4 files) (commit 74bb3ece2c)  (3 entries)
@@ -32,6 +35,9 @@ Time to load tree: 4.8259ms
 ```bash
 oxen node -n 65d46b6d5616364ba975320b5768c63c
 ```
+
+Output:
+
 ```
 [Dir] 65d46b6d56 "" (3.5 MB) (4 files) (commit 74bb3ece2c)  (3 entries)
 =============
@@ -54,6 +60,9 @@ children.len(): 1
 ```bash 
 oxen node -p dir/image.png
 ```
+
+Output:
+
 ```
 [File] b04c7235e3 "image.png" (image/png) 95.1 KB [b04c7235e3] (commit 74bb3ece2c) MetadataImage(1798x839)
 =============

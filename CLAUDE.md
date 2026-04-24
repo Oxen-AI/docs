@@ -15,6 +15,11 @@ output (and any `$` prompt) along with the command.
 - The output block holds the terminal output. Use an untagged fence (`` ``` ``) so it renders
   as plain preformatted text without syntax highlighting. Nothing in it should be copy-pasted
   back into a shell.
+- **Put an `Output:` line between them.** Mintlify automatically groups two adjacent fenced
+  code blocks into a single tabbed block (as if they were wrapped in `<CodeGroup>`), even if
+  there's a blank line between them. A plain-prose `Output:` paragraph between the command
+  and output blocks is enough non-code content to break the grouping, and it also labels the
+  second block for the reader.
 
 ### Do
 
@@ -22,6 +27,8 @@ output (and any `$` prompt) along with the command.
 ```bash
 oxen df data.tsv
 ```
+
+Output:
 
 ```
 shape: (4_774, 2)
