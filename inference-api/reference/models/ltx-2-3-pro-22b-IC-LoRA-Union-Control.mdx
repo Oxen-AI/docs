@@ -1,0 +1,616 @@
+---
+title: "LTX-2.3 Pro 22B IC-LoRA Union Control"
+description: "Baseten-configured LTX 2.3 Pro 22B model with IC/Union-Control support for text-to-video and image-conditioned video generation."
+---
+
+<CardGroup cols={1}>
+  <Card title="Try LTX-2.3 Pro 22B IC-LoRA Union Control in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=ltx-2-3-pro-22b-IC-LoRA-Union-Control">
+    Run this model interactively, tune parameters, and compare outputs.
+  </Card>
+</CardGroup>
+
+**Model ID:** `ltx-2-3-pro-22b-IC-LoRA-Union-Control`
+
+LTX-2.3 Pro 22B IC LoRA Union Control is a high-fidelity video generation model for text-to-video and image-conditioned workflows. It supports prompt-driven generation, camera control, and optional keyframe conditioning for controlled cinematic outputs.
+
+## Example request
+
+<Tip>
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=ltx-2-3-pro-22b-IC-LoRA-Union-Control) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+</Tip>
+
+<Tabs>
+  <Tab title="Sync">
+
+    This blocks until the video is ready (typically 5-15 minutes). Prefer **Async** or **Async with SSE** for anything beyond quick experimentation.
+
+    See the [video generation reference](/inference-api/reference/video_generation) for more details.
+
+    <Tabs>
+      <Tab title="Minimal">
+
+        <CodeGroup>
+
+        ```bash cURL
+        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "ltx-2-3-pro-22b-IC-LoRA-Union-Control",
+          "prompt": "<prompt>"
+        }'
+        ```
+
+        ```python Python
+        import os
+        import requests
+
+        response = requests.post(
+            "https://hub.oxen.ai/api/ai/videos/generate",
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+            },
+            json={
+                "model": "ltx-2-3-pro-22b-IC-LoRA-Union-Control",
+                "prompt": "<prompt>"
+            },
+        )
+        response.raise_for_status()
+        print(response.json())
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+      <Tab title="Basic parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "ltx-2-3-pro-22b-IC-LoRA-Union-Control",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+        }'
+        ```
+
+        ```python Python
+        import os
+        import requests
+
+        response = requests.post(
+            "https://hub.oxen.ai/api/ai/videos/generate",
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+            },
+            json={
+                "model": "ltx-2-3-pro-22b-IC-LoRA-Union-Control",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+            },
+        )
+        response.raise_for_status()
+        print(response.json())
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+      <Tab title="All parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "ltx-2-3-pro-22b-IC-LoRA-Union-Control",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "duration": 6,
+          "aspect_ratio": "16:9",
+          "resolution": "1080p",
+          "fps": 25,
+          "video_conditioning_strength": 1.0,
+          "conditioning_attention_strength": 1.0
+        }'
+        ```
+
+        ```python Python
+        import os
+        import requests
+
+        response = requests.post(
+            "https://hub.oxen.ai/api/ai/videos/generate",
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+            },
+            json={
+                "model": "ltx-2-3-pro-22b-IC-LoRA-Union-Control",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "duration": 6,
+                "aspect_ratio": "16:9",
+                "resolution": "1080p",
+                "fps": 25,
+                "video_conditioning_strength": 1.0,
+                "conditioning_attention_strength": 1.0
+            },
+        )
+        response.raise_for_status()
+        print(response.json())
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+    </Tabs>
+
+  </Tab>
+  <Tab title="Async">
+
+    See the [async queue reference](/inference-api/reference/async_queue) for more details.
+
+    <Tabs>
+      <Tab title="Minimal">
+
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "ltx-2-3-pro-22b-IC-LoRA-Union-Control",
+          "prompt": "<prompt>"
+        }' | jq -r '.generations[0].generation_id')
+
+        # Poll the single generation until it 404s (terminal state).
+        while curl -s -o /dev/null -w "%{http_code}" \
+            -H "Authorization: Bearer $OXEN_API_KEY" \
+            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | grep -q "^200$"; do
+          sleep 5
+        done
+        echo "Done. See the 'Async with SSE' tab to receive the result URL."
+        ```
+
+        ```python Python
+        import os
+        import time
+        import requests
+
+        HEADERS = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        }
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers=HEADERS,
+            json={
+                "model": "ltx-2-3-pro-22b-IC-LoRA-Union-Control",
+                "prompt": "<prompt>"
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        while True:
+            resp = requests.get(
+                f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
+                headers=HEADERS,
+            )
+            if resp.status_code == 404:
+                break
+            time.sleep(5)
+        print("Done. See the 'Async with SSE' tab to receive the result URL.")
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+      <Tab title="Basic parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "ltx-2-3-pro-22b-IC-LoRA-Union-Control",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+        }' | jq -r '.generations[0].generation_id')
+
+        # Poll the single generation until it 404s (terminal state).
+        while curl -s -o /dev/null -w "%{http_code}" \
+            -H "Authorization: Bearer $OXEN_API_KEY" \
+            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | grep -q "^200$"; do
+          sleep 5
+        done
+        echo "Done. See the 'Async with SSE' tab to receive the result URL."
+        ```
+
+        ```python Python
+        import os
+        import time
+        import requests
+
+        HEADERS = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        }
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers=HEADERS,
+            json={
+                "model": "ltx-2-3-pro-22b-IC-LoRA-Union-Control",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        while True:
+            resp = requests.get(
+                f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
+                headers=HEADERS,
+            )
+            if resp.status_code == 404:
+                break
+            time.sleep(5)
+        print("Done. See the 'Async with SSE' tab to receive the result URL.")
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+      <Tab title="All parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "ltx-2-3-pro-22b-IC-LoRA-Union-Control",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "duration": 6,
+          "aspect_ratio": "16:9",
+          "resolution": "1080p",
+          "fps": 25,
+          "video_conditioning_strength": 1.0,
+          "conditioning_attention_strength": 1.0
+        }' | jq -r '.generations[0].generation_id')
+
+        # Poll the single generation until it 404s (terminal state).
+        while curl -s -o /dev/null -w "%{http_code}" \
+            -H "Authorization: Bearer $OXEN_API_KEY" \
+            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | grep -q "^200$"; do
+          sleep 5
+        done
+        echo "Done. See the 'Async with SSE' tab to receive the result URL."
+        ```
+
+        ```python Python
+        import os
+        import time
+        import requests
+
+        HEADERS = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        }
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers=HEADERS,
+            json={
+                "model": "ltx-2-3-pro-22b-IC-LoRA-Union-Control",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "duration": 6,
+                "aspect_ratio": "16:9",
+                "resolution": "1080p",
+                "fps": 25,
+                "video_conditioning_strength": 1.0,
+                "conditioning_attention_strength": 1.0
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        while True:
+            resp = requests.get(
+                f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
+                headers=HEADERS,
+            )
+            if resp.status_code == 404:
+                break
+            time.sleep(5)
+        print("Done. See the 'Async with SSE' tab to receive the result URL.")
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+    </Tabs>
+
+  </Tab>
+  <Tab title="Async with SSE">
+
+    See the [async queue reference](/inference-api/reference/async_queue) for more details.
+
+    <Tabs>
+      <Tab title="Minimal">
+
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "ltx-2-3-pro-22b-IC-LoRA-Union-Control",
+          "prompt": "<prompt>"
+        }' | jq -r '.generations[0].generation_id')
+
+        # Stream the SSE channel, grab the data line that follows a
+        # media_generation_completed event for our id, and pretty-print it.
+        curl -sN -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/events \
+          | awk -v id="$GEN_ID" '
+            /^event: media_generation_completed$/ { expect=1; next }
+            /^data: / && expect {
+              payload = substr($0, 7)
+              if (index(payload, "\"generation_id\":\"" id "\"")) { print payload; exit }
+              expect = 0
+            }
+          ' | jq .
+        ```
+
+        ```python Python
+        import json
+        import os
+        import requests
+
+        API_KEY = os.environ["OXEN_API_KEY"]
+        AUTH = {"Authorization": f"Bearer {API_KEY}"}
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers={**AUTH, "Content-Type": "application/json"},
+            json={
+                "model": "ltx-2-3-pro-22b-IC-LoRA-Union-Control",
+                "prompt": "<prompt>"
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        with requests.get(
+            "https://hub.oxen.ai/api/events",
+            headers=AUTH,
+            stream=True,
+        ) as stream:
+            event_name = None
+            for line in stream.iter_lines(decode_unicode=True):
+                if line.startswith("event: "):
+                    event_name = line.removeprefix("event: ")
+                elif line.startswith("data: ") and event_name == "media_generation_completed":
+                    payload = json.loads(line.removeprefix("data: "))
+                    if payload.get("generation_id") == generation_id:
+                        print(payload)
+                        break
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+      <Tab title="Basic parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "ltx-2-3-pro-22b-IC-LoRA-Union-Control",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+        }' | jq -r '.generations[0].generation_id')
+
+        # Stream the SSE channel, grab the data line that follows a
+        # media_generation_completed event for our id, and pretty-print it.
+        curl -sN -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/events \
+          | awk -v id="$GEN_ID" '
+            /^event: media_generation_completed$/ { expect=1; next }
+            /^data: / && expect {
+              payload = substr($0, 7)
+              if (index(payload, "\"generation_id\":\"" id "\"")) { print payload; exit }
+              expect = 0
+            }
+          ' | jq .
+        ```
+
+        ```python Python
+        import json
+        import os
+        import requests
+
+        API_KEY = os.environ["OXEN_API_KEY"]
+        AUTH = {"Authorization": f"Bearer {API_KEY}"}
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers={**AUTH, "Content-Type": "application/json"},
+            json={
+                "model": "ltx-2-3-pro-22b-IC-LoRA-Union-Control",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        with requests.get(
+            "https://hub.oxen.ai/api/events",
+            headers=AUTH,
+            stream=True,
+        ) as stream:
+            event_name = None
+            for line in stream.iter_lines(decode_unicode=True):
+                if line.startswith("event: "):
+                    event_name = line.removeprefix("event: ")
+                elif line.startswith("data: ") and event_name == "media_generation_completed":
+                    payload = json.loads(line.removeprefix("data: "))
+                    if payload.get("generation_id") == generation_id:
+                        print(payload)
+                        break
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+      <Tab title="All parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "ltx-2-3-pro-22b-IC-LoRA-Union-Control",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "duration": 6,
+          "aspect_ratio": "16:9",
+          "resolution": "1080p",
+          "fps": 25,
+          "video_conditioning_strength": 1.0,
+          "conditioning_attention_strength": 1.0
+        }' | jq -r '.generations[0].generation_id')
+
+        # Stream the SSE channel, grab the data line that follows a
+        # media_generation_completed event for our id, and pretty-print it.
+        curl -sN -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/events \
+          | awk -v id="$GEN_ID" '
+            /^event: media_generation_completed$/ { expect=1; next }
+            /^data: / && expect {
+              payload = substr($0, 7)
+              if (index(payload, "\"generation_id\":\"" id "\"")) { print payload; exit }
+              expect = 0
+            }
+          ' | jq .
+        ```
+
+        ```python Python
+        import json
+        import os
+        import requests
+
+        API_KEY = os.environ["OXEN_API_KEY"]
+        AUTH = {"Authorization": f"Bearer {API_KEY}"}
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers={**AUTH, "Content-Type": "application/json"},
+            json={
+                "model": "ltx-2-3-pro-22b-IC-LoRA-Union-Control",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "duration": 6,
+                "aspect_ratio": "16:9",
+                "resolution": "1080p",
+                "fps": 25,
+                "video_conditioning_strength": 1.0,
+                "conditioning_attention_strength": 1.0
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        with requests.get(
+            "https://hub.oxen.ai/api/events",
+            headers=AUTH,
+            stream=True,
+        ) as stream:
+            event_name = None
+            for line in stream.iter_lines(decode_unicode=True):
+                if line.startswith("event: "):
+                    event_name = line.removeprefix("event: ")
+                elif line.startswith("data: ") and event_name == "media_generation_completed":
+                    payload = json.loads(line.removeprefix("data: "))
+                    if payload.get("generation_id") == generation_id:
+                        print(payload)
+                        break
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+    </Tabs>
+
+  </Tab>
+</Tabs>
+
+## Fetch model details
+
+The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
+
+```bash
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/ltx-2-3-pro-22b-IC-LoRA-Union-Control
+```
+
+## Request parameters
+
+### Required parameters
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `prompt` | `string` | &mdash; | Text prompt describing the video to generate |
+
+### Optional parameters
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `input_image` | `string` | &mdash; | First frame image for image-to-video generation Format: uri. |
+| `input_video` | `string` | &mdash; | Primary conditioning video URL. Format: uri. |
+| `duration` | `integer` | `6` | Duration of the video in seconds One of: 6, 8, 10. |
+| `aspect_ratio` | `string` | `"16:9"` | Aspect ratio of the generated video One of: 16:9, 9:16. |
+| `resolution` | `string` | `"1080p"` | Resolution quality of the generated video One of: 1080p, 2k, 4k. |
+| `fps` | `integer` | `25` | Frame rate in frames per second One of: 24, 25, 48, 50. |
+| `video_conditioning_strength` | `number` | `1.0` | Default strength applied to conditioning videos when per-item strength is not provided. Range: 0.0 – 1.0. |
+| `conditioning_attention_strength` | `number` | `1.0` | Attention strength for IC-LoRA conditioning. Range: 0.0 – 1.0. |
+| `seed` | `integer` | &mdash; | Random seed. Set for reproducible generation. |

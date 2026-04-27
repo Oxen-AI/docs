@@ -1,251 +1,254 @@
 {
-  "$schema": "https://mintlify.com/schema.json",
-  "name": "Oxen.ai",
-  "logo": {
-      "dark": "/logo/dark.svg",
-      "light": "/logo/light.svg"
-  },
-  "favicon": "/favicon.png",
-  "colors": {
-      "primary": "#0E87CB",
-      "light": "#0E87CB",
-      "dark": "#161616",
-      "background": {
-          "dark": "#0A0A0A"
-      },
-      "anchors": {
-          "from": "#0E87CB",
-          "to": "#0E87CB"
-      }
-  },
-  "topbarLinks": [
-      {
-          "name": "Support",
-          "url": "https://discord.com/invite/s3tBEn7Ptg"
-      }
-  ],
-  "topbarCtaButton": {
-      "name": "Sign Up",
-      "url": "https://oxen.ai/register"
-  },
-  "tabs": [
-      {
-          "name": "Python API",
-          "url": "python-api"
-      },
-      {
-          "name": "Repository API",
-          "url": "http-api",
-          "openapi": "https://hub.oxen.ai/api/_spec/oxen_server_openapi.json"
-      },
-      {
-          "name": "Fine-Tuning API",
-          "url": "fine-tuning-api",
-          "openapi": "https://hub.oxen.ai/api/_spec/oxen_hub_api.json"
-      },
-      {
-          "name": "Inference API",
-          "url": "inference-api"
-      }
-  ],
-  "anchors": [
-      {
-          "name": "Documentation",
-          "icon": "book-open-cover",
-          "url": "https://docs.oxen.ai"
-      },
-      {
-          "name": "Blog",
-          "icon": "newspaper",
-          "url": "https://blog.oxen.ai"
-      },
-      {
-          "name": "GitHub",
-          "icon": "github",
-          "url": "https://github.com/Oxen-AI/Oxen"
-      }
-  ],
-  "navigation": [
-      {
-          "group": "Get Started",
-          "pages": [
-              "getting-started/intro",
-              {
-                  "group": "⚡️ Models",
-                  "pages": [
-                      "getting-started/inference",
-                      "examples/inference/chat_completions",
-                      "examples/inference/vision_language_models",
-                      "examples/inference/image_generation",
-                      "examples/inference/image_editing",
-                      "examples/inference/video_generation"
-                  ]
-              },
-              {
-                  "group": "🛠️ Fine-Tuning",
-                  "pages": [
-                      "getting-started/fine-tuning",
-                      "examples/fine-tuning/text_generation",
-                      "examples/fine-tuning/chat_completions",
-                      "examples/fine-tuning/image_understanding",
-                      "examples/fine-tuning/image_generation",
-                      "examples/fine-tuning/image_editing",
-                      "examples/fine-tuning/video_generation"
-                  ]
-              },
-              "getting-started/datasets",
-              "getting-started/batch_inference",
-              "getting-started/versioning"
-          ]
-      },
-      {
-          "group": "Developer Tools",
-          "pages": [
-              "getting-started/install",
-              {
-                "group": "💻 Command Line Interface",
-                "pages": [
-                    "getting-started/command-line/config",
-                    "getting-started/command-line/import_data",
-                    "getting-started/command-line/local_development",
-                    "getting-started/command-line/push_changes",
-                    "getting-started/command-line/dev_tools"
-                ]
-              },
-              "getting-started/python",
-              "getting-started/oxen-server",
-              "features/performance"
-          ]
-      },
-      {
-          "group": "Other Concepts",
-          "pages": [
-              "concepts/diffs",
-              "concepts/file_metadata",
-              "concepts/workspaces"
-          ]
-      },
-      {
-          "group": "Release Notes",
-          "pages": [
-              "concepts/feature-updates"
-          ]
-      },
-      {
-          "group": "Python API",
-          "pages": [
-              "python-api/index",
-              "python-api/clone",
-              "python-api/data_frame",
-              "python-api/datasets",
-              "python-api/df_utils",
-              "python-api/diff/diff",
-              "python-api/diff/line_diff",
-              "python-api/diff/tabular_diff",
-              "python-api/diff/text_diff",
-              "python-api/init",
-              "python-api/oxen_fs",
-              "python-api/remote_repo",
-              "python-api/repo",
-              "python-api/repositories",
-              "python-api/workspace"
-          ]
-      },
-      {
-          "group": "Repository API",
-          "pages": [
-                { 
+    "$schema": "https://mintlify.com/schema.json",
+    "name": "Oxen.ai",
+    "logo": {
+        "dark": "/logo/dark.svg",
+        "light": "/logo/light.svg"
+    },
+    "favicon": "/favicon.png",
+    "colors": {
+        "primary": "#0E87CB",
+        "light": "#0E87CB",
+        "dark": "#161616",
+        "background": {
+            "dark": "#0A0A0A"
+        },
+        "anchors": {
+            "from": "#0E87CB",
+            "to": "#0E87CB"
+        }
+    },
+    "topbarLinks": [
+        {
+            "name": "Support",
+            "url": "https://discord.com/invite/s3tBEn7Ptg"
+        }
+    ],
+    "topbarCtaButton": {
+        "name": "Sign Up",
+        "url": "https://oxen.ai/register"
+    },
+    "tabs": [
+        {
+            "name": "Python API",
+            "url": "python-api"
+        },
+        {
+            "name": "Repository API",
+            "url": "http-api",
+            "openapi": "https://dev.hub.oxen.ai/api/_spec/oxen_server_openapi.json"
+        },
+        {
+            "name": "Fine-Tuning API",
+            "url": "fine-tuning-api",
+            "openapi": "https://dev.hub.oxen.ai/api/_spec/oxen_hub_api.json"
+        },
+        {
+            "name": "Inference API",
+            "url": "inference-api"
+        }
+    ],
+    "anchors": [
+        {
+            "name": "Documentation",
+            "icon": "book-open-cover",
+            "url": "https://docs.oxen.ai"
+        },
+        {
+            "name": "Blog",
+            "icon": "newspaper",
+            "url": "https://blog.oxen.ai"
+        },
+        {
+            "name": "GitHub",
+            "icon": "github",
+            "url": "https://github.com/Oxen-AI/Oxen"
+        }
+    ],
+    "navigation": [
+        {
+            "group": "Get Started",
+            "pages": [
+                "getting-started/intro",
+                {
+                    "group": "\u26a1\ufe0f Models",
+                    "pages": [
+                        "getting-started/inference",
+                        "examples/inference/chat_completions",
+                        "examples/inference/vision_language_models",
+                        "examples/inference/image_generation",
+                        "examples/inference/image_editing",
+                        "examples/inference/video_generation"
+                    ]
+                },
+                {
+                    "group": "\ud83d\udee0\ufe0f Fine-Tuning",
+                    "pages": [
+                        "getting-started/fine-tuning",
+                        "examples/fine-tuning/text_generation",
+                        "examples/fine-tuning/chat_completions",
+                        "examples/fine-tuning/image_understanding",
+                        "examples/fine-tuning/image_generation",
+                        "examples/fine-tuning/image_editing",
+                        "examples/fine-tuning/video_generation"
+                    ]
+                },
+                "getting-started/datasets",
+                "getting-started/batch_inference",
+                "getting-started/versioning"
+            ]
+        },
+        {
+            "group": "Developer Tools",
+            "pages": [
+                "getting-started/install",
+                {
+                    "group": "\ud83d\udcbb Command Line Interface",
+                    "pages": [
+                        "getting-started/command-line/config",
+                        "getting-started/command-line/import_data",
+                        "getting-started/command-line/local_development",
+                        "getting-started/command-line/push_changes",
+                        "getting-started/command-line/dev_tools"
+                    ]
+                },
+                "getting-started/python",
+                "getting-started/oxen-server",
+                "features/performance"
+            ]
+        },
+        {
+            "group": "Other Concepts",
+            "pages": [
+                "concepts/diffs",
+                "concepts/file_metadata",
+                "concepts/workspaces"
+            ]
+        },
+        {
+            "group": "Release Notes",
+            "pages": [
+                "concepts/feature-updates"
+            ]
+        },
+        {
+            "group": "Python API",
+            "pages": [
+                "python-api/index",
+                "python-api/clone",
+                "python-api/data_frame",
+                "python-api/datasets",
+                "python-api/df_utils",
+                "python-api/diff/diff",
+                "python-api/diff/line_diff",
+                "python-api/diff/tabular_diff",
+                "python-api/diff/text_diff",
+                "python-api/init",
+                "python-api/oxen_fs",
+                "python-api/remote_repo",
+                "python-api/repo",
+                "python-api/repositories",
+                "python-api/workspace"
+            ]
+        },
+        {
+            "group": "Repository API",
+            "pages": [
+                {
                     "group": "Getting Started",
                     "pages": [
                         "http-api/index",
                         "http-api/example"
                     ]
                 }
-          ]
-      },
-      {
-          "group": "Inference API",
-          "pages": [
-              "inference-api/overview",
-              {
-                  "group": "Quick Starts",
-                  "pages": [
-                      "inference-api/quickstart/chat",
-                      "inference-api/quickstart/image-generation",
-                      "inference-api/quickstart/video-generation"
-                  ]
-              },
-              {
-                  "group": "API Reference",
-                  "pages": [
-                      "inference-api/reference/chat_completions",
-                      "inference-api/reference/image_generation",
-                      "inference-api/reference/image_editing",
-                      "inference-api/reference/video_generation",
-                      "inference-api/reference/async_queue",
-                      "inference-api/reference/models/overview"
-                  ]
-              },
-              {
-                  "group": "Model References",
-                  "pages": [
-                      "inference-api/reference/models/kling_o3_pro_reference_to_video",
-                      "inference-api/reference/models/kling_o3_pro_video_to_video_edit",
-                      "inference-api/reference/models/seedance_2_reference_to_video",
-                      "inference-api/reference/models/topaz_starlight_precise_2_5"
-                  ]
-              }
-          ]
-      },
-      {
-          "group": "Fine-Tuning API",
-          "pages": [
-              "fine-tuning-api/overview",
-              {
-                  "group": "Quick Starts",
-                  "pages": [
-                      "fine-tuning-api/quickstart/text",
-                      "fine-tuning-api/quickstart/image-generation",
-                      "fine-tuning-api/quickstart/image-editing",
-                      "fine-tuning-api/quickstart/video"
-                  ]
-              },
-              {
-                  "group": "Tutorials",
-                  "pages": [
-                      "fine-tuning-api/tutorials/01_fine_tuning",
-                      "fine-tuning-api/tutorials/03_fine_tuning_image_generation",
-                      "fine-tuning-api/tutorials/02_fine_tuning_image"
-                  ]
-              },
-              {
-                  "group": "API Reference",
-                  "pages": [
-                      "fine-tuning-api/reference/text_generation",
-                      "fine-tuning-api/reference/text_chat_messages",
-                      "fine-tuning-api/reference/image_generation",
-                      "fine-tuning-api/reference/image_editing",
-                      "fine-tuning-api/reference/multi_image_editing",
-                      "fine-tuning-api/reference/image_to_text",
-                      "fine-tuning-api/reference/image_to_video",
-                      "fine-tuning-api/reference/text_to_video"
-                  ]
-              },
-              "fine-tuning-api/parameters"
-          ]
-      }
-  ],
-  "footerSocials": {
-      "twitter": "https://twitter.com/oxen_ai",
-      "github": "https://github.com/Oxen-AI/Oxen",
-      "linkedin": "https://www.linkedin.com/company/oxenai/"
-  },
-  "analytics": {
-      "posthog": {
-          "apiKey": "phc_Do6VnS78puWwBQuPcJ7TkjixBZwsV4Xxc3ABHVNvjmE"
-      },
-      "ga4": {
-          "measurementId": "G-H6D2C08EKP"
-      }
-  }
+            ]
+        },
+        {
+            "group": "Inference API",
+            "pages": [
+                "inference-api/overview",
+                {
+                    "group": "Quick Starts",
+                    "pages": [
+                        "inference-api/quickstart/chat",
+                        "inference-api/quickstart/image-generation",
+                        "inference-api/quickstart/video-generation",
+                        "inference-api/quickstart/async-queue"
+                    ]
+                },
+                {
+                    "group": "API Reference",
+                    "pages": [
+                        "inference-api/reference/chat_completions",
+                        "inference-api/reference/image_generation",
+                        "inference-api/reference/image_editing",
+                        "inference-api/reference/video_generation",
+                        "inference-api/reference/async_queue",
+                        "inference-api/reference/models/overview",
+                        "inference-api/reference/model-references"
+                    ]
+                },
+                {
+                    "group": "Model Walkthroughs",
+                    "pages": [
+                        "inference-api/reference/models/walkthroughs/overview",
+                        "inference-api/reference/models/walkthroughs/kling_o3_pro_reference_to_video",
+                        "inference-api/reference/models/walkthroughs/kling_o3_pro_video_to_video_edit",
+                        "inference-api/reference/models/walkthroughs/seedance_2_reference_to_video",
+                        "inference-api/reference/models/walkthroughs/topaz_starlight_precise_2_5"
+                    ]
+                }
+            ]
+        },
+        {
+            "group": "Fine-Tuning API",
+            "pages": [
+                "fine-tuning-api/overview",
+                {
+                    "group": "Quick Starts",
+                    "pages": [
+                        "fine-tuning-api/quickstart/text",
+                        "fine-tuning-api/quickstart/image-generation",
+                        "fine-tuning-api/quickstart/image-editing",
+                        "fine-tuning-api/quickstart/video"
+                    ]
+                },
+                {
+                    "group": "Tutorials",
+                    "pages": [
+                        "fine-tuning-api/tutorials/01_fine_tuning",
+                        "fine-tuning-api/tutorials/03_fine_tuning_image_generation",
+                        "fine-tuning-api/tutorials/02_fine_tuning_image"
+                    ]
+                },
+                {
+                    "group": "API Reference",
+                    "pages": [
+                        "fine-tuning-api/reference/text_generation",
+                        "fine-tuning-api/reference/text_chat_messages",
+                        "fine-tuning-api/reference/image_generation",
+                        "fine-tuning-api/reference/image_editing",
+                        "fine-tuning-api/reference/multi_image_editing",
+                        "fine-tuning-api/reference/image_to_text",
+                        "fine-tuning-api/reference/image_to_video",
+                        "fine-tuning-api/reference/text_to_video"
+                    ]
+                },
+                "fine-tuning-api/parameters"
+            ]
+        }
+    ],
+    "footerSocials": {
+        "twitter": "https://twitter.com/oxen_ai",
+        "github": "https://github.com/Oxen-AI/Oxen",
+        "linkedin": "https://www.linkedin.com/company/oxenai/"
+    },
+    "analytics": {
+        "posthog": {
+            "apiKey": "phc_Do6VnS78puWwBQuPcJ7TkjixBZwsV4Xxc3ABHVNvjmE"
+        },
+        "ga4": {
+            "measurementId": "G-H6D2C08EKP"
+        }
+    }
 }

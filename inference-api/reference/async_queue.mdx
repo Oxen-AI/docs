@@ -505,7 +505,7 @@ API_KEY = "YOUR_API_KEY"
 HEADERS = {"Authorization": f"Bearer {API_KEY}"}
 
 # After enqueuing, grab a generation ID
-generation_id = "bb8f5eb7-361e-4e13-ab73-67457bc8057e"
+generation_id = "YOUR_GENERATION_ID"
 print(f"Polling generation {generation_id}")
 
 start = time.time()
@@ -528,11 +528,11 @@ while True:
 ```bash cURL
 # Check a specific generation
 curl -H "Authorization: Bearer $OXEN_API_KEY" \
-  "https://hub.oxen.ai/api/ai/queue/bb8f5eb7-361e-4e13-ab73-67457bc8057e"
+  "https://hub.oxen.ai/api/ai/queue/$GENERATION_ID"
 
 # Cancel a generation
 curl -X DELETE -H "Authorization: Bearer $OXEN_API_KEY" \
-  "https://hub.oxen.ai/api/ai/queue/bb8f5eb7-361e-4e13-ab73-67457bc8057e"
+  "https://hub.oxen.ai/api/ai/queue/$GENERATION_ID"
 ```
 
 </CodeGroup>

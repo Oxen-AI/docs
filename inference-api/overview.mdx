@@ -13,17 +13,30 @@ The Inference API gives you access to hundreds of AI models through a single, co
 - **Image Generation**: Text-to-image, image-to-image editing
 - **Video Generation**: Text-to-video, image-to-video, reference-to-video, video-to-video editing
 
+## Where to find things
+
+| Looking for... | Go to |
+|---|---|
+| General API info | [Keep reading below](#authentication) |
+| Getting started fast | [Quick Starts](#quick-starts) |
+| Endpoint specs and parameters | [API Reference](#api-reference) |
+| Running inference with a specific model | [Model API References](/inference-api/reference/model-references) |
+| Model discovery | [Models page](https://www.oxen.ai/ai/models) |
+
 ## Quick Starts
 
-<CardGroup cols={3}>
+<CardGroup cols={4}>
   <Card title="Chat" icon="message" href="/inference-api/quickstart/chat">
     Text generation in minutes
   </Card>
-  <Card title="Image Generation" icon="image" href="/inference-api/quickstart/image-generation">
+  <Card title="Images" icon="image" href="/inference-api/quickstart/image-generation">
     Text-to-image in minutes
   </Card>
-  <Card title="Video Generation" icon="video" href="/inference-api/quickstart/video-generation">
+  <Card title="Videos" icon="video" href="/inference-api/quickstart/video-generation">
     Text-to-video in minutes
+  </Card>
+  <Card title="Async Queue" icon="layer-group" href="/inference-api/quickstart/async-queue">
+    Generate in background
   </Card>
 </CardGroup>
 
@@ -50,20 +63,28 @@ The Inference API gives you access to hundreds of AI models through a single, co
   </Card>
 </CardGroup>
 
-## Model References
+## Individual Model API References
 
-<CardGroup cols={2}>
-  <Card title="Kling O3 Pro: Reference to Video" icon="film" href="/inference-api/reference/models/kling_o3_pro_reference_to_video">
-    Multi-shot video with reference images, elements, and audio
+<CardGroup cols={1}>
+  <Card title="Browse per-model API references" icon="book" href="/inference-api/reference/model-references">
+    Sample requests, parameter tables, and workbench links for every model.
   </Card>
-  <Card title="Kling O3 Pro: Video to Video Edit" icon="pen-to-square" href="/inference-api/reference/models/kling_o3_pro_video_to_video_edit">
-    Edit existing videos with text instructions and reference images
+</CardGroup>
+
+## Individual Model Walkthroughs
+
+<CardGroup cols={4}>
+  <Card title="Kling O3 Pro: Reference to Video" icon="film" href="/inference-api/reference/models/walkthroughs/kling_o3_pro_reference_to_video">
+    Multi-shot with references
   </Card>
-  <Card title="Seedance 2.0: Reference to Video" icon="seedling" href="/inference-api/reference/models/seedance_2_reference_to_video">
-    Generate video from text, images, video, and audio references
+  <Card title="Kling O3 Pro: Video to Video Edit" icon="pen-to-square" href="/inference-api/reference/models/walkthroughs/kling_o3_pro_video_to_video_edit">
+    Text-guided video edits
   </Card>
-  <Card title="Topaz Starlight Precise 2.5" icon="arrow-up-right-dots" href="/inference-api/reference/models/topaz_starlight_precise_2_5">
-    Video upscaling and restoration up to 4K
+  <Card title="Seedance 2.0: Reference to Video" icon="seedling" href="/inference-api/reference/models/walkthroughs/seedance_2_reference_to_video">
+    Mixed-reference video
+  </Card>
+  <Card title="Topaz Starlight Precise 2.5" icon="arrow-up-right-dots" href="/inference-api/reference/models/walkthroughs/topaz_starlight_precise_2_5">
+    Upscale and restore to 4K
   </Card>
 </CardGroup>
 

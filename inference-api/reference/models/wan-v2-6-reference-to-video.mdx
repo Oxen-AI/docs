@@ -1,0 +1,425 @@
+---
+title: "WAN 2.6 - Video to Video"
+description: "Generates videos from reference videos, maintaining character consistency, with multi-shot narratives, up to 15s duration, and native audio sync."
+---
+
+<CardGroup cols={1}>
+  <Card title="Try WAN 2.6 - Video to Video in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=wan-v2-6-reference-to-video">
+    Run this model interactively, tune parameters, and compare outputs.
+  </Card>
+</CardGroup>
+
+**Model ID:** `wan-v2-6-reference-to-video`
+
+WAN 2.6 - Video to Video is a **diffusion model** designed for reference-based video generation with character and identity consistency. It excels in generating cinematic videos from reference footage while maintaining stable character appearance, voice characteristics, and motion style across multiple shots.
+
+Some noteworthy use cases of WAN 2.6 - Video to Video include character-driven storytelling, brand-consistent video creation, and multi-character dialogue scenes with synchronized audio.
+
+| Metric             | Value              |
+|--------------------|--------------------|
+| Parameter Count    | Unknown            |
+| Mixture of Experts | Unknown            |
+| Context Length     | Unknown            |
+| Multilingual       | Unknown            |
+| Quantized*         | Unknown            |
+
+*_Quantization is specific to the inference provider and the model may be offered with different quantization levels by other providers._
+
+---
+
+**Notes on the description:**
+
+The search results provided information about WAN 2.6's general capabilities (text-to-video, image-to-video, and reference-to-video modes), output specifications (up to 1080p, 15 seconds, native audio with lip-sync), and technical features (multimodal architecture, temporal stability). However, specific technical details such as parameter count, mixture of experts status, context length, multilingual support, and quantization information for the Fal-hosted `wan/v2.6/reference-to-video` endpoint were not found in the search results. The description focuses on the reference-to-video capability as specified in your model identifier, which the sources confirm is a core feature with strong identity retention and character consistency.
+
+## Example request
+
+<Tip>
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=wan-v2-6-reference-to-video) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+</Tip>
+
+<Tabs>
+  <Tab title="Sync">
+
+    This blocks until the video is ready (typically 5-15 minutes). Prefer **Async** or **Async with SSE** for anything beyond quick experimentation.
+
+    See the [video generation reference](/inference-api/reference/video_generation) for more details.
+
+    <Tabs>
+      <Tab title="Minimal">
+
+        <CodeGroup>
+
+        ```bash cURL
+        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "wan-v2-6-reference-to-video",
+          "prompt": "An ox slowly walking down the road. Cinematic."
+        }'
+        ```
+
+        ```python Python
+        import os
+        import requests
+
+        response = requests.post(
+            "https://hub.oxen.ai/api/ai/videos/generate",
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+            },
+            json={
+                "model": "wan-v2-6-reference-to-video",
+                "prompt": "An ox slowly walking down the road. Cinematic."
+            },
+        )
+        response.raise_for_status()
+        print(response.json())
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+      <Tab title="Basic parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "wan-v2-6-reference-to-video",
+          "prompt": "An ox slowly walking down the road. Cinematic.",
+          "input_videos": [
+            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+          ]
+        }'
+        ```
+
+        ```python Python
+        import os
+        import requests
+
+        response = requests.post(
+            "https://hub.oxen.ai/api/ai/videos/generate",
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+            },
+            json={
+                "model": "wan-v2-6-reference-to-video",
+                "prompt": "An ox slowly walking down the road. Cinematic.",
+                "input_videos": [
+                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+                ]
+            },
+        )
+        response.raise_for_status()
+        print(response.json())
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+    </Tabs>
+
+  </Tab>
+  <Tab title="Async">
+
+    See the [async queue reference](/inference-api/reference/async_queue) for more details.
+
+    <Tabs>
+      <Tab title="Minimal">
+
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "wan-v2-6-reference-to-video",
+          "prompt": "An ox slowly walking down the road. Cinematic."
+        }' | jq -r '.generations[0].generation_id')
+
+        # Poll the single generation until it 404s (terminal state).
+        while curl -s -o /dev/null -w "%{http_code}" \
+            -H "Authorization: Bearer $OXEN_API_KEY" \
+            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | grep -q "^200$"; do
+          sleep 5
+        done
+        echo "Done. See the 'Async with SSE' tab to receive the result URL."
+        ```
+
+        ```python Python
+        import os
+        import time
+        import requests
+
+        HEADERS = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        }
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers=HEADERS,
+            json={
+                "model": "wan-v2-6-reference-to-video",
+                "prompt": "An ox slowly walking down the road. Cinematic."
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        while True:
+            resp = requests.get(
+                f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
+                headers=HEADERS,
+            )
+            if resp.status_code == 404:
+                break
+            time.sleep(5)
+        print("Done. See the 'Async with SSE' tab to receive the result URL.")
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+      <Tab title="Basic parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "wan-v2-6-reference-to-video",
+          "prompt": "An ox slowly walking down the road. Cinematic.",
+          "input_videos": [
+            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+          ]
+        }' | jq -r '.generations[0].generation_id')
+
+        # Poll the single generation until it 404s (terminal state).
+        while curl -s -o /dev/null -w "%{http_code}" \
+            -H "Authorization: Bearer $OXEN_API_KEY" \
+            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | grep -q "^200$"; do
+          sleep 5
+        done
+        echo "Done. See the 'Async with SSE' tab to receive the result URL."
+        ```
+
+        ```python Python
+        import os
+        import time
+        import requests
+
+        HEADERS = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        }
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers=HEADERS,
+            json={
+                "model": "wan-v2-6-reference-to-video",
+                "prompt": "An ox slowly walking down the road. Cinematic.",
+                "input_videos": [
+                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+                ]
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        while True:
+            resp = requests.get(
+                f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
+                headers=HEADERS,
+            )
+            if resp.status_code == 404:
+                break
+            time.sleep(5)
+        print("Done. See the 'Async with SSE' tab to receive the result URL.")
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+    </Tabs>
+
+  </Tab>
+  <Tab title="Async with SSE">
+
+    See the [async queue reference](/inference-api/reference/async_queue) for more details.
+
+    <Tabs>
+      <Tab title="Minimal">
+
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "wan-v2-6-reference-to-video",
+          "prompt": "An ox slowly walking down the road. Cinematic."
+        }' | jq -r '.generations[0].generation_id')
+
+        # Stream the SSE channel, grab the data line that follows a
+        # media_generation_completed event for our id, and pretty-print it.
+        curl -sN -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/events \
+          | awk -v id="$GEN_ID" '
+            /^event: media_generation_completed$/ { expect=1; next }
+            /^data: / && expect {
+              payload = substr($0, 7)
+              if (index(payload, "\"generation_id\":\"" id "\"")) { print payload; exit }
+              expect = 0
+            }
+          ' | jq .
+        ```
+
+        ```python Python
+        import json
+        import os
+        import requests
+
+        API_KEY = os.environ["OXEN_API_KEY"]
+        AUTH = {"Authorization": f"Bearer {API_KEY}"}
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers={**AUTH, "Content-Type": "application/json"},
+            json={
+                "model": "wan-v2-6-reference-to-video",
+                "prompt": "An ox slowly walking down the road. Cinematic."
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        with requests.get(
+            "https://hub.oxen.ai/api/events",
+            headers=AUTH,
+            stream=True,
+        ) as stream:
+            event_name = None
+            for line in stream.iter_lines(decode_unicode=True):
+                if line.startswith("event: "):
+                    event_name = line.removeprefix("event: ")
+                elif line.startswith("data: ") and event_name == "media_generation_completed":
+                    payload = json.loads(line.removeprefix("data: "))
+                    if payload.get("generation_id") == generation_id:
+                        print(payload)
+                        break
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+      <Tab title="Basic parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "wan-v2-6-reference-to-video",
+          "prompt": "An ox slowly walking down the road. Cinematic.",
+          "input_videos": [
+            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+          ]
+        }' | jq -r '.generations[0].generation_id')
+
+        # Stream the SSE channel, grab the data line that follows a
+        # media_generation_completed event for our id, and pretty-print it.
+        curl -sN -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/events \
+          | awk -v id="$GEN_ID" '
+            /^event: media_generation_completed$/ { expect=1; next }
+            /^data: / && expect {
+              payload = substr($0, 7)
+              if (index(payload, "\"generation_id\":\"" id "\"")) { print payload; exit }
+              expect = 0
+            }
+          ' | jq .
+        ```
+
+        ```python Python
+        import json
+        import os
+        import requests
+
+        API_KEY = os.environ["OXEN_API_KEY"]
+        AUTH = {"Authorization": f"Bearer {API_KEY}"}
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers={**AUTH, "Content-Type": "application/json"},
+            json={
+                "model": "wan-v2-6-reference-to-video",
+                "prompt": "An ox slowly walking down the road. Cinematic.",
+                "input_videos": [
+                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+                ]
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        with requests.get(
+            "https://hub.oxen.ai/api/events",
+            headers=AUTH,
+            stream=True,
+        ) as stream:
+            event_name = None
+            for line in stream.iter_lines(decode_unicode=True):
+                if line.startswith("event: "):
+                    event_name = line.removeprefix("event: ")
+                elif line.startswith("data: ") and event_name == "media_generation_completed":
+                    payload = json.loads(line.removeprefix("data: "))
+                    if payload.get("generation_id") == generation_id:
+                        print(payload)
+                        break
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+    </Tabs>
+
+  </Tab>
+</Tabs>
+
+## Fetch model details
+
+The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
+
+```bash
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/wan-v2-6-reference-to-video
+```
+
+## Request parameters
+
+### Required parameters
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `prompt` | `string` | `"An ox slowly walking down the road. Cinematic."` | Text description of what you want to generate, or the instruction on how to edit the given image. |
+
+### Optional parameters
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `input_videos` | `array<string>` | `["https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"]` | Videos to use as reference. |

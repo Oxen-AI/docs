@@ -1,0 +1,447 @@
+---
+title: "Topaz Rhea - Fine Detail Video Upscaler"
+description: "Next-generation general-purpose Topaz video upscaler with tunable detail, noise, blur, and grain controls."
+---
+
+<CardGroup cols={1}>
+  <Card title="Try Topaz Rhea - Fine Detail Video Upscaler in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=topazlabs-rhea-video">
+    Run this model interactively, tune parameters, and compare outputs.
+  </Card>
+</CardGroup>
+
+**Model ID:** `topazlabs-rhea-video`
+
+Topaz Rhea is a next-generation general-purpose upscaling and enhancement model from the Proteus family, tuned for modern camera footage and mixed sources.
+
+Use Rhea as an updated alternative to Proteus when you want stronger detail reconstruction with the same fine-grained enhancement controls.
+
+## Example request
+
+<Tip>
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=topazlabs-rhea-video) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+</Tip>
+
+<Tabs>
+  <Tab title="Sync">
+
+    This blocks until the video is ready (typically 5-15 minutes). Prefer **Async** or **Async with SSE** for anything beyond quick experimentation.
+
+    See the [video generation reference](/inference-api/reference/video_generation) for more details.
+
+    <Tabs>
+      <Tab title="Minimal">
+
+        <CodeGroup>
+
+        ```bash cURL
+        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "topazlabs-rhea-video",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+        }'
+        ```
+
+        ```python Python
+        import os
+        import requests
+
+        response = requests.post(
+            "https://hub.oxen.ai/api/ai/videos/generate",
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+            },
+            json={
+                "model": "topazlabs-rhea-video",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+            },
+        )
+        response.raise_for_status()
+        print(response.json())
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+      <Tab title="All parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "topazlabs-rhea-video",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "resolution": "1080p",
+          "blur": 0,
+          "compression": 0,
+          "details": 0,
+          "grain": 0.05,
+          "halo": 0,
+          "noise": 0,
+          "target_fps": 24
+        }'
+        ```
+
+        ```python Python
+        import os
+        import requests
+
+        response = requests.post(
+            "https://hub.oxen.ai/api/ai/videos/generate",
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+            },
+            json={
+                "model": "topazlabs-rhea-video",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "resolution": "1080p",
+                "blur": 0,
+                "compression": 0,
+                "details": 0,
+                "grain": 0.05,
+                "halo": 0,
+                "noise": 0,
+                "target_fps": 24
+            },
+        )
+        response.raise_for_status()
+        print(response.json())
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+    </Tabs>
+
+  </Tab>
+  <Tab title="Async">
+
+    See the [async queue reference](/inference-api/reference/async_queue) for more details.
+
+    <Tabs>
+      <Tab title="Minimal">
+
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "topazlabs-rhea-video",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+        }' | jq -r '.generations[0].generation_id')
+
+        # Poll the single generation until it 404s (terminal state).
+        while curl -s -o /dev/null -w "%{http_code}" \
+            -H "Authorization: Bearer $OXEN_API_KEY" \
+            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | grep -q "^200$"; do
+          sleep 5
+        done
+        echo "Done. See the 'Async with SSE' tab to receive the result URL."
+        ```
+
+        ```python Python
+        import os
+        import time
+        import requests
+
+        HEADERS = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        }
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers=HEADERS,
+            json={
+                "model": "topazlabs-rhea-video",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        while True:
+            resp = requests.get(
+                f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
+                headers=HEADERS,
+            )
+            if resp.status_code == 404:
+                break
+            time.sleep(5)
+        print("Done. See the 'Async with SSE' tab to receive the result URL.")
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+      <Tab title="All parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "topazlabs-rhea-video",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "resolution": "1080p",
+          "blur": 0,
+          "compression": 0,
+          "details": 0,
+          "grain": 0.05,
+          "halo": 0,
+          "noise": 0,
+          "target_fps": 24
+        }' | jq -r '.generations[0].generation_id')
+
+        # Poll the single generation until it 404s (terminal state).
+        while curl -s -o /dev/null -w "%{http_code}" \
+            -H "Authorization: Bearer $OXEN_API_KEY" \
+            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | grep -q "^200$"; do
+          sleep 5
+        done
+        echo "Done. See the 'Async with SSE' tab to receive the result URL."
+        ```
+
+        ```python Python
+        import os
+        import time
+        import requests
+
+        HEADERS = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        }
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers=HEADERS,
+            json={
+                "model": "topazlabs-rhea-video",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "resolution": "1080p",
+                "blur": 0,
+                "compression": 0,
+                "details": 0,
+                "grain": 0.05,
+                "halo": 0,
+                "noise": 0,
+                "target_fps": 24
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        while True:
+            resp = requests.get(
+                f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
+                headers=HEADERS,
+            )
+            if resp.status_code == 404:
+                break
+            time.sleep(5)
+        print("Done. See the 'Async with SSE' tab to receive the result URL.")
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+    </Tabs>
+
+  </Tab>
+  <Tab title="Async with SSE">
+
+    See the [async queue reference](/inference-api/reference/async_queue) for more details.
+
+    <Tabs>
+      <Tab title="Minimal">
+
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "topazlabs-rhea-video",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+        }' | jq -r '.generations[0].generation_id')
+
+        # Stream the SSE channel, grab the data line that follows a
+        # media_generation_completed event for our id, and pretty-print it.
+        curl -sN -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/events \
+          | awk -v id="$GEN_ID" '
+            /^event: media_generation_completed$/ { expect=1; next }
+            /^data: / && expect {
+              payload = substr($0, 7)
+              if (index(payload, "\"generation_id\":\"" id "\"")) { print payload; exit }
+              expect = 0
+            }
+          ' | jq .
+        ```
+
+        ```python Python
+        import json
+        import os
+        import requests
+
+        API_KEY = os.environ["OXEN_API_KEY"]
+        AUTH = {"Authorization": f"Bearer {API_KEY}"}
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers={**AUTH, "Content-Type": "application/json"},
+            json={
+                "model": "topazlabs-rhea-video",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        with requests.get(
+            "https://hub.oxen.ai/api/events",
+            headers=AUTH,
+            stream=True,
+        ) as stream:
+            event_name = None
+            for line in stream.iter_lines(decode_unicode=True):
+                if line.startswith("event: "):
+                    event_name = line.removeprefix("event: ")
+                elif line.startswith("data: ") and event_name == "media_generation_completed":
+                    payload = json.loads(line.removeprefix("data: "))
+                    if payload.get("generation_id") == generation_id:
+                        print(payload)
+                        break
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+      <Tab title="All parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "topazlabs-rhea-video",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "resolution": "1080p",
+          "blur": 0,
+          "compression": 0,
+          "details": 0,
+          "grain": 0.05,
+          "halo": 0,
+          "noise": 0,
+          "target_fps": 24
+        }' | jq -r '.generations[0].generation_id')
+
+        # Stream the SSE channel, grab the data line that follows a
+        # media_generation_completed event for our id, and pretty-print it.
+        curl -sN -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/events \
+          | awk -v id="$GEN_ID" '
+            /^event: media_generation_completed$/ { expect=1; next }
+            /^data: / && expect {
+              payload = substr($0, 7)
+              if (index(payload, "\"generation_id\":\"" id "\"")) { print payload; exit }
+              expect = 0
+            }
+          ' | jq .
+        ```
+
+        ```python Python
+        import json
+        import os
+        import requests
+
+        API_KEY = os.environ["OXEN_API_KEY"]
+        AUTH = {"Authorization": f"Bearer {API_KEY}"}
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers={**AUTH, "Content-Type": "application/json"},
+            json={
+                "model": "topazlabs-rhea-video",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "resolution": "1080p",
+                "blur": 0,
+                "compression": 0,
+                "details": 0,
+                "grain": 0.05,
+                "halo": 0,
+                "noise": 0,
+                "target_fps": 24
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        with requests.get(
+            "https://hub.oxen.ai/api/events",
+            headers=AUTH,
+            stream=True,
+        ) as stream:
+            event_name = None
+            for line in stream.iter_lines(decode_unicode=True):
+                if line.startswith("event: "):
+                    event_name = line.removeprefix("event: ")
+                elif line.startswith("data: ") and event_name == "media_generation_completed":
+                    payload = json.loads(line.removeprefix("data: "))
+                    if payload.get("generation_id") == generation_id:
+                        print(payload)
+                        break
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+    </Tabs>
+
+  </Tab>
+</Tabs>
+
+## Fetch model details
+
+The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
+
+```bash
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/topazlabs-rhea-video
+```
+
+## Request parameters
+
+### Required parameters
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `input_video` | `string` | &mdash; | Video file to upscale (URL or file path). Format: uri. |
+
+### Optional parameters
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `resolution` | `string` | `"1080p"` | Target output resolution. One of: 720p, 1080p, 2k, 4k. |
+| `blur` | `number` | `0` | Anti-blur / sharpening. Higher values produce a sharper result. Range: -1 – 1. |
+| `compression` | `number` | `0` | Reduces compression artifacts. Higher values remove more artifacts. Range: -1 – 1. |
+| `details` | `number` | `0` | Detail enhancement. Higher values boost fine detail. Range: -1 – 1. |
+| `grain` | `number` | `0.05` | Film grain intensity. Range: 0 – 0.1. |
+| `grain_type` | `string` | &mdash; | Film grain style. One of: silver_rich, gaussian, grey. |
+| `halo` | `number` | `0` | Halo and ringing reduction. Higher values suppress halos more strongly. Range: -1 – 1. |
+| `noise` | `number` | `0` | Noise handling. Negative reduces noise, positive adds grain-like noise. Range: -1 – 1. |
+| `target_fps` | `integer` | `24` | Target frame rate (fps), up to 60. Range: 1 – 60. |
