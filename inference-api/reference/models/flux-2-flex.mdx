@@ -52,10 +52,7 @@ Some other noteworthy features of FLUX.2 [flex] include:
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "flux-2-flex",
-          "prompt": "Draw a parody of the Mona Lisa by Leonardo da Vinci with Bloxy, the cartoon ox in the reference image, as Lisa del Giocondo. Keep Bloxy in the original style of the reference image with the cartoon ox, but adapt its pose to the pose depicted in the Mona Lisa. Don'\''t include its arms or legs in the painting.",
-          "input_image": [
-            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ]
+          "prompt": "Draw a parody of the Mona Lisa by Leonardo da Vinci with Bloxy, the cartoon ox in the reference image, as Lisa del Giocondo. Keep Bloxy in the original style of the reference image with the cartoon ox, but adapt its pose to the pose depicted in the Mona Lisa. Don'\''t include its arms or legs in the painting."
         }'
         ```
 
@@ -71,10 +68,7 @@ Some other noteworthy features of FLUX.2 [flex] include:
             },
             json={
                 "model": "flux-2-flex",
-                "prompt": "Draw a parody of the Mona Lisa by Leonardo da Vinci with Bloxy, the cartoon ox in the reference image, as Lisa del Giocondo. Keep Bloxy in the original style of the reference image with the cartoon ox, but adapt its pose to the pose depicted in the Mona Lisa. Don't include its arms or legs in the painting.",
-                "input_image": [
-                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ]
+                "prompt": "Draw a parody of the Mona Lisa by Leonardo da Vinci with Bloxy, the cartoon ox in the reference image, as Lisa del Giocondo. Keep Bloxy in the original style of the reference image with the cartoon ox, but adapt its pose to the pose depicted in the Mona Lisa. Don't include its arms or legs in the painting."
             },
         )
         response.raise_for_status()
@@ -159,10 +153,7 @@ Some other noteworthy features of FLUX.2 [flex] include:
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "flux-2-flex",
-          "prompt": "Draw a parody of the Mona Lisa by Leonardo da Vinci with Bloxy, the cartoon ox in the reference image, as Lisa del Giocondo. Keep Bloxy in the original style of the reference image with the cartoon ox, but adapt its pose to the pose depicted in the Mona Lisa. Don'\''t include its arms or legs in the painting.",
-          "input_image": [
-            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ]
+          "prompt": "Draw a parody of the Mona Lisa by Leonardo da Vinci with Bloxy, the cartoon ox in the reference image, as Lisa del Giocondo. Keep Bloxy in the original style of the reference image with the cartoon ox, but adapt its pose to the pose depicted in the Mona Lisa. Don'\''t include its arms or legs in the painting."
         }' | jq -r '.generations[0].generation_id')
 
         # Poll the single generation until it 404s (terminal state).
@@ -189,10 +180,7 @@ Some other noteworthy features of FLUX.2 [flex] include:
             headers=HEADERS,
             json={
                 "model": "flux-2-flex",
-                "prompt": "Draw a parody of the Mona Lisa by Leonardo da Vinci with Bloxy, the cartoon ox in the reference image, as Lisa del Giocondo. Keep Bloxy in the original style of the reference image with the cartoon ox, but adapt its pose to the pose depicted in the Mona Lisa. Don't include its arms or legs in the painting.",
-                "input_image": [
-                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ]
+                "prompt": "Draw a parody of the Mona Lisa by Leonardo da Vinci with Bloxy, the cartoon ox in the reference image, as Lisa del Giocondo. Keep Bloxy in the original style of the reference image with the cartoon ox, but adapt its pose to the pose depicted in the Mona Lisa. Don't include its arms or legs in the painting."
             },
         )
         enqueue.raise_for_status()
@@ -309,10 +297,7 @@ Some other noteworthy features of FLUX.2 [flex] include:
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "flux-2-flex",
-          "prompt": "Draw a parody of the Mona Lisa by Leonardo da Vinci with Bloxy, the cartoon ox in the reference image, as Lisa del Giocondo. Keep Bloxy in the original style of the reference image with the cartoon ox, but adapt its pose to the pose depicted in the Mona Lisa. Don'\''t include its arms or legs in the painting.",
-          "input_image": [
-            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ]
+          "prompt": "Draw a parody of the Mona Lisa by Leonardo da Vinci with Bloxy, the cartoon ox in the reference image, as Lisa del Giocondo. Keep Bloxy in the original style of the reference image with the cartoon ox, but adapt its pose to the pose depicted in the Mona Lisa. Don'\''t include its arms or legs in the painting."
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -341,10 +326,7 @@ Some other noteworthy features of FLUX.2 [flex] include:
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "flux-2-flex",
-                "prompt": "Draw a parody of the Mona Lisa by Leonardo da Vinci with Bloxy, the cartoon ox in the reference image, as Lisa del Giocondo. Keep Bloxy in the original style of the reference image with the cartoon ox, but adapt its pose to the pose depicted in the Mona Lisa. Don't include its arms or legs in the painting.",
-                "input_image": [
-                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ]
+                "prompt": "Draw a parody of the Mona Lisa by Leonardo da Vinci with Bloxy, the cartoon ox in the reference image, as Lisa del Giocondo. Keep Bloxy in the original style of the reference image with the cartoon ox, but adapt its pose to the pose depicted in the Mona Lisa. Don't include its arms or legs in the painting."
             },
         )
         enqueue.raise_for_status()
@@ -474,12 +456,12 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `prompt` | `string` | `"Draw a parody of the Mona Lisa by Leonardo da Vinci with Bloxy, the cartoon ox in the reference image, as Lisa del Giocondo. Keep Bloxy in the original style of the reference image with the cartoon ox, but adapt its pose to the pose depicted in the Mona Lisa. Don't include its arms or legs in the painting."` | Prompt for generated image |
-| `input_image` | `array<string>` | `["https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"]` | Input images to transform or use as reference (supports multiple image urls) |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
+| `input_image` | `array<string>` | `["https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"]` | Input images to transform or use as reference (supports multiple image urls) |
 | `aspect_ratio` | `string` | `"2:3"` | Aspect ratio for the generated image One of: 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, match_input_image. |
 | `resolution` | `string` | `"1 MP"` | Resolution for the generated image One of: 1 MP, 2 MP, 0.5 MP. |
 | `num_inference_steps` | `integer` | `30` | Number of denoising steps. Recommended range is 28-50, and lower number of steps produce lower quality outputs, faster. Range: 1 – 50. |

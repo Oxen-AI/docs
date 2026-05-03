@@ -1,6 +1,6 @@
 ---
 title: "WAN 2.7 - Image to Video"
-description: "Animates images into videos up to 15s at 1080p with improved motion, scene fidelity, and optional end-frame or audio guidance."
+description: "Animates images into video up to 15s at 1080P with first/last-frame guidance, video continuation, and optional driving audio."
 ---
 
 <CardGroup cols={1}>
@@ -11,7 +11,7 @@ description: "Animates images into videos up to 15s at 1080p with improved motio
 
 **Model ID:** `wan-v2-7-image-to-video`
 
-WAN 2.7 image-to-video animates a static image into video with enhanced motion smoothness, superior scene fidelity, and greater visual coherence over previous versions. It supports first-frame-to-video, first+last-frame-to-video, and video continuation scenarios. Output up to 1080p resolution with durations from 2-15 seconds, multiple aspect ratios, and optional driving audio.
+WAN 2.7 image-to-video animates a static image into video with enhanced motion smoothness, superior scene fidelity, and greater visual coherence over previous versions. Supports first-frame-to-video, first-and-last-frame-to-video, and video continuation from a starting clip with an optional last frame. Output up to 1080P with durations from 2-15 seconds, plus optional driving audio for lip-sync and action timing.
 
 ## Example request
 
@@ -37,8 +37,7 @@ WAN 2.7 image-to-video animates a static image into video with enhanced motion s
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-v2-7-image-to-video",
-          "prompt": "The camera slowly zooms in while the subject comes to life, cinematic lighting.",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png"
+          "prompt": "The camera slowly zooms in while the subject comes to life, cinematic lighting."
         }'
         ```
 
@@ -54,8 +53,7 @@ WAN 2.7 image-to-video animates a static image into video with enhanced motion s
             },
             json={
                 "model": "wan-v2-7-image-to-video",
-                "prompt": "The camera slowly zooms in while the subject comes to life, cinematic lighting.",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png"
+                "prompt": "The camera slowly zooms in while the subject comes to life, cinematic lighting."
             },
         )
         response.raise_for_status()
@@ -76,8 +74,9 @@ WAN 2.7 image-to-video animates a static image into video with enhanced motion s
           -d '{
           "model": "wan-v2-7-image-to-video",
           "prompt": "The camera slowly zooms in while the subject comes to life, cinematic lighting.",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
-          "end_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "end_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }'
         ```
 
@@ -94,8 +93,9 @@ WAN 2.7 image-to-video animates a static image into video with enhanced motion s
             json={
                 "model": "wan-v2-7-image-to-video",
                 "prompt": "The camera slowly zooms in while the subject comes to life, cinematic lighting.",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
-                "end_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "end_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         response.raise_for_status()
@@ -116,10 +116,13 @@ WAN 2.7 image-to-video animates a static image into video with enhanced motion s
           -d '{
           "model": "wan-v2-7-image-to-video",
           "prompt": "The camera slowly zooms in while the subject comes to life, cinematic lighting.",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "end_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "resolution": "1080p",
-          "duration": 5
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "resolution": "1080P",
+          "duration": 5,
+          "prompt_extend": true,
+          "watermark": false
         }'
         ```
 
@@ -136,10 +139,13 @@ WAN 2.7 image-to-video animates a static image into video with enhanced motion s
             json={
                 "model": "wan-v2-7-image-to-video",
                 "prompt": "The camera slowly zooms in while the subject comes to life, cinematic lighting.",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "end_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "resolution": "1080p",
-                "duration": 5
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "resolution": "1080P",
+                "duration": 5,
+                "prompt_extend": true,
+                "watermark": false
             },
         )
         response.raise_for_status()
@@ -168,8 +174,7 @@ WAN 2.7 image-to-video animates a static image into video with enhanced motion s
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-v2-7-image-to-video",
-          "prompt": "The camera slowly zooms in while the subject comes to life, cinematic lighting.",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png"
+          "prompt": "The camera slowly zooms in while the subject comes to life, cinematic lighting."
         }' | jq -r '.generations[0].generation_id')
 
         # Poll the single generation until it 404s (terminal state).
@@ -196,8 +201,7 @@ WAN 2.7 image-to-video animates a static image into video with enhanced motion s
             headers=HEADERS,
             json={
                 "model": "wan-v2-7-image-to-video",
-                "prompt": "The camera slowly zooms in while the subject comes to life, cinematic lighting.",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png"
+                "prompt": "The camera slowly zooms in while the subject comes to life, cinematic lighting."
             },
         )
         enqueue.raise_for_status()
@@ -229,8 +233,9 @@ WAN 2.7 image-to-video animates a static image into video with enhanced motion s
           -d '{
           "model": "wan-v2-7-image-to-video",
           "prompt": "The camera slowly zooms in while the subject comes to life, cinematic lighting.",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
-          "end_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "end_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll the single generation until it 404s (terminal state).
@@ -258,8 +263,9 @@ WAN 2.7 image-to-video animates a static image into video with enhanced motion s
             json={
                 "model": "wan-v2-7-image-to-video",
                 "prompt": "The camera slowly zooms in while the subject comes to life, cinematic lighting.",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
-                "end_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "end_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         enqueue.raise_for_status()
@@ -291,10 +297,13 @@ WAN 2.7 image-to-video animates a static image into video with enhanced motion s
           -d '{
           "model": "wan-v2-7-image-to-video",
           "prompt": "The camera slowly zooms in while the subject comes to life, cinematic lighting.",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "end_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "resolution": "1080p",
-          "duration": 5
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "resolution": "1080P",
+          "duration": 5,
+          "prompt_extend": true,
+          "watermark": false
         }' | jq -r '.generations[0].generation_id')
 
         # Poll the single generation until it 404s (terminal state).
@@ -322,10 +331,13 @@ WAN 2.7 image-to-video animates a static image into video with enhanced motion s
             json={
                 "model": "wan-v2-7-image-to-video",
                 "prompt": "The camera slowly zooms in while the subject comes to life, cinematic lighting.",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "end_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "resolution": "1080p",
-                "duration": 5
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "resolution": "1080P",
+                "duration": 5,
+                "prompt_extend": true,
+                "watermark": false
             },
         )
         enqueue.raise_for_status()
@@ -364,8 +376,7 @@ WAN 2.7 image-to-video animates a static image into video with enhanced motion s
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-v2-7-image-to-video",
-          "prompt": "The camera slowly zooms in while the subject comes to life, cinematic lighting.",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png"
+          "prompt": "The camera slowly zooms in while the subject comes to life, cinematic lighting."
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -394,8 +405,7 @@ WAN 2.7 image-to-video animates a static image into video with enhanced motion s
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "wan-v2-7-image-to-video",
-                "prompt": "The camera slowly zooms in while the subject comes to life, cinematic lighting.",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png"
+                "prompt": "The camera slowly zooms in while the subject comes to life, cinematic lighting."
             },
         )
         enqueue.raise_for_status()
@@ -432,8 +442,9 @@ WAN 2.7 image-to-video animates a static image into video with enhanced motion s
           -d '{
           "model": "wan-v2-7-image-to-video",
           "prompt": "The camera slowly zooms in while the subject comes to life, cinematic lighting.",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
-          "end_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "end_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -463,8 +474,9 @@ WAN 2.7 image-to-video animates a static image into video with enhanced motion s
             json={
                 "model": "wan-v2-7-image-to-video",
                 "prompt": "The camera slowly zooms in while the subject comes to life, cinematic lighting.",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
-                "end_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "end_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         enqueue.raise_for_status()
@@ -501,10 +513,13 @@ WAN 2.7 image-to-video animates a static image into video with enhanced motion s
           -d '{
           "model": "wan-v2-7-image-to-video",
           "prompt": "The camera slowly zooms in while the subject comes to life, cinematic lighting.",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "end_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "resolution": "1080p",
-          "duration": 5
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "resolution": "1080P",
+          "duration": 5,
+          "prompt_extend": true,
+          "watermark": false
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -534,10 +549,13 @@ WAN 2.7 image-to-video animates a static image into video with enhanced motion s
             json={
                 "model": "wan-v2-7-image-to-video",
                 "prompt": "The camera slowly zooms in while the subject comes to life, cinematic lighting.",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "end_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "resolution": "1080p",
-                "duration": 5
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "resolution": "1080P",
+                "duration": 5,
+                "prompt_extend": true,
+                "watermark": false
             },
         )
         enqueue.raise_for_status()
@@ -581,16 +599,19 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | `"The camera slowly zooms in while the subject comes to life, cinematic lighting."` | Text prompt describing the desired video. Max 5000 characters. |
-| `input_image` | `string` | `"https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png"` | URL of the first frame image. Formats: JPEG, JPG, PNG, BMP, WEBP. Max 20 MB. Format: uri. |
+| `prompt` | `string` | `"The camera slowly zooms in while the subject comes to life, cinematic lighting."` | Text prompt describing the desired video. Supports Chinese and English. Max 5000 characters. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `end_image_url` | `string` | &mdash; | URL of the last frame image for first-and-last-frame-to-video. Same format constraints as input image. Format: uri. |
-| `resolution` | `string` | `"1080p"` | Output video resolution tier. One of: 720p, 1080p. |
+| `input_image` | `string` | &mdash; | URL of the first frame image. Required for first-frame-to-video and first-and-last-frame-to-video. Formats: JPEG, JPG, PNG, BMP, WEBP. Resolution 240-8000 px per side, aspect ratio 1:8 to 8:1, max 20 MB. Mutually exclusive with input_video. Format: uri. |
+| `end_image_url` | `string` | &mdash; | Optional URL of the last frame image for first-and-last-frame-to-video. Same format constraints as the first frame image. Format: uri. |
+| `input_video` | `string` | &mdash; | URL of an input video for continuation (first_clip). Formats: MP4, MOV. Duration 2-10s, resolution 240-4096 px per side, aspect ratio 1:8 to 8:1, max 100 MB. Mutually exclusive with input_image. Format: uri. |
+| `audio_url` | `string` | &mdash; | Optional driving audio URL. Used for lip-sync and action timing. Supports WAV and MP3. Duration 2-30s, max 15 MB. If shorter than the video, the remainder is silent; if longer, it is truncated. Format: uri. |
+| `resolution` | `string` | `"1080P"` | Output video resolution tier. One of: 720P, 1080P. |
 | `duration` | `integer` | `5` | Output video duration in seconds (2-15). Range: 2 – 15. |
-| `negative_prompt` | `string` | &mdash; | Content to avoid in the video. Max 500 characters. |
-| `audio_url` | `string` | &mdash; | URL of driving audio. Supports WAV and MP3. Duration: 2-30s. Max 15 MB. Format: uri. |
-| `seed` | `integer` | &mdash; | Random seed for reproducibility (0-2147483647). |
+| `negative_prompt` | `string` | &mdash; | Content to avoid in the video. Supports Chinese and English. Max 500 characters. |
+| `prompt_extend` | `boolean` | `true` | Whether the model rewrites short prompts to improve quality. Adds processing time. |
+| `watermark` | `boolean` | `false` | Adds an 'AI Generated' watermark to the bottom-right corner. |
+| `seed` | `integer` | &mdash; | Random seed for reproducibility (0-2147483647). Range: 0 – 2147483647. |

@@ -1,6 +1,6 @@
 ---
 title: "WAN 2.7 - Text to Video"
-description: "Text-to-video with improved quality, multi-shot generation, up to 1080p, 2-15s duration, and optional audio."
+description: "Text-to-video with multi-shot generation, up to 1080P, 2-15s duration, and optional driving audio."
 ---
 
 <CardGroup cols={1}>
@@ -11,7 +11,7 @@ description: "Text-to-video with improved quality, multi-shot generation, up to 
 
 **Model ID:** `wan-v2-7-text-to-video`
 
-WAN 2.7 text-to-video generates video from a text prompt with enhanced motion smoothness, superior scene fidelity, and greater visual coherence over previous versions. It supports 720p and 1080p output, durations from 2-15 seconds, multiple aspect ratios (16:9, 9:16, 1:1, 4:3, 3:4), multi-shot video generation controlled via natural language in the prompt, and optional driving audio.
+WAN 2.7 text-to-video generates video from a text prompt with enhanced motion smoothness, superior scene fidelity, and greater visual coherence over previous versions. Supports 720P and 1080P output, durations from 2-15 seconds, multiple aspect ratios (16:9, 9:16, 1:1, 4:3, 3:4), multi-shot generation controlled via natural language in the prompt, and optional driving audio.
 
 ## Example request
 
@@ -75,8 +75,10 @@ WAN 2.7 text-to-video generates video from a text prompt with enhanced motion sm
           "model": "wan-v2-7-text-to-video",
           "prompt": "A kitten running in a meadow, cinematic lighting, smooth camera movement.",
           "aspect_ratio": "16:9",
-          "resolution": "1080p",
-          "duration": 5
+          "resolution": "1080P",
+          "duration": 5,
+          "prompt_extend": true,
+          "watermark": false
         }'
         ```
 
@@ -94,8 +96,10 @@ WAN 2.7 text-to-video generates video from a text prompt with enhanced motion sm
                 "model": "wan-v2-7-text-to-video",
                 "prompt": "A kitten running in a meadow, cinematic lighting, smooth camera movement.",
                 "aspect_ratio": "16:9",
-                "resolution": "1080p",
-                "duration": 5
+                "resolution": "1080P",
+                "duration": 5,
+                "prompt_extend": true,
+                "watermark": false
             },
         )
         response.raise_for_status()
@@ -184,8 +188,10 @@ WAN 2.7 text-to-video generates video from a text prompt with enhanced motion sm
           "model": "wan-v2-7-text-to-video",
           "prompt": "A kitten running in a meadow, cinematic lighting, smooth camera movement.",
           "aspect_ratio": "16:9",
-          "resolution": "1080p",
-          "duration": 5
+          "resolution": "1080P",
+          "duration": 5,
+          "prompt_extend": true,
+          "watermark": false
         }' | jq -r '.generations[0].generation_id')
 
         # Poll the single generation until it 404s (terminal state).
@@ -214,8 +220,10 @@ WAN 2.7 text-to-video generates video from a text prompt with enhanced motion sm
                 "model": "wan-v2-7-text-to-video",
                 "prompt": "A kitten running in a meadow, cinematic lighting, smooth camera movement.",
                 "aspect_ratio": "16:9",
-                "resolution": "1080p",
-                "duration": 5
+                "resolution": "1080P",
+                "duration": 5,
+                "prompt_extend": true,
+                "watermark": false
             },
         )
         enqueue.raise_for_status()
@@ -321,8 +329,10 @@ WAN 2.7 text-to-video generates video from a text prompt with enhanced motion sm
           "model": "wan-v2-7-text-to-video",
           "prompt": "A kitten running in a meadow, cinematic lighting, smooth camera movement.",
           "aspect_ratio": "16:9",
-          "resolution": "1080p",
-          "duration": 5
+          "resolution": "1080P",
+          "duration": 5,
+          "prompt_extend": true,
+          "watermark": false
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -353,8 +363,10 @@ WAN 2.7 text-to-video generates video from a text prompt with enhanced motion sm
                 "model": "wan-v2-7-text-to-video",
                 "prompt": "A kitten running in a meadow, cinematic lighting, smooth camera movement.",
                 "aspect_ratio": "16:9",
-                "resolution": "1080p",
-                "duration": 5
+                "resolution": "1080P",
+                "duration": 5,
+                "prompt_extend": true,
+                "watermark": false
             },
         )
         enqueue.raise_for_status()
@@ -398,15 +410,17 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | `"A kitten running in a meadow, cinematic lighting, smooth camera movement."` | Text prompt describing the desired video. Max 5000 characters. |
+| `prompt` | `string` | `"A kitten running in a meadow, cinematic lighting, smooth camera movement."` | Text prompt describing the desired video. Supports Chinese and English. Max 500 characters. Use 'generate a single-shot video' or 'generate a multi-shot video' (or timestamped shot descriptions like 'Shot 1 [0-3s] Wide angle: ...') to control shot structure. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `aspect_ratio` | `string` | `"16:9"` | Aspect ratio of the generated video. One of: 16:9, 9:16, 1:1, 4:3, 3:4. |
-| `resolution` | `string` | `"1080p"` | Output video resolution tier. One of: 720p, 1080p. |
+| `resolution` | `string` | `"1080P"` | Output video resolution tier. One of: 720P, 1080P. |
 | `duration` | `integer` | `5` | Output video duration in seconds (2-15). Range: 2 – 15. |
-| `negative_prompt` | `string` | &mdash; | Content to avoid in the video. Max 500 characters. |
-| `audio_url` | `string` | &mdash; | URL of driving audio. Supports WAV and MP3. Duration: 3-30s. Max 15 MB. If not provided, the model auto-generates matching background music. Format: uri. |
-| `seed` | `integer` | &mdash; | Random seed for reproducibility (0-2147483647). |
+| `negative_prompt` | `string` | &mdash; | Content to avoid in the video. Supports Chinese and English. Max 500 characters. |
+| `audio_url` | `string` | &mdash; | URL of driving audio. Supports WAV and MP3. Duration: 2-30s. Max 15 MB. If omitted, the model auto-generates matching background audio. Format: uri. |
+| `prompt_extend` | `boolean` | `true` | Whether the model rewrites short prompts to improve quality. Adds processing time. |
+| `watermark` | `boolean` | `false` | Adds an 'AI-generated' watermark to the bottom-right corner. |
+| `seed` | `integer` | &mdash; | Random seed for reproducibility (0-2147483647). Range: 0 – 2147483647. |
