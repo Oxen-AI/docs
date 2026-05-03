@@ -1,25 +1,26 @@
 ---
-title: "Claude Opus 4.6"
-description: "Anthropic's most advanced model, excelling in coding, agentic workflows, computer use, reasoning, math, and domain expertise in finance, law, STEM."
+title: "Claude Opus 4.7"
+description: "Anthropic's most capable model, with a step-change jump in agentic coding over Opus 4.6 and a native 1M-token context window."
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try Claude Opus 4.6 in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=claude-opus-4-6">
+  <Card title="Try Claude Opus 4.7 in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=claude-opus-4-7">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `claude-opus-4-6`
+**Model ID:** `claude-opus-4-7`
 
-**Claude Opus 4.6 is a Multimodal LLM designed for coding, enterprise agents, and professional work.** It excels in reasoning, planning, software engineering, agentic tasks, and long context processing, with features like adaptive thinking that adjusts reasoning effort by task complexity.
+**Claude Opus 4.7 is Anthropic's most capable generally available model, designed for complex reasoning, enterprise agents, and agentic coding.** It delivers a step-change improvement in agentic coding over Claude Opus 4.6 and ships with a native 1M-token context window at standard pricing.
 
-Some other noteworthy features of Claude Opus 4.6 include image processing for analyzing charts and diagrams, context compaction for extended conversations, and computer use for multi-step workflows.
+Other noteworthy features of Claude Opus 4.7 include adaptive thinking that adjusts reasoning effort by task complexity, image processing, server-side context compaction for extended conversations, and computer use for multi-step workflows. Opus 4.7 uses a new tokenizer and does not support extended thinking.
 
 | Metric             | Value              |
 |--------------------|--------------------|
 | Parameter Count    | Unknown            |
 | Mixture of Experts | Unknown            |
 | Context Length     | 1,000,000 tokens   |
+| Max Output         | 128,000 tokens     |
 | Multilingual       | Yes                |
 | Quantized*         | Unknown            |
 
@@ -28,7 +29,7 @@ Some other noteworthy features of Claude Opus 4.6 include image processing for a
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=claude-opus-4-6) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=claude-opus-4-7) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
@@ -41,7 +42,7 @@ Some other noteworthy features of Claude Opus 4.6 include image processing for a
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer $OXEN_API_KEY" \
       -d '{
-      "model": "claude-opus-4-6",
+      "model": "claude-opus-4-7",
       "messages": [
         {
           "role": "user",
@@ -62,7 +63,7 @@ Some other noteworthy features of Claude Opus 4.6 include image processing for a
             "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
         },
         json={
-            "model": "claude-opus-4-6",
+            "model": "claude-opus-4-7",
             "messages": [
                 {
                     "role": "user",
@@ -87,7 +88,7 @@ Some other noteworthy features of Claude Opus 4.6 include image processing for a
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer $OXEN_API_KEY" \
       -d '{
-      "model": "claude-opus-4-6",
+      "model": "claude-opus-4-7",
       "messages": [
         {
           "role": "user",
@@ -111,7 +112,7 @@ Some other noteworthy features of Claude Opus 4.6 include image processing for a
             "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
         },
         json={
-            "model": "claude-opus-4-6",
+            "model": "claude-opus-4-7",
             "messages": [
                 {
                     "role": "user",
@@ -137,7 +138,7 @@ Some other noteworthy features of Claude Opus 4.6 include image processing for a
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/claude-opus-4-6
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/claude-opus-4-7
 ```
 
 ## Request parameters

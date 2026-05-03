@@ -1,42 +1,30 @@
 ---
-title: "Seedream 4.0"
-description: "Delivers ultra-fast, high-resolution image generation, precise natural-language editing, and consistent multi-image output—ideal for creative, batch, or…"
+title: "Happy Horse - Text to Video"
+description: "Text-to-video generation up to 1080P with configurable aspect ratio and duration."
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try Seedream 4.0 in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=bytedance-seedream-4">
+  <Card title="Try Happy Horse - Text to Video in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=happyhorse-1.0-t2v">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `bytedance-seedream-4`
+**Model ID:** `happyhorse-1.0-t2v`
 
-Seedream 4.0 is a Multimodal LLM designed for unified image generation and advanced image editing via natural language prompts.
-
-It excels in **high-speed, high-resolution image synthesis and editing**, supporting tasks such as photorealistic image generation, precise object addition/removal, and consistent multi-image output. The model offers robust handling of both Chinese and English prompts, maintains character and style consistency across sets, and enables batch processing for efficient workflows.
-
-Some other noteworthy features of Seedream 4.0 include the ability to generate up to 9–10 matching images in a single batch, seamless style transfer, and detailed transformations—making it valuable for storyboarding, product design, and creative content production.
-
-| Metric             | Value              |
-|--------------------|--------------------|
-| Parameter Count    | Unknown            |
-| Mixture of Experts | Unknown            |
-| Context Length     | Unknown            |
-| Multilingual       | Yes                |
-| Quantized*         | Unknown            |
-
-*_Quantization is specific to the inference provider and the model may be offered with different quantization levels by other providers._
+HappyHorse 1.0 text-to-video generates video from a text prompt at 720P or 1080P with durations from 3 to 15 seconds and configurable aspect ratio.
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=bytedance-seedream-4) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=happyhorse-1.0-t2v) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
   <Tab title="Sync">
 
-    See the [image generation reference](/inference-api/reference/image_generation) for more details.
+    This blocks until the video is ready (typically 5-15 minutes). Prefer **Async** or **Async with SSE** for anything beyond quick experimentation.
+
+    See the [video generation reference](/inference-api/reference/video_generation) for more details.
 
     <Tabs>
       <Tab title="Minimal">
@@ -44,12 +32,12 @@ Some other noteworthy features of Seedream 4.0 include the ability to generate u
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "bytedance-seedream-4",
-          "prompt": "Add a funny hat"
+          "model": "happyhorse-1.0-t2v",
+          "prompt": "A cinematic shot of a horse running through a meadow at sunset."
         }'
         ```
 
@@ -58,14 +46,14 @@ Some other noteworthy features of Seedream 4.0 include the ability to generate u
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/generate",
+            "https://hub.oxen.ai/api/ai/videos/generate",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "bytedance-seedream-4",
-                "prompt": "Add a funny hat"
+                "model": "happyhorse-1.0-t2v",
+                "prompt": "A cinematic shot of a horse running through a meadow at sunset."
             },
         )
         response.raise_for_status()
@@ -80,15 +68,15 @@ Some other noteworthy features of Seedream 4.0 include the ability to generate u
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "bytedance-seedream-4",
-          "prompt": "Add a funny hat",
-          "input_image": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
-          ]
+          "model": "happyhorse-1.0-t2v",
+          "prompt": "A cinematic shot of a horse running through a meadow at sunset.",
+          "aspect_ratio": "16:9",
+          "resolution": "1080P",
+          "duration": 5
         }'
         ```
 
@@ -97,17 +85,17 @@ Some other noteworthy features of Seedream 4.0 include the ability to generate u
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/generate",
+            "https://hub.oxen.ai/api/ai/videos/generate",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "bytedance-seedream-4",
-                "prompt": "Add a funny hat",
-                "input_image": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
-                ]
+                "model": "happyhorse-1.0-t2v",
+                "prompt": "A cinematic shot of a horse running through a meadow at sunset.",
+                "aspect_ratio": "16:9",
+                "resolution": "1080P",
+                "duration": 5
             },
         )
         response.raise_for_status()
@@ -135,8 +123,8 @@ Some other noteworthy features of Seedream 4.0 include the ability to generate u
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "bytedance-seedream-4",
-          "prompt": "Add a funny hat"
+          "model": "happyhorse-1.0-t2v",
+          "prompt": "A cinematic shot of a horse running through a meadow at sunset."
         }' | jq -r '.generations[0].generation_id')
 
         # Poll the single generation until it 404s (terminal state).
@@ -162,8 +150,8 @@ Some other noteworthy features of Seedream 4.0 include the ability to generate u
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "bytedance-seedream-4",
-                "prompt": "Add a funny hat"
+                "model": "happyhorse-1.0-t2v",
+                "prompt": "A cinematic shot of a horse running through a meadow at sunset."
             },
         )
         enqueue.raise_for_status()
@@ -193,11 +181,11 @@ Some other noteworthy features of Seedream 4.0 include the ability to generate u
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "bytedance-seedream-4",
-          "prompt": "Add a funny hat",
-          "input_image": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
-          ]
+          "model": "happyhorse-1.0-t2v",
+          "prompt": "A cinematic shot of a horse running through a meadow at sunset.",
+          "aspect_ratio": "16:9",
+          "resolution": "1080P",
+          "duration": 5
         }' | jq -r '.generations[0].generation_id')
 
         # Poll the single generation until it 404s (terminal state).
@@ -223,11 +211,11 @@ Some other noteworthy features of Seedream 4.0 include the ability to generate u
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "bytedance-seedream-4",
-                "prompt": "Add a funny hat",
-                "input_image": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
-                ]
+                "model": "happyhorse-1.0-t2v",
+                "prompt": "A cinematic shot of a horse running through a meadow at sunset.",
+                "aspect_ratio": "16:9",
+                "resolution": "1080P",
+                "duration": 5
             },
         )
         enqueue.raise_for_status()
@@ -265,8 +253,8 @@ Some other noteworthy features of Seedream 4.0 include the ability to generate u
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "bytedance-seedream-4",
-          "prompt": "Add a funny hat"
+          "model": "happyhorse-1.0-t2v",
+          "prompt": "A cinematic shot of a horse running through a meadow at sunset."
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -294,8 +282,8 @@ Some other noteworthy features of Seedream 4.0 include the ability to generate u
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "bytedance-seedream-4",
-                "prompt": "Add a funny hat"
+                "model": "happyhorse-1.0-t2v",
+                "prompt": "A cinematic shot of a horse running through a meadow at sunset."
             },
         )
         enqueue.raise_for_status()
@@ -330,11 +318,11 @@ Some other noteworthy features of Seedream 4.0 include the ability to generate u
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "bytedance-seedream-4",
-          "prompt": "Add a funny hat",
-          "input_image": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
-          ]
+          "model": "happyhorse-1.0-t2v",
+          "prompt": "A cinematic shot of a horse running through a meadow at sunset.",
+          "aspect_ratio": "16:9",
+          "resolution": "1080P",
+          "duration": 5
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -362,11 +350,11 @@ Some other noteworthy features of Seedream 4.0 include the ability to generate u
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "bytedance-seedream-4",
-                "prompt": "Add a funny hat",
-                "input_image": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
-                ]
+                "model": "happyhorse-1.0-t2v",
+                "prompt": "A cinematic shot of a horse running through a meadow at sunset.",
+                "aspect_ratio": "16:9",
+                "resolution": "1080P",
+                "duration": 5
             },
         )
         enqueue.raise_for_status()
@@ -401,7 +389,7 @@ Some other noteworthy features of Seedream 4.0 include the ability to generate u
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/bytedance-seedream-4
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/happyhorse-1.0-t2v
 ```
 
 ## Request parameters
@@ -410,10 +398,13 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | `"Add a funny hat"` | Text description of what you want to generate, or the instruction on how to edit the given image. |
+| `prompt` | `string` | `"A cinematic shot of a horse running through a meadow at sunset."` | Text prompt describing the desired video. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `input_image` | `array<string>` | `["https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"]` | Input images to transform or use as reference (supports multiple image urls) |
+| `aspect_ratio` | `string` | `"16:9"` | Aspect ratio of the generated video. One of: 16:9, 9:16, 1:1, 4:3, 3:4. |
+| `resolution` | `string` | `"1080P"` | Output video resolution tier. One of: 720P, 1080P. |
+| `duration` | `integer` | `5` | Output video duration in seconds (3-15). Range: 3 – 15. |
+| `seed` | `integer` | &mdash; | Random seed for reproducibility (0-2147483647). Range: 0 – 2147483647. |

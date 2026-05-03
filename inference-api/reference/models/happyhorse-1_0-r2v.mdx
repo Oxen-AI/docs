@@ -1,22 +1,22 @@
 ---
-title: "WAN 2.7 - Reference to Video"
-description: "Reference-guided video generation with character consistency, multi-character support, optional reference voices, and up to 1080P output."
+title: "Happy Horse - Reference to Video"
+description: "Reference-to-video generation up to 1080P with up to 9 reference images."
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try WAN 2.7 - Reference to Video in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=wan-v2-7-reference-to-video">
+  <Card title="Try Happy Horse - Reference to Video in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=happyhorse-1.0-r2v">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `wan-v2-7-reference-to-video`
+**Model ID:** `happyhorse-1.0-r2v`
 
-WAN 2.7 reference-to-video generates video from one or more reference images and reference videos with optional first-frame joint control, supporting single-character performances, multi-character interactions, and multi-shot narration. Up to 5 reference images and reference videos combined; reference identifiers in the prompt ("Image 1", "Image 2", "Video 1", ...) match the order of assets within each type. Output up to 1080P at 2-15s (2-10s when a reference video is included).
+HappyHorse 1.0 reference-to-video generates video from a text prompt and up to 9 reference images for character or scene consistency. Output up to 1080P with durations from 3 to 15 seconds and configurable aspect ratio.
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=wan-v2-7-reference-to-video) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=happyhorse-1.0-r2v) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
@@ -36,8 +36,8 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "wan-v2-7-reference-to-video",
-          "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting."
+          "model": "happyhorse-1.0-r2v",
+          "prompt": "Image 1 walks through a beautiful garden, cinematic lighting."
         }'
         ```
 
@@ -52,8 +52,8 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "wan-v2-7-reference-to-video",
-                "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting."
+                "model": "happyhorse-1.0-r2v",
+                "prompt": "Image 1 walks through a beautiful garden, cinematic lighting."
             },
         )
         response.raise_for_status()
@@ -72,15 +72,11 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "wan-v2-7-reference-to-video",
-          "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting.",
+          "model": "happyhorse-1.0-r2v",
+          "prompt": "Image 1 walks through a beautiful garden, cinematic lighting.",
           "reference_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ],
-          "reference_videos": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-          ],
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ]
         }'
         ```
 
@@ -95,15 +91,11 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "wan-v2-7-reference-to-video",
-                "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting.",
+                "model": "happyhorse-1.0-r2v",
+                "prompt": "Image 1 walks through a beautiful garden, cinematic lighting.",
                 "reference_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ],
-                "reference_videos": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-                ],
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ]
             },
         )
         response.raise_for_status()
@@ -122,20 +114,14 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "wan-v2-7-reference-to-video",
-          "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting.",
+          "model": "happyhorse-1.0-r2v",
+          "prompt": "Image 1 walks through a beautiful garden, cinematic lighting.",
           "reference_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "reference_videos": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-          ],
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "aspect_ratio": "16:9",
           "resolution": "1080P",
-          "duration": 5,
-          "prompt_extend": true,
-          "watermark": false
+          "duration": 5
         }'
         ```
 
@@ -150,20 +136,14 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "wan-v2-7-reference-to-video",
-                "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting.",
+                "model": "happyhorse-1.0-r2v",
+                "prompt": "Image 1 walks through a beautiful garden, cinematic lighting.",
                 "reference_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "reference_videos": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-                ],
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "aspect_ratio": "16:9",
                 "resolution": "1080P",
-                "duration": 5,
-                "prompt_extend": true,
-                "watermark": false
+                "duration": 5
             },
         )
         response.raise_for_status()
@@ -191,8 +171,8 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "wan-v2-7-reference-to-video",
-          "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting."
+          "model": "happyhorse-1.0-r2v",
+          "prompt": "Image 1 walks through a beautiful garden, cinematic lighting."
         }' | jq -r '.generations[0].generation_id')
 
         # Poll the single generation until it 404s (terminal state).
@@ -218,8 +198,8 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "wan-v2-7-reference-to-video",
-                "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting."
+                "model": "happyhorse-1.0-r2v",
+                "prompt": "Image 1 walks through a beautiful garden, cinematic lighting."
             },
         )
         enqueue.raise_for_status()
@@ -249,15 +229,11 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "wan-v2-7-reference-to-video",
-          "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting.",
+          "model": "happyhorse-1.0-r2v",
+          "prompt": "Image 1 walks through a beautiful garden, cinematic lighting.",
           "reference_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ],
-          "reference_videos": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-          ],
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ]
         }' | jq -r '.generations[0].generation_id')
 
         # Poll the single generation until it 404s (terminal state).
@@ -283,15 +259,11 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "wan-v2-7-reference-to-video",
-                "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting.",
+                "model": "happyhorse-1.0-r2v",
+                "prompt": "Image 1 walks through a beautiful garden, cinematic lighting.",
                 "reference_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ],
-                "reference_videos": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-                ],
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ]
             },
         )
         enqueue.raise_for_status()
@@ -321,20 +293,14 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "wan-v2-7-reference-to-video",
-          "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting.",
+          "model": "happyhorse-1.0-r2v",
+          "prompt": "Image 1 walks through a beautiful garden, cinematic lighting.",
           "reference_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "reference_videos": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-          ],
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "aspect_ratio": "16:9",
           "resolution": "1080P",
-          "duration": 5,
-          "prompt_extend": true,
-          "watermark": false
+          "duration": 5
         }' | jq -r '.generations[0].generation_id')
 
         # Poll the single generation until it 404s (terminal state).
@@ -360,20 +326,14 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "wan-v2-7-reference-to-video",
-                "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting.",
+                "model": "happyhorse-1.0-r2v",
+                "prompt": "Image 1 walks through a beautiful garden, cinematic lighting.",
                 "reference_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "reference_videos": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-                ],
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "aspect_ratio": "16:9",
                 "resolution": "1080P",
-                "duration": 5,
-                "prompt_extend": true,
-                "watermark": false
+                "duration": 5
             },
         )
         enqueue.raise_for_status()
@@ -411,8 +371,8 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "wan-v2-7-reference-to-video",
-          "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting."
+          "model": "happyhorse-1.0-r2v",
+          "prompt": "Image 1 walks through a beautiful garden, cinematic lighting."
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -440,8 +400,8 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "wan-v2-7-reference-to-video",
-                "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting."
+                "model": "happyhorse-1.0-r2v",
+                "prompt": "Image 1 walks through a beautiful garden, cinematic lighting."
             },
         )
         enqueue.raise_for_status()
@@ -476,15 +436,11 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "wan-v2-7-reference-to-video",
-          "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting.",
+          "model": "happyhorse-1.0-r2v",
+          "prompt": "Image 1 walks through a beautiful garden, cinematic lighting.",
           "reference_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ],
-          "reference_videos": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-          ],
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ]
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -512,15 +468,11 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "wan-v2-7-reference-to-video",
-                "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting.",
+                "model": "happyhorse-1.0-r2v",
+                "prompt": "Image 1 walks through a beautiful garden, cinematic lighting.",
                 "reference_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ],
-                "reference_videos": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-                ],
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ]
             },
         )
         enqueue.raise_for_status()
@@ -555,20 +507,14 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "wan-v2-7-reference-to-video",
-          "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting.",
+          "model": "happyhorse-1.0-r2v",
+          "prompt": "Image 1 walks through a beautiful garden, cinematic lighting.",
           "reference_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "reference_videos": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-          ],
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "aspect_ratio": "16:9",
           "resolution": "1080P",
-          "duration": 5,
-          "prompt_extend": true,
-          "watermark": false
+          "duration": 5
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -596,20 +542,14 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "wan-v2-7-reference-to-video",
-                "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting.",
+                "model": "happyhorse-1.0-r2v",
+                "prompt": "Image 1 walks through a beautiful garden, cinematic lighting.",
                 "reference_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "reference_videos": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-                ],
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "aspect_ratio": "16:9",
                 "resolution": "1080P",
-                "duration": 5,
-                "prompt_extend": true,
-                "watermark": false
+                "duration": 5
             },
         )
         enqueue.raise_for_status()
@@ -644,7 +584,7 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/wan-v2-7-reference-to-video
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/happyhorse-1.0-r2v
 ```
 
 ## Request parameters
@@ -653,19 +593,14 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | `"Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting."` | Text prompt describing the desired video. Supports Chinese and English. Max 5000 characters. Use 'Image 1, Image 2, ...' to reference reference_images in order, and 'Video 1, Video 2, ...' to reference reference_videos in order; identifiers are independent across types. |
+| `prompt` | `string` | `"Image 1 walks through a beautiful garden, cinematic lighting."` | Text prompt describing the desired video. Use 'Image 1, Image 2, ...' to reference reference_images in order. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `reference_images` | `array<object>` | &mdash; | Array of reference images for character/object/scene appearance. Each item has a URL and an optional reference voice. Order maps to 'Image 1', 'Image 2', etc. Reference images + reference videos must total ≤ 5. JPEG/JPG/PNG/BMP/WEBP, 240-8000 px per side, aspect ratio 1:8 to 8:1, max 20 MB each. |
-| `reference_videos` | `array<object>` | &mdash; | Array of reference videos for character/object appearance, motion, and voice. Each item has a URL and an optional reference voice. Order maps to 'Video 1', 'Video 2', etc. Reference images + reference videos must total ≤ 5. MP4/MOV, 1-30s, 240-4096 px per side, aspect ratio 1:8 to 8:1, max 100 MB each. |
-| `input_image` | `string` | &mdash; | Optional first-frame image used for joint control. Provides a starting frame the video is generated from. JPEG/JPG/PNG/BMP/WEBP, 240-8000 px per side, max 20 MB. When provided, the output aspect ratio is taken from this image and the aspect_ratio parameter is ignored. Format: uri. |
-| `aspect_ratio` | `string` | `"16:9"` | Aspect ratio of the generated video. Ignored when a first frame image is provided (the model uses the input asset's ratio). One of: 16:9, 9:16, 1:1, 4:3, 3:4. |
+| `reference_images` | `array<string>` | &mdash; | Array of up to 9 reference image URLs for character/object/scene appearance. Order maps to 'Image 1', 'Image 2', etc. Formats: JPEG, JPG, PNG. Max 10 MB each. 720p or higher recommended; shorter side must exceed 400 pixels. Reference images should share a similar aspect ratio close to the target video's aspect ratio. |
+| `aspect_ratio` | `string` | `"16:9"` | Aspect ratio of the generated video. One of: 16:9, 9:16, 1:1, 4:3, 3:4. |
 | `resolution` | `string` | `"1080P"` | Output video resolution tier. One of: 720P, 1080P. |
-| `duration` | `integer` | `5` | Output video duration in seconds. 2-15 with reference images only; 2-10 when any reference video is included. Range: 2 – 15. |
-| `negative_prompt` | `string` | &mdash; | Content to avoid in the video. Supports Chinese and English. Max 500 characters. |
-| `prompt_extend` | `boolean` | `true` | Whether the model rewrites short prompts to improve quality. Adds processing time. |
-| `watermark` | `boolean` | `false` | Adds an 'AI Generated' watermark to the bottom-right corner. |
+| `duration` | `integer` | `5` | Output video duration in seconds (3-15). Range: 3 – 15. |
 | `seed` | `integer` | &mdash; | Random seed for reproducibility (0-2147483647). Range: 0 – 2147483647. |
