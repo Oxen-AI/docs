@@ -67,7 +67,7 @@ The API validates at enqueue time that:
 - `num_generations` is 1-4
 - The user is authenticated with sufficient credits
 
-Model-specific parameter validation (prompt content, duration ranges, aspect ratio values) happens **when the generation runs**, not at enqueue time. If a parameter is invalid, the generation fails silently (it disappears from the queue without producing a result). To validate parameters and get immediate error feedback, use `/ai/images/generate` or `/ai/videos/generate` instead.
+Model-specific parameter validation (prompt content, duration ranges, aspect ratio values) happens **when the generation runs**, not at enqueue time. If a parameter is invalid, the generation transitions to `failed` status with an `error_message`. To validate parameters and get immediate error feedback, use `/ai/images/generate` or `/ai/videos/generate` instead.
 
 ---
 
@@ -415,10 +415,7 @@ curl -N -H "Authorization: Bearer $OXEN_API_KEY" \
 
 ### Terminal states without events
 
-`media_generation_completed` does not fire for:
-
-- Cancelled generations (you called `DELETE /ai/queue/:id`)
-- Expired generations (24h TTL with no worker pickup)
+`media_generation_completed` does not fire for cancelled generations (you called `DELETE /ai/queue/:id`). You can still retrieve the final status of any generation via `GET /ai/queue/:id`.
 
 ---
 
