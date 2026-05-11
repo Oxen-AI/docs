@@ -20,7 +20,7 @@ The synchronous endpoints (`/ai/images/generate`, `/ai/videos/generate`) block u
 3. Read result_url from the completed generation
 ```
 
-Generations persist after reaching a terminal state (`succeeded`, `failed`, or `cancelled`), so you can retrieve results at any time without needing to capture them the moment they complete.
+Generations persist after reaching a terminal state (`succeeded`, `failed`, or `cancelled`), so you can retrieve results at any time.
 
 A Server-Sent Events stream at `GET /api/events` can also deliver completion notifications with the output file URL. See [Completion Events](#completion-events).
 
