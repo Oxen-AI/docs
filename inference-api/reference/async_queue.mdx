@@ -160,7 +160,7 @@ Poll until every generation's `status` is a terminal value (`succeeded`, `failed
 GET /api/ai/queue/:generation_id
 ```
 
-Retrieves metadata for a single generation, including completed ones. Since generations persist after reaching a terminal state, this endpoint returns the final status and `result_url` once the generation is done.
+Retrieves metadata for a single generation. Includes `result_url` when the generation has succeeded and `error_message` when it has failed.
 
 ### Path Parameters
 
