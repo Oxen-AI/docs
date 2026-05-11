@@ -33,7 +33,7 @@ response = requests.post(
 generations = response.json()["generations"]
 print(f"Enqueued {len(generations)} generation(s)")
 for g in generations:
-    print(g["generation_id"], g["status"])  # status is "queued"
+    print(g["generation_id"], g["status"])
 ```
 
 ```bash cURL
