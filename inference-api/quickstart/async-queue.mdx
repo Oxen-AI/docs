@@ -5,7 +5,7 @@ description: "Enqueue image and video generations that run in the background"
 
 ## Overview
 
-Video generation can take minutes. The async queue returns immediately with a generation ID so you can avoid long-lived HTTP connections, run up to 4 generations in parallel, and build progress-tracking UIs. Generations persist after completion, so you can retrieve their status and output URLs at any time.
+Video generation can take minutes. The async queue returns immediately with a generation ID so you can avoid long-lived HTTP connections, run generations in parallel, and build progress-tracking UIs. You can either poll the queue or use SSE to receive events when generations complete.
 
 ## Enqueue a Job
 
