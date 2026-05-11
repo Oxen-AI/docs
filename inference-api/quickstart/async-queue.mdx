@@ -51,7 +51,7 @@ curl -X POST https://hub.oxen.ai/api/ai/queue \
 
 ## Poll Until Done
 
-Poll a generation by ID until its `status` reaches a terminal value (`succeeded`, `failed`, or `cancelled`). Completed generations persist, so the endpoint returns the final status and `result_url` rather than 404.
+Poll a generation by ID until its `status` reaches a terminal value (`succeeded`, `failed`, or `cancelled`). The response includes `result_url` on success and `error_message` on failure.
 
 <CodeGroup>
 
