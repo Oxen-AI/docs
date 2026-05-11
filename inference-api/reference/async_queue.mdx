@@ -7,7 +7,7 @@ description: "Enqueue image and video generation jobs that process in the backgr
 
 The synchronous endpoints (`/ai/images/generate`, `/ai/videos/generate`) block until the result is ready. For video generation, this can be 1-10+ minutes. The async queue returns immediately with generation IDs so you can:
 
-- Generate up to 4 images or videos in parallel
+- Run many generations in parallel (up to 4 per request, no limit on total queued)
 - Avoid long-lived HTTP connections
 - Build progress-tracking UIs
 - Query completed generations and their output URLs at any time
@@ -44,7 +44,7 @@ Submit an async image or video generation job.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `num_generations` | integer | `1` | How many generations to run in parallel. Range: 1-4. |
+| `num_generations` | integer | `1` | How many generations to enqueue per request. Range: 1-4. Call the endpoint multiple times to queue more. |
 | `target_namespace` | string | your username | Namespace to store results and bill to. |
 
 All other parameters (e.g. `prompt`, `multi_prompt`, `input_image`, `input_video`, `aspect_ratio`, `duration`, `seed`, `generate_audio`, `response_format`) are passed through to the model. Consult the model's `request_schema` via `GET /api/ai/models/:id` for supported parameters and their constraints.
