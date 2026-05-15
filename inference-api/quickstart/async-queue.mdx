@@ -5,7 +5,7 @@ description: "Enqueue image and video generations that run in the background"
 
 ## Overview
 
-Video generation can take minutes. The async queue returns immediately with a generation id so you can avoid long-lived HTTP connections, run up to 4 generations in parallel, and build progress-tracking UIs.
+Video generation can take minutes. The async queue returns immediately with a generation ID so you can avoid long-lived HTTP connections, run generations in parallel, and build progress-tracking UIs. You can either poll the queue or use SSE to receive events when generations complete.
 
 ## Enqueue a Job
 
@@ -51,39 +51,48 @@ curl -X POST https://hub.oxen.ai/api/ai/queue \
 
 ## Poll Until Done
 
-List in-progress generations with `GET /ai/queue`. A generation drops off the list once it finishes (or fails).
+Poll a generation by ID until its `status` reaches a terminal value (`succeeded`, `failed`, or `cancelled`). The response includes `result_url` on success and `error_message` on failure.
 
 <CodeGroup>
 
 ```python Python
 import time
 
-MODEL = "kling-video-v2-6-pro-text-to-video"
+generation_id = generations[0]["generation_id"]
 
 while True:
-    status = requests.get(
-        "https://hub.oxen.ai/api/ai/queue",
+    data = requests.get(
+        f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
         headers=HEADERS,
-        params={"model": MODEL},
     ).json()
-    if status["count"] == 0:
+    print(f"Status: {data['status']}")
+    if data["status"] in {"succeeded", "failed", "cancelled"}:
         break
-    print(f"Still processing: {status['count']} remaining")
     time.sleep(10)
 
-print("Done!")
+if data["status"] == "succeeded":
+    print(f"Done! Result: {data['result_url']}")
+else:
+    print(f"Generation {data['status']}: {data.get('error_message')}")
 ```
 
 ```bash cURL
 curl -H "Authorization: Bearer YOUR_API_KEY" \
-  "https://hub.oxen.ai/api/ai/queue?model=kling-video-v2-6-pro-text-to-video"
+  "https://hub.oxen.ai/api/ai/queue/GENERATION_ID"
 ```
 
 </CodeGroup>
 
+You can also list all active generations with `GET /ai/queue` to see how many are still in progress:
+
+```bash
+curl -H "Authorization: Bearer YOUR_API_KEY" \
+  "https://hub.oxen.ai/api/ai/queue?model=kling-video-v2-6-pro-text-to-video"
+```
+
 ## Fetch a Single Job
 
-Use the generation id when you want one job's status without listing everything:
+Use the generation ID to get a specific job's full status, including `result_url` on success:
 
 ```bash
 curl -H "Authorization: Bearer YOUR_API_KEY" \

@@ -358,12 +358,7 @@ def _json_body_py(body: dict[str, Any], *, indent_prefix: str = "    ") -> str:
 
 
 def render_async_poll_curl(body: dict[str, Any]) -> str:
-    """Enqueue the job, capture the generation id, and poll that id until it 404s.
-
-    The queue endpoint drops finished generations, so a 404 means "done"; the
-    actual result URL is only emitted over SSE (see the SSE variant) or persisted
-    to the caller's namespace.
-    """
+    """Enqueue the job, capture the generation id, and poll until it reaches a terminal status."""
     pretty = _shell_escape_single_quoted(json.dumps(body, indent=2))
     return (
         "# Enqueue, capture the generation id.\n"
@@ -372,13 +367,18 @@ def render_async_poll_curl(body: dict[str, Any]) -> str:
         "  -H \"Authorization: Bearer $OXEN_API_KEY\" \\\n"
         f"  -d '{pretty}' | jq -r '.generations[0].generation_id')\n"
         "\n"
-        "# Poll the single generation until it 404s (terminal state).\n"
-        "while curl -s -o /dev/null -w \"%{http_code}\" \\\n"
-        "    -H \"Authorization: Bearer $OXEN_API_KEY\" \\\n"
-        "    \"https://hub.oxen.ai/api/ai/queue/$GEN_ID\" | grep -q \"^200$\"; do\n"
+        "# Poll until the generation reaches a terminal status.\n"
+        "while true; do\n"
+        "  STATUS=$(curl -s -H \"Authorization: Bearer $OXEN_API_KEY\" \\\n"
+        "    \"https://hub.oxen.ai/api/ai/queue/$GEN_ID\" | jq -r '.status')\n"
+        "  echo \"Status: $STATUS\"\n"
+        "  case $STATUS in succeeded|failed|cancelled) break;; esac\n"
         "  sleep 5\n"
         "done\n"
-        "echo \"Done. See the 'Async with SSE' tab to receive the result URL.\""
+        "\n"
+        "# Print the result.\n"
+        "curl -s -H \"Authorization: Bearer $OXEN_API_KEY\" \\\n"
+        "  \"https://hub.oxen.ai/api/ai/queue/$GEN_ID\" | jq ."
     )
 
 
@@ -403,14 +403,18 @@ def render_async_poll_python(body: dict[str, Any]) -> str:
         "generation_id = enqueue.json()[\"generations\"][0][\"generation_id\"]\n"
         "\n"
         "while True:\n"
-        "    resp = requests.get(\n"
+        "    data = requests.get(\n"
         "        f\"https://hub.oxen.ai/api/ai/queue/{generation_id}\",\n"
         "        headers=HEADERS,\n"
-        "    )\n"
-        "    if resp.status_code == 404:\n"
+        "    ).json()\n"
+        "    if data[\"status\"] in {\"succeeded\", \"failed\", \"cancelled\"}:\n"
         "        break\n"
         "    time.sleep(5)\n"
-        "print(\"Done. See the 'Async with SSE' tab to receive the result URL.\")"
+        "\n"
+        "if data[\"status\"] == \"succeeded\":\n"
+        "    print(f\"Result: {data['result_url']}\")\n"
+        "else:\n"
+        "    print(f\"Generation {data['status']}: {data.get('error_message')}\")"
     )
 
 
