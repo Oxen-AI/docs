@@ -151,13 +151,18 @@ Some other noteworthy features of FLUX.2 [dev] include native support for LoRA f
           "prompt": "Bloxy, the cartoon ox in the reference image, as a superhero. The overall style should be kept the same as the reference image. Bloxy should be wearing a blue suit with whitish-grey sleeves and leggings. On Bloxy'\''s shoulders rest a yellow shoulder mantle and yellow capelet with a collar clasp. A red jewel lies in the center of the collar clasp."
         }' | jq -r '.generations[0].generation_id')
 
-        # Poll the single generation until it 404s (terminal state).
-        while curl -s -o /dev/null -w "%{http_code}" \
-            -H "Authorization: Bearer $OXEN_API_KEY" \
-            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | grep -q "^200$"; do
+        # Poll until the generation reaches a terminal status.
+        while true; do
+          STATUS=$(curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.status')
+          echo "Status: $STATUS"
+          case $STATUS in succeeded|failed|cancelled) break;; esac
           sleep 5
         done
-        echo "Done. See the 'Async with SSE' tab to receive the result URL."
+
+        # Print the result.
+        curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+          "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq .
         ```
 
         ```python Python
@@ -182,14 +187,18 @@ Some other noteworthy features of FLUX.2 [dev] include native support for LoRA f
         generation_id = enqueue.json()["generations"][0]["generation_id"]
 
         while True:
-            resp = requests.get(
+            data = requests.get(
                 f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
                 headers=HEADERS,
-            )
-            if resp.status_code == 404:
+            ).json()
+            if data["status"] in {"succeeded", "failed", "cancelled"}:
                 break
             time.sleep(5)
-        print("Done. See the 'Async with SSE' tab to receive the result URL.")
+
+        if data["status"] == "succeeded":
+            print(f"Result: {data['result_url']}")
+        else:
+            print(f"Generation {data['status']}: {data.get('error_message')}")
         ```
 
         </CodeGroup>
@@ -219,13 +228,18 @@ Some other noteworthy features of FLUX.2 [dev] include native support for LoRA f
           "disable_safety_checker": false
         }' | jq -r '.generations[0].generation_id')
 
-        # Poll the single generation until it 404s (terminal state).
-        while curl -s -o /dev/null -w "%{http_code}" \
-            -H "Authorization: Bearer $OXEN_API_KEY" \
-            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | grep -q "^200$"; do
+        # Poll until the generation reaches a terminal status.
+        while true; do
+          STATUS=$(curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.status')
+          echo "Status: $STATUS"
+          case $STATUS in succeeded|failed|cancelled) break;; esac
           sleep 5
         done
-        echo "Done. See the 'Async with SSE' tab to receive the result URL."
+
+        # Print the result.
+        curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+          "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq .
         ```
 
         ```python Python
@@ -260,14 +274,18 @@ Some other noteworthy features of FLUX.2 [dev] include native support for LoRA f
         generation_id = enqueue.json()["generations"][0]["generation_id"]
 
         while True:
-            resp = requests.get(
+            data = requests.get(
                 f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
                 headers=HEADERS,
-            )
-            if resp.status_code == 404:
+            ).json()
+            if data["status"] in {"succeeded", "failed", "cancelled"}:
                 break
             time.sleep(5)
-        print("Done. See the 'Async with SSE' tab to receive the result URL.")
+
+        if data["status"] == "succeeded":
+            print(f"Result: {data['result_url']}")
+        else:
+            print(f"Generation {data['status']}: {data.get('error_message')}")
         ```
 
         </CodeGroup>

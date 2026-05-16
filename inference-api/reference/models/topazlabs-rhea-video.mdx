@@ -139,13 +139,18 @@ Use Rhea as an updated alternative to Proteus when you want stronger detail reco
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }' | jq -r '.generations[0].generation_id')
 
-        # Poll the single generation until it 404s (terminal state).
-        while curl -s -o /dev/null -w "%{http_code}" \
-            -H "Authorization: Bearer $OXEN_API_KEY" \
-            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | grep -q "^200$"; do
+        # Poll until the generation reaches a terminal status.
+        while true; do
+          STATUS=$(curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.status')
+          echo "Status: $STATUS"
+          case $STATUS in succeeded|failed|cancelled) break;; esac
           sleep 5
         done
-        echo "Done. See the 'Async with SSE' tab to receive the result URL."
+
+        # Print the result.
+        curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+          "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq .
         ```
 
         ```python Python
@@ -170,14 +175,18 @@ Use Rhea as an updated alternative to Proteus when you want stronger detail reco
         generation_id = enqueue.json()["generations"][0]["generation_id"]
 
         while True:
-            resp = requests.get(
+            data = requests.get(
                 f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
                 headers=HEADERS,
-            )
-            if resp.status_code == 404:
+            ).json()
+            if data["status"] in {"succeeded", "failed", "cancelled"}:
                 break
             time.sleep(5)
-        print("Done. See the 'Async with SSE' tab to receive the result URL.")
+
+        if data["status"] == "succeeded":
+            print(f"Result: {data['result_url']}")
+        else:
+            print(f"Generation {data['status']}: {data.get('error_message')}")
         ```
 
         </CodeGroup>
@@ -205,13 +214,18 @@ Use Rhea as an updated alternative to Proteus when you want stronger detail reco
           "target_fps": 24
         }' | jq -r '.generations[0].generation_id')
 
-        # Poll the single generation until it 404s (terminal state).
-        while curl -s -o /dev/null -w "%{http_code}" \
-            -H "Authorization: Bearer $OXEN_API_KEY" \
-            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | grep -q "^200$"; do
+        # Poll until the generation reaches a terminal status.
+        while true; do
+          STATUS=$(curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.status')
+          echo "Status: $STATUS"
+          case $STATUS in succeeded|failed|cancelled) break;; esac
           sleep 5
         done
-        echo "Done. See the 'Async with SSE' tab to receive the result URL."
+
+        # Print the result.
+        curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+          "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq .
         ```
 
         ```python Python
@@ -244,14 +258,18 @@ Use Rhea as an updated alternative to Proteus when you want stronger detail reco
         generation_id = enqueue.json()["generations"][0]["generation_id"]
 
         while True:
-            resp = requests.get(
+            data = requests.get(
                 f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
                 headers=HEADERS,
-            )
-            if resp.status_code == 404:
+            ).json()
+            if data["status"] in {"succeeded", "failed", "cancelled"}:
                 break
             time.sleep(5)
-        print("Done. See the 'Async with SSE' tab to receive the result URL.")
+
+        if data["status"] == "succeeded":
+            print(f"Result: {data['result_url']}")
+        else:
+            print(f"Generation {data['status']}: {data.get('error_message')}")
         ```
 
         </CodeGroup>
@@ -444,4 +462,4 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | `grain_type` | `string` | &mdash; | Film grain style. One of: silver_rich, gaussian, grey. |
 | `halo` | `number` | `0` | Halo and ringing reduction. Higher values suppress halos more strongly. Range: -1 – 1. |
 | `noise` | `number` | `0` | Noise handling. Negative reduces noise, positive adds grain-like noise. Range: -1 – 1. |
-| `target_fps` | `integer` | `24` | Target frame rate (fps), up to 60. Range: 1 – 60. |
+| `target_fps` | `number` | `24` | Target frame rate (fps). One of: 24, 23.976, 25, 29.97, 30, 50, 59.94, 60. |
