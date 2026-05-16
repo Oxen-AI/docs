@@ -1,29 +1,22 @@
 ---
-title: "LTX-2 Pro"
-description: "Generates high-res 4K@25FPS videos from image+text, camera control, and synced audio."
+title: "Kling O3 4K: Text-to-Video"
+description: "Native 4K text-to-video generation with cinema-grade detail and optional synchronized audio."
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try LTX-2 Pro in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=ltx-2-19b-image-to-video">
+  <Card title="Try Kling O3 4K: Text-to-Video in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=kling-video-o3-4k-text-to-video">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `ltx-2-19b-image-to-video`
+**Model ID:** `kling-video-o3-4k-text-to-video`
 
-LTX-2 19B - Image to Video is a diffusion transformer that excels in generating high-resolution video clips from an input image and text prompt, producing up to 4K resolution at 25 FPS with options for synchronized audio.
-
-Some other noteworthy features of LTX-2 19B - Image to Video include multi-keyframe conditioning for scene control, 3D camera logic for realistic movements, and LoRA fine-tuning support.
-
-| Metric             | Value              |
-|--------------------|--------------------|
-| Parameter Count    | 19 billion         |
-| Mixture of Experts | No                 |
+Kling O3 4K Text-to-Video is the first AI video model with native 4K (3840x2160) output, generating cinema-grade footage directly from a text prompt with no upscaling step. It supports clips from 3 to 15 seconds, multiple aspect ratios (16:9, 9:16, 1:1), and optional native synchronized audio in English and Chinese. Built for production-ready visuals, large-screen displays, and professional creative workflows where clarity and cinematic detail are non-negotiable.
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=ltx-2-19b-image-to-video) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=kling-video-o3-4k-text-to-video) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
@@ -43,7 +36,7 @@ Some other noteworthy features of LTX-2 19B - Image to Video include multi-keyfr
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-19b-image-to-video",
+          "model": "kling-video-o3-4k-text-to-video",
           "prompt": "<prompt>"
         }'
         ```
@@ -59,46 +52,8 @@ Some other noteworthy features of LTX-2 19B - Image to Video include multi-keyfr
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "ltx-2-19b-image-to-video",
+                "model": "kling-video-o3-4k-text-to-video",
                 "prompt": "<prompt>"
-            },
-        )
-        response.raise_for_status()
-        print(response.json())
-        ```
-
-        </CodeGroup>
-
-      </Tab>
-      <Tab title="Basic parameters">
-
-        <CodeGroup>
-
-        ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
-          -H "Content-Type: application/json" \
-          -H "Authorization: Bearer $OXEN_API_KEY" \
-          -d '{
-          "model": "ltx-2-19b-image-to-video",
-          "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-        }'
-        ```
-
-        ```python Python
-        import os
-        import requests
-
-        response = requests.post(
-            "https://hub.oxen.ai/api/ai/videos/generate",
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
-            },
-            json={
-                "model": "ltx-2-19b-image-to-video",
-                "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         response.raise_for_status()
@@ -117,12 +72,11 @@ Some other noteworthy features of LTX-2 19B - Image to Video include multi-keyfr
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-19b-image-to-video",
+          "model": "kling-video-o3-4k-text-to-video",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "resolution": "1080p",
-          "duration": 6,
-          "generate_audio": true
+          "duration": 5,
+          "aspect_ratio": "16:9",
+          "generate_audio": false
         }'
         ```
 
@@ -137,12 +91,11 @@ Some other noteworthy features of LTX-2 19B - Image to Video include multi-keyfr
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "ltx-2-19b-image-to-video",
+                "model": "kling-video-o3-4k-text-to-video",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "resolution": "1080p",
-                "duration": 6,
-                "generate_audio": true
+                "duration": 5,
+                "aspect_ratio": "16:9",
+                "generate_audio": false
             },
         )
         response.raise_for_status()
@@ -170,7 +123,7 @@ Some other noteworthy features of LTX-2 19B - Image to Video include multi-keyfr
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-19b-image-to-video",
+          "model": "kling-video-o3-4k-text-to-video",
           "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
@@ -202,77 +155,8 @@ Some other noteworthy features of LTX-2 19B - Image to Video include multi-keyfr
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "ltx-2-19b-image-to-video",
+                "model": "kling-video-o3-4k-text-to-video",
                 "prompt": "<prompt>"
-            },
-        )
-        enqueue.raise_for_status()
-        generation_id = enqueue.json()["generations"][0]["generation_id"]
-
-        while True:
-            data = requests.get(
-                f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
-                headers=HEADERS,
-            ).json()
-            if data["status"] in {"succeeded", "failed", "cancelled"}:
-                break
-            time.sleep(5)
-
-        if data["status"] == "succeeded":
-            print(f"Result: {data['result_url']}")
-        else:
-            print(f"Generation {data['status']}: {data.get('error_message')}")
-        ```
-
-        </CodeGroup>
-
-      </Tab>
-      <Tab title="Basic parameters">
-
-        <CodeGroup>
-
-        ```bash cURL
-        # Enqueue, capture the generation id.
-        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
-          -H "Content-Type: application/json" \
-          -H "Authorization: Bearer $OXEN_API_KEY" \
-          -d '{
-          "model": "ltx-2-19b-image-to-video",
-          "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-        }' | jq -r '.generations[0].generation_id')
-
-        # Poll until the generation reaches a terminal status.
-        while true; do
-          STATUS=$(curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
-            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.status')
-          echo "Status: $STATUS"
-          case $STATUS in succeeded|failed|cancelled) break;; esac
-          sleep 5
-        done
-
-        # Print the result.
-        curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
-          "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq .
-        ```
-
-        ```python Python
-        import os
-        import time
-        import requests
-
-        HEADERS = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
-        }
-
-        enqueue = requests.post(
-            "https://hub.oxen.ai/api/ai/queue",
-            headers=HEADERS,
-            json={
-                "model": "ltx-2-19b-image-to-video",
-                "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         enqueue.raise_for_status()
@@ -306,12 +190,11 @@ Some other noteworthy features of LTX-2 19B - Image to Video include multi-keyfr
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-19b-image-to-video",
+          "model": "kling-video-o3-4k-text-to-video",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "resolution": "1080p",
-          "duration": 6,
-          "generate_audio": true
+          "duration": 5,
+          "aspect_ratio": "16:9",
+          "generate_audio": false
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -342,12 +225,11 @@ Some other noteworthy features of LTX-2 19B - Image to Video include multi-keyfr
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "ltx-2-19b-image-to-video",
+                "model": "kling-video-o3-4k-text-to-video",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "resolution": "1080p",
-                "duration": 6,
-                "generate_audio": true
+                "duration": 5,
+                "aspect_ratio": "16:9",
+                "generate_audio": false
             },
         )
         enqueue.raise_for_status()
@@ -389,7 +271,7 @@ Some other noteworthy features of LTX-2 19B - Image to Video include multi-keyfr
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-19b-image-to-video",
+          "model": "kling-video-o3-4k-text-to-video",
           "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
@@ -418,75 +300,8 @@ Some other noteworthy features of LTX-2 19B - Image to Video include multi-keyfr
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "ltx-2-19b-image-to-video",
+                "model": "kling-video-o3-4k-text-to-video",
                 "prompt": "<prompt>"
-            },
-        )
-        enqueue.raise_for_status()
-        generation_id = enqueue.json()["generations"][0]["generation_id"]
-
-        with requests.get(
-            "https://hub.oxen.ai/api/events",
-            headers=AUTH,
-            stream=True,
-        ) as stream:
-            event_name = None
-            for line in stream.iter_lines(decode_unicode=True):
-                if line.startswith("event: "):
-                    event_name = line.removeprefix("event: ")
-                elif line.startswith("data: ") and event_name == "media_generation_completed":
-                    payload = json.loads(line.removeprefix("data: "))
-                    if payload.get("generation_id") == generation_id:
-                        print(payload)
-                        break
-        ```
-
-        </CodeGroup>
-
-      </Tab>
-      <Tab title="Basic parameters">
-
-        <CodeGroup>
-
-        ```bash cURL
-        # Enqueue, capture the generation id.
-        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
-          -H "Content-Type: application/json" \
-          -H "Authorization: Bearer $OXEN_API_KEY" \
-          -d '{
-          "model": "ltx-2-19b-image-to-video",
-          "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-        }' | jq -r '.generations[0].generation_id')
-
-        # Stream the SSE channel, grab the data line that follows a
-        # media_generation_completed event for our id, and pretty-print it.
-        curl -sN -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/events \
-          | awk -v id="$GEN_ID" '
-            /^event: media_generation_completed$/ { expect=1; next }
-            /^data: / && expect {
-              payload = substr($0, 7)
-              if (index(payload, "\"generation_id\":\"" id "\"")) { print payload; exit }
-              expect = 0
-            }
-          ' | jq .
-        ```
-
-        ```python Python
-        import json
-        import os
-        import requests
-
-        API_KEY = os.environ["OXEN_API_KEY"]
-        AUTH = {"Authorization": f"Bearer {API_KEY}"}
-
-        enqueue = requests.post(
-            "https://hub.oxen.ai/api/ai/queue",
-            headers={**AUTH, "Content-Type": "application/json"},
-            json={
-                "model": "ltx-2-19b-image-to-video",
-                "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         enqueue.raise_for_status()
@@ -521,12 +336,11 @@ Some other noteworthy features of LTX-2 19B - Image to Video include multi-keyfr
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-19b-image-to-video",
+          "model": "kling-video-o3-4k-text-to-video",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "resolution": "1080p",
-          "duration": 6,
-          "generate_audio": true
+          "duration": 5,
+          "aspect_ratio": "16:9",
+          "generate_audio": false
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -554,12 +368,11 @@ Some other noteworthy features of LTX-2 19B - Image to Video include multi-keyfr
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "ltx-2-19b-image-to-video",
+                "model": "kling-video-o3-4k-text-to-video",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "resolution": "1080p",
-                "duration": 6,
-                "generate_audio": true
+                "duration": 5,
+                "aspect_ratio": "16:9",
+                "generate_audio": false
             },
         )
         enqueue.raise_for_status()
@@ -594,7 +407,7 @@ Some other noteworthy features of LTX-2 19B - Image to Video include multi-keyfr
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/ltx-2-19b-image-to-video
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/kling-video-o3-4k-text-to-video
 ```
 
 ## Request parameters
@@ -603,13 +416,12 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | Text prompt describing the video to generate |
+| `prompt` | `string` | &mdash; | Text prompt describing the scene to generate. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `input_image` | `string` | &mdash; | First frame image for optional image-to-video generation Format: uri. |
-| `resolution` | `string` | `"1080p"` | Resolution quality of the generated video One of: 1080p, 2k, 4k. |
-| `duration` | `integer` | `6` | Duration of the video in seconds One of: 6, 8, 10. |
-| `generate_audio` | `boolean` | `true` | Generate audio for the video |
+| `duration` | `integer` | `5` | Length of the generated video in seconds. Range: 3 – 15. |
+| `aspect_ratio` | `string` | `"16:9"` | Aspect ratio of the generated video. One of: 16:9, 9:16, 1:1. |
+| `generate_audio` | `boolean` | `false` | Generate synchronized native audio (English or Chinese) with the video. |
