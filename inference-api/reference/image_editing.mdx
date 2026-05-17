@@ -17,7 +17,7 @@ Edit an existing image using a text prompt. The request blocks until the edited 
 |---|---|---|---|---|
 | `model` | string | **yes** | -- | Image editing model (e.g. `qwen-image-edit`, `nano-banana-2-edit`, `xai-grok-imagine-image-edit`) |
 | `prompt` | string | **yes** | -- | Description of the edit to apply. |
-| `input_image` | string \| array of strings (URL) | **yes** | -- | URL of the image to edit. Most models accept a single URL string; multi-image models (e.g. `gpt-image-2-edit`, `nano-banana-2-edit`, `qwen-image-edit-2511`) accept an array of URLs for multi-reference composition. Check the [per-model reference](/inference-api/reference/model-references) for the exact type a given model expects. URLs must be publicly accessible — data URIs (`data:image/...;base64,...`) also work but are not recommended for production. |
+| `input_image` | string \| array of strings (URL) | **yes** | -- | URL of the image to edit. Most models accept a single URL string; multi-image models (e.g. `gpt-image-2-edit`, `nano-banana-2-edit`, `qwen-image-edit-2511`) accept an array of URLs for multi-reference composition. Check the [per-model reference](/inference-api/reference/model-references) for the exact type a given model expects. URLs must be publicly accessible. Data URIs (`data:image/...;base64,...`) also work but are not recommended for production. |
 | `response_format` | string | no | `"url"` | `"url"` returns a hosted URL. `"b64_json"` returns base64-encoded image bytes inline. |
 | `target_namespace` | string | no | current user | Namespace to save results and bill to. Can be an organization name. |
 
@@ -102,7 +102,7 @@ curl -X POST https://hub.oxen.ai/api/ai/images/edit \
 
 </CodeGroup>
 
-Whether a model accepts a single image or an array of images is part of its schema — see each model's [API reference](/inference-api/reference/model-references) for the exact type.
+Whether a model accepts a single image or an array of images is part of its schema. See each model's [API reference](/inference-api/reference/model-references) for the exact type.
 
 ### Response
 
