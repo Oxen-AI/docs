@@ -1,0 +1,80 @@
+---
+title: '🗂️ Deploy From Directory'
+description: 'Drop an `oxen.toml` into any directory in your repo to get a one-click Deploy Model button in the UI.'
+---
+
+Any directory that contains an `oxen.toml` with a valid `[model]` section becomes deployable from the Oxen.ai UI. Browse to the folder and a **Deploy Model** button appears alongside the file listing. Clicking it provisions a dedicated inference endpoint using the settings in `oxen.toml`.
+
+Below is an example of the deploy model button:
+
+<img alt="Deploy Model button" classname="block" src="/images/deploy-model.png" />
+
+## The `oxen.toml` file
+
+Place the file at the root of the directory you want to deploy. Only one `[model]` section is required.
+
+```toml oxen.toml
+[model]
+source = "Qwen/Qwen3-8B"
+type   = "lora"
+```
+
+| Field | Required | Description |
+|---|---|---|
+| `source` | yes | The base model this directory was trained from. Accepts a HuggingFace ID (e.g. `Qwen/Qwen3-8B`) or an Oxen model name. |
+| `type` | yes | Either `"lora"` (LoRA adapter weights only) or `"full"` (full model weights). |
+
+## Examples
+
+### LoRA adapter
+
+A directory containing LoRA weights trained on top of a supported base model:
+
+```toml oxen.toml
+[model]
+source = "Qwen/Qwen3-8B"
+type   = "lora"
+```
+
+### Full fine-tune
+
+A directory containing full model weights:
+
+```toml oxen.toml
+[model]
+source = "meta-llama/Llama-3.2-3B-Instruct"
+type   = "full"
+```
+
+### Image model
+
+The `source` field works for any supported base model, including image and video models:
+
+```toml oxen.toml
+[model]
+source = "black-forest-labs/FLUX.1-dev"
+type   = "lora"
+```
+
+## The UI workflow
+
+1. Push a directory containing model weights and an `oxen.toml` to your repository.
+2. Navigate to that directory in the Oxen.ai UI.
+3. Click **Deploy Model**. Oxen.ai reads `oxen.toml`, resolves the base model, and spins up a dedicated endpoint.
+4. Once the deployment is live, use the returned model name with the [Inference API](/inference-api/overview) or the in-browser playground.
+
+Below is an example of the deployment status in the workbench view after clicking Deploy Model:
+
+<img alt="Deployment status view" classname="block" src="/images/deployment-status.png" />
+
+Redeploying from the same directory and revision reuses the existing deployment rather than creating a duplicate.
+
+## Common errors
+
+| Message | Cause |
+|---|---|
+| `oxen.toml not found at <path>/oxen.toml` | No `oxen.toml` in the directory you're trying to deploy. |
+| `oxen.toml must contain a [model] section` | File parsed but the top-level `[model]` table is missing. |
+| `oxen.toml missing required field: model.source` | `source` is not set. |
+| `oxen.toml model.type must be "lora" or "full"` | `type` is set to something other than `"lora"` or `"full"`. |
+| `Source model not found: <source>` | The `source` doesn't match any HuggingFace ID or Oxen model name Oxen.ai currently supports. Contact [hello@oxen.ai](mailto:hello@oxen.ai) to request support for a new base model. |

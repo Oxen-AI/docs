@@ -71,7 +71,7 @@
             "pages": [
                 "getting-started/intro",
                 {
-                    "group": "\u26a1\ufe0f Models",
+                    "group": "⚡️ Models",
                     "pages": [
                         "getting-started/inference",
                         "examples/inference/chat_completions",
@@ -82,7 +82,7 @@
                     ]
                 },
                 {
-                    "group": "\ud83d\udee0\ufe0f Fine-Tuning",
+                    "group": "🛠️ Fine-Tuning",
                     "pages": [
                         "getting-started/fine-tuning",
                         "examples/fine-tuning/text_generation",
@@ -95,7 +95,8 @@
                 },
                 "getting-started/datasets",
                 "getting-started/batch_inference",
-                "getting-started/versioning"
+                "getting-started/versioning",
+                "features/deploy_from_directory"
             ]
         },
         {
@@ -103,7 +104,7 @@
             "pages": [
                 "getting-started/install",
                 {
-                    "group": "\ud83d\udcbb Command Line Interface",
+                    "group": "💻 Command Line Interface",
                     "pages": [
                         "getting-started/command-line/config",
                         "getting-started/command-line/import_data",
