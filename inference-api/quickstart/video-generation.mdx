@@ -73,22 +73,24 @@ response = requests.post(
         "duration": 5,
     },
 )
-generations = response.json()["generations"]
-print(f"Enqueued {len(generations)} generation(s)")
+generation_id = response.json()["generations"][0]["generation_id"]
+print(f"Enqueued generation: {generation_id}")
 
 # 2. Poll until done
 while True:
-    status = requests.get(
-        "https://hub.oxen.ai/api/ai/queue",
+    data = requests.get(
+        f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
         headers=HEADERS,
-        params={"model": MODEL},
     ).json()
-    if status["count"] == 0:
+    print(f"Status: {data['status']}")
+    if data["status"] in {"succeeded", "failed", "cancelled"}:
         break
-    print(f"Still processing: {status['count']} remaining")
     time.sleep(10)
 
-print("Done!")
+if data["status"] == "succeeded":
+    print(f"Done! Result: {data['result_url']}")
+else:
+    print(f"Generation {data['status']}: {data.get('error_message')}")
 ```
 
 ```bash cURL

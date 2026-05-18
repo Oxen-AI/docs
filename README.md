@@ -19,6 +19,14 @@ then `uv run generate-finetune-docs.py` to generate the finetune api documentati
 
 This will fetch the new models from https://hub.oxen.ai/api/evaluations/models and generate the documentation from them. The documentation will be generated in the `fine-tuning-api/reference` directory.
 
+## Per-Model Inference API Reference Pages
+
+```
+uv run generate-model-docs.py
+```
+
+Fetches the same `/api/evaluations/models` list and writes one `.mdx` page per inference-capable model under `inference-api/reference/models/`, plus an index page at `inference-api/reference/model-references.mdx` that links to each one (grouped by developer). Only the index page is listed in `mint.json`; the per-model pages are reachable by direct URL. This avoids Mintlify's eager render of a 130-leaf flat nav that made the Inference API tab slow to load. Pass `--input path/to/models.json` to run offline against a saved payload.
+
 ## Python Doc Generation
 
 To generate/update the python documentation for the `/python-api` directory there is a `./generate-python-docs.sh` script.

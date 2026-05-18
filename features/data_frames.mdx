@@ -48,8 +48,12 @@ Oxen also provides command line tools to interact with data frames. This makes i
 `oxen df` is a handy subcommand to interact with data frames locally. For example, `oxen df <FILENAME>` displays the contents of tabular data files.
 
 ```bash
-$ oxen df data.tsv
+oxen df data.tsv
+```
 
+Output:
+
+```
 shape: (4_774, 2)
 +-----------+---------------------------------+
 | dcategory | text                            |
@@ -76,8 +80,12 @@ You can also use `oxen df` options to view your data with modifications. These c
 
 ```bash
 # Add extra column
-$ oxen df data.tsv --add-col 'language:English:str'
+oxen df data.tsv --add-col 'language:English:str'
+```
 
+Output:
+
+```
 shape: (4_774, 3)
 +----------+---------------------------------+----------+
 | category | text                            | language |
@@ -96,10 +104,16 @@ shape: (4_774, 3)
 | ham      | Mark works tomorrow. He gets o… | English  |
 | ham      | Keep ur problems in ur heart, … | English  |
 +----------+---------------------------------+----------+
+```
 
+```bash
 # Filter out spam messages, view text only
-$ oxen df data.tsv --filter 'category == ham' --columns 'text'
+oxen df data.tsv --filter 'category == ham' --columns 'text'
+```
 
+Output:
+
+```
 shape: (4_124, 1)
 +---------------------------------+
 | text                            |
@@ -118,10 +132,16 @@ shape: (4_124, 1)
 | Mark works tomorrow. He gets o… |
 | Keep ur problems in ur heart, … |
 +---------------------------------+
+```
 
+```bash
 # Randomize the data, then view the first 5 entries
-$ oxen df data.tsv --head 5 --randomize
+oxen df data.tsv --head 5 --randomize
+```
 
+Output:
+
+```
 shape: (5, 2)
 +----------+---------------------------------+
 | category | text                            |
@@ -224,8 +244,12 @@ All of these operations are exposed over HTTP, so you are not limited to using t
 You can also edit data files locally with `oxen df --write`. Any modifications you make with this flag set will be written back to the original file and register as 'modified' in your Oxen repository.
 
 ```bash
-$ oxen df data.tsv --filter 'category == spam' --write
+oxen df data.tsv --filter 'category == spam' --write
+```
 
+Output:
+
+```
 shape: (650, 2)
 +----------+---------------------------------+
 | category | text                            |
@@ -245,9 +269,15 @@ shape: (650, 2)
 | spam     | Do you want a New Nokia 3510i … |
 +----------+---------------------------------+
 Writing "data.tsv"
+```
 
-$ oxen df data.tsv
+```bash
+oxen df data.tsv
+```
 
+Output:
+
+```
 shape: (650, 2)
 +----------+---------------------------------+
 | category | text                            |
@@ -286,7 +316,9 @@ Some formats like parquet and arrow are more efficient for different [tasks](htt
 oxen df train.csv -o train.parquet
 ```
 
-```bash
+Output:
+
+```
 shape: (9_000, 6)
 +-------------------------+-------+--------+--------+--------+--------+
 | file                    ┆ label ┆ min_x  ┆ min_y  ┆ width  ┆ height |
@@ -312,7 +344,11 @@ Oxen has a powerful SQL query engine built in to the CLI. You can run SQL querie
 
 ```bash
 oxen df train.csv --sql 'SELECT * FROM df WHERE label = "dog"'
+```
 
+Output:
+
+```
 shape: (4_860, 6)
 +-------------------------+-------+--------+--------+--------+--------+
 | file                    ┆ label ┆ min_x  ┆ min_y  ┆ width  ┆ height |
@@ -329,14 +365,18 @@ shape: (4_860, 6)
 | images/000000041257.jpg ┆ dog   ┆ 6.81   ┆ 117.29 ┆ 207.06 ┆ 86.08  |
 | images/000000321014.jpg ┆ dog   ┆ 51.86  ┆ 61.18  ┆ 166.26 ┆ 63.11  |
 +-------------------------+-------+--------+--------+--------+--------+
-​```
+```
 
 ## Filter
-If you don't need a full sql query, Oxen also has a lightweight `--filter` option which supports >, <, and == operations
+If you don't need a full sql query, Oxen also has a lightweight `--filter` option which supports `>`, `<`, and `==` operations
 
 ```bash
 oxen df train.csv --filter 'width > 100'
+```
 
+Output:
+
+```
 shape: (3_483, 6)
 +-------------------------+-------+--------+--------+--------+--------+
 | file                    | label | min_x  | min_y  | width  | height |
@@ -355,6 +395,7 @@ shape: (3_483, 6)
 | images/000000071025.jpg | cat   | 55.33  | 105.45 | 160.15 | 73.57  |
 | images/000000171435.jpg | dog   | 22.86  | 100.03 | 125.55 | 41.61  |
 +-------------------------+-------+--------+--------+--------+--------+
+```
 
 ## View Schema
 
@@ -366,7 +407,9 @@ To view a data frame's schema in full, you can use the `--schema` flag.
 oxen df train.csv --schema
 ```
 
-```bash
+Output:
+
+```
 +--------+-------+
 | column | dtype |
 +----------------+
@@ -392,7 +435,9 @@ If you only need a subset of your data frame's columns, you can specify them in 
 oxen df train.csv --columns 'file,label'
 ```
 
-```bash
+Output:
+
+```
 shape: (9_000, 2)
 +-------------------------+-------+
 | file                    ┆ label |
@@ -419,7 +464,9 @@ You can also view particular rows using `--take`
 oxen df train.csv --take '1,13,42'
 ```
 
-```bash
+Output:
+
+```
 shape: (3, 6)
 +-------------------------+-------+-------+-------+--------+--------+
 | file                    ┆ label ┆ min_x ┆ min_y ┆ width  ┆ height |
@@ -459,7 +506,9 @@ Your data might not match the schema of a data frame you want to combine with, i
 oxen df train.csv --add-col 'is_cute:unknown:str'
 ```
 
-```bash
+Output:
+
+```
 shape: (9_000, 7)
 +-------------------------+-------+--------+--------+--------+--------+---------+
 | file                    ┆ label ┆ min_x  ┆ min_y  ┆ width  ┆ height ┆ is_cute |
@@ -486,7 +535,9 @@ You can also append new rows to the data frame. The `--add-row` option takes in 
 oxen df train.csv --add-row 'images/my_cat.jpg,cat,0,0,0,0'
 ```
 
-```bash
+Output:
+
+```
 shape: (9_001, 6)
 +-------------------------+-------+--------+--------+--------+--------+
 | file                    ┆ label ┆ min_x  ┆ min_y  ┆ width  ┆ height |
@@ -513,7 +564,9 @@ Often, you'll want to randomize data before splitting into train and test sets, 
 oxen df train.csv --randomize
 ```
 
-```bash
+Output:
+
+```
 shape: (9_000, 6)
 +-------------------------+-------+--------+--------+--------+--------+
 | file                    ┆ label ┆ min_x  ┆ min_y  ┆ width  ┆ height |
@@ -540,7 +593,9 @@ You can sort your data with the `sort` flag. You can sort the data by the values
 oxen df train.csv --sort "height"
 ```
 
-```bash
+Output:
+
+```
 shape: (9_000, 6)
 +-------------------------+-------+--------+--------+--------+--------+
 | file                    ┆ label ┆ min_x  ┆ min_y  ┆ width  ┆ height |
@@ -567,7 +622,9 @@ You can also reverse the order of a data table. By default `--sort` sorts in asc
 oxen df train.csv --reverse
 ```
 
-```bash
+Output:
+
+```
 shape: (9_000, 6)
 +-------------------------+-------+--------+--------+--------+--------+
 | file                    | label | min_x  | min_y  | width  | height |
