@@ -127,4 +127,4 @@ Same format as `/ai/images/generate`:
 | Image URL not accessible | `"... 403 Client Error: Forbidden for url: ..."` |
 | Model not found | `"Model not found: <name>"` |
 
-The `input_image` URL must be publicly downloadable. URLs that require authentication or block automated access will fail.
+The `input_image` URL must be publicly downloadable. URLs that require authentication or block automated access will fail. Data URIs (`data:image/...;base64,...`) work as an alternative but aren't recommended for production.
