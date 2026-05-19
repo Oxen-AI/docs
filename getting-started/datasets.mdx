@@ -2,19 +2,21 @@
 title: '📊 Datasets'
 ---
 
-In Oxen.ai, datasets are the foundation of improving your models. They are the ground truth to [evaluate](/getting-started/evaluation) your models on. They are the starting point for any model [fine-tuning](/getting-started/fine-tuning) loop. Oxen.ai allows you to version, query, and edit your datasets with an easy to use web interface as well as a command line tools and python library.
+In Oxen.ai, datasets are used to structure your unstructured data. Any tabular data file will automatically be turned into collaborative database that can be versioned and used to organize data, can be queried, or fed in as training data for models.
+
+Oxen.ai datasets are accessible with an easy to use web interface as well as a command line tools, python, and HTTP library.
 
 ## Repositories vs Datasets
 
-Repositories are the top level container for your datasets. Similar to GitHub, they are just a collection of versioned files and directories. 
+Repositories are the top level container for your datasets. They are a collection of versioned files and directories. 
 
 <img alt="Oxen.ai Repo" className="rounded-xl" src="/images/datasets/image_net_files.png" />
 
-The difference is that in Oxen.ai, files with the extensions `csv`, `tsv`, `jsonl` and `parquet` come to life. These dataset files can be multi-modal containing links to images, audio, and PDFs. You can query them in natural language, and edit them like a spreadsheet.
+Certain files within Oxen with the extensions `csv`, `tsv`, `jsonl` and `parquet` gain super powers. These dataset files can be multi-modal containing links to images, audio, and PDFs. You can query them in natural language, and edit them like a spreadsheet.
 
 <img alt="Image Net" className="rounded-xl" src="/images/datasets/image_net_train.png" />
 
-Under the hood we turn these raw files into a really lightweight database that can be queried, edited, versioned, and downloaded.
+Under the hood we turn these raw files into a lightweight database that can be queried, edited, versioned, and downloaded.
 
 ## View Your Dataset
 
@@ -87,37 +89,9 @@ oxen push
 
 <Info>
 To perform **write operations** on datasets, you need to be an editor on the repository and have your username and API key set. You can set your username and API key using the [CLI](/getting-started/cli) or [Python library](/python-api/index).
+
+Read more about [Authentication & Authorization](/getting-started/auth).
 </Info>
-
-### Configure Your Username
-
-<CodeGroup>
-
-```python Python
-from oxen.user import config_user
-config_user("Bessie Oxington", "bessie@oxen.ai")
-```
-
-```bash CLI
-oxen config --name "Bessie Oxington" --email "bessie@yourcomany.com"
-```
-
-</CodeGroup>
-
-### Configure Your API Key
-
-<CodeGroup>
-
-```python Python
-from oxen.auth import config_auth
-config_auth("YOUR_AUTH_TOKEN")
-```
-
-```bash CLI
-oxen config --auth hub.oxen.ai <your_auth_token>
-```
-
-</CodeGroup>
 
 ## Using `fsspec`
 
@@ -303,7 +277,6 @@ for row in results:
 ```
 
 If you don't have an embedding column, you can either use a [Python Notebook](/examples/notebooks/compute_text_embeddings) to compute them or use an [Evaluation](/getting-started/evaluation) to compute them.
-
 
 ## Rendering Images and Links
 

@@ -20,59 +20,7 @@ oxen.clone("ox/SpanishToEnglish")
 
 This will create a directory called `SpanishToEnglish` in your current working directory and download the latest version of the repository.
 
-### Private Repositories
-
-Not all repositories are public. If you are trying to clone a private repository, you will need to [configure auth](/python-api/auth) before you can clone.
-
-If you try to clone a repository you do not have access to, and you have not configured auth, you will see the following error:
-
-```bash
-ValueError: oxen authentication token not found, obtain one from your administrator and configure with:
-
-oxen config --auth <HOST> <TOKEN>
-```
-
-### Obtain Auth Token
-
-Before you can push to a remote repository, you must have permissions to do so. Permissions are handled through an `auth_token` that is passed in with the request.
-
-You can obtain an `auth_token` by creating an account on [Oxen.ai](https://oxen.ai) and going to your profile.
-
-<img
-  className="block"
-  src="/images/auth_key.png"
-  alt="Oxen.ai authentication key"
-/>
-
-### Set Auth Token
-
-To set your auth token, you can either set it through the command line interface or directly in python.
-
-<CodeGroup>
-
-```python Python
-from oxen.auth import config_auth
-config_auth("YOUR_AUTH_TOKEN")
-```
-
-```bash CLI
-oxen config --auth 'hub.oxen.ai' YOUR_AUTH_TOKEN
-```
-
-</CodeGroup>
-
-This will write the auth token to a file in `~/.config/oxen/auth_config.toml` for future use. If you set up your own [oxen-server](/getting-started/oxen-server) you can generate custom auth tokens there.
-
-## Setup User
-
-In order for Oxen to know who is committing and where to sync to by default, you must call [config_user](/python-api/user) and pass in the name and email you would like to use in your commit messages.
-
-```python
-from oxen.user import config_user
-config_user("YOUR NAME", "YOUR EMAIL")
-```
-
-This will save a file in `~/.config/oxen/user_config.toml` that contains your user configuration.
+If you have not setup your API Key locally, you will get an error cloning data. View our [Authentication & Authorization documentation](/getting-started/auth) to learn more.
 
 ## Initialize Local Repository
 

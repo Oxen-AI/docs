@@ -36,12 +36,12 @@
         {
             "name": "Repository API",
             "url": "http-api",
-            "openapi": "https://dev.hub.oxen.ai/api/_spec/oxen_server_openapi.json"
+            "openapi": "https://hub.oxen.ai/api/_spec/oxen_server_openapi.json"
         },
         {
             "name": "Fine-Tuning API",
             "url": "fine-tuning-api",
-            "openapi": "https://dev.hub.oxen.ai/api/_spec/oxen_hub_api.json"
+            "openapi": "https://hub.oxen.ai/api/_spec/oxen_hub_api.json"
         },
         {
             "name": "Inference API",
@@ -123,12 +123,6 @@
                 "concepts/diffs",
                 "concepts/file_metadata",
                 "concepts/workspaces"
-            ]
-        },
-        {
-            "group": "Release Notes",
-            "pages": [
-                "concepts/feature-updates"
             ]
         },
         {
