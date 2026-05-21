@@ -78,7 +78,8 @@
                         "examples/inference/vision_language_models",
                         "examples/inference/image_generation",
                         "examples/inference/image_editing",
-                        "examples/inference/video_generation"
+                        "examples/inference/video_generation",
+                        "examples/inference/openclaw"
                     ]
                 },
                 {
