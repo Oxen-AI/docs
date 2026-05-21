@@ -1,0 +1,19 @@
+---
+title: 'Repositories on Oxen.ai'
+sidebarTitle: 📖 Overview
+description: 'Oxen.ai allows you to version and store your data in repositories. Think of it like git for large data.'
+---
+
+When using models on Oxen.ai, by default we store the model inputs, outputs, and metadata in a repository. Every piece of data is versioned so you can trace the provenance of your data and models.
+
+In order to version data at scale, we built an [open source version control system](https://github.com/Oxen-AI/Oxen) that can scale to monorepos with millions of files and terabytes of data.
+
+## Key Concepts
+
+* **Repository**: A collection of data that is versioned together.
+* **Commit**: A snapshot of a repository at a given time.
+* **Branch**: A named pointer to a commit.
+* **Dataset**: A tabular file within an oxen repository that can be indexed and searched.
+* **Workspace**: The equivalent of a remote working directory that data can be staged and committed to a repository.
+
+Follow along with the [Version Control](/examples/data/versioning) guide to learn how to version your data.
