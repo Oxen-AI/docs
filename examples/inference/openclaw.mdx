@@ -1,0 +1,88 @@
+---
+title: "OpenClaw"
+description: "Use Oxen.ai models from OpenClaw, a local personal AI assistant."
+---
+
+[OpenClaw](https://github.com/openclaw/openclaw) is a personal AI assistant you run on your own machine. It connects to chat apps like WhatsApp, Telegram, Discord, and Slack, and supports custom OpenAI-compatible model providers. This guide points OpenClaw at Oxen.ai so every agent turn runs through the Oxen [chat completions API](/examples/inference/chat_completions).
+
+## Prerequisites
+
+- Node 24 (recommended) or Node 22.19+
+- An [Oxen.ai API key](https://www.oxen.ai/settings/profile), exported as `OXEN_API_KEY`
+
+## Install OpenClaw
+
+```bash
+npm install -g openclaw@latest
+```
+
+## Add Oxen as a model provider
+
+Run `openclaw onboard` with the `custom-api-key` flow:
+
+```bash
+openclaw onboard \
+  --non-interactive \
+  --accept-risk \
+  --auth-choice custom-api-key \
+  --custom-provider-id oxen \
+  --custom-base-url https://hub.oxen.ai/api/ai \
+  --custom-api-key "$OXEN_API_KEY" \
+  --custom-model-id claude-sonnet-4-6 \
+  --custom-compatibility openai \
+  --custom-text-input \
+  --install-daemon
+```
+
+Output:
+
+```
+Updated config: ~/.openclaw/openclaw.json
+Workspace OK: ~/.openclaw/workspace
+Sessions OK: ~/.openclaw/agents/main/sessions
+```
+
+`--custom-model-id` sets the default model. Pick any text model from the [Oxen catalog](https://www.oxen.ai/ai/models); a capable general-purpose model like `claude-sonnet-4-6` is a good starting choice. `--install-daemon` installs the gateway as a background service so it stays running.
+
+This writes a `models.providers.oxen` block to `~/.openclaw/openclaw.json` with `baseUrl`, `apiKey`, `api: "openai-completions"`, and a one-entry `models` list.
+
+## Run an agent turn
+
+```bash
+openclaw agent --agent main --message "What is a great name for an ox? Reply in 5 words or less."
+```
+
+Output:
+
+```
+**Bruno** works perfectly for an ox.
+```
+
+The agent calls `https://hub.oxen.ai/api/ai/chat/completions` under the hood, billed to your Oxen account.
+
+## Add more models
+
+To expose a second Oxen model, edit `models.providers.oxen.models` in `~/.openclaw/openclaw.json` and append an entry with the same shape:
+
+```json
+{
+  "id": "gpt-5-mini",
+  "name": "GPT-5 Mini",
+  "input": ["text"],
+  "cost": { "input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0 },
+  "contextWindow": 200000,
+  "maxTokens": 4096,
+  "reasoning": false
+}
+```
+
+Then switch the default:
+
+```bash
+openclaw models set oxen/gpt-5-mini
+```
+
+## Next steps
+
+- Connect OpenClaw to [WhatsApp](https://docs.openclaw.ai/channels/whatsapp), [Telegram](https://docs.openclaw.ai/channels/telegram), [Discord](https://docs.openclaw.ai/channels/discord), or any other [supported channel](https://docs.openclaw.ai/channels) so you can chat with your Oxen-backed assistant from anywhere.
+- Browse the full [Oxen model catalog](https://www.oxen.ai/ai/models). Vision models work through the same provider; see [Vision Language Models](/examples/inference/vision_language_models) for the message shape.
