@@ -120,8 +120,8 @@ If you're using the OpenAI SDK, set the base URL to `https://hub.oxen.ai/api/ai`
 | `/ai/images/edit` | POST | Image editing |
 | `/ai/videos/generate` | POST | Video generation |
 | `/ai/queue` | POST | Async image/video generation |
-| `/ai/queue` | GET | List queued generations |
-| `/ai/queue/:generation_id` | GET | Get generation status |
+| `/ai/queue` | GET | List generations (active by default, filterable by status) |
+| `/ai/queue/:generation_id` | GET | Get generation status and result |
 | `/ai/queue/:generation_id` | DELETE | Cancel a queued generation |
 | `/ai/models` | GET | List available models |
 | `/ai/models/:id` | GET | Get model details and parameter schema |

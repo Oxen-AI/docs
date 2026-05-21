@@ -42,6 +42,9 @@ This can be used to stage new, modified, or removed files and directories to the
 ``` bash
 oxen status
 ```
+
+Output:
+
 ```
 On branch main -> 113b00a451ac07d284b29ce5604d6891
 
@@ -72,6 +75,8 @@ You can see the history of changes on your current branch by running:
 ```bash
 oxen log
 ```
+
+Output:
 
 ```
 commit 6b958e268656b0c5
@@ -122,6 +127,8 @@ Note: since we are dealing with large datasets with many files, `status` rolls u
 oxen status
 ```
 
+Output:
+
 ```
 On branch main -> e76dd52a4fc13a6f
 
@@ -161,13 +168,13 @@ You can also use `oxen restore` on directories to recursively restore their file
 If you want to restore to a specific version in your commit history, you can supply the commit id or branch name with the `--source` flag.
 
 ```bash
-$ oxen restore path/to/file.txt --source COMMIT_ID
+oxen restore path/to/file.txt --source COMMIT_ID
 ```
 
 As with git, you can also restore files from the `staged_db` using `oxen restore --staged`
 
 ```bash
-$ oxen restore --staged path/to/dir
+oxen restore --staged path/to/dir
 ```
 
 ## Removing Data

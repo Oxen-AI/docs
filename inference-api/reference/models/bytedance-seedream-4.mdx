@@ -38,183 +38,378 @@ Some other noteworthy features of Seedream 4.0 include the ability to generate u
 
     See the [image generation reference](/inference-api/reference/image_generation) for more details.
 
-    <CodeGroup>
+    <Tabs>
+      <Tab title="Minimal">
 
-    ```bash cURL
-    curl -X POST https://hub.oxen.ai/api/ai/images/generate \
-      -H "Content-Type: application/json" \
-      -H "Authorization: Bearer $OXEN_API_KEY" \
-      -d '{
-      "model": "bytedance-seedream-4",
-      "prompt": "Add a funny hat",
-      "input_image": [
-        "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
-      ]
-    }'
-    ```
+        <CodeGroup>
 
-    ```python Python
-    import os
-    import requests
+        ```bash cURL
+        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "bytedance-seedream-4",
+          "prompt": "Add a funny hat"
+        }'
+        ```
 
-    response = requests.post(
-        "https://hub.oxen.ai/api/ai/images/generate",
-        headers={
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
-        },
-        json={
-            "model": "bytedance-seedream-4",
-            "prompt": "Add a funny hat",
-            "input_image": [
-                "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
-            ]
-        },
-    )
-    response.raise_for_status()
-    print(response.json())
-    ```
+        ```python Python
+        import os
+        import requests
 
-    </CodeGroup>
+        response = requests.post(
+            "https://hub.oxen.ai/api/ai/images/generate",
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+            },
+            json={
+                "model": "bytedance-seedream-4",
+                "prompt": "Add a funny hat"
+            },
+        )
+        response.raise_for_status()
+        print(response.json())
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+      <Tab title="All parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "bytedance-seedream-4",
+          "prompt": "Add a funny hat",
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
+          ]
+        }'
+        ```
+
+        ```python Python
+        import os
+        import requests
+
+        response = requests.post(
+            "https://hub.oxen.ai/api/ai/images/generate",
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+            },
+            json={
+                "model": "bytedance-seedream-4",
+                "prompt": "Add a funny hat",
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
+                ]
+            },
+        )
+        response.raise_for_status()
+        print(response.json())
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+    </Tabs>
 
   </Tab>
   <Tab title="Async">
 
     See the [async queue reference](/inference-api/reference/async_queue) for more details.
 
-    <CodeGroup>
+    <Tabs>
+      <Tab title="Minimal">
 
-    ```bash cURL
-    # Enqueue, capture the generation id.
-    GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
-      -H "Content-Type: application/json" \
-      -H "Authorization: Bearer $OXEN_API_KEY" \
-      -d '{
-      "model": "bytedance-seedream-4",
-      "prompt": "Add a funny hat",
-      "input_image": [
-        "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
-      ]
-    }' | jq -r '.generations[0].generation_id')
+        <CodeGroup>
 
-    # Poll the single generation until it 404s (terminal state).
-    while curl -s -o /dev/null -w "%{http_code}" \
-        -H "Authorization: Bearer $OXEN_API_KEY" \
-        "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | grep -q "^200$"; do
-      sleep 5
-    done
-    echo "Done. See the 'Async with SSE' tab to receive the result URL."
-    ```
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "bytedance-seedream-4",
+          "prompt": "Add a funny hat"
+        }' | jq -r '.generations[0].generation_id')
 
-    ```python Python
-    import os
-    import time
-    import requests
+        # Poll until the generation reaches a terminal status.
+        while true; do
+          STATUS=$(curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.status')
+          echo "Status: $STATUS"
+          case $STATUS in succeeded|failed|cancelled) break;; esac
+          sleep 5
+        done
 
-    HEADERS = {
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
-    }
+        # Print the result.
+        curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+          "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq .
+        ```
 
-    enqueue = requests.post(
-        "https://hub.oxen.ai/api/ai/queue",
-        headers=HEADERS,
-        json={
-            "model": "bytedance-seedream-4",
-            "prompt": "Add a funny hat",
-            "input_image": [
-                "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
-            ]
-        },
-    )
-    enqueue.raise_for_status()
-    generation_id = enqueue.json()["generations"][0]["generation_id"]
+        ```python Python
+        import os
+        import time
+        import requests
 
-    while True:
-        resp = requests.get(
-            f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
+        HEADERS = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        }
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
+            json={
+                "model": "bytedance-seedream-4",
+                "prompt": "Add a funny hat"
+            },
         )
-        if resp.status_code == 404:
-            break
-        time.sleep(5)
-    print("Done. See the 'Async with SSE' tab to receive the result URL.")
-    ```
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
 
-    </CodeGroup>
+        while True:
+            data = requests.get(
+                f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
+                headers=HEADERS,
+            ).json()
+            if data["status"] in {"succeeded", "failed", "cancelled"}:
+                break
+            time.sleep(5)
+
+        if data["status"] == "succeeded":
+            print(f"Result: {data['result_url']}")
+        else:
+            print(f"Generation {data['status']}: {data.get('error_message')}")
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+      <Tab title="All parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "bytedance-seedream-4",
+          "prompt": "Add a funny hat",
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
+          ]
+        }' | jq -r '.generations[0].generation_id')
+
+        # Poll until the generation reaches a terminal status.
+        while true; do
+          STATUS=$(curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.status')
+          echo "Status: $STATUS"
+          case $STATUS in succeeded|failed|cancelled) break;; esac
+          sleep 5
+        done
+
+        # Print the result.
+        curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+          "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq .
+        ```
+
+        ```python Python
+        import os
+        import time
+        import requests
+
+        HEADERS = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        }
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers=HEADERS,
+            json={
+                "model": "bytedance-seedream-4",
+                "prompt": "Add a funny hat",
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
+                ]
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        while True:
+            data = requests.get(
+                f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
+                headers=HEADERS,
+            ).json()
+            if data["status"] in {"succeeded", "failed", "cancelled"}:
+                break
+            time.sleep(5)
+
+        if data["status"] == "succeeded":
+            print(f"Result: {data['result_url']}")
+        else:
+            print(f"Generation {data['status']}: {data.get('error_message')}")
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+    </Tabs>
 
   </Tab>
   <Tab title="Async with SSE">
 
     See the [async queue reference](/inference-api/reference/async_queue) for more details.
 
-    <CodeGroup>
+    <Tabs>
+      <Tab title="Minimal">
 
-    ```bash cURL
-    # Enqueue, capture the generation id.
-    GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
-      -H "Content-Type: application/json" \
-      -H "Authorization: Bearer $OXEN_API_KEY" \
-      -d '{
-      "model": "bytedance-seedream-4",
-      "prompt": "Add a funny hat",
-      "input_image": [
-        "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
-      ]
-    }' | jq -r '.generations[0].generation_id')
+        <CodeGroup>
 
-    # Stream the SSE channel, grab the data line that follows a
-    # media_generation_completed event for our id, and pretty-print it.
-    curl -sN -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/events \
-      | awk -v id="$GEN_ID" '
-        /^event: media_generation_completed$/ { expect=1; next }
-        /^data: / && expect {
-          payload = substr($0, 7)
-          if (index(payload, "\"generation_id\":\"" id "\"")) { print payload; exit }
-          expect = 0
-        }
-      ' | jq .
-    ```
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "bytedance-seedream-4",
+          "prompt": "Add a funny hat"
+        }' | jq -r '.generations[0].generation_id')
 
-    ```python Python
-    import json
-    import os
-    import requests
+        # Stream the SSE channel, grab the data line that follows a
+        # media_generation_completed event for our id, and pretty-print it.
+        curl -sN -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/events \
+          | awk -v id="$GEN_ID" '
+            /^event: media_generation_completed$/ { expect=1; next }
+            /^data: / && expect {
+              payload = substr($0, 7)
+              if (index(payload, "\"generation_id\":\"" id "\"")) { print payload; exit }
+              expect = 0
+            }
+          ' | jq .
+        ```
 
-    API_KEY = os.environ["OXEN_API_KEY"]
-    AUTH = {"Authorization": f"Bearer {API_KEY}"}
+        ```python Python
+        import json
+        import os
+        import requests
 
-    enqueue = requests.post(
-        "https://hub.oxen.ai/api/ai/queue",
-        headers={**AUTH, "Content-Type": "application/json"},
-        json={
-            "model": "bytedance-seedream-4",
-            "prompt": "Add a funny hat",
-            "input_image": [
-                "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
-            ]
-        },
-    )
-    enqueue.raise_for_status()
-    generation_id = enqueue.json()["generations"][0]["generation_id"]
+        API_KEY = os.environ["OXEN_API_KEY"]
+        AUTH = {"Authorization": f"Bearer {API_KEY}"}
 
-    with requests.get(
-        "https://hub.oxen.ai/api/events",
-        headers=AUTH,
-        stream=True,
-    ) as stream:
-        event_name = None
-        for line in stream.iter_lines(decode_unicode=True):
-            if line.startswith("event: "):
-                event_name = line.removeprefix("event: ")
-            elif line.startswith("data: ") and event_name == "media_generation_completed":
-                payload = json.loads(line.removeprefix("data: "))
-                if payload.get("generation_id") == generation_id:
-                    print(payload)
-                    break
-    ```
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers={**AUTH, "Content-Type": "application/json"},
+            json={
+                "model": "bytedance-seedream-4",
+                "prompt": "Add a funny hat"
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
 
-    </CodeGroup>
+        with requests.get(
+            "https://hub.oxen.ai/api/events",
+            headers=AUTH,
+            stream=True,
+        ) as stream:
+            event_name = None
+            for line in stream.iter_lines(decode_unicode=True):
+                if line.startswith("event: "):
+                    event_name = line.removeprefix("event: ")
+                elif line.startswith("data: ") and event_name == "media_generation_completed":
+                    payload = json.loads(line.removeprefix("data: "))
+                    if payload.get("generation_id") == generation_id:
+                        print(payload)
+                        break
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+      <Tab title="All parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "bytedance-seedream-4",
+          "prompt": "Add a funny hat",
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
+          ]
+        }' | jq -r '.generations[0].generation_id')
+
+        # Stream the SSE channel, grab the data line that follows a
+        # media_generation_completed event for our id, and pretty-print it.
+        curl -sN -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/events \
+          | awk -v id="$GEN_ID" '
+            /^event: media_generation_completed$/ { expect=1; next }
+            /^data: / && expect {
+              payload = substr($0, 7)
+              if (index(payload, "\"generation_id\":\"" id "\"")) { print payload; exit }
+              expect = 0
+            }
+          ' | jq .
+        ```
+
+        ```python Python
+        import json
+        import os
+        import requests
+
+        API_KEY = os.environ["OXEN_API_KEY"]
+        AUTH = {"Authorization": f"Bearer {API_KEY}"}
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers={**AUTH, "Content-Type": "application/json"},
+            json={
+                "model": "bytedance-seedream-4",
+                "prompt": "Add a funny hat",
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
+                ]
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        with requests.get(
+            "https://hub.oxen.ai/api/events",
+            headers=AUTH,
+            stream=True,
+        ) as stream:
+            event_name = None
+            for line in stream.iter_lines(decode_unicode=True):
+                if line.startswith("event: "):
+                    event_name = line.removeprefix("event: ")
+                elif line.startswith("data: ") and event_name == "media_generation_completed":
+                    payload = json.loads(line.removeprefix("data: "))
+                    if payload.get("generation_id") == generation_id:
+                        print(payload)
+                        break
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+    </Tabs>
 
   </Tab>
 </Tabs>
@@ -234,4 +429,9 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `prompt` | `string` | `"Add a funny hat"` | Text description of what you want to generate, or the instruction on how to edit the given image. |
+
+### Optional parameters
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
 | `input_image` | `array<string>` | `["https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"]` | Input images to transform or use as reference (supports multiple image urls) |

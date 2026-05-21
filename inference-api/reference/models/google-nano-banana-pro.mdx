@@ -188,13 +188,18 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
           "prompt": "A botanist / researcher looking up at a banana tree in an Amazon rainforest. Photorealistic. It could be used for a National Geographic cover."
         }' | jq -r '.generations[0].generation_id')
 
-        # Poll the single generation until it 404s (terminal state).
-        while curl -s -o /dev/null -w "%{http_code}" \
-            -H "Authorization: Bearer $OXEN_API_KEY" \
-            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | grep -q "^200$"; do
+        # Poll until the generation reaches a terminal status.
+        while true; do
+          STATUS=$(curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.status')
+          echo "Status: $STATUS"
+          case $STATUS in succeeded|failed|cancelled) break;; esac
           sleep 5
         done
-        echo "Done. See the 'Async with SSE' tab to receive the result URL."
+
+        # Print the result.
+        curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+          "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq .
         ```
 
         ```python Python
@@ -219,14 +224,18 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
         generation_id = enqueue.json()["generations"][0]["generation_id"]
 
         while True:
-            resp = requests.get(
+            data = requests.get(
                 f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
                 headers=HEADERS,
-            )
-            if resp.status_code == 404:
+            ).json()
+            if data["status"] in {"succeeded", "failed", "cancelled"}:
                 break
             time.sleep(5)
-        print("Done. See the 'Async with SSE' tab to receive the result URL.")
+
+        if data["status"] == "succeeded":
+            print(f"Result: {data['result_url']}")
+        else:
+            print(f"Generation {data['status']}: {data.get('error_message')}")
         ```
 
         </CodeGroup>
@@ -249,13 +258,18 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
           ]
         }' | jq -r '.generations[0].generation_id')
 
-        # Poll the single generation until it 404s (terminal state).
-        while curl -s -o /dev/null -w "%{http_code}" \
-            -H "Authorization: Bearer $OXEN_API_KEY" \
-            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | grep -q "^200$"; do
+        # Poll until the generation reaches a terminal status.
+        while true; do
+          STATUS=$(curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.status')
+          echo "Status: $STATUS"
+          case $STATUS in succeeded|failed|cancelled) break;; esac
           sleep 5
         done
-        echo "Done. See the 'Async with SSE' tab to receive the result URL."
+
+        # Print the result.
+        curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+          "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq .
         ```
 
         ```python Python
@@ -283,14 +297,18 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
         generation_id = enqueue.json()["generations"][0]["generation_id"]
 
         while True:
-            resp = requests.get(
+            data = requests.get(
                 f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
                 headers=HEADERS,
-            )
-            if resp.status_code == 404:
+            ).json()
+            if data["status"] in {"succeeded", "failed", "cancelled"}:
                 break
             time.sleep(5)
-        print("Done. See the 'Async with SSE' tab to receive the result URL.")
+
+        if data["status"] == "succeeded":
+            print(f"Result: {data['result_url']}")
+        else:
+            print(f"Generation {data['status']}: {data.get('error_message')}")
         ```
 
         </CodeGroup>
@@ -316,13 +334,18 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
           "safety_tolerance": "6"
         }' | jq -r '.generations[0].generation_id')
 
-        # Poll the single generation until it 404s (terminal state).
-        while curl -s -o /dev/null -w "%{http_code}" \
-            -H "Authorization: Bearer $OXEN_API_KEY" \
-            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | grep -q "^200$"; do
+        # Poll until the generation reaches a terminal status.
+        while true; do
+          STATUS=$(curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.status')
+          echo "Status: $STATUS"
+          case $STATUS in succeeded|failed|cancelled) break;; esac
           sleep 5
         done
-        echo "Done. See the 'Async with SSE' tab to receive the result URL."
+
+        # Print the result.
+        curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+          "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq .
         ```
 
         ```python Python
@@ -353,14 +376,18 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
         generation_id = enqueue.json()["generations"][0]["generation_id"]
 
         while True:
-            resp = requests.get(
+            data = requests.get(
                 f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
                 headers=HEADERS,
-            )
-            if resp.status_code == 404:
+            ).json()
+            if data["status"] in {"succeeded", "failed", "cancelled"}:
                 break
             time.sleep(5)
-        print("Done. See the 'Async with SSE' tab to receive the result URL.")
+
+        if data["status"] == "succeeded":
+            print(f"Result: {data['result_url']}")
+        else:
+            print(f"Generation {data['status']}: {data.get('error_message')}")
         ```
 
         </CodeGroup>
