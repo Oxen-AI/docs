@@ -35,7 +35,9 @@
                   "examples/data/versioning",
                   "examples/data/datasets",
                   "examples/data/workspaces",
-                  "examples/data/performance"
+                  "examples/data/performance",
+                  "concepts/diffs",
+                  "concepts/file_metadata"
                 ]
               },
               {
@@ -59,47 +61,79 @@
               {
                 "group": "💻 Command Line Interface",
                 "pages": [
-                  "getting-started/command-line/config",
-                  "getting-started/command-line/import_data",
-                  "getting-started/command-line/local_development",
-                  "getting-started/command-line/push_changes",
-                  "getting-started/command-line/dev_tools"
+                  "getting-started/command-line/setup",
+                  "getting-started/command-line/start_repository",
+                  "getting-started/command-line/track_changes",
+                  "getting-started/command-line/branches",
+                  "getting-started/command-line/sync_remote",
+                  "getting-started/command-line/workspaces",
+                  "getting-started/command-line/maintenance",
+                  "getting-started/command-line/debugging"
                 ]
               },
-              "getting-started/python",
+              {
+                "group": "🐍 Python",
+                "pages": [
+                  "python-api/index",
+                  "python-api/clone",
+                  "python-api/data_frame",
+                  "python-api/datasets",
+                  "python-api/df_utils",
+                  "python-api/diff/diff",
+                  "python-api/diff/line_diff",
+                  "python-api/diff/tabular_diff",
+                  "python-api/diff/text_diff",
+                  "python-api/init",
+                  "python-api/oxen_fs",
+                  "python-api/remote_repo",
+                  "python-api/repo",
+                  "python-api/repositories",
+                  "python-api/workspace"
+                ]
+              },
               "getting-started/oxen-server"
-            ]
-          },
-          {
-            "group": "Other Concepts",
-            "pages": [
-              "concepts/diffs",
-              "concepts/file_metadata"
             ]
           }
         ]
       },
       {
-        "tab": "Python API",
+        "tab": "Inference API",
         "groups": [
           {
-            "group": "Python API",
+            "group": "Inference API",
             "pages": [
-              "python-api/index",
-              "python-api/clone",
-              "python-api/data_frame",
-              "python-api/datasets",
-              "python-api/df_utils",
-              "python-api/diff/diff",
-              "python-api/diff/line_diff",
-              "python-api/diff/tabular_diff",
-              "python-api/diff/text_diff",
-              "python-api/init",
-              "python-api/oxen_fs",
-              "python-api/remote_repo",
-              "python-api/repo",
-              "python-api/repositories",
-              "python-api/workspace"
+              "inference-api/overview",
+              {
+                "group": "Quick Starts",
+                "pages": [
+                  "inference-api/quickstart/chat",
+                  "inference-api/quickstart/image-generation",
+                  "inference-api/quickstart/video-generation",
+                  "inference-api/quickstart/async-queue"
+                ]
+              },
+              {
+                "group": "API Reference",
+                "pages": [
+                  "inference-api/reference/chat_completions",
+                  "inference-api/reference/image_generation",
+                  "inference-api/reference/image_editing",
+                  "inference-api/reference/video_generation",
+                  "inference-api/reference/async_queue",
+                  "inference-api/reference/models/overview",
+                  "inference-api/reference/model-references"
+                ]
+              },
+              {
+                "group": "Model Walkthroughs",
+                "pages": [
+                  "inference-api/reference/models/walkthroughs/overview",
+                  "inference-api/reference/models/walkthroughs/kling_o3_pro_reference_to_video",
+                  "inference-api/reference/models/walkthroughs/kling_o3_pro_video_to_video_edit",
+                  "inference-api/reference/models/walkthroughs/seedance_2_reference_to_video",
+                  "inference-api/reference/models/walkthroughs/topaz_starlight_precise_2_5"
+                ]
+              }
             ]
           }
         ]
@@ -114,13 +148,8 @@
           {
             "group": "Repository API",
             "pages": [
-              {
-                "group": "Getting Started",
-                "pages": [
-                  "http-api/index",
-                  "http-api/example"
-                ]
-              }
+              "http-api/index",
+              "http-api/example"
             ]
           }
         ]
@@ -167,48 +196,6 @@
                 ]
               },
               "fine-tuning-api/parameters"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Inference API",
-        "groups": [
-          {
-            "group": "Inference API",
-            "pages": [
-              "inference-api/overview",
-              {
-                "group": "Quick Starts",
-                "pages": [
-                  "inference-api/quickstart/chat",
-                  "inference-api/quickstart/image-generation",
-                  "inference-api/quickstart/video-generation",
-                  "inference-api/quickstart/async-queue"
-                ]
-              },
-              {
-                "group": "API Reference",
-                "pages": [
-                  "inference-api/reference/chat_completions",
-                  "inference-api/reference/image_generation",
-                  "inference-api/reference/image_editing",
-                  "inference-api/reference/video_generation",
-                  "inference-api/reference/async_queue",
-                  "inference-api/reference/models/overview",
-                  "inference-api/reference/model-references"
-                ]
-              },
-              {
-                "group": "Model Walkthroughs",
-                "pages": [
-                  "inference-api/reference/models/walkthroughs/overview",
-                  "inference-api/reference/models/walkthroughs/kling_o3_pro_reference_to_video",
-                  "inference-api/reference/models/walkthroughs/kling_o3_pro_video_to_video_edit",
-                  "inference-api/reference/models/walkthroughs/seedance_2_reference_to_video",
-                  "inference-api/reference/models/walkthroughs/topaz_starlight_precise_2_5"
-                ]
-              }
             ]
           }
         ]

@@ -1,0 +1,70 @@
+---
+title: '🌿 Branches & Merging'
+description: 'Create branches, switch between them, and merge work together.'
+---
+
+Branches let you take a snapshot of your data, experiment freely, and merge the results back without affecting the original. The commands map closely to git.
+
+## Create a Branch
+
+Create a new branch and check it out in one step with `oxen checkout -b`.
+
+```bash
+oxen checkout -b feature
+```
+
+## List Branches
+
+To list the branches in your repository (highlighting the one you're on), use `oxen branch`.
+
+```bash
+oxen branch
+```
+
+To see branches that exist on the remotes, add `--remote`.
+
+```bash
+oxen branch --remote
+```
+
+To delete a branch, use `oxen branch --delete`. This fails if the branch has changes that haven't been merged.
+
+```bash
+oxen branch --delete feature
+```
+
+Use `-D` to force-delete a branch.
+
+```bash
+oxen branch -D feature
+```
+
+## Switch Between Branches
+
+Use `oxen checkout` to switch branches. This restores the working directory to the HEAD commit of the branch you're checking out.
+
+```bash
+oxen checkout main
+```
+
+You can also check out a specific commit.
+
+```bash
+oxen checkout COMMIT_ID
+```
+
+## Merge Branches
+
+Merge another branch into your current branch with `oxen merge`. This creates a merge commit, or fails if there are conflicts to resolve.
+
+```bash
+oxen merge TARGET_BRANCH
+```
+
+If you're collaborating, you may instead want to open a merge request through the [Oxen.ai web UI](https://oxen.ai).
+
+<img
+  className="block"
+  src="/images/merge_request.png"
+  alt="Oxen.ai merge request"
+/>

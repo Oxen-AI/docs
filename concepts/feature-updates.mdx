@@ -34,7 +34,7 @@ This page will have a complete update with demos, photos, and top feature update
 - Introduced the option to delete branches from the remote repository. [#80](https://github.com/Oxen-AI/Oxen/pull/80)
 - Improved workspace management to prevent multiple simultaneous workspaces and ensure consistent handling during file additions. [#80](https://github.com/Oxen-AI/Oxen/pull/80)
 - Enhanced branch existence checks and streamlined branch deletion. [#80](https://github.com/Oxen-AI/Oxen/pull/80)
-- Introduced notebook management capabilities, allowing users to start and stop notebook sessions within Oxen repositories via [Python](/getting-started/python). [#79](https://github.com/Oxen-AI/Oxen/pull/79)
+- Introduced notebook management capabilities, allowing users to start and stop notebook sessions within Oxen repositories via [Python](/python-api). [#79](https://github.com/Oxen-AI/Oxen/pull/79)
 - Added a new Python module for notebook operations and exposed these features in the public API. [#79](https://github.com/Oxen-AI/Oxen/pull/79)
 - Enhanced error handling and user feedback when initializing workspaces and executing SQL queries. [#79](https://github.com/Oxen-AI/Oxen/pull/79)
 - Improved performance for adding multiple files by batching operations. [#79](https://github.com/Oxen-AI/Oxen/pull/79)
@@ -114,7 +114,7 @@ This page will have a complete update with demos, photos, and top feature update
 - Added a new error handling mechanism for data retrieval methods. [#77](https://github.com/Oxen-AI/Oxen/pull/77)
 
 #### By Customer Request
-- Added how to save a parquet file to a directory, and errors with to_csv in [Python](/getting-started/python) by [Mirascope's](https://www.oxen.ai/Mirascope) request
+- Added how to save a parquet file to a directory, and errors with to_csv in [Python](/python-api) by [Mirascope's](https://www.oxen.ai/Mirascope) request
 - Added method to test if a branch already exists
 - Create data frame if it does not exist on the first insert
 
@@ -175,11 +175,11 @@ This page will have a complete update with demos, photos, and top feature update
 #### By Customer Request
 - [@isaac_pivotal](https://www.oxen.ai/isaac_pivotal) requested the audio player in the UI can now be scrolled through
 ![audio player](/images/audio_player.png)
-- [@isaac_pivotal](https://www.oxen.ai/isaac_pivotal) requested a [Python API](getting-started/python) to upload bytes
+- [@isaac_pivotal](https://www.oxen.ai/isaac_pivotal) requested a [Python API](/python-api) to upload bytes
 - [@isaac_pivotal](https://www.oxen.ai/isaac_pivotal) requested to add a generator for paginating over a file list
-- We've added a method to fetch file metadata (hash, etc) through our [Python SDK](/getting-started/python)
+- We've added a method to fetch file metadata (hash, etc) through our [Python SDK](/python-api)
 - [@Mirascope](https://www.oxen.ai/Mirascope) requested named [workspaces](/concepts/workspaces)
-- We've added a method for checking if local file matches remote file in the [Python SDK](/getting-started/python)
+- We've added a method for checking if local file matches remote file in the [Python SDK](/python-api)
 
 ### Fixed Bugs
 - We now have better handling on commit view in the UI
@@ -200,7 +200,7 @@ This page will have a complete update with demos, photos, and top feature update
 - The [Query Data Frame API](/http-api/workspaces/query_dataframe) now accepts a query id for downloading a SQL queried data frame in a workspace
 - As per request (shout out [Paul](https://www.oxen.ai/paul)), we've support PUT to a file with a `based-on` revision passed in
 - Added --remote to `oxen workspace list`
-- Added ability to merge with the [python library](/getting-started/python)
+- Added ability to merge with the [python library](/python-api)
 - By customer request we've slimmed down Python dependencies with FSSpec
 
 ### Fixed Bugs

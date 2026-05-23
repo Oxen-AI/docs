@@ -1,0 +1,87 @@
+---
+title: '🔄 Sync with a Remote'
+description: 'Push, pull, and fetch changes between your local repository and a remote.'
+---
+
+Once your repository has a remote configured (see [Start a Repository](/getting-started/command-line/start_repository#configure-a-remote)), you can push your work and pull collaborators' changes.
+
+## Push Changes
+
+Once you've committed changes locally, push them to a remote with `oxen push`.
+
+```bash
+oxen push origin main
+```
+
+If you don't supply a remote name or branch, they default to `origin` and the current branch.
+
+```bash
+oxen push
+```
+
+### Resume a Push
+
+If a push is cancelled partway through, use `--missing-files` to resume and upload only the remaining files.
+
+```bash
+oxen push --missing-files
+```
+
+## Pull Changes
+
+To pull the latest commits for a branch — downloading their files and Merkle trees, then checking out the latest commit — use `oxen pull`.
+
+```bash
+oxen pull origin main
+```
+
+If no arguments are provided, the remote defaults to `origin` and the branch defaults to the current branch.
+
+```bash
+oxen pull
+```
+
+As with `clone`, you can pull all branches with `--all`.
+
+```bash
+oxen pull --all
+```
+
+## Fetch Changes
+
+To fetch the latest changes without checking them out in the working directory, use `oxen fetch`.
+
+```bash
+oxen fetch
+```
+
+This is useful when you want to inspect what's new on the remote before deciding whether to merge or check it out.
+
+## View Configured Remotes
+
+`oxen remote` lists the remotes configured for your repository.
+
+```bash
+oxen remote
+```
+
+Output:
+
+```
+origin
+```
+
+Use `--verbose` to also see each remote's URL.
+
+```bash
+oxen remote --verbose
+```
+
+Output:
+
+```
+origin      https://hub.oxen.ai/ox/CatDogBBox
+local_dev   http://localhost:3000/ox/CatDogBBox
+```
+
+To add or change a remote's URL, see [Configure a Remote](/getting-started/command-line/start_repository#configure-a-remote) on the Start a Repository page.
