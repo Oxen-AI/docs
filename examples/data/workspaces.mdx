@@ -1,49 +1,70 @@
 ---
 title: '📦 Workspaces'
-description: 'Workspaces allow you to add and commit data to a repository without having to download it locally'
+description: 'Workspaces allow you to stage changes to a repository without having to download it locally.'
 ---
 
-Oxen Workspaces function like a 'repo within a repo' – you can add, remove, and restore files to and from a workspace without affecting the repository it's based off of.
+A workspace is like a working directory that lives on the Oxen server. You can `add`, `rm`, and modify files in a workspace and then commit those changes in bulk, without ever cloning the repository to your local machine.
 
-## Workspace Structure
+Under the hood, every workspace is pinned to a specific commit on a branch. All staged changes are computed relative to that commit. Staged changes survive server restarts, but they are **not** part of the repository's commit history until you commit the workspace, so they can be deleted without leaving a trace.
 
-A repository's workspaces are stored in the `workspaces` folder of the `.oxen` hidden dir. Each workspace has a `workspace_id` or `workspace_name` with which it can be identified, as well as the `commit_id` of the commit in the repository that the workspace points to. You can have multiple workspaces for the same `commit_id` so long as they each have a different `workspace_id`
+## Why use a workspace?
 
-Workspaces are useful when you want to work with a repository without downloading all of the data for it locally. To interact with one, you don't have to have the remote repository's contents pulled locally – you only need a local repo that's pointing to the remote
+Reach for a workspace when you want to:
+
+- **Edit a repository that's too large to clone.** Stage changes to a 100GB+ repo without copying it to your machine.
+- **Bulk-import data without keeping a local copy.** `oxen workspace add` uploads directly to the server, so you don't pay the disk cost of writing every file into a local `.oxen` store first.
+- **Batch many changes into a single commit.** Add, remove, and modify dozens of files server-side, then land them as one atomic commit.
+- **Let multiple clients contribute to one staged commit.** A named workspace can be written to by several processes or users before anyone commits — useful for workflows like labeling UIs, ingestion services, or agents producing training data.
+- **Keep a long-lived staging area across multiple commits.** Named workspaces persist after commit and fast-forward to the new commit, so the same workspace can be reused over and over.
+
+If you're working in a repo small enough to clone and just want the normal `add → commit → push` flow, you don't need a workspace — see the [Version Control guide](/examples/data/versioning) instead.
+
+## Quick start
+
+### Add to an existing repo without cloning it
+
+Imagine a repository with 1 million images. Instead of cloning the data, init an empty local repo, point it at the remote, and write directly to a workspace.
 
 <CodeGroup>
 
 ```bash CLI
 oxen init
 oxen config --set-remote origin https://hub.oxen.ai/ox/ImageNet-1k
-oxen workspace create --name extra_images # Create a workspace on a repository without pulling its contents
-oxen workspace add new_images/ --workspace-name extra_images
-oxen workspace commit -m "Add new images to dataset" -n extra_images
+oxen workspace create --name add_image --branch main
+# Stage a single file into the images/ directory of the workspace
+oxen workspace add /path/to/my_images/image.jpg --directory images/ --workspace-name add_image
+# See what's staged
+oxen workspace status --workspace-name add_image
+# Commit the staged changes to main
+oxen workspace commit -m "Add new image to images/ directory" -n add_image -b main
 ```
 
 ```python Python
 from oxen import RemoteRepo
 from oxen import Workspace
 
-repo = RemoteRepo("ox/ImageNet-1k") # Host defaults to 'hub.oxen.ai'
+repo = RemoteRepo("ox/ImageNet-1k")  # Host defaults to 'hub.oxen.ai'
 workspace = Workspace(repo, "extra-images")
 workspace.add("new_images/")
 
-status = workspace.status() # View the changes staged to the workspace
+status = workspace.status()
 print(status.added_files())
 
 workspace.commit("Add new images to dataset")
 ```
+
 </CodeGroup>
 
-They're also useful for doing imports of large amounts of files to a server. When you use `oxen workspace add`, you're not writing any data to your local machine – Oxen processes and uploads the files directly to the remote. This allows you to avoid copying the files to a local repository like you would if you use the `add --> commit --> push` workflow, speeding up the operation and saving space on your machine 
+### Bulk-import data into a fresh repo
+
+`oxen workspace add` never writes data to your local machine — files stream directly to the remote. This avoids the disk and time cost of `add → commit → push`, which would otherwise copy every file into a local `.oxen` store first.
 
 <CodeGroup>
 
 ```bash CLI
 oxen init
-oxen config --create-remote --host hub.oxen.ai --scheme https --name ox/ImageNet-1k --add_readme
-oxen workspace create # Create a workspace to import the data. This will return a workspace ID
+oxen config --create-remote --host hub.oxen.ai --scheme https --name ox/ImageNet-1k
+oxen workspace create  # Create a workspace to import the data. This will return a workspace ID
 oxen workspace add images/ --workspace-id [WORKSPACE_ID]
 oxen workspace commit -m "Import 1 million images" -w [WORKSPACE_ID]
 ```
@@ -64,9 +85,23 @@ workspace.commit("Import 1 million images")
 
 </CodeGroup>
 
-## Instantiating a Workspace
+Workspaces can also be driven through the [HTTP API](/http-api/workspaces/get-or-create-workspace) — useful when you're building a custom client (labeling UI, ingestion daemon, agent, etc.) that needs to write to a repo without shipping the Oxen CLI or Python SDK.
 
-Create a workspace with a remote repository and a branch name.
+## How it works
+
+Every workspace references a specific commit, the same way a branch does. All your staged operations are recorded as a diff against that base commit.
+
+When you commit a workspace:
+
+1. Oxen applies your staged diff on top of the workspace's base commit to produce a new commit.
+2. That new commit is added to a target branch on the remote (see [Committing changes](#committing-changes) for how the target is chosen).
+3. If the target branch has advanced past the workspace's base commit, Oxen attempts to merge. Conflicts cause the commit to fail and you'll need to resolve them before retrying.
+
+Because workspaces are commit-scoped, two workspaces created from the same branch at different times can see completely different views of the repo. That's intentional — it gives you isolation while staging — but it also means a long-lived workspace can drift from the branch tip and accumulate conflicts.
+
+## Creating a workspace
+
+A workspace is created against a remote repository, and optionally against a specific branch.
 
 <CodeGroup>
 
@@ -84,7 +119,7 @@ oxen workspace create -w my-workspace-name -b add-images
 
 </CodeGroup>
 
-If no branch name is provided, the default branch is used
+If no branch is provided, the default branch (usually `main`) is used.
 
 <CodeGroup>
 
@@ -102,9 +137,11 @@ oxen workspace create
 
 </CodeGroup>
 
-On the server, this will base the workspace on the latest commit of the branch. As such, you can only create workspaces using branches that exist on the remote. 
+The workspace is pinned to whatever commit the branch points at when you create it. You can only create workspaces from branches that already exist on the remote.
 
-Optionally, you can provide a name for the workspace
+### Named vs. unnamed workspaces
+
+Every workspace has an auto-generated **id**. You can optionally also give it a human-readable **name**.
 
 <CodeGroup>
 
@@ -119,25 +156,36 @@ workspace = Workspace(repo, name="my-workspace-name")
 ```bash CLI
 oxen workspace create -n my-workspace-name
 ```
+
 </CodeGroup>
 
-Named workspaces are persistent. When you commit a named workspace, its `commit_id` will be updated to the newly created commit. Use a named workspace if you want make multiple commits with the same workspace
+The name matters because of two behavioral differences:
 
-## List Workspaces
+| | Unnamed workspace | Named workspace |
+| --- | --- | --- |
+| Lifetime after commit | Deleted | Persists, fast-forwarded to the new commit |
+| Best for | One-shot imports, throwaway staging | Long-lived staging, multi-commit or multi-client workflows |
 
-You can list the workspaces for a remote using `oxen workspace list`
+Use a **named** workspace when you expect to make multiple commits from the same workspace, or when several processes/users will share it. Use an **unnamed** workspace for one-off imports where you don't need it to stick around.
 
-<CodeGroup>
+### Identifying a workspace in CLI commands
 
-```bash CLI 
-oxen workspace list -r my_remote # Defaults to `origin` if no remote is provided
+Most workspace commands need to know *which* workspace you're targeting. You can reference a workspace by either its id or its name:
+
+- `--workspace-id <id>` (short: `-w`) — reference by the auto-generated id returned from `oxen workspace create`.
+- `--workspace-name <name>` (short: `-n`) — reference by the name you set with `--name` at create time.
+
+## Listing workspaces
+
+List the workspaces on a remote with `oxen workspace list`.
+
+```bash
+oxen workspace list -r my_remote  # Defaults to `origin` if no remote is provided
 ```
 
-</CodeGroup>
+## Adding files
 
-## Adding Files
-
-Use `oxen workspace add` to stage files to the workspace. This uploads the files' contents directly to the server
+`oxen workspace add` streams a file's contents directly to the server and stages it on the workspace.
 
 <CodeGroup>
 
@@ -159,32 +207,27 @@ oxen workspace status -w my-workspace-id
 
 </CodeGroup>
 
-### Removing staged files
+### Unstaging a file
 
-If you want to remove files staged to a workspace, you can unstage them with `oxen workspace rm --staged`.
-
-<CodeGroup>
-
-```python Python
-from oxen import RemoteRepo
-from oxen import Workspace
-
-repo = RemoteRepo("ox/CatDogBBox")
-workspace = Workspace(repo, "add-images")
-workspace.rm("image.jpg")
-status = workspace.status()
-print(status.added_files()) # 'images.jpg' will no longer be listed
-```
+To remove a file you've staged on the workspace (without touching the base repo), unstage it with `oxen workspace rm --staged`.
 
 ```bash CLI
 oxen workspace rm --staged image.jpg -w my-workspace-id
 ```
 
-</CodeGroup>
+{/* TODO: the Python `Workspace.rm()` method maps to the *non-staged* server endpoint
+  (it stages a deletion of a file that exists in the base commit). There doesn't appear
+  to be a Python equivalent of `oxen workspace rm --staged` (unstage a previously
+  `add`ed file) — calls into `repositories::workspaces::files::unstage` aren't
+  exposed on the `Workspace` class. Confirm whether this is intentional or an SDK gap,
+  and either add a `Workspace.unstage(path)` binding or document the workaround
+  (e.g. delete the workspace and re-create it). */}
 
-### Removing files from the base repo
+### Deleting a file from the base repo
 
-On the other hand, you can use workspaces to remove files from the repository they're based on. Stage files for removal with `oxen workspace rm`
+<Warning>
+`oxen workspace rm` **without** `--staged` stages a deletion of a file that exists in the base repo. When you commit the workspace, that file will be removed from the branch. Use `--staged` if you only want to unstage a previously added file.
+</Warning>
 
 <CodeGroup>
 
@@ -192,11 +235,20 @@ On the other hand, you can use workspaces to remove files from the repository th
 oxen workspace rm image.jpg -w my-workspace-id
 ```
 
+```python Python
+from oxen import RemoteRepo
+from oxen import Workspace
+
+repo = RemoteRepo("ox/CatDogBBox")
+workspace = Workspace(repo, "add-images")
+workspace.rm("image.jpg")  # Stages a deletion of image.jpg from the base repo
+```
+
 </CodeGroup>
 
-## Commit Changes
+## Committing changes
 
-When you're finished staging changes, you can commit the workspace to merge them into the base repo. This will create a new commit on the remote branch.
+Commit a workspace to land its staged changes as a new commit on the remote.
 
 <CodeGroup>
 
@@ -205,16 +257,24 @@ from oxen import RemoteRepo
 from oxen import Workspace
 
 repo = RemoteRepo("ox/CatDogBBox")
-workspace = Workspace(repo, "add_images") 
+workspace = Workspace(repo, "add_images")
 workspace.commit("adding an image using a workspace", "add_images")
 ```
 
 ```bash CLI
 oxen workspace commit -m "adding an image" -w my-workspace-id -b add_images
 ```
+
 </CodeGroup>
 
-If you don't provide a branch, the commit will be made to a new branch on the remote
+{/* TODO: the original doc contradicts itself about what happens when you commit without a target branch:
+
+  - Line 221 of the previous version said: "If you don't provide a branch, the commit will be made to a new branch on the remote"
+  - The "How it works" section said: "If no branch is provided, the commit will be made to the branch the workspace was created from."
+
+  Which is correct? If a new branch is created when none is provided, what is the new branch named (auto-generated from the workspace name? UUID?)? I've left the "new branch" behavior below for now to match the previous doc, but please confirm and I'll fix both this section and "How it works" accordingly. */}
+
+If you don't provide a target branch, the commit will be made to a new branch on the remote.
 
 <CodeGroup>
 
@@ -223,18 +283,20 @@ from oxen import RemoteRepo
 from oxen import Workspace
 
 repo = RemoteRepo("ox/CatDogBBox")
-workspace = Workspace(repo, "my_branch") 
-workspace.commit("adding an image using a workspace") # No branch is provided, so this will create a new branch
+workspace = Workspace(repo, "my_branch")
+workspace.commit("adding an image using a workspace")  # No branch is provided, so this will create a new branch
 ```
 
 ```bash CLI
-oxen workspace commit -m "adding an image" -w my-workspace-id # No branch is provided, so this will create a new branch
+oxen workspace commit -m "adding an image" -w my-workspace-id  # No branch is provided, so this will create a new branch
 ```
-
-If a workspace doesn't have a name, it will be deleted on commit. If it's named, it will be updated to point to the newly created commit 
 
 </CodeGroup>
 
-🎉 You have now committed data to the remote repo!
+After a successful commit:
 
-Note: If merge conflicts are found, the workspace commit will fail, and you'll have to resolve them to continue
+- An **unnamed** workspace is deleted.
+- A **named** workspace is fast-forwarded to point at the new commit, so you can keep using it.
+
+If merge conflicts are detected (because the target branch has advanced past the workspace's base commit), the commit will fail. {/* TODO: how should users resolve a workspace merge conflict? Is there an `oxen workspace ...` command for this, or is the recommended fix to discard the workspace and re-create it off the latest commit, then re-stage? A short pointer here would help. */}
+
