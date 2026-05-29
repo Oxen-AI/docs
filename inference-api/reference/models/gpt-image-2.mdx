@@ -72,9 +72,8 @@ GPT Image 2 is OpenAI's next-generation image model available through Fal. It pr
           -d '{
           "model": "gpt-image-2",
           "prompt": "An ox standing in the middle of a long open road at sunset, cinematic lighting, photorealistic, centered and staring at the camera.",
-          "resolution": "1024x1024",
+          "resolution": "1920x1080",
           "quality": "high",
-          "num_images": 1,
           "output_format": "png"
         }'
         ```
@@ -92,9 +91,8 @@ GPT Image 2 is OpenAI's next-generation image model available through Fal. It pr
             json={
                 "model": "gpt-image-2",
                 "prompt": "An ox standing in the middle of a long open road at sunset, cinematic lighting, photorealistic, centered and staring at the camera.",
-                "resolution": "1024x1024",
+                "resolution": "1920x1080",
                 "quality": "high",
-                "num_images": 1,
                 "output_format": "png"
             },
         )
@@ -192,9 +190,8 @@ GPT Image 2 is OpenAI's next-generation image model available through Fal. It pr
           -d '{
           "model": "gpt-image-2",
           "prompt": "An ox standing in the middle of a long open road at sunset, cinematic lighting, photorealistic, centered and staring at the camera.",
-          "resolution": "1024x1024",
+          "resolution": "1920x1080",
           "quality": "high",
-          "num_images": 1,
           "output_format": "png"
         }' | jq -r '.generations[0].generation_id')
 
@@ -228,9 +225,8 @@ GPT Image 2 is OpenAI's next-generation image model available through Fal. It pr
             json={
                 "model": "gpt-image-2",
                 "prompt": "An ox standing in the middle of a long open road at sunset, cinematic lighting, photorealistic, centered and staring at the camera.",
-                "resolution": "1024x1024",
+                "resolution": "1920x1080",
                 "quality": "high",
-                "num_images": 1,
                 "output_format": "png"
             },
         )
@@ -340,9 +336,8 @@ GPT Image 2 is OpenAI's next-generation image model available through Fal. It pr
           -d '{
           "model": "gpt-image-2",
           "prompt": "An ox standing in the middle of a long open road at sunset, cinematic lighting, photorealistic, centered and staring at the camera.",
-          "resolution": "1024x1024",
+          "resolution": "1920x1080",
           "quality": "high",
-          "num_images": 1,
           "output_format": "png"
         }' | jq -r '.generations[0].generation_id')
 
@@ -373,9 +368,8 @@ GPT Image 2 is OpenAI's next-generation image model available through Fal. It pr
             json={
                 "model": "gpt-image-2",
                 "prompt": "An ox standing in the middle of a long open road at sunset, cinematic lighting, photorealistic, centered and staring at the camera.",
-                "resolution": "1024x1024",
+                "resolution": "1920x1080",
                 "quality": "high",
-                "num_images": 1,
                 "output_format": "png"
             },
         )
@@ -426,7 +420,6 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `resolution` | `string` | `"1024x1024"` | Output image resolution. HD sizes (1920x1080 and lower) bill at the standard tier; QHD+ sizes (2560x1440 and higher) bill at the high-resolution tier. One of: 1024x768, 1024x1024, 1024x1536, 1920x1080, 2560x1440, 3840x2160. |
-| `quality` | `string` | `"high"` | Output quality tier. Locked to high for best fidelity. One of: high. |
-| `num_images` | `integer` | `1` | Number of images to generate per request. Range: 1 – 4. |
+| `resolution` | `string` | `"1920x1080"` | Output image resolution. HD sizes (1920x1080 and lower) bill at the standard tier; QHD+ sizes (2560x1440 and higher) bill at the high-resolution tier. One of: 1024x768, 1024x1024, 1024x1536, 1920x1080, 2560x1440, 3840x2160. |
+| `quality` | `string` | `"high"` | Output quality tier. Use 'auto' to let the model pick, or set explicitly to low, medium, or high. One of: auto, low, medium, high. |
 | `output_format` | `string` | `"png"` | File format for the generated image. One of: png, jpeg, webp. |

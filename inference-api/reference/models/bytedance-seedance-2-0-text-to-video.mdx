@@ -1,6 +1,6 @@
 ---
 title: "Seedance 2.0 - Text to Video"
-description: "Text-to-video with flexible duration and aspect ratio, resolution up to 720p, and optional synchronized audio."
+description: "Text-to-video with flexible duration and aspect ratio, resolution up to 1080p, and optional synchronized audio."
 ---
 
 <CardGroup cols={1}>
@@ -11,7 +11,7 @@ description: "Text-to-video with flexible duration and aspect ratio, resolution 
 
 **Model ID:** `bytedance-seedance-2-0-text-to-video`
 
-ByteDance Seedance 2 text-to-video generates video from a text prompt. It supports 480p or 720p output, durations from 4–15 seconds or automatic length from the prompt, multiple aspect ratios (including auto), and optional synchronized audio (effects, ambience, and lip-synced speech).
+ByteDance Seedance 2.0 (Pro) generates video from a text prompt. Supports 480p, 720p, and 1080p output, durations from 4-15 seconds, multiple aspect ratios, and optional synchronized audio.
 
 ## Example request
 
@@ -37,7 +37,7 @@ ByteDance Seedance 2 text-to-video generates video from a text prompt. It suppor
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedance-2-0-text-to-video",
-          "prompt": "An octopus finds a football in the ocean and excitedly calls its octopus friends to come and play. Cut scene to an octopus football game under the sea."
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -53,7 +53,7 @@ ByteDance Seedance 2 text-to-video generates video from a text prompt. It suppor
             },
             json={
                 "model": "bytedance-seedance-2-0-text-to-video",
-                "prompt": "An octopus finds a football in the ocean and excitedly calls its octopus friends to come and play. Cut scene to an octopus football game under the sea."
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -73,11 +73,12 @@ ByteDance Seedance 2 text-to-video generates video from a text prompt. It suppor
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedance-2-0-text-to-video",
-          "prompt": "An octopus finds a football in the ocean and excitedly calls its octopus friends to come and play. Cut scene to an octopus football game under the sea.",
+          "prompt": "<prompt>",
           "resolution": "720p",
-          "duration": "auto",
-          "aspect_ratio": "auto",
-          "generate_audio": true
+          "duration": -1,
+          "aspect_ratio": "adaptive",
+          "generate_audio": false,
+          "watermark": false
         }'
         ```
 
@@ -93,11 +94,12 @@ ByteDance Seedance 2 text-to-video generates video from a text prompt. It suppor
             },
             json={
                 "model": "bytedance-seedance-2-0-text-to-video",
-                "prompt": "An octopus finds a football in the ocean and excitedly calls its octopus friends to come and play. Cut scene to an octopus football game under the sea.",
+                "prompt": "<prompt>",
                 "resolution": "720p",
-                "duration": "auto",
-                "aspect_ratio": "auto",
-                "generate_audio": true
+                "duration": -1,
+                "aspect_ratio": "adaptive",
+                "generate_audio": false,
+                "watermark": false
             },
         )
         response.raise_for_status()
@@ -126,7 +128,7 @@ ByteDance Seedance 2 text-to-video generates video from a text prompt. It suppor
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedance-2-0-text-to-video",
-          "prompt": "An octopus finds a football in the ocean and excitedly calls its octopus friends to come and play. Cut scene to an octopus football game under the sea."
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -158,7 +160,7 @@ ByteDance Seedance 2 text-to-video generates video from a text prompt. It suppor
             headers=HEADERS,
             json={
                 "model": "bytedance-seedance-2-0-text-to-video",
-                "prompt": "An octopus finds a football in the ocean and excitedly calls its octopus friends to come and play. Cut scene to an octopus football game under the sea."
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -193,11 +195,12 @@ ByteDance Seedance 2 text-to-video generates video from a text prompt. It suppor
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedance-2-0-text-to-video",
-          "prompt": "An octopus finds a football in the ocean and excitedly calls its octopus friends to come and play. Cut scene to an octopus football game under the sea.",
+          "prompt": "<prompt>",
           "resolution": "720p",
-          "duration": "auto",
-          "aspect_ratio": "auto",
-          "generate_audio": true
+          "duration": -1,
+          "aspect_ratio": "adaptive",
+          "generate_audio": false,
+          "watermark": false
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -229,11 +232,12 @@ ByteDance Seedance 2 text-to-video generates video from a text prompt. It suppor
             headers=HEADERS,
             json={
                 "model": "bytedance-seedance-2-0-text-to-video",
-                "prompt": "An octopus finds a football in the ocean and excitedly calls its octopus friends to come and play. Cut scene to an octopus football game under the sea.",
+                "prompt": "<prompt>",
                 "resolution": "720p",
-                "duration": "auto",
-                "aspect_ratio": "auto",
-                "generate_audio": true
+                "duration": -1,
+                "aspect_ratio": "adaptive",
+                "generate_audio": false,
+                "watermark": false
             },
         )
         enqueue.raise_for_status()
@@ -276,7 +280,7 @@ ByteDance Seedance 2 text-to-video generates video from a text prompt. It suppor
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedance-2-0-text-to-video",
-          "prompt": "An octopus finds a football in the ocean and excitedly calls its octopus friends to come and play. Cut scene to an octopus football game under the sea."
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -305,7 +309,7 @@ ByteDance Seedance 2 text-to-video generates video from a text prompt. It suppor
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "bytedance-seedance-2-0-text-to-video",
-                "prompt": "An octopus finds a football in the ocean and excitedly calls its octopus friends to come and play. Cut scene to an octopus football game under the sea."
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -341,11 +345,12 @@ ByteDance Seedance 2 text-to-video generates video from a text prompt. It suppor
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedance-2-0-text-to-video",
-          "prompt": "An octopus finds a football in the ocean and excitedly calls its octopus friends to come and play. Cut scene to an octopus football game under the sea.",
+          "prompt": "<prompt>",
           "resolution": "720p",
-          "duration": "auto",
-          "aspect_ratio": "auto",
-          "generate_audio": true
+          "duration": -1,
+          "aspect_ratio": "adaptive",
+          "generate_audio": false,
+          "watermark": false
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -374,11 +379,12 @@ ByteDance Seedance 2 text-to-video generates video from a text prompt. It suppor
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "bytedance-seedance-2-0-text-to-video",
-                "prompt": "An octopus finds a football in the ocean and excitedly calls its octopus friends to come and play. Cut scene to an octopus football game under the sea.",
+                "prompt": "<prompt>",
                 "resolution": "720p",
-                "duration": "auto",
-                "aspect_ratio": "auto",
-                "generate_audio": true
+                "duration": -1,
+                "aspect_ratio": "adaptive",
+                "generate_audio": false,
+                "watermark": false
             },
         )
         enqueue.raise_for_status()
@@ -422,14 +428,14 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | `"An octopus finds a football in the ocean and excitedly calls its octopus friends to come and play. Cut scene to an octopus football game under the sea."` | The text prompt used to generate the video. |
+| `prompt` | `string` | &mdash; | The text prompt used to generate the video. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `resolution` | `string` | `"720p"` | Video resolution - 480p for faster generation, 720p for balance. One of: 480p, 720p. |
-| `duration` | `string` | `"auto"` | Duration of the video in seconds. Supports 4 to 15 seconds, or auto to let the model decide based on the prompt. One of: auto, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15. |
-| `aspect_ratio` | `string` | `"auto"` | The aspect ratio of the generated video. Use 16:9 for landscape, 9:16 for portrait/vertical, 1:1 for square, 21:9 for ultrawide cinematic, or auto to let the model decide. One of: auto, 21:9, 16:9, 4:3, 1:1, 3:4, 9:16. |
-| `generate_audio` | `boolean` | `true` | Whether to generate synchronized audio for the video, including sound effects, ambient sounds, and lip-synced speech. The cost of video generation is the same regardless of whether audio is generated or not. |
-| `seed` | `integer` | &mdash; | Random seed for reproducibility. Note that results may still vary slightly even with the same seed. |
+| `resolution` | `string` | `"720p"` | Video resolution. 480p for faster generation, 720p for balance, 1080p for highest quality. One of: 480p, 720p, 1080p. |
+| `duration` | `integer` | `-1` | Duration of the video in seconds. Supports 4 to 15 seconds, or auto to let the model decide based on the prompt. One of: -1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15. |
+| `aspect_ratio` | `string` | `"adaptive"` | The aspect ratio of the generated video. Use 16:9 for landscape, 9:16 for portrait/vertical, 1:1 for square, 21:9 for ultrawide cinematic, or auto to let the model decide. One of: adaptive, 21:9, 16:9, 4:3, 1:1, 3:4, 9:16. |
+| `generate_audio` | `boolean` | `false` | Whether to generate synchronized audio for the video, including sound effects, ambient sounds, and lip-synced speech. |
+| `watermark` | `boolean` | `false` | Whether to add an 'AI generated' watermark to the output. |

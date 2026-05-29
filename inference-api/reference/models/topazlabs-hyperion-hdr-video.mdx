@@ -1,24 +1,24 @@
 ---
-title: "Topaz Starlight Precise 2.5"
-description: "Video restoration and upscaling model from Topaz for detail-preserving 1080p/4k outputs."
+title: "Topaz Hyperion HDR"
+description: "HDR video conversion from Topaz with PQ/HLG transfer functions and ProRes output support."
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try Topaz Starlight Precise 2.5 in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=topazlabs-upscale-starlight-2-5-video">
+  <Card title="Try Topaz Hyperion HDR in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=topazlabs-hyperion-hdr-video">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `topazlabs-upscale-starlight-2-5-video`
+**Model ID:** `topazlabs-hyperion-hdr-video`
 
-Topaz Starlight Precise 2.5 is a video restoration and upscaling model focused on preserving fine detail and temporal consistency while improving clarity.
+Topaz Hyperion is an HDR video model that converts SDR footage into HDR with selectable transfer functions (PQ or HLG) and tunable exposure, saturation, and highlight handling.
 
-Use this model to upscale input video to 1080p or 4k and control output frame rate.
+Pair with ProRes output for professional editing workflows; H265 output is also supported.
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=topazlabs-upscale-starlight-2-5-video) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=topazlabs-hyperion-hdr-video) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
@@ -38,7 +38,7 @@ Use this model to upscale input video to 1080p or 4k and control output frame ra
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "topazlabs-upscale-starlight-2-5-video",
+          "model": "topazlabs-hyperion-hdr-video",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }'
         ```
@@ -54,7 +54,7 @@ Use this model to upscale input video to 1080p or 4k and control output frame ra
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "topazlabs-upscale-starlight-2-5-video",
+                "model": "topazlabs-hyperion-hdr-video",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
@@ -74,13 +74,14 @@ Use this model to upscale input video to 1080p or 4k and control output frame ra
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "topazlabs-upscale-starlight-2-5-video",
+          "model": "topazlabs-hyperion-hdr-video",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "resolution": "4k",
-          "interpolate_frames": false,
-          "target_fps": 30,
-          "enable_clc": true,
-          "is_optimized_mode": true
+          "transfer_function": "hlg",
+          "adjust_exposure": 0.5,
+          "boost_saturation": 0.5,
+          "highlight_threshold": 0.65,
+          "output_encoder": "H265",
+          "output_profile": "422 HQ"
         }'
         ```
 
@@ -95,13 +96,14 @@ Use this model to upscale input video to 1080p or 4k and control output frame ra
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "topazlabs-upscale-starlight-2-5-video",
+                "model": "topazlabs-hyperion-hdr-video",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "resolution": "4k",
-                "interpolate_frames": false,
-                "target_fps": 30,
-                "enable_clc": true,
-                "is_optimized_mode": true
+                "transfer_function": "hlg",
+                "adjust_exposure": 0.5,
+                "boost_saturation": 0.5,
+                "highlight_threshold": 0.65,
+                "output_encoder": "H265",
+                "output_profile": "422 HQ"
             },
         )
         response.raise_for_status()
@@ -129,7 +131,7 @@ Use this model to upscale input video to 1080p or 4k and control output frame ra
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "topazlabs-upscale-starlight-2-5-video",
+          "model": "topazlabs-hyperion-hdr-video",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }' | jq -r '.generations[0].generation_id')
 
@@ -161,7 +163,7 @@ Use this model to upscale input video to 1080p or 4k and control output frame ra
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "topazlabs-upscale-starlight-2-5-video",
+                "model": "topazlabs-hyperion-hdr-video",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
@@ -196,13 +198,14 @@ Use this model to upscale input video to 1080p or 4k and control output frame ra
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "topazlabs-upscale-starlight-2-5-video",
+          "model": "topazlabs-hyperion-hdr-video",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "resolution": "4k",
-          "interpolate_frames": false,
-          "target_fps": 30,
-          "enable_clc": true,
-          "is_optimized_mode": true
+          "transfer_function": "hlg",
+          "adjust_exposure": 0.5,
+          "boost_saturation": 0.5,
+          "highlight_threshold": 0.65,
+          "output_encoder": "H265",
+          "output_profile": "422 HQ"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -233,13 +236,14 @@ Use this model to upscale input video to 1080p or 4k and control output frame ra
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "topazlabs-upscale-starlight-2-5-video",
+                "model": "topazlabs-hyperion-hdr-video",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "resolution": "4k",
-                "interpolate_frames": false,
-                "target_fps": 30,
-                "enable_clc": true,
-                "is_optimized_mode": true
+                "transfer_function": "hlg",
+                "adjust_exposure": 0.5,
+                "boost_saturation": 0.5,
+                "highlight_threshold": 0.65,
+                "output_encoder": "H265",
+                "output_profile": "422 HQ"
             },
         )
         enqueue.raise_for_status()
@@ -281,7 +285,7 @@ Use this model to upscale input video to 1080p or 4k and control output frame ra
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "topazlabs-upscale-starlight-2-5-video",
+          "model": "topazlabs-hyperion-hdr-video",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }' | jq -r '.generations[0].generation_id')
 
@@ -310,7 +314,7 @@ Use this model to upscale input video to 1080p or 4k and control output frame ra
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "topazlabs-upscale-starlight-2-5-video",
+                "model": "topazlabs-hyperion-hdr-video",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
@@ -346,13 +350,14 @@ Use this model to upscale input video to 1080p or 4k and control output frame ra
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "topazlabs-upscale-starlight-2-5-video",
+          "model": "topazlabs-hyperion-hdr-video",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "resolution": "4k",
-          "interpolate_frames": false,
-          "target_fps": 30,
-          "enable_clc": true,
-          "is_optimized_mode": true
+          "transfer_function": "hlg",
+          "adjust_exposure": 0.5,
+          "boost_saturation": 0.5,
+          "highlight_threshold": 0.65,
+          "output_encoder": "H265",
+          "output_profile": "422 HQ"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -380,13 +385,14 @@ Use this model to upscale input video to 1080p or 4k and control output frame ra
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "topazlabs-upscale-starlight-2-5-video",
+                "model": "topazlabs-hyperion-hdr-video",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "resolution": "4k",
-                "interpolate_frames": false,
-                "target_fps": 30,
-                "enable_clc": true,
-                "is_optimized_mode": true
+                "transfer_function": "hlg",
+                "adjust_exposure": 0.5,
+                "boost_saturation": 0.5,
+                "highlight_threshold": 0.65,
+                "output_encoder": "H265",
+                "output_profile": "422 HQ"
             },
         )
         enqueue.raise_for_status()
@@ -421,7 +427,7 @@ Use this model to upscale input video to 1080p or 4k and control output frame ra
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/topazlabs-upscale-starlight-2-5-video
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/topazlabs-hyperion-hdr-video
 ```
 
 ## Request parameters
@@ -430,15 +436,15 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `input_video` | `string` | &mdash; | Video file to upscale (URL or file path). Format: uri. |
+| `input_video` | `string` | &mdash; | Video file to convert to HDR (URL or file path). Format: uri. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `resolution` | `string` | `"4k"` | Target output resolution. One of: 1080p, 2k, 4k. |
-| `interpolate_frames` | `boolean` | `false` | Increase the output frame rate by generating new frames. More expensive. |
-| `target_fps` | `number` | `30` | Output frame rate after interpolation. One of: 24, 23.976, 25, 29.97, 30, 50, 59.94, 60. |
-| `creativity` | `string` | &mdash; | Controls enhancement intensity. One of: low, middle, high. |
-| `enable_clc` | `boolean` | `true` | Enables content-aware processing. |
-| `is_optimized_mode` | `boolean` | `true` | Enables optimization mode for faster processing. |
+| `transfer_function` | `string` | `"hlg"` | HDR transfer function. HLG is broadcast-friendly; PQ targets HDR10 mastering. One of: pq, hlg. |
+| `adjust_exposure` | `number` | `0.5` | Exposure adjustment applied during HDR conversion. Range: 0 – 1. |
+| `boost_saturation` | `number` | `0.5` | Saturation boost applied during HDR conversion. Range: 0 – 1. |
+| `highlight_threshold` | `number` | `0.65` | Threshold above which highlights are expanded into HDR range. Range: 0.45 – 0.85. |
+| `output_encoder` | `string` | `"H265"` | Video encoder for the rendered output. ProRes is recommended for pro editing workflows. One of: H265, ProRes. |
+| `output_profile` | `string` | `"422 HQ"` | ProRes quality profile. One of: 422 Proxy, 422 LT, 422 Std, 422 HQ. |

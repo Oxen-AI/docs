@@ -1,24 +1,22 @@
 ---
-title: "Topaz Starlight Precise 2.5"
-description: "Video restoration and upscaling model from Topaz for detail-preserving 1080p/4k outputs."
+title: "Seedance 2.0 Fast - Text to Video"
+description: "Faster, lower-cost text-to-video with resolution up to 720p."
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try Topaz Starlight Precise 2.5 in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=topazlabs-upscale-starlight-2-5-video">
+  <Card title="Try Seedance 2.0 Fast - Text to Video in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=bytedance-seedance-2-0-fast-text-to-video">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `topazlabs-upscale-starlight-2-5-video`
+**Model ID:** `bytedance-seedance-2-0-fast-text-to-video`
 
-Topaz Starlight Precise 2.5 is a video restoration and upscaling model focused on preserving fine detail and temporal consistency while improving clarity.
-
-Use this model to upscale input video to 1080p or 4k and control output frame rate.
+ByteDance Seedance 2.0 Fast generates video from a text prompt, optimized for speed and cost. Supports 480p and 720p output, durations from 4-15 seconds, multiple aspect ratios, and optional synchronized audio.
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=topazlabs-upscale-starlight-2-5-video) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=bytedance-seedance-2-0-fast-text-to-video) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
@@ -38,8 +36,8 @@ Use this model to upscale input video to 1080p or 4k and control output frame ra
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "topazlabs-upscale-starlight-2-5-video",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+          "model": "bytedance-seedance-2-0-fast-text-to-video",
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -54,8 +52,8 @@ Use this model to upscale input video to 1080p or 4k and control output frame ra
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "topazlabs-upscale-starlight-2-5-video",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+                "model": "bytedance-seedance-2-0-fast-text-to-video",
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -74,13 +72,13 @@ Use this model to upscale input video to 1080p or 4k and control output frame ra
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "topazlabs-upscale-starlight-2-5-video",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "resolution": "4k",
-          "interpolate_frames": false,
-          "target_fps": 30,
-          "enable_clc": true,
-          "is_optimized_mode": true
+          "model": "bytedance-seedance-2-0-fast-text-to-video",
+          "prompt": "<prompt>",
+          "resolution": "720p",
+          "duration": -1,
+          "aspect_ratio": "adaptive",
+          "generate_audio": false,
+          "watermark": false
         }'
         ```
 
@@ -95,13 +93,13 @@ Use this model to upscale input video to 1080p or 4k and control output frame ra
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "topazlabs-upscale-starlight-2-5-video",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "resolution": "4k",
-                "interpolate_frames": false,
-                "target_fps": 30,
-                "enable_clc": true,
-                "is_optimized_mode": true
+                "model": "bytedance-seedance-2-0-fast-text-to-video",
+                "prompt": "<prompt>",
+                "resolution": "720p",
+                "duration": -1,
+                "aspect_ratio": "adaptive",
+                "generate_audio": false,
+                "watermark": false
             },
         )
         response.raise_for_status()
@@ -129,8 +127,8 @@ Use this model to upscale input video to 1080p or 4k and control output frame ra
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "topazlabs-upscale-starlight-2-5-video",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+          "model": "bytedance-seedance-2-0-fast-text-to-video",
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -161,8 +159,8 @@ Use this model to upscale input video to 1080p or 4k and control output frame ra
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "topazlabs-upscale-starlight-2-5-video",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+                "model": "bytedance-seedance-2-0-fast-text-to-video",
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -196,13 +194,13 @@ Use this model to upscale input video to 1080p or 4k and control output frame ra
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "topazlabs-upscale-starlight-2-5-video",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "resolution": "4k",
-          "interpolate_frames": false,
-          "target_fps": 30,
-          "enable_clc": true,
-          "is_optimized_mode": true
+          "model": "bytedance-seedance-2-0-fast-text-to-video",
+          "prompt": "<prompt>",
+          "resolution": "720p",
+          "duration": -1,
+          "aspect_ratio": "adaptive",
+          "generate_audio": false,
+          "watermark": false
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -233,13 +231,13 @@ Use this model to upscale input video to 1080p or 4k and control output frame ra
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "topazlabs-upscale-starlight-2-5-video",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "resolution": "4k",
-                "interpolate_frames": false,
-                "target_fps": 30,
-                "enable_clc": true,
-                "is_optimized_mode": true
+                "model": "bytedance-seedance-2-0-fast-text-to-video",
+                "prompt": "<prompt>",
+                "resolution": "720p",
+                "duration": -1,
+                "aspect_ratio": "adaptive",
+                "generate_audio": false,
+                "watermark": false
             },
         )
         enqueue.raise_for_status()
@@ -281,8 +279,8 @@ Use this model to upscale input video to 1080p or 4k and control output frame ra
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "topazlabs-upscale-starlight-2-5-video",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+          "model": "bytedance-seedance-2-0-fast-text-to-video",
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -310,8 +308,8 @@ Use this model to upscale input video to 1080p or 4k and control output frame ra
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "topazlabs-upscale-starlight-2-5-video",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+                "model": "bytedance-seedance-2-0-fast-text-to-video",
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -346,13 +344,13 @@ Use this model to upscale input video to 1080p or 4k and control output frame ra
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "topazlabs-upscale-starlight-2-5-video",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "resolution": "4k",
-          "interpolate_frames": false,
-          "target_fps": 30,
-          "enable_clc": true,
-          "is_optimized_mode": true
+          "model": "bytedance-seedance-2-0-fast-text-to-video",
+          "prompt": "<prompt>",
+          "resolution": "720p",
+          "duration": -1,
+          "aspect_ratio": "adaptive",
+          "generate_audio": false,
+          "watermark": false
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -380,13 +378,13 @@ Use this model to upscale input video to 1080p or 4k and control output frame ra
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "topazlabs-upscale-starlight-2-5-video",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "resolution": "4k",
-                "interpolate_frames": false,
-                "target_fps": 30,
-                "enable_clc": true,
-                "is_optimized_mode": true
+                "model": "bytedance-seedance-2-0-fast-text-to-video",
+                "prompt": "<prompt>",
+                "resolution": "720p",
+                "duration": -1,
+                "aspect_ratio": "adaptive",
+                "generate_audio": false,
+                "watermark": false
             },
         )
         enqueue.raise_for_status()
@@ -421,7 +419,7 @@ Use this model to upscale input video to 1080p or 4k and control output frame ra
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/topazlabs-upscale-starlight-2-5-video
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/bytedance-seedance-2-0-fast-text-to-video
 ```
 
 ## Request parameters
@@ -430,15 +428,14 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `input_video` | `string` | &mdash; | Video file to upscale (URL or file path). Format: uri. |
+| `prompt` | `string` | &mdash; | The text prompt used to generate the video. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `resolution` | `string` | `"4k"` | Target output resolution. One of: 1080p, 2k, 4k. |
-| `interpolate_frames` | `boolean` | `false` | Increase the output frame rate by generating new frames. More expensive. |
-| `target_fps` | `number` | `30` | Output frame rate after interpolation. One of: 24, 23.976, 25, 29.97, 30, 50, 59.94, 60. |
-| `creativity` | `string` | &mdash; | Controls enhancement intensity. One of: low, middle, high. |
-| `enable_clc` | `boolean` | `true` | Enables content-aware processing. |
-| `is_optimized_mode` | `boolean` | `true` | Enables optimization mode for faster processing. |
+| `resolution` | `string` | `"720p"` | Video resolution. One of: 480p, 720p. |
+| `duration` | `integer` | `-1` | Duration of the video in seconds. Supports 4 to 15 seconds, or auto to let the model decide based on the prompt. One of: -1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15. |
+| `aspect_ratio` | `string` | `"adaptive"` | The aspect ratio of the generated video. Use 16:9 for landscape, 9:16 for portrait/vertical, 1:1 for square, 21:9 for ultrawide cinematic, or auto to let the model decide. One of: adaptive, 21:9, 16:9, 4:3, 1:1, 3:4, 9:16. |
+| `generate_audio` | `boolean` | `false` | Whether to generate synchronized audio. |
+| `watermark` | `boolean` | `false` | Whether to add an 'AI generated' watermark to the output. |

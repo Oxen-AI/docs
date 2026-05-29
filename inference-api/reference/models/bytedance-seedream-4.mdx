@@ -1,6 +1,6 @@
 ---
 title: "Seedream 4.0"
-description: "Delivers ultra-fast, high-resolution image generation, precise natural-language editing, and consistent multi-image output—ideal for creative, batch, or…"
+description: "Image generation with single- and multi-reference editing and resolutions from 1K to 4K."
 ---
 
 <CardGroup cols={1}>
@@ -11,21 +11,7 @@ description: "Delivers ultra-fast, high-resolution image generation, precise nat
 
 **Model ID:** `bytedance-seedream-4`
 
-Seedream 4.0 is a Multimodal LLM designed for unified image generation and advanced image editing via natural language prompts.
-
-It excels in **high-speed, high-resolution image synthesis and editing**, supporting tasks such as photorealistic image generation, precise object addition/removal, and consistent multi-image output. The model offers robust handling of both Chinese and English prompts, maintains character and style consistency across sets, and enables batch processing for efficient workflows.
-
-Some other noteworthy features of Seedream 4.0 include the ability to generate up to 9–10 matching images in a single batch, seamless style transfer, and detailed transformations—making it valuable for storyboarding, product design, and creative content production.
-
-| Metric             | Value              |
-|--------------------|--------------------|
-| Parameter Count    | Unknown            |
-| Mixture of Experts | Unknown            |
-| Context Length     | Unknown            |
-| Multilingual       | Yes                |
-| Quantized*         | Unknown            |
-
-*_Quantization is specific to the inference provider and the model may be offered with different quantization levels by other providers._
+ByteDance Seedream 4.0 generates images from a text prompt, with single-image and multi-reference image-to-image editing. Supports 1K, 2K, and 4K output resolutions and batch generation.
 
 ## Example request
 
@@ -36,7 +22,7 @@ Some other noteworthy features of Seedream 4.0 include the ability to generate u
 <Tabs>
   <Tab title="Sync">
 
-    See the [image generation reference](/inference-api/reference/image_generation) for more details.
+    See the [image editing reference](/inference-api/reference/image_editing) for more details.
 
     <Tabs>
       <Tab title="Minimal">
@@ -44,12 +30,12 @@ Some other noteworthy features of Seedream 4.0 include the ability to generate u
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedream-4",
-          "prompt": "Add a funny hat"
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -58,14 +44,58 @@ Some other noteworthy features of Seedream 4.0 include the ability to generate u
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/generate",
+            "https://hub.oxen.ai/api/ai/images/edit",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
                 "model": "bytedance-seedream-4",
-                "prompt": "Add a funny hat"
+                "prompt": "<prompt>"
+            },
+        )
+        response.raise_for_status()
+        print(response.json())
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+      <Tab title="Basic parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "bytedance-seedream-4",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_images": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ]
+        }'
+        ```
+
+        ```python Python
+        import os
+        import requests
+
+        response = requests.post(
+            "https://hub.oxen.ai/api/ai/images/edit",
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+            },
+            json={
+                "model": "bytedance-seedream-4",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_images": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ]
             },
         )
         response.raise_for_status()
@@ -80,15 +110,19 @@ Some other noteworthy features of Seedream 4.0 include the ability to generate u
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedream-4",
-          "prompt": "Add a funny hat",
-          "input_image": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
-          ]
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_images": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
+          "size": "2K",
+          "output_format": "jpeg",
+          "watermark": false
         }'
         ```
 
@@ -97,17 +131,21 @@ Some other noteworthy features of Seedream 4.0 include the ability to generate u
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/generate",
+            "https://hub.oxen.ai/api/ai/images/edit",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
                 "model": "bytedance-seedream-4",
-                "prompt": "Add a funny hat",
-                "input_image": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
-                ]
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_images": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
+                "size": "2K",
+                "output_format": "jpeg",
+                "watermark": false
             },
         )
         response.raise_for_status()
@@ -136,7 +174,7 @@ Some other noteworthy features of Seedream 4.0 include the ability to generate u
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedream-4",
-          "prompt": "Add a funny hat"
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -168,7 +206,82 @@ Some other noteworthy features of Seedream 4.0 include the ability to generate u
             headers=HEADERS,
             json={
                 "model": "bytedance-seedream-4",
-                "prompt": "Add a funny hat"
+                "prompt": "<prompt>"
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        while True:
+            data = requests.get(
+                f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
+                headers=HEADERS,
+            ).json()
+            if data["status"] in {"succeeded", "failed", "cancelled"}:
+                break
+            time.sleep(5)
+
+        if data["status"] == "succeeded":
+            print(f"Result: {data['result_url']}")
+        else:
+            print(f"Generation {data['status']}: {data.get('error_message')}")
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+      <Tab title="Basic parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "bytedance-seedream-4",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_images": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ]
+        }' | jq -r '.generations[0].generation_id')
+
+        # Poll until the generation reaches a terminal status.
+        while true; do
+          STATUS=$(curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.status')
+          echo "Status: $STATUS"
+          case $STATUS in succeeded|failed|cancelled) break;; esac
+          sleep 5
+        done
+
+        # Print the result.
+        curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+          "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq .
+        ```
+
+        ```python Python
+        import os
+        import time
+        import requests
+
+        HEADERS = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        }
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers=HEADERS,
+            json={
+                "model": "bytedance-seedream-4",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_images": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ]
             },
         )
         enqueue.raise_for_status()
@@ -203,10 +316,14 @@ Some other noteworthy features of Seedream 4.0 include the ability to generate u
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedream-4",
-          "prompt": "Add a funny hat",
-          "input_image": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
-          ]
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_images": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
+          "size": "2K",
+          "output_format": "jpeg",
+          "watermark": false
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -238,10 +355,14 @@ Some other noteworthy features of Seedream 4.0 include the ability to generate u
             headers=HEADERS,
             json={
                 "model": "bytedance-seedream-4",
-                "prompt": "Add a funny hat",
-                "input_image": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
-                ]
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_images": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
+                "size": "2K",
+                "output_format": "jpeg",
+                "watermark": false
             },
         )
         enqueue.raise_for_status()
@@ -284,7 +405,7 @@ Some other noteworthy features of Seedream 4.0 include the ability to generate u
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedream-4",
-          "prompt": "Add a funny hat"
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -313,7 +434,80 @@ Some other noteworthy features of Seedream 4.0 include the ability to generate u
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "bytedance-seedream-4",
-                "prompt": "Add a funny hat"
+                "prompt": "<prompt>"
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        with requests.get(
+            "https://hub.oxen.ai/api/events",
+            headers=AUTH,
+            stream=True,
+        ) as stream:
+            event_name = None
+            for line in stream.iter_lines(decode_unicode=True):
+                if line.startswith("event: "):
+                    event_name = line.removeprefix("event: ")
+                elif line.startswith("data: ") and event_name == "media_generation_completed":
+                    payload = json.loads(line.removeprefix("data: "))
+                    if payload.get("generation_id") == generation_id:
+                        print(payload)
+                        break
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+      <Tab title="Basic parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "bytedance-seedream-4",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_images": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ]
+        }' | jq -r '.generations[0].generation_id')
+
+        # Stream the SSE channel, grab the data line that follows a
+        # media_generation_completed event for our id, and pretty-print it.
+        curl -sN -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/events \
+          | awk -v id="$GEN_ID" '
+            /^event: media_generation_completed$/ { expect=1; next }
+            /^data: / && expect {
+              payload = substr($0, 7)
+              if (index(payload, "\"generation_id\":\"" id "\"")) { print payload; exit }
+              expect = 0
+            }
+          ' | jq .
+        ```
+
+        ```python Python
+        import json
+        import os
+        import requests
+
+        API_KEY = os.environ["OXEN_API_KEY"]
+        AUTH = {"Authorization": f"Bearer {API_KEY}"}
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers={**AUTH, "Content-Type": "application/json"},
+            json={
+                "model": "bytedance-seedream-4",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_images": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ]
             },
         )
         enqueue.raise_for_status()
@@ -349,10 +543,14 @@ Some other noteworthy features of Seedream 4.0 include the ability to generate u
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedream-4",
-          "prompt": "Add a funny hat",
-          "input_image": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
-          ]
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_images": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
+          "size": "2K",
+          "output_format": "jpeg",
+          "watermark": false
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -381,10 +579,14 @@ Some other noteworthy features of Seedream 4.0 include the ability to generate u
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "bytedance-seedream-4",
-                "prompt": "Add a funny hat",
-                "input_image": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
-                ]
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_images": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
+                "size": "2K",
+                "output_format": "jpeg",
+                "watermark": false
             },
         )
         enqueue.raise_for_status()
@@ -428,10 +630,14 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | `"Add a funny hat"` | Text description of what you want to generate, or the instruction on how to edit the given image. |
+| `prompt` | `string` | &mdash; | Text prompt for image generation. Recommended length <=600 English words. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `input_image` | `array<string>` | `["https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"]` | Input images to transform or use as reference (supports multiple image urls) |
+| `input_image` | `string` | &mdash; | Optional URL of a single reference image for image-to-image generation. Format: uri. |
+| `input_images` | `array<string>` | &mdash; | Optional list of reference image URLs for multi-reference editing. Up to 14 images. |
+| `size` | `string` | `"2K"` | Image resolution. Accepts 1K, 2K, or 4K presets, or explicit WxH pixel dimensions. One of: 1K, 2K, 4K. |
+| `output_format` | `string` | `"jpeg"` | Output image format. One of: jpeg. |
+| `watermark` | `boolean` | `false` | Whether to add an 'AI generated' watermark. |

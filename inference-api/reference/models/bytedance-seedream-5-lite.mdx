@@ -1,6 +1,6 @@
 ---
 title: "Seedream 5.0 Lite"
-description: "Image generation with built-in reasoning, example-based editing, multi-reference control (up to 14 images), and 3K resolution support.(128 characters)"
+description: "Image generation with multi-reference control (up to 14 images), batch generation, and 3K resolution support."
 ---
 
 <CardGroup cols={1}>
@@ -11,19 +11,7 @@ description: "Image generation with built-in reasoning, example-based editing, m
 
 **Model ID:** `bytedance-seedream-5-lite`
 
-**bytedance/seedream-5-lite is an image generation model.** It offers image generation with built-in reasoning, example-based editing, and deep domain knowledge.
-
-**Some other noteworthy features of bytedance/seedream-5-lite include** multi-reference control (up to 14 images), batch generation (up to 15 images), 3K resolution support, and sequential image generation mode.
-
-| Metric             | Value              |
-|--------------------|--------------------|
-| Parameter Count    | Unknown            |
-| Mixture of Experts | Unknown            |
-| Context Length     | Unknown            |
-| Multilingual       | No                 |
-| Quantized*         | Unknown            |
-
-*_Quantization is specific to the inference provider and the model may be offered with different quantization levels by other providers._
+ByteDance Seedream 5.0 Lite generates images from a text prompt, with single-image and multi-reference image-to-image editing. Supports 2K, 3K, and 4K output resolutions, batch generation, and PNG or JPEG output.
 
 ## Example request
 
@@ -34,7 +22,7 @@ description: "Image generation with built-in reasoning, example-based editing, m
 <Tabs>
   <Tab title="Sync">
 
-    See the [image generation reference](/inference-api/reference/image_generation) for more details.
+    See the [image editing reference](/inference-api/reference/image_editing) for more details.
 
     <Tabs>
       <Tab title="Minimal">
@@ -42,7 +30,7 @@ description: "Image generation with built-in reasoning, example-based editing, m
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
@@ -56,7 +44,7 @@ description: "Image generation with built-in reasoning, example-based editing, m
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/generate",
+            "https://hub.oxen.ai/api/ai/images/edit",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
@@ -78,13 +66,14 @@ description: "Image generation with built-in reasoning, example-based editing, m
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedream-5-lite",
           "prompt": "<prompt>",
-          "image_input": [
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
         }'
@@ -95,7 +84,7 @@ description: "Image generation with built-in reasoning, example-based editing, m
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/generate",
+            "https://hub.oxen.ai/api/ai/images/edit",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
@@ -103,7 +92,8 @@ description: "Image generation with built-in reasoning, example-based editing, m
             json={
                 "model": "bytedance-seedream-5-lite",
                 "prompt": "<prompt>",
-                "image_input": [
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
             },
@@ -120,18 +110,19 @@ description: "Image generation with built-in reasoning, example-based editing, m
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedream-5-lite",
           "prompt": "<prompt>",
-          "image_input": [
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
           "size": "2K",
-          "aspect_ratio": "match_input_image",
-          "output_format": "png"
+          "output_format": "png",
+          "watermark": false
         }'
         ```
 
@@ -140,7 +131,7 @@ description: "Image generation with built-in reasoning, example-based editing, m
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/generate",
+            "https://hub.oxen.ai/api/ai/images/edit",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
@@ -148,12 +139,13 @@ description: "Image generation with built-in reasoning, example-based editing, m
             json={
                 "model": "bytedance-seedream-5-lite",
                 "prompt": "<prompt>",
-                "image_input": [
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
                 "size": "2K",
-                "aspect_ratio": "match_input_image",
-                "output_format": "png"
+                "output_format": "png",
+                "watermark": false
             },
         )
         response.raise_for_status()
@@ -250,7 +242,8 @@ description: "Image generation with built-in reasoning, example-based editing, m
           -d '{
           "model": "bytedance-seedream-5-lite",
           "prompt": "<prompt>",
-          "image_input": [
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
         }' | jq -r '.generations[0].generation_id')
@@ -285,7 +278,8 @@ description: "Image generation with built-in reasoning, example-based editing, m
             json={
                 "model": "bytedance-seedream-5-lite",
                 "prompt": "<prompt>",
-                "image_input": [
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
             },
@@ -323,12 +317,13 @@ description: "Image generation with built-in reasoning, example-based editing, m
           -d '{
           "model": "bytedance-seedream-5-lite",
           "prompt": "<prompt>",
-          "image_input": [
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
           "size": "2K",
-          "aspect_ratio": "match_input_image",
-          "output_format": "png"
+          "output_format": "png",
+          "watermark": false
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -361,12 +356,13 @@ description: "Image generation with built-in reasoning, example-based editing, m
             json={
                 "model": "bytedance-seedream-5-lite",
                 "prompt": "<prompt>",
-                "image_input": [
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
                 "size": "2K",
-                "aspect_ratio": "match_input_image",
-                "output_format": "png"
+                "output_format": "png",
+                "watermark": false
             },
         )
         enqueue.raise_for_status()
@@ -475,7 +471,8 @@ description: "Image generation with built-in reasoning, example-based editing, m
           -d '{
           "model": "bytedance-seedream-5-lite",
           "prompt": "<prompt>",
-          "image_input": [
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
         }' | jq -r '.generations[0].generation_id')
@@ -507,7 +504,8 @@ description: "Image generation with built-in reasoning, example-based editing, m
             json={
                 "model": "bytedance-seedream-5-lite",
                 "prompt": "<prompt>",
-                "image_input": [
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
             },
@@ -546,12 +544,13 @@ description: "Image generation with built-in reasoning, example-based editing, m
           -d '{
           "model": "bytedance-seedream-5-lite",
           "prompt": "<prompt>",
-          "image_input": [
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
           "size": "2K",
-          "aspect_ratio": "match_input_image",
-          "output_format": "png"
+          "output_format": "png",
+          "watermark": false
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -581,12 +580,13 @@ description: "Image generation with built-in reasoning, example-based editing, m
             json={
                 "model": "bytedance-seedream-5-lite",
                 "prompt": "<prompt>",
-                "image_input": [
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
                 "size": "2K",
-                "aspect_ratio": "match_input_image",
-                "output_format": "png"
+                "output_format": "png",
+                "watermark": false
             },
         )
         enqueue.raise_for_status()
@@ -630,13 +630,14 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | Text prompt for image generation |
+| `prompt` | `string` | &mdash; | Text prompt for image generation. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `image_input` | `array<string>` | &mdash; | Input image(s) for image-to-image generation. List of 1-14 images for single or multi-reference generation. |
-| `size` | `string` | `"2K"` | Image resolution: 2K (2048px) or 3K (3072px). One of: 2K, 3K. |
-| `aspect_ratio` | `string` | `"match_input_image"` | Image aspect ratio. Use 'match_input_image' to automatically match the input image's aspect ratio. One of: match_input_image, 1:1, 4:3, 3:4, 16:9, 9:16, 3:2, 2:3, 21:9. |
+| `input_image` | `string` | &mdash; | Optional URL of a single reference image for image-to-image generation. Format: uri. |
+| `input_images` | `array<string>` | &mdash; | Optional list of reference image URLs for multi-reference editing. Up to 14 images. |
+| `size` | `string` | `"2K"` | Image resolution. One of: 2K, 3K, 4K. |
 | `output_format` | `string` | `"png"` | Output image format. One of: png, jpeg. |
+| `watermark` | `boolean` | `false` | Whether to add an 'AI generated' watermark. |

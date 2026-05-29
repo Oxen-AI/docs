@@ -1,6 +1,6 @@
 ---
 title: "Seedream 4.5"
-description: "High-fidelity text-to-image and image-to-image generation with multi-reference control (up to 10 images), 4K support, and batch output.(128 characters)"
+description: "Image generation with single- and multi-reference editing and 2K/4K resolutions."
 ---
 
 <CardGroup cols={1}>
@@ -11,19 +11,7 @@ description: "High-fidelity text-to-image and image-to-image generation with mul
 
 **Model ID:** `bytedance-seedream-4-5`
 
-**bytedance/seedream-4.5 is an image generation model.** It excels in high-fidelity text-to-image and image-to-image generation with improved consistency, editing capabilities, and realism in physics, lighting, and multi-angle outputs compared to prior versions.
-
-**Some other noteworthy features of bytedance/seedream-4.5 include** multi-reference control (up to 10 images), batch generation (up to 6-15 images), 4K resolution support, and enhanced text rendering.
-
-| Metric             | Value              |
-|--------------------|--------------------|
-| Parameter Count    | Unknown            |
-| Mixture of Experts | Unknown            |
-| Context Length     | Unknown            |
-| Multilingual       | No                 |
-| Quantized*         | Unknown            |
-
-*_Quantization is specific to the inference provider and the model may be offered with different quantization levels by other providers._
+ByteDance Seedream 4.5 generates images from a text prompt, with single-image and multi-reference image-to-image editing. Supports 2K and 4K output resolutions and batch generation.
 
 ## Example request
 
@@ -34,7 +22,7 @@ description: "High-fidelity text-to-image and image-to-image generation with mul
 <Tabs>
   <Tab title="Sync">
 
-    See the [image generation reference](/inference-api/reference/image_generation) for more details.
+    See the [image editing reference](/inference-api/reference/image_editing) for more details.
 
     <Tabs>
       <Tab title="Minimal">
@@ -42,12 +30,12 @@ description: "High-fidelity text-to-image and image-to-image generation with mul
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedream-4-5",
-          "prompt": "An exterior shot of a gritty neon-drenched cyberpunk caf\u00e9, a flickering holographic sign projecting '\''Oxen.ai Cafe'\'' in glitching cyan and magenta lettering above it'\''s outdoor windows. High-contrast digital aesthetic with neon tones, chromatic aberration, digital noise artifacts, and dense megacity back-alley atmosphere."
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -56,14 +44,14 @@ description: "High-fidelity text-to-image and image-to-image generation with mul
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/generate",
+            "https://hub.oxen.ai/api/ai/images/edit",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
                 "model": "bytedance-seedream-4-5",
-                "prompt": "An exterior shot of a gritty neon-drenched cyberpunk caf\u00e9, a flickering holographic sign projecting 'Oxen.ai Cafe' in glitching cyan and magenta lettering above it's outdoor windows. High-contrast digital aesthetic with neon tones, chromatic aberration, digital noise artifacts, and dense megacity back-alley atmosphere."
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -78,13 +66,14 @@ description: "High-fidelity text-to-image and image-to-image generation with mul
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedream-4-5",
-          "prompt": "An exterior shot of a gritty neon-drenched cyberpunk caf\u00e9, a flickering holographic sign projecting '\''Oxen.ai Cafe'\'' in glitching cyan and magenta lettering above it'\''s outdoor windows. High-contrast digital aesthetic with neon tones, chromatic aberration, digital noise artifacts, and dense megacity back-alley atmosphere.",
-          "input_image": [
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
         }'
@@ -95,15 +84,16 @@ description: "High-fidelity text-to-image and image-to-image generation with mul
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/generate",
+            "https://hub.oxen.ai/api/ai/images/edit",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
                 "model": "bytedance-seedream-4-5",
-                "prompt": "An exterior shot of a gritty neon-drenched cyberpunk caf\u00e9, a flickering holographic sign projecting 'Oxen.ai Cafe' in glitching cyan and magenta lettering above it's outdoor windows. High-contrast digital aesthetic with neon tones, chromatic aberration, digital noise artifacts, and dense megacity back-alley atmosphere.",
-                "input_image": [
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
             },
@@ -120,17 +110,19 @@ description: "High-fidelity text-to-image and image-to-image generation with mul
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedream-4-5",
-          "prompt": "An exterior shot of a gritty neon-drenched cyberpunk caf\u00e9, a flickering holographic sign projecting '\''Oxen.ai Cafe'\'' in glitching cyan and magenta lettering above it'\''s outdoor windows. High-contrast digital aesthetic with neon tones, chromatic aberration, digital noise artifacts, and dense megacity back-alley atmosphere.",
-          "input_image": [
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "aspect_ratio": "1:1",
-          "size": "4K"
+          "size": "2K",
+          "output_format": "jpeg",
+          "watermark": false
         }'
         ```
 
@@ -139,19 +131,21 @@ description: "High-fidelity text-to-image and image-to-image generation with mul
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/generate",
+            "https://hub.oxen.ai/api/ai/images/edit",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
                 "model": "bytedance-seedream-4-5",
-                "prompt": "An exterior shot of a gritty neon-drenched cyberpunk caf\u00e9, a flickering holographic sign projecting 'Oxen.ai Cafe' in glitching cyan and magenta lettering above it's outdoor windows. High-contrast digital aesthetic with neon tones, chromatic aberration, digital noise artifacts, and dense megacity back-alley atmosphere.",
-                "input_image": [
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "aspect_ratio": "1:1",
-                "size": "4K"
+                "size": "2K",
+                "output_format": "jpeg",
+                "watermark": false
             },
         )
         response.raise_for_status()
@@ -180,7 +174,7 @@ description: "High-fidelity text-to-image and image-to-image generation with mul
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedream-4-5",
-          "prompt": "An exterior shot of a gritty neon-drenched cyberpunk caf\u00e9, a flickering holographic sign projecting '\''Oxen.ai Cafe'\'' in glitching cyan and magenta lettering above it'\''s outdoor windows. High-contrast digital aesthetic with neon tones, chromatic aberration, digital noise artifacts, and dense megacity back-alley atmosphere."
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -212,7 +206,7 @@ description: "High-fidelity text-to-image and image-to-image generation with mul
             headers=HEADERS,
             json={
                 "model": "bytedance-seedream-4-5",
-                "prompt": "An exterior shot of a gritty neon-drenched cyberpunk caf\u00e9, a flickering holographic sign projecting 'Oxen.ai Cafe' in glitching cyan and magenta lettering above it's outdoor windows. High-contrast digital aesthetic with neon tones, chromatic aberration, digital noise artifacts, and dense megacity back-alley atmosphere."
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -247,8 +241,9 @@ description: "High-fidelity text-to-image and image-to-image generation with mul
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedream-4-5",
-          "prompt": "An exterior shot of a gritty neon-drenched cyberpunk caf\u00e9, a flickering holographic sign projecting '\''Oxen.ai Cafe'\'' in glitching cyan and magenta lettering above it'\''s outdoor windows. High-contrast digital aesthetic with neon tones, chromatic aberration, digital noise artifacts, and dense megacity back-alley atmosphere.",
-          "input_image": [
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
         }' | jq -r '.generations[0].generation_id')
@@ -282,8 +277,9 @@ description: "High-fidelity text-to-image and image-to-image generation with mul
             headers=HEADERS,
             json={
                 "model": "bytedance-seedream-4-5",
-                "prompt": "An exterior shot of a gritty neon-drenched cyberpunk caf\u00e9, a flickering holographic sign projecting 'Oxen.ai Cafe' in glitching cyan and magenta lettering above it's outdoor windows. High-contrast digital aesthetic with neon tones, chromatic aberration, digital noise artifacts, and dense megacity back-alley atmosphere.",
-                "input_image": [
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
             },
@@ -320,12 +316,14 @@ description: "High-fidelity text-to-image and image-to-image generation with mul
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedream-4-5",
-          "prompt": "An exterior shot of a gritty neon-drenched cyberpunk caf\u00e9, a flickering holographic sign projecting '\''Oxen.ai Cafe'\'' in glitching cyan and magenta lettering above it'\''s outdoor windows. High-contrast digital aesthetic with neon tones, chromatic aberration, digital noise artifacts, and dense megacity back-alley atmosphere.",
-          "input_image": [
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "aspect_ratio": "1:1",
-          "size": "4K"
+          "size": "2K",
+          "output_format": "jpeg",
+          "watermark": false
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -357,12 +355,14 @@ description: "High-fidelity text-to-image and image-to-image generation with mul
             headers=HEADERS,
             json={
                 "model": "bytedance-seedream-4-5",
-                "prompt": "An exterior shot of a gritty neon-drenched cyberpunk caf\u00e9, a flickering holographic sign projecting 'Oxen.ai Cafe' in glitching cyan and magenta lettering above it's outdoor windows. High-contrast digital aesthetic with neon tones, chromatic aberration, digital noise artifacts, and dense megacity back-alley atmosphere.",
-                "input_image": [
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "aspect_ratio": "1:1",
-                "size": "4K"
+                "size": "2K",
+                "output_format": "jpeg",
+                "watermark": false
             },
         )
         enqueue.raise_for_status()
@@ -405,7 +405,7 @@ description: "High-fidelity text-to-image and image-to-image generation with mul
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedream-4-5",
-          "prompt": "An exterior shot of a gritty neon-drenched cyberpunk caf\u00e9, a flickering holographic sign projecting '\''Oxen.ai Cafe'\'' in glitching cyan and magenta lettering above it'\''s outdoor windows. High-contrast digital aesthetic with neon tones, chromatic aberration, digital noise artifacts, and dense megacity back-alley atmosphere."
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -434,7 +434,7 @@ description: "High-fidelity text-to-image and image-to-image generation with mul
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "bytedance-seedream-4-5",
-                "prompt": "An exterior shot of a gritty neon-drenched cyberpunk caf\u00e9, a flickering holographic sign projecting 'Oxen.ai Cafe' in glitching cyan and magenta lettering above it's outdoor windows. High-contrast digital aesthetic with neon tones, chromatic aberration, digital noise artifacts, and dense megacity back-alley atmosphere."
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -470,8 +470,9 @@ description: "High-fidelity text-to-image and image-to-image generation with mul
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedream-4-5",
-          "prompt": "An exterior shot of a gritty neon-drenched cyberpunk caf\u00e9, a flickering holographic sign projecting '\''Oxen.ai Cafe'\'' in glitching cyan and magenta lettering above it'\''s outdoor windows. High-contrast digital aesthetic with neon tones, chromatic aberration, digital noise artifacts, and dense megacity back-alley atmosphere.",
-          "input_image": [
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
         }' | jq -r '.generations[0].generation_id')
@@ -502,8 +503,9 @@ description: "High-fidelity text-to-image and image-to-image generation with mul
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "bytedance-seedream-4-5",
-                "prompt": "An exterior shot of a gritty neon-drenched cyberpunk caf\u00e9, a flickering holographic sign projecting 'Oxen.ai Cafe' in glitching cyan and magenta lettering above it's outdoor windows. High-contrast digital aesthetic with neon tones, chromatic aberration, digital noise artifacts, and dense megacity back-alley atmosphere.",
-                "input_image": [
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
             },
@@ -541,12 +543,14 @@ description: "High-fidelity text-to-image and image-to-image generation with mul
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedream-4-5",
-          "prompt": "An exterior shot of a gritty neon-drenched cyberpunk caf\u00e9, a flickering holographic sign projecting '\''Oxen.ai Cafe'\'' in glitching cyan and magenta lettering above it'\''s outdoor windows. High-contrast digital aesthetic with neon tones, chromatic aberration, digital noise artifacts, and dense megacity back-alley atmosphere.",
-          "input_image": [
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "aspect_ratio": "1:1",
-          "size": "4K"
+          "size": "2K",
+          "output_format": "jpeg",
+          "watermark": false
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -575,12 +579,14 @@ description: "High-fidelity text-to-image and image-to-image generation with mul
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "bytedance-seedream-4-5",
-                "prompt": "An exterior shot of a gritty neon-drenched cyberpunk caf\u00e9, a flickering holographic sign projecting 'Oxen.ai Cafe' in glitching cyan and magenta lettering above it's outdoor windows. High-contrast digital aesthetic with neon tones, chromatic aberration, digital noise artifacts, and dense megacity back-alley atmosphere.",
-                "input_image": [
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "aspect_ratio": "1:1",
-                "size": "4K"
+                "size": "2K",
+                "output_format": "jpeg",
+                "watermark": false
             },
         )
         enqueue.raise_for_status()
@@ -624,13 +630,14 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | `"An exterior shot of a gritty neon-drenched cyberpunk caf\u00e9, a flickering holographic sign projecting 'Oxen.ai Cafe' in glitching cyan and magenta lettering above it's outdoor windows. High-contrast digital aesthetic with neon tones, chromatic aberration, digital noise artifacts, and dense megacity back-alley atmosphere."` | Prompt for generated image |
+| `prompt` | `string` | &mdash; | Text prompt for image generation. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `input_image` | `array<string>` | &mdash; | Input images to transform or use as reference (supports multiple image urls) |
-| `aspect_ratio` | `string` | `"1:1"` | Aspect ratio for the generated image One of: 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, match_input_image. |
-| `size` | `string` | `"4K"` | Image resolution: 2K (2048px) or 4K (4096px). One of: 2K, 4K. |
-| `seed` | `integer` | &mdash; | Random seed. Set for reproducible generation |
+| `input_image` | `string` | &mdash; | Optional URL of a single reference image for image-to-image generation. Format: uri. |
+| `input_images` | `array<string>` | &mdash; | Optional list of reference image URLs for multi-reference editing. Up to 14 images. |
+| `size` | `string` | `"2K"` | Image resolution. One of: 2K, 4K. |
+| `output_format` | `string` | `"jpeg"` | Output image format. One of: jpeg. |
+| `watermark` | `boolean` | `false` | Whether to add an 'AI generated' watermark. |

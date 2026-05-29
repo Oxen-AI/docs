@@ -81,9 +81,8 @@ GPT Image 2 Edit is OpenAI's image editing model available through Fal. It trans
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "resolution": "1024x1024",
+          "resolution": "auto",
           "quality": "high",
-          "num_images": 1,
           "output_format": "png"
         }'
         ```
@@ -104,9 +103,8 @@ GPT Image 2 Edit is OpenAI's image editing model available through Fal. It trans
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "resolution": "1024x1024",
+                "resolution": "auto",
                 "quality": "high",
-                "num_images": 1,
                 "output_format": "png"
             },
         )
@@ -213,9 +211,8 @@ GPT Image 2 Edit is OpenAI's image editing model available through Fal. It trans
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "resolution": "1024x1024",
+          "resolution": "auto",
           "quality": "high",
-          "num_images": 1,
           "output_format": "png"
         }' | jq -r '.generations[0].generation_id')
 
@@ -252,9 +249,8 @@ GPT Image 2 Edit is OpenAI's image editing model available through Fal. It trans
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "resolution": "1024x1024",
+                "resolution": "auto",
                 "quality": "high",
-                "num_images": 1,
                 "output_format": "png"
             },
         )
@@ -373,9 +369,8 @@ GPT Image 2 Edit is OpenAI's image editing model available through Fal. It trans
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "resolution": "1024x1024",
+          "resolution": "auto",
           "quality": "high",
-          "num_images": 1,
           "output_format": "png"
         }' | jq -r '.generations[0].generation_id')
 
@@ -409,9 +404,8 @@ GPT Image 2 Edit is OpenAI's image editing model available through Fal. It trans
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "resolution": "1024x1024",
+                "resolution": "auto",
                 "quality": "high",
-                "num_images": 1,
                 "output_format": "png"
             },
         )
@@ -463,8 +457,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `resolution` | `string` | `"1024x1024"` | Output image resolution. HD sizes (1920x1080 and lower) bill at the standard tier; QHD+ sizes (2560x1440 and higher) bill at the high-resolution tier. One of: 1024x768, 1024x1024, 1024x1536, 1920x1080, 2560x1440, 3840x2160. |
-| `quality` | `string` | `"high"` | Output quality tier. Locked to high for best fidelity. One of: high. |
-| `num_images` | `integer` | `1` | Number of images to generate per request. Range: 1 – 4. |
+| `resolution` | `string` | `"auto"` | Output image resolution. HD sizes (1920x1080 and lower) bill at the standard tier; QHD+ sizes (2560x1440 and higher) bill at the high-resolution tier. One of: auto, 1024x768, 1024x1024, 1024x1536, 1920x1080, 2560x1440, 3840x2160. |
+| `quality` | `string` | `"high"` | Output quality tier. Use 'auto' to let the model pick, or set explicitly to low, medium, or high. One of: auto, low, medium, high. |
 | `output_format` | `string` | `"png"` | File format for the generated image. One of: png, jpeg, webp. |
 | `mask_url` | `string` | &mdash; | Optional mask image URL. White pixels mark regions to edit; black pixels are preserved. Leave empty to edit the whole image. Format: uri. |

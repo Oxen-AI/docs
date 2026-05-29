@@ -1,6 +1,6 @@
 ---
 title: "Seedance 2.0 - Image to Video"
-description: "Image-to-video with optional start-to-end frame transitions, flexible duration and aspect ratio, resolution up to 1080p, and optional synchronized audio."
+description: "Image-to-video with optional start-to-end frame transitions, resolution up to 1080p, and optional synchronized audio."
 ---
 
 <CardGroup cols={1}>
@@ -11,7 +11,7 @@ description: "Image-to-video with optional start-to-end frame transitions, flexi
 
 **Model ID:** `bytedance-seedance-2-0-image-to-video`
 
-ByteDance Seedance 2 image-to-video animates a starting frame from a text motion prompt, with optional end-frame control for transitions. It supports 480p, 720p, or 1080p output, durations from 4–15 seconds or automatic length from the prompt, multiple aspect ratios (including auto from the input image), and synchronized audio (effects, ambience, and lip-synced speech).
+ByteDance Seedance 2.0 (Pro) animates a starting frame from a text motion prompt, with optional end-frame control for transitions. Supports 480p, 720p, or 1080p output, durations from 4-15 seconds, and synchronized audio.
 
 ## Example request
 
@@ -77,7 +77,9 @@ ByteDance Seedance 2 image-to-video animates a starting frame from a text motion
           "model": "bytedance-seedance-2-0-image-to-video",
           "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "input_image_has_face": false,
+          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "tail_image_url_has_face": false
         }'
         ```
 
@@ -95,7 +97,9 @@ ByteDance Seedance 2 image-to-video animates a starting frame from a text motion
                 "model": "bytedance-seedance-2-0-image-to-video",
                 "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "input_image_has_face": false,
+                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "tail_image_url_has_face": false
             },
         )
         response.raise_for_status()
@@ -117,11 +121,14 @@ ByteDance Seedance 2 image-to-video animates a starting frame from a text motion
           "model": "bytedance-seedance-2-0-image-to-video",
           "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_image_has_face": false,
           "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "tail_image_url_has_face": false,
           "resolution": "720p",
-          "duration": "auto",
-          "aspect_ratio": "auto",
-          "generate_audio": true
+          "duration": -1,
+          "aspect_ratio": "adaptive",
+          "generate_audio": false,
+          "watermark": false
         }'
         ```
 
@@ -139,11 +146,14 @@ ByteDance Seedance 2 image-to-video animates a starting frame from a text motion
                 "model": "bytedance-seedance-2-0-image-to-video",
                 "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_image_has_face": false,
                 "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "tail_image_url_has_face": false,
                 "resolution": "720p",
-                "duration": "auto",
-                "aspect_ratio": "auto",
-                "generate_audio": true
+                "duration": -1,
+                "aspect_ratio": "adaptive",
+                "generate_audio": false,
+                "watermark": false
             },
         )
         response.raise_for_status()
@@ -243,7 +253,9 @@ ByteDance Seedance 2 image-to-video animates a starting frame from a text motion
           "model": "bytedance-seedance-2-0-image-to-video",
           "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "input_image_has_face": false,
+          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "tail_image_url_has_face": false
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -277,7 +289,9 @@ ByteDance Seedance 2 image-to-video animates a starting frame from a text motion
                 "model": "bytedance-seedance-2-0-image-to-video",
                 "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "input_image_has_face": false,
+                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "tail_image_url_has_face": false
             },
         )
         enqueue.raise_for_status()
@@ -314,11 +328,14 @@ ByteDance Seedance 2 image-to-video animates a starting frame from a text motion
           "model": "bytedance-seedance-2-0-image-to-video",
           "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_image_has_face": false,
           "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "tail_image_url_has_face": false,
           "resolution": "720p",
-          "duration": "auto",
-          "aspect_ratio": "auto",
-          "generate_audio": true
+          "duration": -1,
+          "aspect_ratio": "adaptive",
+          "generate_audio": false,
+          "watermark": false
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -352,11 +369,14 @@ ByteDance Seedance 2 image-to-video animates a starting frame from a text motion
                 "model": "bytedance-seedance-2-0-image-to-video",
                 "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_image_has_face": false,
                 "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "tail_image_url_has_face": false,
                 "resolution": "720p",
-                "duration": "auto",
-                "aspect_ratio": "auto",
-                "generate_audio": true
+                "duration": -1,
+                "aspect_ratio": "adaptive",
+                "generate_audio": false,
+                "watermark": false
             },
         )
         enqueue.raise_for_status()
@@ -468,7 +488,9 @@ ByteDance Seedance 2 image-to-video animates a starting frame from a text motion
           "model": "bytedance-seedance-2-0-image-to-video",
           "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "input_image_has_face": false,
+          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "tail_image_url_has_face": false
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -499,7 +521,9 @@ ByteDance Seedance 2 image-to-video animates a starting frame from a text motion
                 "model": "bytedance-seedance-2-0-image-to-video",
                 "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "input_image_has_face": false,
+                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "tail_image_url_has_face": false
             },
         )
         enqueue.raise_for_status()
@@ -537,11 +561,14 @@ ByteDance Seedance 2 image-to-video animates a starting frame from a text motion
           "model": "bytedance-seedance-2-0-image-to-video",
           "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_image_has_face": false,
           "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "tail_image_url_has_face": false,
           "resolution": "720p",
-          "duration": "auto",
-          "aspect_ratio": "auto",
-          "generate_audio": true
+          "duration": -1,
+          "aspect_ratio": "adaptive",
+          "generate_audio": false,
+          "watermark": false
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -572,11 +599,14 @@ ByteDance Seedance 2 image-to-video animates a starting frame from a text motion
                 "model": "bytedance-seedance-2-0-image-to-video",
                 "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_image_has_face": false,
                 "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "tail_image_url_has_face": false,
                 "resolution": "720p",
-                "duration": "auto",
-                "aspect_ratio": "auto",
-                "generate_audio": true
+                "duration": -1,
+                "aspect_ratio": "adaptive",
+                "generate_audio": false,
+                "watermark": false
             },
         )
         enqueue.raise_for_status()
@@ -621,15 +651,19 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `prompt` | `string` | &mdash; | The text prompt describing the desired motion and action for the video. |
-| `input_image` | `string` | &mdash; | The URL of the starting frame image to animate. Supported formats: JPEG, PNG, WebP. Max 30 MB. Format: uri. |
+| `input_image` | `string` | &mdash; | The URL of the starting frame image. Formats: JPEG, PNG, WebP. Max 30 MB. Format: uri. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `tail_image_url` | `string` | &mdash; | The URL of the image to use as the last frame of the video. When provided, the generated video will transition from the starting image to this ending image. Supported formats: JPEG, PNG, WebP. Max 30 MB. Format: uri. |
-| `resolution` | `string` | `"720p"` | Video resolution - 480p for faster generation, 720p for balance, 1080p for highest quality. One of: 480p, 720p, 1080p. |
-| `duration` | `string` | `"auto"` | Duration of the video in seconds. Supports 4 to 15 seconds, or auto to let the model decide based on the prompt. One of: auto, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15. |
-| `aspect_ratio` | `string` | `"auto"` | The aspect ratio of the generated video. Use 16:9 for landscape, 9:16 for portrait/vertical, 1:1 for square, 21:9 for ultrawide cinematic, or auto to infer from the input image. One of: auto, 21:9, 16:9, 4:3, 1:1, 3:4, 9:16. |
-| `generate_audio` | `boolean` | `true` | Whether to generate synchronized audio for the video, including sound effects, ambient sounds, and lip-synced speech. |
-| `seed` | `integer` | &mdash; | Random seed for reproducibility. Note that results may still vary slightly even with the same seed. |
+| `input_image_has_face` | `boolean` | `false` | Turn this on when the start frame contains a real human face.
+Content filters may block the request if this is not enabled. |
+| `tail_image_url` | `string` | &mdash; | Optional URL of the end-frame image. When provided, the generated video transitions from the start frame to this end frame. Format: uri. |
+| `tail_image_url_has_face` | `boolean` | `false` | Turn this on when the end frame contains a real human face.
+Content filters may block the request if this is not enabled. |
+| `resolution` | `string` | `"720p"` | Video resolution. 480p for faster generation, 720p for balance, 1080p for highest quality. One of: 480p, 720p, 1080p. |
+| `duration` | `integer` | `-1` | Duration of the video in seconds. Supports 4 to 15 seconds, or auto to let the model decide based on the prompt. One of: -1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15. |
+| `aspect_ratio` | `string` | `"adaptive"` | The aspect ratio of the generated video. Use 16:9 for landscape, 9:16 for portrait/vertical, 1:1 for square, 21:9 for ultrawide cinematic, or auto to let the model decide. One of: adaptive, 21:9, 16:9, 4:3, 1:1, 3:4, 9:16. |
+| `generate_audio` | `boolean` | `false` | Whether to generate synchronized audio. |
+| `watermark` | `boolean` | `false` | Whether to add an 'AI generated' watermark to the output. |
