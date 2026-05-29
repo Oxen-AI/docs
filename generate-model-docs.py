@@ -267,6 +267,39 @@ def render_schema_tables(model: dict[str, Any]) -> str:
     return "\n\n".join(sections)
 
 
+def _escape_mdx_text(text: str) -> str:
+    """Neutralize characters MDX reads as markup in body prose.
+
+    Mintlify parses page bodies as MDX, where a bare `<` starts a JSX tag and a
+    bare `{` starts a JSX expression. Either one aborts the build when it shows
+    up verbatim in registry-authored text (e.g. a description like
+    "length <=600 words"). Convert them to the HTML entities that render as the
+    literal character. Newlines are preserved so multi-paragraph descriptions
+    still render as separate paragraphs.
+    """
+    return text.replace("<", "&lt;").replace("{", "&#123;").replace("}", "&#125;")
+
+
+def _escape_table_cell(text: str) -> str:
+    """Make `text` safe to drop into a single Markdown table cell.
+
+    A table row is one physical line whose columns are split on `|`, so a
+    newline or a stray pipe in a registry description breaks the row. Collapse
+    all whitespace (including newlines) to keep the cell on one line, escape the
+    pipe, then apply the same MDX escaping as body prose.
+    """
+    return _escape_mdx_text(" ".join(text.split())).replace("|", "\\|")
+
+
+def _escape_table_code(text: str) -> str:
+    """Escape a value that sits inside backticks in a table cell.
+
+    Inside a code span MDX leaves `<`/`{` literal, so only the cell-delimiting
+    pipe and stray newlines can break the table.
+    """
+    return " ".join(text.split()).replace("|", "\\|")
+
+
 def _render_parameter_table(rows: list[tuple[str, dict[str, Any]]]) -> str:
     lines = [
         "| Field | Type | Default | Description |",
@@ -280,7 +313,7 @@ def _render_parameter_table(rows: list[tuple[str, dict[str, Any]]]) -> str:
             field_type = f"array<{items_type}>"
 
         default = prop_schema.get("default")
-        default_cell = f"`{json.dumps(default)}`" if default is not None else "&mdash;"
+        default_cell = f"`{_escape_table_code(json.dumps(default))}`" if default is not None else "&mdash;"
 
         description = prop_schema.get("description") or prop_schema.get("title") or ""
         if prop_schema.get("enum"):
@@ -296,7 +329,7 @@ def _render_parameter_table(rows: list[tuple[str, dict[str, Any]]]) -> str:
             description = (description + f" Format: {fmt}.").strip()
 
         lines.append(
-            f"| `{prop_name}` | `{field_type}` | {default_cell} | {description.strip() or ' '} |"
+            f"| `{prop_name}` | `{field_type}` | {default_cell} | {_escape_table_cell(description) or ' '} |"
         )
 
     return "\n".join(lines)
@@ -688,7 +721,7 @@ def render_page(model: dict[str, Any], workbench_base: str) -> str:
     ]
 
     if description:
-        body_md += ["", description]
+        body_md += ["", _escape_mdx_text(description)]
 
     # Drop any variant whose body is identical to the previous kept variant so we
     # don't render duplicate tabs (e.g. a model with no `basic` fields would otherwise
