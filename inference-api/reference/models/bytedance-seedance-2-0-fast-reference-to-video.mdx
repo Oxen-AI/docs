@@ -782,11 +782,9 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `input_face_images` | `array<string>` | &mdash; | Place reference images here when they show a real human face.
-Content filters may block the request otherwise. |
+| `input_face_images` | `array<string>` | &mdash; | Place reference images here when they show a real human face. Content filters may block the request otherwise. |
 | `input_images` | `array<string>` | &mdash; | Reference images that guide the generated video. Up to 9 total reference images and up to 15 total references across all types may be used. |
-| `input_face_videos` | `array<string>` | &mdash; | Place reference videos here when they show a real human face.
-Content filters may block the request otherwise. |
+| `input_face_videos` | `array<string>` | &mdash; | Place reference videos here when they show a real human face. Content filters may block the request otherwise. |
 | `input_videos` | `array<string>` | &mdash; | Reference videos that guide the generated video. Up to 3 total reference videos and up to 15 total references across all types may be used. |
 | `input_audios` | `array<string>` | &mdash; | Reference audios that guide the generated video. Up to 3 total reference audios and up to 15 total references across all types may be used. |
 | `resolution` | `string` | `"720p"` | Video resolution. One of: 480p, 720p. |
