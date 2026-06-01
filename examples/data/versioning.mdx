@@ -393,7 +393,7 @@ curl -X GET -H "Authorization: Bearer $TOKEN" \
 
 ### Workspaces
 
-Under the hood, the way that we enable remote collaboration is through a concept called a [workspace](/concepts/workspaces). A workspace can be thought of as an uncommitted working directory that is stored on the server. Just like you can `add` files before committing locally, you can `add` files to a workspace on the remote server before committing. This allows you to build up a set of changes remotely before committing them in bulk.
+Under the hood, the way that we enable remote collaboration is through a concept called a [workspace](/getting-started/workspaces). A workspace can be thought of as an uncommitted working directory that is stored on the server. Just like you can `add` files before committing locally, you can `add` files to a workspace on the remote server before committing. This allows you to build up a set of changes remotely before committing them in bulk.
 
 <CodeGroup>
 
@@ -453,7 +453,7 @@ curl -X POST -H "Authorization: Bearer $TOKEN" \
 
 The `RemoteRepo.add` method is a shortcut for creating a workspace and adding files to it. It creates a ephemeral workspace and adds the files to it, and deletes the workspace after committing.
 
-To learn more about workspaces, check out the [workspaces documentation](/concepts/workspaces).
+To learn more about workspaces, check out the [workspaces documentation](/getting-started/workspaces).
 
 ### Clone a Remote Repository
 

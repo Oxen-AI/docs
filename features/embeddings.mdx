@@ -71,7 +71,7 @@ oxen download ox/Simple-Wikipedia-50k title_embeddings.parquet -o embeddings.par
 
 ### Create a workspace
 
-In order to use embeddings, you will need to create a [workspace](/concepts/workspaces). Workspaces allow you to query and edit versions of the data without immediately committing your changes. Oxen uses [DuckDB](https://duckdb.org/2024/05/03/vector-similarity-search-vss.html) to store your embeddings and data.
+In order to use embeddings, you will need to create a [workspace](/getting-started/workspaces). Workspaces allow you to query and edit versions of the data without immediately committing your changes. Oxen uses [DuckDB](https://duckdb.org/2024/05/03/vector-similarity-search-vss.html) to store your embeddings and data.
 
 If you haven't already created an Oxen repository, you should create a new one to get started.
 
@@ -91,7 +91,7 @@ oxen add embeddings.parquet
 oxen commit -m "Add embeddings"
 ```
 
-Now we have our embeddings committed to the repository. We can create a workspace to query the data. A workspace is based off of a branch and links directly to a version of a dataset at a commit. If you want to learn more about workspaces, check out the [workspaces](/concepts/workspaces) page.
+Now we have our embeddings committed to the repository. We can create a workspace to query the data. A workspace is based off of a branch and links directly to a version of a dataset at a commit. If you want to learn more about workspaces, check out the [workspaces](/getting-started/workspaces) page.
 
 Create a workspace and give it a name.
 
@@ -153,4 +153,4 @@ oxen workspace df get embeddings.parquet \
 
 Workspaces are power tools once you wrap your head around them. They allow you to build some really interesting exploratory data analysis, labeling workflows, and search pipelines. Using nearest neighbor search with embeddings is a great way to sift through large datasets, prototype RAG pipelines, and test different embeddings models.
 
-If you want to see the underlying HTTP request that is being made, checkout the [API reference](/http-api/workspaces).
+If you want to see the underlying HTTP request that is being made, checkout the [API reference](/http-api/data-frames/get-data-frame-slice).
