@@ -34,7 +34,7 @@ This page will have a complete update with demos, photos, and top feature update
 - Introduced the option to delete branches from the remote repository. [#80](https://github.com/Oxen-AI/Oxen/pull/80)
 - Improved workspace management to prevent multiple simultaneous workspaces and ensure consistent handling during file additions. [#80](https://github.com/Oxen-AI/Oxen/pull/80)
 - Enhanced branch existence checks and streamlined branch deletion. [#80](https://github.com/Oxen-AI/Oxen/pull/80)
-- Introduced notebook management capabilities, allowing users to start and stop notebook sessions within Oxen repositories via [Python](/getting-started/python). [#79](https://github.com/Oxen-AI/Oxen/pull/79)
+- Introduced notebook management capabilities, allowing users to start and stop notebook sessions within Oxen repositories via [Python](/python-api). [#79](https://github.com/Oxen-AI/Oxen/pull/79)
 - Added a new Python module for notebook operations and exposed these features in the public API. [#79](https://github.com/Oxen-AI/Oxen/pull/79)
 - Enhanced error handling and user feedback when initializing workspaces and executing SQL queries. [#79](https://github.com/Oxen-AI/Oxen/pull/79)
 - Improved performance for adding multiple files by batching operations. [#79](https://github.com/Oxen-AI/Oxen/pull/79)
@@ -80,7 +80,7 @@ This page will have a complete update with demos, photos, and top feature update
 - Added Support for Model Deprecation
 - Allow import of hugging face datasets into Server
 - Added a `copy prompt` button to entries in the eval list view
-- For [Notebooks](/getting-started/notebooks) added branch indicator and now respects branches with slashes
+- For Notebooks added branch indicator and now respects branches with slashes
 - Now able to merge changes on the server where there are no file conflicts (for example: a notebook is staged and a data frame is staged)
 - GitHub Actions for python windows
 - Expanded row-view component to make viewing complex content easier
@@ -114,7 +114,7 @@ This page will have a complete update with demos, photos, and top feature update
 - Added a new error handling mechanism for data retrieval methods. [#77](https://github.com/Oxen-AI/Oxen/pull/77)
 
 #### By Customer Request
-- Added how to save a parquet file to a directory, and errors with to_csv in [Python](/getting-started/python) by [Mirascope's](https://www.oxen.ai/Mirascope) request
+- Added how to save a parquet file to a directory, and errors with to_csv in [Python](/python-api) by [Mirascope's](https://www.oxen.ai/Mirascope) request
 - Added method to test if a branch already exists
 - Create data frame if it does not exist on the first insert
 
@@ -175,11 +175,11 @@ This page will have a complete update with demos, photos, and top feature update
 #### By Customer Request
 - [@isaac_pivotal](https://www.oxen.ai/isaac_pivotal) requested the audio player in the UI can now be scrolled through
 ![audio player](/images/audio_player.png)
-- [@isaac_pivotal](https://www.oxen.ai/isaac_pivotal) requested a [Python API](getting-started/python) to upload bytes
+- [@isaac_pivotal](https://www.oxen.ai/isaac_pivotal) requested a [Python API](/python-api) to upload bytes
 - [@isaac_pivotal](https://www.oxen.ai/isaac_pivotal) requested to add a generator for paginating over a file list
-- We've added a method to fetch file metadata (hash, etc) through our [Python SDK](/getting-started/python)
-- [@Mirascope](https://www.oxen.ai/Mirascope) requested named [workspaces](/concepts/workspaces)
-- We've added a method for checking if local file matches remote file in the [Python SDK](/getting-started/python)
+- We've added a method to fetch file metadata (hash, etc) through our [Python SDK](/python-api)
+- [@Mirascope](https://www.oxen.ai/Mirascope) requested named [workspaces](/getting-started/workspaces)
+- We've added a method for checking if local file matches remote file in the [Python SDK](/python-api)
 
 ### Fixed Bugs
 - We now have better handling on commit view in the UI
@@ -193,14 +193,14 @@ This page will have a complete update with demos, photos, and top feature update
 - New [Model Description Page](https://www.oxen.ai/ai/models/deepseek-r1)! Click on any model in [The Model Page](https://www.oxen.ai/ai/models) to learn what to use it for, stats, and compare prices.
 ![Model Description Page](/images/model_description_page.png)
 
-- You can now download your SQL query results within [workspaces](/http-api/workspaces/query_dataframe) and in the [UI](https://oxen.ai)!
+- You can now download your SQL query results within [workspaces](/http-api/data-frames/get-data-frame-slice) and in the [UI](https://oxen.ai)!
 ![download SQL query results](/images/download_sql_query.png)
 
 - We cleaned up [Oxen.ai's](https://www.oxen.ai) navigation bar:)
-- The [Query Data Frame API](/http-api/workspaces/query_dataframe) now accepts a query id for downloading a SQL queried data frame in a workspace
+- The [Query Data Frame API](/http-api/data-frames/get-data-frame-slice) now accepts a query id for downloading a SQL queried data frame in a workspace
 - As per request (shout out [Paul](https://www.oxen.ai/paul)), we've support PUT to a file with a `based-on` revision passed in
 - Added --remote to `oxen workspace list`
-- Added ability to merge with the [python library](/getting-started/python)
+- Added ability to merge with the [python library](/python-api)
 - By customer request we've slimmed down Python dependencies with FSSpec
 
 ### Fixed Bugs
@@ -245,13 +245,13 @@ This page will have a complete update with demos, photos, and top feature update
 - A repo is created when a file is uploaded
 - We moved error banner in [Model Inference](https://oxen.ai/ai/models) above the dataframe
 - We've added to the [HTTP API docs](/http-api)
-- You can now ask Text2SQL queries throught the workspaces API and [download results](/http-api/workspaces/query_dataframe)
+- You can now ask Text2SQL queries throught the workspaces API and [download results](/http-api/data-frames/get-data-frame-slice)
 
 ### Fixed Bugs
 - Shout out [Mund](https://www.oxen.ai/MundVetter) for letting us know Model Inference crashed and wasn't showing the commit message. Fixed! :)
 - when an ID is `0`, the sidbar will not show `Null` but `0`
 - The target branch stays the target branch when running an evaluation from the completed evaluation page (it used to use the evaluation ID as the target branch)
-- You can now have several [workspaces](/concepts/workspaces) with the same commit ID
+- You can now have several [workspaces](/getting-started/workspaces) with the same commit ID
 - Columns used to sometimes show up twice...not anymore:)
 
 
@@ -284,7 +284,7 @@ This page will have a complete update with demos, photos, and top feature update
 - We removed "Versions" Tab from Top Nav
 - There is now a Commit button directly on the data frame
 - You now have more advanced commit options for [editable data frames](/features/labeling_data)
-- We now list [workspace API](/http-api/workspaces/list_workspaces) so admins can see all workspaces
+- We now list [workspace API](/http-api/workspaces/list-workspaces) so admins can see all workspaces
 - There is now a Create Query API
 - Auto detect image file type with Rust for images that do not end in .png or .jpg
 
@@ -329,7 +329,7 @@ This page will have a complete update with demos, photos, and top feature update
 />
 
 - Now able to `oxen add`, `oxen add schema` metadata, and `oxen rm` in a subdirectory
-- Enabled pushing, pulling, merging of [subtrees](/features/workspaces#remote-workspaces)
+- Enabled pushing, pulling, merging of [subtrees](/getting-started/workspaces#remote-workspaces)
 
 <img
   className="block"

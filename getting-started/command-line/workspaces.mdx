@@ -1,0 +1,36 @@
+---
+title: '🗂️ Workspaces'
+description: 'Stage and commit changes directly against a remote without a full local clone.'
+---
+
+A workspace lets you stage changes against a remote branch without first copying its files to a local repository. This makes it ideal for bulk imports, automation, and any case where you don't need a local working copy.
+
+For the conceptual overview, see [Workspaces](/getting-started/workspaces). For the Python interface, see [`python-api/workspace`](/python-api/workspace).
+
+## Create a Workspace
+
+Create a workspace on the current branch with `oxen workspace create`.
+
+```bash
+oxen workspace create
+```
+
+This returns a workspace ID you'll use for subsequent commands.
+
+## Stage Files in a Workspace
+
+Add files to the workspace with `oxen workspace add`. The file contents are uploaded directly to the remote and staged for commit.
+
+```bash
+oxen workspace add images --workspace-id 117abd2d-3363-497d-ac93-a5cb3c280234
+```
+
+## Commit a Workspace
+
+Once your changes are staged, commit them with `oxen workspace commit`.
+
+```bash
+oxen workspace commit -m "Uploading Images" --workspace-id 117abd2d-3363-497d-ac93-a5cb3c280234
+```
+
+The commit lands on the remote branch directly — no local push step required.
