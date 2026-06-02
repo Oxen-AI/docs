@@ -73,3 +73,7 @@ a command belong inside the command block, on the line before the command.
 When the "output" is a file listing, a config file, or other structured content, tag that
 second block with the file's format (`toml`, `json`, `yaml`, ...) for syntax highlighting;
 still keep it separate from the command that produced it.
+
+## Public
+
+This repository is **public**. Do not mention Oxen's private/internal repositories — by name or description — in code comments, doc-comments, error messages, commit messages, PR titles or descriptions, or any other code or documentation committed here. Keep references to private repos out of public artifacts entirely; if internal context is genuinely needed, point to the relevant Linear issue rather than inlining private-repo details.
