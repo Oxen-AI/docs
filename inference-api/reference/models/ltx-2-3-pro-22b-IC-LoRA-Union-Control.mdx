@@ -637,7 +637,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | `duration` | `integer` | `6` | Duration of the video in seconds One of: 6, 8, 10. |
 | `aspect_ratio` | `string` | `"16:9"` | Aspect ratio of the generated video One of: 16:9, 9:16. |
 | `resolution` | `string` | `"1080p"` | Resolution quality of the generated video One of: 1080p, 2k, 4k. |
-| `fps` | `integer` | `25` | Frame rate in frames per second One of: 24, 25, 48, 50. |
+| `fps` | `integer` | `25` | Frame rate in frames per second One of: 24, 25, 30, 48, 50, 60. |
 | `video_conditioning_strength` | `number` | `1.0` | Default strength applied to conditioning videos when per-item strength is not provided. Range: 0.0 – 1.0. |
 | `conditioning_attention_strength` | `number` | `1.0` | Attention strength for IC-LoRA conditioning. Range: 0.0 – 1.0. |
 | `seed` | `integer` | &mdash; | Random seed. Set for reproducible generation. |

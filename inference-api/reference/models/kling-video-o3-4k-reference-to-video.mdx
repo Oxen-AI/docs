@@ -72,7 +72,10 @@ Part of the Kling 3.0/o3 family on fal.ai, this 4K reference-to-video model gene
           -d '{
           "model": "kling-video-o3-4k-reference-to-video",
           "start_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ]
         }'
         ```
 
@@ -89,7 +92,10 @@ Part of the Kling 3.0/o3 family on fal.ai, this 4K reference-to-video model gene
             json={
                 "model": "kling-video-o3-4k-reference-to-video",
                 "start_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ]
             },
         )
         response.raise_for_status()
@@ -111,6 +117,9 @@ Part of the Kling 3.0/o3 family on fal.ai, this 4K reference-to-video model gene
           "model": "kling-video-o3-4k-reference-to-video",
           "start_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
           "aspect_ratio": "16:9",
           "generate_audio": false
         }'
@@ -130,6 +139,9 @@ Part of the Kling 3.0/o3 family on fal.ai, this 4K reference-to-video model gene
                 "model": "kling-video-o3-4k-reference-to-video",
                 "start_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
                 "aspect_ratio": "16:9",
                 "generate_audio": false
             },
@@ -226,7 +238,10 @@ Part of the Kling 3.0/o3 family on fal.ai, this 4K reference-to-video model gene
           -d '{
           "model": "kling-video-o3-4k-reference-to-video",
           "start_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ]
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -259,7 +274,10 @@ Part of the Kling 3.0/o3 family on fal.ai, this 4K reference-to-video model gene
             json={
                 "model": "kling-video-o3-4k-reference-to-video",
                 "start_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ]
             },
         )
         enqueue.raise_for_status()
@@ -296,6 +314,9 @@ Part of the Kling 3.0/o3 family on fal.ai, this 4K reference-to-video model gene
           "model": "kling-video-o3-4k-reference-to-video",
           "start_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
           "aspect_ratio": "16:9",
           "generate_audio": false
         }' | jq -r '.generations[0].generation_id')
@@ -331,6 +352,9 @@ Part of the Kling 3.0/o3 family on fal.ai, this 4K reference-to-video model gene
                 "model": "kling-video-o3-4k-reference-to-video",
                 "start_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
                 "aspect_ratio": "16:9",
                 "generate_audio": false
             },
@@ -439,7 +463,10 @@ Part of the Kling 3.0/o3 family on fal.ai, this 4K reference-to-video model gene
           -d '{
           "model": "kling-video-o3-4k-reference-to-video",
           "start_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ]
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -469,7 +496,10 @@ Part of the Kling 3.0/o3 family on fal.ai, this 4K reference-to-video model gene
             json={
                 "model": "kling-video-o3-4k-reference-to-video",
                 "start_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ]
             },
         )
         enqueue.raise_for_status()
@@ -507,6 +537,9 @@ Part of the Kling 3.0/o3 family on fal.ai, this 4K reference-to-video model gene
           "model": "kling-video-o3-4k-reference-to-video",
           "start_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
           "aspect_ratio": "16:9",
           "generate_audio": false
         }' | jq -r '.generations[0].generation_id')
@@ -539,6 +572,9 @@ Part of the Kling 3.0/o3 family on fal.ai, this 4K reference-to-video model gene
                 "model": "kling-video-o3-4k-reference-to-video",
                 "start_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
                 "aspect_ratio": "16:9",
                 "generate_audio": false
             },

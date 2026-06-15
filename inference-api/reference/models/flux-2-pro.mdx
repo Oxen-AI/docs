@@ -130,7 +130,7 @@ Some other noteworthy features of FLUX.2 [pro] include precise control over pose
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "aspect_ratio": "1:1",
+          "aspect_ratio": "16:9",
           "resolution": "1 MP",
           "num_inference_steps": 30,
           "guidance": 2,
@@ -156,7 +156,7 @@ Some other noteworthy features of FLUX.2 [pro] include precise control over pose
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "aspect_ratio": "1:1",
+                "aspect_ratio": "16:9",
                 "resolution": "1 MP",
                 "num_inference_steps": 30,
                 "guidance": 2,
@@ -335,7 +335,7 @@ Some other noteworthy features of FLUX.2 [pro] include precise control over pose
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "aspect_ratio": "1:1",
+          "aspect_ratio": "16:9",
           "resolution": "1 MP",
           "num_inference_steps": 30,
           "guidance": 2,
@@ -377,7 +377,7 @@ Some other noteworthy features of FLUX.2 [pro] include precise control over pose
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "aspect_ratio": "1:1",
+                "aspect_ratio": "16:9",
                 "resolution": "1 MP",
                 "num_inference_steps": 30,
                 "guidance": 2,
@@ -566,7 +566,7 @@ Some other noteworthy features of FLUX.2 [pro] include precise control over pose
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "aspect_ratio": "1:1",
+          "aspect_ratio": "16:9",
           "resolution": "1 MP",
           "num_inference_steps": 30,
           "guidance": 2,
@@ -605,7 +605,7 @@ Some other noteworthy features of FLUX.2 [pro] include precise control over pose
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "aspect_ratio": "1:1",
+                "aspect_ratio": "16:9",
                 "resolution": "1 MP",
                 "num_inference_steps": 30,
                 "guidance": 2,
@@ -662,7 +662,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `input_image` | `array<string>` | &mdash; | Input images to transform or use as reference (supports multiple image urls) |
-| `aspect_ratio` | `string` | `"1:1"` | Aspect ratio for the generated image One of: 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, match_input_image. |
+| `aspect_ratio` | `string` | `"16:9"` | Aspect ratio for the generated image One of: 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, match_input_image. |
 | `resolution` | `string` | `"1 MP"` | Resolution for the generated image One of: 1 MP, 2 MP, 0.5 MP. |
 | `num_inference_steps` | `integer` | `30` | Number of denoising steps. Recommended range is 28-50, and lower number of steps produce lower quality outputs, faster. Range: 1 – 50. |
 | `guidance` | `number` | `2` | Guidance for generated image. Lower values can give more realistic images. Good values to try are 2, 2.5, 3 and 3.5 Range: 0 – 10. |

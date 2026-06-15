@@ -1,28 +1,30 @@
 ---
-title: "Nano Banana 2"
-description: "Nano Banana 2 is a text-to-image model that generates images from text descriptions."
+title: "Grok Imagine Video 1.5 - Image to Video"
+description: "Generate videos from images with audio using xAI's Grok Imagine 1.5 Video model."
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try Nano Banana 2 in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=nano-banana-2">
+  <Card title="Try Grok Imagine Video 1.5 - Image to Video in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=xai-grok-imagine-video-1-5-image-to-video">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `nano-banana-2`
+**Model ID:** `xai-grok-imagine-video-1-5-image-to-video`
 
-Nano Banana 2 is a text-to-image model that generates images from text descriptions.
+Generate videos from images with audio using xAI's Grok Imagine 1.5 Video model.
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=nano-banana-2) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=xai-grok-imagine-video-1-5-image-to-video) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
   <Tab title="Sync">
 
-    See the [image generation reference](/inference-api/reference/image_generation) for more details.
+    This blocks until the video is ready (typically 5-15 minutes). Prefer **Async** or **Async with SSE** for anything beyond quick experimentation.
+
+    See the [video generation reference](/inference-api/reference/video_generation) for more details.
 
     <Tabs>
       <Tab title="Minimal">
@@ -30,12 +32,13 @@ Nano Banana 2 is a text-to-image model that generates images from text descripti
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "nano-banana-2",
-          "prompt": "<prompt>"
+          "model": "xai-grok-imagine-video-1-5-image-to-video",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }'
         ```
 
@@ -44,14 +47,15 @@ Nano Banana 2 is a text-to-image model that generates images from text descripti
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/generate",
+            "https://hub.oxen.ai/api/ai/videos/generate",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "nano-banana-2",
-                "prompt": "<prompt>"
+                "model": "xai-grok-imagine-video-1-5-image-to-video",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         response.raise_for_status()
@@ -66,16 +70,14 @@ Nano Banana 2 is a text-to-image model that generates images from text descripti
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "nano-banana-2",
+          "model": "xai-grok-imagine-video-1-5-image-to-video",
           "prompt": "<prompt>",
-          "aspect_ratio": "16:9",
-          "resolution": "2K",
-          "enable_web_search": true,
-          "safety_tolerance": "6"
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "resolution": "720p"
         }'
         ```
 
@@ -84,18 +86,16 @@ Nano Banana 2 is a text-to-image model that generates images from text descripti
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/generate",
+            "https://hub.oxen.ai/api/ai/videos/generate",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "nano-banana-2",
+                "model": "xai-grok-imagine-video-1-5-image-to-video",
                 "prompt": "<prompt>",
-                "aspect_ratio": "16:9",
-                "resolution": "2K",
-                "enable_web_search": true,
-                "safety_tolerance": "6"
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "resolution": "720p"
             },
         )
         response.raise_for_status()
@@ -123,8 +123,9 @@ Nano Banana 2 is a text-to-image model that generates images from text descripti
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "nano-banana-2",
-          "prompt": "<prompt>"
+          "model": "xai-grok-imagine-video-1-5-image-to-video",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -155,8 +156,9 @@ Nano Banana 2 is a text-to-image model that generates images from text descripti
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "nano-banana-2",
-                "prompt": "<prompt>"
+                "model": "xai-grok-imagine-video-1-5-image-to-video",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         enqueue.raise_for_status()
@@ -190,12 +192,10 @@ Nano Banana 2 is a text-to-image model that generates images from text descripti
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "nano-banana-2",
+          "model": "xai-grok-imagine-video-1-5-image-to-video",
           "prompt": "<prompt>",
-          "aspect_ratio": "16:9",
-          "resolution": "2K",
-          "enable_web_search": true,
-          "safety_tolerance": "6"
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "resolution": "720p"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -226,12 +226,10 @@ Nano Banana 2 is a text-to-image model that generates images from text descripti
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "nano-banana-2",
+                "model": "xai-grok-imagine-video-1-5-image-to-video",
                 "prompt": "<prompt>",
-                "aspect_ratio": "16:9",
-                "resolution": "2K",
-                "enable_web_search": true,
-                "safety_tolerance": "6"
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "resolution": "720p"
             },
         )
         enqueue.raise_for_status()
@@ -273,8 +271,9 @@ Nano Banana 2 is a text-to-image model that generates images from text descripti
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "nano-banana-2",
-          "prompt": "<prompt>"
+          "model": "xai-grok-imagine-video-1-5-image-to-video",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -302,8 +301,9 @@ Nano Banana 2 is a text-to-image model that generates images from text descripti
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "nano-banana-2",
-                "prompt": "<prompt>"
+                "model": "xai-grok-imagine-video-1-5-image-to-video",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         enqueue.raise_for_status()
@@ -338,12 +338,10 @@ Nano Banana 2 is a text-to-image model that generates images from text descripti
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "nano-banana-2",
+          "model": "xai-grok-imagine-video-1-5-image-to-video",
           "prompt": "<prompt>",
-          "aspect_ratio": "16:9",
-          "resolution": "2K",
-          "enable_web_search": true,
-          "safety_tolerance": "6"
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "resolution": "720p"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -371,12 +369,10 @@ Nano Banana 2 is a text-to-image model that generates images from text descripti
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "nano-banana-2",
+                "model": "xai-grok-imagine-video-1-5-image-to-video",
                 "prompt": "<prompt>",
-                "aspect_ratio": "16:9",
-                "resolution": "2K",
-                "enable_web_search": true,
-                "safety_tolerance": "6"
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "resolution": "720p"
             },
         )
         enqueue.raise_for_status()
@@ -411,7 +407,7 @@ Nano Banana 2 is a text-to-image model that generates images from text descripti
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/nano-banana-2
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/xai-grok-imagine-video-1-5-image-to-video
 ```
 
 ## Request parameters
@@ -420,13 +416,12 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | Text description of what you want to generate, or the instruction on how to edit the given image. |
+| `prompt` | `string` | &mdash; | Text prompt describing the video to generate |
+| `input_image` | `string` | &mdash; | First frame image for image-to-video generation Format: uri. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `aspect_ratio` | `string` | `"16:9"` | Aspect ratio for the generated image One of: auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 4:5, 5:4, 21:9, 4:1, 1:4, 8:1, 1:8. |
-| `resolution` | `string` | `"2K"` | Resolution of the generated image One of: 1K, 2K, 4K. |
-| `enable_web_search` | `boolean` | `true` | Enable web search for the image generation task. This will allow the model to use the latest information from the web to generate the image. |
-| `safety_tolerance` | `string` | `"6"` | The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict. Default value: 4 One of: 1, 2, 3, 4, 5, 6. |
+| `resolution` | `string` | `"720p"` | Resolution quality of the generated video One of: 480p, 720p. |
+| `duration` | `integer` | &mdash; | Duration of the video in seconds Range: 1 – 15. |
