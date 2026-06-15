@@ -79,7 +79,7 @@ It supports natural motion, realistic scene animation, optional native audio gen
           "model": "google-veo-3-1-fast",
           "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "aspect_ratio": "auto",
+          "aspect_ratio": "16:9",
           "duration": "8s",
           "resolution": "720p",
           "generate_audio": true,
@@ -102,7 +102,7 @@ It supports natural motion, realistic scene animation, optional native audio gen
                 "model": "google-veo-3-1-fast",
                 "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "aspect_ratio": "auto",
+                "aspect_ratio": "16:9",
                 "duration": "8s",
                 "resolution": "720p",
                 "generate_audio": true,
@@ -207,7 +207,7 @@ It supports natural motion, realistic scene animation, optional native audio gen
           "model": "google-veo-3-1-fast",
           "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "aspect_ratio": "auto",
+          "aspect_ratio": "16:9",
           "duration": "8s",
           "resolution": "720p",
           "generate_audio": true,
@@ -246,7 +246,7 @@ It supports natural motion, realistic scene animation, optional native audio gen
                 "model": "google-veo-3-1-fast",
                 "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "aspect_ratio": "auto",
+                "aspect_ratio": "16:9",
                 "duration": "8s",
                 "resolution": "720p",
                 "generate_audio": true,
@@ -363,7 +363,7 @@ It supports natural motion, realistic scene animation, optional native audio gen
           "model": "google-veo-3-1-fast",
           "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "aspect_ratio": "auto",
+          "aspect_ratio": "16:9",
           "duration": "8s",
           "resolution": "720p",
           "generate_audio": true,
@@ -399,7 +399,7 @@ It supports natural motion, realistic scene animation, optional native audio gen
                 "model": "google-veo-3-1-fast",
                 "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "aspect_ratio": "auto",
+                "aspect_ratio": "16:9",
                 "duration": "8s",
                 "resolution": "720p",
                 "generate_audio": true,
@@ -455,7 +455,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `aspect_ratio` | `string` | `"auto"` | Output video aspect ratio. One of: auto, 16:9, 9:16. |
+| `aspect_ratio` | `string` | `"16:9"` | Output video aspect ratio. One of: auto, 16:9, 9:16. |
 | `duration` | `string` | `"8s"` | Duration of the generated video. One of: 4s, 6s, 8s. |
 | `resolution` | `string` | `"720p"` | Output video resolution. One of: 720p, 1080p, 4k. |
 | `generate_audio` | `boolean` | `true` | Whether to generate audio for the video. |

@@ -131,7 +131,7 @@ Some other noteworthy features of nano-banana include mask-free inpainting (edit
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "aspect_ratio": "1:1"
+          "aspect_ratio": "16:9"
         }'
         ```
 
@@ -151,7 +151,7 @@ Some other noteworthy features of nano-banana include mask-free inpainting (edit
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "aspect_ratio": "1:1"
+                "aspect_ratio": "16:9"
             },
         )
         response.raise_for_status()
@@ -324,7 +324,7 @@ Some other noteworthy features of nano-banana include mask-free inpainting (edit
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "aspect_ratio": "1:1"
+          "aspect_ratio": "16:9"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -360,7 +360,7 @@ Some other noteworthy features of nano-banana include mask-free inpainting (edit
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "aspect_ratio": "1:1"
+                "aspect_ratio": "16:9"
             },
         )
         enqueue.raise_for_status()
@@ -543,7 +543,7 @@ Some other noteworthy features of nano-banana include mask-free inpainting (edit
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "aspect_ratio": "1:1"
+          "aspect_ratio": "16:9"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -576,7 +576,7 @@ Some other noteworthy features of nano-banana include mask-free inpainting (edit
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "aspect_ratio": "1:1"
+                "aspect_ratio": "16:9"
             },
         )
         enqueue.raise_for_status()
@@ -627,4 +627,4 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `input_image` | `array<string>` | &mdash; | Input images to transform or use as reference (supports multiple image urls) |
-| `aspect_ratio` | `string` | `"1:1"` | Aspect ratio for the generated image One of: 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3. |
+| `aspect_ratio` | `string` | `"16:9"` | Aspect ratio for the generated image One of: 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3. |

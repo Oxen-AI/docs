@@ -81,7 +81,7 @@ Gemini 2.5 Flash Image (aka nano-banana), is a state-of-the-art image generation
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "aspect_ratio": "auto",
+          "aspect_ratio": "16:9",
           "resolution": "2K",
           "enable_web_search": true,
           "safety_tolerance": "6"
@@ -104,7 +104,7 @@ Gemini 2.5 Flash Image (aka nano-banana), is a state-of-the-art image generation
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "aspect_ratio": "auto",
+                "aspect_ratio": "16:9",
                 "resolution": "2K",
                 "enable_web_search": true,
                 "safety_tolerance": "6"
@@ -213,7 +213,7 @@ Gemini 2.5 Flash Image (aka nano-banana), is a state-of-the-art image generation
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "aspect_ratio": "auto",
+          "aspect_ratio": "16:9",
           "resolution": "2K",
           "enable_web_search": true,
           "safety_tolerance": "6"
@@ -252,7 +252,7 @@ Gemini 2.5 Flash Image (aka nano-banana), is a state-of-the-art image generation
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "aspect_ratio": "auto",
+                "aspect_ratio": "16:9",
                 "resolution": "2K",
                 "enable_web_search": true,
                 "safety_tolerance": "6"
@@ -373,7 +373,7 @@ Gemini 2.5 Flash Image (aka nano-banana), is a state-of-the-art image generation
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "aspect_ratio": "auto",
+          "aspect_ratio": "16:9",
           "resolution": "2K",
           "enable_web_search": true,
           "safety_tolerance": "6"
@@ -409,7 +409,7 @@ Gemini 2.5 Flash Image (aka nano-banana), is a state-of-the-art image generation
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "aspect_ratio": "auto",
+                "aspect_ratio": "16:9",
                 "resolution": "2K",
                 "enable_web_search": true,
                 "safety_tolerance": "6"
@@ -463,7 +463,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `aspect_ratio` | `string` | `"auto"` | Aspect ratio for the generated image One of: auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 4:5, 5:4, 21:9, 4:1, 1:4, 8:1, 1:8. |
+| `aspect_ratio` | `string` | `"16:9"` | Aspect ratio for the generated image One of: auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 4:5, 5:4, 21:9, 4:1, 1:4, 8:1, 1:8. |
 | `resolution` | `string` | `"2K"` | Resolution of the generated image One of: 1K, 2K, 4K. |
 | `enable_web_search` | `boolean` | `true` | Enable web search for the image generation task. This will allow the model to use the latest information from the web to generate the image. |
 | `safety_tolerance` | `string` | `"6"` | The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict. Default value: 4 One of: 1, 2, 3, 4, 5, 6. |

@@ -92,7 +92,7 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
           "model": "flux-kontext-dev",
           "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png",
           "prompt": "High quality illustration of the character riding a cow, with a text bubble saying '\''Woohoo!'\'' - preserve all colors and traits of the original character, and render the cow in the same style",
-          "aspect_ratio": "match_input_image",
+          "aspect_ratio": "16:9",
           "num_inference_steps": 28,
           "guidance": 2.5,
           "output_format": "webp",
@@ -115,7 +115,7 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
                 "model": "flux-kontext-dev",
                 "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png",
                 "prompt": "High quality illustration of the character riding a cow, with a text bubble saying 'Woohoo!' - preserve all colors and traits of the original character, and render the cow in the same style",
-                "aspect_ratio": "match_input_image",
+                "aspect_ratio": "16:9",
                 "num_inference_steps": 28,
                 "guidance": 2.5,
                 "output_format": "webp",
@@ -220,7 +220,7 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
           "model": "flux-kontext-dev",
           "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png",
           "prompt": "High quality illustration of the character riding a cow, with a text bubble saying '\''Woohoo!'\'' - preserve all colors and traits of the original character, and render the cow in the same style",
-          "aspect_ratio": "match_input_image",
+          "aspect_ratio": "16:9",
           "num_inference_steps": 28,
           "guidance": 2.5,
           "output_format": "webp",
@@ -259,7 +259,7 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
                 "model": "flux-kontext-dev",
                 "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png",
                 "prompt": "High quality illustration of the character riding a cow, with a text bubble saying 'Woohoo!' - preserve all colors and traits of the original character, and render the cow in the same style",
-                "aspect_ratio": "match_input_image",
+                "aspect_ratio": "16:9",
                 "num_inference_steps": 28,
                 "guidance": 2.5,
                 "output_format": "webp",
@@ -376,7 +376,7 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
           "model": "flux-kontext-dev",
           "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png",
           "prompt": "High quality illustration of the character riding a cow, with a text bubble saying '\''Woohoo!'\'' - preserve all colors and traits of the original character, and render the cow in the same style",
-          "aspect_ratio": "match_input_image",
+          "aspect_ratio": "16:9",
           "num_inference_steps": 28,
           "guidance": 2.5,
           "output_format": "webp",
@@ -412,7 +412,7 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
                 "model": "flux-kontext-dev",
                 "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png",
                 "prompt": "High quality illustration of the character riding a cow, with a text bubble saying 'Woohoo!' - preserve all colors and traits of the original character, and render the cow in the same style",
-                "aspect_ratio": "match_input_image",
+                "aspect_ratio": "16:9",
                 "num_inference_steps": 28,
                 "guidance": 2.5,
                 "output_format": "webp",
@@ -468,7 +468,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `aspect_ratio` | `string` | `"match_input_image"` | Aspect ratio of the generated image. Use 'match_input_image' to match the aspect ratio of the input image. One of: 1:1, 16:9, 21:9, 3:2, 2:3, 4:5, 5:4, 3:4, 4:3, 9:16, 9:21, match_input_image. |
+| `aspect_ratio` | `string` | `"16:9"` | Aspect ratio of the generated image. Use 'match_input_image' to match the aspect ratio of the input image. One of: 1:1, 16:9, 21:9, 3:2, 2:3, 4:5, 5:4, 3:4, 4:3, 9:16, 9:21, match_input_image. |
 | `num_inference_steps` | `integer` | `28` | Number of inference steps Range: 4 – 50. |
 | `guidance` | `number` | `2.5` | Guidance scale for generation Range: 0 – 10. |
 | `seed` | `integer` | &mdash; | Random seed for reproducible generation. Leave blank for random. |

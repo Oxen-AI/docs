@@ -132,7 +132,7 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "aspect_ratio": "auto",
+          "aspect_ratio": "16:9",
           "resolution": "2K",
           "safety_tolerance": "6"
         }'
@@ -154,7 +154,7 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "aspect_ratio": "auto",
+                "aspect_ratio": "16:9",
                 "resolution": "2K",
                 "safety_tolerance": "6"
             },
@@ -329,7 +329,7 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "aspect_ratio": "auto",
+          "aspect_ratio": "16:9",
           "resolution": "2K",
           "safety_tolerance": "6"
         }' | jq -r '.generations[0].generation_id')
@@ -367,7 +367,7 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "aspect_ratio": "auto",
+                "aspect_ratio": "16:9",
                 "resolution": "2K",
                 "safety_tolerance": "6"
             },
@@ -552,7 +552,7 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "aspect_ratio": "auto",
+          "aspect_ratio": "16:9",
           "resolution": "2K",
           "safety_tolerance": "6"
         }' | jq -r '.generations[0].generation_id')
@@ -587,7 +587,7 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "aspect_ratio": "auto",
+                "aspect_ratio": "16:9",
                 "resolution": "2K",
                 "safety_tolerance": "6"
             },
@@ -640,6 +640,6 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `input_image` | `array<string>` | &mdash; | Input images to transform or use as reference (supports multiple image urls) |
-| `aspect_ratio` | `string` | `"auto"` | Aspect ratio for the generated image One of: auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3. |
+| `aspect_ratio` | `string` | `"16:9"` | Aspect ratio for the generated image One of: auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3. |
 | `resolution` | `string` | `"2K"` | Resolution of the generated image One of: 1K, 2K, 4K. |
 | `safety_tolerance` | `string` | `"6"` | The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict. Default value: 4 One of: 1, 2, 3, 4, 5, 6. |

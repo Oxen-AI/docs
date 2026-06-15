@@ -91,7 +91,7 @@ It excels in prompt-driven video modifications like object swapping, scene resty
           "model": "xai-grok-imagine-video-edit-video",
           "prompt": "<prompt>",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "aspect_ratio": "auto"
+          "resolution": "auto"
         }'
         ```
 
@@ -109,7 +109,7 @@ It excels in prompt-driven video modifications like object swapping, scene resty
                 "model": "xai-grok-imagine-video-edit-video",
                 "prompt": "<prompt>",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "aspect_ratio": "auto"
+                "resolution": "auto"
             },
         )
         response.raise_for_status()
@@ -209,7 +209,7 @@ It excels in prompt-driven video modifications like object swapping, scene resty
           "model": "xai-grok-imagine-video-edit-video",
           "prompt": "<prompt>",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "aspect_ratio": "auto"
+          "resolution": "auto"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -243,7 +243,7 @@ It excels in prompt-driven video modifications like object swapping, scene resty
                 "model": "xai-grok-imagine-video-edit-video",
                 "prompt": "<prompt>",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "aspect_ratio": "auto"
+                "resolution": "auto"
             },
         )
         enqueue.raise_for_status()
@@ -355,7 +355,7 @@ It excels in prompt-driven video modifications like object swapping, scene resty
           "model": "xai-grok-imagine-video-edit-video",
           "prompt": "<prompt>",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "aspect_ratio": "auto"
+          "resolution": "auto"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -386,7 +386,7 @@ It excels in prompt-driven video modifications like object swapping, scene resty
                 "model": "xai-grok-imagine-video-edit-video",
                 "prompt": "<prompt>",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "aspect_ratio": "auto"
+                "resolution": "auto"
             },
         )
         enqueue.raise_for_status()
@@ -437,4 +437,4 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `aspect_ratio` | `string` | `"auto"` | Resolution of the output video. One of: auto, 720p, 480p. |
+| `resolution` | `string` | `"auto"` | Resolution of the output video. One of: auto, 480p, 720p. |

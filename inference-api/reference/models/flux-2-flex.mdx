@@ -78,6 +78,48 @@ Some other noteworthy features of FLUX.2 [flex] include:
         </CodeGroup>
 
       </Tab>
+      <Tab title="Basic parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "flux-2-flex",
+          "prompt": "Draw a parody of the Mona Lisa by Leonardo da Vinci with Bloxy, the cartoon ox in the reference image, as Lisa del Giocondo. Keep Bloxy in the original style of the reference image with the cartoon ox, but adapt its pose to the pose depicted in the Mona Lisa. Don'\''t include its arms or legs in the painting.",
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ]
+        }'
+        ```
+
+        ```python Python
+        import os
+        import requests
+
+        response = requests.post(
+            "https://hub.oxen.ai/api/ai/images/edit",
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+            },
+            json={
+                "model": "flux-2-flex",
+                "prompt": "Draw a parody of the Mona Lisa by Leonardo da Vinci with Bloxy, the cartoon ox in the reference image, as Lisa del Giocondo. Keep Bloxy in the original style of the reference image with the cartoon ox, but adapt its pose to the pose depicted in the Mona Lisa. Don't include its arms or legs in the painting.",
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ]
+            },
+        )
+        response.raise_for_status()
+        print(response.json())
+        ```
+
+        </CodeGroup>
+
+      </Tab>
       <Tab title="All parameters">
 
         <CodeGroup>
@@ -92,7 +134,7 @@ Some other noteworthy features of FLUX.2 [flex] include:
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "aspect_ratio": "2:3",
+          "aspect_ratio": "16:9",
           "resolution": "1 MP",
           "num_inference_steps": 30,
           "guidance": 2,
@@ -118,7 +160,7 @@ Some other noteworthy features of FLUX.2 [flex] include:
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "aspect_ratio": "2:3",
+                "aspect_ratio": "16:9",
                 "resolution": "1 MP",
                 "num_inference_steps": 30,
                 "guidance": 2,
@@ -209,6 +251,79 @@ Some other noteworthy features of FLUX.2 [flex] include:
         </CodeGroup>
 
       </Tab>
+      <Tab title="Basic parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "flux-2-flex",
+          "prompt": "Draw a parody of the Mona Lisa by Leonardo da Vinci with Bloxy, the cartoon ox in the reference image, as Lisa del Giocondo. Keep Bloxy in the original style of the reference image with the cartoon ox, but adapt its pose to the pose depicted in the Mona Lisa. Don'\''t include its arms or legs in the painting.",
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ]
+        }' | jq -r '.generations[0].generation_id')
+
+        # Poll until the generation reaches a terminal status.
+        while true; do
+          STATUS=$(curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.status')
+          echo "Status: $STATUS"
+          case $STATUS in succeeded|failed|cancelled) break;; esac
+          sleep 5
+        done
+
+        # Print the result.
+        curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+          "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq .
+        ```
+
+        ```python Python
+        import os
+        import time
+        import requests
+
+        HEADERS = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        }
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers=HEADERS,
+            json={
+                "model": "flux-2-flex",
+                "prompt": "Draw a parody of the Mona Lisa by Leonardo da Vinci with Bloxy, the cartoon ox in the reference image, as Lisa del Giocondo. Keep Bloxy in the original style of the reference image with the cartoon ox, but adapt its pose to the pose depicted in the Mona Lisa. Don't include its arms or legs in the painting.",
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ]
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        while True:
+            data = requests.get(
+                f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
+                headers=HEADERS,
+            ).json()
+            if data["status"] in {"succeeded", "failed", "cancelled"}:
+                break
+            time.sleep(5)
+
+        if data["status"] == "succeeded":
+            print(f"Result: {data['result_url']}")
+        else:
+            print(f"Generation {data['status']}: {data.get('error_message')}")
+        ```
+
+        </CodeGroup>
+
+      </Tab>
       <Tab title="All parameters">
 
         <CodeGroup>
@@ -224,7 +339,7 @@ Some other noteworthy features of FLUX.2 [flex] include:
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "aspect_ratio": "2:3",
+          "aspect_ratio": "16:9",
           "resolution": "1 MP",
           "num_inference_steps": 30,
           "guidance": 2,
@@ -266,7 +381,7 @@ Some other noteworthy features of FLUX.2 [flex] include:
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "aspect_ratio": "2:3",
+                "aspect_ratio": "16:9",
                 "resolution": "1 MP",
                 "num_inference_steps": 30,
                 "guidance": 2,
@@ -369,6 +484,77 @@ Some other noteworthy features of FLUX.2 [flex] include:
         </CodeGroup>
 
       </Tab>
+      <Tab title="Basic parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "flux-2-flex",
+          "prompt": "Draw a parody of the Mona Lisa by Leonardo da Vinci with Bloxy, the cartoon ox in the reference image, as Lisa del Giocondo. Keep Bloxy in the original style of the reference image with the cartoon ox, but adapt its pose to the pose depicted in the Mona Lisa. Don'\''t include its arms or legs in the painting.",
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ]
+        }' | jq -r '.generations[0].generation_id')
+
+        # Stream the SSE channel, grab the data line that follows a
+        # media_generation_completed event for our id, and pretty-print it.
+        curl -sN -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/events \
+          | awk -v id="$GEN_ID" '
+            /^event: media_generation_completed$/ { expect=1; next }
+            /^data: / && expect {
+              payload = substr($0, 7)
+              if (index(payload, "\"generation_id\":\"" id "\"")) { print payload; exit }
+              expect = 0
+            }
+          ' | jq .
+        ```
+
+        ```python Python
+        import json
+        import os
+        import requests
+
+        API_KEY = os.environ["OXEN_API_KEY"]
+        AUTH = {"Authorization": f"Bearer {API_KEY}"}
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers={**AUTH, "Content-Type": "application/json"},
+            json={
+                "model": "flux-2-flex",
+                "prompt": "Draw a parody of the Mona Lisa by Leonardo da Vinci with Bloxy, the cartoon ox in the reference image, as Lisa del Giocondo. Keep Bloxy in the original style of the reference image with the cartoon ox, but adapt its pose to the pose depicted in the Mona Lisa. Don't include its arms or legs in the painting.",
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ]
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        with requests.get(
+            "https://hub.oxen.ai/api/events",
+            headers=AUTH,
+            stream=True,
+        ) as stream:
+            event_name = None
+            for line in stream.iter_lines(decode_unicode=True):
+                if line.startswith("event: "):
+                    event_name = line.removeprefix("event: ")
+                elif line.startswith("data: ") and event_name == "media_generation_completed":
+                    payload = json.loads(line.removeprefix("data: "))
+                    if payload.get("generation_id") == generation_id:
+                        print(payload)
+                        break
+        ```
+
+        </CodeGroup>
+
+      </Tab>
       <Tab title="All parameters">
 
         <CodeGroup>
@@ -384,7 +570,7 @@ Some other noteworthy features of FLUX.2 [flex] include:
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "aspect_ratio": "2:3",
+          "aspect_ratio": "16:9",
           "resolution": "1 MP",
           "num_inference_steps": 30,
           "guidance": 2,
@@ -423,7 +609,7 @@ Some other noteworthy features of FLUX.2 [flex] include:
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "aspect_ratio": "2:3",
+                "aspect_ratio": "16:9",
                 "resolution": "1 MP",
                 "num_inference_steps": 30,
                 "guidance": 2,
@@ -480,7 +666,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `input_image` | `array<string>` | `["https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"]` | Input images to transform or use as reference (supports multiple image urls) |
-| `aspect_ratio` | `string` | `"2:3"` | Aspect ratio for the generated image One of: 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, match_input_image. |
+| `aspect_ratio` | `string` | `"16:9"` | Aspect ratio for the generated image One of: 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, match_input_image. |
 | `resolution` | `string` | `"1 MP"` | Resolution for the generated image One of: 1 MP, 2 MP, 0.5 MP. |
 | `num_inference_steps` | `integer` | `30` | Number of denoising steps. Recommended range is 28-50, and lower number of steps produce lower quality outputs, faster. Range: 1 – 50. |
 | `guidance` | `number` | `2` | Guidance for generated image. Lower values can give more realistic images. Good values to try are 2, 2.5, 3 and 3.5 Range: 0 – 10. |

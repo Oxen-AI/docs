@@ -81,7 +81,7 @@ Qwen/Qwen-Image-Edit-2511 is an image generation model designed for complex imag
           "input_image": [
             "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
           ],
-          "aspect_ratio": "1:1",
+          "aspect_ratio": "16:9",
           "negative_prompt": " ",
           "output_format": "png"
         }'
@@ -103,7 +103,7 @@ Qwen/Qwen-Image-Edit-2511 is an image generation model designed for complex imag
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
                 ],
-                "aspect_ratio": "1:1",
+                "aspect_ratio": "16:9",
                 "negative_prompt": " ",
                 "output_format": "png"
             },
@@ -211,7 +211,7 @@ Qwen/Qwen-Image-Edit-2511 is an image generation model designed for complex imag
           "input_image": [
             "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
           ],
-          "aspect_ratio": "1:1",
+          "aspect_ratio": "16:9",
           "negative_prompt": " ",
           "output_format": "png"
         }' | jq -r '.generations[0].generation_id')
@@ -249,7 +249,7 @@ Qwen/Qwen-Image-Edit-2511 is an image generation model designed for complex imag
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
                 ],
-                "aspect_ratio": "1:1",
+                "aspect_ratio": "16:9",
                 "negative_prompt": " ",
                 "output_format": "png"
             },
@@ -369,7 +369,7 @@ Qwen/Qwen-Image-Edit-2511 is an image generation model designed for complex imag
           "input_image": [
             "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
           ],
-          "aspect_ratio": "1:1",
+          "aspect_ratio": "16:9",
           "negative_prompt": " ",
           "output_format": "png"
         }' | jq -r '.generations[0].generation_id')
@@ -404,7 +404,7 @@ Qwen/Qwen-Image-Edit-2511 is an image generation model designed for complex imag
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
                 ],
-                "aspect_ratio": "1:1",
+                "aspect_ratio": "16:9",
                 "negative_prompt": " ",
                 "output_format": "png"
             },
@@ -457,6 +457,6 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `aspect_ratio` | `string` | `"1:1"` | Aspect ratio for the generated image One of: 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3. |
+| `aspect_ratio` | `string` | `"16:9"` | Aspect ratio for the generated image One of: 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3. |
 | `negative_prompt` | `string` | `" "` | Negative prompt for generated image |
 | `output_format` | `string` | `"png"` | Format of the output images One of: webp, jpg, png. |

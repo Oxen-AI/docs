@@ -79,7 +79,7 @@ It supports controllable duration, aspect ratio, and resolution while balancing 
           "model": "google-veo-3-1-lite",
           "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "aspect_ratio": "auto",
+          "aspect_ratio": "16:9",
           "duration": "8s",
           "resolution": "720p",
           "auto_fix": false
@@ -100,7 +100,7 @@ It supports controllable duration, aspect ratio, and resolution while balancing 
                 "model": "google-veo-3-1-lite",
                 "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "aspect_ratio": "auto",
+                "aspect_ratio": "16:9",
                 "duration": "8s",
                 "resolution": "720p",
                 "auto_fix": false
@@ -203,7 +203,7 @@ It supports controllable duration, aspect ratio, and resolution while balancing 
           "model": "google-veo-3-1-lite",
           "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "aspect_ratio": "auto",
+          "aspect_ratio": "16:9",
           "duration": "8s",
           "resolution": "720p",
           "auto_fix": false
@@ -240,7 +240,7 @@ It supports controllable duration, aspect ratio, and resolution while balancing 
                 "model": "google-veo-3-1-lite",
                 "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "aspect_ratio": "auto",
+                "aspect_ratio": "16:9",
                 "duration": "8s",
                 "resolution": "720p",
                 "auto_fix": false
@@ -355,7 +355,7 @@ It supports controllable duration, aspect ratio, and resolution while balancing 
           "model": "google-veo-3-1-lite",
           "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "aspect_ratio": "auto",
+          "aspect_ratio": "16:9",
           "duration": "8s",
           "resolution": "720p",
           "auto_fix": false
@@ -389,7 +389,7 @@ It supports controllable duration, aspect ratio, and resolution while balancing 
                 "model": "google-veo-3-1-lite",
                 "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "aspect_ratio": "auto",
+                "aspect_ratio": "16:9",
                 "duration": "8s",
                 "resolution": "720p",
                 "auto_fix": false
@@ -443,7 +443,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `aspect_ratio` | `string` | `"auto"` | Output video aspect ratio. One of: auto, 16:9, 9:16. |
+| `aspect_ratio` | `string` | `"16:9"` | Output video aspect ratio. One of: auto, 16:9, 9:16. |
 | `duration` | `string` | `"8s"` | Duration of the generated video. One of: 4s, 6s, 8s. |
 | `resolution` | `string` | `"720p"` | Output video resolution. One of: 720p, 1080p. |
 | `negative_prompt` | `string` | &mdash; | Text describing what to avoid in the generated video. |

@@ -37,7 +37,7 @@ ByteDance Seedance 2.0 Fast generates video from a text prompt guided by referen
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedance-2-0-fast-reference-to-video",
-          "prompt": "<prompt>"
+          "prompt": "A lone ox walks down an empty desert highway at golden hour, dust drifting behind it, slow cinematic camera move, warm low sunlight, shallow depth of field."
         }'
         ```
 
@@ -53,7 +53,7 @@ ByteDance Seedance 2.0 Fast generates video from a text prompt guided by referen
             },
             json={
                 "model": "bytedance-seedance-2-0-fast-reference-to-video",
-                "prompt": "<prompt>"
+                "prompt": "A lone ox walks down an empty desert highway at golden hour, dust drifting behind it, slow cinematic camera move, warm low sunlight, shallow depth of field."
             },
         )
         response.raise_for_status()
@@ -73,7 +73,7 @@ ByteDance Seedance 2.0 Fast generates video from a text prompt guided by referen
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedance-2-0-fast-reference-to-video",
-          "prompt": "<prompt>",
+          "prompt": "A lone ox walks down an empty desert highway at golden hour, dust drifting behind it, slow cinematic camera move, warm low sunlight, shallow depth of field.",
           "input_face_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
@@ -104,7 +104,7 @@ ByteDance Seedance 2.0 Fast generates video from a text prompt guided by referen
             },
             json={
                 "model": "bytedance-seedance-2-0-fast-reference-to-video",
-                "prompt": "<prompt>",
+                "prompt": "A lone ox walks down an empty desert highway at golden hour, dust drifting behind it, slow cinematic camera move, warm low sunlight, shallow depth of field.",
                 "input_face_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
@@ -139,7 +139,7 @@ ByteDance Seedance 2.0 Fast generates video from a text prompt guided by referen
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedance-2-0-fast-reference-to-video",
-          "prompt": "<prompt>",
+          "prompt": "A lone ox walks down an empty desert highway at golden hour, dust drifting behind it, slow cinematic camera move, warm low sunlight, shallow depth of field.",
           "input_face_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
@@ -157,7 +157,7 @@ ByteDance Seedance 2.0 Fast generates video from a text prompt guided by referen
           ],
           "resolution": "720p",
           "duration": -1,
-          "aspect_ratio": "adaptive",
+          "aspect_ratio": "16:9",
           "generate_audio": false,
           "watermark": false
         }'
@@ -175,7 +175,7 @@ ByteDance Seedance 2.0 Fast generates video from a text prompt guided by referen
             },
             json={
                 "model": "bytedance-seedance-2-0-fast-reference-to-video",
-                "prompt": "<prompt>",
+                "prompt": "A lone ox walks down an empty desert highway at golden hour, dust drifting behind it, slow cinematic camera move, warm low sunlight, shallow depth of field.",
                 "input_face_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
@@ -193,7 +193,7 @@ ByteDance Seedance 2.0 Fast generates video from a text prompt guided by referen
                 ],
                 "resolution": "720p",
                 "duration": -1,
-                "aspect_ratio": "adaptive",
+                "aspect_ratio": "16:9",
                 "generate_audio": false,
                 "watermark": false
             },
@@ -224,7 +224,7 @@ ByteDance Seedance 2.0 Fast generates video from a text prompt guided by referen
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedance-2-0-fast-reference-to-video",
-          "prompt": "<prompt>"
+          "prompt": "A lone ox walks down an empty desert highway at golden hour, dust drifting behind it, slow cinematic camera move, warm low sunlight, shallow depth of field."
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -256,7 +256,7 @@ ByteDance Seedance 2.0 Fast generates video from a text prompt guided by referen
             headers=HEADERS,
             json={
                 "model": "bytedance-seedance-2-0-fast-reference-to-video",
-                "prompt": "<prompt>"
+                "prompt": "A lone ox walks down an empty desert highway at golden hour, dust drifting behind it, slow cinematic camera move, warm low sunlight, shallow depth of field."
             },
         )
         enqueue.raise_for_status()
@@ -291,7 +291,7 @@ ByteDance Seedance 2.0 Fast generates video from a text prompt guided by referen
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedance-2-0-fast-reference-to-video",
-          "prompt": "<prompt>",
+          "prompt": "A lone ox walks down an empty desert highway at golden hour, dust drifting behind it, slow cinematic camera move, warm low sunlight, shallow depth of field.",
           "input_face_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
@@ -338,7 +338,7 @@ ByteDance Seedance 2.0 Fast generates video from a text prompt guided by referen
             headers=HEADERS,
             json={
                 "model": "bytedance-seedance-2-0-fast-reference-to-video",
-                "prompt": "<prompt>",
+                "prompt": "A lone ox walks down an empty desert highway at golden hour, dust drifting behind it, slow cinematic camera move, warm low sunlight, shallow depth of field.",
                 "input_face_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
@@ -388,7 +388,7 @@ ByteDance Seedance 2.0 Fast generates video from a text prompt guided by referen
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedance-2-0-fast-reference-to-video",
-          "prompt": "<prompt>",
+          "prompt": "A lone ox walks down an empty desert highway at golden hour, dust drifting behind it, slow cinematic camera move, warm low sunlight, shallow depth of field.",
           "input_face_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
@@ -406,7 +406,7 @@ ByteDance Seedance 2.0 Fast generates video from a text prompt guided by referen
           ],
           "resolution": "720p",
           "duration": -1,
-          "aspect_ratio": "adaptive",
+          "aspect_ratio": "16:9",
           "generate_audio": false,
           "watermark": false
         }' | jq -r '.generations[0].generation_id')
@@ -440,7 +440,7 @@ ByteDance Seedance 2.0 Fast generates video from a text prompt guided by referen
             headers=HEADERS,
             json={
                 "model": "bytedance-seedance-2-0-fast-reference-to-video",
-                "prompt": "<prompt>",
+                "prompt": "A lone ox walks down an empty desert highway at golden hour, dust drifting behind it, slow cinematic camera move, warm low sunlight, shallow depth of field.",
                 "input_face_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
@@ -458,7 +458,7 @@ ByteDance Seedance 2.0 Fast generates video from a text prompt guided by referen
                 ],
                 "resolution": "720p",
                 "duration": -1,
-                "aspect_ratio": "adaptive",
+                "aspect_ratio": "16:9",
                 "generate_audio": false,
                 "watermark": false
             },
@@ -503,7 +503,7 @@ ByteDance Seedance 2.0 Fast generates video from a text prompt guided by referen
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedance-2-0-fast-reference-to-video",
-          "prompt": "<prompt>"
+          "prompt": "A lone ox walks down an empty desert highway at golden hour, dust drifting behind it, slow cinematic camera move, warm low sunlight, shallow depth of field."
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -532,7 +532,7 @@ ByteDance Seedance 2.0 Fast generates video from a text prompt guided by referen
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "bytedance-seedance-2-0-fast-reference-to-video",
-                "prompt": "<prompt>"
+                "prompt": "A lone ox walks down an empty desert highway at golden hour, dust drifting behind it, slow cinematic camera move, warm low sunlight, shallow depth of field."
             },
         )
         enqueue.raise_for_status()
@@ -568,7 +568,7 @@ ByteDance Seedance 2.0 Fast generates video from a text prompt guided by referen
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedance-2-0-fast-reference-to-video",
-          "prompt": "<prompt>",
+          "prompt": "A lone ox walks down an empty desert highway at golden hour, dust drifting behind it, slow cinematic camera move, warm low sunlight, shallow depth of field.",
           "input_face_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
@@ -612,7 +612,7 @@ ByteDance Seedance 2.0 Fast generates video from a text prompt guided by referen
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "bytedance-seedance-2-0-fast-reference-to-video",
-                "prompt": "<prompt>",
+                "prompt": "A lone ox walks down an empty desert highway at golden hour, dust drifting behind it, slow cinematic camera move, warm low sunlight, shallow depth of field.",
                 "input_face_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
@@ -663,7 +663,7 @@ ByteDance Seedance 2.0 Fast generates video from a text prompt guided by referen
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedance-2-0-fast-reference-to-video",
-          "prompt": "<prompt>",
+          "prompt": "A lone ox walks down an empty desert highway at golden hour, dust drifting behind it, slow cinematic camera move, warm low sunlight, shallow depth of field.",
           "input_face_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
@@ -681,7 +681,7 @@ ByteDance Seedance 2.0 Fast generates video from a text prompt guided by referen
           ],
           "resolution": "720p",
           "duration": -1,
-          "aspect_ratio": "adaptive",
+          "aspect_ratio": "16:9",
           "generate_audio": false,
           "watermark": false
         }' | jq -r '.generations[0].generation_id')
@@ -712,7 +712,7 @@ ByteDance Seedance 2.0 Fast generates video from a text prompt guided by referen
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "bytedance-seedance-2-0-fast-reference-to-video",
-                "prompt": "<prompt>",
+                "prompt": "A lone ox walks down an empty desert highway at golden hour, dust drifting behind it, slow cinematic camera move, warm low sunlight, shallow depth of field.",
                 "input_face_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
@@ -730,7 +730,7 @@ ByteDance Seedance 2.0 Fast generates video from a text prompt guided by referen
                 ],
                 "resolution": "720p",
                 "duration": -1,
-                "aspect_ratio": "adaptive",
+                "aspect_ratio": "16:9",
                 "generate_audio": false,
                 "watermark": false
             },
@@ -776,7 +776,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | The text prompt used to generate the video. Use [Image 1], [Video 1], [Audio 1], etc. (1-based positional index within each media type) to reference inputs. Face-containing media is indexed before non-face media within its type. |
+| `prompt` | `string` | `"A lone ox walks down an empty desert highway at golden hour, dust drifting behind it, slow cinematic camera move, warm low sunlight, shallow depth of field."` | The text prompt used to generate the video. Use [Image 1], [Video 1], [Audio 1], etc. (1-based positional index within each media type) to reference inputs. Face-containing media is indexed before non-face media within its type. |
 
 ### Optional parameters
 
@@ -789,6 +789,6 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | `input_audios` | `array<string>` | &mdash; | Reference audios that guide the generated video. Up to 3 total reference audios and up to 15 total references across all types may be used. |
 | `resolution` | `string` | `"720p"` | Video resolution. One of: 480p, 720p. |
 | `duration` | `integer` | `-1` | Duration of the video in seconds. Supports 4 to 15 seconds, or auto to let the model decide based on the prompt. One of: -1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15. |
-| `aspect_ratio` | `string` | `"adaptive"` | The aspect ratio of the generated video. Use 16:9 for landscape, 9:16 for portrait/vertical, 1:1 for square, 21:9 for ultrawide cinematic, or auto to let the model decide. One of: adaptive, 21:9, 16:9, 4:3, 1:1, 3:4, 9:16. |
+| `aspect_ratio` | `string` | `"16:9"` | The aspect ratio of the generated video. Use 16:9 for landscape, 9:16 for portrait/vertical, 1:1 for square, 21:9 for ultrawide cinematic, or auto to let the model decide. One of: adaptive, 21:9, 16:9, 4:3, 1:1, 3:4, 9:16. |
 | `generate_audio` | `boolean` | `false` | Whether to generate synchronized audio. |
 | `watermark` | `boolean` | `false` | Whether to add an 'AI generated' watermark to the output. |
