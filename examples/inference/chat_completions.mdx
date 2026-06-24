@@ -243,11 +243,9 @@ print(response.choices[0].message.content)
 
 ## Documents (PDFs)
 
-Attach a document with a `file` content part, using the same format as OpenAI's
-[file inputs](https://developers.openai.com/api/docs/guides/file-inputs). Oxen.ai
-translates the document to each provider's native format, so it works the same
-regardless of which model you call. Place the document before the text part for
-the best results.
+Attach a document with a `file` content part. Oxen.ai translates the document to
+each provider's native format, so it works the same regardless of which model
+you call. Place the document before the text part for the best results.
 
 Pass the file inline as a base64 data URL in `file.file_data`:
 
