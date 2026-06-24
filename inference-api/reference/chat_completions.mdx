@@ -106,10 +106,9 @@ Pass exactly one of `file_data` (a base64 data URL) or `file_url` (a URL). The
 URL must be publicly accessible (and unexpired, if presigned). A document must be
 24 MB or smaller; larger files return a `400`.
 
-The document works the same regardless of which model you call. Oxen.ai
-translates it to each provider's native format (an Anthropic `document` block,
-an OpenAI `file` part, a Gemini `inline_data` part, and so on). Place the
-document before the text part for the best results.
+Oxen.ai translates the document to each provider's native format, so it works
+the same regardless of which model you call. Place the document before the text
+part for the best results.
 
 <Note>
 **Supported file types:** `application/pdf`. Requesting an unsupported file type
