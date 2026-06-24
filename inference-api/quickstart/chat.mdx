@@ -160,7 +160,7 @@ response = client.chat.completions.create(
         {
             "role": "user",
             "content": [
-                {"type": "file", "file": {"filename": "report.pdf", "file_url": pdf_url}},
+                {"type": "file", "file": {"file_url": pdf_url}},
                 {"type": "text", "text": "Summarize the key findings."},
             ],
         }
