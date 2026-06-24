@@ -119,6 +119,46 @@ oxen diff dataset.csv
 
 This compares `dataset.csv` in the working directory with its version in the HEAD commit. You can also diff different files against each other, files across revisions, or whole revisions against each other. See the [diff concepts page](/concepts/diffs) for the full set of options.
 
+## View File Contents
+
+To print the raw bytes of a file as they exist at a revision, use `oxen cat`. The contents are written to stdout, so you can pipe them into another tool or redirect them to a file without restoring the file into your working directory.
+
+```bash
+oxen cat README.md
+```
+
+Output:
+
+```
+# My Dataset
+
+A collection of training images and their annotations.
+```
+
+By default `oxen cat` reads from `HEAD`. Pass `--revision` (or `-r`) to read the file as it existed at a specific branch or commit.
+
+```bash
+oxen cat README.md --revision my-branch
+```
+
+`oxen cat` streams the exact stored bytes, so it works on any file type, including binary data. Pipe the output into another tool rather than printing binary straight to your terminal, which can garble it.
+
+```bash
+oxen cat data/train.csv | head
+```
+
+To get a file's *metadata* (hash, size, data type) instead of its contents — pairing with `oxen cat` — use `oxen info`. Pass `--revision` (or `-r`) to describe the file as it existed at a specific branch or commit, and `--json` for machine-readable output. Without `--revision`, `oxen info` describes the file in your working tree.
+
+```bash
+oxen info data/train.csv --revision my-branch --json
+```
+
+Output:
+
+```json
+{"filename": "train.csv", "hash": "5d41402abc4b2a76b9719d911017c592", "size": 40960, "data_type": "tabular", "mime_type": "text/csv", "extension": "csv", "last_updated": {"id": "a1b2c3d4", "message": "Add training data"}}
+```
+
 ## Restore Files
 
 To revert changes you've made to a file in the working directory, use `oxen restore`. This restores the file to its version in the HEAD commit, and works on both modified and deleted files.
