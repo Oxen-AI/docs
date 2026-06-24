@@ -93,10 +93,7 @@ in `file.file_data`, exactly like OpenAI's
 ```
 
 You may also reference a document by URL, useful for files generated in a
-[workspace](/concepts/workspaces). This is an **Oxen.ai extension**: OpenAI's
-Chat Completions `file` object has no URL field (only `file_data` and `file_id`),
-so we borrow the `file_url` field name from OpenAI's
-[Responses API](https://platform.openai.com/docs/api-reference/responses):
+[workspace](/concepts/workspaces):
 
 ```json
 {

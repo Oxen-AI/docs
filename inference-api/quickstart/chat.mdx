@@ -138,9 +138,7 @@ curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
 ### Reference a document by URL
 
 Instead of inlining base64, you can point at a PDF by URL (handy for files
-generated in a [workspace](/concepts/workspaces)). This is an Oxen.ai extension.
-OpenAI's Chat Completions API has no file-URL field, so we borrow `file_url` from
-its [Responses API](https://platform.openai.com/docs/api-reference/responses):
+generated in a [workspace](/concepts/workspaces)):
 
 <CodeGroup>
 

@@ -304,10 +304,7 @@ print(response.choices[0].message.content)
 </CodeGroup>
 
 You can also reference a document by URL (handy for files generated in a
-[workspace](/concepts/workspaces)) by passing it in `file.file_url`. This is an
-Oxen.ai extension. OpenAI's Chat Completions `file` object has no URL field, so
-we borrow `file_url` from its
-[Responses API](https://platform.openai.com/docs/api-reference/responses). Pass
+[workspace](/concepts/workspaces)) by passing it in `file.file_url`. Pass
 exactly one of `file_data` (a base64 data URL) or `file_url` (a URL); the URL
 must be publicly accessible (and unexpired, if presigned).
 
