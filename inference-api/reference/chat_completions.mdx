@@ -80,14 +80,14 @@ in `file.file_data`, exactly like OpenAI's
 {
   "role": "user",
   "content": [
-    {"type": "text", "text": "Summarize the key findings in this document."},
     {
       "type": "file",
       "file": {
         "filename": "report.pdf",
         "file_data": "data:application/pdf;base64,JVBERi0xLjQK..."
       }
-    }
+    },
+    {"type": "text", "text": "Summarize the key findings in this document."}
   ]
 }
 ```
@@ -124,8 +124,12 @@ A 400 response for an unsupported type looks like:
 ```json
 {
   "error": {
-    "message": "Unsupported file type 'image/tiff'. Supported file types: application/pdf."
-  }
+    "type": "invalid_file_input",
+    "title": "The provided file could not be used.",
+    "detail": "Unsupported file type 'image/tiff'. Supported file types: application/pdf."
+  },
+  "status": "error",
+  "status_message": "invalid_file_input"
 }
 ```
 
