@@ -106,7 +106,8 @@ so we borrow the `file_url` field name from OpenAI's
 ```
 
 Pass exactly one of `file_data` (a base64 data URL) or `file_url` (a URL). The
-URL must be publicly accessible (and unexpired, if presigned).
+URL must be publicly accessible (and unexpired, if presigned). A document must be
+24 MB or smaller; larger files return a `400`.
 
 The document works the same regardless of which model you call. Oxen.ai
 translates it to each provider's native format (an Anthropic `document` block,

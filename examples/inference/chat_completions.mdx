@@ -360,9 +360,9 @@ print(response.choices[0].message.content)
 
 </CodeGroup>
 
-Only `application/pdf` is supported today; other file types return a `400`.
-Referencing files by OpenAI `file_id` is not supported. Inline the file with
-`file_data` or pass `file_url`.
+Only `application/pdf` is supported today, and a document must be 24 MB or
+smaller; other inputs return a `400`. Referencing files by OpenAI `file_id` is
+not supported. Inline the file with `file_data` or pass `file_url`.
 
 ## Tool use
 
