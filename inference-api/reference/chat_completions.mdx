@@ -92,7 +92,7 @@ in `file.file_data`, exactly like OpenAI's
 }
 ```
 
-You may also reference a document by URL — useful for files generated in a
+You may also reference a document by URL, useful for files generated in a
 [workspace](/concepts/workspaces). This is an **Oxen.ai extension**: OpenAI's
 Chat Completions `file` object has no URL field (only `file_data` and `file_id`),
 so we borrow the `file_url` field name from OpenAI's
@@ -108,15 +108,15 @@ so we borrow the `file_url` field name from OpenAI's
 Pass exactly one of `file_data` (a base64 data URL) or `file_url` (a URL). The
 URL must be publicly accessible (and unexpired, if presigned).
 
-The document works the same regardless of which model you call — Oxen.ai
+The document works the same regardless of which model you call. Oxen.ai
 translates it to each provider's native format (an Anthropic `document` block,
 an OpenAI `file` part, a Gemini `inline_data` part, and so on). Place the
 document before the text part for the best results.
 
 <Note>
 **Supported file types:** `application/pdf`. Requesting an unsupported file type
-returns a `400` error. Referencing files by OpenAI `file_id` is not supported —
-inline the file with `file_data` or pass `file_url`.
+returns a `400` error. Referencing files by OpenAI `file_id` is not supported.
+Inline the file with `file_data` or pass `file_url`.
 </Note>
 
 A 400 response for an unsupported type looks like:
