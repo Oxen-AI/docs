@@ -152,7 +152,7 @@ client = OpenAI(
     api_key="YOUR_API_KEY",
 )
 
-pdf_url = "https://hub.oxen.ai/api/repos/ox/playground/file/main/report.pdf"
+pdf_url = "https://arxiv.org/pdf/1706.03762"
 
 response = client.chat.completions.create(
     model="claude-sonnet-4-6",
@@ -179,7 +179,7 @@ curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
     "messages": [{
       "role": "user",
       "content": [
-        {"type": "file", "file": {"file_url": "https://hub.oxen.ai/api/repos/ox/playground/file/main/report.pdf"}},
+        {"type": "file", "file": {"file_url": "https://arxiv.org/pdf/1706.03762"}},
         {"type": "text", "text": "Summarize the key findings."}
       ]
     }]
