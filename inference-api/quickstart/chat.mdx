@@ -5,7 +5,7 @@ description: "Generate text with language models in minutes"
 
 ## Overview
 
-Generate text responses from language models using the OpenAI-compatible chat completions API. Supports streaming, vision, tool calling, and structured output.
+Generate text responses from language models using the OpenAI-compatible chat completions API. Supports streaming, vision, documents (PDFs), tool calling, and structured output.
 
 ## Minimal Example
 
@@ -78,6 +78,119 @@ curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
 ```
 
 </CodeGroup>
+
+## With a Document (PDF)
+
+Attach a PDF with a `file` content part, using the same format as OpenAI's
+[file inputs](https://developers.openai.com/api/docs/guides/file-inputs). The
+document is translated to whichever model you call, so the same request works
+across providers (Anthropic, OpenAI, Gemini, …).
+
+<CodeGroup>
+
+```python Python
+import base64
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://hub.oxen.ai/api/ai",
+    api_key="YOUR_API_KEY",
+)
+
+with open("report.pdf", "rb") as f:
+    file_data = "data:application/pdf;base64," + base64.standard_b64encode(f.read()).decode()
+
+response = client.chat.completions.create(
+    model="claude-sonnet-4-6",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "file", "file": {"filename": "report.pdf", "file_data": file_data}},
+                {"type": "text", "text": "Summarize the key findings."},
+            ],
+        }
+    ],
+)
+
+print(response.choices[0].message.content)
+```
+
+```bash cURL
+FILE_DATA="data:application/pdf;base64,$(base64 < report.pdf | tr -d '\n')"
+curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "claude-sonnet-4-6",
+    "messages": [{
+      "role": "user",
+      "content": [
+        {"type": "file", "file": {"filename": "report.pdf", "file_data": "'"$FILE_DATA"'"}},
+        {"type": "text", "text": "Summarize the key findings."}
+      ]
+    }]
+  }'
+```
+
+</CodeGroup>
+
+### Reference a document by URL
+
+Instead of inlining base64, you can point at a PDF by URL (handy for files
+generated in a [workspace](/concepts/workspaces)). This is an Oxen.ai extension —
+OpenAI's Chat Completions API has no file-URL field, so we borrow `file_url` from
+its [Responses API](https://platform.openai.com/docs/api-reference/responses):
+
+<CodeGroup>
+
+```python Python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://hub.oxen.ai/api/ai",
+    api_key="YOUR_API_KEY",
+)
+
+pdf_url = "https://hub.oxen.ai/api/repos/ox/playground/file/main/report.pdf"
+
+response = client.chat.completions.create(
+    model="claude-sonnet-4-6",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "file", "file": {"filename": "report.pdf", "file_url": pdf_url}},
+                {"type": "text", "text": "Summarize the key findings."},
+            ],
+        }
+    ],
+)
+
+print(response.choices[0].message.content)
+```
+
+```bash cURL
+curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "claude-sonnet-4-6",
+    "messages": [{
+      "role": "user",
+      "content": [
+        {"type": "file", "file": {"file_url": "https://hub.oxen.ai/api/repos/ox/playground/file/main/report.pdf"}},
+        {"type": "text", "text": "Summarize the key findings."}
+      ]
+    }]
+  }'
+```
+
+</CodeGroup>
+
+The URL must be publicly accessible (and unexpired, if presigned). Only
+`application/pdf` is supported today; other file types return a `400`. See the
+[reference](/inference-api/reference/chat_completions) for details.
 
 ## What's Next
 

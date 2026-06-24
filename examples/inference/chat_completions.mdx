@@ -241,6 +241,129 @@ print(response.choices[0].message.content)
 
 </CodeGroup>
 
+## Documents (PDFs)
+
+Attach a document with a `file` content part, using the same format as OpenAI's
+[file inputs](https://developers.openai.com/api/docs/guides/file-inputs). Oxen.ai
+translates it to whichever model you call (an Anthropic `document` block, an
+OpenAI `file` part, a Gemini `inline_data` part), so the same request works
+across providers. Place the document before the text part for the best results.
+
+Pass the file inline as a base64 data URL in `file.file_data`:
+
+<CodeGroup>
+
+```bash cURL
+FILE_DATA="data:application/pdf;base64,$(base64 < report.pdf | tr -d '\n')"
+curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "claude-sonnet-4-6",
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {"type": "file", "file": {"filename": "report.pdf", "file_data": "'"$FILE_DATA"'"}},
+          {"type": "text", "text": "Summarize the key findings in this document."}
+        ]
+      }
+    ]
+  }'
+```
+
+```python Python (OpenAI SDK)
+import base64
+import os
+from openai import OpenAI
+
+client = OpenAI(
+    api_key=os.environ["OXEN_API_KEY"],
+    base_url="https://hub.oxen.ai/api/ai",
+)
+
+with open("report.pdf", "rb") as f:
+    file_data = "data:application/pdf;base64," + base64.standard_b64encode(f.read()).decode()
+
+response = client.chat.completions.create(
+    model="claude-sonnet-4-6",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "file", "file": {"filename": "report.pdf", "file_data": file_data}},
+                {"type": "text", "text": "Summarize the key findings in this document."},
+            ],
+        }
+    ],
+)
+
+print(response.choices[0].message.content)
+```
+
+</CodeGroup>
+
+You can also reference a document by URL (handy for files generated in a
+[workspace](/concepts/workspaces)) by passing it in `file.file_url`. This is an
+Oxen.ai extension — OpenAI's Chat Completions `file` object has no URL field, so
+we borrow `file_url` from its
+[Responses API](https://platform.openai.com/docs/api-reference/responses). Pass
+exactly one of `file_data` (a base64 data URL) or `file_url` (a URL); the URL
+must be publicly accessible (and unexpired, if presigned).
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "claude-sonnet-4-6",
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {"type": "file", "file": {"file_url": "https://hub.oxen.ai/api/repos/ox/playground/file/main/report.pdf"}},
+          {"type": "text", "text": "Summarize the key findings in this document."}
+        ]
+      }
+    ]
+  }'
+```
+
+```python Python (OpenAI SDK)
+import os
+from openai import OpenAI
+
+client = OpenAI(
+    api_key=os.environ["OXEN_API_KEY"],
+    base_url="https://hub.oxen.ai/api/ai",
+)
+
+pdf_url = "https://hub.oxen.ai/api/repos/ox/playground/file/main/report.pdf"
+
+response = client.chat.completions.create(
+    model="claude-sonnet-4-6",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "file", "file": {"file_url": pdf_url}},
+                {"type": "text", "text": "Summarize the key findings in this document."},
+            ],
+        }
+    ],
+)
+
+print(response.choices[0].message.content)
+```
+
+</CodeGroup>
+
+Only `application/pdf` is supported today; other file types return a `400`.
+Referencing files by OpenAI `file_id` is not supported — inline the file with
+`file_data` or pass `file_url`.
+
 ## Tool use
 
 Tool calling (function calling) follows the same [OpenAI Chat Completions tool format](https://platform.openai.com/docs/guides/function-calling). You send a `tools` array describing each function’s JSON Schema; the model may reply with `tool_calls` instead of plain text. You execute those functions in your app, then send the results back in new `tool` messages so the model can finish the answer.

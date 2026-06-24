@@ -9,7 +9,7 @@ The Inference API gives you access to hundreds of AI models through a single, co
 
 **Capabilities:**
 
-- **Text Generation**: Chat completions, tool calling, vision, structured output
+- **Text Generation**: Chat completions, tool calling, vision, documents (PDFs), structured output
 - **Image Generation**: Text-to-image, image-to-image editing
 - **Video Generation**: Text-to-video, image-to-video, reference-to-video, video-to-video editing
 
@@ -44,7 +44,7 @@ The Inference API gives you access to hundreds of AI models through a single, co
 
 <CardGroup cols={3}>
   <Card title="Chat Completions" icon="message" href="/inference-api/reference/chat_completions">
-    Text generation, vision, tool calling
+    Text generation, vision, documents, tool calling
   </Card>
   <Card title="Image Generation" icon="image" href="/inference-api/reference/image_generation">
     Text-to-image generation
@@ -115,7 +115,7 @@ If you're using the OpenAI SDK, set the base URL to `https://hub.oxen.ai/api/ai`
 
 | Endpoint | Method | Description |
 |---|---|---|
-| `/ai/chat/completions` | POST | Text generation (chat, vision, tool use) |
+| `/ai/chat/completions` | POST | Text generation (chat, vision, documents, tool use) |
 | `/ai/images/generate` | POST | Image generation |
 | `/ai/images/edit` | POST | Image editing |
 | `/ai/videos/generate` | POST | Video generation |
