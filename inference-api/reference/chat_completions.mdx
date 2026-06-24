@@ -70,11 +70,10 @@ Image and video URLs must be publicly accessible.
 
 ### Files and documents (PDFs)
 
-Attach a document to a message with a `file` content part. The OpenAI-compatible
-way (works unchanged through the OpenAI SDK) is to pass the file inline as a
-base64 [data URL](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URLs)
-in `file.file_data`, exactly like OpenAI's
-[file inputs](https://developers.openai.com/api/docs/guides/file-inputs):
+Attach a document to a message with a `file` content part. Pass the file inline
+as a base64 [data URL](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URLs)
+in `file.file_data`. You can use this through the
+[OpenAI SDK](https://developers.openai.com/api/docs/guides/file-inputs) or the API:
 
 ```json
 {
