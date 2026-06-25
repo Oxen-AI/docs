@@ -1,6 +1,6 @@
 ---
 title: "Chat Completions"
-description: "Generate text responses from language models with support for streaming, vision, and tool calling"
+description: "Generate text responses from language models with support for streaming, vision, documents, and tool calling"
 ---
 
 ## Endpoint
@@ -9,7 +9,7 @@ description: "Generate text responses from language models with support for stre
 POST /api/ai/chat/completions
 ```
 
-Compatible with the OpenAI chat completions format. Supports streaming, multimodal input (images and video), tool calling, and structured output.
+Compatible with the OpenAI chat completions format. Supports streaming, multimodal input (images, video, and documents), tool calling, and structured output.
 
 ## Request Parameters
 
@@ -67,6 +67,67 @@ Video input:
 ```
 
 Image and video URLs must be publicly accessible.
+
+### Files and documents (PDFs)
+
+Attach a document to a message with a `file` content part. Pass the file inline
+as a base64 [data URL](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URLs)
+in `file.file_data`:
+
+```json
+{
+  "role": "user",
+  "content": [
+    {
+      "type": "file",
+      "file": {
+        "filename": "report.pdf",
+        "file_data": "data:application/pdf;base64,JVBERi0xLjQK..."
+      }
+    },
+    {"type": "text", "text": "Summarize the key findings in this document."}
+  ]
+}
+```
+
+You may also reference a document by URL, useful for files generated in a
+[workspace](/concepts/workspaces):
+
+```json
+{
+  "type": "file",
+  "file": {"file_url": "https://arxiv.org/pdf/1706.03762"}
+}
+```
+
+Pass exactly one of `file_data` (a base64 data URL) or `file_url`. The
+URL must be publicly accessible (and unexpired, if presigned). A document must be
+24 MB or smaller; larger files return a `400`.
+
+Oxen.ai translates the document to each provider's native format, so it works
+the same regardless of which model you call. Place the document before the text
+part for the best results.
+
+<Note>
+**Supported file types:** `application/pdf`. Requesting an unsupported file type
+returns a `400` error. Referencing files by OpenAI `file_id` is not supported.
+Inline the file with `file_data` or pass `file_url`.
+</Note>
+
+A 400 response for an unsupported type looks like:
+
+```json
+{
+  "error": {
+    "type": "invalid_file_input",
+    "title": "The provided file could not be used.",
+    "detail": "Unsupported file type 'image/tiff'. Supported file types: application/pdf."
+  },
+  "status": "error",
+  "status_message": "invalid_file_input",
+  "status_description": "The provided file could not be used."
+}
+```
 
 ## Examples
 
@@ -131,6 +192,57 @@ curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
   }
 }
 ```
+
+### Analyze a PDF
+
+<CodeGroup>
+
+```python Python
+import base64
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://hub.oxen.ai/api/ai",
+    api_key="YOUR_API_KEY",
+)
+
+with open("report.pdf", "rb") as f:
+    file_data = "data:application/pdf;base64," + base64.standard_b64encode(f.read()).decode()
+
+response = client.chat.completions.create(
+    model="claude-sonnet-4-6",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "file", "file": {"filename": "report.pdf", "file_data": file_data}},
+                {"type": "text", "text": "Summarize the key findings in this document."},
+            ],
+        }
+    ],
+)
+
+print(response.choices[0].message.content)
+```
+
+```bash cURL
+FILE_DATA="data:application/pdf;base64,$(base64 < report.pdf | tr -d '\n')"
+curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "claude-sonnet-4-6",
+    "messages": [{
+      "role": "user",
+      "content": [
+        {"type": "file", "file": {"filename": "report.pdf", "file_data": "'"$FILE_DATA"'"}},
+        {"type": "text", "text": "Summarize the key findings in this document."}
+      ]
+    }]
+  }'
+```
+
+</CodeGroup>
 
 ### Streaming
 

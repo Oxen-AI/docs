@@ -241,6 +241,124 @@ print(response.choices[0].message.content)
 
 </CodeGroup>
 
+## Documents (PDFs)
+
+Attach a document with a `file` content part. Oxen.ai translates the document to
+each provider's native format, so it works the same regardless of which model
+you call. Place the document before the text part for the best results.
+
+Pass the file inline as a base64 data URL in `file.file_data`:
+
+<CodeGroup>
+
+```bash cURL
+FILE_DATA="data:application/pdf;base64,$(base64 < report.pdf | tr -d '\n')"
+curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "claude-sonnet-4-6",
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {"type": "file", "file": {"filename": "report.pdf", "file_data": "'"$FILE_DATA"'"}},
+          {"type": "text", "text": "Summarize the key findings in this document."}
+        ]
+      }
+    ]
+  }'
+```
+
+```python Python (OpenAI SDK)
+import base64
+import os
+from openai import OpenAI
+
+client = OpenAI(
+    api_key=os.environ["OXEN_API_KEY"],
+    base_url="https://hub.oxen.ai/api/ai",
+)
+
+with open("report.pdf", "rb") as f:
+    file_data = "data:application/pdf;base64," + base64.standard_b64encode(f.read()).decode()
+
+response = client.chat.completions.create(
+    model="claude-sonnet-4-6",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "file", "file": {"filename": "report.pdf", "file_data": file_data}},
+                {"type": "text", "text": "Summarize the key findings in this document."},
+            ],
+        }
+    ],
+)
+
+print(response.choices[0].message.content)
+```
+
+</CodeGroup>
+
+You can also reference a document by URL (handy for files generated in a
+[workspace](/concepts/workspaces)) by passing it in `file.file_url`. Pass
+exactly one of `file_data` (a base64 data URL) or `file_url`; the URL
+must be publicly accessible (and unexpired, if presigned).
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "claude-sonnet-4-6",
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {"type": "file", "file": {"file_url": "https://arxiv.org/pdf/1706.03762"}},
+          {"type": "text", "text": "Summarize the key findings in this document."}
+        ]
+      }
+    ]
+  }'
+```
+
+```python Python (OpenAI SDK)
+import os
+from openai import OpenAI
+
+client = OpenAI(
+    api_key=os.environ["OXEN_API_KEY"],
+    base_url="https://hub.oxen.ai/api/ai",
+)
+
+pdf_url = "https://arxiv.org/pdf/1706.03762"
+
+response = client.chat.completions.create(
+    model="claude-sonnet-4-6",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "file", "file": {"file_url": pdf_url}},
+                {"type": "text", "text": "Summarize the key findings in this document."},
+            ],
+        }
+    ],
+)
+
+print(response.choices[0].message.content)
+```
+
+</CodeGroup>
+
+Only `application/pdf` is supported, and a document must be 24 MB or
+smaller; other inputs return a `400`. Referencing files by OpenAI `file_id` is
+not supported. Inline the file with `file_data` or pass `file_url`.
+
 ## Tool use
 
 Tool calling (function calling) follows the same [OpenAI Chat Completions tool format](https://platform.openai.com/docs/guides/function-calling). You send a `tools` array describing each function’s JSON Schema; the model may reply with `tool_calls` instead of plain text. You execute those functions in your app, then send the results back in new `tool` messages so the model can finish the answer.
