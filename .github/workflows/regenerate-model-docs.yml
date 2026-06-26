@@ -2,8 +2,8 @@ name: Regenerate model API reference docs
 
 on:
   schedule:
-    # 5pm Friday PST (01:00 UTC Saturday). GitHub cron is UTC and ignores DST.
-    - cron: "0 1 * * 6"
+    # 5pm Friday PDT (00:00 UTC Saturday). GitHub cron is UTC and ignores DST.
+    - cron: "0 0 * * 6"
   workflow_dispatch:
     inputs:
       models_url:
