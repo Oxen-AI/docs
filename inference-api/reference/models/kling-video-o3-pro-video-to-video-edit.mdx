@@ -1,6 +1,6 @@
 ---
 title: "Kling O3 Edit - Video to Video"
-description: "Edit videos using text prompts and reference images for character consistency or object replacement."
+description: "Pro video-to-video editing"
 ---
 
 <CardGroup cols={1}>
@@ -37,8 +37,8 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-o3-pro-video-to-video-edit",
-          "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4"
+          "prompt": "<prompt>",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }'
         ```
 
@@ -54,8 +54,8 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
             },
             json={
                 "model": "kling-video-o3-pro-video-to-video-edit",
-                "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4"
+                "prompt": "<prompt>",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         response.raise_for_status()
@@ -75,9 +75,9 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-o3-pro-video-to-video-edit",
-          "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
+          "prompt": "<prompt>",
           "input_image": [],
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "elements": [
             {}
           ]
@@ -96,9 +96,9 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
             },
             json={
                 "model": "kling-video-o3-pro-video-to-video-edit",
-                "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
+                "prompt": "<prompt>",
                 "input_image": [],
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "elements": [
                     {}
                 ]
@@ -121,9 +121,9 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-o3-pro-video-to-video-edit",
-          "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
+          "prompt": "<prompt>",
           "input_image": [],
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "elements": [
             {}
           ],
@@ -143,9 +143,9 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
             },
             json={
                 "model": "kling-video-o3-pro-video-to-video-edit",
-                "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
+                "prompt": "<prompt>",
                 "input_image": [],
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "elements": [
                     {}
                 ],
@@ -178,8 +178,8 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-o3-pro-video-to-video-edit",
-          "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4"
+          "prompt": "<prompt>",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -211,8 +211,8 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
             headers=HEADERS,
             json={
                 "model": "kling-video-o3-pro-video-to-video-edit",
-                "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4"
+                "prompt": "<prompt>",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         enqueue.raise_for_status()
@@ -247,9 +247,9 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-o3-pro-video-to-video-edit",
-          "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
+          "prompt": "<prompt>",
           "input_image": [],
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "elements": [
             {}
           ]
@@ -284,9 +284,9 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
             headers=HEADERS,
             json={
                 "model": "kling-video-o3-pro-video-to-video-edit",
-                "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
+                "prompt": "<prompt>",
                 "input_image": [],
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "elements": [
                     {}
                 ]
@@ -324,9 +324,9 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-o3-pro-video-to-video-edit",
-          "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
+          "prompt": "<prompt>",
           "input_image": [],
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "elements": [
             {}
           ],
@@ -362,9 +362,9 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
             headers=HEADERS,
             json={
                 "model": "kling-video-o3-pro-video-to-video-edit",
-                "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
+                "prompt": "<prompt>",
                 "input_image": [],
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "elements": [
                     {}
                 ],
@@ -411,8 +411,8 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-o3-pro-video-to-video-edit",
-          "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4"
+          "prompt": "<prompt>",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -441,8 +441,8 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "kling-video-o3-pro-video-to-video-edit",
-                "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4"
+                "prompt": "<prompt>",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         enqueue.raise_for_status()
@@ -478,9 +478,9 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-o3-pro-video-to-video-edit",
-          "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
+          "prompt": "<prompt>",
           "input_image": [],
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "elements": [
             {}
           ]
@@ -512,9 +512,9 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "kling-video-o3-pro-video-to-video-edit",
-                "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
+                "prompt": "<prompt>",
                 "input_image": [],
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "elements": [
                     {}
                 ]
@@ -553,9 +553,9 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-o3-pro-video-to-video-edit",
-          "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
+          "prompt": "<prompt>",
           "input_image": [],
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "elements": [
             {}
           ],
@@ -588,9 +588,9 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "kling-video-o3-pro-video-to-video-edit",
-                "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
+                "prompt": "<prompt>",
                 "input_image": [],
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "elements": [
                     {}
                 ],
@@ -638,8 +638,8 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | `"A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots."` | Text description of what you want to generate, or the instruction on how to edit the given image. |
-| `input_video` | `string` | `"https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4"` | Video to use as reference. Format: uri. |
+| `prompt` | `string` | &mdash; | Text description of what you want to generate, or the instruction on how to edit the given image. |
+| `input_video` | `string` | &mdash; | Video to use as reference. Format: uri. |
 
 ### Optional parameters
 
