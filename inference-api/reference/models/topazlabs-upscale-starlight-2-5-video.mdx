@@ -1,6 +1,6 @@
 ---
 title: "Topaz Starlight Precise 2.5"
-description: "Video restoration and upscaling model from Topaz for detail-preserving 1080p/4k outputs."
+description: "Detail-preserving video upscaling"
 ---
 
 <CardGroup cols={1}>
@@ -439,6 +439,5 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | `resolution` | `string` | `"4k"` | Target output resolution. One of: 1080p, 2k, 4k. |
 | `interpolate_frames` | `boolean` | `false` | Increase the output frame rate by generating new frames. More expensive. |
 | `target_fps` | `number` | `30` | Output frame rate after interpolation. One of: 24, 23.976, 25, 29.97, 30, 50, 59.94, 60. |
-| `creativity` | `string` | &mdash; | Controls enhancement intensity. One of: low, middle, high. |
 | `enable_clc` | `boolean` | `true` | Enables content-aware processing. |
 | `is_optimized_mode` | `boolean` | `true` | Enables optimization mode for faster processing. |

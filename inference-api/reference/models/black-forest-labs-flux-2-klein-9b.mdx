@@ -1,6 +1,6 @@
 ---
 title: "FLUX.2 Klein 9B"
-description: "FLUX.2 Klein 9B is a compact 9 billion parameter text-to-image diffusion model optimized for fast inference and high-quality image generation."
+description: "Compact, fast text-to-image model"
 ---
 
 <CardGroup cols={1}>
@@ -639,7 +639,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | `input_image` | `array<string>` | &mdash; | Input images to transform or use as reference (supports multiple image urls) |
 | `aspect_ratio` | `string` | `"16:9"` | Aspect ratio for the generated image One of: 1:1, 16:9, 9:16, 4:3, 3:4. |
 | `output_quality` | `string` | `"standard"` | Quality setting for output image One of: standard, high. |
-| `output_format` | `string` | `"png"` | Format of the output image One of: png, jpeg, webp. |
+| `output_format` | `string` | `"png"` | Format of the output image One of: png, jpg, webp. |
 | `seed` | `integer` | &mdash; | Random seed. Leave blank to randomize |
 | `num_inference_steps` | `integer` | `28` | Number of denoising steps Range: 1 – 50. |
 | `guidance_scale` | `number` | `2.0` | Scale for classifier-free guidance Range: 0.0 – 10.0. |
