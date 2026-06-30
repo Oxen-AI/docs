@@ -243,9 +243,7 @@ print(response.choices[0].message.content)
 
 ## Documents (PDFs)
 
-Attach a document with a `file` content part. Oxen.ai translates the document to
-each provider's native format, so it works the same regardless of which model
-you call. Place the document before the text part for the best results.
+Attach a document with a `file` content part. Place the document before the text part for the best results.
 
 Pass the file inline as a base64 data URL in `file.file_data`:
 
@@ -358,6 +356,97 @@ print(response.choices[0].message.content)
 Only `application/pdf` is supported, and a document must be 24 MB or
 smaller; other inputs return a `400`. Referencing files by OpenAI `file_id` is
 not supported. Inline the file with `file_data` or pass `file_url`.
+
+## Audio
+
+Attach audio with an `audio_url` content part to a model that supports audio
+input (such as `gemini-3-1-pro-preview`).
+Place the audio part before the text part for the best results.
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gemini-3-1-pro-preview",
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {"type": "audio_url", "audio_url": {"url": "https://example.com/clip.mp3"}},
+          {"type": "text", "text": "Transcribe this clip and summarize it in one sentence."}
+        ]
+      }
+    ]
+  }'
+```
+
+```python Python (OpenAI SDK)
+from openai import OpenAI
+import os
+
+client = OpenAI(
+    api_key=os.environ["OXEN_API_KEY"],
+    base_url="https://hub.oxen.ai/api/ai",
+)
+
+response = client.chat.completions.create(
+    model="gemini-3-1-pro-preview",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "audio_url", "audio_url": {"url": "https://example.com/clip.mp3"}},
+                {"type": "text", "text": "Transcribe this clip and summarize it in one sentence."},
+            ],
+        }
+    ],
+)
+
+print(response.choices[0].message.content)
+```
+
+</CodeGroup>
+
+To send a local file, base64-encode it into a `data:` URL and pass it as the
+`audio_url`:
+
+```python Python (OpenAI SDK)
+import base64
+import os
+from openai import OpenAI
+
+client = OpenAI(
+    api_key=os.environ["OXEN_API_KEY"],
+    base_url="https://hub.oxen.ai/api/ai",
+)
+
+with open("clip.mp3", "rb") as f:
+    audio_url = "data:audio/mp3;base64," + base64.standard_b64encode(f.read()).decode()
+
+response = client.chat.completions.create(
+    model="gemini-3-1-pro-preview",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "audio_url", "audio_url": {"url": audio_url}},
+                {"type": "text", "text": "What is said in this clip?"},
+            ],
+        }
+    ],
+)
+
+print(response.choices[0].message.content)
+```
+
+The URL must be publicly accessible (and unexpired, if presigned). Audio must be
+15 MB or smaller; larger files return a `400`. Supported formats vary by
+provider: OpenAI audio models (e.g. `gpt-audio`) accept only `wav` and `mp3`,
+while Gemini models (e.g. `gemini-3-1-pro-preview`) additionally accept `m4a`,
+`aac`, `ogg`, and `flac`.
 
 ## Tool use
 
