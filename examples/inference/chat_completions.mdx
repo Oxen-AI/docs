@@ -375,7 +375,7 @@ curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
       {
         "role": "user",
         "content": [
-          {"type": "audio_url", "audio_url": {"url": "https://example.com/clip.mp3"}},
+          {"type": "audio_url", "audio_url": {"url": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/audio/DoOrDoNot.m4a"}},
           {"type": "text", "text": "Transcribe this clip and summarize it in one sentence."}
         ]
       }
@@ -398,7 +398,7 @@ response = client.chat.completions.create(
         {
             "role": "user",
             "content": [
-                {"type": "audio_url", "audio_url": {"url": "https://example.com/clip.mp3"}},
+                {"type": "audio_url", "audio_url": {"url": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/audio/DoOrDoNot.m4a"}},
                 {"type": "text", "text": "Transcribe this clip and summarize it in one sentence."},
             ],
         }
@@ -443,7 +443,7 @@ print(response.choices[0].message.content)
 ```
 
 The URL must be publicly accessible (and unexpired, if presigned). Audio must be
-15 MB or smaller; larger files return a `400`. Supported formats vary by
+20 MB or smaller; larger files return a `400`. Supported formats vary by
 provider: OpenAI audio models (e.g. `gpt-audio`) accept only `wav` and `mp3`,
 while Gemini models (e.g. `gemini-3-1-pro-preview`) additionally accept `m4a`,
 `aac`, `ogg`, and `flac`.
