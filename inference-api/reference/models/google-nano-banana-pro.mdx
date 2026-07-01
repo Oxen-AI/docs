@@ -50,7 +50,7 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "google-nano-banana-pro",
-          "prompt": "A botanist / researcher looking up at a banana tree in an Amazon rainforest. Photorealistic. It could be used for a National Geographic cover."
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -66,7 +66,7 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
             },
             json={
                 "model": "google-nano-banana-pro",
-                "prompt": "A botanist / researcher looking up at a banana tree in an Amazon rainforest. Photorealistic. It could be used for a National Geographic cover."
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -86,7 +86,7 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "google-nano-banana-pro",
-          "prompt": "A botanist / researcher looking up at a banana tree in an Amazon rainforest. Photorealistic. It could be used for a National Geographic cover.",
+          "prompt": "<prompt>",
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
@@ -105,7 +105,7 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
             },
             json={
                 "model": "google-nano-banana-pro",
-                "prompt": "A botanist / researcher looking up at a banana tree in an Amazon rainforest. Photorealistic. It could be used for a National Geographic cover.",
+                "prompt": "<prompt>",
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
@@ -128,7 +128,7 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "google-nano-banana-pro",
-          "prompt": "A botanist / researcher looking up at a banana tree in an Amazon rainforest. Photorealistic. It could be used for a National Geographic cover.",
+          "prompt": "<prompt>",
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
@@ -150,7 +150,7 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
             },
             json={
                 "model": "google-nano-banana-pro",
-                "prompt": "A botanist / researcher looking up at a banana tree in an Amazon rainforest. Photorealistic. It could be used for a National Geographic cover.",
+                "prompt": "<prompt>",
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
@@ -185,7 +185,7 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "google-nano-banana-pro",
-          "prompt": "A botanist / researcher looking up at a banana tree in an Amazon rainforest. Photorealistic. It could be used for a National Geographic cover."
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -217,7 +217,7 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
             headers=HEADERS,
             json={
                 "model": "google-nano-banana-pro",
-                "prompt": "A botanist / researcher looking up at a banana tree in an Amazon rainforest. Photorealistic. It could be used for a National Geographic cover."
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -252,7 +252,7 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "google-nano-banana-pro",
-          "prompt": "A botanist / researcher looking up at a banana tree in an Amazon rainforest. Photorealistic. It could be used for a National Geographic cover.",
+          "prompt": "<prompt>",
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
@@ -287,7 +287,7 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
             headers=HEADERS,
             json={
                 "model": "google-nano-banana-pro",
-                "prompt": "A botanist / researcher looking up at a banana tree in an Amazon rainforest. Photorealistic. It could be used for a National Geographic cover.",
+                "prompt": "<prompt>",
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
@@ -325,7 +325,7 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "google-nano-banana-pro",
-          "prompt": "A botanist / researcher looking up at a banana tree in an Amazon rainforest. Photorealistic. It could be used for a National Geographic cover.",
+          "prompt": "<prompt>",
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
@@ -363,7 +363,7 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
             headers=HEADERS,
             json={
                 "model": "google-nano-banana-pro",
-                "prompt": "A botanist / researcher looking up at a banana tree in an Amazon rainforest. Photorealistic. It could be used for a National Geographic cover.",
+                "prompt": "<prompt>",
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
@@ -412,7 +412,7 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "google-nano-banana-pro",
-          "prompt": "A botanist / researcher looking up at a banana tree in an Amazon rainforest. Photorealistic. It could be used for a National Geographic cover."
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -441,7 +441,7 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "google-nano-banana-pro",
-                "prompt": "A botanist / researcher looking up at a banana tree in an Amazon rainforest. Photorealistic. It could be used for a National Geographic cover."
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -477,7 +477,7 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "google-nano-banana-pro",
-          "prompt": "A botanist / researcher looking up at a banana tree in an Amazon rainforest. Photorealistic. It could be used for a National Geographic cover.",
+          "prompt": "<prompt>",
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
@@ -509,7 +509,7 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "google-nano-banana-pro",
-                "prompt": "A botanist / researcher looking up at a banana tree in an Amazon rainforest. Photorealistic. It could be used for a National Geographic cover.",
+                "prompt": "<prompt>",
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
@@ -548,7 +548,7 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "google-nano-banana-pro",
-          "prompt": "A botanist / researcher looking up at a banana tree in an Amazon rainforest. Photorealistic. It could be used for a National Geographic cover.",
+          "prompt": "<prompt>",
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
@@ -583,7 +583,7 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "google-nano-banana-pro",
-                "prompt": "A botanist / researcher looking up at a banana tree in an Amazon rainforest. Photorealistic. It could be used for a National Geographic cover.",
+                "prompt": "<prompt>",
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
@@ -633,13 +633,13 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | `"A botanist / researcher looking up at a banana tree in an Amazon rainforest. Photorealistic. It could be used for a National Geographic cover."` | Text description of what you want to generate, or the instruction on how to edit the given image. |
+| `prompt` | `string` | &mdash; | Text description of what you want to generate, or the instruction on how to edit the given image. Use @Image1, @Image2, etc. to reference the input images. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `input_image` | `array<string>` | &mdash; | Input images to transform or use as reference (supports multiple image urls) |
-| `aspect_ratio` | `string` | `"16:9"` | Aspect ratio for the generated image One of: auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3. |
+| `input_image` | `array<string>` | &mdash; | Input images to transform or use as reference. Reference them in the prompt as @Image1, @Image2, etc. |
+| `aspect_ratio` | `string` | `"16:9"` | Aspect ratio for the generated image One of: auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 4:5, 5:4, 21:9. |
 | `resolution` | `string` | `"2K"` | Resolution of the generated image One of: 1K, 2K, 4K. |
 | `safety_tolerance` | `string` | `"6"` | The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict. Default value: 4 One of: 1, 2, 3, 4, 5, 6. |

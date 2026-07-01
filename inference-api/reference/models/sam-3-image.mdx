@@ -47,8 +47,8 @@ Some other noteworthy **features** of Segment Anything 3 - Image include **exhau
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "sam-3-image",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
-          "prompt": "the ox horns"
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -64,8 +64,8 @@ Some other noteworthy **features** of Segment Anything 3 - Image include **exhau
             },
             json={
                 "model": "sam-3-image",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
-                "prompt": "the ox horns"
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -85,8 +85,8 @@ Some other noteworthy **features** of Segment Anything 3 - Image include **exhau
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "sam-3-image",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
-          "prompt": "the ox horns",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "prompt": "<prompt>",
           "apply_mask": true,
           "output_format": "png"
         }'
@@ -104,8 +104,8 @@ Some other noteworthy **features** of Segment Anything 3 - Image include **exhau
             },
             json={
                 "model": "sam-3-image",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
-                "prompt": "the ox horns",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "prompt": "<prompt>",
                 "apply_mask": true,
                 "output_format": "png"
             },
@@ -136,8 +136,8 @@ Some other noteworthy **features** of Segment Anything 3 - Image include **exhau
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "sam-3-image",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
-          "prompt": "the ox horns"
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -169,8 +169,8 @@ Some other noteworthy **features** of Segment Anything 3 - Image include **exhau
             headers=HEADERS,
             json={
                 "model": "sam-3-image",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
-                "prompt": "the ox horns"
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -205,8 +205,8 @@ Some other noteworthy **features** of Segment Anything 3 - Image include **exhau
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "sam-3-image",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
-          "prompt": "the ox horns",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "prompt": "<prompt>",
           "apply_mask": true,
           "output_format": "png"
         }' | jq -r '.generations[0].generation_id')
@@ -240,8 +240,8 @@ Some other noteworthy **features** of Segment Anything 3 - Image include **exhau
             headers=HEADERS,
             json={
                 "model": "sam-3-image",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
-                "prompt": "the ox horns",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "prompt": "<prompt>",
                 "apply_mask": true,
                 "output_format": "png"
             },
@@ -286,8 +286,8 @@ Some other noteworthy **features** of Segment Anything 3 - Image include **exhau
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "sam-3-image",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
-          "prompt": "the ox horns"
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -316,8 +316,8 @@ Some other noteworthy **features** of Segment Anything 3 - Image include **exhau
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "sam-3-image",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
-                "prompt": "the ox horns"
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -353,8 +353,8 @@ Some other noteworthy **features** of Segment Anything 3 - Image include **exhau
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "sam-3-image",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
-          "prompt": "the ox horns",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "prompt": "<prompt>",
           "apply_mask": true,
           "output_format": "png"
         }' | jq -r '.generations[0].generation_id')
@@ -385,8 +385,8 @@ Some other noteworthy **features** of Segment Anything 3 - Image include **exhau
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "sam-3-image",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
-                "prompt": "the ox horns",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "prompt": "<prompt>",
                 "apply_mask": true,
                 "output_format": "png"
             },
@@ -432,8 +432,8 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `input_image` | `string` | `"https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png"` | Image to use as reference. Must be jpeg, png, gif, or webp. Format: uri. |
-| `prompt` | `string` | `"the ox horns"` | Text description of what you want to segment out of the image. |
+| `input_image` | `string` | &mdash; | Image to use as reference. Must be jpeg, png, gif, or webp. Format: uri. |
+| `prompt` | `string` | &mdash; | Text description of what you want to segment out of the image. |
 
 ### Optional parameters
 

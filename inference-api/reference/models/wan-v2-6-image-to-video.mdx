@@ -49,8 +49,8 @@ Some other noteworthy features of WAN 2.6 image-to-video include multi-shot sequ
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-v2-6-image-to-video",
-          "prompt": "Zoom into the ox, while it is walking forward on the road, in cinematic fashion",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png"
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }'
         ```
 
@@ -66,8 +66,8 @@ Some other noteworthy features of WAN 2.6 image-to-video include multi-shot sequ
             },
             json={
                 "model": "wan-v2-6-image-to-video",
-                "prompt": "Zoom into the ox, while it is walking forward on the road, in cinematic fashion",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png"
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         response.raise_for_status()
@@ -87,8 +87,8 @@ Some other noteworthy features of WAN 2.6 image-to-video include multi-shot sequ
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-v2-6-image-to-video",
-          "prompt": "Zoom into the ox, while it is walking forward on the road, in cinematic fashion",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "duration": 5
         }'
         ```
@@ -105,8 +105,8 @@ Some other noteworthy features of WAN 2.6 image-to-video include multi-shot sequ
             },
             json={
                 "model": "wan-v2-6-image-to-video",
-                "prompt": "Zoom into the ox, while it is walking forward on the road, in cinematic fashion",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "duration": 5
             },
         )
@@ -136,8 +136,8 @@ Some other noteworthy features of WAN 2.6 image-to-video include multi-shot sequ
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-v2-6-image-to-video",
-          "prompt": "Zoom into the ox, while it is walking forward on the road, in cinematic fashion",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png"
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -169,8 +169,8 @@ Some other noteworthy features of WAN 2.6 image-to-video include multi-shot sequ
             headers=HEADERS,
             json={
                 "model": "wan-v2-6-image-to-video",
-                "prompt": "Zoom into the ox, while it is walking forward on the road, in cinematic fashion",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png"
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         enqueue.raise_for_status()
@@ -205,8 +205,8 @@ Some other noteworthy features of WAN 2.6 image-to-video include multi-shot sequ
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-v2-6-image-to-video",
-          "prompt": "Zoom into the ox, while it is walking forward on the road, in cinematic fashion",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "duration": 5
         }' | jq -r '.generations[0].generation_id')
 
@@ -239,8 +239,8 @@ Some other noteworthy features of WAN 2.6 image-to-video include multi-shot sequ
             headers=HEADERS,
             json={
                 "model": "wan-v2-6-image-to-video",
-                "prompt": "Zoom into the ox, while it is walking forward on the road, in cinematic fashion",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "duration": 5
             },
         )
@@ -284,8 +284,8 @@ Some other noteworthy features of WAN 2.6 image-to-video include multi-shot sequ
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-v2-6-image-to-video",
-          "prompt": "Zoom into the ox, while it is walking forward on the road, in cinematic fashion",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png"
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -314,8 +314,8 @@ Some other noteworthy features of WAN 2.6 image-to-video include multi-shot sequ
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "wan-v2-6-image-to-video",
-                "prompt": "Zoom into the ox, while it is walking forward on the road, in cinematic fashion",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png"
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         enqueue.raise_for_status()
@@ -351,8 +351,8 @@ Some other noteworthy features of WAN 2.6 image-to-video include multi-shot sequ
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-v2-6-image-to-video",
-          "prompt": "Zoom into the ox, while it is walking forward on the road, in cinematic fashion",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "duration": 5
         }' | jq -r '.generations[0].generation_id')
 
@@ -382,8 +382,8 @@ Some other noteworthy features of WAN 2.6 image-to-video include multi-shot sequ
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "wan-v2-6-image-to-video",
-                "prompt": "Zoom into the ox, while it is walking forward on the road, in cinematic fashion",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "duration": 5
             },
         )
@@ -428,8 +428,8 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | `"Zoom into the ox, while it is walking forward on the road, in cinematic fashion"` | Text description of what you want to generate, or the instruction on how to edit the given image. |
-| `input_image` | `string` | `"https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png"` | Image to use as reference. Must be jpeg, png, gif, or webp. Format: uri. |
+| `prompt` | `string` | &mdash; | Text description of what you want to generate, or the instruction on how to edit the given image. |
+| `input_image` | `string` | &mdash; | Image to use as reference. Must be jpeg, png, gif, or webp. Format: uri. |
 
 ### Optional parameters
 

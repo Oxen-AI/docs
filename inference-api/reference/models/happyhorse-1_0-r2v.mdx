@@ -37,7 +37,7 @@ HappyHorse 1.0 reference-to-video generates video from a text prompt and up to 9
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "happyhorse-1.0-r2v",
-          "prompt": "Image 1 walks through a beautiful garden, cinematic lighting."
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -53,7 +53,7 @@ HappyHorse 1.0 reference-to-video generates video from a text prompt and up to 9
             },
             json={
                 "model": "happyhorse-1.0-r2v",
-                "prompt": "Image 1 walks through a beautiful garden, cinematic lighting."
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -73,7 +73,7 @@ HappyHorse 1.0 reference-to-video generates video from a text prompt and up to 9
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "happyhorse-1.0-r2v",
-          "prompt": "Image 1 walks through a beautiful garden, cinematic lighting.",
+          "prompt": "<prompt>",
           "reference_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
@@ -92,7 +92,7 @@ HappyHorse 1.0 reference-to-video generates video from a text prompt and up to 9
             },
             json={
                 "model": "happyhorse-1.0-r2v",
-                "prompt": "Image 1 walks through a beautiful garden, cinematic lighting.",
+                "prompt": "<prompt>",
                 "reference_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
@@ -115,7 +115,7 @@ HappyHorse 1.0 reference-to-video generates video from a text prompt and up to 9
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "happyhorse-1.0-r2v",
-          "prompt": "Image 1 walks through a beautiful garden, cinematic lighting.",
+          "prompt": "<prompt>",
           "reference_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
@@ -137,7 +137,7 @@ HappyHorse 1.0 reference-to-video generates video from a text prompt and up to 9
             },
             json={
                 "model": "happyhorse-1.0-r2v",
-                "prompt": "Image 1 walks through a beautiful garden, cinematic lighting.",
+                "prompt": "<prompt>",
                 "reference_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
@@ -172,7 +172,7 @@ HappyHorse 1.0 reference-to-video generates video from a text prompt and up to 9
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "happyhorse-1.0-r2v",
-          "prompt": "Image 1 walks through a beautiful garden, cinematic lighting."
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -204,7 +204,7 @@ HappyHorse 1.0 reference-to-video generates video from a text prompt and up to 9
             headers=HEADERS,
             json={
                 "model": "happyhorse-1.0-r2v",
-                "prompt": "Image 1 walks through a beautiful garden, cinematic lighting."
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -239,7 +239,7 @@ HappyHorse 1.0 reference-to-video generates video from a text prompt and up to 9
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "happyhorse-1.0-r2v",
-          "prompt": "Image 1 walks through a beautiful garden, cinematic lighting.",
+          "prompt": "<prompt>",
           "reference_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
@@ -274,7 +274,7 @@ HappyHorse 1.0 reference-to-video generates video from a text prompt and up to 9
             headers=HEADERS,
             json={
                 "model": "happyhorse-1.0-r2v",
-                "prompt": "Image 1 walks through a beautiful garden, cinematic lighting.",
+                "prompt": "<prompt>",
                 "reference_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
@@ -312,7 +312,7 @@ HappyHorse 1.0 reference-to-video generates video from a text prompt and up to 9
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "happyhorse-1.0-r2v",
-          "prompt": "Image 1 walks through a beautiful garden, cinematic lighting.",
+          "prompt": "<prompt>",
           "reference_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
@@ -350,7 +350,7 @@ HappyHorse 1.0 reference-to-video generates video from a text prompt and up to 9
             headers=HEADERS,
             json={
                 "model": "happyhorse-1.0-r2v",
-                "prompt": "Image 1 walks through a beautiful garden, cinematic lighting.",
+                "prompt": "<prompt>",
                 "reference_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
@@ -399,7 +399,7 @@ HappyHorse 1.0 reference-to-video generates video from a text prompt and up to 9
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "happyhorse-1.0-r2v",
-          "prompt": "Image 1 walks through a beautiful garden, cinematic lighting."
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -428,7 +428,7 @@ HappyHorse 1.0 reference-to-video generates video from a text prompt and up to 9
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "happyhorse-1.0-r2v",
-                "prompt": "Image 1 walks through a beautiful garden, cinematic lighting."
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -464,7 +464,7 @@ HappyHorse 1.0 reference-to-video generates video from a text prompt and up to 9
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "happyhorse-1.0-r2v",
-          "prompt": "Image 1 walks through a beautiful garden, cinematic lighting.",
+          "prompt": "<prompt>",
           "reference_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
@@ -496,7 +496,7 @@ HappyHorse 1.0 reference-to-video generates video from a text prompt and up to 9
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "happyhorse-1.0-r2v",
-                "prompt": "Image 1 walks through a beautiful garden, cinematic lighting.",
+                "prompt": "<prompt>",
                 "reference_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
@@ -535,7 +535,7 @@ HappyHorse 1.0 reference-to-video generates video from a text prompt and up to 9
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "happyhorse-1.0-r2v",
-          "prompt": "Image 1 walks through a beautiful garden, cinematic lighting.",
+          "prompt": "<prompt>",
           "reference_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
@@ -570,7 +570,7 @@ HappyHorse 1.0 reference-to-video generates video from a text prompt and up to 9
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "happyhorse-1.0-r2v",
-                "prompt": "Image 1 walks through a beautiful garden, cinematic lighting.",
+                "prompt": "<prompt>",
                 "reference_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
@@ -620,13 +620,13 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | `"Image 1 walks through a beautiful garden, cinematic lighting."` | Text prompt describing the desired video. Use 'Image 1, Image 2, ...' to reference reference_images in order. |
+| `prompt` | `string` | &mdash; | Text prompt describing the desired video. Use @Image1, @Image2, ... to reference the reference images in order. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `reference_images` | `array<string>` | &mdash; | Array of up to 9 reference image URLs for character/object/scene appearance. Order maps to 'Image 1', 'Image 2', etc. Formats: JPEG, JPG, PNG. Max 10 MB each. 720p or higher recommended; shorter side must exceed 400 pixels. Reference images should share a similar aspect ratio close to the target video's aspect ratio. |
+| `reference_images` | `array<string>` | &mdash; | Array of up to 9 reference image URLs for character/object/scene appearance. Order maps to @Image1, @Image2, etc. Formats: JPEG, JPG, PNG. Max 10 MB each. 720p or higher recommended; shorter side must exceed 400 pixels. Reference images should share a similar aspect ratio close to the target video's aspect ratio. |
 | `aspect_ratio` | `string` | `"16:9"` | Aspect ratio of the generated video. One of: 16:9, 9:16, 1:1, 4:3, 3:4. |
 | `resolution` | `string` | `"1080P"` | Output video resolution tier. One of: 720P, 1080P. |
 | `duration` | `integer` | `5` | Output video duration in seconds (3-15). Range: 3 – 15. |

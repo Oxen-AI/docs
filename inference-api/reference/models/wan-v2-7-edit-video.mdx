@@ -37,8 +37,8 @@ WAN 2.7 edit-video transforms existing videos using instruction-based editing, r
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-v2-7-edit-video",
-          "prompt": "Transform the entire scene into a beautiful watercolor painting style. Soft brushstrokes, flowing paint washes, visible paper texture.",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/videos/waterfall.mp4"
+          "prompt": "<prompt>",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }'
         ```
 
@@ -54,8 +54,8 @@ WAN 2.7 edit-video transforms existing videos using instruction-based editing, r
             },
             json={
                 "model": "wan-v2-7-edit-video",
-                "prompt": "Transform the entire scene into a beautiful watercolor painting style. Soft brushstrokes, flowing paint washes, visible paper texture.",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/videos/waterfall.mp4"
+                "prompt": "<prompt>",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         response.raise_for_status()
@@ -75,8 +75,8 @@ WAN 2.7 edit-video transforms existing videos using instruction-based editing, r
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-v2-7-edit-video",
-          "prompt": "Transform the entire scene into a beautiful watercolor painting style. Soft brushstrokes, flowing paint washes, visible paper texture.",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/videos/waterfall.mp4",
+          "prompt": "<prompt>",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "resolution": "1080p",
           "duration": 0,
           "audio_setting": "auto"
@@ -95,8 +95,8 @@ WAN 2.7 edit-video transforms existing videos using instruction-based editing, r
             },
             json={
                 "model": "wan-v2-7-edit-video",
-                "prompt": "Transform the entire scene into a beautiful watercolor painting style. Soft brushstrokes, flowing paint washes, visible paper texture.",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/videos/waterfall.mp4",
+                "prompt": "<prompt>",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "resolution": "1080p",
                 "duration": 0,
                 "audio_setting": "auto"
@@ -128,8 +128,8 @@ WAN 2.7 edit-video transforms existing videos using instruction-based editing, r
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-v2-7-edit-video",
-          "prompt": "Transform the entire scene into a beautiful watercolor painting style. Soft brushstrokes, flowing paint washes, visible paper texture.",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/videos/waterfall.mp4"
+          "prompt": "<prompt>",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -161,8 +161,8 @@ WAN 2.7 edit-video transforms existing videos using instruction-based editing, r
             headers=HEADERS,
             json={
                 "model": "wan-v2-7-edit-video",
-                "prompt": "Transform the entire scene into a beautiful watercolor painting style. Soft brushstrokes, flowing paint washes, visible paper texture.",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/videos/waterfall.mp4"
+                "prompt": "<prompt>",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         enqueue.raise_for_status()
@@ -197,8 +197,8 @@ WAN 2.7 edit-video transforms existing videos using instruction-based editing, r
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-v2-7-edit-video",
-          "prompt": "Transform the entire scene into a beautiful watercolor painting style. Soft brushstrokes, flowing paint washes, visible paper texture.",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/videos/waterfall.mp4",
+          "prompt": "<prompt>",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "resolution": "1080p",
           "duration": 0,
           "audio_setting": "auto"
@@ -233,8 +233,8 @@ WAN 2.7 edit-video transforms existing videos using instruction-based editing, r
             headers=HEADERS,
             json={
                 "model": "wan-v2-7-edit-video",
-                "prompt": "Transform the entire scene into a beautiful watercolor painting style. Soft brushstrokes, flowing paint washes, visible paper texture.",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/videos/waterfall.mp4",
+                "prompt": "<prompt>",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "resolution": "1080p",
                 "duration": 0,
                 "audio_setting": "auto"
@@ -280,8 +280,8 @@ WAN 2.7 edit-video transforms existing videos using instruction-based editing, r
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-v2-7-edit-video",
-          "prompt": "Transform the entire scene into a beautiful watercolor painting style. Soft brushstrokes, flowing paint washes, visible paper texture.",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/videos/waterfall.mp4"
+          "prompt": "<prompt>",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -310,8 +310,8 @@ WAN 2.7 edit-video transforms existing videos using instruction-based editing, r
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "wan-v2-7-edit-video",
-                "prompt": "Transform the entire scene into a beautiful watercolor painting style. Soft brushstrokes, flowing paint washes, visible paper texture.",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/videos/waterfall.mp4"
+                "prompt": "<prompt>",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         enqueue.raise_for_status()
@@ -347,8 +347,8 @@ WAN 2.7 edit-video transforms existing videos using instruction-based editing, r
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-v2-7-edit-video",
-          "prompt": "Transform the entire scene into a beautiful watercolor painting style. Soft brushstrokes, flowing paint washes, visible paper texture.",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/videos/waterfall.mp4",
+          "prompt": "<prompt>",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "resolution": "1080p",
           "duration": 0,
           "audio_setting": "auto"
@@ -380,8 +380,8 @@ WAN 2.7 edit-video transforms existing videos using instruction-based editing, r
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "wan-v2-7-edit-video",
-                "prompt": "Transform the entire scene into a beautiful watercolor painting style. Soft brushstrokes, flowing paint washes, visible paper texture.",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/videos/waterfall.mp4",
+                "prompt": "<prompt>",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "resolution": "1080p",
                 "duration": 0,
                 "audio_setting": "auto"
@@ -428,8 +428,8 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | `"Transform the entire scene into a beautiful watercolor painting style. Soft brushstrokes, flowing paint washes, visible paper texture."` | Editing instruction or style transfer description. |
-| `input_video` | `string` | `"https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/videos/waterfall.mp4"` | URL of the input video to edit. Format: MP4, MOV. Duration: 2-10s. Max 100 MB. Format: uri. |
+| `prompt` | `string` | &mdash; | Editing instruction or style transfer description. |
+| `input_video` | `string` | &mdash; | URL of the input video to edit. Format: MP4, MOV. Duration: 2-10s. Max 100 MB. Format: uri. |
 
 ### Optional parameters
 

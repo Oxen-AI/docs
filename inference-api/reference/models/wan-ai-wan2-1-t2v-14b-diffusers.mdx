@@ -51,7 +51,7 @@ Some other noteworthy features of Wan-AI/Wan2.1-T2V-14B-Diffusers include prompt
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-ai-wan2-1-t2v-14b-diffusers",
-          "prompt": "A beautiful landscape painting of a serene lake with mountains in the background and an ox in the foreground."
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -67,7 +67,7 @@ Some other noteworthy features of Wan-AI/Wan2.1-T2V-14B-Diffusers include prompt
             },
             json={
                 "model": "wan-ai-wan2-1-t2v-14b-diffusers",
-                "prompt": "A beautiful landscape painting of a serene lake with mountains in the background and an ox in the foreground."
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -87,10 +87,9 @@ Some other noteworthy features of Wan-AI/Wan2.1-T2V-14B-Diffusers include prompt
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-ai-wan2-1-t2v-14b-diffusers",
-          "prompt": "A beautiful landscape painting of a serene lake with mountains in the background and an ox in the foreground.",
+          "prompt": "<prompt>",
           "height": 480,
           "width": 832,
-          "negative_prompt": " ",
           "num_inference_steps": 16,
           "num_frames": 81,
           "guidance_scale": 5.0
@@ -109,10 +108,9 @@ Some other noteworthy features of Wan-AI/Wan2.1-T2V-14B-Diffusers include prompt
             },
             json={
                 "model": "wan-ai-wan2-1-t2v-14b-diffusers",
-                "prompt": "A beautiful landscape painting of a serene lake with mountains in the background and an ox in the foreground.",
+                "prompt": "<prompt>",
                 "height": 480,
                 "width": 832,
-                "negative_prompt": " ",
                 "num_inference_steps": 16,
                 "num_frames": 81,
                 "guidance_scale": 5.0
@@ -144,7 +142,7 @@ Some other noteworthy features of Wan-AI/Wan2.1-T2V-14B-Diffusers include prompt
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-ai-wan2-1-t2v-14b-diffusers",
-          "prompt": "A beautiful landscape painting of a serene lake with mountains in the background and an ox in the foreground."
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -176,7 +174,7 @@ Some other noteworthy features of Wan-AI/Wan2.1-T2V-14B-Diffusers include prompt
             headers=HEADERS,
             json={
                 "model": "wan-ai-wan2-1-t2v-14b-diffusers",
-                "prompt": "A beautiful landscape painting of a serene lake with mountains in the background and an ox in the foreground."
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -211,10 +209,9 @@ Some other noteworthy features of Wan-AI/Wan2.1-T2V-14B-Diffusers include prompt
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-ai-wan2-1-t2v-14b-diffusers",
-          "prompt": "A beautiful landscape painting of a serene lake with mountains in the background and an ox in the foreground.",
+          "prompt": "<prompt>",
           "height": 480,
           "width": 832,
-          "negative_prompt": " ",
           "num_inference_steps": 16,
           "num_frames": 81,
           "guidance_scale": 5.0
@@ -249,10 +246,9 @@ Some other noteworthy features of Wan-AI/Wan2.1-T2V-14B-Diffusers include prompt
             headers=HEADERS,
             json={
                 "model": "wan-ai-wan2-1-t2v-14b-diffusers",
-                "prompt": "A beautiful landscape painting of a serene lake with mountains in the background and an ox in the foreground.",
+                "prompt": "<prompt>",
                 "height": 480,
                 "width": 832,
-                "negative_prompt": " ",
                 "num_inference_steps": 16,
                 "num_frames": 81,
                 "guidance_scale": 5.0
@@ -298,7 +294,7 @@ Some other noteworthy features of Wan-AI/Wan2.1-T2V-14B-Diffusers include prompt
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-ai-wan2-1-t2v-14b-diffusers",
-          "prompt": "A beautiful landscape painting of a serene lake with mountains in the background and an ox in the foreground."
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -327,7 +323,7 @@ Some other noteworthy features of Wan-AI/Wan2.1-T2V-14B-Diffusers include prompt
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "wan-ai-wan2-1-t2v-14b-diffusers",
-                "prompt": "A beautiful landscape painting of a serene lake with mountains in the background and an ox in the foreground."
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -363,10 +359,9 @@ Some other noteworthy features of Wan-AI/Wan2.1-T2V-14B-Diffusers include prompt
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-ai-wan2-1-t2v-14b-diffusers",
-          "prompt": "A beautiful landscape painting of a serene lake with mountains in the background and an ox in the foreground.",
+          "prompt": "<prompt>",
           "height": 480,
           "width": 832,
-          "negative_prompt": " ",
           "num_inference_steps": 16,
           "num_frames": 81,
           "guidance_scale": 5.0
@@ -398,10 +393,9 @@ Some other noteworthy features of Wan-AI/Wan2.1-T2V-14B-Diffusers include prompt
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "wan-ai-wan2-1-t2v-14b-diffusers",
-                "prompt": "A beautiful landscape painting of a serene lake with mountains in the background and an ox in the foreground.",
+                "prompt": "<prompt>",
                 "height": 480,
                 "width": 832,
-                "negative_prompt": " ",
                 "num_inference_steps": 16,
                 "num_frames": 81,
                 "guidance_scale": 5.0
@@ -448,7 +442,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | `"A beautiful landscape painting of a serene lake with mountains in the background and an ox in the foreground."` | Prompt for generated image |
+| `prompt` | `string` | &mdash; | Prompt for generated image |
 
 ### Optional parameters
 
@@ -456,7 +450,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 |-------|------|---------|-------------|
 | `height` | `integer` | `480` | Height of the video Range: 1 – 720. |
 | `width` | `integer` | `832` | Width of the video Range: 1 – 1280. |
-| `negative_prompt` | `string` | `" "` | Negative prompt for generated image |
+| `negative_prompt` | `string` | &mdash; | Negative prompt for generated image |
 | `num_inference_steps` | `integer` | `16` | Number of diffusion steps to take Range: 1 – 100. |
 | `num_frames` | `integer` | `81` | Number of frames of video to generate Range: 1 – 120. |
 | `guidance_scale` | `number` | `5.0` | Guidance for generated video. Lower values can give more realistic videos. Range: 0 – 10. |

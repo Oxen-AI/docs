@@ -49,9 +49,9 @@ Some other noteworthy features of Kling O1 - Reference to Video include image-to
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-o1-reference-to-video",
-          "prompt": "@Element1 flies into the scene and lands on the table next to the ox in @Image1",
+          "prompt": "<prompt>",
           "input_image": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/daily_moo.png"
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
         }'
         ```
@@ -68,9 +68,9 @@ Some other noteworthy features of Kling O1 - Reference to Video include image-to
             },
             json={
                 "model": "kling-video-o1-reference-to-video",
-                "prompt": "@Element1 flies into the scene and lands on the table next to the ox in @Image1",
+                "prompt": "<prompt>",
                 "input_image": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/daily_moo.png"
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
             },
         )
@@ -91,17 +91,12 @@ Some other noteworthy features of Kling O1 - Reference to Video include image-to
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-o1-reference-to-video",
-          "prompt": "@Element1 flies into the scene and lands on the table next to the ox in @Image1",
+          "prompt": "<prompt>",
           "input_image": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/daily_moo.png"
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
           "elements": [
-            {
-              "frontal_image_url": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/red_bird.png",
-              "reference_image_urls": [
-                "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/red_bird_side.png"
-              ]
-            }
+            {}
           ]
         }'
         ```
@@ -118,17 +113,12 @@ Some other noteworthy features of Kling O1 - Reference to Video include image-to
             },
             json={
                 "model": "kling-video-o1-reference-to-video",
-                "prompt": "@Element1 flies into the scene and lands on the table next to the ox in @Image1",
+                "prompt": "<prompt>",
                 "input_image": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/daily_moo.png"
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
                 "elements": [
-                    {
-                        "frontal_image_url": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/red_bird.png",
-                        "reference_image_urls": [
-                            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/red_bird_side.png"
-                        ]
-                    }
+                    {}
                 ]
             },
         )
@@ -149,17 +139,12 @@ Some other noteworthy features of Kling O1 - Reference to Video include image-to
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-o1-reference-to-video",
-          "prompt": "@Element1 flies into the scene and lands on the table next to the ox in @Image1",
+          "prompt": "<prompt>",
           "input_image": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/daily_moo.png"
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
           "elements": [
-            {
-              "frontal_image_url": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/red_bird.png",
-              "reference_image_urls": [
-                "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/red_bird_side.png"
-              ]
-            }
+            {}
           ],
           "aspect_ratio": "16:9",
           "duration": 5
@@ -178,17 +163,12 @@ Some other noteworthy features of Kling O1 - Reference to Video include image-to
             },
             json={
                 "model": "kling-video-o1-reference-to-video",
-                "prompt": "@Element1 flies into the scene and lands on the table next to the ox in @Image1",
+                "prompt": "<prompt>",
                 "input_image": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/daily_moo.png"
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
                 "elements": [
-                    {
-                        "frontal_image_url": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/red_bird.png",
-                        "reference_image_urls": [
-                            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/red_bird_side.png"
-                        ]
-                    }
+                    {}
                 ],
                 "aspect_ratio": "16:9",
                 "duration": 5
@@ -220,9 +200,9 @@ Some other noteworthy features of Kling O1 - Reference to Video include image-to
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-o1-reference-to-video",
-          "prompt": "@Element1 flies into the scene and lands on the table next to the ox in @Image1",
+          "prompt": "<prompt>",
           "input_image": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/daily_moo.png"
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
         }' | jq -r '.generations[0].generation_id')
 
@@ -255,9 +235,9 @@ Some other noteworthy features of Kling O1 - Reference to Video include image-to
             headers=HEADERS,
             json={
                 "model": "kling-video-o1-reference-to-video",
-                "prompt": "@Element1 flies into the scene and lands on the table next to the ox in @Image1",
+                "prompt": "<prompt>",
                 "input_image": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/daily_moo.png"
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
             },
         )
@@ -293,17 +273,12 @@ Some other noteworthy features of Kling O1 - Reference to Video include image-to
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-o1-reference-to-video",
-          "prompt": "@Element1 flies into the scene and lands on the table next to the ox in @Image1",
+          "prompt": "<prompt>",
           "input_image": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/daily_moo.png"
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
           "elements": [
-            {
-              "frontal_image_url": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/red_bird.png",
-              "reference_image_urls": [
-                "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/red_bird_side.png"
-              ]
-            }
+            {}
           ]
         }' | jq -r '.generations[0].generation_id')
 
@@ -336,17 +311,12 @@ Some other noteworthy features of Kling O1 - Reference to Video include image-to
             headers=HEADERS,
             json={
                 "model": "kling-video-o1-reference-to-video",
-                "prompt": "@Element1 flies into the scene and lands on the table next to the ox in @Image1",
+                "prompt": "<prompt>",
                 "input_image": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/daily_moo.png"
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
                 "elements": [
-                    {
-                        "frontal_image_url": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/red_bird.png",
-                        "reference_image_urls": [
-                            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/red_bird_side.png"
-                        ]
-                    }
+                    {}
                 ]
             },
         )
@@ -382,17 +352,12 @@ Some other noteworthy features of Kling O1 - Reference to Video include image-to
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-o1-reference-to-video",
-          "prompt": "@Element1 flies into the scene and lands on the table next to the ox in @Image1",
+          "prompt": "<prompt>",
           "input_image": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/daily_moo.png"
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
           "elements": [
-            {
-              "frontal_image_url": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/red_bird.png",
-              "reference_image_urls": [
-                "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/red_bird_side.png"
-              ]
-            }
+            {}
           ],
           "aspect_ratio": "16:9",
           "duration": 5
@@ -427,17 +392,12 @@ Some other noteworthy features of Kling O1 - Reference to Video include image-to
             headers=HEADERS,
             json={
                 "model": "kling-video-o1-reference-to-video",
-                "prompt": "@Element1 flies into the scene and lands on the table next to the ox in @Image1",
+                "prompt": "<prompt>",
                 "input_image": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/daily_moo.png"
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
                 "elements": [
-                    {
-                        "frontal_image_url": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/red_bird.png",
-                        "reference_image_urls": [
-                            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/red_bird_side.png"
-                        ]
-                    }
+                    {}
                 ],
                 "aspect_ratio": "16:9",
                 "duration": 5
@@ -483,9 +443,9 @@ Some other noteworthy features of Kling O1 - Reference to Video include image-to
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-o1-reference-to-video",
-          "prompt": "@Element1 flies into the scene and lands on the table next to the ox in @Image1",
+          "prompt": "<prompt>",
           "input_image": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/daily_moo.png"
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
         }' | jq -r '.generations[0].generation_id')
 
@@ -515,9 +475,9 @@ Some other noteworthy features of Kling O1 - Reference to Video include image-to
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "kling-video-o1-reference-to-video",
-                "prompt": "@Element1 flies into the scene and lands on the table next to the ox in @Image1",
+                "prompt": "<prompt>",
                 "input_image": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/daily_moo.png"
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
             },
         )
@@ -554,17 +514,12 @@ Some other noteworthy features of Kling O1 - Reference to Video include image-to
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-o1-reference-to-video",
-          "prompt": "@Element1 flies into the scene and lands on the table next to the ox in @Image1",
+          "prompt": "<prompt>",
           "input_image": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/daily_moo.png"
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
           "elements": [
-            {
-              "frontal_image_url": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/red_bird.png",
-              "reference_image_urls": [
-                "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/red_bird_side.png"
-              ]
-            }
+            {}
           ]
         }' | jq -r '.generations[0].generation_id')
 
@@ -594,17 +549,12 @@ Some other noteworthy features of Kling O1 - Reference to Video include image-to
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "kling-video-o1-reference-to-video",
-                "prompt": "@Element1 flies into the scene and lands on the table next to the ox in @Image1",
+                "prompt": "<prompt>",
                 "input_image": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/daily_moo.png"
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
                 "elements": [
-                    {
-                        "frontal_image_url": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/red_bird.png",
-                        "reference_image_urls": [
-                            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/red_bird_side.png"
-                        ]
-                    }
+                    {}
                 ]
             },
         )
@@ -641,17 +591,12 @@ Some other noteworthy features of Kling O1 - Reference to Video include image-to
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-o1-reference-to-video",
-          "prompt": "@Element1 flies into the scene and lands on the table next to the ox in @Image1",
+          "prompt": "<prompt>",
           "input_image": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/daily_moo.png"
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
           "elements": [
-            {
-              "frontal_image_url": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/red_bird.png",
-              "reference_image_urls": [
-                "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/red_bird_side.png"
-              ]
-            }
+            {}
           ],
           "aspect_ratio": "16:9",
           "duration": 5
@@ -683,17 +628,12 @@ Some other noteworthy features of Kling O1 - Reference to Video include image-to
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "kling-video-o1-reference-to-video",
-                "prompt": "@Element1 flies into the scene and lands on the table next to the ox in @Image1",
+                "prompt": "<prompt>",
                 "input_image": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/daily_moo.png"
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
                 "elements": [
-                    {
-                        "frontal_image_url": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/red_bird.png",
-                        "reference_image_urls": [
-                            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/red_bird_side.png"
-                        ]
-                    }
+                    {}
                 ],
                 "aspect_ratio": "16:9",
                 "duration": 5
@@ -740,13 +680,13 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | `"@Element1 flies into the scene and lands on the table next to the ox in @Image1"` | Text description of what you want to generate, or the instruction on how to edit the given image. |
-| `input_image` | `array<string>` | `["https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/daily_moo.png"]` | Optional reference images. Use @Image1, @Image2, etc. in the prompt to refer to them. |
+| `prompt` | `string` | &mdash; | Text description of what you want to generate, or the instruction on how to edit the given image. |
+| `input_image` | `array<string>` | &mdash; | Optional reference images. Use @Image1, @Image2, etc. in the prompt to refer to them. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `elements` | `array<object>` | `[{"frontal_image_url": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/red_bird.png", "reference_image_urls": ["https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/red_bird_side.png"]}]` | Optional element references. Use @Element1, @Element2, etc. in the prompt to refer to them. |
+| `elements` | `array<object>` | &mdash; | Optional element references. Use @Element1, @Element2, etc. in the prompt to refer to them. |
 | `aspect_ratio` | `string` | `"16:9"` | Video aspect ratio One of: 9:16, 1:1, 16:9. |
 | `duration` | `integer` | `5` | Video duration in seconds One of: 5, 10. |

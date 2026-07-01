@@ -630,13 +630,13 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | Text description of the image to generate |
+| `prompt` | `string` | &mdash; | Text description of the image to generate. Use @Image1, @Image2, etc. to reference the input images. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `input_image` | `array<string>` | &mdash; | Input images to transform or use as reference (supports multiple image urls) |
+| `input_image` | `array<string>` | &mdash; | Input images to transform or use as reference. Reference them in the prompt as @Image1, @Image2, etc. |
 | `aspect_ratio` | `string` | `"16:9"` | Aspect ratio for the generated image One of: 1:1, 16:9, 9:16, 4:3, 3:4. |
 | `output_quality` | `string` | `"standard"` | Quality setting for output image One of: standard, high. |
 | `output_format` | `string` | `"png"` | Format of the output image One of: png, jpg, webp. |

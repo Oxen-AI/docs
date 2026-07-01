@@ -52,7 +52,7 @@ Some other noteworthy features of Segment Anything 3 - Video include real-time s
           -d '{
           "model": "sam-3-video",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "prompt": "the ox horns"
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -69,7 +69,7 @@ Some other noteworthy features of Segment Anything 3 - Video include real-time s
             json={
                 "model": "sam-3-video",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "prompt": "the ox horns"
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -90,7 +90,7 @@ Some other noteworthy features of Segment Anything 3 - Video include real-time s
           -d '{
           "model": "sam-3-video",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "prompt": "the ox horns",
+          "prompt": "<prompt>",
           "apply_mask": true
         }'
         ```
@@ -108,7 +108,7 @@ Some other noteworthy features of Segment Anything 3 - Video include real-time s
             json={
                 "model": "sam-3-video",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "prompt": "the ox horns",
+                "prompt": "<prompt>",
                 "apply_mask": true
             },
         )
@@ -139,7 +139,7 @@ Some other noteworthy features of Segment Anything 3 - Video include real-time s
           -d '{
           "model": "sam-3-video",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "prompt": "the ox horns"
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -172,7 +172,7 @@ Some other noteworthy features of Segment Anything 3 - Video include real-time s
             json={
                 "model": "sam-3-video",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "prompt": "the ox horns"
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -208,7 +208,7 @@ Some other noteworthy features of Segment Anything 3 - Video include real-time s
           -d '{
           "model": "sam-3-video",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "prompt": "the ox horns",
+          "prompt": "<prompt>",
           "apply_mask": true
         }' | jq -r '.generations[0].generation_id')
 
@@ -242,7 +242,7 @@ Some other noteworthy features of Segment Anything 3 - Video include real-time s
             json={
                 "model": "sam-3-video",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "prompt": "the ox horns",
+                "prompt": "<prompt>",
                 "apply_mask": true
             },
         )
@@ -287,7 +287,7 @@ Some other noteworthy features of Segment Anything 3 - Video include real-time s
           -d '{
           "model": "sam-3-video",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "prompt": "the ox horns"
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -317,7 +317,7 @@ Some other noteworthy features of Segment Anything 3 - Video include real-time s
             json={
                 "model": "sam-3-video",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "prompt": "the ox horns"
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -354,7 +354,7 @@ Some other noteworthy features of Segment Anything 3 - Video include real-time s
           -d '{
           "model": "sam-3-video",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "prompt": "the ox horns",
+          "prompt": "<prompt>",
           "apply_mask": true
         }' | jq -r '.generations[0].generation_id')
 
@@ -385,7 +385,7 @@ Some other noteworthy features of Segment Anything 3 - Video include real-time s
             json={
                 "model": "sam-3-video",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "prompt": "the ox horns",
+                "prompt": "<prompt>",
                 "apply_mask": true
             },
         )
@@ -430,8 +430,8 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `input_video` | `string` | `"https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"` | Video to use as reference. Format: uri. |
-| `prompt` | `string` | `"the ox horns"` | Text description of what you want to segment out of the video. |
+| `input_video` | `string` | &mdash; | Video to use as reference. Format: uri. |
+| `prompt` | `string` | &mdash; | Text description of what you want to segment out of the video. |
 
 ### Optional parameters
 

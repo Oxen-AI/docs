@@ -49,7 +49,7 @@ Some other noteworthy features of Kling 2.6 Pro - Image to Video include support
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-v2-6-pro-image-to-video",
-          "prompt": "A man making it to the summit on top of a mountain. The man raises his arms in victory and exhales a sigh of relief."
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -65,7 +65,7 @@ Some other noteworthy features of Kling 2.6 Pro - Image to Video include support
             },
             json={
                 "model": "kling-video-v2-6-pro-image-to-video",
-                "prompt": "A man making it to the summit on top of a mountain. The man raises his arms in victory and exhales a sigh of relief."
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -85,8 +85,8 @@ Some other noteworthy features of Kling 2.6 Pro - Image to Video include support
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-v2-6-pro-image-to-video",
-          "prompt": "A man making it to the summit on top of a mountain. The man raises his arms in victory and exhales a sigh of relief.",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/man-hiking.png"
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }'
         ```
 
@@ -102,8 +102,8 @@ Some other noteworthy features of Kling 2.6 Pro - Image to Video include support
             },
             json={
                 "model": "kling-video-v2-6-pro-image-to-video",
-                "prompt": "A man making it to the summit on top of a mountain. The man raises his arms in victory and exhales a sigh of relief.",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/man-hiking.png"
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         response.raise_for_status()
@@ -123,9 +123,8 @@ Some other noteworthy features of Kling 2.6 Pro - Image to Video include support
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-v2-6-pro-image-to-video",
-          "prompt": "A man making it to the summit on top of a mountain. The man raises his arms in victory and exhales a sigh of relief.",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/man-hiking.png",
-          "negative_prompt": "blur, distort, and low quality",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "duration": 5,
           "generate_audio": false
         }'
@@ -143,9 +142,8 @@ Some other noteworthy features of Kling 2.6 Pro - Image to Video include support
             },
             json={
                 "model": "kling-video-v2-6-pro-image-to-video",
-                "prompt": "A man making it to the summit on top of a mountain. The man raises his arms in victory and exhales a sigh of relief.",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/man-hiking.png",
-                "negative_prompt": "blur, distort, and low quality",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "duration": 5,
                 "generate_audio": false
             },
@@ -176,7 +174,7 @@ Some other noteworthy features of Kling 2.6 Pro - Image to Video include support
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-v2-6-pro-image-to-video",
-          "prompt": "A man making it to the summit on top of a mountain. The man raises his arms in victory and exhales a sigh of relief."
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -208,7 +206,7 @@ Some other noteworthy features of Kling 2.6 Pro - Image to Video include support
             headers=HEADERS,
             json={
                 "model": "kling-video-v2-6-pro-image-to-video",
-                "prompt": "A man making it to the summit on top of a mountain. The man raises his arms in victory and exhales a sigh of relief."
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -243,8 +241,8 @@ Some other noteworthy features of Kling 2.6 Pro - Image to Video include support
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-v2-6-pro-image-to-video",
-          "prompt": "A man making it to the summit on top of a mountain. The man raises his arms in victory and exhales a sigh of relief.",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/man-hiking.png"
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -276,8 +274,8 @@ Some other noteworthy features of Kling 2.6 Pro - Image to Video include support
             headers=HEADERS,
             json={
                 "model": "kling-video-v2-6-pro-image-to-video",
-                "prompt": "A man making it to the summit on top of a mountain. The man raises his arms in victory and exhales a sigh of relief.",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/man-hiking.png"
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         enqueue.raise_for_status()
@@ -312,9 +310,8 @@ Some other noteworthy features of Kling 2.6 Pro - Image to Video include support
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-v2-6-pro-image-to-video",
-          "prompt": "A man making it to the summit on top of a mountain. The man raises his arms in victory and exhales a sigh of relief.",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/man-hiking.png",
-          "negative_prompt": "blur, distort, and low quality",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "duration": 5,
           "generate_audio": false
         }' | jq -r '.generations[0].generation_id')
@@ -348,9 +345,8 @@ Some other noteworthy features of Kling 2.6 Pro - Image to Video include support
             headers=HEADERS,
             json={
                 "model": "kling-video-v2-6-pro-image-to-video",
-                "prompt": "A man making it to the summit on top of a mountain. The man raises his arms in victory and exhales a sigh of relief.",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/man-hiking.png",
-                "negative_prompt": "blur, distort, and low quality",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "duration": 5,
                 "generate_audio": false
             },
@@ -395,7 +391,7 @@ Some other noteworthy features of Kling 2.6 Pro - Image to Video include support
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-v2-6-pro-image-to-video",
-          "prompt": "A man making it to the summit on top of a mountain. The man raises his arms in victory and exhales a sigh of relief."
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -424,7 +420,7 @@ Some other noteworthy features of Kling 2.6 Pro - Image to Video include support
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "kling-video-v2-6-pro-image-to-video",
-                "prompt": "A man making it to the summit on top of a mountain. The man raises his arms in victory and exhales a sigh of relief."
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -460,8 +456,8 @@ Some other noteworthy features of Kling 2.6 Pro - Image to Video include support
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-v2-6-pro-image-to-video",
-          "prompt": "A man making it to the summit on top of a mountain. The man raises his arms in victory and exhales a sigh of relief.",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/man-hiking.png"
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -490,8 +486,8 @@ Some other noteworthy features of Kling 2.6 Pro - Image to Video include support
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "kling-video-v2-6-pro-image-to-video",
-                "prompt": "A man making it to the summit on top of a mountain. The man raises his arms in victory and exhales a sigh of relief.",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/man-hiking.png"
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         enqueue.raise_for_status()
@@ -527,9 +523,8 @@ Some other noteworthy features of Kling 2.6 Pro - Image to Video include support
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-v2-6-pro-image-to-video",
-          "prompt": "A man making it to the summit on top of a mountain. The man raises his arms in victory and exhales a sigh of relief.",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/man-hiking.png",
-          "negative_prompt": "blur, distort, and low quality",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "duration": 5,
           "generate_audio": false
         }' | jq -r '.generations[0].generation_id')
@@ -560,9 +555,8 @@ Some other noteworthy features of Kling 2.6 Pro - Image to Video include support
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "kling-video-v2-6-pro-image-to-video",
-                "prompt": "A man making it to the summit on top of a mountain. The man raises his arms in victory and exhales a sigh of relief.",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/man-hiking.png",
-                "negative_prompt": "blur, distort, and low quality",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "duration": 5,
                 "generate_audio": false
             },
@@ -608,13 +602,13 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | `"A man making it to the summit on top of a mountain. The man raises his arms in victory and exhales a sigh of relief."` | Text description of what you want to generate, or the instruction on how to edit the given image. |
+| `prompt` | `string` | &mdash; | Text description of what you want to generate, or the instruction on how to edit the given image. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `input_image` | `string` | `"https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/man-hiking.png"` | Image to use as reference. Must be jpeg, png, gif, or webp. Format: uri. |
-| `negative_prompt` | `string` | `"blur, distort, and low quality"` | Text description of what you *do not* want the model to do. |
+| `input_image` | `string` | &mdash; | Image to use as reference. Must be jpeg, png, gif, or webp. Format: uri. |
+| `negative_prompt` | `string` | &mdash; | Text description of what you *do not* want the model to do. |
 | `duration` | `integer` | `5` | Video duration in seconds One of: 5, 10. |
 | `generate_audio` | `boolean` | `false` | Generate audio with the video. |

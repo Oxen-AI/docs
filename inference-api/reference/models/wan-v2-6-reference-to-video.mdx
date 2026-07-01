@@ -55,7 +55,7 @@ The search results provided information about WAN 2.6's general capabilities (te
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-v2-6-reference-to-video",
-          "prompt": "An ox slowly walking down the road. Cinematic."
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -71,7 +71,7 @@ The search results provided information about WAN 2.6's general capabilities (te
             },
             json={
                 "model": "wan-v2-6-reference-to-video",
-                "prompt": "An ox slowly walking down the road. Cinematic."
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -91,7 +91,7 @@ The search results provided information about WAN 2.6's general capabilities (te
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-v2-6-reference-to-video",
-          "prompt": "An ox slowly walking down the road. Cinematic.",
+          "prompt": "<prompt>",
           "input_videos": [
             "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
           ]
@@ -110,7 +110,7 @@ The search results provided information about WAN 2.6's general capabilities (te
             },
             json={
                 "model": "wan-v2-6-reference-to-video",
-                "prompt": "An ox slowly walking down the road. Cinematic.",
+                "prompt": "<prompt>",
                 "input_videos": [
                     "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
                 ]
@@ -142,7 +142,7 @@ The search results provided information about WAN 2.6's general capabilities (te
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-v2-6-reference-to-video",
-          "prompt": "An ox slowly walking down the road. Cinematic."
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -174,7 +174,7 @@ The search results provided information about WAN 2.6's general capabilities (te
             headers=HEADERS,
             json={
                 "model": "wan-v2-6-reference-to-video",
-                "prompt": "An ox slowly walking down the road. Cinematic."
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -209,7 +209,7 @@ The search results provided information about WAN 2.6's general capabilities (te
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-v2-6-reference-to-video",
-          "prompt": "An ox slowly walking down the road. Cinematic.",
+          "prompt": "<prompt>",
           "input_videos": [
             "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
           ]
@@ -244,7 +244,7 @@ The search results provided information about WAN 2.6's general capabilities (te
             headers=HEADERS,
             json={
                 "model": "wan-v2-6-reference-to-video",
-                "prompt": "An ox slowly walking down the road. Cinematic.",
+                "prompt": "<prompt>",
                 "input_videos": [
                     "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
                 ]
@@ -290,7 +290,7 @@ The search results provided information about WAN 2.6's general capabilities (te
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-v2-6-reference-to-video",
-          "prompt": "An ox slowly walking down the road. Cinematic."
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -319,7 +319,7 @@ The search results provided information about WAN 2.6's general capabilities (te
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "wan-v2-6-reference-to-video",
-                "prompt": "An ox slowly walking down the road. Cinematic."
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -355,7 +355,7 @@ The search results provided information about WAN 2.6's general capabilities (te
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-v2-6-reference-to-video",
-          "prompt": "An ox slowly walking down the road. Cinematic.",
+          "prompt": "<prompt>",
           "input_videos": [
             "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
           ]
@@ -387,7 +387,7 @@ The search results provided information about WAN 2.6's general capabilities (te
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "wan-v2-6-reference-to-video",
-                "prompt": "An ox slowly walking down the road. Cinematic.",
+                "prompt": "<prompt>",
                 "input_videos": [
                     "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
                 ]
@@ -434,10 +434,10 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | `"An ox slowly walking down the road. Cinematic."` | Text description of what you want to generate, or the instruction on how to edit the given image. |
+| `prompt` | `string` | &mdash; | Text description of the video to generate. Use @Video1, @Video2, etc. to reference the input videos. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `input_videos` | `array<string>` | `["https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"]` | Videos to use as reference. |
+| `input_videos` | `array<string>` | &mdash; | Reference videos that guide the generated video. Reference them in the prompt as @Video1, @Video2, etc. |

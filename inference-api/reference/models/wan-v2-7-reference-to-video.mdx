@@ -11,7 +11,7 @@ description: "Multi-reference video, up to 1080p"
 
 **Model ID:** `wan-v2-7-reference-to-video`
 
-WAN 2.7 reference-to-video generates video from one or more reference images and reference videos with optional first-frame joint control, supporting single-character performances, multi-character interactions, and multi-shot narration. Up to 5 reference images and reference videos combined; reference identifiers in the prompt ("Image 1", "Image 2", "Video 1", ...) match the order of assets within each type. Output up to 1080P at 2-15s (2-10s when a reference video is included).
+WAN 2.7 reference-to-video generates video from one or more reference images and reference videos with optional first-frame joint control, supporting single-character performances, multi-character interactions, and multi-shot narration. Up to 5 reference images and reference videos combined; reference identifiers in the prompt (@Image1, @Image2, @Video1, ...) match the order of assets within each type. Output up to 1080P at 2-15s (2-10s when a reference video is included).
 
 ## Example request
 
@@ -37,7 +37,7 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-v2-7-reference-to-video",
-          "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting."
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -53,7 +53,7 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
             },
             json={
                 "model": "wan-v2-7-reference-to-video",
-                "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting."
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -73,7 +73,7 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-v2-7-reference-to-video",
-          "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting.",
+          "prompt": "<prompt>",
           "reference_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
@@ -96,7 +96,7 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
             },
             json={
                 "model": "wan-v2-7-reference-to-video",
-                "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting.",
+                "prompt": "<prompt>",
                 "reference_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
@@ -123,7 +123,7 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-v2-7-reference-to-video",
-          "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting.",
+          "prompt": "<prompt>",
           "reference_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
@@ -151,7 +151,7 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
             },
             json={
                 "model": "wan-v2-7-reference-to-video",
-                "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting.",
+                "prompt": "<prompt>",
                 "reference_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
@@ -192,7 +192,7 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-v2-7-reference-to-video",
-          "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting."
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -224,7 +224,7 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
             headers=HEADERS,
             json={
                 "model": "wan-v2-7-reference-to-video",
-                "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting."
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -259,7 +259,7 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-v2-7-reference-to-video",
-          "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting.",
+          "prompt": "<prompt>",
           "reference_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
@@ -298,7 +298,7 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
             headers=HEADERS,
             json={
                 "model": "wan-v2-7-reference-to-video",
-                "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting.",
+                "prompt": "<prompt>",
                 "reference_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
@@ -340,7 +340,7 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-v2-7-reference-to-video",
-          "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting.",
+          "prompt": "<prompt>",
           "reference_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
@@ -384,7 +384,7 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
             headers=HEADERS,
             json={
                 "model": "wan-v2-7-reference-to-video",
-                "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting.",
+                "prompt": "<prompt>",
                 "reference_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
@@ -439,7 +439,7 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-v2-7-reference-to-video",
-          "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting."
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -468,7 +468,7 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "wan-v2-7-reference-to-video",
-                "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting."
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -504,7 +504,7 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-v2-7-reference-to-video",
-          "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting.",
+          "prompt": "<prompt>",
           "reference_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
@@ -540,7 +540,7 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "wan-v2-7-reference-to-video",
-                "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting.",
+                "prompt": "<prompt>",
                 "reference_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
@@ -583,7 +583,7 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "wan-v2-7-reference-to-video",
-          "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting.",
+          "prompt": "<prompt>",
           "reference_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
@@ -624,7 +624,7 @@ WAN 2.7 reference-to-video generates video from one or more reference images and
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "wan-v2-7-reference-to-video",
-                "prompt": "Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting.",
+                "prompt": "<prompt>",
                 "reference_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
@@ -680,14 +680,14 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | `"Image 1 walks through a beautiful garden in the style of Image 2, cinematic lighting."` | Text prompt describing the desired video. Supports Chinese and English. Max 5000 characters. Use 'Image 1, Image 2, ...' to reference reference_images in order, and 'Video 1, Video 2, ...' to reference reference_videos in order; identifiers are independent across types. |
+| `prompt` | `string` | &mdash; | Text prompt describing the desired video. Supports Chinese and English. Max 5000 characters. Use @Image1, @Image2, ... to reference the reference images in order, and @Video1, @Video2, ... to reference the reference videos in order; identifiers are independent across types. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `reference_images` | `array<object>` | &mdash; | Array of reference images for character/object/scene appearance. Each item has a URL and an optional reference voice. Order maps to 'Image 1', 'Image 2', etc. Reference images + reference videos must total ≤ 5. JPEG/JPG/PNG/BMP/WEBP, 240-8000 px per side, aspect ratio 1:8 to 8:1, max 20 MB each. |
-| `reference_videos` | `array<object>` | &mdash; | Array of reference videos for character/object appearance, motion, and voice. Each item has a URL and an optional reference voice. Order maps to 'Video 1', 'Video 2', etc. Reference images + reference videos must total ≤ 5. MP4/MOV, 1-30s, 240-4096 px per side, aspect ratio 1:8 to 8:1, max 100 MB each. |
+| `reference_images` | `array<object>` | &mdash; | Array of reference images for character/object/scene appearance. Each item has a URL and an optional reference voice. Order maps to @Image1, @Image2, etc. Reference images + reference videos must total ≤ 5. JPEG/JPG/PNG/BMP/WEBP, 240-8000 px per side, aspect ratio 1:8 to 8:1, max 20 MB each. |
+| `reference_videos` | `array<object>` | &mdash; | Array of reference videos for character/object appearance, motion, and voice. Each item has a URL and an optional reference voice. Order maps to @Video1, @Video2, etc. Reference images + reference videos must total ≤ 5. MP4/MOV, 1-30s, 240-4096 px per side, aspect ratio 1:8 to 8:1, max 100 MB each. |
 | `input_image` | `string` | &mdash; | Optional first-frame image used for joint control. Provides a starting frame the video is generated from. JPEG/JPG/PNG/BMP/WEBP, 240-8000 px per side, max 20 MB. When provided, the output aspect ratio is taken from this image and the aspect_ratio parameter is ignored. Format: uri. |
 | `aspect_ratio` | `string` | `"16:9"` | Aspect ratio of the generated video. Ignored when a first frame image is provided (the model uses the input asset's ratio). One of: 16:9, 9:16, 1:1, 4:3, 3:4. |
 | `resolution` | `string` | `"1080P"` | Output video resolution tier. One of: 720P, 1080P. |

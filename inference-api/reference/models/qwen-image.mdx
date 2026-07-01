@@ -49,7 +49,7 @@ Some other noteworthy features of Qwen/Qwen-Image include robust support for ima
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "qwen-image",
-          "prompt": "A beautiful landscape painting of a serene lake with mountains in the background"
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -65,7 +65,7 @@ Some other noteworthy features of Qwen/Qwen-Image include robust support for ima
             },
             json={
                 "model": "qwen-image",
-                "prompt": "A beautiful landscape painting of a serene lake with mountains in the background"
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -85,8 +85,7 @@ Some other noteworthy features of Qwen/Qwen-Image include robust support for ima
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "qwen-image",
-          "prompt": "A beautiful landscape painting of a serene lake with mountains in the background",
-          "negative_prompt": " ",
+          "prompt": "<prompt>",
           "aspect_ratio": "16:9",
           "image_size": "optimize_for_quality",
           "num_inference_steps": 30,
@@ -109,8 +108,7 @@ Some other noteworthy features of Qwen/Qwen-Image include robust support for ima
             },
             json={
                 "model": "qwen-image",
-                "prompt": "A beautiful landscape painting of a serene lake with mountains in the background",
-                "negative_prompt": " ",
+                "prompt": "<prompt>",
                 "aspect_ratio": "16:9",
                 "image_size": "optimize_for_quality",
                 "num_inference_steps": 30,
@@ -146,7 +144,7 @@ Some other noteworthy features of Qwen/Qwen-Image include robust support for ima
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "qwen-image",
-          "prompt": "A beautiful landscape painting of a serene lake with mountains in the background"
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -178,7 +176,7 @@ Some other noteworthy features of Qwen/Qwen-Image include robust support for ima
             headers=HEADERS,
             json={
                 "model": "qwen-image",
-                "prompt": "A beautiful landscape painting of a serene lake with mountains in the background"
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -213,8 +211,7 @@ Some other noteworthy features of Qwen/Qwen-Image include robust support for ima
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "qwen-image",
-          "prompt": "A beautiful landscape painting of a serene lake with mountains in the background",
-          "negative_prompt": " ",
+          "prompt": "<prompt>",
           "aspect_ratio": "16:9",
           "image_size": "optimize_for_quality",
           "num_inference_steps": 30,
@@ -253,8 +250,7 @@ Some other noteworthy features of Qwen/Qwen-Image include robust support for ima
             headers=HEADERS,
             json={
                 "model": "qwen-image",
-                "prompt": "A beautiful landscape painting of a serene lake with mountains in the background",
-                "negative_prompt": " ",
+                "prompt": "<prompt>",
                 "aspect_ratio": "16:9",
                 "image_size": "optimize_for_quality",
                 "num_inference_steps": 30,
@@ -304,7 +300,7 @@ Some other noteworthy features of Qwen/Qwen-Image include robust support for ima
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "qwen-image",
-          "prompt": "A beautiful landscape painting of a serene lake with mountains in the background"
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -333,7 +329,7 @@ Some other noteworthy features of Qwen/Qwen-Image include robust support for ima
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "qwen-image",
-                "prompt": "A beautiful landscape painting of a serene lake with mountains in the background"
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -369,8 +365,7 @@ Some other noteworthy features of Qwen/Qwen-Image include robust support for ima
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "qwen-image",
-          "prompt": "A beautiful landscape painting of a serene lake with mountains in the background",
-          "negative_prompt": " ",
+          "prompt": "<prompt>",
           "aspect_ratio": "16:9",
           "image_size": "optimize_for_quality",
           "num_inference_steps": 30,
@@ -406,8 +401,7 @@ Some other noteworthy features of Qwen/Qwen-Image include robust support for ima
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "qwen-image",
-                "prompt": "A beautiful landscape painting of a serene lake with mountains in the background",
-                "negative_prompt": " ",
+                "prompt": "<prompt>",
                 "aspect_ratio": "16:9",
                 "image_size": "optimize_for_quality",
                 "num_inference_steps": 30,
@@ -458,13 +452,13 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | `"A beautiful landscape painting of a serene lake with mountains in the background"` | Prompt for generated image |
+| `prompt` | `string` | &mdash; | Prompt for generated image |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `negative_prompt` | `string` | `" "` | Negative prompt for generated image |
+| `negative_prompt` | `string` | &mdash; | Negative prompt for generated image |
 | `aspect_ratio` | `string` | `"16:9"` | Aspect ratio for the generated image One of: 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3. |
 | `image_size` | `string` | `"optimize_for_quality"` | Image size for the generated image One of: optimize_for_quality, optimize_for_speed. |
 | `num_inference_steps` | `integer` | `30` | Number of denoising steps. Recommended range is 28-50, and lower number of steps produce lower quality outputs, faster. Range: 1 – 50. |

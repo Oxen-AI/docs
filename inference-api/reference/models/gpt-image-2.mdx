@@ -1,6 +1,6 @@
 ---
 title: "GPT Image 2"
-description: "4K images with near-perfect text rendering"
+description: "High-fidelity images with near-perfect text rendering"
 ---
 
 <CardGroup cols={1}>
@@ -11,7 +11,7 @@ description: "4K images with near-perfect text rendering"
 
 **Model ID:** `gpt-image-2`
 
-GPT Image 2 is OpenAI's next-generation image model available through Fal. It produces photorealistic images with strong prompt adherence, pixel-perfect text rendering, and accurate handling of dense or multilingual layouts, making it suitable for infographics, UI mockups, product photography, and architectural visualization.
+GPT Image 2 is OpenAI's next-generation image model. It produces photorealistic images with strong prompt adherence, pixel-perfect text rendering, and accurate handling of dense or multilingual layouts, making it suitable for infographics, UI mockups, product photography, and architectural visualization. Pass a reference image to edit it, or omit one to generate from the prompt alone.
 
 ## Example request
 
@@ -22,7 +22,7 @@ GPT Image 2 is OpenAI's next-generation image model available through Fal. It pr
 <Tabs>
   <Tab title="Sync">
 
-    See the [image generation reference](/inference-api/reference/image_generation) for more details.
+    See the [image editing reference](/inference-api/reference/image_editing) for more details.
 
     <Tabs>
       <Tab title="Minimal">
@@ -30,12 +30,12 @@ GPT Image 2 is OpenAI's next-generation image model available through Fal. It pr
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "gpt-image-2",
-          "prompt": "An ox standing in the middle of a long open road at sunset, cinematic lighting, photorealistic, centered and staring at the camera."
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -44,14 +44,56 @@ GPT Image 2 is OpenAI's next-generation image model available through Fal. It pr
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/generate",
+            "https://hub.oxen.ai/api/ai/images/edit",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
                 "model": "gpt-image-2",
-                "prompt": "An ox standing in the middle of a long open road at sunset, cinematic lighting, photorealistic, centered and staring at the camera."
+                "prompt": "<prompt>"
+            },
+        )
+        response.raise_for_status()
+        print(response.json())
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+      <Tab title="Basic parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "gpt-image-2",
+          "prompt": "<prompt>",
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ]
+        }'
+        ```
+
+        ```python Python
+        import os
+        import requests
+
+        response = requests.post(
+            "https://hub.oxen.ai/api/ai/images/edit",
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+            },
+            json={
+                "model": "gpt-image-2",
+                "prompt": "<prompt>",
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ]
             },
         )
         response.raise_for_status()
@@ -66,13 +108,17 @@ GPT Image 2 is OpenAI's next-generation image model available through Fal. It pr
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "gpt-image-2",
-          "prompt": "An ox standing in the middle of a long open road at sunset, cinematic lighting, photorealistic, centered and staring at the camera.",
-          "resolution": "1920x1080",
+          "prompt": "<prompt>",
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
+          "aspect_ratio": "16:9",
+          "resolution": "2K",
           "quality": "high",
           "output_format": "png"
         }'
@@ -83,15 +129,19 @@ GPT Image 2 is OpenAI's next-generation image model available through Fal. It pr
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/generate",
+            "https://hub.oxen.ai/api/ai/images/edit",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
                 "model": "gpt-image-2",
-                "prompt": "An ox standing in the middle of a long open road at sunset, cinematic lighting, photorealistic, centered and staring at the camera.",
-                "resolution": "1920x1080",
+                "prompt": "<prompt>",
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
+                "aspect_ratio": "16:9",
+                "resolution": "2K",
                 "quality": "high",
                 "output_format": "png"
             },
@@ -122,7 +172,7 @@ GPT Image 2 is OpenAI's next-generation image model available through Fal. It pr
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "gpt-image-2",
-          "prompt": "An ox standing in the middle of a long open road at sunset, cinematic lighting, photorealistic, centered and staring at the camera."
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -154,7 +204,80 @@ GPT Image 2 is OpenAI's next-generation image model available through Fal. It pr
             headers=HEADERS,
             json={
                 "model": "gpt-image-2",
-                "prompt": "An ox standing in the middle of a long open road at sunset, cinematic lighting, photorealistic, centered and staring at the camera."
+                "prompt": "<prompt>"
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        while True:
+            data = requests.get(
+                f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
+                headers=HEADERS,
+            ).json()
+            if data["status"] in {"succeeded", "failed", "cancelled"}:
+                break
+            time.sleep(5)
+
+        if data["status"] == "succeeded":
+            print(f"Result: {data['result_url']}")
+        else:
+            print(f"Generation {data['status']}: {data.get('error_message')}")
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+      <Tab title="Basic parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "gpt-image-2",
+          "prompt": "<prompt>",
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ]
+        }' | jq -r '.generations[0].generation_id')
+
+        # Poll until the generation reaches a terminal status.
+        while true; do
+          STATUS=$(curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.status')
+          echo "Status: $STATUS"
+          case $STATUS in succeeded|failed|cancelled) break;; esac
+          sleep 5
+        done
+
+        # Print the result.
+        curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+          "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq .
+        ```
+
+        ```python Python
+        import os
+        import time
+        import requests
+
+        HEADERS = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        }
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers=HEADERS,
+            json={
+                "model": "gpt-image-2",
+                "prompt": "<prompt>",
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ]
             },
         )
         enqueue.raise_for_status()
@@ -189,8 +312,12 @@ GPT Image 2 is OpenAI's next-generation image model available through Fal. It pr
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "gpt-image-2",
-          "prompt": "An ox standing in the middle of a long open road at sunset, cinematic lighting, photorealistic, centered and staring at the camera.",
-          "resolution": "1920x1080",
+          "prompt": "<prompt>",
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
+          "aspect_ratio": "16:9",
+          "resolution": "2K",
           "quality": "high",
           "output_format": "png"
         }' | jq -r '.generations[0].generation_id')
@@ -224,8 +351,12 @@ GPT Image 2 is OpenAI's next-generation image model available through Fal. It pr
             headers=HEADERS,
             json={
                 "model": "gpt-image-2",
-                "prompt": "An ox standing in the middle of a long open road at sunset, cinematic lighting, photorealistic, centered and staring at the camera.",
-                "resolution": "1920x1080",
+                "prompt": "<prompt>",
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
+                "aspect_ratio": "16:9",
+                "resolution": "2K",
                 "quality": "high",
                 "output_format": "png"
             },
@@ -270,7 +401,7 @@ GPT Image 2 is OpenAI's next-generation image model available through Fal. It pr
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "gpt-image-2",
-          "prompt": "An ox standing in the middle of a long open road at sunset, cinematic lighting, photorealistic, centered and staring at the camera."
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -299,7 +430,78 @@ GPT Image 2 is OpenAI's next-generation image model available through Fal. It pr
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "gpt-image-2",
-                "prompt": "An ox standing in the middle of a long open road at sunset, cinematic lighting, photorealistic, centered and staring at the camera."
+                "prompt": "<prompt>"
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        with requests.get(
+            "https://hub.oxen.ai/api/events",
+            headers=AUTH,
+            stream=True,
+        ) as stream:
+            event_name = None
+            for line in stream.iter_lines(decode_unicode=True):
+                if line.startswith("event: "):
+                    event_name = line.removeprefix("event: ")
+                elif line.startswith("data: ") and event_name == "media_generation_completed":
+                    payload = json.loads(line.removeprefix("data: "))
+                    if payload.get("generation_id") == generation_id:
+                        print(payload)
+                        break
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+      <Tab title="Basic parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "gpt-image-2",
+          "prompt": "<prompt>",
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ]
+        }' | jq -r '.generations[0].generation_id')
+
+        # Stream the SSE channel, grab the data line that follows a
+        # media_generation_completed event for our id, and pretty-print it.
+        curl -sN -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/events \
+          | awk -v id="$GEN_ID" '
+            /^event: media_generation_completed$/ { expect=1; next }
+            /^data: / && expect {
+              payload = substr($0, 7)
+              if (index(payload, "\"generation_id\":\"" id "\"")) { print payload; exit }
+              expect = 0
+            }
+          ' | jq .
+        ```
+
+        ```python Python
+        import json
+        import os
+        import requests
+
+        API_KEY = os.environ["OXEN_API_KEY"]
+        AUTH = {"Authorization": f"Bearer {API_KEY}"}
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers={**AUTH, "Content-Type": "application/json"},
+            json={
+                "model": "gpt-image-2",
+                "prompt": "<prompt>",
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ]
             },
         )
         enqueue.raise_for_status()
@@ -335,8 +537,12 @@ GPT Image 2 is OpenAI's next-generation image model available through Fal. It pr
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "gpt-image-2",
-          "prompt": "An ox standing in the middle of a long open road at sunset, cinematic lighting, photorealistic, centered and staring at the camera.",
-          "resolution": "1920x1080",
+          "prompt": "<prompt>",
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
+          "aspect_ratio": "16:9",
+          "resolution": "2K",
           "quality": "high",
           "output_format": "png"
         }' | jq -r '.generations[0].generation_id')
@@ -367,8 +573,12 @@ GPT Image 2 is OpenAI's next-generation image model available through Fal. It pr
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "gpt-image-2",
-                "prompt": "An ox standing in the middle of a long open road at sunset, cinematic lighting, photorealistic, centered and staring at the camera.",
-                "resolution": "1920x1080",
+                "prompt": "<prompt>",
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
+                "aspect_ratio": "16:9",
+                "resolution": "2K",
                 "quality": "high",
                 "output_format": "png"
             },
@@ -414,12 +624,15 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | `"An ox standing in the middle of a long open road at sunset, cinematic lighting, photorealistic, centered and staring at the camera."` | Text description of the image to generate. |
+| `prompt` | `string` | &mdash; | Text description of the image to generate. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `resolution` | `string` | `"1920x1080"` | Output image resolution. HD sizes (1920x1080 and lower) bill at the standard tier; QHD+ sizes (2560x1440 and higher) bill at the high-resolution tier. One of: 1024x768, 1024x1024, 1024x1536, 1920x1080, 2560x1440, 3840x2160. |
-| `quality` | `string` | `"high"` | Output quality tier. Use 'auto' to let the model pick, or set explicitly to low, medium, or high. One of: auto, low, medium, high. |
+| `input_image` | `array<string>` | &mdash; | Optional reference image(s) to edit. Leave empty to generate from the prompt alone. |
+| `aspect_ratio` | `string` | `"16:9"` | Aspect ratio for the generated image One of: auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 21:9, 9:21. |
+| `resolution` | `string` | `"2K"` | Output image resolution. Higher tiers render more pixels and cost more; see cost_per_image_grid for per-tier pricing. One of: 1K, 2K, 4K. |
+| `quality` | `string` | `"high"` | Output quality tier: low, medium, or high. Higher quality renders more detail and costs more. One of: low, medium, high. |
 | `output_format` | `string` | `"png"` | File format for the generated image. One of: png, jpeg, webp. |
+| `mask_url` | `string` | &mdash; | Optional mask image URL. White pixels mark regions to edit; black pixels are preserved. Leave empty to edit the whole image. Format: uri. |

@@ -49,8 +49,8 @@ Some other noteworthy features of Kling O1 Edit - Video to Video include camera 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-o1-video-to-video-edit",
-          "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4"
+          "prompt": "<prompt>",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }'
         ```
 
@@ -66,8 +66,8 @@ Some other noteworthy features of Kling O1 Edit - Video to Video include camera 
             },
             json={
                 "model": "kling-video-o1-video-to-video-edit",
-                "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4"
+                "prompt": "<prompt>",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         response.raise_for_status()
@@ -87,9 +87,9 @@ Some other noteworthy features of Kling O1 Edit - Video to Video include camera 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-o1-video-to-video-edit",
-          "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
+          "prompt": "<prompt>",
           "input_image": [],
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "elements": [
             {}
           ]
@@ -108,9 +108,9 @@ Some other noteworthy features of Kling O1 Edit - Video to Video include camera 
             },
             json={
                 "model": "kling-video-o1-video-to-video-edit",
-                "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
+                "prompt": "<prompt>",
                 "input_image": [],
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "elements": [
                     {}
                 ]
@@ -133,9 +133,9 @@ Some other noteworthy features of Kling O1 Edit - Video to Video include camera 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-o1-video-to-video-edit",
-          "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
+          "prompt": "<prompt>",
           "input_image": [],
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "elements": [
             {}
           ],
@@ -155,9 +155,9 @@ Some other noteworthy features of Kling O1 Edit - Video to Video include camera 
             },
             json={
                 "model": "kling-video-o1-video-to-video-edit",
-                "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
+                "prompt": "<prompt>",
                 "input_image": [],
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "elements": [
                     {}
                 ],
@@ -190,8 +190,8 @@ Some other noteworthy features of Kling O1 Edit - Video to Video include camera 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-o1-video-to-video-edit",
-          "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4"
+          "prompt": "<prompt>",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -223,8 +223,8 @@ Some other noteworthy features of Kling O1 Edit - Video to Video include camera 
             headers=HEADERS,
             json={
                 "model": "kling-video-o1-video-to-video-edit",
-                "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4"
+                "prompt": "<prompt>",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         enqueue.raise_for_status()
@@ -259,9 +259,9 @@ Some other noteworthy features of Kling O1 Edit - Video to Video include camera 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-o1-video-to-video-edit",
-          "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
+          "prompt": "<prompt>",
           "input_image": [],
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "elements": [
             {}
           ]
@@ -296,9 +296,9 @@ Some other noteworthy features of Kling O1 Edit - Video to Video include camera 
             headers=HEADERS,
             json={
                 "model": "kling-video-o1-video-to-video-edit",
-                "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
+                "prompt": "<prompt>",
                 "input_image": [],
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "elements": [
                     {}
                 ]
@@ -336,9 +336,9 @@ Some other noteworthy features of Kling O1 Edit - Video to Video include camera 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-o1-video-to-video-edit",
-          "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
+          "prompt": "<prompt>",
           "input_image": [],
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "elements": [
             {}
           ],
@@ -374,9 +374,9 @@ Some other noteworthy features of Kling O1 Edit - Video to Video include camera 
             headers=HEADERS,
             json={
                 "model": "kling-video-o1-video-to-video-edit",
-                "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
+                "prompt": "<prompt>",
                 "input_image": [],
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "elements": [
                     {}
                 ],
@@ -423,8 +423,8 @@ Some other noteworthy features of Kling O1 Edit - Video to Video include camera 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-o1-video-to-video-edit",
-          "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4"
+          "prompt": "<prompt>",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -453,8 +453,8 @@ Some other noteworthy features of Kling O1 Edit - Video to Video include camera 
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "kling-video-o1-video-to-video-edit",
-                "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4"
+                "prompt": "<prompt>",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         enqueue.raise_for_status()
@@ -490,9 +490,9 @@ Some other noteworthy features of Kling O1 Edit - Video to Video include camera 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-o1-video-to-video-edit",
-          "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
+          "prompt": "<prompt>",
           "input_image": [],
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "elements": [
             {}
           ]
@@ -524,9 +524,9 @@ Some other noteworthy features of Kling O1 Edit - Video to Video include camera 
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "kling-video-o1-video-to-video-edit",
-                "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
+                "prompt": "<prompt>",
                 "input_image": [],
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "elements": [
                     {}
                 ]
@@ -565,9 +565,9 @@ Some other noteworthy features of Kling O1 Edit - Video to Video include camera 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-o1-video-to-video-edit",
-          "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
+          "prompt": "<prompt>",
           "input_image": [],
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "elements": [
             {}
           ],
@@ -600,9 +600,9 @@ Some other noteworthy features of Kling O1 Edit - Video to Video include camera 
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "kling-video-o1-video-to-video-edit",
-                "prompt": "A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots.",
+                "prompt": "<prompt>",
                 "input_image": [],
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "elements": [
                     {}
                 ],
@@ -650,8 +650,8 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | `"A red bird flies in and lands in-between the two birds on the wire. They fight for positioning before settling in their spots."` | Text description of what you want to generate, or the instruction on how to edit the given image. |
-| `input_video` | `string` | `"https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/birds_on_telephone_wire.mp4"` | Video to use as reference. Format: uri. |
+| `prompt` | `string` | &mdash; | Text description of what you want to generate, or the instruction on how to edit the given image. |
+| `input_video` | `string` | &mdash; | Video to use as reference. Format: uri. |
 
 ### Optional parameters
 

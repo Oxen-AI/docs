@@ -45,8 +45,8 @@ Some other noteworthy features of Qwen/Qwen-Image-Edit include multi-image editi
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "qwen-image-edit",
-          "prompt": "Add a funny hat",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }'
         ```
 
@@ -62,8 +62,8 @@ Some other noteworthy features of Qwen/Qwen-Image-Edit include multi-image editi
             },
             json={
                 "model": "qwen-image-edit",
-                "prompt": "Add a funny hat",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         response.raise_for_status()
@@ -83,8 +83,8 @@ Some other noteworthy features of Qwen/Qwen-Image-Edit include multi-image editi
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "qwen-image-edit",
-          "prompt": "Add a funny hat",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "aspect_ratio": "16:9"
         }'
         ```
@@ -101,8 +101,8 @@ Some other noteworthy features of Qwen/Qwen-Image-Edit include multi-image editi
             },
             json={
                 "model": "qwen-image-edit",
-                "prompt": "Add a funny hat",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "aspect_ratio": "16:9"
             },
         )
@@ -132,8 +132,8 @@ Some other noteworthy features of Qwen/Qwen-Image-Edit include multi-image editi
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "qwen-image-edit",
-          "prompt": "Add a funny hat",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -165,8 +165,8 @@ Some other noteworthy features of Qwen/Qwen-Image-Edit include multi-image editi
             headers=HEADERS,
             json={
                 "model": "qwen-image-edit",
-                "prompt": "Add a funny hat",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         enqueue.raise_for_status()
@@ -201,8 +201,8 @@ Some other noteworthy features of Qwen/Qwen-Image-Edit include multi-image editi
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "qwen-image-edit",
-          "prompt": "Add a funny hat",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "aspect_ratio": "16:9"
         }' | jq -r '.generations[0].generation_id')
 
@@ -235,8 +235,8 @@ Some other noteworthy features of Qwen/Qwen-Image-Edit include multi-image editi
             headers=HEADERS,
             json={
                 "model": "qwen-image-edit",
-                "prompt": "Add a funny hat",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "aspect_ratio": "16:9"
             },
         )
@@ -280,8 +280,8 @@ Some other noteworthy features of Qwen/Qwen-Image-Edit include multi-image editi
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "qwen-image-edit",
-          "prompt": "Add a funny hat",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -310,8 +310,8 @@ Some other noteworthy features of Qwen/Qwen-Image-Edit include multi-image editi
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "qwen-image-edit",
-                "prompt": "Add a funny hat",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         enqueue.raise_for_status()
@@ -347,8 +347,8 @@ Some other noteworthy features of Qwen/Qwen-Image-Edit include multi-image editi
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "qwen-image-edit",
-          "prompt": "Add a funny hat",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "aspect_ratio": "16:9"
         }' | jq -r '.generations[0].generation_id')
 
@@ -378,8 +378,8 @@ Some other noteworthy features of Qwen/Qwen-Image-Edit include multi-image editi
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "qwen-image-edit",
-                "prompt": "Add a funny hat",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "aspect_ratio": "16:9"
             },
         )
@@ -424,8 +424,8 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | `"Add a funny hat"` | Text description of what you want to generate, or the instruction on how to edit the given image. |
-| `input_image` | `string` | `"https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"` | Image to use as reference. Must be jpeg, png, gif, or webp. Format: uri. |
+| `prompt` | `string` | &mdash; | Text description of what you want to generate, or the instruction on how to edit the given image. |
+| `input_image` | `string` | &mdash; | Image to use as reference. Must be jpeg, png, gif, or webp. Format: uri. |
 
 ### Optional parameters
 

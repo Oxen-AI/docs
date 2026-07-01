@@ -39,7 +39,7 @@ Some other noteworthy features of Sora 2 Pro include text-to-video and image-to-
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "openai-sora-2-pro",
-          "prompt": "An ox being given a speeding ticket by a police officer. The ox is driving a Porsche 911, with sunglasses and a hat on like a high profile celebrity."
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -55,7 +55,7 @@ Some other noteworthy features of Sora 2 Pro include text-to-video and image-to-
             },
             json={
                 "model": "openai-sora-2-pro",
-                "prompt": "An ox being given a speeding ticket by a police officer. The ox is driving a Porsche 911, with sunglasses and a hat on like a high profile celebrity."
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -75,7 +75,7 @@ Some other noteworthy features of Sora 2 Pro include text-to-video and image-to-
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "openai-sora-2-pro",
-          "prompt": "An ox being given a speeding ticket by a police officer. The ox is driving a Porsche 911, with sunglasses and a hat on like a high profile celebrity.",
+          "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }'
         ```
@@ -92,7 +92,7 @@ Some other noteworthy features of Sora 2 Pro include text-to-video and image-to-
             },
             json={
                 "model": "openai-sora-2-pro",
-                "prompt": "An ox being given a speeding ticket by a police officer. The ox is driving a Porsche 911, with sunglasses and a hat on like a high profile celebrity.",
+                "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
@@ -113,7 +113,7 @@ Some other noteworthy features of Sora 2 Pro include text-to-video and image-to-
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "openai-sora-2-pro",
-          "prompt": "An ox being given a speeding ticket by a police officer. The ox is driving a Porsche 911, with sunglasses and a hat on like a high profile celebrity.",
+          "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "aspect_ratio": "landscape",
           "resolution": "standard",
@@ -133,7 +133,7 @@ Some other noteworthy features of Sora 2 Pro include text-to-video and image-to-
             },
             json={
                 "model": "openai-sora-2-pro",
-                "prompt": "An ox being given a speeding ticket by a police officer. The ox is driving a Porsche 911, with sunglasses and a hat on like a high profile celebrity.",
+                "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "aspect_ratio": "landscape",
                 "resolution": "standard",
@@ -166,7 +166,7 @@ Some other noteworthy features of Sora 2 Pro include text-to-video and image-to-
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "openai-sora-2-pro",
-          "prompt": "An ox being given a speeding ticket by a police officer. The ox is driving a Porsche 911, with sunglasses and a hat on like a high profile celebrity."
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -198,7 +198,7 @@ Some other noteworthy features of Sora 2 Pro include text-to-video and image-to-
             headers=HEADERS,
             json={
                 "model": "openai-sora-2-pro",
-                "prompt": "An ox being given a speeding ticket by a police officer. The ox is driving a Porsche 911, with sunglasses and a hat on like a high profile celebrity."
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -233,7 +233,7 @@ Some other noteworthy features of Sora 2 Pro include text-to-video and image-to-
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "openai-sora-2-pro",
-          "prompt": "An ox being given a speeding ticket by a police officer. The ox is driving a Porsche 911, with sunglasses and a hat on like a high profile celebrity.",
+          "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }' | jq -r '.generations[0].generation_id')
 
@@ -266,7 +266,7 @@ Some other noteworthy features of Sora 2 Pro include text-to-video and image-to-
             headers=HEADERS,
             json={
                 "model": "openai-sora-2-pro",
-                "prompt": "An ox being given a speeding ticket by a police officer. The ox is driving a Porsche 911, with sunglasses and a hat on like a high profile celebrity.",
+                "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
@@ -302,7 +302,7 @@ Some other noteworthy features of Sora 2 Pro include text-to-video and image-to-
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "openai-sora-2-pro",
-          "prompt": "An ox being given a speeding ticket by a police officer. The ox is driving a Porsche 911, with sunglasses and a hat on like a high profile celebrity.",
+          "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "aspect_ratio": "landscape",
           "resolution": "standard",
@@ -338,7 +338,7 @@ Some other noteworthy features of Sora 2 Pro include text-to-video and image-to-
             headers=HEADERS,
             json={
                 "model": "openai-sora-2-pro",
-                "prompt": "An ox being given a speeding ticket by a police officer. The ox is driving a Porsche 911, with sunglasses and a hat on like a high profile celebrity.",
+                "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "aspect_ratio": "landscape",
                 "resolution": "standard",
@@ -385,7 +385,7 @@ Some other noteworthy features of Sora 2 Pro include text-to-video and image-to-
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "openai-sora-2-pro",
-          "prompt": "An ox being given a speeding ticket by a police officer. The ox is driving a Porsche 911, with sunglasses and a hat on like a high profile celebrity."
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -414,7 +414,7 @@ Some other noteworthy features of Sora 2 Pro include text-to-video and image-to-
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "openai-sora-2-pro",
-                "prompt": "An ox being given a speeding ticket by a police officer. The ox is driving a Porsche 911, with sunglasses and a hat on like a high profile celebrity."
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -450,7 +450,7 @@ Some other noteworthy features of Sora 2 Pro include text-to-video and image-to-
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "openai-sora-2-pro",
-          "prompt": "An ox being given a speeding ticket by a police officer. The ox is driving a Porsche 911, with sunglasses and a hat on like a high profile celebrity.",
+          "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }' | jq -r '.generations[0].generation_id')
 
@@ -480,7 +480,7 @@ Some other noteworthy features of Sora 2 Pro include text-to-video and image-to-
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "openai-sora-2-pro",
-                "prompt": "An ox being given a speeding ticket by a police officer. The ox is driving a Porsche 911, with sunglasses and a hat on like a high profile celebrity.",
+                "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
@@ -517,7 +517,7 @@ Some other noteworthy features of Sora 2 Pro include text-to-video and image-to-
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "openai-sora-2-pro",
-          "prompt": "An ox being given a speeding ticket by a police officer. The ox is driving a Porsche 911, with sunglasses and a hat on like a high profile celebrity.",
+          "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "aspect_ratio": "landscape",
           "resolution": "standard",
@@ -550,7 +550,7 @@ Some other noteworthy features of Sora 2 Pro include text-to-video and image-to-
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "openai-sora-2-pro",
-                "prompt": "An ox being given a speeding ticket by a police officer. The ox is driving a Porsche 911, with sunglasses and a hat on like a high profile celebrity.",
+                "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "aspect_ratio": "landscape",
                 "resolution": "standard",
@@ -598,7 +598,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | `"An ox being given a speeding ticket by a police officer. The ox is driving a Porsche 911, with sunglasses and a hat on like a high profile celebrity."` | Text description of the scene to generate, or instructions for how to transform the input image. |
+| `prompt` | `string` | &mdash; | Text description of the scene to generate, or instructions for how to transform the input image. |
 
 ### Optional parameters
 

@@ -1,0 +1,65 @@
+---
+title: "GPT Audio"
+description: "OpenAI audio-input chat model"
+---
+
+<CardGroup cols={1}>
+  <Card title="Try GPT Audio in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=gpt-audio">
+    Run this model interactively, tune parameters, and compare outputs.
+  </Card>
+</CardGroup>
+
+**Model ID:** `gpt-audio`
+
+GPT Audio is OpenAI's generally available audio model. It accepts audio as an input content part in the Chat Completions API, so a chat model can answer about spoken audio alongside text.
+
+## Example request
+
+<Tip>
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=gpt-audio) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+</Tip>
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST https://hub.oxen.ai/api/ai/audio/transcriptions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -d '{
+  "model": "gpt-audio",
+  "audio_url": "https://example.com/audio.mp3"
+}'
+```
+
+```python Python
+import os
+import requests
+
+response = requests.post(
+    "https://hub.oxen.ai/api/ai/audio/transcriptions",
+    headers={
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+    },
+    json={
+        "model": "gpt-audio",
+        "audio_url": "https://example.com/audio.mp3"
+    },
+)
+response.raise_for_status()
+print(response.json())
+```
+
+</CodeGroup>
+
+## Fetch model details
+
+The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
+
+```bash
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/gpt-audio
+```
+
+## Request parameters
+
+This model follows the standard OpenAI chat completions request body. See the [chat completions reference](../inference-api.mdx) for the full parameter list.

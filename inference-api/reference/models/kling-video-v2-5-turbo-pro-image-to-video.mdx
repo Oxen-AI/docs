@@ -52,8 +52,8 @@ Some other noteworthy use cases of Kling v2.5 - Image to Video include character
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-v2-5-turbo-pro-image-to-video",
-          "prompt": "Zoom into the ox, while it is walking forward on the road, change the season from winter to summer as you zoom in, cinematic",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png"
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }'
         ```
 
@@ -69,8 +69,8 @@ Some other noteworthy use cases of Kling v2.5 - Image to Video include character
             },
             json={
                 "model": "kling-video-v2-5-turbo-pro-image-to-video",
-                "prompt": "Zoom into the ox, while it is walking forward on the road, change the season from winter to summer as you zoom in, cinematic",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png"
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         response.raise_for_status()
@@ -90,8 +90,8 @@ Some other noteworthy use cases of Kling v2.5 - Image to Video include character
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-v2-5-turbo-pro-image-to-video",
-          "prompt": "Zoom into the ox, while it is walking forward on the road, change the season from winter to summer as you zoom in, cinematic",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }'
         ```
@@ -108,8 +108,8 @@ Some other noteworthy use cases of Kling v2.5 - Image to Video include character
             },
             json={
                 "model": "kling-video-v2-5-turbo-pro-image-to-video",
-                "prompt": "Zoom into the ox, while it is walking forward on the road, change the season from winter to summer as you zoom in, cinematic",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
@@ -130,8 +130,8 @@ Some other noteworthy use cases of Kling v2.5 - Image to Video include character
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-v2-5-turbo-pro-image-to-video",
-          "prompt": "Zoom into the ox, while it is walking forward on the road, change the season from winter to summer as you zoom in, cinematic",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "duration": 5
         }'
@@ -149,8 +149,8 @@ Some other noteworthy use cases of Kling v2.5 - Image to Video include character
             },
             json={
                 "model": "kling-video-v2-5-turbo-pro-image-to-video",
-                "prompt": "Zoom into the ox, while it is walking forward on the road, change the season from winter to summer as you zoom in, cinematic",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "duration": 5
             },
@@ -181,8 +181,8 @@ Some other noteworthy use cases of Kling v2.5 - Image to Video include character
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-v2-5-turbo-pro-image-to-video",
-          "prompt": "Zoom into the ox, while it is walking forward on the road, change the season from winter to summer as you zoom in, cinematic",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png"
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -214,8 +214,8 @@ Some other noteworthy use cases of Kling v2.5 - Image to Video include character
             headers=HEADERS,
             json={
                 "model": "kling-video-v2-5-turbo-pro-image-to-video",
-                "prompt": "Zoom into the ox, while it is walking forward on the road, change the season from winter to summer as you zoom in, cinematic",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png"
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         enqueue.raise_for_status()
@@ -250,8 +250,8 @@ Some other noteworthy use cases of Kling v2.5 - Image to Video include character
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-v2-5-turbo-pro-image-to-video",
-          "prompt": "Zoom into the ox, while it is walking forward on the road, change the season from winter to summer as you zoom in, cinematic",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }' | jq -r '.generations[0].generation_id')
 
@@ -284,8 +284,8 @@ Some other noteworthy use cases of Kling v2.5 - Image to Video include character
             headers=HEADERS,
             json={
                 "model": "kling-video-v2-5-turbo-pro-image-to-video",
-                "prompt": "Zoom into the ox, while it is walking forward on the road, change the season from winter to summer as you zoom in, cinematic",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
@@ -321,8 +321,8 @@ Some other noteworthy use cases of Kling v2.5 - Image to Video include character
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-v2-5-turbo-pro-image-to-video",
-          "prompt": "Zoom into the ox, while it is walking forward on the road, change the season from winter to summer as you zoom in, cinematic",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "duration": 5
         }' | jq -r '.generations[0].generation_id')
@@ -356,8 +356,8 @@ Some other noteworthy use cases of Kling v2.5 - Image to Video include character
             headers=HEADERS,
             json={
                 "model": "kling-video-v2-5-turbo-pro-image-to-video",
-                "prompt": "Zoom into the ox, while it is walking forward on the road, change the season from winter to summer as you zoom in, cinematic",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "duration": 5
             },
@@ -402,8 +402,8 @@ Some other noteworthy use cases of Kling v2.5 - Image to Video include character
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-v2-5-turbo-pro-image-to-video",
-          "prompt": "Zoom into the ox, while it is walking forward on the road, change the season from winter to summer as you zoom in, cinematic",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png"
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -432,8 +432,8 @@ Some other noteworthy use cases of Kling v2.5 - Image to Video include character
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "kling-video-v2-5-turbo-pro-image-to-video",
-                "prompt": "Zoom into the ox, while it is walking forward on the road, change the season from winter to summer as you zoom in, cinematic",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png"
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         enqueue.raise_for_status()
@@ -469,8 +469,8 @@ Some other noteworthy use cases of Kling v2.5 - Image to Video include character
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-v2-5-turbo-pro-image-to-video",
-          "prompt": "Zoom into the ox, while it is walking forward on the road, change the season from winter to summer as you zoom in, cinematic",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }' | jq -r '.generations[0].generation_id')
 
@@ -500,8 +500,8 @@ Some other noteworthy use cases of Kling v2.5 - Image to Video include character
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "kling-video-v2-5-turbo-pro-image-to-video",
-                "prompt": "Zoom into the ox, while it is walking forward on the road, change the season from winter to summer as you zoom in, cinematic",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
@@ -538,8 +538,8 @@ Some other noteworthy use cases of Kling v2.5 - Image to Video include character
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-v2-5-turbo-pro-image-to-video",
-          "prompt": "Zoom into the ox, while it is walking forward on the road, change the season from winter to summer as you zoom in, cinematic",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "duration": 5
         }' | jq -r '.generations[0].generation_id')
@@ -570,8 +570,8 @@ Some other noteworthy use cases of Kling v2.5 - Image to Video include character
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "kling-video-v2-5-turbo-pro-image-to-video",
-                "prompt": "Zoom into the ox, while it is walking forward on the road, change the season from winter to summer as you zoom in, cinematic",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "duration": 5
             },
@@ -617,8 +617,8 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | `"Zoom into the ox, while it is walking forward on the road, change the season from winter to summer as you zoom in, cinematic"` | Text description of what you want to generate, or the instruction on how to edit the given image. |
-| `input_image` | `string` | `"https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/ox_zoom_out_1926_1076.png"` | Image to use as reference. Must be jpeg, png, gif, or webp. Format: uri. |
+| `prompt` | `string` | &mdash; | Text description of what you want to generate, or the instruction on how to edit the given image. |
+| `input_image` | `string` | &mdash; | Image to use as reference. Must be jpeg, png, gif, or webp. Format: uri. |
 
 ### Optional parameters
 

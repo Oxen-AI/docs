@@ -49,7 +49,7 @@ Some other noteworthy features of Kling 2.6 Pro - Text to Video include support 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-v2-6-pro-text-to-video",
-          "prompt": "A close up of a blonde woman surfer in a wet suit, with a wave behind her, paddling to get momentum before standing up, on her stomach, looking back over her shoulder at the wave coming in."
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -65,7 +65,7 @@ Some other noteworthy features of Kling 2.6 Pro - Text to Video include support 
             },
             json={
                 "model": "kling-video-v2-6-pro-text-to-video",
-                "prompt": "A close up of a blonde woman surfer in a wet suit, with a wave behind her, paddling to get momentum before standing up, on her stomach, looking back over her shoulder at the wave coming in."
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -85,8 +85,7 @@ Some other noteworthy features of Kling 2.6 Pro - Text to Video include support 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-v2-6-pro-text-to-video",
-          "prompt": "A close up of a blonde woman surfer in a wet suit, with a wave behind her, paddling to get momentum before standing up, on her stomach, looking back over her shoulder at the wave coming in.",
-          "negative_prompt": "blur, distort, and low quality",
+          "prompt": "<prompt>",
           "aspect_ratio": "16:9",
           "duration": 5,
           "generate_audio": false,
@@ -106,8 +105,7 @@ Some other noteworthy features of Kling 2.6 Pro - Text to Video include support 
             },
             json={
                 "model": "kling-video-v2-6-pro-text-to-video",
-                "prompt": "A close up of a blonde woman surfer in a wet suit, with a wave behind her, paddling to get momentum before standing up, on her stomach, looking back over her shoulder at the wave coming in.",
-                "negative_prompt": "blur, distort, and low quality",
+                "prompt": "<prompt>",
                 "aspect_ratio": "16:9",
                 "duration": 5,
                 "generate_audio": false,
@@ -140,7 +138,7 @@ Some other noteworthy features of Kling 2.6 Pro - Text to Video include support 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-v2-6-pro-text-to-video",
-          "prompt": "A close up of a blonde woman surfer in a wet suit, with a wave behind her, paddling to get momentum before standing up, on her stomach, looking back over her shoulder at the wave coming in."
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -172,7 +170,7 @@ Some other noteworthy features of Kling 2.6 Pro - Text to Video include support 
             headers=HEADERS,
             json={
                 "model": "kling-video-v2-6-pro-text-to-video",
-                "prompt": "A close up of a blonde woman surfer in a wet suit, with a wave behind her, paddling to get momentum before standing up, on her stomach, looking back over her shoulder at the wave coming in."
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -207,8 +205,7 @@ Some other noteworthy features of Kling 2.6 Pro - Text to Video include support 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-v2-6-pro-text-to-video",
-          "prompt": "A close up of a blonde woman surfer in a wet suit, with a wave behind her, paddling to get momentum before standing up, on her stomach, looking back over her shoulder at the wave coming in.",
-          "negative_prompt": "blur, distort, and low quality",
+          "prompt": "<prompt>",
           "aspect_ratio": "16:9",
           "duration": 5,
           "generate_audio": false,
@@ -244,8 +241,7 @@ Some other noteworthy features of Kling 2.6 Pro - Text to Video include support 
             headers=HEADERS,
             json={
                 "model": "kling-video-v2-6-pro-text-to-video",
-                "prompt": "A close up of a blonde woman surfer in a wet suit, with a wave behind her, paddling to get momentum before standing up, on her stomach, looking back over her shoulder at the wave coming in.",
-                "negative_prompt": "blur, distort, and low quality",
+                "prompt": "<prompt>",
                 "aspect_ratio": "16:9",
                 "duration": 5,
                 "generate_audio": false,
@@ -292,7 +288,7 @@ Some other noteworthy features of Kling 2.6 Pro - Text to Video include support 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-v2-6-pro-text-to-video",
-          "prompt": "A close up of a blonde woman surfer in a wet suit, with a wave behind her, paddling to get momentum before standing up, on her stomach, looking back over her shoulder at the wave coming in."
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -321,7 +317,7 @@ Some other noteworthy features of Kling 2.6 Pro - Text to Video include support 
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "kling-video-v2-6-pro-text-to-video",
-                "prompt": "A close up of a blonde woman surfer in a wet suit, with a wave behind her, paddling to get momentum before standing up, on her stomach, looking back over her shoulder at the wave coming in."
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -357,8 +353,7 @@ Some other noteworthy features of Kling 2.6 Pro - Text to Video include support 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "kling-video-v2-6-pro-text-to-video",
-          "prompt": "A close up of a blonde woman surfer in a wet suit, with a wave behind her, paddling to get momentum before standing up, on her stomach, looking back over her shoulder at the wave coming in.",
-          "negative_prompt": "blur, distort, and low quality",
+          "prompt": "<prompt>",
           "aspect_ratio": "16:9",
           "duration": 5,
           "generate_audio": false,
@@ -391,8 +386,7 @@ Some other noteworthy features of Kling 2.6 Pro - Text to Video include support 
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "kling-video-v2-6-pro-text-to-video",
-                "prompt": "A close up of a blonde woman surfer in a wet suit, with a wave behind her, paddling to get momentum before standing up, on her stomach, looking back over her shoulder at the wave coming in.",
-                "negative_prompt": "blur, distort, and low quality",
+                "prompt": "<prompt>",
                 "aspect_ratio": "16:9",
                 "duration": 5,
                 "generate_audio": false,
@@ -440,13 +434,13 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | `"A close up of a blonde woman surfer in a wet suit, with a wave behind her, paddling to get momentum before standing up, on her stomach, looking back over her shoulder at the wave coming in."` | Text description of what you want to generate, or the instruction on how to edit the given image. |
+| `prompt` | `string` | &mdash; | Text description of what you want to generate, or the instruction on how to edit the given image. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `negative_prompt` | `string` | `"blur, distort, and low quality"` | Text description of what you *do not* want the model to do. |
+| `negative_prompt` | `string` | &mdash; | Text description of what you *do not* want the model to do. |
 | `aspect_ratio` | `string` | `"16:9"` | Video aspect ratio One of: 9:16, 16:9, 1:1. |
 | `duration` | `integer` | `5` | Video duration in seconds One of: 5, 10. |
 | `generate_audio` | `boolean` | `false` | Generate audio with the video. |

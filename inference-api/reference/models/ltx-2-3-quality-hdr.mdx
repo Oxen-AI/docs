@@ -93,8 +93,7 @@ The model returns an MP4 preview of the HDR result for quick inspection alongsid
           "resolution": "auto",
           "frames_per_second": 24,
           "generate_audio": true,
-          "video_quality": "high",
-          "negative_prompt": "color distortion, overexposure, static, blurry details, subtitles, style, artwork, painting, frame, still, dim overall tone, worst quality, low quality, JPEG compression artifacts, ugly, mutilated, extra fingers, poorly drawn hands, poorly drawn face, deformed, disfigured, malformed limbs, fused fingers, motionless frame, cluttered background, three legs, crowded background, walking backwards"
+          "video_quality": "high"
         }'
         ```
 
@@ -116,8 +115,7 @@ The model returns an MP4 preview of the HDR result for quick inspection alongsid
                 "resolution": "auto",
                 "frames_per_second": 24,
                 "generate_audio": true,
-                "video_quality": "high",
-                "negative_prompt": "color distortion, overexposure, static, blurry details, subtitles, style, artwork, painting, frame, still, dim overall tone, worst quality, low quality, JPEG compression artifacts, ugly, mutilated, extra fingers, poorly drawn hands, poorly drawn face, deformed, disfigured, malformed limbs, fused fingers, motionless frame, cluttered background, three legs, crowded background, walking backwards"
+                "video_quality": "high"
             },
         )
         response.raise_for_status()
@@ -221,8 +219,7 @@ The model returns an MP4 preview of the HDR result for quick inspection alongsid
           "resolution": "auto",
           "frames_per_second": 24,
           "generate_audio": true,
-          "video_quality": "high",
-          "negative_prompt": "color distortion, overexposure, static, blurry details, subtitles, style, artwork, painting, frame, still, dim overall tone, worst quality, low quality, JPEG compression artifacts, ugly, mutilated, extra fingers, poorly drawn hands, poorly drawn face, deformed, disfigured, malformed limbs, fused fingers, motionless frame, cluttered background, three legs, crowded background, walking backwards"
+          "video_quality": "high"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -260,8 +257,7 @@ The model returns an MP4 preview of the HDR result for quick inspection alongsid
                 "resolution": "auto",
                 "frames_per_second": 24,
                 "generate_audio": true,
-                "video_quality": "high",
-                "negative_prompt": "color distortion, overexposure, static, blurry details, subtitles, style, artwork, painting, frame, still, dim overall tone, worst quality, low quality, JPEG compression artifacts, ugly, mutilated, extra fingers, poorly drawn hands, poorly drawn face, deformed, disfigured, malformed limbs, fused fingers, motionless frame, cluttered background, three legs, crowded background, walking backwards"
+                "video_quality": "high"
             },
         )
         enqueue.raise_for_status()
@@ -377,8 +373,7 @@ The model returns an MP4 preview of the HDR result for quick inspection alongsid
           "resolution": "auto",
           "frames_per_second": 24,
           "generate_audio": true,
-          "video_quality": "high",
-          "negative_prompt": "color distortion, overexposure, static, blurry details, subtitles, style, artwork, painting, frame, still, dim overall tone, worst quality, low quality, JPEG compression artifacts, ugly, mutilated, extra fingers, poorly drawn hands, poorly drawn face, deformed, disfigured, malformed limbs, fused fingers, motionless frame, cluttered background, three legs, crowded background, walking backwards"
+          "video_quality": "high"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -413,8 +408,7 @@ The model returns an MP4 preview of the HDR result for quick inspection alongsid
                 "resolution": "auto",
                 "frames_per_second": 24,
                 "generate_audio": true,
-                "video_quality": "high",
-                "negative_prompt": "color distortion, overexposure, static, blurry details, subtitles, style, artwork, painting, frame, still, dim overall tone, worst quality, low quality, JPEG compression artifacts, ugly, mutilated, extra fingers, poorly drawn hands, poorly drawn face, deformed, disfigured, malformed limbs, fused fingers, motionless frame, cluttered background, three legs, crowded background, walking backwards"
+                "video_quality": "high"
             },
         )
         enqueue.raise_for_status()
@@ -470,5 +464,5 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | `frames_per_second` | `number` | `24` | Frames per second of the generated video. Range: 1 – 60. |
 | `generate_audio` | `boolean` | `true` | Whether to include audio in the returned video. When disabled, the final MP4 is returned without an audio track. |
 | `video_quality` | `string` | `"high"` | The quality preset of the generated video. One of: low, medium, high, maximum. |
-| `negative_prompt` | `string` | `"color distortion, overexposure, static, blurry details, subtitles, style, artwork, painting, frame, still, dim overall tone, worst quality, low quality, JPEG compression artifacts, ugly, mutilated, extra fingers, poorly drawn hands, poorly drawn face, deformed, disfigured, malformed limbs, fused fingers, motionless frame, cluttered background, three legs, crowded background, walking backwards"` | The negative prompt to steer generation away from. |
+| `negative_prompt` | `string` | &mdash; | The negative prompt to steer generation away from. |
 | `seed` | `integer` | &mdash; | Random seed for reproducibility. If None, a random seed is chosen. |
