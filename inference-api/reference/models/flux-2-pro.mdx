@@ -48,7 +48,7 @@ Some other noteworthy features of FLUX.2 [pro] include precise control over pose
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "flux-2-pro",
-          "prompt": "Wanderer above the Sea of Fog by Caspar David Friedrich, as the wanderer facing out towards the expanse. The character should be shown from behind, standing on the rocky peak, facing away from the viewer and looking out towards the vast landscape. The background should be in the style of Caspar David Friedrich."
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -64,7 +64,7 @@ Some other noteworthy features of FLUX.2 [pro] include precise control over pose
             },
             json={
                 "model": "flux-2-pro",
-                "prompt": "Wanderer above the Sea of Fog by Caspar David Friedrich, as the wanderer facing out towards the expanse. The character should be shown from behind, standing on the rocky peak, facing away from the viewer and looking out towards the vast landscape. The background should be in the style of Caspar David Friedrich."
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -84,7 +84,7 @@ Some other noteworthy features of FLUX.2 [pro] include precise control over pose
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "flux-2-pro",
-          "prompt": "Wanderer above the Sea of Fog by Caspar David Friedrich, as the wanderer facing out towards the expanse. The character should be shown from behind, standing on the rocky peak, facing away from the viewer and looking out towards the vast landscape. The background should be in the style of Caspar David Friedrich.",
+          "prompt": "<prompt>",
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
@@ -103,7 +103,7 @@ Some other noteworthy features of FLUX.2 [pro] include precise control over pose
             },
             json={
                 "model": "flux-2-pro",
-                "prompt": "Wanderer above the Sea of Fog by Caspar David Friedrich, as the wanderer facing out towards the expanse. The character should be shown from behind, standing on the rocky peak, facing away from the viewer and looking out towards the vast landscape. The background should be in the style of Caspar David Friedrich.",
+                "prompt": "<prompt>",
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
@@ -126,7 +126,7 @@ Some other noteworthy features of FLUX.2 [pro] include precise control over pose
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "flux-2-pro",
-          "prompt": "Wanderer above the Sea of Fog by Caspar David Friedrich, as the wanderer facing out towards the expanse. The character should be shown from behind, standing on the rocky peak, facing away from the viewer and looking out towards the vast landscape. The background should be in the style of Caspar David Friedrich.",
+          "prompt": "<prompt>",
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
@@ -152,7 +152,7 @@ Some other noteworthy features of FLUX.2 [pro] include precise control over pose
             },
             json={
                 "model": "flux-2-pro",
-                "prompt": "Wanderer above the Sea of Fog by Caspar David Friedrich, as the wanderer facing out towards the expanse. The character should be shown from behind, standing on the rocky peak, facing away from the viewer and looking out towards the vast landscape. The background should be in the style of Caspar David Friedrich.",
+                "prompt": "<prompt>",
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
@@ -191,7 +191,7 @@ Some other noteworthy features of FLUX.2 [pro] include precise control over pose
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "flux-2-pro",
-          "prompt": "Wanderer above the Sea of Fog by Caspar David Friedrich, as the wanderer facing out towards the expanse. The character should be shown from behind, standing on the rocky peak, facing away from the viewer and looking out towards the vast landscape. The background should be in the style of Caspar David Friedrich."
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -223,7 +223,7 @@ Some other noteworthy features of FLUX.2 [pro] include precise control over pose
             headers=HEADERS,
             json={
                 "model": "flux-2-pro",
-                "prompt": "Wanderer above the Sea of Fog by Caspar David Friedrich, as the wanderer facing out towards the expanse. The character should be shown from behind, standing on the rocky peak, facing away from the viewer and looking out towards the vast landscape. The background should be in the style of Caspar David Friedrich."
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -258,7 +258,7 @@ Some other noteworthy features of FLUX.2 [pro] include precise control over pose
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "flux-2-pro",
-          "prompt": "Wanderer above the Sea of Fog by Caspar David Friedrich, as the wanderer facing out towards the expanse. The character should be shown from behind, standing on the rocky peak, facing away from the viewer and looking out towards the vast landscape. The background should be in the style of Caspar David Friedrich.",
+          "prompt": "<prompt>",
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
@@ -293,7 +293,7 @@ Some other noteworthy features of FLUX.2 [pro] include precise control over pose
             headers=HEADERS,
             json={
                 "model": "flux-2-pro",
-                "prompt": "Wanderer above the Sea of Fog by Caspar David Friedrich, as the wanderer facing out towards the expanse. The character should be shown from behind, standing on the rocky peak, facing away from the viewer and looking out towards the vast landscape. The background should be in the style of Caspar David Friedrich.",
+                "prompt": "<prompt>",
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
@@ -331,7 +331,7 @@ Some other noteworthy features of FLUX.2 [pro] include precise control over pose
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "flux-2-pro",
-          "prompt": "Wanderer above the Sea of Fog by Caspar David Friedrich, as the wanderer facing out towards the expanse. The character should be shown from behind, standing on the rocky peak, facing away from the viewer and looking out towards the vast landscape. The background should be in the style of Caspar David Friedrich.",
+          "prompt": "<prompt>",
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
@@ -373,7 +373,7 @@ Some other noteworthy features of FLUX.2 [pro] include precise control over pose
             headers=HEADERS,
             json={
                 "model": "flux-2-pro",
-                "prompt": "Wanderer above the Sea of Fog by Caspar David Friedrich, as the wanderer facing out towards the expanse. The character should be shown from behind, standing on the rocky peak, facing away from the viewer and looking out towards the vast landscape. The background should be in the style of Caspar David Friedrich.",
+                "prompt": "<prompt>",
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
@@ -426,7 +426,7 @@ Some other noteworthy features of FLUX.2 [pro] include precise control over pose
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "flux-2-pro",
-          "prompt": "Wanderer above the Sea of Fog by Caspar David Friedrich, as the wanderer facing out towards the expanse. The character should be shown from behind, standing on the rocky peak, facing away from the viewer and looking out towards the vast landscape. The background should be in the style of Caspar David Friedrich."
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -455,7 +455,7 @@ Some other noteworthy features of FLUX.2 [pro] include precise control over pose
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "flux-2-pro",
-                "prompt": "Wanderer above the Sea of Fog by Caspar David Friedrich, as the wanderer facing out towards the expanse. The character should be shown from behind, standing on the rocky peak, facing away from the viewer and looking out towards the vast landscape. The background should be in the style of Caspar David Friedrich."
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -491,7 +491,7 @@ Some other noteworthy features of FLUX.2 [pro] include precise control over pose
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "flux-2-pro",
-          "prompt": "Wanderer above the Sea of Fog by Caspar David Friedrich, as the wanderer facing out towards the expanse. The character should be shown from behind, standing on the rocky peak, facing away from the viewer and looking out towards the vast landscape. The background should be in the style of Caspar David Friedrich.",
+          "prompt": "<prompt>",
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
@@ -523,7 +523,7 @@ Some other noteworthy features of FLUX.2 [pro] include precise control over pose
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "flux-2-pro",
-                "prompt": "Wanderer above the Sea of Fog by Caspar David Friedrich, as the wanderer facing out towards the expanse. The character should be shown from behind, standing on the rocky peak, facing away from the viewer and looking out towards the vast landscape. The background should be in the style of Caspar David Friedrich.",
+                "prompt": "<prompt>",
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
@@ -562,7 +562,7 @@ Some other noteworthy features of FLUX.2 [pro] include precise control over pose
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "flux-2-pro",
-          "prompt": "Wanderer above the Sea of Fog by Caspar David Friedrich, as the wanderer facing out towards the expanse. The character should be shown from behind, standing on the rocky peak, facing away from the viewer and looking out towards the vast landscape. The background should be in the style of Caspar David Friedrich.",
+          "prompt": "<prompt>",
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
@@ -601,7 +601,7 @@ Some other noteworthy features of FLUX.2 [pro] include precise control over pose
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "flux-2-pro",
-                "prompt": "Wanderer above the Sea of Fog by Caspar David Friedrich, as the wanderer facing out towards the expanse. The character should be shown from behind, standing on the rocky peak, facing away from the viewer and looking out towards the vast landscape. The background should be in the style of Caspar David Friedrich.",
+                "prompt": "<prompt>",
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
@@ -655,13 +655,13 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | `"Wanderer above the Sea of Fog by Caspar David Friedrich, as the wanderer facing out towards the expanse. The character should be shown from behind, standing on the rocky peak, facing away from the viewer and looking out towards the vast landscape. The background should be in the style of Caspar David Friedrich."` | Prompt for generated image |
+| `prompt` | `string` | &mdash; | Prompt for generated image. Use @Image1, @Image2, etc. to reference the input images. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `input_image` | `array<string>` | &mdash; | Input images to transform or use as reference (supports multiple image urls) |
+| `input_image` | `array<string>` | &mdash; | Input images to transform or use as reference. Reference them in the prompt as @Image1, @Image2, etc. |
 | `aspect_ratio` | `string` | `"16:9"` | Aspect ratio for the generated image One of: 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, match_input_image. |
 | `resolution` | `string` | `"1 MP"` | Resolution for the generated image One of: 1 MP, 2 MP, 0.5 MP. |
 | `num_inference_steps` | `integer` | `30` | Number of denoising steps. Recommended range is 28-50, and lower number of steps produce lower quality outputs, faster. Range: 1 – 50. |

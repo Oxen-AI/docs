@@ -39,7 +39,7 @@ Beyond design, Ideogram V4 delivers strong realism and broad artistic range. It 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "ideogram-v4",
-          "prompt": "A red panda perched on a mossy branch in a misty forest at sunrise"
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -55,7 +55,7 @@ Beyond design, Ideogram V4 delivers strong realism and broad artistic range. It 
             },
             json={
                 "model": "ideogram-v4",
-                "prompt": "A red panda perched on a mossy branch in a misty forest at sunrise"
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -75,7 +75,7 @@ Beyond design, Ideogram V4 delivers strong realism and broad artistic range. It 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "ideogram-v4",
-          "prompt": "A red panda perched on a mossy branch in a misty forest at sunrise",
+          "prompt": "<prompt>",
           "image_size": "square_hd",
           "rendering_speed": "BALANCED",
           "expansion_model": "Medium",
@@ -98,7 +98,7 @@ Beyond design, Ideogram V4 delivers strong realism and broad artistic range. It 
             },
             json={
                 "model": "ideogram-v4",
-                "prompt": "A red panda perched on a mossy branch in a misty forest at sunrise",
+                "prompt": "<prompt>",
                 "image_size": "square_hd",
                 "rendering_speed": "BALANCED",
                 "expansion_model": "Medium",
@@ -134,7 +134,7 @@ Beyond design, Ideogram V4 delivers strong realism and broad artistic range. It 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "ideogram-v4",
-          "prompt": "A red panda perched on a mossy branch in a misty forest at sunrise"
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -166,7 +166,7 @@ Beyond design, Ideogram V4 delivers strong realism and broad artistic range. It 
             headers=HEADERS,
             json={
                 "model": "ideogram-v4",
-                "prompt": "A red panda perched on a mossy branch in a misty forest at sunrise"
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -201,7 +201,7 @@ Beyond design, Ideogram V4 delivers strong realism and broad artistic range. It 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "ideogram-v4",
-          "prompt": "A red panda perched on a mossy branch in a misty forest at sunrise",
+          "prompt": "<prompt>",
           "image_size": "square_hd",
           "rendering_speed": "BALANCED",
           "expansion_model": "Medium",
@@ -240,7 +240,7 @@ Beyond design, Ideogram V4 delivers strong realism and broad artistic range. It 
             headers=HEADERS,
             json={
                 "model": "ideogram-v4",
-                "prompt": "A red panda perched on a mossy branch in a misty forest at sunrise",
+                "prompt": "<prompt>",
                 "image_size": "square_hd",
                 "rendering_speed": "BALANCED",
                 "expansion_model": "Medium",
@@ -290,7 +290,7 @@ Beyond design, Ideogram V4 delivers strong realism and broad artistic range. It 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "ideogram-v4",
-          "prompt": "A red panda perched on a mossy branch in a misty forest at sunrise"
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -319,7 +319,7 @@ Beyond design, Ideogram V4 delivers strong realism and broad artistic range. It 
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "ideogram-v4",
-                "prompt": "A red panda perched on a mossy branch in a misty forest at sunrise"
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -355,7 +355,7 @@ Beyond design, Ideogram V4 delivers strong realism and broad artistic range. It 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "ideogram-v4",
-          "prompt": "A red panda perched on a mossy branch in a misty forest at sunrise",
+          "prompt": "<prompt>",
           "image_size": "square_hd",
           "rendering_speed": "BALANCED",
           "expansion_model": "Medium",
@@ -391,7 +391,7 @@ Beyond design, Ideogram V4 delivers strong realism and broad artistic range. It 
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "ideogram-v4",
-                "prompt": "A red panda perched on a mossy branch in a misty forest at sunrise",
+                "prompt": "<prompt>",
                 "image_size": "square_hd",
                 "rendering_speed": "BALANCED",
                 "expansion_model": "Medium",
@@ -442,7 +442,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | `"A red panda perched on a mossy branch in a misty forest at sunrise"` | The prompt to generate an image from. |
+| `prompt` | `string` | &mdash; | The prompt to generate an image from. |
 
 ### Optional parameters
 

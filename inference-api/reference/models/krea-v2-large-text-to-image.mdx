@@ -37,7 +37,7 @@ The model supports a range of aspect ratios, a creativity control that trades pr
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "krea-v2-large-text-to-image",
-          "prompt": "A Van Gogh-tinged Proven\u00e7al farmhouse under starry nights."
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -53,7 +53,7 @@ The model supports a range of aspect ratios, a creativity control that trades pr
             },
             json={
                 "model": "krea-v2-large-text-to-image",
-                "prompt": "A Van Gogh-tinged Proven\u00e7al farmhouse under starry nights."
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -73,7 +73,7 @@ The model supports a range of aspect ratios, a creativity control that trades pr
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "krea-v2-large-text-to-image",
-          "prompt": "A Van Gogh-tinged Proven\u00e7al farmhouse under starry nights.",
+          "prompt": "<prompt>",
           "image_style_references": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
@@ -92,7 +92,7 @@ The model supports a range of aspect ratios, a creativity control that trades pr
             },
             json={
                 "model": "krea-v2-large-text-to-image",
-                "prompt": "A Van Gogh-tinged Proven\u00e7al farmhouse under starry nights.",
+                "prompt": "<prompt>",
                 "image_style_references": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
@@ -115,7 +115,7 @@ The model supports a range of aspect ratios, a creativity control that trades pr
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "krea-v2-large-text-to-image",
-          "prompt": "A Van Gogh-tinged Proven\u00e7al farmhouse under starry nights.",
+          "prompt": "<prompt>",
           "image_style_references": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
@@ -136,7 +136,7 @@ The model supports a range of aspect ratios, a creativity control that trades pr
             },
             json={
                 "model": "krea-v2-large-text-to-image",
-                "prompt": "A Van Gogh-tinged Proven\u00e7al farmhouse under starry nights.",
+                "prompt": "<prompt>",
                 "image_style_references": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
@@ -170,7 +170,7 @@ The model supports a range of aspect ratios, a creativity control that trades pr
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "krea-v2-large-text-to-image",
-          "prompt": "A Van Gogh-tinged Proven\u00e7al farmhouse under starry nights."
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -202,7 +202,7 @@ The model supports a range of aspect ratios, a creativity control that trades pr
             headers=HEADERS,
             json={
                 "model": "krea-v2-large-text-to-image",
-                "prompt": "A Van Gogh-tinged Proven\u00e7al farmhouse under starry nights."
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -237,7 +237,7 @@ The model supports a range of aspect ratios, a creativity control that trades pr
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "krea-v2-large-text-to-image",
-          "prompt": "A Van Gogh-tinged Proven\u00e7al farmhouse under starry nights.",
+          "prompt": "<prompt>",
           "image_style_references": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
@@ -272,7 +272,7 @@ The model supports a range of aspect ratios, a creativity control that trades pr
             headers=HEADERS,
             json={
                 "model": "krea-v2-large-text-to-image",
-                "prompt": "A Van Gogh-tinged Proven\u00e7al farmhouse under starry nights.",
+                "prompt": "<prompt>",
                 "image_style_references": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
@@ -310,7 +310,7 @@ The model supports a range of aspect ratios, a creativity control that trades pr
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "krea-v2-large-text-to-image",
-          "prompt": "A Van Gogh-tinged Proven\u00e7al farmhouse under starry nights.",
+          "prompt": "<prompt>",
           "image_style_references": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
@@ -347,7 +347,7 @@ The model supports a range of aspect ratios, a creativity control that trades pr
             headers=HEADERS,
             json={
                 "model": "krea-v2-large-text-to-image",
-                "prompt": "A Van Gogh-tinged Proven\u00e7al farmhouse under starry nights.",
+                "prompt": "<prompt>",
                 "image_style_references": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
@@ -395,7 +395,7 @@ The model supports a range of aspect ratios, a creativity control that trades pr
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "krea-v2-large-text-to-image",
-          "prompt": "A Van Gogh-tinged Proven\u00e7al farmhouse under starry nights."
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -424,7 +424,7 @@ The model supports a range of aspect ratios, a creativity control that trades pr
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "krea-v2-large-text-to-image",
-                "prompt": "A Van Gogh-tinged Proven\u00e7al farmhouse under starry nights."
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -460,7 +460,7 @@ The model supports a range of aspect ratios, a creativity control that trades pr
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "krea-v2-large-text-to-image",
-          "prompt": "A Van Gogh-tinged Proven\u00e7al farmhouse under starry nights.",
+          "prompt": "<prompt>",
           "image_style_references": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
@@ -492,7 +492,7 @@ The model supports a range of aspect ratios, a creativity control that trades pr
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "krea-v2-large-text-to-image",
-                "prompt": "A Van Gogh-tinged Proven\u00e7al farmhouse under starry nights.",
+                "prompt": "<prompt>",
                 "image_style_references": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
@@ -531,7 +531,7 @@ The model supports a range of aspect ratios, a creativity control that trades pr
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "krea-v2-large-text-to-image",
-          "prompt": "A Van Gogh-tinged Proven\u00e7al farmhouse under starry nights.",
+          "prompt": "<prompt>",
           "image_style_references": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
@@ -565,7 +565,7 @@ The model supports a range of aspect ratios, a creativity control that trades pr
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "krea-v2-large-text-to-image",
-                "prompt": "A Van Gogh-tinged Proven\u00e7al farmhouse under starry nights.",
+                "prompt": "<prompt>",
                 "image_style_references": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
@@ -614,7 +614,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | `"A Van Gogh-tinged Proven\u00e7al farmhouse under starry nights."` | Text description of the image to generate. |
+| `prompt` | `string` | &mdash; | Text description of the image to generate. |
 
 ### Optional parameters
 

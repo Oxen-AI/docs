@@ -49,7 +49,7 @@ Some other noteworthy features of google/veo-3.1 include image-to-video animatio
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "google-veo-3-1",
-          "prompt": "A dog digging on the beach"
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -65,7 +65,7 @@ Some other noteworthy features of google/veo-3.1 include image-to-video animatio
             },
             json={
                 "model": "google-veo-3-1",
-                "prompt": "A dog digging on the beach"
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -86,7 +86,7 @@ Some other noteworthy features of google/veo-3.1 include image-to-video animatio
           -d '{
           "model": "google-veo-3-1",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "prompt": "A dog digging on the beach"
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -103,7 +103,7 @@ Some other noteworthy features of google/veo-3.1 include image-to-video animatio
             json={
                 "model": "google-veo-3-1",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "prompt": "A dog digging on the beach"
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -124,7 +124,7 @@ Some other noteworthy features of google/veo-3.1 include image-to-video animatio
           -d '{
           "model": "google-veo-3-1",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "prompt": "A dog digging on the beach",
+          "prompt": "<prompt>",
           "aspect_ratio": "16:9",
           "duration": 8,
           "resolution": "1080p",
@@ -145,7 +145,7 @@ Some other noteworthy features of google/veo-3.1 include image-to-video animatio
             json={
                 "model": "google-veo-3-1",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "prompt": "A dog digging on the beach",
+                "prompt": "<prompt>",
                 "aspect_ratio": "16:9",
                 "duration": 8,
                 "resolution": "1080p",
@@ -178,7 +178,7 @@ Some other noteworthy features of google/veo-3.1 include image-to-video animatio
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "google-veo-3-1",
-          "prompt": "A dog digging on the beach"
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -210,7 +210,7 @@ Some other noteworthy features of google/veo-3.1 include image-to-video animatio
             headers=HEADERS,
             json={
                 "model": "google-veo-3-1",
-                "prompt": "A dog digging on the beach"
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -246,7 +246,7 @@ Some other noteworthy features of google/veo-3.1 include image-to-video animatio
           -d '{
           "model": "google-veo-3-1",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "prompt": "A dog digging on the beach"
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -279,7 +279,7 @@ Some other noteworthy features of google/veo-3.1 include image-to-video animatio
             json={
                 "model": "google-veo-3-1",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "prompt": "A dog digging on the beach"
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -315,7 +315,7 @@ Some other noteworthy features of google/veo-3.1 include image-to-video animatio
           -d '{
           "model": "google-veo-3-1",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "prompt": "A dog digging on the beach",
+          "prompt": "<prompt>",
           "aspect_ratio": "16:9",
           "duration": 8,
           "resolution": "1080p",
@@ -352,7 +352,7 @@ Some other noteworthy features of google/veo-3.1 include image-to-video animatio
             json={
                 "model": "google-veo-3-1",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "prompt": "A dog digging on the beach",
+                "prompt": "<prompt>",
                 "aspect_ratio": "16:9",
                 "duration": 8,
                 "resolution": "1080p",
@@ -399,7 +399,7 @@ Some other noteworthy features of google/veo-3.1 include image-to-video animatio
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "google-veo-3-1",
-          "prompt": "A dog digging on the beach"
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -428,7 +428,7 @@ Some other noteworthy features of google/veo-3.1 include image-to-video animatio
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "google-veo-3-1",
-                "prompt": "A dog digging on the beach"
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -465,7 +465,7 @@ Some other noteworthy features of google/veo-3.1 include image-to-video animatio
           -d '{
           "model": "google-veo-3-1",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "prompt": "A dog digging on the beach"
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -495,7 +495,7 @@ Some other noteworthy features of google/veo-3.1 include image-to-video animatio
             json={
                 "model": "google-veo-3-1",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "prompt": "A dog digging on the beach"
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -532,7 +532,7 @@ Some other noteworthy features of google/veo-3.1 include image-to-video animatio
           -d '{
           "model": "google-veo-3-1",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "prompt": "A dog digging on the beach",
+          "prompt": "<prompt>",
           "aspect_ratio": "16:9",
           "duration": 8,
           "resolution": "1080p",
@@ -566,7 +566,7 @@ Some other noteworthy features of google/veo-3.1 include image-to-video animatio
             json={
                 "model": "google-veo-3-1",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "prompt": "A dog digging on the beach",
+                "prompt": "<prompt>",
                 "aspect_ratio": "16:9",
                 "duration": 8,
                 "resolution": "1080p",
@@ -614,7 +614,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | `"A dog digging on the beach"` | Text description of what you want to generate, or the instruction on how to edit the given image. |
+| `prompt` | `string` | &mdash; | Text description of what you want to generate, or the instruction on how to edit the given image. |
 
 ### Optional parameters
 

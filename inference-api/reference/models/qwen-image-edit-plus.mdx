@@ -49,9 +49,9 @@ Some other noteworthy features of Qwen/Qwen-Image-Edit-Plus include native Contr
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "qwen-image-edit-plus",
-          "prompt": "Add a funny hat",
+          "prompt": "<prompt>",
           "input_image": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
         }'
         ```
@@ -68,9 +68,9 @@ Some other noteworthy features of Qwen/Qwen-Image-Edit-Plus include native Contr
             },
             json={
                 "model": "qwen-image-edit-plus",
-                "prompt": "Add a funny hat",
+                "prompt": "<prompt>",
                 "input_image": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
             },
         )
@@ -91,12 +91,11 @@ Some other noteworthy features of Qwen/Qwen-Image-Edit-Plus include native Contr
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "qwen-image-edit-plus",
-          "prompt": "Add a funny hat",
+          "prompt": "<prompt>",
           "input_image": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
           "aspect_ratio": "16:9",
-          "negative_prompt": " ",
           "output_format": "png"
         }'
         ```
@@ -113,12 +112,11 @@ Some other noteworthy features of Qwen/Qwen-Image-Edit-Plus include native Contr
             },
             json={
                 "model": "qwen-image-edit-plus",
-                "prompt": "Add a funny hat",
+                "prompt": "<prompt>",
                 "input_image": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
                 "aspect_ratio": "16:9",
-                "negative_prompt": " ",
                 "output_format": "png"
             },
         )
@@ -148,9 +146,9 @@ Some other noteworthy features of Qwen/Qwen-Image-Edit-Plus include native Contr
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "qwen-image-edit-plus",
-          "prompt": "Add a funny hat",
+          "prompt": "<prompt>",
           "input_image": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
         }' | jq -r '.generations[0].generation_id')
 
@@ -183,9 +181,9 @@ Some other noteworthy features of Qwen/Qwen-Image-Edit-Plus include native Contr
             headers=HEADERS,
             json={
                 "model": "qwen-image-edit-plus",
-                "prompt": "Add a funny hat",
+                "prompt": "<prompt>",
                 "input_image": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
             },
         )
@@ -221,12 +219,11 @@ Some other noteworthy features of Qwen/Qwen-Image-Edit-Plus include native Contr
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "qwen-image-edit-plus",
-          "prompt": "Add a funny hat",
+          "prompt": "<prompt>",
           "input_image": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
           "aspect_ratio": "16:9",
-          "negative_prompt": " ",
           "output_format": "png"
         }' | jq -r '.generations[0].generation_id')
 
@@ -259,12 +256,11 @@ Some other noteworthy features of Qwen/Qwen-Image-Edit-Plus include native Contr
             headers=HEADERS,
             json={
                 "model": "qwen-image-edit-plus",
-                "prompt": "Add a funny hat",
+                "prompt": "<prompt>",
                 "input_image": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
                 "aspect_ratio": "16:9",
-                "negative_prompt": " ",
                 "output_format": "png"
             },
         )
@@ -308,9 +304,9 @@ Some other noteworthy features of Qwen/Qwen-Image-Edit-Plus include native Contr
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "qwen-image-edit-plus",
-          "prompt": "Add a funny hat",
+          "prompt": "<prompt>",
           "input_image": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
         }' | jq -r '.generations[0].generation_id')
 
@@ -340,9 +336,9 @@ Some other noteworthy features of Qwen/Qwen-Image-Edit-Plus include native Contr
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "qwen-image-edit-plus",
-                "prompt": "Add a funny hat",
+                "prompt": "<prompt>",
                 "input_image": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
             },
         )
@@ -379,12 +375,11 @@ Some other noteworthy features of Qwen/Qwen-Image-Edit-Plus include native Contr
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "qwen-image-edit-plus",
-          "prompt": "Add a funny hat",
+          "prompt": "<prompt>",
           "input_image": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
           "aspect_ratio": "16:9",
-          "negative_prompt": " ",
           "output_format": "png"
         }' | jq -r '.generations[0].generation_id')
 
@@ -414,12 +409,11 @@ Some other noteworthy features of Qwen/Qwen-Image-Edit-Plus include native Contr
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "qwen-image-edit-plus",
-                "prompt": "Add a funny hat",
+                "prompt": "<prompt>",
                 "input_image": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
                 "aspect_ratio": "16:9",
-                "negative_prompt": " ",
                 "output_format": "png"
             },
         )
@@ -464,13 +458,13 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | `"Add a funny hat"` | Text description of what you want to generate, or the instruction on how to edit the given image. |
-| `input_image` | `array<string>` | `["https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"]` | Input images to transform or use as reference (supports multiple image urls) |
+| `prompt` | `string` | &mdash; | Text description of what you want to generate, or the instruction on how to edit the given image. Use @Image1, @Image2, etc. to reference the input images. |
+| `input_image` | `array<string>` | &mdash; | Input images to transform or use as reference. Reference them in the prompt as @Image1, @Image2, etc. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `aspect_ratio` | `string` | `"16:9"` | Aspect ratio for the generated image One of: 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3. |
-| `negative_prompt` | `string` | `" "` | Negative prompt for generated image |
+| `negative_prompt` | `string` | &mdash; | Negative prompt for generated image |
 | `output_format` | `string` | `"png"` | Format of the output images One of: webp, jpg, png. |

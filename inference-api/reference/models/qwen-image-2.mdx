@@ -126,8 +126,7 @@ It is a 7B-parameter architecture that generates images natively at up to 2048×
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "match_input_image": false,
           "aspect_ratio": "16:9",
-          "enable_prompt_expansion": true,
-          "negative_prompt": "<negative_prompt>"
+          "enable_prompt_expansion": true
         }'
         ```
 
@@ -147,8 +146,7 @@ It is a 7B-parameter architecture that generates images natively at up to 2048×
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "match_input_image": false,
                 "aspect_ratio": "16:9",
-                "enable_prompt_expansion": true,
-                "negative_prompt": "<negative_prompt>"
+                "enable_prompt_expansion": true
             },
         )
         response.raise_for_status()
@@ -317,8 +315,7 @@ It is a 7B-parameter architecture that generates images natively at up to 2048×
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "match_input_image": false,
           "aspect_ratio": "16:9",
-          "enable_prompt_expansion": true,
-          "negative_prompt": "<negative_prompt>"
+          "enable_prompt_expansion": true
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -354,8 +351,7 @@ It is a 7B-parameter architecture that generates images natively at up to 2048×
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "match_input_image": false,
                 "aspect_ratio": "16:9",
-                "enable_prompt_expansion": true,
-                "negative_prompt": "<negative_prompt>"
+                "enable_prompt_expansion": true
             },
         )
         enqueue.raise_for_status()
@@ -534,8 +530,7 @@ It is a 7B-parameter architecture that generates images natively at up to 2048×
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "match_input_image": false,
           "aspect_ratio": "16:9",
-          "enable_prompt_expansion": true,
-          "negative_prompt": "<negative_prompt>"
+          "enable_prompt_expansion": true
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -568,8 +563,7 @@ It is a 7B-parameter architecture that generates images natively at up to 2048×
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "match_input_image": false,
                 "aspect_ratio": "16:9",
-                "enable_prompt_expansion": true,
-                "negative_prompt": "<negative_prompt>"
+                "enable_prompt_expansion": true
             },
         )
         enqueue.raise_for_status()
@@ -623,5 +617,5 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | `match_input_image` | `boolean` | `false` | When true and an image is provided, use the input image's aspect ratio and resolution instead of the aspect_ratio parameter |
 | `aspect_ratio` | `string` | `"16:9"` | Aspect ratio of the generated image One of: 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 2:1, 1:2. |
 | `enable_prompt_expansion` | `boolean` | `true` | Automatically expand and optimize the prompt for better results |
-| `negative_prompt` | `string` | `""` | Negative prompt to specify elements to avoid in the generated image |
+| `negative_prompt` | `string` | &mdash; | Negative prompt to specify elements to avoid in the generated image |
 | `seed` | `integer` | &mdash; | Random seed for reproducible generation. Range: 0-2147483647 |

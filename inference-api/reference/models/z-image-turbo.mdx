@@ -48,7 +48,7 @@ Some other noteworthy features of Tongyi-MAI/Z-Image-Turbo include strong **inst
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "z-image-turbo",
-          "prompt": "A woman with red curly hair wearing a red flannel shirt, sitting in front of a campfire, night-time, photorealistic, indy folk vibes."
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -64,7 +64,7 @@ Some other noteworthy features of Tongyi-MAI/Z-Image-Turbo include strong **inst
             },
             json={
                 "model": "z-image-turbo",
-                "prompt": "A woman with red curly hair wearing a red flannel shirt, sitting in front of a campfire, night-time, photorealistic, indy folk vibes."
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -84,7 +84,7 @@ Some other noteworthy features of Tongyi-MAI/Z-Image-Turbo include strong **inst
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "z-image-turbo",
-          "prompt": "A woman with red curly hair wearing a red flannel shirt, sitting in front of a campfire, night-time, photorealistic, indy folk vibes.",
+          "prompt": "<prompt>",
           "num_inference_steps": 8,
           "output_format": "webp"
         }'
@@ -102,7 +102,7 @@ Some other noteworthy features of Tongyi-MAI/Z-Image-Turbo include strong **inst
             },
             json={
                 "model": "z-image-turbo",
-                "prompt": "A woman with red curly hair wearing a red flannel shirt, sitting in front of a campfire, night-time, photorealistic, indy folk vibes.",
+                "prompt": "<prompt>",
                 "num_inference_steps": 8,
                 "output_format": "webp"
             },
@@ -133,7 +133,7 @@ Some other noteworthy features of Tongyi-MAI/Z-Image-Turbo include strong **inst
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "z-image-turbo",
-          "prompt": "A woman with red curly hair wearing a red flannel shirt, sitting in front of a campfire, night-time, photorealistic, indy folk vibes."
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -165,7 +165,7 @@ Some other noteworthy features of Tongyi-MAI/Z-Image-Turbo include strong **inst
             headers=HEADERS,
             json={
                 "model": "z-image-turbo",
-                "prompt": "A woman with red curly hair wearing a red flannel shirt, sitting in front of a campfire, night-time, photorealistic, indy folk vibes."
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -200,7 +200,7 @@ Some other noteworthy features of Tongyi-MAI/Z-Image-Turbo include strong **inst
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "z-image-turbo",
-          "prompt": "A woman with red curly hair wearing a red flannel shirt, sitting in front of a campfire, night-time, photorealistic, indy folk vibes.",
+          "prompt": "<prompt>",
           "num_inference_steps": 8,
           "output_format": "webp"
         }' | jq -r '.generations[0].generation_id')
@@ -234,7 +234,7 @@ Some other noteworthy features of Tongyi-MAI/Z-Image-Turbo include strong **inst
             headers=HEADERS,
             json={
                 "model": "z-image-turbo",
-                "prompt": "A woman with red curly hair wearing a red flannel shirt, sitting in front of a campfire, night-time, photorealistic, indy folk vibes.",
+                "prompt": "<prompt>",
                 "num_inference_steps": 8,
                 "output_format": "webp"
             },
@@ -279,7 +279,7 @@ Some other noteworthy features of Tongyi-MAI/Z-Image-Turbo include strong **inst
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "z-image-turbo",
-          "prompt": "A woman with red curly hair wearing a red flannel shirt, sitting in front of a campfire, night-time, photorealistic, indy folk vibes."
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -308,7 +308,7 @@ Some other noteworthy features of Tongyi-MAI/Z-Image-Turbo include strong **inst
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "z-image-turbo",
-                "prompt": "A woman with red curly hair wearing a red flannel shirt, sitting in front of a campfire, night-time, photorealistic, indy folk vibes."
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -344,7 +344,7 @@ Some other noteworthy features of Tongyi-MAI/Z-Image-Turbo include strong **inst
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "z-image-turbo",
-          "prompt": "A woman with red curly hair wearing a red flannel shirt, sitting in front of a campfire, night-time, photorealistic, indy folk vibes.",
+          "prompt": "<prompt>",
           "num_inference_steps": 8,
           "output_format": "webp"
         }' | jq -r '.generations[0].generation_id')
@@ -375,7 +375,7 @@ Some other noteworthy features of Tongyi-MAI/Z-Image-Turbo include strong **inst
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "z-image-turbo",
-                "prompt": "A woman with red curly hair wearing a red flannel shirt, sitting in front of a campfire, night-time, photorealistic, indy folk vibes.",
+                "prompt": "<prompt>",
                 "num_inference_steps": 8,
                 "output_format": "webp"
             },
@@ -421,7 +421,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | `"A woman with red curly hair wearing a red flannel shirt, sitting in front of a campfire, night-time, photorealistic, indy folk vibes."` | Prompt for generated image |
+| `prompt` | `string` | &mdash; | Prompt for generated image |
 
 ### Optional parameters
 

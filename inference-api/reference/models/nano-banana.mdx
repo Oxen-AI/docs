@@ -49,7 +49,7 @@ Some other noteworthy features of nano-banana include mask-free inpainting (edit
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "nano-banana",
-          "prompt": "Generate an ox standing in the middle of a snow storm, standing on a long windy road. Zoomed out. Cinematic."
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -65,7 +65,7 @@ Some other noteworthy features of nano-banana include mask-free inpainting (edit
             },
             json={
                 "model": "nano-banana",
-                "prompt": "Generate an ox standing in the middle of a snow storm, standing on a long windy road. Zoomed out. Cinematic."
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -85,7 +85,7 @@ Some other noteworthy features of nano-banana include mask-free inpainting (edit
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "nano-banana",
-          "prompt": "Generate an ox standing in the middle of a snow storm, standing on a long windy road. Zoomed out. Cinematic.",
+          "prompt": "<prompt>",
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
@@ -104,7 +104,7 @@ Some other noteworthy features of nano-banana include mask-free inpainting (edit
             },
             json={
                 "model": "nano-banana",
-                "prompt": "Generate an ox standing in the middle of a snow storm, standing on a long windy road. Zoomed out. Cinematic.",
+                "prompt": "<prompt>",
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
@@ -127,7 +127,7 @@ Some other noteworthy features of nano-banana include mask-free inpainting (edit
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "nano-banana",
-          "prompt": "Generate an ox standing in the middle of a snow storm, standing on a long windy road. Zoomed out. Cinematic.",
+          "prompt": "<prompt>",
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
@@ -147,7 +147,7 @@ Some other noteworthy features of nano-banana include mask-free inpainting (edit
             },
             json={
                 "model": "nano-banana",
-                "prompt": "Generate an ox standing in the middle of a snow storm, standing on a long windy road. Zoomed out. Cinematic.",
+                "prompt": "<prompt>",
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
@@ -180,7 +180,7 @@ Some other noteworthy features of nano-banana include mask-free inpainting (edit
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "nano-banana",
-          "prompt": "Generate an ox standing in the middle of a snow storm, standing on a long windy road. Zoomed out. Cinematic."
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -212,7 +212,7 @@ Some other noteworthy features of nano-banana include mask-free inpainting (edit
             headers=HEADERS,
             json={
                 "model": "nano-banana",
-                "prompt": "Generate an ox standing in the middle of a snow storm, standing on a long windy road. Zoomed out. Cinematic."
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -247,7 +247,7 @@ Some other noteworthy features of nano-banana include mask-free inpainting (edit
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "nano-banana",
-          "prompt": "Generate an ox standing in the middle of a snow storm, standing on a long windy road. Zoomed out. Cinematic.",
+          "prompt": "<prompt>",
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
@@ -282,7 +282,7 @@ Some other noteworthy features of nano-banana include mask-free inpainting (edit
             headers=HEADERS,
             json={
                 "model": "nano-banana",
-                "prompt": "Generate an ox standing in the middle of a snow storm, standing on a long windy road. Zoomed out. Cinematic.",
+                "prompt": "<prompt>",
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
@@ -320,7 +320,7 @@ Some other noteworthy features of nano-banana include mask-free inpainting (edit
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "nano-banana",
-          "prompt": "Generate an ox standing in the middle of a snow storm, standing on a long windy road. Zoomed out. Cinematic.",
+          "prompt": "<prompt>",
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
@@ -356,7 +356,7 @@ Some other noteworthy features of nano-banana include mask-free inpainting (edit
             headers=HEADERS,
             json={
                 "model": "nano-banana",
-                "prompt": "Generate an ox standing in the middle of a snow storm, standing on a long windy road. Zoomed out. Cinematic.",
+                "prompt": "<prompt>",
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
@@ -403,7 +403,7 @@ Some other noteworthy features of nano-banana include mask-free inpainting (edit
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "nano-banana",
-          "prompt": "Generate an ox standing in the middle of a snow storm, standing on a long windy road. Zoomed out. Cinematic."
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -432,7 +432,7 @@ Some other noteworthy features of nano-banana include mask-free inpainting (edit
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "nano-banana",
-                "prompt": "Generate an ox standing in the middle of a snow storm, standing on a long windy road. Zoomed out. Cinematic."
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -468,7 +468,7 @@ Some other noteworthy features of nano-banana include mask-free inpainting (edit
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "nano-banana",
-          "prompt": "Generate an ox standing in the middle of a snow storm, standing on a long windy road. Zoomed out. Cinematic.",
+          "prompt": "<prompt>",
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
@@ -500,7 +500,7 @@ Some other noteworthy features of nano-banana include mask-free inpainting (edit
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "nano-banana",
-                "prompt": "Generate an ox standing in the middle of a snow storm, standing on a long windy road. Zoomed out. Cinematic.",
+                "prompt": "<prompt>",
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
@@ -539,7 +539,7 @@ Some other noteworthy features of nano-banana include mask-free inpainting (edit
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "nano-banana",
-          "prompt": "Generate an ox standing in the middle of a snow storm, standing on a long windy road. Zoomed out. Cinematic.",
+          "prompt": "<prompt>",
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
@@ -572,7 +572,7 @@ Some other noteworthy features of nano-banana include mask-free inpainting (edit
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "nano-banana",
-                "prompt": "Generate an ox standing in the middle of a snow storm, standing on a long windy road. Zoomed out. Cinematic.",
+                "prompt": "<prompt>",
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
@@ -620,11 +620,11 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | `"Generate an ox standing in the middle of a snow storm, standing on a long windy road. Zoomed out. Cinematic."` | Text description of what you want to generate, or the instruction on how to edit the given image. |
+| `prompt` | `string` | &mdash; | Text description of what you want to generate, or the instruction on how to edit the given image. Use @Image1, @Image2, etc. to reference the input images. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `input_image` | `array<string>` | &mdash; | Input images to transform or use as reference (supports multiple image urls) |
+| `input_image` | `array<string>` | &mdash; | Input images to transform or use as reference. Reference them in the prompt as @Image1, @Image2, etc. |
 | `aspect_ratio` | `string` | `"16:9"` | Aspect ratio for the generated image One of: 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3. |

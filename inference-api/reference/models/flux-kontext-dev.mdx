@@ -52,8 +52,8 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "flux-kontext-dev",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png",
-          "prompt": "High quality illustration of the character riding a cow, with a text bubble saying '\''Woohoo!'\'' - preserve all colors and traits of the original character, and render the cow in the same style"
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -69,8 +69,8 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
             },
             json={
                 "model": "flux-kontext-dev",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png",
-                "prompt": "High quality illustration of the character riding a cow, with a text bubble saying 'Woohoo!' - preserve all colors and traits of the original character, and render the cow in the same style"
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -90,8 +90,8 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "flux-kontext-dev",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png",
-          "prompt": "High quality illustration of the character riding a cow, with a text bubble saying '\''Woohoo!'\'' - preserve all colors and traits of the original character, and render the cow in the same style",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "prompt": "<prompt>",
           "aspect_ratio": "16:9",
           "num_inference_steps": 28,
           "guidance": 2.5,
@@ -113,8 +113,8 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
             },
             json={
                 "model": "flux-kontext-dev",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png",
-                "prompt": "High quality illustration of the character riding a cow, with a text bubble saying 'Woohoo!' - preserve all colors and traits of the original character, and render the cow in the same style",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "prompt": "<prompt>",
                 "aspect_ratio": "16:9",
                 "num_inference_steps": 28,
                 "guidance": 2.5,
@@ -149,8 +149,8 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "flux-kontext-dev",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png",
-          "prompt": "High quality illustration of the character riding a cow, with a text bubble saying '\''Woohoo!'\'' - preserve all colors and traits of the original character, and render the cow in the same style"
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -182,8 +182,8 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
             headers=HEADERS,
             json={
                 "model": "flux-kontext-dev",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png",
-                "prompt": "High quality illustration of the character riding a cow, with a text bubble saying 'Woohoo!' - preserve all colors and traits of the original character, and render the cow in the same style"
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -218,8 +218,8 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "flux-kontext-dev",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png",
-          "prompt": "High quality illustration of the character riding a cow, with a text bubble saying '\''Woohoo!'\'' - preserve all colors and traits of the original character, and render the cow in the same style",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "prompt": "<prompt>",
           "aspect_ratio": "16:9",
           "num_inference_steps": 28,
           "guidance": 2.5,
@@ -257,8 +257,8 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
             headers=HEADERS,
             json={
                 "model": "flux-kontext-dev",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png",
-                "prompt": "High quality illustration of the character riding a cow, with a text bubble saying 'Woohoo!' - preserve all colors and traits of the original character, and render the cow in the same style",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "prompt": "<prompt>",
                 "aspect_ratio": "16:9",
                 "num_inference_steps": 28,
                 "guidance": 2.5,
@@ -307,8 +307,8 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "flux-kontext-dev",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png",
-          "prompt": "High quality illustration of the character riding a cow, with a text bubble saying '\''Woohoo!'\'' - preserve all colors and traits of the original character, and render the cow in the same style"
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -337,8 +337,8 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "flux-kontext-dev",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png",
-                "prompt": "High quality illustration of the character riding a cow, with a text bubble saying 'Woohoo!' - preserve all colors and traits of the original character, and render the cow in the same style"
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -374,8 +374,8 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "flux-kontext-dev",
-          "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png",
-          "prompt": "High quality illustration of the character riding a cow, with a text bubble saying '\''Woohoo!'\'' - preserve all colors and traits of the original character, and render the cow in the same style",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "prompt": "<prompt>",
           "aspect_ratio": "16:9",
           "num_inference_steps": 28,
           "guidance": 2.5,
@@ -410,8 +410,8 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "flux-kontext-dev",
-                "input_image": "https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png",
-                "prompt": "High quality illustration of the character riding a cow, with a text bubble saying 'Woohoo!' - preserve all colors and traits of the original character, and render the cow in the same style",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "prompt": "<prompt>",
                 "aspect_ratio": "16:9",
                 "num_inference_steps": 28,
                 "guidance": 2.5,
@@ -461,8 +461,8 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `input_image` | `string` | `"https://hub.oxen.ai/api/repos/ox/Oxen-Character-Simple-Vector-Graphic/file/main/images/reference/bloxy_white_bg.png"` | Image to use as reference. Must be jpeg, png, gif, or webp. Format: uri. |
-| `prompt` | `string` | `"High quality illustration of the character riding a cow, with a text bubble saying 'Woohoo!' - preserve all colors and traits of the original character, and render the cow in the same style"` | Text description of what you want to generate, or the instruction on how to edit the given image. |
+| `input_image` | `string` | &mdash; | Image to use as reference. Must be jpeg, png, gif, or webp. Format: uri. |
+| `prompt` | `string` | &mdash; | Text description of what you want to generate, or the instruction on how to edit the given image. |
 
 ### Optional parameters
 

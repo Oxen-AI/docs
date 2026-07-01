@@ -37,7 +37,7 @@ HappyHorse 1.1 text-to-video generates video from a text prompt at 720P or 1080P
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "happyhorse-1.1-t2v",
-          "prompt": "A cinematic shot of a horse running through a meadow at sunset."
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -53,7 +53,7 @@ HappyHorse 1.1 text-to-video generates video from a text prompt at 720P or 1080P
             },
             json={
                 "model": "happyhorse-1.1-t2v",
-                "prompt": "A cinematic shot of a horse running through a meadow at sunset."
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -73,7 +73,7 @@ HappyHorse 1.1 text-to-video generates video from a text prompt at 720P or 1080P
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "happyhorse-1.1-t2v",
-          "prompt": "A cinematic shot of a horse running through a meadow at sunset.",
+          "prompt": "<prompt>",
           "aspect_ratio": "16:9",
           "resolution": "1080P",
           "duration": 5
@@ -92,7 +92,7 @@ HappyHorse 1.1 text-to-video generates video from a text prompt at 720P or 1080P
             },
             json={
                 "model": "happyhorse-1.1-t2v",
-                "prompt": "A cinematic shot of a horse running through a meadow at sunset.",
+                "prompt": "<prompt>",
                 "aspect_ratio": "16:9",
                 "resolution": "1080P",
                 "duration": 5
@@ -124,7 +124,7 @@ HappyHorse 1.1 text-to-video generates video from a text prompt at 720P or 1080P
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "happyhorse-1.1-t2v",
-          "prompt": "A cinematic shot of a horse running through a meadow at sunset."
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -156,7 +156,7 @@ HappyHorse 1.1 text-to-video generates video from a text prompt at 720P or 1080P
             headers=HEADERS,
             json={
                 "model": "happyhorse-1.1-t2v",
-                "prompt": "A cinematic shot of a horse running through a meadow at sunset."
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -191,7 +191,7 @@ HappyHorse 1.1 text-to-video generates video from a text prompt at 720P or 1080P
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "happyhorse-1.1-t2v",
-          "prompt": "A cinematic shot of a horse running through a meadow at sunset.",
+          "prompt": "<prompt>",
           "aspect_ratio": "16:9",
           "resolution": "1080P",
           "duration": 5
@@ -226,7 +226,7 @@ HappyHorse 1.1 text-to-video generates video from a text prompt at 720P or 1080P
             headers=HEADERS,
             json={
                 "model": "happyhorse-1.1-t2v",
-                "prompt": "A cinematic shot of a horse running through a meadow at sunset.",
+                "prompt": "<prompt>",
                 "aspect_ratio": "16:9",
                 "resolution": "1080P",
                 "duration": 5
@@ -272,7 +272,7 @@ HappyHorse 1.1 text-to-video generates video from a text prompt at 720P or 1080P
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "happyhorse-1.1-t2v",
-          "prompt": "A cinematic shot of a horse running through a meadow at sunset."
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -301,7 +301,7 @@ HappyHorse 1.1 text-to-video generates video from a text prompt at 720P or 1080P
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "happyhorse-1.1-t2v",
-                "prompt": "A cinematic shot of a horse running through a meadow at sunset."
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -337,7 +337,7 @@ HappyHorse 1.1 text-to-video generates video from a text prompt at 720P or 1080P
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "happyhorse-1.1-t2v",
-          "prompt": "A cinematic shot of a horse running through a meadow at sunset.",
+          "prompt": "<prompt>",
           "aspect_ratio": "16:9",
           "resolution": "1080P",
           "duration": 5
@@ -369,7 +369,7 @@ HappyHorse 1.1 text-to-video generates video from a text prompt at 720P or 1080P
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "happyhorse-1.1-t2v",
-                "prompt": "A cinematic shot of a horse running through a meadow at sunset.",
+                "prompt": "<prompt>",
                 "aspect_ratio": "16:9",
                 "resolution": "1080P",
                 "duration": 5
@@ -416,7 +416,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | `"A cinematic shot of a horse running through a meadow at sunset."` | Text prompt describing the desired video. |
+| `prompt` | `string` | &mdash; | Text prompt describing the desired video. |
 
 ### Optional parameters
 

@@ -37,7 +37,7 @@ ByteDance Seedance 2.0 (Pro) generates video from a text prompt. Supports 480p, 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedance-2-0-text-to-video",
-          "prompt": "A lone ox walks down an empty desert highway at golden hour, dust drifting behind it, slow cinematic camera move, warm low sunlight, shallow depth of field."
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -53,7 +53,7 @@ ByteDance Seedance 2.0 (Pro) generates video from a text prompt. Supports 480p, 
             },
             json={
                 "model": "bytedance-seedance-2-0-text-to-video",
-                "prompt": "A lone ox walks down an empty desert highway at golden hour, dust drifting behind it, slow cinematic camera move, warm low sunlight, shallow depth of field."
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -73,7 +73,7 @@ ByteDance Seedance 2.0 (Pro) generates video from a text prompt. Supports 480p, 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedance-2-0-text-to-video",
-          "prompt": "A lone ox walks down an empty desert highway at golden hour, dust drifting behind it, slow cinematic camera move, warm low sunlight, shallow depth of field.",
+          "prompt": "<prompt>",
           "resolution": "720p",
           "duration": -1,
           "aspect_ratio": "16:9",
@@ -94,7 +94,7 @@ ByteDance Seedance 2.0 (Pro) generates video from a text prompt. Supports 480p, 
             },
             json={
                 "model": "bytedance-seedance-2-0-text-to-video",
-                "prompt": "A lone ox walks down an empty desert highway at golden hour, dust drifting behind it, slow cinematic camera move, warm low sunlight, shallow depth of field.",
+                "prompt": "<prompt>",
                 "resolution": "720p",
                 "duration": -1,
                 "aspect_ratio": "16:9",
@@ -128,7 +128,7 @@ ByteDance Seedance 2.0 (Pro) generates video from a text prompt. Supports 480p, 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedance-2-0-text-to-video",
-          "prompt": "A lone ox walks down an empty desert highway at golden hour, dust drifting behind it, slow cinematic camera move, warm low sunlight, shallow depth of field."
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -160,7 +160,7 @@ ByteDance Seedance 2.0 (Pro) generates video from a text prompt. Supports 480p, 
             headers=HEADERS,
             json={
                 "model": "bytedance-seedance-2-0-text-to-video",
-                "prompt": "A lone ox walks down an empty desert highway at golden hour, dust drifting behind it, slow cinematic camera move, warm low sunlight, shallow depth of field."
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -195,7 +195,7 @@ ByteDance Seedance 2.0 (Pro) generates video from a text prompt. Supports 480p, 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedance-2-0-text-to-video",
-          "prompt": "A lone ox walks down an empty desert highway at golden hour, dust drifting behind it, slow cinematic camera move, warm low sunlight, shallow depth of field.",
+          "prompt": "<prompt>",
           "resolution": "720p",
           "duration": -1,
           "aspect_ratio": "16:9",
@@ -232,7 +232,7 @@ ByteDance Seedance 2.0 (Pro) generates video from a text prompt. Supports 480p, 
             headers=HEADERS,
             json={
                 "model": "bytedance-seedance-2-0-text-to-video",
-                "prompt": "A lone ox walks down an empty desert highway at golden hour, dust drifting behind it, slow cinematic camera move, warm low sunlight, shallow depth of field.",
+                "prompt": "<prompt>",
                 "resolution": "720p",
                 "duration": -1,
                 "aspect_ratio": "16:9",
@@ -280,7 +280,7 @@ ByteDance Seedance 2.0 (Pro) generates video from a text prompt. Supports 480p, 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedance-2-0-text-to-video",
-          "prompt": "A lone ox walks down an empty desert highway at golden hour, dust drifting behind it, slow cinematic camera move, warm low sunlight, shallow depth of field."
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -309,7 +309,7 @@ ByteDance Seedance 2.0 (Pro) generates video from a text prompt. Supports 480p, 
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "bytedance-seedance-2-0-text-to-video",
-                "prompt": "A lone ox walks down an empty desert highway at golden hour, dust drifting behind it, slow cinematic camera move, warm low sunlight, shallow depth of field."
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -345,7 +345,7 @@ ByteDance Seedance 2.0 (Pro) generates video from a text prompt. Supports 480p, 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-seedance-2-0-text-to-video",
-          "prompt": "A lone ox walks down an empty desert highway at golden hour, dust drifting behind it, slow cinematic camera move, warm low sunlight, shallow depth of field.",
+          "prompt": "<prompt>",
           "resolution": "720p",
           "duration": -1,
           "aspect_ratio": "16:9",
@@ -379,7 +379,7 @@ ByteDance Seedance 2.0 (Pro) generates video from a text prompt. Supports 480p, 
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "bytedance-seedance-2-0-text-to-video",
-                "prompt": "A lone ox walks down an empty desert highway at golden hour, dust drifting behind it, slow cinematic camera move, warm low sunlight, shallow depth of field.",
+                "prompt": "<prompt>",
                 "resolution": "720p",
                 "duration": -1,
                 "aspect_ratio": "16:9",
@@ -428,7 +428,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | `"A lone ox walks down an empty desert highway at golden hour, dust drifting behind it, slow cinematic camera move, warm low sunlight, shallow depth of field."` | The text prompt used to generate the video. |
+| `prompt` | `string` | &mdash; | The text prompt used to generate the video. |
 
 ### Optional parameters
 
