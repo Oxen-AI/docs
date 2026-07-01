@@ -77,3 +77,7 @@ still keep it separate from the command that produced it.
 ## Public
 
 This repository is **public**. Do not mention Oxen's private/internal repositories — by name or description — in code comments, doc-comments, error messages, commit messages, PR titles or descriptions, or any other code or documentation committed here. Keep references to private repos out of public artifacts entirely; if internal context is genuinely needed, point to the relevant Linear issue rather than inlining private-repo details.
+
+## GitHub Actions
+
+Pin actions in `.github/workflows/` by trust tier, following the org-wide policy: <https://github.com/Oxen-AI/Oxen/blob/main/docs/github_actions_pinning.md> — version tag for first-party/high-trust orgs, full commit SHA with a `# vX.Y.Z` comment for third-party.
