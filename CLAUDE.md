@@ -80,4 +80,4 @@ This repository is **public**. Do not mention Oxen's private/internal repositori
 
 ## GitHub Actions
 
-Pin actions in `.github/workflows/` by trust tier, following the org-wide policy: <https://github.com/Oxen-AI/Oxen/blob/main/docs/github_actions_pinning.md> — version tag for first-party/high-trust orgs, full commit SHA with a `# vX.Y.Z` comment for third-party.
+Pin actions in `.github/workflows/` by trust tier, following the [org-wide policy](https://github.com/Oxen-AI/Oxen/blob/main/docs/github_actions_pinning.md) — version tag for first-party/high-trust orgs, full commit SHA with a `# vX.Y.Z` comment for third-party.
