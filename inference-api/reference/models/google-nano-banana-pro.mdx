@@ -13,7 +13,7 @@ description: "Studio-quality 4K image generation"
 
 Nano Banana Pro is an image generation model that excels in generating studio-quality visuals with advanced text rendering, high-fidelity 2K and 4K outputs, and superior character consistency across multiple images. It is built on Google's Gemini 3 Pro Image architecture and leverages multimodal understanding for nuanced, context-aware creative direction rather than simple keyword matching.
 
-It is designed for professional creative workflows, making it particularly effective for marketing campaigns, product visualization, and educational content requiring precise, legible text directly embedded in images.  
+It is designed for professional creative workflows, making it particularly effective for marketing campaigns, product visualization, and educational content requiring precise, legible text directly embedded in images.
 Nano Banana Pro supports complex editing tasks, such as multi-image fusion, localized edits, and maintaining branding consistency across diverse asset types.
 
 Some other noteworthy features of Nano Banana Pro include multi-image blending (up to 14 images per generation), accurate infographic and diagram creation, and advanced controls for scene lighting, camera angle, and color grading.
@@ -134,7 +134,7 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
           ],
           "aspect_ratio": "16:9",
           "resolution": "2K",
-          "safety_tolerance": "6"
+          "google_search": false
         }'
         ```
 
@@ -156,7 +156,7 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
                 ],
                 "aspect_ratio": "16:9",
                 "resolution": "2K",
-                "safety_tolerance": "6"
+                "google_search": false
             },
         )
         response.raise_for_status()
@@ -331,7 +331,7 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
           ],
           "aspect_ratio": "16:9",
           "resolution": "2K",
-          "safety_tolerance": "6"
+          "google_search": false
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -369,7 +369,7 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
                 ],
                 "aspect_ratio": "16:9",
                 "resolution": "2K",
-                "safety_tolerance": "6"
+                "google_search": false
             },
         )
         enqueue.raise_for_status()
@@ -554,7 +554,7 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
           ],
           "aspect_ratio": "16:9",
           "resolution": "2K",
-          "safety_tolerance": "6"
+          "google_search": false
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -589,7 +589,7 @@ Some other noteworthy features of Nano Banana Pro include multi-image blending (
                 ],
                 "aspect_ratio": "16:9",
                 "resolution": "2K",
-                "safety_tolerance": "6"
+                "google_search": false
             },
         )
         enqueue.raise_for_status()
@@ -639,7 +639,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `input_image` | `array<string>` | &mdash; | Input images to transform or use as reference. Reference them in the prompt as @Image1, @Image2, etc. |
+| `input_image` | `array<string>` | &mdash; | Optional reference image(s) to edit or compose (up to 14). Leave empty to generate from the prompt alone. Reference them in the prompt as @Image1, @Image2, etc. |
 | `aspect_ratio` | `string` | `"16:9"` | Aspect ratio for the generated image One of: auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 4:5, 5:4, 21:9. |
 | `resolution` | `string` | `"2K"` | Resolution of the generated image One of: 1K, 2K, 4K. |
-| `safety_tolerance` | `string` | `"6"` | The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict. Default value: 4 One of: 1, 2, 3, 4, 5, 6. |
+| `google_search` | `boolean` | `false` | Ground the image in real-time web search results, useful for factual or current-events content like charts, maps, and recent events. |

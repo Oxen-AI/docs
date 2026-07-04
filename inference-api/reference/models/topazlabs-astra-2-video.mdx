@@ -1,24 +1,24 @@
 ---
-title: "Veo 3.1 Lite"
-description: "Cost-efficient text/image-to-video by Google"
+title: "Topaz Astra 2"
+description: "Creative video upscaling for AI video"
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try Veo 3.1 Lite in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=google-veo-3-1-lite">
+  <Card title="Try Topaz Astra 2 in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=topazlabs-astra-2-video">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `google-veo-3-1-lite`
+**Model ID:** `topazlabs-astra-2-video`
 
-Veo 3.1 Lite is Google's most cost-efficient Veo model, generating high-quality short videos from a text prompt or a first-frame image, with native synchronized audio.
+Topaz Astra 2 is a creative video upscaling model that enhances AI-generated video by adding new detail and texture, up to 4k.
 
-It balances quality and cost for everyday creative and production workflows, with controllable duration, aspect ratio, and resolution.
+Use this model to enrich stylized or synthetic footage with adjustable creativity, realism, and sharpness, optionally guided by a prompt.
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=google-veo-3-1-lite) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=topazlabs-astra-2-video) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
@@ -38,8 +38,9 @@ It balances quality and cost for everyday creative and production workflows, wit
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "google-veo-3-1-lite",
-          "prompt": "<prompt>"
+          "model": "topazlabs-astra-2-video",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "creativity": 0.5
         }'
         ```
 
@@ -54,8 +55,9 @@ It balances quality and cost for everyday creative and production workflows, wit
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "google-veo-3-1-lite",
-                "prompt": "<prompt>"
+                "model": "topazlabs-astra-2-video",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "creativity": 0.5
             },
         )
         response.raise_for_status()
@@ -74,9 +76,10 @@ It balances quality and cost for everyday creative and production workflows, wit
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "google-veo-3-1-lite",
-          "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "model": "topazlabs-astra-2-video",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "creativity": 0.5,
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -91,9 +94,10 @@ It balances quality and cost for everyday creative and production workflows, wit
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "google-veo-3-1-lite",
-                "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "model": "topazlabs-astra-2-video",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "creativity": 0.5,
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -112,12 +116,13 @@ It balances quality and cost for everyday creative and production workflows, wit
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "google-veo-3-1-lite",
+          "model": "topazlabs-astra-2-video",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "creativity": 0.5,
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "aspect_ratio": "16:9",
-          "resolution": "720p",
-          "duration": 8
+          "resolution": "4k",
+          "realism": 0.5,
+          "sharp": 0.5
         }'
         ```
 
@@ -132,12 +137,13 @@ It balances quality and cost for everyday creative and production workflows, wit
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "google-veo-3-1-lite",
+                "model": "topazlabs-astra-2-video",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "creativity": 0.5,
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "aspect_ratio": "16:9",
-                "resolution": "720p",
-                "duration": 8
+                "resolution": "4k",
+                "realism": 0.5,
+                "sharp": 0.5
             },
         )
         response.raise_for_status()
@@ -165,8 +171,9 @@ It balances quality and cost for everyday creative and production workflows, wit
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "google-veo-3-1-lite",
-          "prompt": "<prompt>"
+          "model": "topazlabs-astra-2-video",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "creativity": 0.5
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -197,8 +204,9 @@ It balances quality and cost for everyday creative and production workflows, wit
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "google-veo-3-1-lite",
-                "prompt": "<prompt>"
+                "model": "topazlabs-astra-2-video",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "creativity": 0.5
             },
         )
         enqueue.raise_for_status()
@@ -232,9 +240,10 @@ It balances quality and cost for everyday creative and production workflows, wit
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "google-veo-3-1-lite",
-          "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "model": "topazlabs-astra-2-video",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "creativity": 0.5,
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -265,9 +274,10 @@ It balances quality and cost for everyday creative and production workflows, wit
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "google-veo-3-1-lite",
-                "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "model": "topazlabs-astra-2-video",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "creativity": 0.5,
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -301,12 +311,13 @@ It balances quality and cost for everyday creative and production workflows, wit
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "google-veo-3-1-lite",
+          "model": "topazlabs-astra-2-video",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "creativity": 0.5,
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "aspect_ratio": "16:9",
-          "resolution": "720p",
-          "duration": 8
+          "resolution": "4k",
+          "realism": 0.5,
+          "sharp": 0.5
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -337,12 +348,13 @@ It balances quality and cost for everyday creative and production workflows, wit
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "google-veo-3-1-lite",
+                "model": "topazlabs-astra-2-video",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "creativity": 0.5,
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "aspect_ratio": "16:9",
-                "resolution": "720p",
-                "duration": 8
+                "resolution": "4k",
+                "realism": 0.5,
+                "sharp": 0.5
             },
         )
         enqueue.raise_for_status()
@@ -384,8 +396,9 @@ It balances quality and cost for everyday creative and production workflows, wit
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "google-veo-3-1-lite",
-          "prompt": "<prompt>"
+          "model": "topazlabs-astra-2-video",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "creativity": 0.5
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -413,8 +426,9 @@ It balances quality and cost for everyday creative and production workflows, wit
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "google-veo-3-1-lite",
-                "prompt": "<prompt>"
+                "model": "topazlabs-astra-2-video",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "creativity": 0.5
             },
         )
         enqueue.raise_for_status()
@@ -449,9 +463,10 @@ It balances quality and cost for everyday creative and production workflows, wit
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "google-veo-3-1-lite",
-          "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "model": "topazlabs-astra-2-video",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "creativity": 0.5,
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -479,9 +494,10 @@ It balances quality and cost for everyday creative and production workflows, wit
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "google-veo-3-1-lite",
-                "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "model": "topazlabs-astra-2-video",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "creativity": 0.5,
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -516,12 +532,13 @@ It balances quality and cost for everyday creative and production workflows, wit
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "google-veo-3-1-lite",
+          "model": "topazlabs-astra-2-video",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "creativity": 0.5,
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "aspect_ratio": "16:9",
-          "resolution": "720p",
-          "duration": 8
+          "resolution": "4k",
+          "realism": 0.5,
+          "sharp": 0.5
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -549,12 +566,13 @@ It balances quality and cost for everyday creative and production workflows, wit
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "google-veo-3-1-lite",
+                "model": "topazlabs-astra-2-video",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "creativity": 0.5,
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "aspect_ratio": "16:9",
-                "resolution": "720p",
-                "duration": 8
+                "resolution": "4k",
+                "realism": 0.5,
+                "sharp": 0.5
             },
         )
         enqueue.raise_for_status()
@@ -589,7 +607,7 @@ It balances quality and cost for everyday creative and production workflows, wit
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/google-veo-3-1-lite
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/topazlabs-astra-2-video
 ```
 
 ## Request parameters
@@ -598,14 +616,14 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | Text description of the video to generate, or how to animate the input image. |
+| `input_video` | `string` | &mdash; | Video file to enhance and upscale (URL or file path). Format: uri. |
+| `creativity` | `number` | `0.5` | How much new creative detail to add (0.0 faithful, 1.0 most creative). Range: 0 – 1. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `input_image` | `string` | &mdash; | Optional first-frame image to animate (image-to-video). Leave empty to generate from the prompt alone. Format: uri. |
-| `aspect_ratio` | `string` | `"16:9"` | Output video aspect ratio. One of: 16:9, 9:16. |
-| `resolution` | `string` | `"720p"` | Output video resolution. 1080p requires an 8 second duration. One of: 720p, 1080p. |
-| `duration` | `integer` | `8` | Video duration in seconds. 1080p requires 8 seconds. One of: 4, 6, 8. |
-| `seed` | `integer` | &mdash; | Random seed for deterministic generation. |
+| `prompt` | `string` | `""` | Optional prompt to guide enhancement. Limits clips to 450 frames when set. |
+| `resolution` | `string` | `"4k"` | Target output resolution. One of: 1080p, 2k, 4k. |
+| `realism` | `number` | `0.5` | Bias toward photorealistic detail (0.0-1.0). Range: 0 – 1. |
+| `sharp` | `number` | `0.5` | Pre-enhance sharpness (0.0 softens, 0.5 passthrough, 1.0 sharpens). Range: 0 – 1. |

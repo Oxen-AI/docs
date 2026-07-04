@@ -1,0 +1,191 @@
+---
+title: "Seed Audio 1.0"
+description: "Text-to-speech with voice cloning and prosody control"
+---
+
+<CardGroup cols={1}>
+  <Card title="Try Seed Audio 1.0 in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=bytedance-seed-audio-1-0">
+    Run this model interactively, tune parameters, and compare outputs.
+  </Card>
+</CardGroup>
+
+**Model ID:** `bytedance-seed-audio-1-0`
+
+ByteDance Seed Audio 1.0 is a text-to-speech and audio generation model served through Fal. It synthesizes natural speech from a text prompt with control over voice, output format, sample rate, speed, volume, and pitch. Up to three reference audio clips can be supplied for voice cloning and referenced in the prompt as @Audio1, @Audio2, @Audio3, or a single reference image can be provided instead.
+
+## Example request
+
+<Tip>
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=bytedance-seed-audio-1-0) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+</Tip>
+
+<Tabs>
+  <Tab title="Minimal">
+
+    <CodeGroup>
+
+    ```bash cURL
+    curl -X POST https://hub.oxen.ai/api/ai/audio/speech \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $OXEN_API_KEY" \
+      -d '{
+      "model": "bytedance-seed-audio-1-0",
+      "prompt": "<prompt>",
+      "input": "Welcome to Oxen"
+    }'
+    ```
+
+    ```python Python
+    import os
+    import requests
+
+    response = requests.post(
+        "https://hub.oxen.ai/api/ai/audio/speech",
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        },
+        json={
+            "model": "bytedance-seed-audio-1-0",
+            "prompt": "<prompt>",
+            "input": "Welcome to Oxen"
+        },
+    )
+    response.raise_for_status()
+    print(response.json())
+    ```
+
+    </CodeGroup>
+
+  </Tab>
+  <Tab title="Basic parameters">
+
+    <CodeGroup>
+
+    ```bash cURL
+    curl -X POST https://hub.oxen.ai/api/ai/audio/speech \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $OXEN_API_KEY" \
+      -d '{
+      "model": "bytedance-seed-audio-1-0",
+      "prompt": "<prompt>",
+      "audio_urls": [
+        "https://example.com/audio.mp3"
+      ],
+      "image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+      "input": "Welcome to Oxen"
+    }'
+    ```
+
+    ```python Python
+    import os
+    import requests
+
+    response = requests.post(
+        "https://hub.oxen.ai/api/ai/audio/speech",
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        },
+        json={
+            "model": "bytedance-seed-audio-1-0",
+            "prompt": "<prompt>",
+            "audio_urls": [
+                "https://example.com/audio.mp3"
+            ],
+            "image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+            "input": "Welcome to Oxen"
+        },
+    )
+    response.raise_for_status()
+    print(response.json())
+    ```
+
+    </CodeGroup>
+
+  </Tab>
+  <Tab title="All parameters">
+
+    <CodeGroup>
+
+    ```bash cURL
+    curl -X POST https://hub.oxen.ai/api/ai/audio/speech \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $OXEN_API_KEY" \
+      -d '{
+      "model": "bytedance-seed-audio-1-0",
+      "prompt": "<prompt>",
+      "audio_urls": [
+        "https://example.com/audio.mp3"
+      ],
+      "image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+      "output_format": "mp3",
+      "sample_rate": 24000,
+      "speed": 1.0,
+      "volume": 1.0,
+      "pitch": 0,
+      "input": "Welcome to Oxen"
+    }'
+    ```
+
+    ```python Python
+    import os
+    import requests
+
+    response = requests.post(
+        "https://hub.oxen.ai/api/ai/audio/speech",
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        },
+        json={
+            "model": "bytedance-seed-audio-1-0",
+            "prompt": "<prompt>",
+            "audio_urls": [
+                "https://example.com/audio.mp3"
+            ],
+            "image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+            "output_format": "mp3",
+            "sample_rate": 24000,
+            "speed": 1.0,
+            "volume": 1.0,
+            "pitch": 0,
+            "input": "Welcome to Oxen"
+        },
+    )
+    response.raise_for_status()
+    print(response.json())
+    ```
+
+    </CodeGroup>
+
+  </Tab>
+</Tabs>
+
+## Fetch model details
+
+The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
+
+```bash
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/bytedance-seed-audio-1-0
+```
+
+## Request parameters
+
+### Required parameters
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `prompt` | `string` | &mdash; | Prompt or text to synthesize. Reference audio inputs by order with @Audio1, @Audio2, @Audio3. |
+
+### Optional parameters
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `audio_urls` | `array<string>` | &mdash; | Up to 3 reference audio URLs for voice cloning (max 30s and 10MB each). Reference them in the prompt as @Audio1, @Audio2, @Audio3. Supported formats: wav, mp3, pcm, ogg_opus. |
+| `image_url` | `string` | &mdash; | Optional single reference image URL (jpeg, png, or webp, max 10MB). Incompatible with audio references. Format: uri. |
+| `output_format` | `string` | `"mp3"` | Output audio file format. One of: wav, mp3, pcm, ogg_opus. |
+| `sample_rate` | `integer` | `24000` | Output sample rate in Hz. One of: 8000, 16000, 24000, 32000, 44100, 48000. |
+| `speed` | `number` | `1.0` | Speech tempo multiplier (typical range 0.5-2.0). Range: 0.5 – 2.0. |
+| `volume` | `number` | `1.0` | Audio amplitude multiplier (typical range 0.5-2.0). Range: 0.5 – 2.0. |
+| `pitch` | `integer` | `0` | Pitch shift in semitones (range -12 to 12; 0 leaves the pitch unchanged). Range: -12 – 12. |

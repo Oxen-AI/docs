@@ -11,9 +11,9 @@ description: "Text/image-to-video, audio, narrative control"
 
 **Model ID:** `google-veo-3-1`
 
-google/veo-3.1 is a video generation model. It excels in generating high-fidelity videos with native synchronized audio, including dialogue, sound effects, and ambient noise, along with improved narrative control and scene consistency over prior versions.
+Veo 3.1 is Google's video generation model. It excels at generating high-fidelity videos with native synchronized audio, including dialogue, sound effects, and ambient noise, along with improved narrative control and scene consistency over prior versions.
 
-Some other noteworthy features of google/veo-3.1 include image-to-video animation with reference images for consistent elements, scene extension, first/last frame interpolation, and multi-shot sequences.
+Some other noteworthy features of Veo 3.1 include image-to-video animation from a first-frame image, strong prompt adherence, and legible on-screen text.
 
 | Metric             | Value              |
 |--------------------|--------------------|
@@ -85,8 +85,8 @@ Some other noteworthy features of google/veo-3.1 include image-to-video animatio
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "google-veo-3-1",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "prompt": "<prompt>"
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }'
         ```
 
@@ -102,8 +102,8 @@ Some other noteworthy features of google/veo-3.1 include image-to-video animatio
             },
             json={
                 "model": "google-veo-3-1",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "prompt": "<prompt>"
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         response.raise_for_status()
@@ -123,12 +123,11 @@ Some other noteworthy features of google/veo-3.1 include image-to-video animatio
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "google-veo-3-1",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "aspect_ratio": "16:9",
-          "duration": 8,
           "resolution": "1080p",
-          "generate_audio": false
+          "duration": 8
         }'
         ```
 
@@ -144,12 +143,11 @@ Some other noteworthy features of google/veo-3.1 include image-to-video animatio
             },
             json={
                 "model": "google-veo-3-1",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "aspect_ratio": "16:9",
-                "duration": 8,
                 "resolution": "1080p",
-                "generate_audio": false
+                "duration": 8
             },
         )
         response.raise_for_status()
@@ -245,8 +243,8 @@ Some other noteworthy features of google/veo-3.1 include image-to-video animatio
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "google-veo-3-1",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "prompt": "<prompt>"
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -278,8 +276,8 @@ Some other noteworthy features of google/veo-3.1 include image-to-video animatio
             headers=HEADERS,
             json={
                 "model": "google-veo-3-1",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "prompt": "<prompt>"
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         enqueue.raise_for_status()
@@ -314,12 +312,11 @@ Some other noteworthy features of google/veo-3.1 include image-to-video animatio
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "google-veo-3-1",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "aspect_ratio": "16:9",
-          "duration": 8,
           "resolution": "1080p",
-          "generate_audio": false
+          "duration": 8
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -351,12 +348,11 @@ Some other noteworthy features of google/veo-3.1 include image-to-video animatio
             headers=HEADERS,
             json={
                 "model": "google-veo-3-1",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "aspect_ratio": "16:9",
-                "duration": 8,
                 "resolution": "1080p",
-                "generate_audio": false
+                "duration": 8
             },
         )
         enqueue.raise_for_status()
@@ -464,8 +460,8 @@ Some other noteworthy features of google/veo-3.1 include image-to-video animatio
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "google-veo-3-1",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "prompt": "<prompt>"
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -494,8 +490,8 @@ Some other noteworthy features of google/veo-3.1 include image-to-video animatio
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "google-veo-3-1",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "prompt": "<prompt>"
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         enqueue.raise_for_status()
@@ -531,12 +527,11 @@ Some other noteworthy features of google/veo-3.1 include image-to-video animatio
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "google-veo-3-1",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "aspect_ratio": "16:9",
-          "duration": 8,
           "resolution": "1080p",
-          "generate_audio": false
+          "duration": 8
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -565,12 +560,11 @@ Some other noteworthy features of google/veo-3.1 include image-to-video animatio
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "google-veo-3-1",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "aspect_ratio": "16:9",
-                "duration": 8,
                 "resolution": "1080p",
-                "generate_audio": false
+                "duration": 8
             },
         )
         enqueue.raise_for_status()
@@ -614,14 +608,13 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | Text description of what you want to generate, or the instruction on how to edit the given image. |
+| `prompt` | `string` | &mdash; | Text description of the video to generate, or how to animate the input image. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `input_image` | `string` | &mdash; | Image to use as reference. Must be jpeg, png, gif, or webp. Format: uri. |
-| `aspect_ratio` | `string` | `"16:9"` | Video aspect ratio One of: 9:16, 16:9. |
-| `duration` | `integer` | `8` | Video duration in seconds One of: 4, 6, 8. |
-| `resolution` | `string` | `"1080p"` | Resolution of the generated video One of: 1080p, 720p. |
-| `generate_audio` | `boolean` | `false` | Generate audio with the video. |
+| `input_image` | `string` | &mdash; | Optional first-frame image to animate (image-to-video). Leave empty to generate from the prompt alone. Must be jpeg, png, gif, or webp. Format: uri. |
+| `aspect_ratio` | `string` | `"16:9"` | Video aspect ratio One of: 16:9, 9:16. |
+| `resolution` | `string` | `"1080p"` | Resolution of the generated video. 1080p and 4k require an 8 second duration. One of: 720p, 1080p, 4k. |
+| `duration` | `integer` | `8` | Video duration in seconds. 1080p and 4k require 8 seconds. One of: 4, 6, 8. |
