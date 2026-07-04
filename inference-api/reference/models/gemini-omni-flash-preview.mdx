@@ -1,24 +1,22 @@
 ---
-title: "Veo 3.1 Lite"
-description: "Cost-efficient text/image-to-video by Google"
+title: "Gemini Omni Flash"
+description: "Omni-modal short video generation and editing"
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try Veo 3.1 Lite in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=google-veo-3-1-lite">
+  <Card title="Try Gemini Omni Flash in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=gemini-omni-flash-preview">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `google-veo-3-1-lite`
+**Model ID:** `gemini-omni-flash-preview`
 
-Veo 3.1 Lite is Google's most cost-efficient Veo model, generating high-quality short videos from a text prompt or a first-frame image, with native synchronized audio.
-
-It balances quality and cost for everyday creative and production workflows, with controllable duration, aspect ratio, and resolution.
+Gemini Omni Flash is Google's omni-modal model that generates short videos with synchronized audio from a text prompt, input images, or an input video to edit. It brings multimodal creative direction into a single model, producing 720p MP4 clips a few seconds long.
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=google-veo-3-1-lite) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=gemini-omni-flash-preview) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
@@ -38,7 +36,7 @@ It balances quality and cost for everyday creative and production workflows, wit
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "google-veo-3-1-lite",
+          "model": "gemini-omni-flash-preview",
           "prompt": "<prompt>"
         }'
         ```
@@ -54,7 +52,7 @@ It balances quality and cost for everyday creative and production workflows, wit
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "google-veo-3-1-lite",
+                "model": "gemini-omni-flash-preview",
                 "prompt": "<prompt>"
             },
         )
@@ -74,9 +72,11 @@ It balances quality and cost for everyday creative and production workflows, wit
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "google-veo-3-1-lite",
+          "model": "gemini-omni-flash-preview",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "first_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_image": [],
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }'
         ```
 
@@ -91,9 +91,11 @@ It balances quality and cost for everyday creative and production workflows, wit
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "google-veo-3-1-lite",
+                "model": "gemini-omni-flash-preview",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "first_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_image": [],
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         response.raise_for_status()
@@ -112,12 +114,12 @@ It balances quality and cost for everyday creative and production workflows, wit
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "google-veo-3-1-lite",
+          "model": "gemini-omni-flash-preview",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "aspect_ratio": "16:9",
-          "resolution": "720p",
-          "duration": 8
+          "first_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_image": [],
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "aspect_ratio": "16:9"
         }'
         ```
 
@@ -132,12 +134,12 @@ It balances quality and cost for everyday creative and production workflows, wit
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "google-veo-3-1-lite",
+                "model": "gemini-omni-flash-preview",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "aspect_ratio": "16:9",
-                "resolution": "720p",
-                "duration": 8
+                "first_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_image": [],
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "aspect_ratio": "16:9"
             },
         )
         response.raise_for_status()
@@ -165,7 +167,7 @@ It balances quality and cost for everyday creative and production workflows, wit
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "google-veo-3-1-lite",
+          "model": "gemini-omni-flash-preview",
           "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
@@ -197,7 +199,7 @@ It balances quality and cost for everyday creative and production workflows, wit
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "google-veo-3-1-lite",
+                "model": "gemini-omni-flash-preview",
                 "prompt": "<prompt>"
             },
         )
@@ -232,9 +234,11 @@ It balances quality and cost for everyday creative and production workflows, wit
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "google-veo-3-1-lite",
+          "model": "gemini-omni-flash-preview",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "first_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_image": [],
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -265,9 +269,11 @@ It balances quality and cost for everyday creative and production workflows, wit
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "google-veo-3-1-lite",
+                "model": "gemini-omni-flash-preview",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "first_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_image": [],
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         enqueue.raise_for_status()
@@ -301,12 +307,12 @@ It balances quality and cost for everyday creative and production workflows, wit
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "google-veo-3-1-lite",
+          "model": "gemini-omni-flash-preview",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "aspect_ratio": "16:9",
-          "resolution": "720p",
-          "duration": 8
+          "first_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_image": [],
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "aspect_ratio": "16:9"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -337,12 +343,12 @@ It balances quality and cost for everyday creative and production workflows, wit
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "google-veo-3-1-lite",
+                "model": "gemini-omni-flash-preview",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "aspect_ratio": "16:9",
-                "resolution": "720p",
-                "duration": 8
+                "first_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_image": [],
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "aspect_ratio": "16:9"
             },
         )
         enqueue.raise_for_status()
@@ -384,7 +390,7 @@ It balances quality and cost for everyday creative and production workflows, wit
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "google-veo-3-1-lite",
+          "model": "gemini-omni-flash-preview",
           "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
@@ -413,7 +419,7 @@ It balances quality and cost for everyday creative and production workflows, wit
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "google-veo-3-1-lite",
+                "model": "gemini-omni-flash-preview",
                 "prompt": "<prompt>"
             },
         )
@@ -449,9 +455,11 @@ It balances quality and cost for everyday creative and production workflows, wit
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "google-veo-3-1-lite",
+          "model": "gemini-omni-flash-preview",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "first_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_image": [],
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -479,9 +487,11 @@ It balances quality and cost for everyday creative and production workflows, wit
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "google-veo-3-1-lite",
+                "model": "gemini-omni-flash-preview",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "first_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_image": [],
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         enqueue.raise_for_status()
@@ -516,12 +526,12 @@ It balances quality and cost for everyday creative and production workflows, wit
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "google-veo-3-1-lite",
+          "model": "gemini-omni-flash-preview",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "aspect_ratio": "16:9",
-          "resolution": "720p",
-          "duration": 8
+          "first_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_image": [],
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "aspect_ratio": "16:9"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -549,12 +559,12 @@ It balances quality and cost for everyday creative and production workflows, wit
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "google-veo-3-1-lite",
+                "model": "gemini-omni-flash-preview",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "aspect_ratio": "16:9",
-                "resolution": "720p",
-                "duration": 8
+                "first_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_image": [],
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "aspect_ratio": "16:9"
             },
         )
         enqueue.raise_for_status()
@@ -589,7 +599,7 @@ It balances quality and cost for everyday creative and production workflows, wit
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/google-veo-3-1-lite
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/gemini-omni-flash-preview
 ```
 
 ## Request parameters
@@ -598,14 +608,13 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | Text description of the video to generate, or how to animate the input image. |
+| `prompt` | `string` | &mdash; | Text description of the video to generate, how to animate the input images, or the edit to apply to the input video. Reference the first-frame image as @FirstFrame and reference images as @Image1, @Image2, etc. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `input_image` | `string` | &mdash; | Optional first-frame image to animate (image-to-video). Leave empty to generate from the prompt alone. Format: uri. |
+| `first_frame_image` | `string` | &mdash; | Optional image to use as the video's starting frame. Reference it in the prompt as @FirstFrame. Format: uri. |
+| `input_image` | `array<string>` | `[]` | Optional reference images (characters, objects, styles to carry into the video). Reference them in the prompt as @Image1, @Image2, etc. |
+| `input_video` | `string` | &mdash; | Optional video to edit. The prompt describes the changes to apply; unmentioned elements are preserved. Leave empty to generate a new video. Format: uri. |
 | `aspect_ratio` | `string` | `"16:9"` | Output video aspect ratio. One of: 16:9, 9:16. |
-| `resolution` | `string` | `"720p"` | Output video resolution. 1080p requires an 8 second duration. One of: 720p, 1080p. |
-| `duration` | `integer` | `8` | Video duration in seconds. 1080p requires 8 seconds. One of: 4, 6, 8. |
-| `seed` | `integer` | &mdash; | Random seed for deterministic generation. |

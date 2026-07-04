@@ -1,22 +1,24 @@
 ---
-title: "Nano Banana 2 - Image Edit"
-description: "Flash-speed natural-language image editing"
+title: "Topaz Wonder 3"
+description: "All-in-one image enhancement and upscaling"
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try Nano Banana 2 - Image Edit in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=nano-banana-2-edit">
+  <Card title="Try Topaz Wonder 3 in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=topazlabs-wonder-3-image">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `nano-banana-2-edit`
+**Model ID:** `topazlabs-wonder-3-image`
 
-Gemini 2.5 Flash Image (aka nano-banana), is a state-of-the-art image generation and editing model capable of blending multiple images into a single image, maintaining character consistency for storytelling, making targeted transformations with natural language prompts (e.g., blurring backgrounds, removing objects, altering poses, colorizing B&W photos), and using Gemini's world knowledge for semantic understanding of real-world scenarios. It excels at visual templates for applications like real estate, badges, product mockups, multi-image fusion (e.g., placing objects in scenes, restyling rooms), and interactive educational tools. The model includes SynthID watermarking for AI-generated content identification.
+Topaz Wonder 3 is an all-in-one image enhancement and upscaling model that adds natural, realistic detail to photos of any size, handling both high-quality and heavily degraded images with consistent results.
+
+Use this model to enhance and upscale images with adjustable strength, creativity, and texture, optionally guided by a prompt.
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=nano-banana-2-edit) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=topazlabs-wonder-3-image) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
@@ -34,11 +36,8 @@ Gemini 2.5 Flash Image (aka nano-banana), is a state-of-the-art image generation
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "nano-banana-2-edit",
-          "prompt": "<prompt>",
-          "input_image": [
-            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ]
+          "model": "topazlabs-wonder-3-image",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }'
         ```
 
@@ -53,11 +52,46 @@ Gemini 2.5 Flash Image (aka nano-banana), is a state-of-the-art image generation
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "nano-banana-2-edit",
-                "prompt": "<prompt>",
-                "input_image": [
-                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ]
+                "model": "topazlabs-wonder-3-image",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+            },
+        )
+        response.raise_for_status()
+        print(response.json())
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+      <Tab title="Basic parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "topazlabs-wonder-3-image",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "prompt": "<prompt>"
+        }'
+        ```
+
+        ```python Python
+        import os
+        import requests
+
+        response = requests.post(
+            "https://hub.oxen.ai/api/ai/images/edit",
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+            },
+            json={
+                "model": "topazlabs-wonder-3-image",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -76,15 +110,14 @@ Gemini 2.5 Flash Image (aka nano-banana), is a state-of-the-art image generation
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "nano-banana-2-edit",
+          "model": "topazlabs-wonder-3-image",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "prompt": "<prompt>",
-          "input_image": [
-            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ],
-          "aspect_ratio": "16:9",
-          "resolution": "2K",
-          "enable_web_search": true,
-          "safety_tolerance": "6"
+          "enhancement_strength": "medium",
+          "creativity": 3,
+          "texture": 1,
+          "sharpen": 0,
+          "denoise": 0
         }'
         ```
 
@@ -99,15 +132,14 @@ Gemini 2.5 Flash Image (aka nano-banana), is a state-of-the-art image generation
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "nano-banana-2-edit",
+                "model": "topazlabs-wonder-3-image",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "prompt": "<prompt>",
-                "input_image": [
-                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ],
-                "aspect_ratio": "16:9",
-                "resolution": "2K",
-                "enable_web_search": true,
-                "safety_tolerance": "6"
+                "enhancement_strength": "medium",
+                "creativity": 3,
+                "texture": 1,
+                "sharpen": 0,
+                "denoise": 0
             },
         )
         response.raise_for_status()
@@ -135,11 +167,8 @@ Gemini 2.5 Flash Image (aka nano-banana), is a state-of-the-art image generation
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "nano-banana-2-edit",
-          "prompt": "<prompt>",
-          "input_image": [
-            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ]
+          "model": "topazlabs-wonder-3-image",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -170,11 +199,77 @@ Gemini 2.5 Flash Image (aka nano-banana), is a state-of-the-art image generation
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "nano-banana-2-edit",
-                "prompt": "<prompt>",
-                "input_image": [
-                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ]
+                "model": "topazlabs-wonder-3-image",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        while True:
+            data = requests.get(
+                f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
+                headers=HEADERS,
+            ).json()
+            if data["status"] in {"succeeded", "failed", "cancelled"}:
+                break
+            time.sleep(5)
+
+        if data["status"] == "succeeded":
+            print(f"Result: {data['result_url']}")
+        else:
+            print(f"Generation {data['status']}: {data.get('error_message')}")
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+      <Tab title="Basic parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "topazlabs-wonder-3-image",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "prompt": "<prompt>"
+        }' | jq -r '.generations[0].generation_id')
+
+        # Poll until the generation reaches a terminal status.
+        while true; do
+          STATUS=$(curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.status')
+          echo "Status: $STATUS"
+          case $STATUS in succeeded|failed|cancelled) break;; esac
+          sleep 5
+        done
+
+        # Print the result.
+        curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+          "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq .
+        ```
+
+        ```python Python
+        import os
+        import time
+        import requests
+
+        HEADERS = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        }
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers=HEADERS,
+            json={
+                "model": "topazlabs-wonder-3-image",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -208,15 +303,14 @@ Gemini 2.5 Flash Image (aka nano-banana), is a state-of-the-art image generation
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "nano-banana-2-edit",
+          "model": "topazlabs-wonder-3-image",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "prompt": "<prompt>",
-          "input_image": [
-            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ],
-          "aspect_ratio": "16:9",
-          "resolution": "2K",
-          "enable_web_search": true,
-          "safety_tolerance": "6"
+          "enhancement_strength": "medium",
+          "creativity": 3,
+          "texture": 1,
+          "sharpen": 0,
+          "denoise": 0
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -247,15 +341,14 @@ Gemini 2.5 Flash Image (aka nano-banana), is a state-of-the-art image generation
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "nano-banana-2-edit",
+                "model": "topazlabs-wonder-3-image",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "prompt": "<prompt>",
-                "input_image": [
-                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ],
-                "aspect_ratio": "16:9",
-                "resolution": "2K",
-                "enable_web_search": true,
-                "safety_tolerance": "6"
+                "enhancement_strength": "medium",
+                "creativity": 3,
+                "texture": 1,
+                "sharpen": 0,
+                "denoise": 0
             },
         )
         enqueue.raise_for_status()
@@ -297,11 +390,8 @@ Gemini 2.5 Flash Image (aka nano-banana), is a state-of-the-art image generation
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "nano-banana-2-edit",
-          "prompt": "<prompt>",
-          "input_image": [
-            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ]
+          "model": "topazlabs-wonder-3-image",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -329,11 +419,75 @@ Gemini 2.5 Flash Image (aka nano-banana), is a state-of-the-art image generation
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "nano-banana-2-edit",
-                "prompt": "<prompt>",
-                "input_image": [
-                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ]
+                "model": "topazlabs-wonder-3-image",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        with requests.get(
+            "https://hub.oxen.ai/api/events",
+            headers=AUTH,
+            stream=True,
+        ) as stream:
+            event_name = None
+            for line in stream.iter_lines(decode_unicode=True):
+                if line.startswith("event: "):
+                    event_name = line.removeprefix("event: ")
+                elif line.startswith("data: ") and event_name == "media_generation_completed":
+                    payload = json.loads(line.removeprefix("data: "))
+                    if payload.get("generation_id") == generation_id:
+                        print(payload)
+                        break
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+      <Tab title="Basic parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "topazlabs-wonder-3-image",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "prompt": "<prompt>"
+        }' | jq -r '.generations[0].generation_id')
+
+        # Stream the SSE channel, grab the data line that follows a
+        # media_generation_completed event for our id, and pretty-print it.
+        curl -sN -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/events \
+          | awk -v id="$GEN_ID" '
+            /^event: media_generation_completed$/ { expect=1; next }
+            /^data: / && expect {
+              payload = substr($0, 7)
+              if (index(payload, "\"generation_id\":\"" id "\"")) { print payload; exit }
+              expect = 0
+            }
+          ' | jq .
+        ```
+
+        ```python Python
+        import json
+        import os
+        import requests
+
+        API_KEY = os.environ["OXEN_API_KEY"]
+        AUTH = {"Authorization": f"Bearer {API_KEY}"}
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers={**AUTH, "Content-Type": "application/json"},
+            json={
+                "model": "topazlabs-wonder-3-image",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -368,15 +522,14 @@ Gemini 2.5 Flash Image (aka nano-banana), is a state-of-the-art image generation
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "nano-banana-2-edit",
+          "model": "topazlabs-wonder-3-image",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "prompt": "<prompt>",
-          "input_image": [
-            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ],
-          "aspect_ratio": "16:9",
-          "resolution": "2K",
-          "enable_web_search": true,
-          "safety_tolerance": "6"
+          "enhancement_strength": "medium",
+          "creativity": 3,
+          "texture": 1,
+          "sharpen": 0,
+          "denoise": 0
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -404,15 +557,14 @@ Gemini 2.5 Flash Image (aka nano-banana), is a state-of-the-art image generation
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "nano-banana-2-edit",
+                "model": "topazlabs-wonder-3-image",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "prompt": "<prompt>",
-                "input_image": [
-                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ],
-                "aspect_ratio": "16:9",
-                "resolution": "2K",
-                "enable_web_search": true,
-                "safety_tolerance": "6"
+                "enhancement_strength": "medium",
+                "creativity": 3,
+                "texture": 1,
+                "sharpen": 0,
+                "denoise": 0
             },
         )
         enqueue.raise_for_status()
@@ -447,7 +599,7 @@ Gemini 2.5 Flash Image (aka nano-banana), is a state-of-the-art image generation
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/nano-banana-2-edit
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/topazlabs-wonder-3-image
 ```
 
 ## Request parameters
@@ -456,14 +608,15 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | Text description of what you want to generate, or the instruction on how to edit the given image. Use @Image1, @Image2, etc. to reference the input images. |
-| `input_image` | `array<string>` | &mdash; | Input images to transform or use as reference. Reference them in the prompt as @Image1, @Image2, etc. |
+| `input_image` | `string` | &mdash; | Image to enhance and upscale (URL or file path). jpeg, png, gif, or webp. Format: uri. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `aspect_ratio` | `string` | `"16:9"` | Aspect ratio for the generated image One of: auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 4:5, 5:4, 21:9, 4:1, 1:4, 8:1, 1:8. |
-| `resolution` | `string` | `"2K"` | Resolution of the generated image One of: 1K, 2K, 4K. |
-| `enable_web_search` | `boolean` | `true` | Enable web search for the image generation task. This will allow the model to use the latest information from the web to generate the image. |
-| `safety_tolerance` | `string` | `"6"` | The safety tolerance level for content moderation. 1 is the most strict (blocks most content), 6 is the least strict. Default value: 4 One of: 1, 2, 3, 4, 5, 6. |
+| `prompt` | `string` | `""` | Optional prompt to guide enhancement (max 1024 characters). |
+| `enhancement_strength` | `string` | `"medium"` | Overall enhancement strength. One of: low, medium, high. |
+| `creativity` | `integer` | `3` | How much creative detail to add (1 faithful, 9 most creative). Range: 1 – 9. |
+| `texture` | `integer` | `1` | Texture enhancement strength (1-5). Range: 1 – 5. |
+| `sharpen` | `number` | `0` | Sharpening amount (0.0-1.0). Range: 0 – 1. |
+| `denoise` | `number` | `0` | Noise reduction amount (0.0-1.0). Range: 0 – 1. |
