@@ -660,7 +660,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | `input_image` | `string` | &mdash; | Optional URL of an image to use as the first frame. When omitted, the workflow runs from text and audio only. Format: uri. |
 | `match_audio_length` | `boolean` | `true` | When enabled, derives the number of frames from the audio duration and frames_per_second. When disabled, uses num_frames. |
 | `num_frames` | `integer` | `121` | The number of frames to generate. Range: 9 – 481. |
-| `resolution` | `string` | `"auto"` | Final output size. 'auto' matches the input image aspect ratio when an image is provided; otherwise it uses the workflow's landscape fallback. |
+| `resolution` | `string` | `"auto"` | Final output size. 'auto' matches the input image aspect ratio when an image is provided; otherwise it uses the workflow's landscape fallback. One of: auto, square_hd, square, portrait_4_3, portrait_16_9, landscape_4_3, landscape_16_9. |
 | `frames_per_second` | `number` | `24` | Frames per second of the generated video. Range: 1 – 60. |
 | `image_strength` | `number` | `0.7` | Conditioning strength for the optional first frame. 1.0 keeps the image more strictly; lower values give the model more freedom. Range: 0 – 1. |
 | `generate_audio` | `boolean` | `true` | Whether to include audio in the returned video. When disabled, the final MP4 is returned without an audio track. |
