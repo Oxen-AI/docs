@@ -447,7 +447,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `num_frames` | `integer` | `121` | The number of frames to generate. Range: 9 – 481. |
-| `resolution` | `string` | `"landscape_16_9"` | The size of the generated video. |
+| `resolution` | `string` | `"landscape_16_9"` | The size of the generated video. One of: square_hd, square, portrait_4_3, portrait_16_9, landscape_4_3, landscape_16_9. |
 | `frames_per_second` | `number` | `24` | Frames per second of the generated video. Range: 1 – 60. |
 | `generate_audio` | `boolean` | `true` | Whether to include audio in the returned video. When disabled, the final MP4 is returned without an audio track. |
 | `video_quality` | `string` | `"high"` | The quality preset of the generated video. One of: low, medium, high, maximum. |

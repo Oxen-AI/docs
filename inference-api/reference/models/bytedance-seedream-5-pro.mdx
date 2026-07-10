@@ -1,30 +1,30 @@
 ---
-title: "Kling O3 Edit - Video to Video"
-description: "Pro video-to-video editing"
+title: "Seedream 5.0 Pro"
+description: "Precise image generation and editing"
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try Kling O3 Edit - Video to Video in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=kling-video-o3-pro-video-to-video-edit">
+  <Card title="Try Seedream 5.0 Pro in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=bytedance-seedream-5-pro">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `kling-video-o3-pro-video-to-video-edit`
+**Model ID:** `bytedance-seedream-5-pro`
 
-Kling Video 3.0 Video to Video is an all-in-one generative video model that unifies high-quality video creation and editing into a single workflow, letting you input text, images, or reference characters to produce cinematic, multi-shot sequences with coherent motion, physics-informed camera behavior, and synchronized audio.
+ByteDance Seedream 5.0 Pro is an image generation and editing model built for precise, region-level control and professional design work. It generates images from a text prompt and performs single-image and multi-reference editing (recolor, material swap, object replacement, multi-image fusion), with native multilingual text rendering across more than 10 languages and strong layout reasoning for text-dense compositions.
+
+Pick an aspect ratio and a 1K or 2K resolution level to set the output dimensions. Each request returns a single image up to 2K (2048x2048), and up to 10 reference images can guide an edit.
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=kling-video-o3-pro-video-to-video-edit) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=bytedance-seedream-5-pro) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
   <Tab title="Sync">
 
-    This blocks until the video is ready (typically 5-15 minutes). Prefer **Async** or **Async with SSE** for anything beyond quick experimentation.
-
-    See the [video generation reference](/inference-api/reference/video_generation) for more details.
+    See the [image editing reference](/inference-api/reference/image_editing) for more details.
 
     <Tabs>
       <Tab title="Minimal">
@@ -32,13 +32,12 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "kling-video-o3-pro-video-to-video-edit",
-          "prompt": "<prompt>",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+          "model": "bytedance-seedream-5-pro",
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -47,15 +46,14 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/videos/generate",
+            "https://hub.oxen.ai/api/ai/images/edit",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "kling-video-o3-pro-video-to-video-edit",
-                "prompt": "<prompt>",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+                "model": "bytedance-seedream-5-pro",
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -70,18 +68,14 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "kling-video-o3-pro-video-to-video-edit",
+          "model": "bytedance-seedream-5-pro",
           "prompt": "<prompt>",
-          "input_image": [
+          "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ],
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "elements": [
-            {}
           ]
         }'
         ```
@@ -91,20 +85,16 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/videos/generate",
+            "https://hub.oxen.ai/api/ai/images/edit",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "kling-video-o3-pro-video-to-video-edit",
+                "model": "bytedance-seedream-5-pro",
                 "prompt": "<prompt>",
-                "input_image": [
+                "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ],
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "elements": [
-                    {}
                 ]
             },
         )
@@ -120,20 +110,19 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "kling-video-o3-pro-video-to-video-edit",
+          "model": "bytedance-seedream-5-pro",
           "prompt": "<prompt>",
-          "input_image": [
+          "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "elements": [
-            {}
-          ],
-          "keep_audio": false
+          "aspect_ratio": "1:1",
+          "size": "2K",
+          "output_format": "png",
+          "watermark": false
         }'
         ```
 
@@ -142,22 +131,21 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/videos/generate",
+            "https://hub.oxen.ai/api/ai/images/edit",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "kling-video-o3-pro-video-to-video-edit",
+                "model": "bytedance-seedream-5-pro",
                 "prompt": "<prompt>",
-                "input_image": [
+                "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "elements": [
-                    {}
-                ],
-                "keep_audio": false
+                "aspect_ratio": "1:1",
+                "size": "2K",
+                "output_format": "png",
+                "watermark": false
             },
         )
         response.raise_for_status()
@@ -185,9 +173,8 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "kling-video-o3-pro-video-to-video-edit",
-          "prompt": "<prompt>",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+          "model": "bytedance-seedream-5-pro",
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -218,9 +205,8 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "kling-video-o3-pro-video-to-video-edit",
-                "prompt": "<prompt>",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+                "model": "bytedance-seedream-5-pro",
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -254,14 +240,10 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "kling-video-o3-pro-video-to-video-edit",
+          "model": "bytedance-seedream-5-pro",
           "prompt": "<prompt>",
-          "input_image": [
+          "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ],
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "elements": [
-            {}
           ]
         }' | jq -r '.generations[0].generation_id')
 
@@ -293,14 +275,10 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "kling-video-o3-pro-video-to-video-edit",
+                "model": "bytedance-seedream-5-pro",
                 "prompt": "<prompt>",
-                "input_image": [
+                "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ],
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "elements": [
-                    {}
                 ]
             },
         )
@@ -335,16 +313,15 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "kling-video-o3-pro-video-to-video-edit",
+          "model": "bytedance-seedream-5-pro",
           "prompt": "<prompt>",
-          "input_image": [
+          "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "elements": [
-            {}
-          ],
-          "keep_audio": false
+          "aspect_ratio": "1:1",
+          "size": "2K",
+          "output_format": "png",
+          "watermark": false
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -375,16 +352,15 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "kling-video-o3-pro-video-to-video-edit",
+                "model": "bytedance-seedream-5-pro",
                 "prompt": "<prompt>",
-                "input_image": [
+                "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "elements": [
-                    {}
-                ],
-                "keep_audio": false
+                "aspect_ratio": "1:1",
+                "size": "2K",
+                "output_format": "png",
+                "watermark": false
             },
         )
         enqueue.raise_for_status()
@@ -426,9 +402,8 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "kling-video-o3-pro-video-to-video-edit",
-          "prompt": "<prompt>",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+          "model": "bytedance-seedream-5-pro",
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -456,9 +431,8 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "kling-video-o3-pro-video-to-video-edit",
-                "prompt": "<prompt>",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+                "model": "bytedance-seedream-5-pro",
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -493,14 +467,10 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "kling-video-o3-pro-video-to-video-edit",
+          "model": "bytedance-seedream-5-pro",
           "prompt": "<prompt>",
-          "input_image": [
+          "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ],
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "elements": [
-            {}
           ]
         }' | jq -r '.generations[0].generation_id')
 
@@ -529,14 +499,10 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "kling-video-o3-pro-video-to-video-edit",
+                "model": "bytedance-seedream-5-pro",
                 "prompt": "<prompt>",
-                "input_image": [
+                "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ],
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "elements": [
-                    {}
                 ]
             },
         )
@@ -572,16 +538,15 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "kling-video-o3-pro-video-to-video-edit",
+          "model": "bytedance-seedream-5-pro",
           "prompt": "<prompt>",
-          "input_image": [
+          "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "elements": [
-            {}
-          ],
-          "keep_audio": false
+          "aspect_ratio": "1:1",
+          "size": "2K",
+          "output_format": "png",
+          "watermark": false
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -609,16 +574,15 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "kling-video-o3-pro-video-to-video-edit",
+                "model": "bytedance-seedream-5-pro",
                 "prompt": "<prompt>",
-                "input_image": [
+                "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "elements": [
-                    {}
-                ],
-                "keep_audio": false
+                "aspect_ratio": "1:1",
+                "size": "2K",
+                "output_format": "png",
+                "watermark": false
             },
         )
         enqueue.raise_for_status()
@@ -653,7 +617,7 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/kling-video-o3-pro-video-to-video-edit
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/bytedance-seedream-5-pro
 ```
 
 ## Request parameters
@@ -662,13 +626,14 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | Text description of what you want to generate, or the instruction on how to edit the given image. |
-| `input_video` | `string` | &mdash; | Video to use as reference. Format: uri. |
+| `prompt` | `string` | &mdash; | Text prompt for image generation, or the instruction for editing the input images. Use @Image1, @Image2, etc. to reference the input images. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `input_image` | `array<string>` | &mdash; | Optional reference images. Use @Image1, @Image2, etc. in the prompt to refer to them. |
-| `elements` | `array<object>` | &mdash; | Optional element references. Use @Element1, @Element2, etc. in the prompt to refer to them. |
-| `keep_audio` | `boolean` | `false` | Whether to keep the original audio from the video.. |
+| `input_images` | `array<string>` | &mdash; | Optional reference image URLs for image-to-image editing. Provide one image for single-image editing or multiple for multi-reference fusion; reference them in the prompt as @Image1, @Image2, etc. Up to 10 images. |
+| `aspect_ratio` | `string` | `"1:1"` | Aspect ratio of the generated image. Combined with the resolution to set the output dimensions. One of: 1:1, 4:3, 3:4, 16:9, 9:16, 3:2, 2:3, 21:9. |
+| `size` | `string` | `"2K"` | Resolution level. Combined with the aspect ratio to set the output dimensions. One of: 1K, 2K. |
+| `output_format` | `string` | `"png"` | Output image format. One of: png, jpeg. |
+| `watermark` | `boolean` | `false` | Whether to add an 'AI generated' watermark. |

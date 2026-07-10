@@ -13,7 +13,7 @@ description: "Detail-preserving video upscaling"
 
 Topaz Starlight Precise 2.5 is a video restoration and upscaling model focused on preserving fine detail and temporal consistency while improving clarity.
 
-Use this model to upscale input video to 1080p or 4k and control output frame rate.
+A detail-preserving upscaler for AI-generated video and archival sources. Use it to upscale input to 1080p or 4k and control output frame rate.
 
 ## Example request
 
@@ -78,9 +78,7 @@ Use this model to upscale input video to 1080p or 4k and control output frame ra
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "resolution": "4k",
           "interpolate_frames": false,
-          "target_fps": 30,
-          "enable_clc": true,
-          "is_optimized_mode": true
+          "target_fps": 30
         }'
         ```
 
@@ -99,9 +97,7 @@ Use this model to upscale input video to 1080p or 4k and control output frame ra
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "resolution": "4k",
                 "interpolate_frames": false,
-                "target_fps": 30,
-                "enable_clc": true,
-                "is_optimized_mode": true
+                "target_fps": 30
             },
         )
         response.raise_for_status()
@@ -200,9 +196,7 @@ Use this model to upscale input video to 1080p or 4k and control output frame ra
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "resolution": "4k",
           "interpolate_frames": false,
-          "target_fps": 30,
-          "enable_clc": true,
-          "is_optimized_mode": true
+          "target_fps": 30
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -237,9 +231,7 @@ Use this model to upscale input video to 1080p or 4k and control output frame ra
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "resolution": "4k",
                 "interpolate_frames": false,
-                "target_fps": 30,
-                "enable_clc": true,
-                "is_optimized_mode": true
+                "target_fps": 30
             },
         )
         enqueue.raise_for_status()
@@ -350,9 +342,7 @@ Use this model to upscale input video to 1080p or 4k and control output frame ra
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "resolution": "4k",
           "interpolate_frames": false,
-          "target_fps": 30,
-          "enable_clc": true,
-          "is_optimized_mode": true
+          "target_fps": 30
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -384,9 +374,7 @@ Use this model to upscale input video to 1080p or 4k and control output frame ra
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "resolution": "4k",
                 "interpolate_frames": false,
-                "target_fps": 30,
-                "enable_clc": true,
-                "is_optimized_mode": true
+                "target_fps": 30
             },
         )
         enqueue.raise_for_status()
@@ -439,5 +427,3 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | `resolution` | `string` | `"4k"` | Target output resolution. One of: 1080p, 2k, 4k. |
 | `interpolate_frames` | `boolean` | `false` | Increase the output frame rate by generating new frames. More expensive. |
 | `target_fps` | `number` | `30` | Output frame rate after interpolation. One of: 24, 23.976, 25, 29.97, 30, 50, 59.94, 60. |
-| `enable_clc` | `boolean` | `true` | Enables content-aware processing. |
-| `is_optimized_mode` | `boolean` | `true` | Enables optimization mode for faster processing. |

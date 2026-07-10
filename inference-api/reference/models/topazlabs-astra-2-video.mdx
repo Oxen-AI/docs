@@ -13,7 +13,7 @@ description: "Creative video upscaling for AI video"
 
 Topaz Astra 2 is a creative video upscaling model that enhances AI-generated video by adding new detail and texture, up to 4k.
 
-Use this model to enrich stylized or synthetic footage with adjustable creativity, realism, and sharpness, optionally guided by a prompt.
+Use this model to enrich stylized or synthetic footage with adjustable creativity and sharpness, optionally guided by a prompt.
 
 ## Example request
 
@@ -78,7 +78,11 @@ Use this model to enrich stylized or synthetic footage with adjustable creativit
           -d '{
           "model": "topazlabs-astra-2-video",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "resolution": "4k",
+          "interpolate_frames": false,
+          "target_fps": 30,
           "creativity": 0.5,
+          "sharp": 0.5,
           "prompt": "<prompt>"
         }'
         ```
@@ -96,54 +100,12 @@ Use this model to enrich stylized or synthetic footage with adjustable creativit
             json={
                 "model": "topazlabs-astra-2-video",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "creativity": 0.5,
-                "prompt": "<prompt>"
-            },
-        )
-        response.raise_for_status()
-        print(response.json())
-        ```
-
-        </CodeGroup>
-
-      </Tab>
-      <Tab title="All parameters">
-
-        <CodeGroup>
-
-        ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
-          -H "Content-Type: application/json" \
-          -H "Authorization: Bearer $OXEN_API_KEY" \
-          -d '{
-          "model": "topazlabs-astra-2-video",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "creativity": 0.5,
-          "prompt": "<prompt>",
-          "resolution": "4k",
-          "realism": 0.5,
-          "sharp": 0.5
-        }'
-        ```
-
-        ```python Python
-        import os
-        import requests
-
-        response = requests.post(
-            "https://hub.oxen.ai/api/ai/videos/generate",
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
-            },
-            json={
-                "model": "topazlabs-astra-2-video",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "creativity": 0.5,
-                "prompt": "<prompt>",
                 "resolution": "4k",
-                "realism": 0.5,
-                "sharp": 0.5
+                "interpolate_frames": false,
+                "target_fps": 30,
+                "creativity": 0.5,
+                "sharp": 0.5,
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -242,7 +204,11 @@ Use this model to enrich stylized or synthetic footage with adjustable creativit
           -d '{
           "model": "topazlabs-astra-2-video",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "resolution": "4k",
+          "interpolate_frames": false,
+          "target_fps": 30,
           "creativity": 0.5,
+          "sharp": 0.5,
           "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
@@ -276,85 +242,12 @@ Use this model to enrich stylized or synthetic footage with adjustable creativit
             json={
                 "model": "topazlabs-astra-2-video",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "creativity": 0.5,
-                "prompt": "<prompt>"
-            },
-        )
-        enqueue.raise_for_status()
-        generation_id = enqueue.json()["generations"][0]["generation_id"]
-
-        while True:
-            data = requests.get(
-                f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
-                headers=HEADERS,
-            ).json()
-            if data["status"] in {"succeeded", "failed", "cancelled"}:
-                break
-            time.sleep(5)
-
-        if data["status"] == "succeeded":
-            print(f"Result: {data['result_url']}")
-        else:
-            print(f"Generation {data['status']}: {data.get('error_message')}")
-        ```
-
-        </CodeGroup>
-
-      </Tab>
-      <Tab title="All parameters">
-
-        <CodeGroup>
-
-        ```bash cURL
-        # Enqueue, capture the generation id.
-        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
-          -H "Content-Type: application/json" \
-          -H "Authorization: Bearer $OXEN_API_KEY" \
-          -d '{
-          "model": "topazlabs-astra-2-video",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "creativity": 0.5,
-          "prompt": "<prompt>",
-          "resolution": "4k",
-          "realism": 0.5,
-          "sharp": 0.5
-        }' | jq -r '.generations[0].generation_id')
-
-        # Poll until the generation reaches a terminal status.
-        while true; do
-          STATUS=$(curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
-            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.status')
-          echo "Status: $STATUS"
-          case $STATUS in succeeded|failed|cancelled) break;; esac
-          sleep 5
-        done
-
-        # Print the result.
-        curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
-          "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq .
-        ```
-
-        ```python Python
-        import os
-        import time
-        import requests
-
-        HEADERS = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
-        }
-
-        enqueue = requests.post(
-            "https://hub.oxen.ai/api/ai/queue",
-            headers=HEADERS,
-            json={
-                "model": "topazlabs-astra-2-video",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "creativity": 0.5,
-                "prompt": "<prompt>",
                 "resolution": "4k",
-                "realism": 0.5,
-                "sharp": 0.5
+                "interpolate_frames": false,
+                "target_fps": 30,
+                "creativity": 0.5,
+                "sharp": 0.5,
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -465,7 +358,11 @@ Use this model to enrich stylized or synthetic footage with adjustable creativit
           -d '{
           "model": "topazlabs-astra-2-video",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "resolution": "4k",
+          "interpolate_frames": false,
+          "target_fps": 30,
           "creativity": 0.5,
+          "sharp": 0.5,
           "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
@@ -496,83 +393,12 @@ Use this model to enrich stylized or synthetic footage with adjustable creativit
             json={
                 "model": "topazlabs-astra-2-video",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "creativity": 0.5,
-                "prompt": "<prompt>"
-            },
-        )
-        enqueue.raise_for_status()
-        generation_id = enqueue.json()["generations"][0]["generation_id"]
-
-        with requests.get(
-            "https://hub.oxen.ai/api/events",
-            headers=AUTH,
-            stream=True,
-        ) as stream:
-            event_name = None
-            for line in stream.iter_lines(decode_unicode=True):
-                if line.startswith("event: "):
-                    event_name = line.removeprefix("event: ")
-                elif line.startswith("data: ") and event_name == "media_generation_completed":
-                    payload = json.loads(line.removeprefix("data: "))
-                    if payload.get("generation_id") == generation_id:
-                        print(payload)
-                        break
-        ```
-
-        </CodeGroup>
-
-      </Tab>
-      <Tab title="All parameters">
-
-        <CodeGroup>
-
-        ```bash cURL
-        # Enqueue, capture the generation id.
-        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
-          -H "Content-Type: application/json" \
-          -H "Authorization: Bearer $OXEN_API_KEY" \
-          -d '{
-          "model": "topazlabs-astra-2-video",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "creativity": 0.5,
-          "prompt": "<prompt>",
-          "resolution": "4k",
-          "realism": 0.5,
-          "sharp": 0.5
-        }' | jq -r '.generations[0].generation_id')
-
-        # Stream the SSE channel, grab the data line that follows a
-        # media_generation_completed event for our id, and pretty-print it.
-        curl -sN -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/events \
-          | awk -v id="$GEN_ID" '
-            /^event: media_generation_completed$/ { expect=1; next }
-            /^data: / && expect {
-              payload = substr($0, 7)
-              if (index(payload, "\"generation_id\":\"" id "\"")) { print payload; exit }
-              expect = 0
-            }
-          ' | jq .
-        ```
-
-        ```python Python
-        import json
-        import os
-        import requests
-
-        API_KEY = os.environ["OXEN_API_KEY"]
-        AUTH = {"Authorization": f"Bearer {API_KEY}"}
-
-        enqueue = requests.post(
-            "https://hub.oxen.ai/api/ai/queue",
-            headers={**AUTH, "Content-Type": "application/json"},
-            json={
-                "model": "topazlabs-astra-2-video",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "creativity": 0.5,
-                "prompt": "<prompt>",
                 "resolution": "4k",
-                "realism": 0.5,
-                "sharp": 0.5
+                "interpolate_frames": false,
+                "target_fps": 30,
+                "creativity": 0.5,
+                "sharp": 0.5,
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -623,7 +449,8 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | `""` | Optional prompt to guide enhancement. Limits clips to 450 frames when set. |
 | `resolution` | `string` | `"4k"` | Target output resolution. One of: 1080p, 2k, 4k. |
-| `realism` | `number` | `0.5` | Bias toward photorealistic detail (0.0-1.0). Range: 0 – 1. |
+| `interpolate_frames` | `boolean` | `false` | Increase the output frame rate by generating new frames. More expensive. |
+| `target_fps` | `number` | `30` | Output frame rate after interpolation. One of: 24, 23.976, 25, 29.97, 30, 50, 59.94, 60. |
 | `sharp` | `number` | `0.5` | Pre-enhance sharpness (0.0 softens, 0.5 passthrough, 1.0 sharpens). Range: 0 – 1. |
+| `prompt` | `string` | `""` | Optional prompt to guide enhancement. Limits clips to 450 frames when set. |

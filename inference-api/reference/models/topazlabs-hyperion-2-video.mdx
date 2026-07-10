@@ -1,34 +1,24 @@
 ---
-title: "LTX 2.3 Quality: Image to Video"
-description: "High-quality image-to-video with audio"
+title: "Topaz Hyperion 2"
+description: "SDR-to-HDR video, 10-bit HDR10 output"
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try LTX 2.3 Quality: Image to Video in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=ltx-2-3-quality-image-to-video">
+  <Card title="Try Topaz Hyperion 2 in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=topazlabs-hyperion-2-video">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `ltx-2-3-quality-image-to-video`
+**Model ID:** `topazlabs-hyperion-2-video`
 
-LTX 2.3 Quality (Image to Video) is the high-quality preset of Lightricks LTX-2.3 on fal, animating a starting image into video with synchronized native audio guided by a text prompt. It runs a distilled DiT workflow with a quality preset control, supporting up to 481 frames at 1 to 60 FPS and flexible output resolutions.
+Topaz Hyperion 2 is an SDR-to-HDR video model that converts standard-dynamic-range footage into HDR automatically, with no tuning parameters to set.
 
-The model conditions on the input image with an adjustable image strength, where higher values keep the first frame closer to the source and lower values give the model more freedom. Audio (sound effects, ambient noise, and dialogue) is generated alongside the visuals in a single pass and can be disabled to return a silent MP4. It is well suited for bringing still images to life with cinematic motion and matching sound.
-
-| Metric             | Value              |
-|--------------------|--------------------|
-| Parameter Count    | 22 billion         |
-| Mixture of Experts | No                 |
-| Context Length     | Unknown            |
-| Multilingual       | Unknown            |
-| Quantized*         | Unknown            |
-
-*_Quantization is specific to the inference provider and the model may be offered with different quantization levels by other providers._
+Output is 10-bit HDR10 in the BT.2020 color space with a PQ (SMPTE-2084) transfer function, delivered as 10-bit H265 or ProRes for professional mastering, grading, and editing workflows. Hyperion 2 is the actively developed successor to Hyperion (HYP-1), which is now considered legacy.
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=ltx-2-3-quality-image-to-video) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=topazlabs-hyperion-2-video) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
@@ -48,9 +38,8 @@ The model conditions on the input image with an adjustable image strength, where
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-quality-image-to-video",
-          "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "model": "topazlabs-hyperion-2-video",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }'
         ```
 
@@ -65,9 +54,8 @@ The model conditions on the input image with an adjustable image strength, where
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "ltx-2-3-quality-image-to-video",
-                "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "model": "topazlabs-hyperion-2-video",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         response.raise_for_status()
@@ -86,15 +74,10 @@ The model conditions on the input image with an adjustable image strength, where
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-quality-image-to-video",
-          "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "num_frames": 121,
-          "resolution": "auto",
-          "frames_per_second": 24,
-          "image_strength": 0.7,
-          "generate_audio": true,
-          "video_quality": "high"
+          "model": "topazlabs-hyperion-2-video",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "output_encoder": "H265",
+          "output_profile": "422 HQ"
         }'
         ```
 
@@ -109,15 +92,10 @@ The model conditions on the input image with an adjustable image strength, where
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "ltx-2-3-quality-image-to-video",
-                "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "num_frames": 121,
-                "resolution": "auto",
-                "frames_per_second": 24,
-                "image_strength": 0.7,
-                "generate_audio": true,
-                "video_quality": "high"
+                "model": "topazlabs-hyperion-2-video",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "output_encoder": "H265",
+                "output_profile": "422 HQ"
             },
         )
         response.raise_for_status()
@@ -145,9 +123,8 @@ The model conditions on the input image with an adjustable image strength, where
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-quality-image-to-video",
-          "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "model": "topazlabs-hyperion-2-video",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -178,9 +155,8 @@ The model conditions on the input image with an adjustable image strength, where
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "ltx-2-3-quality-image-to-video",
-                "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "model": "topazlabs-hyperion-2-video",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         enqueue.raise_for_status()
@@ -214,15 +190,10 @@ The model conditions on the input image with an adjustable image strength, where
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-quality-image-to-video",
-          "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "num_frames": 121,
-          "resolution": "auto",
-          "frames_per_second": 24,
-          "image_strength": 0.7,
-          "generate_audio": true,
-          "video_quality": "high"
+          "model": "topazlabs-hyperion-2-video",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "output_encoder": "H265",
+          "output_profile": "422 HQ"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -253,15 +224,10 @@ The model conditions on the input image with an adjustable image strength, where
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "ltx-2-3-quality-image-to-video",
-                "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "num_frames": 121,
-                "resolution": "auto",
-                "frames_per_second": 24,
-                "image_strength": 0.7,
-                "generate_audio": true,
-                "video_quality": "high"
+                "model": "topazlabs-hyperion-2-video",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "output_encoder": "H265",
+                "output_profile": "422 HQ"
             },
         )
         enqueue.raise_for_status()
@@ -303,9 +269,8 @@ The model conditions on the input image with an adjustable image strength, where
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-quality-image-to-video",
-          "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "model": "topazlabs-hyperion-2-video",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -333,9 +298,8 @@ The model conditions on the input image with an adjustable image strength, where
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "ltx-2-3-quality-image-to-video",
-                "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "model": "topazlabs-hyperion-2-video",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         enqueue.raise_for_status()
@@ -370,15 +334,10 @@ The model conditions on the input image with an adjustable image strength, where
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-quality-image-to-video",
-          "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "num_frames": 121,
-          "resolution": "auto",
-          "frames_per_second": 24,
-          "image_strength": 0.7,
-          "generate_audio": true,
-          "video_quality": "high"
+          "model": "topazlabs-hyperion-2-video",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "output_encoder": "H265",
+          "output_profile": "422 HQ"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -406,15 +365,10 @@ The model conditions on the input image with an adjustable image strength, where
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "ltx-2-3-quality-image-to-video",
-                "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "num_frames": 121,
-                "resolution": "auto",
-                "frames_per_second": 24,
-                "image_strength": 0.7,
-                "generate_audio": true,
-                "video_quality": "high"
+                "model": "topazlabs-hyperion-2-video",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "output_encoder": "H265",
+                "output_profile": "422 HQ"
             },
         )
         enqueue.raise_for_status()
@@ -449,7 +403,7 @@ The model conditions on the input image with an adjustable image strength, where
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/ltx-2-3-quality-image-to-video
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/topazlabs-hyperion-2-video
 ```
 
 ## Request parameters
@@ -458,18 +412,11 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | The prompt to guide the video generation. |
-| `input_image` | `string` | &mdash; | The URL of the starting image. Format: uri. |
+| `input_video` | `string` | &mdash; | SDR video file to convert to HDR (URL or file path). Format: uri. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `num_frames` | `integer` | `121` | The number of frames to generate. Range: 9 – 481. |
-| `resolution` | `string` | `"auto"` | The size of the generated video. 'auto' derives the size from the input image aspect ratio. One of: auto, square_hd, square, portrait_4_3, portrait_16_9, landscape_4_3, landscape_16_9. |
-| `frames_per_second` | `number` | `24` | Frames per second of the generated video. Range: 1 – 60. |
-| `image_strength` | `number` | `0.7` | Conditioning strength on the start image. 1.0 = exact first-frame match, lower = more freedom for the model. Range: 0 – 1. |
-| `generate_audio` | `boolean` | `true` | Whether to include audio in the returned video. When disabled, the final MP4 is returned without an audio track. |
-| `video_quality` | `string` | `"high"` | The quality preset of the generated video. One of: low, medium, high, maximum. |
-| `negative_prompt` | `string` | &mdash; | The negative prompt to steer generation away from. |
-| `seed` | `integer` | &mdash; | Random seed for reproducibility. If None, a random seed is chosen. |
+| `output_encoder` | `string` | `"H265"` | Video encoder for the rendered HDR output. ProRes is recommended for pro editing workflows. One of: H265, ProRes. |
+| `output_profile` | `string` | `"422 HQ"` | ProRes quality profile. One of: 422 Proxy, 422 LT, 422 Std, 422 HQ. |
