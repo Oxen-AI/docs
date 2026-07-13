@@ -31,7 +31,7 @@ This is a fast repair. It uploads content the remote doesn't have, but it does n
 
 ### Revalidate a Remote
 
-`--revalidate` runs a full integrity check on the remote: it re-hashes every stored file, deletes any whose contents no longer match their hash, then re-uploads everything that is now missing. It repairs corruption as well as absence, at the cost of scanning the remote's entire storage — so reach for it when you suspect corrupted content rather than a merely interrupted push.
+`--revalidate` runs a full integrity check on the remote. It removes corrupted files from the remote and then pushes all missing files. This is the right option to use if you suspect there are any corrupted files on the remote.
 
 ```bash
 oxen push --revalidate
