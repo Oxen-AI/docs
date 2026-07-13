@@ -21,10 +21,20 @@ oxen push
 
 ### Resume a Push
 
-If a push is cancelled partway through, use `--missing-files` to resume and upload only the remaining files.
+If a push is cancelled partway through, use `--missing-files` to resume and upload only the files the remote is missing.
 
 ```bash
 oxen push --missing-files
+```
+
+This is a fast repair. It uploads content the remote doesn't have, but it does not detect corrupted files. To find and fix corruption too, use `--revalidate`.
+
+### Revalidate a Remote
+
+`--revalidate` runs a full integrity check on the remote. It removes corrupted files from the remote and then pushes all missing files. This is the right option to use if you suspect there are any corrupted files on the remote.
+
+```bash
+oxen push --revalidate
 ```
 
 ## Pull Changes
