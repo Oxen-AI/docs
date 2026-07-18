@@ -1,0 +1,199 @@
+---
+title: "Muse Spark 1.1"
+description: "Agentic coding with 1M context"
+---
+
+<CardGroup cols={1}>
+  <Card title="Try Muse Spark 1.1 in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=muse-spark-1-1">
+    Run this model interactively, tune parameters, and compare outputs.
+  </Card>
+</CardGroup>
+
+**Model ID:** `muse-spark-1-1`
+
+Muse Spark 1.1 is Meta's multimodal reasoning model for agentic workflows, coding, computer use, and long-running tasks. It can plan across tools, delegate work to parallel subagents, work with large codebases, and retain important context across extended sessions.
+
+The model supports structured output, parallel tool calling, and visual understanding. Meta serves Muse Spark 1.1 through the proprietary Meta Model API in public preview; its weights are not available for local deployment or fine-tuning.
+
+| Metric             | Value              |
+|--------------------|--------------------|
+| Parameter Count    | Unknown            |
+| Mixture of Experts | Unknown            |
+| Context Length     | 1,000,000 tokens   |
+| Multilingual       | Unknown            |
+| Quantized*         | Unknown            |
+
+*_Quantization is specific to the inference provider and the model may be offered with different quantization levels by other providers._
+
+## Example request
+
+<Tip>
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=muse-spark-1-1) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+</Tip>
+
+<Tabs>
+  <Tab title="Minimal">
+
+    <CodeGroup>
+
+    ```bash cURL
+    curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $OXEN_API_KEY" \
+      -d '{
+      "model": "muse-spark-1-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Hello, what can you do?"
+        }
+      ]
+    }'
+    ```
+
+    ```python Python
+    import os
+    import requests
+
+    response = requests.post(
+        "https://hub.oxen.ai/api/ai/chat/completions",
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        },
+        json={
+            "model": "muse-spark-1-1",
+            "messages": [
+                {
+                    "role": "user",
+                    "content": "Hello, what can you do?"
+                }
+            ]
+        },
+    )
+    response.raise_for_status()
+    print(response.json())
+    ```
+
+    </CodeGroup>
+
+  </Tab>
+  <Tab title="Basic parameters">
+
+    <CodeGroup>
+
+    ```bash cURL
+    curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $OXEN_API_KEY" \
+      -d '{
+      "model": "muse-spark-1-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Hello, what can you do?"
+        }
+      ],
+      "temperature": 0.7,
+      "max_tokens": 1024,
+      "stream": false
+    }'
+    ```
+
+    ```python Python
+    import os
+    import requests
+
+    response = requests.post(
+        "https://hub.oxen.ai/api/ai/chat/completions",
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        },
+        json={
+            "model": "muse-spark-1-1",
+            "messages": [
+                {
+                    "role": "user",
+                    "content": "Hello, what can you do?"
+                }
+            ],
+            "temperature": 0.7,
+            "max_tokens": 1024,
+            "stream": false
+        },
+    )
+    response.raise_for_status()
+    print(response.json())
+    ```
+
+    </CodeGroup>
+
+  </Tab>
+  <Tab title="All parameters">
+
+    <CodeGroup>
+
+    ```bash cURL
+    curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $OXEN_API_KEY" \
+      -d '{
+      "model": "muse-spark-1-1",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Hello, what can you do?"
+        }
+      ],
+      "temperature": 0.7,
+      "max_tokens": 1024,
+      "stream": false,
+      "top_p": 1.0
+    }'
+    ```
+
+    ```python Python
+    import os
+    import requests
+
+    response = requests.post(
+        "https://hub.oxen.ai/api/ai/chat/completions",
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        },
+        json={
+            "model": "muse-spark-1-1",
+            "messages": [
+                {
+                    "role": "user",
+                    "content": "Hello, what can you do?"
+                }
+            ],
+            "temperature": 0.7,
+            "max_tokens": 1024,
+            "stream": false,
+            "top_p": 1.0
+        },
+    )
+    response.raise_for_status()
+    print(response.json())
+    ```
+
+    </CodeGroup>
+
+  </Tab>
+</Tabs>
+
+## Fetch model details
+
+The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
+
+```bash
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/muse-spark-1-1
+```
+
+## Request parameters
+
+This model follows the standard OpenAI chat completions request body. See the [chat completions reference](../inference-api.mdx) for the full parameter list.

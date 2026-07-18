@@ -1,29 +1,22 @@
 ---
-title: "LTX-2.3 Pro"
-description: "Image-to-video with native audio"
+title: "Kling O3 Pro: Reference Video to Video"
+description: "Pro reference-video guided generation"
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try LTX-2.3 Pro in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=ltx-2-3-pro">
+  <Card title="Try Kling O3 Pro: Reference Video to Video in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=kling-video-o3-pro-video-to-video-reference">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `ltx-2-3-pro`
+**Model ID:** `kling-video-o3-pro-video-to-video-reference`
 
-LTX-2.3 22B - Image to Video is a diffusion transformer that excels in generating high-resolution video clips from an input image and text prompt, producing up to 4K resolution at 25 FPS with options for synchronized audio.
-
-Some other noteworthy features of LTX-2.3 22B - Image to Video include multi-keyframe conditioning for scene control, 3D camera logic for realistic movements, and LoRA fine-tuning support.
-
-| Metric             | Value              |
-|--------------------|--------------------|
-| Parameter Count    | 22 billion         |
-| Mixture of Experts | No                 |
+Use a reference video's motion, camera work, or style to guide a new generation. Combine with reference images and elements for character or scene consistency. 1080p output, 3-15 seconds.
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=ltx-2-3-pro) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=kling-video-o3-pro-video-to-video-reference) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
@@ -43,8 +36,9 @@ Some other noteworthy features of LTX-2.3 22B - Image to Video include multi-key
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-pro",
-          "prompt": "<prompt>"
+          "model": "kling-video-o3-pro-video-to-video-reference",
+          "prompt": "<prompt>",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }'
         ```
 
@@ -59,8 +53,9 @@ Some other noteworthy features of LTX-2.3 22B - Image to Video include multi-key
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "ltx-2-3-pro",
-                "prompt": "<prompt>"
+                "model": "kling-video-o3-pro-video-to-video-reference",
+                "prompt": "<prompt>",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         response.raise_for_status()
@@ -79,10 +74,15 @@ Some other noteworthy features of LTX-2.3 22B - Image to Video include multi-key
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-pro",
+          "model": "kling-video-o3-pro-video-to-video-reference",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "last_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
+          "elements": [
+            {}
+          ]
         }'
         ```
 
@@ -97,10 +97,15 @@ Some other noteworthy features of LTX-2.3 22B - Image to Video include multi-key
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "ltx-2-3-pro",
+                "model": "kling-video-o3-pro-video-to-video-reference",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "last_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
+                "elements": [
+                    {}
+                ]
             },
         )
         response.raise_for_status()
@@ -119,16 +124,17 @@ Some other noteworthy features of LTX-2.3 22B - Image to Video include multi-key
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-pro",
+          "model": "kling-video-o3-pro-video-to-video-reference",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "last_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "task": "image_to_video",
-          "resolution": "1080p",
-          "duration": 6,
-          "aspect_ratio": "16:9",
-          "fps": 25,
-          "generate_audio": true
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
+          "elements": [
+            {}
+          ],
+          "keep_audio": true,
+          "aspect_ratio": "auto"
         }'
         ```
 
@@ -143,16 +149,17 @@ Some other noteworthy features of LTX-2.3 22B - Image to Video include multi-key
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "ltx-2-3-pro",
+                "model": "kling-video-o3-pro-video-to-video-reference",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "last_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "task": "image_to_video",
-                "resolution": "1080p",
-                "duration": 6,
-                "aspect_ratio": "16:9",
-                "fps": 25,
-                "generate_audio": true
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
+                "elements": [
+                    {}
+                ],
+                "keep_audio": true,
+                "aspect_ratio": "auto"
             },
         )
         response.raise_for_status()
@@ -180,8 +187,9 @@ Some other noteworthy features of LTX-2.3 22B - Image to Video include multi-key
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-pro",
-          "prompt": "<prompt>"
+          "model": "kling-video-o3-pro-video-to-video-reference",
+          "prompt": "<prompt>",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -212,8 +220,9 @@ Some other noteworthy features of LTX-2.3 22B - Image to Video include multi-key
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "ltx-2-3-pro",
-                "prompt": "<prompt>"
+                "model": "kling-video-o3-pro-video-to-video-reference",
+                "prompt": "<prompt>",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         enqueue.raise_for_status()
@@ -247,10 +256,15 @@ Some other noteworthy features of LTX-2.3 22B - Image to Video include multi-key
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-pro",
+          "model": "kling-video-o3-pro-video-to-video-reference",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "last_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
+          "elements": [
+            {}
+          ]
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -281,10 +295,15 @@ Some other noteworthy features of LTX-2.3 22B - Image to Video include multi-key
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "ltx-2-3-pro",
+                "model": "kling-video-o3-pro-video-to-video-reference",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "last_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
+                "elements": [
+                    {}
+                ]
             },
         )
         enqueue.raise_for_status()
@@ -318,16 +337,17 @@ Some other noteworthy features of LTX-2.3 22B - Image to Video include multi-key
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-pro",
+          "model": "kling-video-o3-pro-video-to-video-reference",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "last_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "task": "image_to_video",
-          "resolution": "1080p",
-          "duration": 6,
-          "aspect_ratio": "16:9",
-          "fps": 25,
-          "generate_audio": true
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
+          "elements": [
+            {}
+          ],
+          "keep_audio": true,
+          "aspect_ratio": "auto"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -358,16 +378,17 @@ Some other noteworthy features of LTX-2.3 22B - Image to Video include multi-key
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "ltx-2-3-pro",
+                "model": "kling-video-o3-pro-video-to-video-reference",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "last_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "task": "image_to_video",
-                "resolution": "1080p",
-                "duration": 6,
-                "aspect_ratio": "16:9",
-                "fps": 25,
-                "generate_audio": true
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
+                "elements": [
+                    {}
+                ],
+                "keep_audio": true,
+                "aspect_ratio": "auto"
             },
         )
         enqueue.raise_for_status()
@@ -409,8 +430,9 @@ Some other noteworthy features of LTX-2.3 22B - Image to Video include multi-key
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-pro",
-          "prompt": "<prompt>"
+          "model": "kling-video-o3-pro-video-to-video-reference",
+          "prompt": "<prompt>",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -438,8 +460,9 @@ Some other noteworthy features of LTX-2.3 22B - Image to Video include multi-key
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "ltx-2-3-pro",
-                "prompt": "<prompt>"
+                "model": "kling-video-o3-pro-video-to-video-reference",
+                "prompt": "<prompt>",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         enqueue.raise_for_status()
@@ -474,10 +497,15 @@ Some other noteworthy features of LTX-2.3 22B - Image to Video include multi-key
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-pro",
+          "model": "kling-video-o3-pro-video-to-video-reference",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "last_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
+          "elements": [
+            {}
+          ]
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -505,10 +533,15 @@ Some other noteworthy features of LTX-2.3 22B - Image to Video include multi-key
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "ltx-2-3-pro",
+                "model": "kling-video-o3-pro-video-to-video-reference",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "last_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
+                "elements": [
+                    {}
+                ]
             },
         )
         enqueue.raise_for_status()
@@ -543,16 +576,17 @@ Some other noteworthy features of LTX-2.3 22B - Image to Video include multi-key
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-pro",
+          "model": "kling-video-o3-pro-video-to-video-reference",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "last_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "task": "image_to_video",
-          "resolution": "1080p",
-          "duration": 6,
-          "aspect_ratio": "16:9",
-          "fps": 25,
-          "generate_audio": true
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
+          "elements": [
+            {}
+          ],
+          "keep_audio": true,
+          "aspect_ratio": "auto"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -580,16 +614,17 @@ Some other noteworthy features of LTX-2.3 22B - Image to Video include multi-key
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "ltx-2-3-pro",
+                "model": "kling-video-o3-pro-video-to-video-reference",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "last_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "task": "image_to_video",
-                "resolution": "1080p",
-                "duration": 6,
-                "aspect_ratio": "16:9",
-                "fps": 25,
-                "generate_audio": true
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
+                "elements": [
+                    {}
+                ],
+                "keep_audio": true,
+                "aspect_ratio": "auto"
             },
         )
         enqueue.raise_for_status()
@@ -624,7 +659,7 @@ Some other noteworthy features of LTX-2.3 22B - Image to Video include multi-key
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/ltx-2-3-pro
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/kling-video-o3-pro-video-to-video-reference
 ```
 
 ## Request parameters
@@ -633,17 +668,15 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | Text prompt describing the video to generate |
+| `prompt` | `string` | &mdash; | Generation instructions. Reference the video as @Video1, images as @Image1, and elements as @Element1. |
+| `input_video` | `string` | &mdash; | Reference video for motion, camera, or style. MP4/MOV, 3-15s, 720-3840px, max 200MB. Format: uri. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `input_image` | `string` | &mdash; | First frame image for image-to-video generation Format: uri. |
-| `last_frame_image` | `string` | &mdash; | Last frame image. When provided, the video interpolates between the first frame and this last frame. Format: uri. |
-| `task` | `string` | `"image_to_video"` | The generation task (fixed for this model) One of: image_to_video. |
-| `resolution` | `string` | `"1080p"` | Resolution quality of the generated video One of: 720p, 1080p, 2k, 4k. |
-| `duration` | `integer` | `6` | Duration of the video in seconds One of: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10. |
-| `aspect_ratio` | `string` | `"16:9"` | Aspect ratio of the generated video One of: 16:9, 9:16. |
-| `fps` | `integer` | `25` | Frame rate in frames per second One of: 24, 25, 48, 50. |
-| `generate_audio` | `boolean` | `true` | Generate audio for the video |
+| `input_image` | `array<string>` | &mdash; | Reference images for style or appearance. Use @Image1, @Image2, etc. in the prompt to refer to them. Maximum 4 total (elements + reference images) when using video. |
+| `elements` | `array<object>` | &mdash; | Optional element references. Use @Element1, @Element2, etc. in the prompt to refer to them. |
+| `keep_audio` | `boolean` | `true` | Keep the original audio from the reference video. |
+| `aspect_ratio` | `string` | `"auto"` | Aspect ratio of the generated video. One of: auto, 16:9, 9:16, 1:1. |
+| `duration` | `string` | &mdash; | Duration of the generated video in seconds. One of: 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15. |
