@@ -133,7 +133,7 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
           "elements": [
             {}
           ],
-          "keep_audio": false
+          "keep_audio": true
         }'
         ```
 
@@ -157,7 +157,7 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
                 "elements": [
                     {}
                 ],
-                "keep_audio": false
+                "keep_audio": true
             },
         )
         response.raise_for_status()
@@ -344,7 +344,7 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
           "elements": [
             {}
           ],
-          "keep_audio": false
+          "keep_audio": true
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -384,7 +384,7 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
                 "elements": [
                     {}
                 ],
-                "keep_audio": false
+                "keep_audio": true
             },
         )
         enqueue.raise_for_status()
@@ -581,7 +581,7 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
           "elements": [
             {}
           ],
-          "keep_audio": false
+          "keep_audio": true
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -618,7 +618,7 @@ Kling Video 3.0 Video to Video is an all-in-one generative video model that unif
                 "elements": [
                     {}
                 ],
-                "keep_audio": false
+                "keep_audio": true
             },
         )
         enqueue.raise_for_status()
@@ -662,8 +662,8 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | Text description of what you want to generate, or the instruction on how to edit the given image. |
-| `input_video` | `string` | &mdash; | Video to use as reference. Format: uri. |
+| `prompt` | `string` | &mdash; | Edit instructions. Reference @Image1, @Image2 for reference images and @Element1, @Element2 for elements. |
+| `input_video` | `string` | &mdash; | Source video to edit. MP4/MOV, 3-15s, 720-3840px, max 200MB. Output duration matches input. Format: uri. |
 
 ### Optional parameters
 
@@ -671,4 +671,4 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 |-------|------|---------|-------------|
 | `input_image` | `array<string>` | &mdash; | Optional reference images. Use @Image1, @Image2, etc. in the prompt to refer to them. |
 | `elements` | `array<object>` | &mdash; | Optional element references. Use @Element1, @Element2, etc. in the prompt to refer to them. |
-| `keep_audio` | `boolean` | `false` | Whether to keep the original audio from the video.. |
+| `keep_audio` | `boolean` | `true` | Keep the original audio from the source video. |
