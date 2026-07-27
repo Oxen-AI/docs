@@ -1,22 +1,22 @@
 ---
-title: "Kling O3 4K: Image-to-Video"
-description: "4K cinematic image-to-video"
+title: "Kling O3 Omni"
+description: "Unified O3 video generation and edit"
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try Kling O3 4K: Image-to-Video in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=kling-video-o3-4k-image-to-video">
+  <Card title="Try Kling O3 Omni in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=kling-video-o3-omni">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `kling-video-o3-4k-image-to-video`
+**Model ID:** `kling-video-o3-omni`
 
-Kling O3 4K Image-to-Video animates a static image into native 4K (3840x2160) motion in a single pass, with no upscaling step. The output's aspect ratio is inherited from the input image, and an optional end frame can anchor the final shot for a specific transition. Supports clips from 3 to 15 seconds, optional native synchronized audio, and preserves the source image's stylistic look, color, and lighting throughout the clip.
+Kling Video 3.0 Omni is a single model for text-to-video, image-to-video with optional start and end frames, reference images, reference-video guided generation, and video editing. Pick 720p, 1080p, or 4K output resolution in one form.
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=kling-video-o3-4k-image-to-video) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=kling-video-o3-omni) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
@@ -36,9 +36,8 @@ Kling O3 4K Image-to-Video animates a static image into native 4K (3840x2160) mo
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "kling-video-o3-4k-image-to-video",
-          "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "model": "kling-video-o3-omni",
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -53,9 +52,8 @@ Kling O3 4K Image-to-Video animates a static image into native 4K (3840x2160) mo
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "kling-video-o3-4k-image-to-video",
-                "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "model": "kling-video-o3-omni",
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -74,10 +72,18 @@ Kling O3 4K Image-to-Video animates a static image into native 4K (3840x2160) mo
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "kling-video-o3-4k-image-to-video",
+          "model": "kling-video-o3-omni",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "video_mode": "edit",
+          "start_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "elements": [
+            {}
+          ]
         }'
         ```
 
@@ -92,10 +98,18 @@ Kling O3 4K Image-to-Video animates a static image into native 4K (3840x2160) mo
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "kling-video-o3-4k-image-to-video",
+                "model": "kling-video-o3-omni",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "video_mode": "edit",
+                "start_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "elements": [
+                    {}
+                ]
             },
         )
         response.raise_for_status()
@@ -114,12 +128,23 @@ Kling O3 4K Image-to-Video animates a static image into native 4K (3840x2160) mo
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "kling-video-o3-4k-image-to-video",
+          "model": "kling-video-o3-omni",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "video_mode": "edit",
+          "start_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "elements": [
+            {}
+          ],
+          "resolution": "1080p",
           "duration": 5,
-          "generate_audio": false
+          "aspect_ratio": "16:9",
+          "generate_audio": false,
+          "keep_audio": true
         }'
         ```
 
@@ -134,12 +159,23 @@ Kling O3 4K Image-to-Video animates a static image into native 4K (3840x2160) mo
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "kling-video-o3-4k-image-to-video",
+                "model": "kling-video-o3-omni",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "video_mode": "edit",
+                "start_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "elements": [
+                    {}
+                ],
+                "resolution": "1080p",
                 "duration": 5,
-                "generate_audio": false
+                "aspect_ratio": "16:9",
+                "generate_audio": false,
+                "keep_audio": true
             },
         )
         response.raise_for_status()
@@ -167,9 +203,8 @@ Kling O3 4K Image-to-Video animates a static image into native 4K (3840x2160) mo
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "kling-video-o3-4k-image-to-video",
-          "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "model": "kling-video-o3-omni",
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -200,9 +235,8 @@ Kling O3 4K Image-to-Video animates a static image into native 4K (3840x2160) mo
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "kling-video-o3-4k-image-to-video",
-                "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "model": "kling-video-o3-omni",
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -236,10 +270,18 @@ Kling O3 4K Image-to-Video animates a static image into native 4K (3840x2160) mo
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "kling-video-o3-4k-image-to-video",
+          "model": "kling-video-o3-omni",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "video_mode": "edit",
+          "start_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "elements": [
+            {}
+          ]
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -270,10 +312,18 @@ Kling O3 4K Image-to-Video animates a static image into native 4K (3840x2160) mo
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "kling-video-o3-4k-image-to-video",
+                "model": "kling-video-o3-omni",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "video_mode": "edit",
+                "start_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "elements": [
+                    {}
+                ]
             },
         )
         enqueue.raise_for_status()
@@ -307,12 +357,23 @@ Kling O3 4K Image-to-Video animates a static image into native 4K (3840x2160) mo
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "kling-video-o3-4k-image-to-video",
+          "model": "kling-video-o3-omni",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "video_mode": "edit",
+          "start_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "elements": [
+            {}
+          ],
+          "resolution": "1080p",
           "duration": 5,
-          "generate_audio": false
+          "aspect_ratio": "16:9",
+          "generate_audio": false,
+          "keep_audio": true
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -343,12 +404,23 @@ Kling O3 4K Image-to-Video animates a static image into native 4K (3840x2160) mo
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "kling-video-o3-4k-image-to-video",
+                "model": "kling-video-o3-omni",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "video_mode": "edit",
+                "start_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "elements": [
+                    {}
+                ],
+                "resolution": "1080p",
                 "duration": 5,
-                "generate_audio": false
+                "aspect_ratio": "16:9",
+                "generate_audio": false,
+                "keep_audio": true
             },
         )
         enqueue.raise_for_status()
@@ -390,9 +462,8 @@ Kling O3 4K Image-to-Video animates a static image into native 4K (3840x2160) mo
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "kling-video-o3-4k-image-to-video",
-          "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "model": "kling-video-o3-omni",
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -420,9 +491,8 @@ Kling O3 4K Image-to-Video animates a static image into native 4K (3840x2160) mo
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "kling-video-o3-4k-image-to-video",
-                "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "model": "kling-video-o3-omni",
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -457,10 +527,18 @@ Kling O3 4K Image-to-Video animates a static image into native 4K (3840x2160) mo
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "kling-video-o3-4k-image-to-video",
+          "model": "kling-video-o3-omni",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "video_mode": "edit",
+          "start_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "elements": [
+            {}
+          ]
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -488,10 +566,18 @@ Kling O3 4K Image-to-Video animates a static image into native 4K (3840x2160) mo
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "kling-video-o3-4k-image-to-video",
+                "model": "kling-video-o3-omni",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "video_mode": "edit",
+                "start_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "elements": [
+                    {}
+                ]
             },
         )
         enqueue.raise_for_status()
@@ -526,12 +612,23 @@ Kling O3 4K Image-to-Video animates a static image into native 4K (3840x2160) mo
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "kling-video-o3-4k-image-to-video",
+          "model": "kling-video-o3-omni",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "video_mode": "edit",
+          "start_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "elements": [
+            {}
+          ],
+          "resolution": "1080p",
           "duration": 5,
-          "generate_audio": false
+          "aspect_ratio": "16:9",
+          "generate_audio": false,
+          "keep_audio": true
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -559,12 +656,23 @@ Kling O3 4K Image-to-Video animates a static image into native 4K (3840x2160) mo
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "kling-video-o3-4k-image-to-video",
+                "model": "kling-video-o3-omni",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "video_mode": "edit",
+                "start_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "elements": [
+                    {}
+                ],
+                "resolution": "1080p",
                 "duration": 5,
-                "generate_audio": false
+                "aspect_ratio": "16:9",
+                "generate_audio": false,
+                "keep_audio": true
             },
         )
         enqueue.raise_for_status()
@@ -599,7 +707,7 @@ Kling O3 4K Image-to-Video animates a static image into native 4K (3840x2160) mo
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/kling-video-o3-4k-image-to-video
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/kling-video-o3-omni
 ```
 
 ## Request parameters
@@ -608,13 +716,20 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | Text prompt describing the motion or action for the video. |
-| `input_image` | `string` | &mdash; | Start frame to generate the video from. Format: uri. |
+| `prompt` | `string` | &mdash; | Generation or edit instructions. Use @Image1, @Image2 for reference images and @Element1, @Element2 for elements. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `tail_image_url` | `string` | &mdash; | Frame to end the generation on. Format: uri. |
-| `duration` | `integer` | `5` | Length of the generated video in seconds. Range: 3 – 15. |
-| `generate_audio` | `boolean` | `false` | Generate synchronized native audio (English or Chinese) with the video. |
+| `input_image` | `array<string>` | &mdash; | Optional reference images for style or subject. Use @Image1, @Image2 in the prompt. Counts toward the shared limit of 7 with elements (4 when input video is set). |
+| `input_video` | `string` | &mdash; | Source video for edit or motion/style reference. Format: uri. |
+| `video_mode` | `string` | `"edit"` | Edit applies your prompt to the clip. Reference uses it for motion/style only. One of: edit, reference. |
+| `start_image_url` | `string` | &mdash; | Optional first frame. End frame requires a start frame. Format: uri. |
+| `tail_image_url` | `string` | &mdash; | Optional last frame. Requires start frame. Format: uri. |
+| `elements` | `array<object>` | &mdash; | Optional element references. Use @Element1, @Element2 in the prompt. Max 7 reference images and elements total, max 4 when using an input video. |
+| `resolution` | `string` | `"1080p"` | Output resolution tier. One of: 720p, 1080p, 4k. |
+| `duration` | `integer` | `5` | Output length in seconds (3 to 15). Ignored for video edit; output matches input length. Range: 3 – 15. |
+| `aspect_ratio` | `string` | `"16:9"` | Output aspect ratio. Omit when editing video or using only start/end frames. One of: 16:9, 9:16, 1:1. |
+| `generate_audio` | `boolean` | `false` | Generate native audio. Must be off when a reference or input video is provided. |
+| `keep_audio` | `boolean` | `true` | When editing or referencing a video, keep the source audio. |

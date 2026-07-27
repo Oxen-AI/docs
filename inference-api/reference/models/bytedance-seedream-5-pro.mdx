@@ -74,7 +74,7 @@ Pick an aspect ratio and a 1K or 2K resolution level to set the output dimension
           -d '{
           "model": "bytedance-seedream-5-pro",
           "prompt": "<prompt>",
-          "input_images": [
+          "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
         }'
@@ -93,7 +93,7 @@ Pick an aspect ratio and a 1K or 2K resolution level to set the output dimension
             json={
                 "model": "bytedance-seedream-5-pro",
                 "prompt": "<prompt>",
-                "input_images": [
+                "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
             },
@@ -116,7 +116,7 @@ Pick an aspect ratio and a 1K or 2K resolution level to set the output dimension
           -d '{
           "model": "bytedance-seedream-5-pro",
           "prompt": "<prompt>",
-          "input_images": [
+          "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
           "aspect_ratio": "1:1",
@@ -139,7 +139,7 @@ Pick an aspect ratio and a 1K or 2K resolution level to set the output dimension
             json={
                 "model": "bytedance-seedream-5-pro",
                 "prompt": "<prompt>",
-                "input_images": [
+                "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
                 "aspect_ratio": "1:1",
@@ -242,7 +242,7 @@ Pick an aspect ratio and a 1K or 2K resolution level to set the output dimension
           -d '{
           "model": "bytedance-seedream-5-pro",
           "prompt": "<prompt>",
-          "input_images": [
+          "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
         }' | jq -r '.generations[0].generation_id')
@@ -277,7 +277,7 @@ Pick an aspect ratio and a 1K or 2K resolution level to set the output dimension
             json={
                 "model": "bytedance-seedream-5-pro",
                 "prompt": "<prompt>",
-                "input_images": [
+                "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
             },
@@ -315,7 +315,7 @@ Pick an aspect ratio and a 1K or 2K resolution level to set the output dimension
           -d '{
           "model": "bytedance-seedream-5-pro",
           "prompt": "<prompt>",
-          "input_images": [
+          "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
           "aspect_ratio": "1:1",
@@ -354,7 +354,7 @@ Pick an aspect ratio and a 1K or 2K resolution level to set the output dimension
             json={
                 "model": "bytedance-seedream-5-pro",
                 "prompt": "<prompt>",
-                "input_images": [
+                "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
                 "aspect_ratio": "1:1",
@@ -469,7 +469,7 @@ Pick an aspect ratio and a 1K or 2K resolution level to set the output dimension
           -d '{
           "model": "bytedance-seedream-5-pro",
           "prompt": "<prompt>",
-          "input_images": [
+          "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
         }' | jq -r '.generations[0].generation_id')
@@ -501,7 +501,7 @@ Pick an aspect ratio and a 1K or 2K resolution level to set the output dimension
             json={
                 "model": "bytedance-seedream-5-pro",
                 "prompt": "<prompt>",
-                "input_images": [
+                "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
             },
@@ -540,7 +540,7 @@ Pick an aspect ratio and a 1K or 2K resolution level to set the output dimension
           -d '{
           "model": "bytedance-seedream-5-pro",
           "prompt": "<prompt>",
-          "input_images": [
+          "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
           "aspect_ratio": "1:1",
@@ -576,7 +576,7 @@ Pick an aspect ratio and a 1K or 2K resolution level to set the output dimension
             json={
                 "model": "bytedance-seedream-5-pro",
                 "prompt": "<prompt>",
-                "input_images": [
+                "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
                 "aspect_ratio": "1:1",
@@ -632,7 +632,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `input_images` | `array<string>` | &mdash; | Optional reference image URLs for image-to-image editing. Provide one image for single-image editing or multiple for multi-reference fusion; reference them in the prompt as @Image1, @Image2, etc. Up to 10 images. |
+| `input_image` | `array<string>` | &mdash; | Optional reference image URLs for image-to-image editing. Provide one image for single-image editing or multiple for multi-reference fusion; reference them in the prompt as @Image1, @Image2, etc. Up to 10 images. |
 | `aspect_ratio` | `string` | `"1:1"` | Aspect ratio of the generated image. Combined with the resolution to set the output dimensions. One of: 1:1, 4:3, 3:4, 16:9, 9:16, 3:2, 2:3, 21:9. |
 | `size` | `string` | `"2K"` | Resolution level. Combined with the aspect ratio to set the output dimensions. One of: 1K, 2K. |
 | `output_format` | `string` | `"png"` | Output image format. One of: png, jpeg. |
