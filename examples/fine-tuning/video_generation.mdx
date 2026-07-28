@@ -5,159 +5,165 @@ description: 'How to fine-tune a video generation model in Oxen.ai'
 
 Oxen.ai allows you to fine-tune a video generation model to generate higher quality videos with consistent brand assets, characters, products, or your own style with no infrastructure setup required. Fine-tune your models with a few clicks, deploy your model to an endpoint, and own all your weights to download and use anywhere.
 
-<img alt="Video Generation" className="rounded-xl" src="/images/fine_tuning/text-to-video/will-smith.gif" />
+You can train on either still images or short video clips. Images are enough to capture a *look*, training on video clips lets the model learn **motion**, and with models that support audio (like LTX-2.3 Pro) the fine-tune can even learn how a character **sounds**.
 
-## Example: Generating Videos of an Actor
+<video controls autoPlay muted loop playsInline className="rounded-xl" src="/images/fine_tuning/text-to-video/ltx-result-final.mp4" />
 
-In this example, we are going to fine-tune WAN 2.2 to be able to generate videos of a specific character or actor. We will be using the actor "Will Smith" in our example to see if we can get the model to generate a high quality video of him eating spaghetti.
+*2 second video of the office manager says, "What's happening, Greg."*
 
-You'll see in the image on the left that at the start of the fine-tune WAN has no concept of "Will Smith" the actor, and by the end (image on the right) we have captured his face and expression.
+## Example: Generating Videos of a Character
 
-<img alt="Will Smith Before and After" className="rounded-xl" src="/images/fine_tuning/text-to-video/will-smith-before-after.png" />
+In this example, we are going to fine-tune a video model to generate videos of a specific character. You can fine-tune any of the fine-tunable video models on Oxen the same way, here we use **LTX-2.3 Pro**. We'll use the manager from *Office Space* (great movie, go watch it if you haven't), and we'll see if we can teach the model his voice, posture and cadence.
+
+At the start of the training run the model doesn't know who the "office manager" is, by the end it nails his face, voice, speaking style and signature lean over the cubicle.
+
+<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', alignItems: 'start' }}>
+  <video controls muted playsInline className="rounded-xl" style={{ width: '100%', display: 'block' }} src="/images/fine_tuning/text-to-video/ltx-result-early.mp4" />
+  <video controls muted playsInline className="rounded-xl" style={{ width: '100%', display: 'block' }} src="/images/fine_tuning/text-to-video/ltx-result-final.mp4" />
+</div>
+
+*2 second video of the office manager says, "What's happening, Greg." Left: step 1, no concept of the character. Right: step 2000, spot on.*
 
 ## Creating the Training Dataset
 
-When fine-tuning video generation models, you need a dataset that contains the images and descriptions of the images. The model will learn the style and character from the image and describe alone, then can extrapolate to the rest of the video. 
+Every fine-tune starts with a dataset, the media you want the model to produce (images or video clips), each paired with a caption. During training the model ties the caption's words to what it sees, so your captions pull double duty, they're the training signal now, and the template for how you'll prompt later. The takeaway is to caption each clip the way you'd prompt for it. At inference you can prompt freely in that same style, no need to match a caption word for word.
 
-The expected format is a csv, jsonl or parquet file with a column that contains the *relative path* to the image in the repository, and a column that contains the description of the image.
+The expected format is a `csv`, `jsonl`, or `parquet` file with a column that contains the *relative path* to each image or video clip in the repository, and a column that contains its description.
 
-<img alt="Will Smith Dataset" className="rounded-xl" src="/images/fine_tuning/text-to-video/will-smith-dataset.png" />
+In this example, we have two columns.
 
-There are two columns where each row contains:
+1. `file_path` - the relative path to the image or video clip in the Oxen repository
+2. `caption` - the description of the media, used as the prompt once the model is deployed
 
-1) `image` - the relative path to the image in the oxen repository
-2) `prompt` - the description of the image in the row
+<Info>
+  **Why the clips fade to black.** LTX-2.3 always works in fixed five-second chunks (**121 frames**), both when training and when generating. The manager's line, though, is only about two seconds long. If we train on a full five seconds, the model learns to stretch that short line to fill the whole clip, and his quick, deadpan delivery comes out slow and dragged. So after he stops talking we replace the rest of the frames with **solid black** and add `duration two seconds` to the caption. Now the model learns to deliver the line in two seconds and then go black, and you get that same tight pacing when you generate by prompting with the same `duration`. We used Claude Code and FFmpeg to cut and pad the clips.
+</Info>
 
-In order to get started, create a repository, then click the "Add Files" button.
+In order to get started, create a repository, then click the "Add Files" button. You can drag and drop a zip file of your media, which is automatically unzipped into your repository. Write a commit message before uploading so your team knows why you added these files. This is handy when iterating on training datasets.
 
-<img alt="Add Files" className="rounded-xl" src="/images/fine_tuning/text-to-video/add-files.png" />
+<img alt="Add Files" className="rounded-xl" src="/images/fine_tuning/text-to-video/ltx-add-files.jpg" />
 
-Then you can drag and drop a zip file of images which will be automatically unzipped into your repository. Write a commit message before uploading so that your team can know why you added these images. This will be handy when iterating on your training datasets.
+Once your media has been uploaded, navigate into the folder, click **Manage Files**, and choose **Create Dataset**.
 
-Once your images have been uploaded, navigate into the folder and click the "Folder to Dataset" button.
+<img alt="Manage Files menu" className="rounded-xl" src="/images/fine_tuning/text-to-video/ltx-manage-files.jpg" />
 
-<img alt="Folder to Dataset" className="rounded-xl" src="/images/fine_tuning/text-to-video/folder-to-dataset-button.png" />
+On the "Build a dataset from this folder" screen, Oxen collects every file into a parquet with a `file_path` column. Give it a name (for example `clips_121.parquet`) and click **Build Dataset**.
 
-This will grab all of the relative paths from the folder, and create a parquet file with a column called `image` that contains the relative path to the image.
+<img alt="Build a dataset from this folder" className="rounded-xl" src="/images/fine_tuning/text-to-video/ltx-build-dataset.jpg" />
 
-<img alt="Folder to Dataset" className="rounded-xl" src="/images/fine_tuning/text-to-video/folder-to-dataset.png" />
+To preview your media, enable rendering on the `file_path` column. Click the "✏️" edit button above the dataset, then edit the column to turn on image or video rendering.
 
-To view the images, you will need to enable image rendering on the `image` column. Click the "✏️" edit button above the dataset, then edit the column to enable image rendering. The video below shows the whole process.
+## Auto-Captioning the Dataset
 
-<video controls className="rounded-xl">
-  <source src="/images/fine_tuning/text-to-video/will_smith_image_render.mp4" type="video/mp4" />
-  Your browser does not support the video tag.
-</video>
+Now that we have a dataset, we need a description for each item. You can caption from the dataset viewer ("Actions" → "Run Inference") or in the fine-tune wizard's **Label Data** step. Select a model that can go from `image -> text` (or `video -> text` for clips), such as **Gemini 3 Flash**, write your prompt, and click **Caption All**.
 
-## Auto-Captioning the Images
-
-Now that we have a dataset, we need to create a description for each image. We can do this by clicking the "Actions" button and selecting "Run Inference".
-
-<img alt="Run Inference" className="rounded-xl" src="/images/data-frames/run-inference.png" />
-
-You will need to select a model that is able to go from `image -> text` from the dropdown on the left. Then write a prompt that describes what you want in the caption and any formatting you want to apply. 
-
-<img alt="Run Inference" className="rounded-xl" src="/images/fine_tuning/text-to-video/caption-dataset-sample.png" />
-
-In this case, we are using the prompt:
-
-```text
-Describe what the actor is doing and wearing in one sentence or less. Each sentence should start with "Will Smith is"
+```text theme={null}
+You are helping caption videos for a fine-tuning dataset. Describe the video in one sentence or less. Respond with only the caption text, nothing else.
 
 {file_path}
 ```
 
 <Info>
-Note: You must supply the curly braces `{}` around the `file_path` column in the prompt to know what column to use for the image.
+  You must supply the curly braces around the `{file_path}` column in the prompt so the model knows which column to use for the media.
 </Info>
 
-When you feed good about your prompt after looking at your samples click the "Next ->" button to decide where you want to save the results. By default, the results will create a new version of the existing file.
+<img alt="Label Data — auto-caption" className="rounded-xl" src="/images/fine_tuning/text-to-video/ltx-label-data.jpg" />
 
-Now sit back and relax as the model captions your images 😌 ☕️.
+<Tip>
+  Keep captions consistent with your goal. For a **character**, prefix every caption with a unique trigger token (for example `office_manager_memo_char`) so the model binds the subject to that token. For a **style**, describe the look rather than naming a character the base model already knows, so it generalizes to new subjects. If you're training on clips, add a `duration two seconds` note so the model learns when to cut to black.
+</Tip>
 
-<img alt="Run Inference" className="rounded-xl" src="/images/fine_tuning/text-to-video/captioning.png" />
-
-Once the model has finished captioning the images, you can see the captions in the specified column. Click the button to "View File at Commit" to return to the dataset viewer.
-
-<img alt="Captions" className="rounded-xl" src="/images/fine_tuning/text-to-video/captioning-finished.png" />
-
-If you want to further refine your prompts, you can always click the "✏️" edit button on the dataset viewer and hand label the captions.
+If you want to further refine your prompts, you can always click the "✏️" edit button on the dataset viewer and hand label the captions. Every change is version controlled, so you can always roll back to an earlier version of the dataset.
 
 ## Kicking off the Fine-Tune
 
-With your images labeled and you are happy with the quality and quantity, it is time to kick off your first fine-tune. 
+With your media labeled and happy with the quality and quantity, it is time to kick off your first fine-tune. Click "Create Fine-tune" and walk through the steps.
 
-Click the "Actions" button and select "Fine-Tune a Model".
+1. **Choose Task**, select **Generate Video**.
+2. **Choose Model**, pick your base model. Here we use **LTX-2.3 Pro** ("image-to-video with native audio").
+3. **Pick Dataset**, select the dataset you built (or upload a new one).
+4. **Label Data**, caption the clips if you haven't already (see above).
+5. **Configure Training**, set the **Video Column** to `file_path` and the **Caption Column** to `caption`, add a few sample prompts, and start the run.
 
-<img alt="Kick off Fine-Tune" className="rounded-xl" src="/images/fine_tuning/text-to-video/fine-tune-a-model-button.png" />
+<Columns cols={2}>
+  <img alt="Choose Task" className="rounded-xl" src="/images/fine_tuning/text-to-video/ltx-choose-task.jpg" />
+  <img alt="Choose Model" className="rounded-xl" src="/images/fine_tuning/text-to-video/ltx-choose-model.jpg" />
+</Columns>
 
-This will take you to the fine-tune page where you can select the model you want to fine-tune. First select the "Fine-Tune Task" of `Video Generation`. Then select the `Wan-AI/Wan2.2-T2V-A14B-Diffusers` model. Make sure the "Image" column is set to `file_path` column, and the "Prompt" column is set to `caption` column.
+<img alt="Pick Dataset" className="rounded-xl" src="/images/fine_tuning/text-to-video/ltx-pick-dataset.jpg" />
 
-In the "Samples" section you can specify a few prompts that you want to test out as the model is training. This will help you get a feel for how the model is performing and make sure it is learning what you want.
+Oxen ships good per-model defaults. You can leave them as-is, or adjust based on the size of your dataset.
 
-<img alt="Write Prompts" className="rounded-xl" src="/images/fine_tuning/text-to-video/fine-tune-prompts.png" />
+| Setting | Default | Tweak for a tiny single-subject dataset |
+| --- | --- | --- |
+| Steps | 3000 | Stop early, watch the samples and end the run once it locks in |
+| LoRA rank / alpha | 32 / 32 | Lower both to keep a small dataset from going to mush |
+| LoRA dropout | 0.25 | Turn off, you're honing one subject, not regularizing for variety |
+| Learning rate | 0.0002 | Keep |
+| Audio learning rate | 0.0001 | Keep, roughly half the video LR since LTX learns audio faster |
+| Frames / resolution | 121 @ 960×576 | Keep |
+| Train / Sample audio | On | Keep on to learn the voice |
+
+In the "Samples" section you can specify a few prompts to test as the model trains. This helps you get a feel for how the model is performing and make sure it is learning what you want. Match the caption format you trained on, including your trigger token and any `duration` note. Click "Create Fine-tune" and Oxen provisions a dedicated GPU. You can launch multiple runs in parallel to sweep hyperparameters.
+
+<Columns cols={2}>
+  <img alt="Configure Training" className="rounded-xl" src="/images/fine_tuning/text-to-video/ltx-configure.jpg" />
+  <img alt="Advanced training parameters" className="rounded-xl" src="/images/fine_tuning/text-to-video/ltx-advanced.jpg" />
+</Columns>
 
 ## Watching the Model Learn
 
-As your model is training, Oxen will automatically sample videos that you specified in the "Samples" section in the previous step. You can see that the model is starting to learn the actor's face and expression after a couple hundred steps.
+As your model trains, Oxen automatically samples videos from the prompts you specified in the previous step (by default every 200 steps). You can see the model start to learn the subject's face, motion, and (where supported) audio after a couple hundred steps.
 
-<video controls className="rounded-xl">
-  <source src="/images/fine_tuning/text-to-video/samples.mp4" type="video/mp4" />
-  Your browser does not support the video tag.
-</video>
+<video controls playsInline className="rounded-xl" src="/images/fine_tuning/text-to-video/ltx-result-cowboy.mp4" />
+
+*2 second video of the office manager in a cowboy hat and dark aviators says, "You're going to have to fine-tune that on Oxen.ai." An out-of-distribution prompt, the LoRA adds new details without losing the character or overfitting.*
+
+<Tip>
+  Add an out-of-distribution sample prompt like the one above (details never in the training data). A healthy LoRA still renders those while keeping the subject, which tells you it isn't overfitting. You can download and run any checkpoint locally, or deploy it on Oxen, and stop the run as soon as the samples look good, since you only pay for the GPU time you use while fine-tuning.
+</Tip>
 
 ## Deploying the Model
 
-When the model has finished training, you can deploy it to a new model by clicking the "Deploy Model" button. The deployment will take a few minutes to complete.
+When the model has finished training, deploy it by clicking the "Deploy Model" button. Deployment takes a few minutes to complete. Some models offer more than one pipeline, for example a fast distilled pipeline for quick iteration and a higher-quality production pipeline.
 
-<img alt="Deploy the Model" className="rounded-xl" src="/images/fine_tuning/text-to-video/deploy-model.png" />
+Once the model is deployed, you can use it in the playground or via the API. The model page gives you a ready-to-paste curl command with your API key filled in. Replace the `model` name with the name of your deployed model.
 
-Once the model is deployed, you can use it in the playground or via the API. Replace the `model` name with the name of your deployed model.
-
-```bash
+```bash theme={null}
 curl -X POST \
 -H "Authorization: Bearer $API_KEY" \
 -H "Content-Type: application/json" \
 -d '{
-  "model": "oxen:ox-comfortable-sapphire-locust",
+  "model": "ox-objective-cyan-puffin",
   "prompt": "An ox walking in a field",
   "run_fast": true
 }' https://hub.oxen.ai/api/ai/videos/generate
 ```
 
+<img alt="Deploy the Model and API usage" className="rounded-xl" src="/images/fine_tuning/text-to-video/ltx-deploy.jpg" />
+
 ## Using the Playground
 
-Click the "Open Playground" button to use the model in the playground. This allows you to prompt the model with different images and prompts to see how it performs.
+Click the "Open Playground" button to use the model in the playground. This lets you prompt the model with different images and prompts to see how it performs. If your model supports it, you can pass a **first frame** to ground the generation. Without one, the model generates from what it learned. The playground saves a history of your prompts and generations so you can refer back to them later.
 
-<img alt="Playground" className="rounded-xl" src="/images/fine_tuning/text-to-video/playground.png" />
-
-The playground will save a history of your prompts and images so that you can refer back to them later.
+{/* TODO: add /images/fine_tuning/text-to-video/ltx-playground.jpg once captured */}
 
 ## Exporting the Model
 
-All of the model weights are stored back in your repository when the fine-tune is complete. Navigate to the fine-tune info tab, and you will see a link to the model weights. This is helpful if you want to download the weights to run in ComfyUI or your own infrastructure.
-
-<img alt="Info Tab" className="rounded-xl" src="/images/fine_tuning/text-to-video/info-tab.png" />
-
-This will take you to the file viewer where you can download the model safetensors.
-
-<img alt="File Viewer" className="rounded-xl" src="/images/fine_tuning/image-generation/file-viewer.png" />
-
-You can also automatically download the weights with the [oxen cli](/getting-started/command-line/start_repository) or [python library](/python-api).
+All of the model weights are stored back in your repository when the fine-tune is complete. Navigate to the fine-tune info tab, and you will see a link to the model weights. This is helpful if you want to download the weights to run in ComfyUI or your own infrastructure. From the file viewer you can download the safetensors, or pull them automatically with the [oxen cli](/getting-started/command-line/start_repository) or [python library](/python-api).
 
 <CodeGroup>
+  ```bash CLI theme={null}
+  oxen download user-name/repo-name path/to/model.safetensors --revision COMMIT_OR_BRANCH
+  ```
 
-```bash CLI
-oxen download user-name/repo-name path/to/model.safetensors --revision COMMIT_OR_BRANCH
-```
-
-```python Python
-from oxen import RemoteRepo
-repo = RemoteRepo("user-name/repo-name")
-repo.download("path/to/model.safetensors", revision="COMMIT_OR_BRANCH")
-```
+  ```python Python theme={null}
+  from oxen import RemoteRepo
+  repo = RemoteRepo("user-name/repo-name")
+  repo.download("path/to/model.safetensors", revision="COMMIT_OR_BRANCH")
+  ```
 </CodeGroup>
 
 ## Need Help Fine-Tuning?
 
-If you need help fine-tuning your model, contact us at hello@oxen.ai and we are happy to help you get started.
+If you need help fine-tuning your model, contact us at [hello@oxen.ai](mailto:hello@oxen.ai) and we are happy to help you get started.
