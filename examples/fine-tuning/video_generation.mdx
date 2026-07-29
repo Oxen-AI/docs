@@ -13,7 +13,7 @@ You can train on either still images or short video clips. Images are enough to 
 
 ## Example: Generating Videos of a Character
 
-In this example, we are going to fine-tune a video model to generate videos of a specific character. You can fine-tune any of the fine-tunable video models on Oxen the same way, here we use **LTX-2.3 Pro**. We'll use the manager from *Office Space* (great movie, go watch it if you haven't), and we'll see if we can teach the model his voice, posture and cadence.
+In this example, we are going to fine-tune a video model to generate videos of a specific character. The same steps work for any video model on Oxen. Here we use **LTX-2.3 Pro**. We'll use the manager from *Office Space* (great movie, go watch it if you haven't), and we'll see if we can teach the model his voice, posture and cadence.
 
 At the start of the training run the model doesn't know who the "office manager" is, by the end it nails his face, voice, speaking style and signature lean over the cubicle.
 
@@ -146,7 +146,7 @@ curl -X POST \
 
 Click the "Open Playground" button to use the model in the playground. This lets you prompt the model with different images and prompts to see how it performs. If your model supports it, you can pass a **first frame** to ground the generation. Without one, the model generates from what it learned. The playground saves a history of your prompts and generations so you can refer back to them later.
 
-{/* TODO: add /images/fine_tuning/text-to-video/ltx-playground.jpg once captured */}
+<img alt="Playground" className="rounded-xl" src="/images/fine_tuning/text-to-video/ltx-playground.jpg" />
 
 ## Exporting the Model
 
