@@ -11,7 +11,7 @@ description: "Image-to-video up to 1080p"
 
 **Model ID:** `happyhorse-1.1-i2v`
 
-HappyHorse 1.1 image-to-video animates a source image into video using a text prompt at 720P or 1080P with durations from 3 to 15 seconds and configurable aspect ratio. It maintains strict consistency with the source image, producing high-quality video that is fluid, natural, and rich in detail.
+HappyHorse 1.1 image-to-video animates a source image into video using a text prompt at 720P or 1080P with durations from 3 to 15 seconds. Output aspect ratio follows the source image. It maintains strict consistency with the source image, producing high-quality video that is fluid, natural, and rich in detail.
 
 ## Example request
 
@@ -77,7 +77,6 @@ HappyHorse 1.1 image-to-video animates a source image into video using a text pr
           "model": "happyhorse-1.1-i2v",
           "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "aspect_ratio": "16:9",
           "resolution": "1080P",
           "duration": 5
         }'
@@ -97,7 +96,6 @@ HappyHorse 1.1 image-to-video animates a source image into video using a text pr
                 "model": "happyhorse-1.1-i2v",
                 "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "aspect_ratio": "16:9",
                 "resolution": "1080P",
                 "duration": 5
             },
@@ -199,7 +197,6 @@ HappyHorse 1.1 image-to-video animates a source image into video using a text pr
           "model": "happyhorse-1.1-i2v",
           "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "aspect_ratio": "16:9",
           "resolution": "1080P",
           "duration": 5
         }' | jq -r '.generations[0].generation_id')
@@ -235,7 +232,6 @@ HappyHorse 1.1 image-to-video animates a source image into video using a text pr
                 "model": "happyhorse-1.1-i2v",
                 "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "aspect_ratio": "16:9",
                 "resolution": "1080P",
                 "duration": 5
             },
@@ -349,7 +345,6 @@ HappyHorse 1.1 image-to-video animates a source image into video using a text pr
           "model": "happyhorse-1.1-i2v",
           "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "aspect_ratio": "16:9",
           "resolution": "1080P",
           "duration": 5
         }' | jq -r '.generations[0].generation_id')
@@ -382,7 +377,6 @@ HappyHorse 1.1 image-to-video animates a source image into video using a text pr
                 "model": "happyhorse-1.1-i2v",
                 "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "aspect_ratio": "16:9",
                 "resolution": "1080P",
                 "duration": 5
             },
@@ -435,6 +429,5 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `aspect_ratio` | `string` | `"16:9"` | Aspect ratio of the generated video. One of: 16:9, 9:16, 1:1, 4:3, 3:4. |
 | `resolution` | `string` | `"1080P"` | Output video resolution tier. One of: 720P, 1080P. |
 | `duration` | `integer` | `5` | Output video duration in seconds (3-15). Range: 3 – 15. |

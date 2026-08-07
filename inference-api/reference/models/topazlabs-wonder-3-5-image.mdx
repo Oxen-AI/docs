@@ -1,30 +1,30 @@
 ---
-title: "Happy Horse - Image to Video"
-description: "Image-to-video up to 1080p"
+title: "Topaz Wonder 3.5"
+description: "Detail-preserving image enhancement and upscaling"
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try Happy Horse - Image to Video in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=happyhorse-1.0-i2v">
+  <Card title="Try Topaz Wonder 3.5 in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=topazlabs-wonder-3-5-image">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `happyhorse-1.0-i2v`
+**Model ID:** `topazlabs-wonder-3-5-image`
 
-HappyHorse 1.0 image-to-video animates a reference image into video using a text prompt at 720P or 1080P with durations from 3 to 15 seconds. Output aspect ratio follows the source image.
+Topaz Wonder 3.5 is an all-in-one image enhancement and upscaling model that adds natural detail to photos of any size, with finer detail and fewer repetitive patterns than Wonder 3 and better handling of visual noise.
+
+It is also more precise on structured content such as tables, charts, and text in screenshots, where earlier versions could distort lines. Adjust the overall enhancement strength to control how much detail is added, and set the scale factor to upscale by up to 6x (the height scales to match).
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=happyhorse-1.0-i2v) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=topazlabs-wonder-3-5-image) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
   <Tab title="Sync">
 
-    This blocks until the video is ready (typically 5-15 minutes). Prefer **Async** or **Async with SSE** for anything beyond quick experimentation.
-
-    See the [video generation reference](/inference-api/reference/video_generation) for more details.
+    See the [image editing reference](/inference-api/reference/image_editing) for more details.
 
     <Tabs>
       <Tab title="Minimal">
@@ -32,12 +32,11 @@ HappyHorse 1.0 image-to-video animates a reference image into video using a text
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "happyhorse-1.0-i2v",
-          "prompt": "<prompt>",
+          "model": "topazlabs-wonder-3-5-image",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }'
         ```
@@ -47,14 +46,13 @@ HappyHorse 1.0 image-to-video animates a reference image into video using a text
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/videos/generate",
+            "https://hub.oxen.ai/api/ai/images/edit",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "happyhorse-1.0-i2v",
-                "prompt": "<prompt>",
+                "model": "topazlabs-wonder-3-5-image",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
@@ -65,20 +63,19 @@ HappyHorse 1.0 image-to-video animates a reference image into video using a text
         </CodeGroup>
 
       </Tab>
-      <Tab title="All parameters">
+      <Tab title="Basic parameters">
 
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "happyhorse-1.0-i2v",
-          "prompt": "<prompt>",
+          "model": "topazlabs-wonder-3-5-image",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "resolution": "1080P",
-          "duration": 5
+          "enhancement_strength": "high",
+          "scale": "1x"
         }'
         ```
 
@@ -87,17 +84,16 @@ HappyHorse 1.0 image-to-video animates a reference image into video using a text
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/videos/generate",
+            "https://hub.oxen.ai/api/ai/images/edit",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "happyhorse-1.0-i2v",
-                "prompt": "<prompt>",
+                "model": "topazlabs-wonder-3-5-image",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "resolution": "1080P",
-                "duration": 5
+                "enhancement_strength": "high",
+                "scale": "1x"
             },
         )
         response.raise_for_status()
@@ -125,8 +121,7 @@ HappyHorse 1.0 image-to-video animates a reference image into video using a text
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "happyhorse-1.0-i2v",
-          "prompt": "<prompt>",
+          "model": "topazlabs-wonder-3-5-image",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }' | jq -r '.generations[0].generation_id')
 
@@ -158,8 +153,7 @@ HappyHorse 1.0 image-to-video animates a reference image into video using a text
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "happyhorse-1.0-i2v",
-                "prompt": "<prompt>",
+                "model": "topazlabs-wonder-3-5-image",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
@@ -184,7 +178,7 @@ HappyHorse 1.0 image-to-video animates a reference image into video using a text
         </CodeGroup>
 
       </Tab>
-      <Tab title="All parameters">
+      <Tab title="Basic parameters">
 
         <CodeGroup>
 
@@ -194,11 +188,10 @@ HappyHorse 1.0 image-to-video animates a reference image into video using a text
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "happyhorse-1.0-i2v",
-          "prompt": "<prompt>",
+          "model": "topazlabs-wonder-3-5-image",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "resolution": "1080P",
-          "duration": 5
+          "enhancement_strength": "high",
+          "scale": "1x"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -229,11 +222,10 @@ HappyHorse 1.0 image-to-video animates a reference image into video using a text
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "happyhorse-1.0-i2v",
-                "prompt": "<prompt>",
+                "model": "topazlabs-wonder-3-5-image",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "resolution": "1080P",
-                "duration": 5
+                "enhancement_strength": "high",
+                "scale": "1x"
             },
         )
         enqueue.raise_for_status()
@@ -275,8 +267,7 @@ HappyHorse 1.0 image-to-video animates a reference image into video using a text
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "happyhorse-1.0-i2v",
-          "prompt": "<prompt>",
+          "model": "topazlabs-wonder-3-5-image",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }' | jq -r '.generations[0].generation_id')
 
@@ -305,8 +296,7 @@ HappyHorse 1.0 image-to-video animates a reference image into video using a text
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "happyhorse-1.0-i2v",
-                "prompt": "<prompt>",
+                "model": "topazlabs-wonder-3-5-image",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
@@ -332,7 +322,7 @@ HappyHorse 1.0 image-to-video animates a reference image into video using a text
         </CodeGroup>
 
       </Tab>
-      <Tab title="All parameters">
+      <Tab title="Basic parameters">
 
         <CodeGroup>
 
@@ -342,11 +332,10 @@ HappyHorse 1.0 image-to-video animates a reference image into video using a text
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "happyhorse-1.0-i2v",
-          "prompt": "<prompt>",
+          "model": "topazlabs-wonder-3-5-image",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "resolution": "1080P",
-          "duration": 5
+          "enhancement_strength": "high",
+          "scale": "1x"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -374,11 +363,10 @@ HappyHorse 1.0 image-to-video animates a reference image into video using a text
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "happyhorse-1.0-i2v",
-                "prompt": "<prompt>",
+                "model": "topazlabs-wonder-3-5-image",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "resolution": "1080P",
-                "duration": 5
+                "enhancement_strength": "high",
+                "scale": "1x"
             },
         )
         enqueue.raise_for_status()
@@ -413,7 +401,7 @@ HappyHorse 1.0 image-to-video animates a reference image into video using a text
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/happyhorse-1.0-i2v
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/topazlabs-wonder-3-5-image
 ```
 
 ## Request parameters
@@ -422,13 +410,11 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | Text prompt describing the desired video. |
-| `input_image` | `string` | &mdash; | URL of the input image. Formats: JPEG, JPG, PNG, BMP, WEBP. Max 10 MB. Each side must be at least 300 pixels. Aspect ratio between 2:5 and 5:2. Format: uri. |
+| `input_image` | `string` | &mdash; | Image to enhance and upscale (URL or file path). jpeg, png, gif, or webp. Format: uri. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `resolution` | `string` | `"1080P"` | Output video resolution tier. One of: 720P, 1080P. |
-| `duration` | `integer` | `5` | Output video duration in seconds (3-15). Range: 3 – 15. |
-| `seed` | `integer` | &mdash; | Random seed for reproducibility (0-2147483647). Range: 0 – 2147483647. |
+| `enhancement_strength` | `string` | `"high"` | Overall enhancement strength. One of: low, medium, high. |
+| `scale` | `string` | `"1x"` | Upscale factor. 1x enhances at the original size; 2x, 4x, or 6x enlarge the image by that multiple (Topaz supports up to 6x). One of: 1x, 2x, 4x, 6x. |

@@ -118,7 +118,6 @@ ByteDance Seedream 4.0 generates images from a text prompt, with single-image an
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
           "size": "2K",
-          "output_format": "jpeg",
           "watermark": false
         }'
         ```
@@ -140,7 +139,6 @@ ByteDance Seedream 4.0 generates images from a text prompt, with single-image an
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
                 "size": "2K",
-                "output_format": "jpeg",
                 "watermark": false
             },
         )
@@ -315,7 +313,6 @@ ByteDance Seedream 4.0 generates images from a text prompt, with single-image an
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
           "size": "2K",
-          "output_format": "jpeg",
           "watermark": false
         }' | jq -r '.generations[0].generation_id')
 
@@ -353,7 +350,6 @@ ByteDance Seedream 4.0 generates images from a text prompt, with single-image an
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
                 "size": "2K",
-                "output_format": "jpeg",
                 "watermark": false
             },
         )
@@ -538,7 +534,6 @@ ByteDance Seedream 4.0 generates images from a text prompt, with single-image an
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
           "size": "2K",
-          "output_format": "jpeg",
           "watermark": false
         }' | jq -r '.generations[0].generation_id')
 
@@ -573,7 +568,6 @@ ByteDance Seedream 4.0 generates images from a text prompt, with single-image an
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
                 "size": "2K",
-                "output_format": "jpeg",
                 "watermark": false
             },
         )
@@ -626,5 +620,4 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 |-------|------|---------|-------------|
 | `input_image` | `array<string>` | &mdash; | Optional reference image URLs for image-to-image editing. Provide one image for single-image editing or multiple for multi-reference fusion; reference them in the prompt as @Image1, @Image2, etc. Up to 14 images. |
 | `size` | `string` | `"2K"` | Image resolution. Accepts 1K, 2K, or 4K presets, or explicit WxH pixel dimensions. One of: 1K, 2K, 4K. |
-| `output_format` | `string` | `"jpeg"` | Output image format. One of: jpeg. |
 | `watermark` | `boolean` | `false` | Whether to add an 'AI generated' watermark. |

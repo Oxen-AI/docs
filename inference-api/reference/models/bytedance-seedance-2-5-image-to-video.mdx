@@ -1,28 +1,30 @@
 ---
-title: "Seedream 4.5"
-description: "Text-to-image and editing, up to 4K"
+title: "Seedance 2.5 - Image to Video"
+description: "Animate images into video with audio"
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try Seedream 4.5 in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=bytedance-seedream-4-5">
+  <Card title="Try Seedance 2.5 - Image to Video in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=bytedance-seedance-2-5-image-to-video">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `bytedance-seedream-4-5`
+**Model ID:** `bytedance-seedance-2-5-image-to-video`
 
-ByteDance Seedream 4.5 generates images from a text prompt, with single-image and multi-reference image-to-image editing. Supports 2K and 4K output resolutions and batch generation.
+ByteDance Seedance 2.5 animates a starting frame from a text motion prompt, with optional end-frame control for transitions and synchronized audio on by default. Supports 480p and 720p output and durations from 4 to 30 seconds. The output keeps the aspect ratio of the first-frame image.
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=bytedance-seedream-4-5) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=bytedance-seedance-2-5-image-to-video) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
   <Tab title="Sync">
 
-    See the [image editing reference](/inference-api/reference/image_editing) for more details.
+    This blocks until the video is ready (typically 5-15 minutes). Prefer **Async** or **Async with SSE** for anything beyond quick experimentation.
+
+    See the [video generation reference](/inference-api/reference/video_generation) for more details.
 
     <Tabs>
       <Tab title="Minimal">
@@ -30,12 +32,13 @@ ByteDance Seedream 4.5 generates images from a text prompt, with single-image an
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
+        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "bytedance-seedream-4-5",
-          "prompt": "<prompt>"
+          "model": "bytedance-seedance-2-5-image-to-video",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }'
         ```
 
@@ -44,14 +47,15 @@ ByteDance Seedream 4.5 generates images from a text prompt, with single-image an
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/edit",
+            "https://hub.oxen.ai/api/ai/videos/generate",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "bytedance-seedream-4-5",
-                "prompt": "<prompt>"
+                "model": "bytedance-seedance-2-5-image-to-video",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         response.raise_for_status()
@@ -66,15 +70,16 @@ ByteDance Seedream 4.5 generates images from a text prompt, with single-image an
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
+        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "bytedance-seedream-4-5",
+          "model": "bytedance-seedance-2-5-image-to-video",
           "prompt": "<prompt>",
-          "input_image": [
-            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ]
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_image_has_face": false,
+          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "tail_image_url_has_face": false
         }'
         ```
 
@@ -83,17 +88,18 @@ ByteDance Seedream 4.5 generates images from a text prompt, with single-image an
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/edit",
+            "https://hub.oxen.ai/api/ai/videos/generate",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "bytedance-seedream-4-5",
+                "model": "bytedance-seedance-2-5-image-to-video",
                 "prompt": "<prompt>",
-                "input_image": [
-                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ]
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_image_has_face": false,
+                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "tail_image_url_has_face": false
             },
         )
         response.raise_for_status()
@@ -108,16 +114,20 @@ ByteDance Seedream 4.5 generates images from a text prompt, with single-image an
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
+        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "bytedance-seedream-4-5",
+          "model": "bytedance-seedance-2-5-image-to-video",
           "prompt": "<prompt>",
-          "input_image": [
-            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ],
-          "size": "2K",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_image_has_face": false,
+          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "tail_image_url_has_face": false,
+          "resolution": "720p",
+          "duration": "auto",
+          "generate_audio": true,
+          "output_format": "mp4",
           "watermark": false
         }'
         ```
@@ -127,18 +137,22 @@ ByteDance Seedream 4.5 generates images from a text prompt, with single-image an
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/edit",
+            "https://hub.oxen.ai/api/ai/videos/generate",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "bytedance-seedream-4-5",
+                "model": "bytedance-seedance-2-5-image-to-video",
                 "prompt": "<prompt>",
-                "input_image": [
-                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ],
-                "size": "2K",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_image_has_face": false,
+                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "tail_image_url_has_face": false,
+                "resolution": "720p",
+                "duration": "auto",
+                "generate_audio": true,
+                "output_format": "mp4",
                 "watermark": false
             },
         )
@@ -167,8 +181,9 @@ ByteDance Seedream 4.5 generates images from a text prompt, with single-image an
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "bytedance-seedream-4-5",
-          "prompt": "<prompt>"
+          "model": "bytedance-seedance-2-5-image-to-video",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -199,8 +214,9 @@ ByteDance Seedream 4.5 generates images from a text prompt, with single-image an
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "bytedance-seedream-4-5",
-                "prompt": "<prompt>"
+                "model": "bytedance-seedance-2-5-image-to-video",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         enqueue.raise_for_status()
@@ -234,11 +250,12 @@ ByteDance Seedream 4.5 generates images from a text prompt, with single-image an
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "bytedance-seedream-4-5",
+          "model": "bytedance-seedance-2-5-image-to-video",
           "prompt": "<prompt>",
-          "input_image": [
-            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ]
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_image_has_face": false,
+          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "tail_image_url_has_face": false
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -269,11 +286,12 @@ ByteDance Seedream 4.5 generates images from a text prompt, with single-image an
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "bytedance-seedream-4-5",
+                "model": "bytedance-seedance-2-5-image-to-video",
                 "prompt": "<prompt>",
-                "input_image": [
-                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ]
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_image_has_face": false,
+                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "tail_image_url_has_face": false
             },
         )
         enqueue.raise_for_status()
@@ -307,12 +325,16 @@ ByteDance Seedream 4.5 generates images from a text prompt, with single-image an
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "bytedance-seedream-4-5",
+          "model": "bytedance-seedance-2-5-image-to-video",
           "prompt": "<prompt>",
-          "input_image": [
-            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ],
-          "size": "2K",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_image_has_face": false,
+          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "tail_image_url_has_face": false,
+          "resolution": "720p",
+          "duration": "auto",
+          "generate_audio": true,
+          "output_format": "mp4",
           "watermark": false
         }' | jq -r '.generations[0].generation_id')
 
@@ -344,12 +366,16 @@ ByteDance Seedream 4.5 generates images from a text prompt, with single-image an
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "bytedance-seedream-4-5",
+                "model": "bytedance-seedance-2-5-image-to-video",
                 "prompt": "<prompt>",
-                "input_image": [
-                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ],
-                "size": "2K",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_image_has_face": false,
+                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "tail_image_url_has_face": false,
+                "resolution": "720p",
+                "duration": "auto",
+                "generate_audio": true,
+                "output_format": "mp4",
                 "watermark": false
             },
         )
@@ -392,8 +418,9 @@ ByteDance Seedream 4.5 generates images from a text prompt, with single-image an
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "bytedance-seedream-4-5",
-          "prompt": "<prompt>"
+          "model": "bytedance-seedance-2-5-image-to-video",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -421,8 +448,9 @@ ByteDance Seedream 4.5 generates images from a text prompt, with single-image an
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "bytedance-seedream-4-5",
-                "prompt": "<prompt>"
+                "model": "bytedance-seedance-2-5-image-to-video",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         enqueue.raise_for_status()
@@ -457,11 +485,12 @@ ByteDance Seedream 4.5 generates images from a text prompt, with single-image an
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "bytedance-seedream-4-5",
+          "model": "bytedance-seedance-2-5-image-to-video",
           "prompt": "<prompt>",
-          "input_image": [
-            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ]
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_image_has_face": false,
+          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "tail_image_url_has_face": false
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -489,11 +518,12 @@ ByteDance Seedream 4.5 generates images from a text prompt, with single-image an
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "bytedance-seedream-4-5",
+                "model": "bytedance-seedance-2-5-image-to-video",
                 "prompt": "<prompt>",
-                "input_image": [
-                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ]
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_image_has_face": false,
+                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "tail_image_url_has_face": false
             },
         )
         enqueue.raise_for_status()
@@ -528,12 +558,16 @@ ByteDance Seedream 4.5 generates images from a text prompt, with single-image an
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "bytedance-seedream-4-5",
+          "model": "bytedance-seedance-2-5-image-to-video",
           "prompt": "<prompt>",
-          "input_image": [
-            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ],
-          "size": "2K",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_image_has_face": false,
+          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "tail_image_url_has_face": false,
+          "resolution": "720p",
+          "duration": "auto",
+          "generate_audio": true,
+          "output_format": "mp4",
           "watermark": false
         }' | jq -r '.generations[0].generation_id')
 
@@ -562,12 +596,16 @@ ByteDance Seedream 4.5 generates images from a text prompt, with single-image an
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "bytedance-seedream-4-5",
+                "model": "bytedance-seedance-2-5-image-to-video",
                 "prompt": "<prompt>",
-                "input_image": [
-                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ],
-                "size": "2K",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_image_has_face": false,
+                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "tail_image_url_has_face": false,
+                "resolution": "720p",
+                "duration": "auto",
+                "generate_audio": true,
+                "output_format": "mp4",
                 "watermark": false
             },
         )
@@ -603,7 +641,7 @@ ByteDance Seedream 4.5 generates images from a text prompt, with single-image an
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/bytedance-seedream-4-5
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/bytedance-seedance-2-5-image-to-video
 ```
 
 ## Request parameters
@@ -612,12 +650,18 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | Text prompt for image generation. Use @Image1, @Image2, etc. to reference the input images. |
+| `prompt` | `string` | &mdash; | The text prompt describing the desired motion and action for the video. |
+| `input_image` | `string` | &mdash; | The URL of the starting frame image. Formats: JPEG, PNG, WebP. Max 30 MB. Format: uri. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `input_image` | `array<string>` | &mdash; | Optional reference image URLs for image-to-image editing. Provide one image for single-image editing or multiple for multi-reference fusion; reference them in the prompt as @Image1, @Image2, etc. Up to 14 images. |
-| `size` | `string` | `"2K"` | Image resolution. One of: 2K, 4K. |
-| `watermark` | `boolean` | `false` | Whether to add an 'AI generated' watermark. |
+| `input_image_has_face` | `boolean` | `false` | Turn this on when the start frame contains a real human face. Content filters may block the request if this is not enabled. |
+| `tail_image_url` | `string` | &mdash; | Optional URL of the end-frame image. When provided, the generated video transitions from the start frame to this end frame. Format: uri. |
+| `tail_image_url_has_face` | `boolean` | `false` | Turn this on when the end frame contains a real human face. Content filters may block the request if this is not enabled. |
+| `resolution` | `string` | `"720p"` | Video resolution. 480p for faster generation, 720p for higher quality. One of: 480p, 720p. |
+| `duration` | `['integer', 'string']` | `"auto"` | Duration of the video in seconds. Supports 4 to 30 seconds, or "auto" to let the model decide based on the prompt. One of: auto, 4, 5, 6, 8, 10, 12, 15, 20, 25, 30. |
+| `generate_audio` | `boolean` | `true` | Whether to generate synchronized audio. |
+| `output_format` | `string` | `"mp4"` | Output video format. mp4 for broad compatibility, mov for high color precision in professional post-production workflows. One of: mp4, mov. |
+| `watermark` | `boolean` | `false` | Whether to add an 'AI generated' watermark to the output. |

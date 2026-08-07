@@ -1,22 +1,26 @@
 ---
-title: "Happy Horse - Image to Video"
-description: "Image-to-video up to 1080p"
+title: "WAN 3.0"
+description: "Reference-driven video with audio, up to 30s"
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try Happy Horse - Image to Video in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=happyhorse-1.0-i2v">
+  <Card title="Try WAN 3.0 in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=wan-v3-0-video">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `happyhorse-1.0-i2v`
+**Model ID:** `wan-v3-0-video`
 
-HappyHorse 1.0 image-to-video animates a reference image into video using a text prompt at 720P or 1080P with durations from 3 to 15 seconds. Output aspect ratio follows the source image.
+WAN 3.0 is a unified video generation model that replaces the separate text-to-video, image-to-video, reference-to-video, and video-edit models of the 2.x line with a single endpoint covering all of them. It generates 2 to 30 second clips at up to 1080P, with generated audio on by default, and supports a smart duration mode that lets the model pick the length from the prompt.
+
+Input works in one of two mutually exclusive modes. All-in-one reference accepts up to 10 images, 5 video clips, and 5 audio clips as combined references for appearance, motion, and voice; refer to them from the prompt as "Image 1", "Video 1" and so on, numbered separately within each type. First and last frame mode instead takes a starting frame and an optional ending frame. Mixing the two modes fails the request.
+
+WAN 3.0 also accepts document and web page input when thinking mode is enabled, which the Oxen API does not expose yet. Note that it removes the `negative_prompt` and `prompt_extend` parameters that the 2.x models accepted.
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=happyhorse-1.0-i2v) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=wan-v3-0-video) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
@@ -36,9 +40,8 @@ HappyHorse 1.0 image-to-video animates a reference image into video using a text
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "happyhorse-1.0-i2v",
-          "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "model": "wan-v3-0-video",
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -53,9 +56,52 @@ HappyHorse 1.0 image-to-video animates a reference image into video using a text
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "happyhorse-1.0-i2v",
+                "model": "wan-v3-0-video",
+                "prompt": "<prompt>"
+            },
+        )
+        response.raise_for_status()
+        print(response.json())
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+      <Tab title="Basic parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "wan-v3-0-video",
+          "prompt": "<prompt>",
+          "resolution": "1080P",
+          "aspect_ratio": "adaptive",
+          "duration": 5,
+          "generate_audio": true
+        }'
+        ```
+
+        ```python Python
+        import os
+        import requests
+
+        response = requests.post(
+            "https://hub.oxen.ai/api/ai/videos/generate",
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+            },
+            json={
+                "model": "wan-v3-0-video",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "resolution": "1080P",
+                "aspect_ratio": "adaptive",
+                "duration": 5,
+                "generate_audio": true
             },
         )
         response.raise_for_status()
@@ -74,11 +120,14 @@ HappyHorse 1.0 image-to-video animates a reference image into video using a text
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "happyhorse-1.0-i2v",
+          "model": "wan-v3-0-video",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "resolution": "1080P",
-          "duration": 5
+          "aspect_ratio": "adaptive",
+          "duration": 5,
+          "generate_audio": true,
+          "enable_thinking": false,
+          "watermark": false
         }'
         ```
 
@@ -93,11 +142,14 @@ HappyHorse 1.0 image-to-video animates a reference image into video using a text
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "happyhorse-1.0-i2v",
+                "model": "wan-v3-0-video",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "resolution": "1080P",
-                "duration": 5
+                "aspect_ratio": "adaptive",
+                "duration": 5,
+                "generate_audio": true,
+                "enable_thinking": false,
+                "watermark": false
             },
         )
         response.raise_for_status()
@@ -125,9 +177,8 @@ HappyHorse 1.0 image-to-video animates a reference image into video using a text
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "happyhorse-1.0-i2v",
-          "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "model": "wan-v3-0-video",
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -158,9 +209,83 @@ HappyHorse 1.0 image-to-video animates a reference image into video using a text
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "happyhorse-1.0-i2v",
+                "model": "wan-v3-0-video",
+                "prompt": "<prompt>"
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        while True:
+            data = requests.get(
+                f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
+                headers=HEADERS,
+            ).json()
+            if data["status"] in {"succeeded", "failed", "cancelled"}:
+                break
+            time.sleep(5)
+
+        if data["status"] == "succeeded":
+            print(f"Result: {data['result_url']}")
+        else:
+            print(f"Generation {data['status']}: {data.get('error_message')}")
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+      <Tab title="Basic parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "wan-v3-0-video",
+          "prompt": "<prompt>",
+          "resolution": "1080P",
+          "aspect_ratio": "adaptive",
+          "duration": 5,
+          "generate_audio": true
+        }' | jq -r '.generations[0].generation_id')
+
+        # Poll until the generation reaches a terminal status.
+        while true; do
+          STATUS=$(curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.status')
+          echo "Status: $STATUS"
+          case $STATUS in succeeded|failed|cancelled) break;; esac
+          sleep 5
+        done
+
+        # Print the result.
+        curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+          "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq .
+        ```
+
+        ```python Python
+        import os
+        import time
+        import requests
+
+        HEADERS = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        }
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers=HEADERS,
+            json={
+                "model": "wan-v3-0-video",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "resolution": "1080P",
+                "aspect_ratio": "adaptive",
+                "duration": 5,
+                "generate_audio": true
             },
         )
         enqueue.raise_for_status()
@@ -194,11 +319,14 @@ HappyHorse 1.0 image-to-video animates a reference image into video using a text
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "happyhorse-1.0-i2v",
+          "model": "wan-v3-0-video",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "resolution": "1080P",
-          "duration": 5
+          "aspect_ratio": "adaptive",
+          "duration": 5,
+          "generate_audio": true,
+          "enable_thinking": false,
+          "watermark": false
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -229,11 +357,14 @@ HappyHorse 1.0 image-to-video animates a reference image into video using a text
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "happyhorse-1.0-i2v",
+                "model": "wan-v3-0-video",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "resolution": "1080P",
-                "duration": 5
+                "aspect_ratio": "adaptive",
+                "duration": 5,
+                "generate_audio": true,
+                "enable_thinking": false,
+                "watermark": false
             },
         )
         enqueue.raise_for_status()
@@ -275,9 +406,8 @@ HappyHorse 1.0 image-to-video animates a reference image into video using a text
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "happyhorse-1.0-i2v",
-          "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "model": "wan-v3-0-video",
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -305,9 +435,81 @@ HappyHorse 1.0 image-to-video animates a reference image into video using a text
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "happyhorse-1.0-i2v",
+                "model": "wan-v3-0-video",
+                "prompt": "<prompt>"
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        with requests.get(
+            "https://hub.oxen.ai/api/events",
+            headers=AUTH,
+            stream=True,
+        ) as stream:
+            event_name = None
+            for line in stream.iter_lines(decode_unicode=True):
+                if line.startswith("event: "):
+                    event_name = line.removeprefix("event: ")
+                elif line.startswith("data: ") and event_name == "media_generation_completed":
+                    payload = json.loads(line.removeprefix("data: "))
+                    if payload.get("generation_id") == generation_id:
+                        print(payload)
+                        break
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+      <Tab title="Basic parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "wan-v3-0-video",
+          "prompt": "<prompt>",
+          "resolution": "1080P",
+          "aspect_ratio": "adaptive",
+          "duration": 5,
+          "generate_audio": true
+        }' | jq -r '.generations[0].generation_id')
+
+        # Stream the SSE channel, grab the data line that follows a
+        # media_generation_completed event for our id, and pretty-print it.
+        curl -sN -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/events \
+          | awk -v id="$GEN_ID" '
+            /^event: media_generation_completed$/ { expect=1; next }
+            /^data: / && expect {
+              payload = substr($0, 7)
+              if (index(payload, "\"generation_id\":\"" id "\"")) { print payload; exit }
+              expect = 0
+            }
+          ' | jq .
+        ```
+
+        ```python Python
+        import json
+        import os
+        import requests
+
+        API_KEY = os.environ["OXEN_API_KEY"]
+        AUTH = {"Authorization": f"Bearer {API_KEY}"}
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers={**AUTH, "Content-Type": "application/json"},
+            json={
+                "model": "wan-v3-0-video",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "resolution": "1080P",
+                "aspect_ratio": "adaptive",
+                "duration": 5,
+                "generate_audio": true
             },
         )
         enqueue.raise_for_status()
@@ -342,11 +544,14 @@ HappyHorse 1.0 image-to-video animates a reference image into video using a text
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "happyhorse-1.0-i2v",
+          "model": "wan-v3-0-video",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "resolution": "1080P",
-          "duration": 5
+          "aspect_ratio": "adaptive",
+          "duration": 5,
+          "generate_audio": true,
+          "enable_thinking": false,
+          "watermark": false
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -374,11 +579,14 @@ HappyHorse 1.0 image-to-video animates a reference image into video using a text
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "happyhorse-1.0-i2v",
+                "model": "wan-v3-0-video",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "resolution": "1080P",
-                "duration": 5
+                "aspect_ratio": "adaptive",
+                "duration": 5,
+                "generate_audio": true,
+                "enable_thinking": false,
+                "watermark": false
             },
         )
         enqueue.raise_for_status()
@@ -413,7 +621,7 @@ HappyHorse 1.0 image-to-video animates a reference image into video using a text
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/happyhorse-1.0-i2v
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/wan-v3-0-video
 ```
 
 ## Request parameters
@@ -422,13 +630,16 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | Text prompt describing the desired video. |
-| `input_image` | `string` | &mdash; | URL of the input image. Formats: JPEG, JPG, PNG, BMP, WEBP. Max 10 MB. Each side must be at least 300 pixels. Aspect ratio between 2:5 and 5:2. Format: uri. |
+| `prompt` | `string` | &mdash; | Text prompt describing the desired video. Supports Chinese and English. Max 5000 characters. Refer to reference assets as Image 1, Image 2, ... and Video 1, Video 2, ...; images and videos are numbered separately within their own type. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `resolution` | `string` | `"1080P"` | Output video resolution tier. One of: 720P, 1080P. |
-| `duration` | `integer` | `5` | Output video duration in seconds (3-15). Range: 3 – 15. |
-| `seed` | `integer` | &mdash; | Random seed for reproducibility (0-2147483647). Range: 0 – 2147483647. |
+| `resolution` | `string` | `"1080P"` | Output video resolution tier. One of: 480P, 720P, 1080P. |
+| `aspect_ratio` | `string` | `"adaptive"` | Aspect ratio of the generated video. Adaptive lets the model choose, which is usually what you want when supplying a first frame image. One of: adaptive, 16:9, 9:16, 1:1, 4:3, 3:4. |
+| `duration` | `integer` | `5` | Output video duration in seconds. Auto lets the model choose the length from the prompt. One of: -1, 2, 3, 4, 5, 6, 8, 10, 12, 15, 20, 25, 30. |
+| `generate_audio` | `boolean` | `true` | Whether the model generates sound for the video. Pricing is the same either way. |
+| `enable_thinking` | `boolean` | `false` | Enables thinking mode, which lets the model reason about the prompt before generating. Adds processing time. |
+| `seed` | `integer` | &mdash; | Random seed for reproducibility (0-2147483647). |
+| `watermark` | `boolean` | `false` | Adds an 'AI generated' watermark to the bottom-right corner. |
