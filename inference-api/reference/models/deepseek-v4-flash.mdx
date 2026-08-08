@@ -1,6 +1,6 @@
 ---
 title: "DeepSeek V4 Flash"
-description: "Efficient MoE model, 1M context"
+description: "Efficient MoE for agents, 1M context"
 ---
 
 <CardGroup cols={1}>
@@ -11,7 +11,7 @@ description: "Efficient MoE model, 1M context"
 
 **Model ID:** `deepseek-v4-flash`
 
-DeepSeek V4 Flash is the efficiency variant of the V4 family. With 284B total parameters and 13B active per token, it targets fast, cheap inference while keeping the family's strong reasoning and tool-use behaviour. Pairs naturally with V4 Pro: route the hard prompts to Pro, everyday traffic to Flash.
+DeepSeek V4 Flash is the efficiency variant of the V4 family. The DeepSeek-V4-Flash-0731 build (July 31, 2026) keeps the same 284B total / 13B active MoE architecture as the April preview, with re-post-training that substantially improves agent, coding, and tool-use workloads. Supports a 1M-token context window, thinking and non-thinking modes, structured outputs, and tool use. Pairs naturally with V4 Pro: route the hard prompts to Pro, everyday and agent traffic to Flash.
 
 | Metric                | Value                          |
 |-----------------------|--------------------------------|
@@ -19,6 +19,7 @@ DeepSeek V4 Flash is the efficiency variant of the V4 family. With 284B total pa
 | Mixture of Experts    | Yes                            |
 | Active Parameter Count| 13 billion                     |
 | Context Length        | 1,048,576 tokens               |
+| Max Output            | 384,000 tokens                 |
 | Multilingual          | Yes                            |
 | Tool Use              | Yes                            |
 | Structured Outputs    | Yes                            |
