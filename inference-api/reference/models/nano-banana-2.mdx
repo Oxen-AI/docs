@@ -634,4 +634,4 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | `aspect_ratio` | `string` | `"16:9"` | Aspect ratio for the generated image One of: auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 4:5, 5:4, 21:9, 4:1, 1:4, 8:1, 1:8. |
 | `resolution` | `string` | `"2K"` | Resolution of the generated image One of: 512, 1K, 2K, 4K. |
 | `google_search` | `boolean` | `false` | Ground the image in real-time web search results, useful for factual or current-events content like charts, maps, and recent events. |
-| `thinking_level` | `string` | `"minimal"` | How much the model reasons before generating. 'high' improves complex compositions at higher latency and cost. One of: minimal, high. |
+| `thinking_level` | `string` | `"minimal"` | How much the model reasons before generating. 'high' improves complex compositions at higher latency. It does not change the price, which is set by resolution alone. One of: minimal, high. |
