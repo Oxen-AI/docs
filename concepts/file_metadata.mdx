@@ -239,6 +239,77 @@ The [OxenHub UI](https://oxen.ai) uses schema metadata to render more complex da
 
 <img alt="OxenHub UI" className="rounded-xl" src="/images/datasets/image_net_train.png" />
 
+## Setting Metadata Over HTTP
+
+The commands above stage schema changes in a local repository. To do the same
+from an application, [oxen-server](/getting-started/oxen-server) exposes both
+levels as endpoints on a [workspace](/concepts/remote-repos). A workspace stages
+the change against a commit, so metadata can be set without committing first —
+useful for data frames an application edits continuously.
+
+Both endpoints **replace** the metadata at their level rather than merging into
+it. Read the current value from the data frame's schema and merge your keys into
+it, or you will drop metadata someone else set.
+
+### Schema Metadata
+
+`PUT /api/repos/:namespace/:repo_name/workspaces/:workspace_id/data_frames/schema/:path`
+
+```bash
+curl -X PUT \
+  "https://hub.oxen.ai/api/repos/your-username/my-dataset/workspaces/my-workspace/data_frames/schema/annotations/train.csv" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"metadata": {"task": "bounding_box", "description": "Extracting bounding boxes from images"}}'
+```
+
+Output:
+
+```
+{"status":"success","status_message":"resource_updated","oxen_version":"0.52.4"}
+```
+
+This is the HTTP equivalent of `oxen schemas add <path> -m '{...}'`.
+
+### Column Metadata
+
+`POST /api/repos/:namespace/:repo_name/workspaces/:workspace_id/data_frames/columns/schema/metadata/:path`
+
+The column is named in the body rather than the path, alongside its metadata.
+
+```bash
+curl -X POST \
+  "https://hub.oxen.ai/api/repos/your-username/my-dataset/workspaces/my-workspace/data_frames/columns/schema/metadata/annotations/train.csv" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"column_name": "file", "metadata": {"_oxen": {"render": {"func": "image"}}}}'
+```
+
+Output:
+
+```
+{"status":"success","status_message":"resource_updated","oxen_version":"0.52.4"}
+```
+
+This is the HTTP equivalent of `oxen schemas add <path> -c 'file' -m '{...}'`, and
+the example above is what `--render image` writes.
+
+### Reading It Back
+
+Metadata set this way comes back on the data frame's schema, at
+`data_frame.source.schema.metadata` for the schema itself and on each entry of
+`data_frame.source.schema.fields` for a column.
+
+```bash
+curl "https://hub.oxen.ai/api/repos/your-username/my-dataset/workspaces/my-workspace/data_frames/resource/annotations/train.csv" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+<Note>
+  The `_oxen` key is reserved for metadata oxen itself understands, such as the
+  `render` functions described below. Your own keys can sit alongside it.
+</Note>
+
 ## Commit The Schema
 
 Schemas changes will not be saved until you commit them.

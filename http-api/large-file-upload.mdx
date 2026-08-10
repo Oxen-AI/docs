@@ -1,0 +1,287 @@
+---
+title: "Large File Upload"
+description: "Upload files of any size in chunks, and optionally stage them into a workspace without committing"
+---
+
+The [File Upload Example](/http-api/example) posts a whole file in one request. That
+works until the file is bigger than what a single request can carry — a proxy, gateway,
+or serverless function in front of your client will usually cap a request body long
+before Oxen does.
+
+The chunked upload API removes that ceiling. It's the same protocol `oxen push` uses for
+large files: you hash the file, upload it in pieces, and ask the server to put those
+pieces back together. Because each piece is its own request, the file's size stops
+mattering — only the size of one chunk does.
+
+It also does something the single-request upload can't: **stage the assembled file
+directly into a [workspace](/getting-started/command-line/workspaces)**, so it's ready to commit — or to read
+back — without ever committing it.
+
+## The three steps
+
+| Step | Endpoint |
+| --- | --- |
+| 1. Announce the upload | `POST /api/repos/{namespace}/{repo_name}/versions/{version_id}/create` |
+| 2. Upload each chunk | `PUT /api/repos/{namespace}/{repo_name}/versions/{version_id}/chunks?offset={offset}` |
+| 3. Reassemble | `POST /api/repos/{namespace}/{repo_name}/versions/{version_id}/complete` |
+
+All three take your API key as a bearer token:
+
+```
+Authorization: Bearer YOUR_API_KEY
+```
+
+## The version id is the file's hash
+
+`{version_id}` is not an id you invent. It is the **XXH3-128 hash of the file's complete
+contents**, written as lowercase hexadecimal **with leading zeros stripped** — the format
+Rust's `{:x}` produces for a `u128`.
+
+This matters because step 3 re-hashes the bytes it assembled and compares them to
+`{version_id}`. Get the hash wrong and the upload is rejected; get it right and you have
+a guarantee that what the server stored is exactly what you sent.
+
+<CodeGroup>
+
+```python Python
+import xxhash  # pip install xxhash
+
+with open(LOCAL_FILE_PATH, "rb") as f:
+    version_id = xxhash.xxh128(f.read()).hexdigest().lstrip("0")
+```
+
+```javascript JavaScript
+import { createXXHash128 } from "hash-wasm"; // npm install hash-wasm
+
+const hasher = await createXXHash128();
+hasher.init();
+hasher.update(new Uint8Array(await file.arrayBuffer()));
+const versionId = hasher.digest("hex").replace(/^0+/, "");
+```
+
+</CodeGroup>
+
+<Note>
+For files large enough that you don't want them in memory, hash incrementally — every
+XXH3 implementation supports feeding it the file in pieces. Reuse the same pieces you're
+about to upload and you read the file only once.
+</Note>
+
+## Step 1: Announce the upload
+
+Tell the server what's coming. `dst_dir` is optional and only used in step 3.
+
+### Request
+
+```
+POST /api/repos/{namespace}/{repo_name}/versions/{version_id}/create
+Content-Type: application/json
+```
+
+```json
+{
+  "hash": "9f3a1c77b2e4d8a6013f5c2e7a94bd10",
+  "file_name": "example.pdf",
+  "size": 20971520,
+  "dst_dir": "documents"
+}
+```
+
+A `200` means go ahead and upload chunks. A rejection means this content already exists
+in the version store — file contents are addressed by their hash, so there is nothing
+left to upload and you can skip to step 3.
+
+## Step 2: Upload the chunks
+
+Send the file in slices. The body is the **raw bytes** of that slice — not multipart, not
+JSON — and `offset` is the slice's byte position in the complete file.
+
+### Request
+
+```
+PUT /api/repos/{namespace}/{repo_name}/versions/{version_id}/chunks?offset={offset}
+Content-Type: application/octet-stream
+```
+
+```bash
+curl -X PUT \
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/octet-stream" \
+  --data-binary @chunk-0.part \
+  "$SERVER_URL/api/repos/$NAMESPACE/$REPO/versions/$VERSION_ID/chunks?offset=0"
+```
+
+Output:
+
+```json
+{"status":"success","status_message":"resource_created","oxen_version":"0.52.4"}
+```
+
+Because every chunk carries its own offset, chunks are independent: send them in any
+order, in parallel, and retry any one of them on its own without restarting the upload.
+
+<Note>
+Keep each chunk at or below **10 MiB**, the server's transfer segment size. Below that,
+pick a size that fits whatever limit sits between you and the server — a chunk still has
+to survive one ordinary HTTP request.
+</Note>
+
+## Step 3: Reassemble
+
+Ask the server to join the chunks into the version file. It verifies the count, then
+verifies the hash.
+
+### Request
+
+```
+POST /api/repos/{namespace}/{repo_name}/versions/{version_id}/complete
+Content-Type: application/json
+```
+
+```json
+{
+  "files": [
+    {
+      "hash": "9f3a1c77b2e4d8a6013f5c2e7a94bd10",
+      "file_name": "example.pdf",
+      "dst_dir": "documents",
+      "num_chunks": 6
+    }
+  ],
+  "workspace_id": "my-workspace"
+}
+```
+
+| Field | Description |
+| --- | --- |
+| `files` | Exactly one file. More than one is rejected. |
+| `files[].hash` | The same XXH3-128 hash as `{version_id}`. |
+| `files[].file_name` | The name the file gets when staged. |
+| `files[].dst_dir` | Optional directory to stage it under. Omit for the repository root. |
+| `files[].num_chunks` | How many chunks you uploaded. Must match what the server holds. |
+| `workspace_id` | Optional. Provide it to stage the file into that workspace. |
+
+### Staging without committing
+
+`workspace_id` is what makes this more than an upload. Provide it and the assembled file
+is staged into that workspace at `dst_dir/file_name` — it shows up in
+`GET /workspaces/{workspace_id}/changes`, it can be read back through
+`GET /workspaces/{workspace_id}/files/{path}`, and it becomes part of the next commit
+you make from that workspace.
+
+Leave `workspace_id` out and the bytes simply live in the version store, addressed by
+their hash, for you to reference later.
+
+This means a large file can be uploaded, inspected, and even discarded without ever
+entering the repository's history.
+
+## Errors
+
+| Response | Cause |
+| --- | --- |
+| `Invalid integer: invalid digit found in string` | `{version_id}` isn't hexadecimal. It must be a hex `u128`, not an arbitrary string. |
+| `Number of chunks does not match expected number of chunks: 5 != 6` | `num_chunks` disagrees with what the server received. A chunk was lost, or two chunks shared an offset and overwrote each other. |
+| `Hash mismatch writing ...` | The reassembled bytes don't hash to `{version_id}`. Usually the wrong hash algorithm or format — check that you used XXH3-128 with leading zeros stripped. |
+
+## Complete example
+
+Uploads a file in 4 MB chunks and stages it into a workspace.
+
+```python Python
+import os
+import requests
+import xxhash
+
+SERVER_URL = "https://hub.oxen.ai"
+API_KEY = "your-api-key-here"
+NAMESPACE = "your-username"
+REPO_NAME = "my-dataset"
+WORKSPACE_ID = "my-workspace"
+
+LOCAL_FILE_PATH = "./example.pdf"
+DST_DIR = "documents"
+CHUNK_SIZE = 4 * 1024 * 1024
+
+headers = {"Authorization": f"Bearer {API_KEY}"}
+base = f"{SERVER_URL}/api/repos/{NAMESPACE}/{REPO_NAME}/versions"
+file_name = os.path.basename(LOCAL_FILE_PATH)
+size = os.path.getsize(LOCAL_FILE_PATH)
+
+# The version id is the file's XXH3-128, hashed incrementally.
+hasher = xxhash.xxh128()
+with open(LOCAL_FILE_PATH, "rb") as f:
+    while block := f.read(CHUNK_SIZE):
+        hasher.update(block)
+version_id = hasher.hexdigest().lstrip("0")
+
+# 1. announce
+requests.post(
+    f"{base}/{version_id}/create",
+    headers=headers,
+    json={"hash": version_id, "file_name": file_name, "size": size, "dst_dir": DST_DIR},
+).raise_for_status()
+
+# 2. upload every chunk, each addressed by its byte offset
+num_chunks = 0
+with open(LOCAL_FILE_PATH, "rb") as f:
+    offset = 0
+    while chunk := f.read(CHUNK_SIZE):
+        requests.put(
+            f"{base}/{version_id}/chunks",
+            headers={**headers, "Content-Type": "application/octet-stream"},
+            params={"offset": offset},
+            data=chunk,
+        ).raise_for_status()
+        offset += len(chunk)
+        num_chunks += 1
+
+# 3. reassemble and stage into the workspace
+requests.post(
+    f"{base}/{version_id}/complete",
+    headers=headers,
+    json={
+        "files": [
+            {
+                "hash": version_id,
+                "file_name": file_name,
+                "dst_dir": DST_DIR,
+                "num_chunks": num_chunks,
+            }
+        ],
+        "workspace_id": WORKSPACE_ID,
+    },
+).raise_for_status()
+
+print(f"Staged {file_name} ({size} bytes) in {num_chunks} chunks")
+```
+
+Output:
+
+```
+Staged example.pdf (20971520 bytes) in 5 chunks
+```
+
+From here, commit the workspace to turn the staged file into history:
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"message":"Add example.pdf","author":"Your Name","email":"you@example.com"}' \
+  "$SERVER_URL/api/repos/$NAMESPACE/$REPO_NAME/workspaces/$WORKSPACE_ID/merge/main"
+```
+
+## When to use this
+
+Reach for chunked upload when any of these is true:
+
+- **The file is larger than one request can carry.** The most common reason. Serverless
+  platforms in particular cap request bodies at a few megabytes.
+- **You want the upload to be resumable.** Chunks are independent, so a failure costs you
+  one chunk, not the whole file.
+- **You want parallelism.** Offsets make the order irrelevant.
+- **You want the file staged but not committed.** `workspace_id` puts it in a workspace,
+  where you can read it back or throw it away without touching history.
+
+For small files where none of this applies, the single-request
+[file upload](/http-api/example) is simpler.
