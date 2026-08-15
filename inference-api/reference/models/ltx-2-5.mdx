@@ -1,24 +1,24 @@
 ---
-title: "LTX 2.3 Pro: Extend Video"
-description: "Extend existing video clips"
+title: "LTX 2.5"
+description: "Text, image, and audio to video, up to 4K"
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try LTX 2.3 Pro: Extend Video in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=ltx-2-3-pro-extend-video">
+  <Card title="Try LTX 2.5 in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=ltx-2-5">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `ltx-2-3-pro-extend-video`
+**Model ID:** `ltx-2-5`
 
-LTX 2.3 (Extend Video) lengthens an existing clip by generating additional frames at the beginning or end using Lightricks LTX-2.3. An optional prompt describes what should happen in the extended portion, and the model uses surrounding footage as context to preserve motion continuity.
+LTX 2.5 generates video from a text prompt, a first-frame image, or an audio track, served directly by Lightricks' LTX API. One form covers all three: add an input image for image-to-video, add an audio file for a synchronized audio-to-video generation, or generate from the prompt alone.
 
-Extension can be applied at the end (default) or the start of the video, with a configurable amount of context drawn from the input clip. The video can be extended by up to 20 seconds per request.
+Pick the Fast tier for speed and cost — up to 4K resolution and 20-second clips — or the Pro tier for higher fidelity at up to 1080p and 10 seconds. Both tiers support native multi-shot generation that keeps characters, lighting, and voices consistent across cuts, camera motion effects, and synchronized audio (turn Generate Audio off for silent output).
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=ltx-2-3-pro-extend-video) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=ltx-2-5) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
@@ -38,8 +38,8 @@ Extension can be applied at the end (default) or the start of the video, with a 
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-pro-extend-video",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+          "model": "ltx-2-5",
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -54,8 +54,8 @@ Extension can be applied at the end (default) or the start of the video, with a 
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "ltx-2-3-pro-extend-video",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+                "model": "ltx-2-5",
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -74,9 +74,11 @@ Extension can be applied at the end (default) or the start of the video, with a 
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-pro-extend-video",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "prompt": "<prompt>"
+          "model": "ltx-2-5",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_audio": "https://example.com/audio.mp3",
+          "video_mode": "fast"
         }'
         ```
 
@@ -91,9 +93,11 @@ Extension can be applied at the end (default) or the start of the video, with a 
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "ltx-2-3-pro-extend-video",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "prompt": "<prompt>"
+                "model": "ltx-2-5",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_audio": "https://example.com/audio.mp3",
+                "video_mode": "fast"
             },
         )
         response.raise_for_status()
@@ -112,11 +116,17 @@ Extension can be applied at the end (default) or the start of the video, with a 
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-pro-extend-video",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "model": "ltx-2-5",
           "prompt": "<prompt>",
-          "duration": 5,
-          "mode": "end"
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_audio": "https://example.com/audio.mp3",
+          "video_mode": "fast",
+          "resolution": "1080p",
+          "aspect_ratio": "16:9",
+          "duration": 6,
+          "fps": 24,
+          "generate_audio": true,
+          "camera_motion": "none"
         }'
         ```
 
@@ -131,11 +141,17 @@ Extension can be applied at the end (default) or the start of the video, with a 
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "ltx-2-3-pro-extend-video",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "model": "ltx-2-5",
                 "prompt": "<prompt>",
-                "duration": 5,
-                "mode": "end"
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_audio": "https://example.com/audio.mp3",
+                "video_mode": "fast",
+                "resolution": "1080p",
+                "aspect_ratio": "16:9",
+                "duration": 6,
+                "fps": 24,
+                "generate_audio": true,
+                "camera_motion": "none"
             },
         )
         response.raise_for_status()
@@ -163,8 +179,8 @@ Extension can be applied at the end (default) or the start of the video, with a 
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-pro-extend-video",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+          "model": "ltx-2-5",
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -195,8 +211,8 @@ Extension can be applied at the end (default) or the start of the video, with a 
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "ltx-2-3-pro-extend-video",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+                "model": "ltx-2-5",
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -230,9 +246,11 @@ Extension can be applied at the end (default) or the start of the video, with a 
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-pro-extend-video",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "prompt": "<prompt>"
+          "model": "ltx-2-5",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_audio": "https://example.com/audio.mp3",
+          "video_mode": "fast"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -263,9 +281,11 @@ Extension can be applied at the end (default) or the start of the video, with a 
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "ltx-2-3-pro-extend-video",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "prompt": "<prompt>"
+                "model": "ltx-2-5",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_audio": "https://example.com/audio.mp3",
+                "video_mode": "fast"
             },
         )
         enqueue.raise_for_status()
@@ -299,11 +319,17 @@ Extension can be applied at the end (default) or the start of the video, with a 
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-pro-extend-video",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "model": "ltx-2-5",
           "prompt": "<prompt>",
-          "duration": 5,
-          "mode": "end"
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_audio": "https://example.com/audio.mp3",
+          "video_mode": "fast",
+          "resolution": "1080p",
+          "aspect_ratio": "16:9",
+          "duration": 6,
+          "fps": 24,
+          "generate_audio": true,
+          "camera_motion": "none"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -334,11 +360,17 @@ Extension can be applied at the end (default) or the start of the video, with a 
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "ltx-2-3-pro-extend-video",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "model": "ltx-2-5",
                 "prompt": "<prompt>",
-                "duration": 5,
-                "mode": "end"
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_audio": "https://example.com/audio.mp3",
+                "video_mode": "fast",
+                "resolution": "1080p",
+                "aspect_ratio": "16:9",
+                "duration": 6,
+                "fps": 24,
+                "generate_audio": true,
+                "camera_motion": "none"
             },
         )
         enqueue.raise_for_status()
@@ -380,8 +412,8 @@ Extension can be applied at the end (default) or the start of the video, with a 
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-pro-extend-video",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+          "model": "ltx-2-5",
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -409,8 +441,8 @@ Extension can be applied at the end (default) or the start of the video, with a 
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "ltx-2-3-pro-extend-video",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+                "model": "ltx-2-5",
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -445,9 +477,11 @@ Extension can be applied at the end (default) or the start of the video, with a 
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-pro-extend-video",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "prompt": "<prompt>"
+          "model": "ltx-2-5",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_audio": "https://example.com/audio.mp3",
+          "video_mode": "fast"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -475,9 +509,11 @@ Extension can be applied at the end (default) or the start of the video, with a 
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "ltx-2-3-pro-extend-video",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "prompt": "<prompt>"
+                "model": "ltx-2-5",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_audio": "https://example.com/audio.mp3",
+                "video_mode": "fast"
             },
         )
         enqueue.raise_for_status()
@@ -512,11 +548,17 @@ Extension can be applied at the end (default) or the start of the video, with a 
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-pro-extend-video",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "model": "ltx-2-5",
           "prompt": "<prompt>",
-          "duration": 5,
-          "mode": "end"
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_audio": "https://example.com/audio.mp3",
+          "video_mode": "fast",
+          "resolution": "1080p",
+          "aspect_ratio": "16:9",
+          "duration": 6,
+          "fps": 24,
+          "generate_audio": true,
+          "camera_motion": "none"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -544,11 +586,17 @@ Extension can be applied at the end (default) or the start of the video, with a 
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "ltx-2-3-pro-extend-video",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "model": "ltx-2-5",
                 "prompt": "<prompt>",
-                "duration": 5,
-                "mode": "end"
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_audio": "https://example.com/audio.mp3",
+                "video_mode": "fast",
+                "resolution": "1080p",
+                "aspect_ratio": "16:9",
+                "duration": 6,
+                "fps": 24,
+                "generate_audio": true,
+                "camera_motion": "none"
             },
         )
         enqueue.raise_for_status()
@@ -583,7 +631,7 @@ Extension can be applied at the end (default) or the start of the video, with a 
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/ltx-2-3-pro-extend-video
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/ltx-2-5
 ```
 
 ## Request parameters
@@ -592,13 +640,20 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `input_video` | `string` | &mdash; | The URL of the video to extend. Format: uri. |
+| `prompt` | `string` | &mdash; | Text description of the video to generate, or how to animate the input image. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | Description of what should happen in the extended portion of the video. |
-| `duration` | `number` | `5` | Duration in seconds to extend the video. Maximum 20 seconds. Range: -∞ – 20. |
-| `mode` | `string` | `"end"` | Where to extend the video: 'end' extends at the end, 'start' extends at the beginning. One of: start, end. |
-| `context` | `number` | &mdash; | Number of seconds from the input video to use as context for the extension (minimum 1 second, maximum 20 seconds). If not provided, defaults to maximize available context within the 505 frame limit. Range: 1 – 20. |
+| `input_image` | `string` | &mdash; | Optional first-frame image to animate (image-to-video). Leave empty to generate from the prompt alone. Format: uri. |
+| `input_audio` | `string` | &mdash; | Optional audio track (2-20 seconds) to drive an audio-to-video generation. Output length and lip sync follow the audio; 1080p only. Format: uri. |
+| `video_mode` | `string` | `"fast"` | Fast is quicker and cheaper, with 4K and up to 20 seconds. Pro is higher fidelity, capped at 1080p and 10 seconds. One of: fast, pro. |
+| `tail_image_url` | `string` | &mdash; | Optional last frame for image-to-video; the model interpolates between the input image and this frame. Format: uri. |
+| `resolution` | `string` | `"1080p"` | Output resolution tier. 1440p and 4K are Fast only. One of: 720p, 1080p, 1440p, 4k. |
+| `aspect_ratio` | `string` | `"16:9"` | Output aspect ratio. One of: 16:9, 9:16. |
+| `duration` | `integer` | `6` | Video duration in seconds. Fast supports up to 20 seconds at 720p/1080p and 10 at higher resolutions; Pro supports up to 10. Range: 6 – 20. |
+| `fps` | `integer` | `24` | Frame rate. 48 and 50 FPS shorten the maximum duration; Pro supports 24, 25, and 50 only. One of: 24, 25, 48, 50. |
+| `generate_audio` | `boolean` | `true` | Generate synchronized audio for the video. |
+| `camera_motion` | `string` | `"none"` | Camera motion effect to apply to the generated video. One of: none, dolly_in, dolly_out, dolly_left, dolly_right, jib_up, jib_down, static, focus_shift. |
+| `guidance_scale` | `number` | &mdash; | Audio-to-video only: how strictly the video follows the prompt. Defaults to 5 with a prompt, 9 with an input image. Range: 1 – 15. |
