@@ -1,22 +1,24 @@
 ---
-title: "LTX 2.3 Pro: Text to Video"
-description: "Text-to-video with native audio"
+title: "LTX 2.3 Retake"
+description: "Regenerate a section of a clip"
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try LTX 2.3 Pro: Text to Video in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=ltx-2-3-pro-text-to-video">
+  <Card title="Try LTX 2.3 Retake in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=ltx-2-3-retake">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `ltx-2-3-pro-text-to-video`
+**Model ID:** `ltx-2-3-retake`
 
-High-fidelity text-to-video generation from Lightricks LTX-2.3 Pro. Creates video from text prompts up to 4K at 50 FPS with optional synchronized audio, camera motion effects, and flexible resolution (1080p, 2K, 4K).
+LTX 2.3 Retake regenerates a section of an existing clip guided by a prompt — change a line of dialogue, an action, or the sound without touching the rest — served directly by Lightricks' LTX API on the Pro tier. Pick where the section starts and how long it runs, and whether to replace its video, its audio, or both.
+
+The input video supports up to 4K and must be at least 3 seconds; output is 1080p.
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=ltx-2-3-pro-text-to-video) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=ltx-2-3-retake) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
@@ -36,8 +38,8 @@ High-fidelity text-to-video generation from Lightricks LTX-2.3 Pro. Creates vide
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-pro-text-to-video",
-          "prompt": "<prompt>"
+          "model": "ltx-2-3-retake",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }'
         ```
 
@@ -52,8 +54,8 @@ High-fidelity text-to-video generation from Lightricks LTX-2.3 Pro. Creates vide
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "ltx-2-3-pro-text-to-video",
-                "prompt": "<prompt>"
+                "model": "ltx-2-3-retake",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         response.raise_for_status()
@@ -72,15 +74,11 @@ High-fidelity text-to-video generation from Lightricks LTX-2.3 Pro. Creates vide
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-pro-text-to-video",
-          "prompt": "<prompt>",
-          "task": "text_to_video",
-          "resolution": "1080p",
-          "duration": 6,
-          "aspect_ratio": "16:9",
-          "fps": 25,
-          "camera_motion": "none",
-          "generate_audio": true
+          "model": "ltx-2-3-retake",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "retake_start_time": 0,
+          "retake_duration": 4,
+          "retake_mode": "replace_audio_and_video"
         }'
         ```
 
@@ -95,15 +93,11 @@ High-fidelity text-to-video generation from Lightricks LTX-2.3 Pro. Creates vide
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "ltx-2-3-pro-text-to-video",
-                "prompt": "<prompt>",
-                "task": "text_to_video",
-                "resolution": "1080p",
-                "duration": 6,
-                "aspect_ratio": "16:9",
-                "fps": 25,
-                "camera_motion": "none",
-                "generate_audio": true
+                "model": "ltx-2-3-retake",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "retake_start_time": 0,
+                "retake_duration": 4,
+                "retake_mode": "replace_audio_and_video"
             },
         )
         response.raise_for_status()
@@ -131,8 +125,8 @@ High-fidelity text-to-video generation from Lightricks LTX-2.3 Pro. Creates vide
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-pro-text-to-video",
-          "prompt": "<prompt>"
+          "model": "ltx-2-3-retake",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -163,8 +157,8 @@ High-fidelity text-to-video generation from Lightricks LTX-2.3 Pro. Creates vide
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "ltx-2-3-pro-text-to-video",
-                "prompt": "<prompt>"
+                "model": "ltx-2-3-retake",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         enqueue.raise_for_status()
@@ -198,15 +192,11 @@ High-fidelity text-to-video generation from Lightricks LTX-2.3 Pro. Creates vide
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-pro-text-to-video",
-          "prompt": "<prompt>",
-          "task": "text_to_video",
-          "resolution": "1080p",
-          "duration": 6,
-          "aspect_ratio": "16:9",
-          "fps": 25,
-          "camera_motion": "none",
-          "generate_audio": true
+          "model": "ltx-2-3-retake",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "retake_start_time": 0,
+          "retake_duration": 4,
+          "retake_mode": "replace_audio_and_video"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -237,15 +227,11 @@ High-fidelity text-to-video generation from Lightricks LTX-2.3 Pro. Creates vide
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "ltx-2-3-pro-text-to-video",
-                "prompt": "<prompt>",
-                "task": "text_to_video",
-                "resolution": "1080p",
-                "duration": 6,
-                "aspect_ratio": "16:9",
-                "fps": 25,
-                "camera_motion": "none",
-                "generate_audio": true
+                "model": "ltx-2-3-retake",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "retake_start_time": 0,
+                "retake_duration": 4,
+                "retake_mode": "replace_audio_and_video"
             },
         )
         enqueue.raise_for_status()
@@ -287,8 +273,8 @@ High-fidelity text-to-video generation from Lightricks LTX-2.3 Pro. Creates vide
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-pro-text-to-video",
-          "prompt": "<prompt>"
+          "model": "ltx-2-3-retake",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -316,8 +302,8 @@ High-fidelity text-to-video generation from Lightricks LTX-2.3 Pro. Creates vide
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "ltx-2-3-pro-text-to-video",
-                "prompt": "<prompt>"
+                "model": "ltx-2-3-retake",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         enqueue.raise_for_status()
@@ -352,15 +338,11 @@ High-fidelity text-to-video generation from Lightricks LTX-2.3 Pro. Creates vide
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-pro-text-to-video",
-          "prompt": "<prompt>",
-          "task": "text_to_video",
-          "resolution": "1080p",
-          "duration": 6,
-          "aspect_ratio": "16:9",
-          "fps": 25,
-          "camera_motion": "none",
-          "generate_audio": true
+          "model": "ltx-2-3-retake",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "retake_start_time": 0,
+          "retake_duration": 4,
+          "retake_mode": "replace_audio_and_video"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -388,15 +370,11 @@ High-fidelity text-to-video generation from Lightricks LTX-2.3 Pro. Creates vide
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "ltx-2-3-pro-text-to-video",
-                "prompt": "<prompt>",
-                "task": "text_to_video",
-                "resolution": "1080p",
-                "duration": 6,
-                "aspect_ratio": "16:9",
-                "fps": 25,
-                "camera_motion": "none",
-                "generate_audio": true
+                "model": "ltx-2-3-retake",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "retake_start_time": 0,
+                "retake_duration": 4,
+                "retake_mode": "replace_audio_and_video"
             },
         )
         enqueue.raise_for_status()
@@ -431,7 +409,7 @@ High-fidelity text-to-video generation from Lightricks LTX-2.3 Pro. Creates vide
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/ltx-2-3-pro-text-to-video
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/ltx-2-3-retake
 ```
 
 ## Request parameters
@@ -440,16 +418,13 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | Text prompt describing the video to generate |
+| `input_video` | `string` | &mdash; | The clip to retake a section of. Up to 4K, at least 3 seconds. Format: uri. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `task` | `string` | `"text_to_video"` | The generation task (fixed for this model) One of: text_to_video. |
-| `resolution` | `string` | `"1080p"` | Resolution quality of the generated video One of: 1080p, 2k, 4k. |
-| `duration` | `integer` | `6` | Duration of the video in seconds One of: 6, 8, 10. |
-| `aspect_ratio` | `string` | `"16:9"` | Aspect ratio of the generated video One of: 16:9, 9:16. |
-| `fps` | `integer` | `25` | Frame rate in frames per second One of: 24, 25, 48, 50. |
-| `camera_motion` | `string` | `"none"` | Camera motion effect to apply to the generated video. Use 'none' for no camera motion. One of: none, dolly_in, dolly_out, dolly_left, dolly_right, jib_up, jib_down, static, focus_shift. |
-| `generate_audio` | `boolean` | `true` | Generate audio for the video |
+| `prompt` | `string` | &mdash; | What should happen in the retaken section. |
+| `retake_start_time` | `number` | `0` | Where the retaken section starts, in seconds. Range: 0 – +∞. |
+| `retake_duration` | `number` | `4` | Length of the retaken section in seconds, at least 2. Range: 2 – +∞. |
+| `retake_mode` | `string` | `"replace_audio_and_video"` | Replace the video, the audio, or both in the retaken section. One of: replace_audio_and_video, replace_video, replace_audio. |

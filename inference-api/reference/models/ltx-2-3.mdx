@@ -1,24 +1,24 @@
 ---
-title: "LTX 2.3 Fast: Image to Video"
-description: "Fast image-to-video with native audio"
+title: "LTX 2.3"
+description: "Text, image, and audio to video, up to 4K"
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try LTX 2.3 Fast: Image to Video in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=ltx-2-3-fast-image-to-video">
+  <Card title="Try LTX 2.3 in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=ltx-2-3">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `ltx-2-3-fast-image-to-video`
+**Model ID:** `ltx-2-3`
 
-LTX 2.3 Fast (Image to Video) is the speed-optimized variant of Lightricks LTX-2.3 on fal, animating a starting image into video with synchronized native audio at lower latency and cost than the standard tier. An optional end image can be supplied to generate a transition between the start and end frames. It supports 1080p, 1440p, and 2160p output at 24/25/48/50 FPS.
+LTX 2.3 generates video from a text prompt, a first-frame image, or an audio track, served directly by Lightricks' LTX API. One form covers all three: add an input image for image-to-video, add an audio file for a synchronized audio-to-video generation, or generate from the prompt alone, at up to 4K and 50 FPS.
 
-The fast model supports clip durations from 6 up to 20 seconds; durations longer than 10 seconds (12, 14, 16, 18, 20) require 25 FPS and 1080p resolution. Input images may be PNG, JPEG, WebP, AVIF, or HEIF.
+Pick the Fast tier for speed and cost or the Pro tier for higher fidelity; both reach 4K, and audio-to-video always runs on Pro, the only tier LTX serves it on. Editing an existing clip lives on the companion LTX 2.3 Extend, Retake, and Reframe models.
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=ltx-2-3-fast-image-to-video) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=ltx-2-3) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
@@ -38,9 +38,8 @@ The fast model supports clip durations from 6 up to 20 seconds; durations longer
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-fast-image-to-video",
-          "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "model": "ltx-2-3",
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -55,9 +54,8 @@ The fast model supports clip durations from 6 up to 20 seconds; durations longer
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "ltx-2-3-fast-image-to-video",
-                "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "model": "ltx-2-3",
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -76,10 +74,11 @@ The fast model supports clip durations from 6 up to 20 seconds; durations longer
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-fast-image-to-video",
+          "model": "ltx-2-3",
           "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "last_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "input_audio": "https://example.com/audio.mp3",
+          "video_mode": "fast"
         }'
         ```
 
@@ -94,10 +93,11 @@ The fast model supports clip durations from 6 up to 20 seconds; durations longer
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "ltx-2-3-fast-image-to-video",
+                "model": "ltx-2-3",
                 "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "last_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "input_audio": "https://example.com/audio.mp3",
+                "video_mode": "fast"
             },
         )
         response.raise_for_status()
@@ -116,15 +116,17 @@ The fast model supports clip durations from 6 up to 20 seconds; durations longer
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-fast-image-to-video",
+          "model": "ltx-2-3",
           "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "last_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "duration": 6,
+          "input_audio": "https://example.com/audio.mp3",
+          "video_mode": "fast",
           "resolution": "1080p",
-          "aspect_ratio": "auto",
-          "fps": 25,
-          "generate_audio": true
+          "aspect_ratio": "16:9",
+          "duration": 6,
+          "fps": 24,
+          "generate_audio": true,
+          "camera_motion": "none"
         }'
         ```
 
@@ -139,15 +141,17 @@ The fast model supports clip durations from 6 up to 20 seconds; durations longer
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "ltx-2-3-fast-image-to-video",
+                "model": "ltx-2-3",
                 "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "last_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "duration": 6,
+                "input_audio": "https://example.com/audio.mp3",
+                "video_mode": "fast",
                 "resolution": "1080p",
-                "aspect_ratio": "auto",
-                "fps": 25,
-                "generate_audio": true
+                "aspect_ratio": "16:9",
+                "duration": 6,
+                "fps": 24,
+                "generate_audio": true,
+                "camera_motion": "none"
             },
         )
         response.raise_for_status()
@@ -175,9 +179,8 @@ The fast model supports clip durations from 6 up to 20 seconds; durations longer
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-fast-image-to-video",
-          "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "model": "ltx-2-3",
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -208,9 +211,8 @@ The fast model supports clip durations from 6 up to 20 seconds; durations longer
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "ltx-2-3-fast-image-to-video",
-                "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "model": "ltx-2-3",
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -244,10 +246,11 @@ The fast model supports clip durations from 6 up to 20 seconds; durations longer
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-fast-image-to-video",
+          "model": "ltx-2-3",
           "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "last_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "input_audio": "https://example.com/audio.mp3",
+          "video_mode": "fast"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -278,10 +281,11 @@ The fast model supports clip durations from 6 up to 20 seconds; durations longer
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "ltx-2-3-fast-image-to-video",
+                "model": "ltx-2-3",
                 "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "last_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "input_audio": "https://example.com/audio.mp3",
+                "video_mode": "fast"
             },
         )
         enqueue.raise_for_status()
@@ -315,15 +319,17 @@ The fast model supports clip durations from 6 up to 20 seconds; durations longer
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-fast-image-to-video",
+          "model": "ltx-2-3",
           "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "last_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "duration": 6,
+          "input_audio": "https://example.com/audio.mp3",
+          "video_mode": "fast",
           "resolution": "1080p",
-          "aspect_ratio": "auto",
-          "fps": 25,
-          "generate_audio": true
+          "aspect_ratio": "16:9",
+          "duration": 6,
+          "fps": 24,
+          "generate_audio": true,
+          "camera_motion": "none"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -354,15 +360,17 @@ The fast model supports clip durations from 6 up to 20 seconds; durations longer
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "ltx-2-3-fast-image-to-video",
+                "model": "ltx-2-3",
                 "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "last_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "duration": 6,
+                "input_audio": "https://example.com/audio.mp3",
+                "video_mode": "fast",
                 "resolution": "1080p",
-                "aspect_ratio": "auto",
-                "fps": 25,
-                "generate_audio": true
+                "aspect_ratio": "16:9",
+                "duration": 6,
+                "fps": 24,
+                "generate_audio": true,
+                "camera_motion": "none"
             },
         )
         enqueue.raise_for_status()
@@ -404,9 +412,8 @@ The fast model supports clip durations from 6 up to 20 seconds; durations longer
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-fast-image-to-video",
-          "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "model": "ltx-2-3",
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -434,9 +441,8 @@ The fast model supports clip durations from 6 up to 20 seconds; durations longer
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "ltx-2-3-fast-image-to-video",
-                "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "model": "ltx-2-3",
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -471,10 +477,11 @@ The fast model supports clip durations from 6 up to 20 seconds; durations longer
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-fast-image-to-video",
+          "model": "ltx-2-3",
           "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "last_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "input_audio": "https://example.com/audio.mp3",
+          "video_mode": "fast"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -502,10 +509,11 @@ The fast model supports clip durations from 6 up to 20 seconds; durations longer
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "ltx-2-3-fast-image-to-video",
+                "model": "ltx-2-3",
                 "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "last_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "input_audio": "https://example.com/audio.mp3",
+                "video_mode": "fast"
             },
         )
         enqueue.raise_for_status()
@@ -540,15 +548,17 @@ The fast model supports clip durations from 6 up to 20 seconds; durations longer
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-fast-image-to-video",
+          "model": "ltx-2-3",
           "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "last_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "duration": 6,
+          "input_audio": "https://example.com/audio.mp3",
+          "video_mode": "fast",
           "resolution": "1080p",
-          "aspect_ratio": "auto",
-          "fps": 25,
-          "generate_audio": true
+          "aspect_ratio": "16:9",
+          "duration": 6,
+          "fps": 24,
+          "generate_audio": true,
+          "camera_motion": "none"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -576,15 +586,17 @@ The fast model supports clip durations from 6 up to 20 seconds; durations longer
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "ltx-2-3-fast-image-to-video",
+                "model": "ltx-2-3",
                 "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "last_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "duration": 6,
+                "input_audio": "https://example.com/audio.mp3",
+                "video_mode": "fast",
                 "resolution": "1080p",
-                "aspect_ratio": "auto",
-                "fps": 25,
-                "generate_audio": true
+                "aspect_ratio": "16:9",
+                "duration": 6,
+                "fps": 24,
+                "generate_audio": true,
+                "camera_motion": "none"
             },
         )
         enqueue.raise_for_status()
@@ -619,7 +631,7 @@ The fast model supports clip durations from 6 up to 20 seconds; durations longer
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/ltx-2-3-fast-image-to-video
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/ltx-2-3
 ```
 
 ## Request parameters
@@ -628,16 +640,20 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | The prompt to generate the video from. |
-| `input_image` | `string` | &mdash; | URL of the image to generate the video from. Supports PNG, JPEG, WebP, AVIF, and HEIF formats. Format: uri. |
+| `prompt` | `string` | &mdash; | Text description of the video to generate, or how to animate the input image. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `last_frame_image` | `string` | &mdash; | The URL of the end image to use for the generated video. When provided, generates a transition video between start and end frames. Format: uri. |
-| `duration` | `integer` | `6` | The duration of the generated video in seconds. The fast model supports 6-20 seconds. Durations longer than 10 seconds (12, 14, 16, 18, 20) are only supported with 25 FPS and 1080p resolution. One of: 6, 8, 10, 12, 14, 16, 18, 20. |
-| `resolution` | `string` | `"1080p"` | The resolution of the generated video. One of: 1080p, 1440p, 2160p. |
-| `aspect_ratio` | `string` | `"auto"` | The aspect ratio of the generated video. If 'auto', the aspect ratio will be determined automatically based on the input image. One of: auto, 16:9, 9:16. |
-| `fps` | `integer` | `25` | The frames per second of the generated video. One of: 24, 25, 48, 50. |
-| `generate_audio` | `boolean` | `true` | Whether to generate audio for the generated video. |
+| `input_image` | `string` | &mdash; | Optional first-frame image to animate (image-to-video). Leave empty to generate from the prompt alone. Format: uri. |
+| `input_audio` | `string` | &mdash; | Optional audio track (2-20 seconds) to drive an audio-to-video generation. Output length and lip sync follow the audio; 1080p only. Always runs on Pro. Format: uri. |
+| `video_mode` | `string` | `"fast"` | Fast is quicker and cheaper; Pro is higher fidelity. Audio-to-video always runs on Pro. One of: fast, pro. |
+| `tail_image_url` | `string` | &mdash; | Optional last frame for image-to-video; the model interpolates between the input image and this frame. Format: uri. |
+| `resolution` | `string` | `"1080p"` | Output resolution tier. Audio-to-video is 1080p only. One of: 720p, 1080p, 1440p, 4k. |
+| `aspect_ratio` | `string` | `"16:9"` | Output aspect ratio. One of: 16:9, 9:16. |
+| `duration` | `integer` | `6` | Video duration in seconds. Up to 20 seconds on Fast at 720p/1080p and 24/25 FPS, otherwise up to 10. Range: 6 – 20. |
+| `fps` | `integer` | `24` | Frame rate. 48 and 50 FPS shorten the maximum duration. One of: 24, 25, 48, 50. |
+| `generate_audio` | `boolean` | `true` | Generate synchronized audio for the video. |
+| `camera_motion` | `string` | `"none"` | Camera motion effect to apply to the generated video. One of: none, dolly_in, dolly_out, dolly_left, dolly_right, jib_up, jib_down, static, focus_shift. |
+| `guidance_scale` | `number` | &mdash; | Audio-to-video only: how strictly the video follows the prompt. Defaults to 5 with a prompt, 9 with an input image. Range: 1 – 15. |

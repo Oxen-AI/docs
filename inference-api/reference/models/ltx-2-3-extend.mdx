@@ -1,22 +1,24 @@
 ---
-title: "LTX 2.3 Pro: Retake"
-description: "Regenerate video segments via prompts"
+title: "LTX 2.3 Extend"
+description: "Continue a clip from its start or end"
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try LTX 2.3 Pro: Retake in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=ltx-2-3-pro-retake">
+  <Card title="Try LTX 2.3 Extend in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=ltx-2-3-extend">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `ltx-2-3-pro-retake`
+**Model ID:** `ltx-2-3-extend`
 
-Targeted video editing from Lightricks LTX-2.3 Pro. Regenerates specific segments of existing videos (2+ seconds) while preserving motion continuity, lighting, and surrounding footage. Supports replace video only, replace audio only, or replace both with natural language prompts. 1080p output.
+LTX 2.3 Extend continues an existing clip, adding 2 to 20 seconds of new footage at its start or end, served directly by Lightricks' LTX API on the Pro tier. The prompt describes what happens in the added portion, and audio is generated for it when the input video has audio.
+
+The input video keeps its resolution and supports 16:9 and 9:16 clips up to 4K; the extension plus the context it draws on is capped at about 21 seconds at 24 FPS.
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=ltx-2-3-pro-retake) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=ltx-2-3-extend) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
@@ -36,8 +38,7 @@ Targeted video editing from Lightricks LTX-2.3 Pro. Regenerates specific segment
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-pro-retake",
-          "prompt": "<prompt>",
+          "model": "ltx-2-3-extend",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }'
         ```
@@ -53,8 +54,7 @@ Targeted video editing from Lightricks LTX-2.3 Pro. Regenerates specific segment
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "ltx-2-3-pro-retake",
-                "prompt": "<prompt>",
+                "model": "ltx-2-3-extend",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
@@ -74,13 +74,10 @@ Targeted video editing from Lightricks LTX-2.3 Pro. Regenerates specific segment
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-pro-retake",
-          "prompt": "<prompt>",
+          "model": "ltx-2-3-extend",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "task": "retake",
-          "retake_start_time": 0,
-          "retake_duration": 2,
-          "retake_mode": "replace_audio_and_video"
+          "duration": 6,
+          "extend_mode": "end"
         }'
         ```
 
@@ -95,13 +92,10 @@ Targeted video editing from Lightricks LTX-2.3 Pro. Regenerates specific segment
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "ltx-2-3-pro-retake",
-                "prompt": "<prompt>",
+                "model": "ltx-2-3-extend",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "task": "retake",
-                "retake_start_time": 0,
-                "retake_duration": 2,
-                "retake_mode": "replace_audio_and_video"
+                "duration": 6,
+                "extend_mode": "end"
             },
         )
         response.raise_for_status()
@@ -129,8 +123,7 @@ Targeted video editing from Lightricks LTX-2.3 Pro. Regenerates specific segment
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-pro-retake",
-          "prompt": "<prompt>",
+          "model": "ltx-2-3-extend",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }' | jq -r '.generations[0].generation_id')
 
@@ -162,8 +155,7 @@ Targeted video editing from Lightricks LTX-2.3 Pro. Regenerates specific segment
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "ltx-2-3-pro-retake",
-                "prompt": "<prompt>",
+                "model": "ltx-2-3-extend",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
@@ -198,13 +190,10 @@ Targeted video editing from Lightricks LTX-2.3 Pro. Regenerates specific segment
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-pro-retake",
-          "prompt": "<prompt>",
+          "model": "ltx-2-3-extend",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "task": "retake",
-          "retake_start_time": 0,
-          "retake_duration": 2,
-          "retake_mode": "replace_audio_and_video"
+          "duration": 6,
+          "extend_mode": "end"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -235,13 +224,10 @@ Targeted video editing from Lightricks LTX-2.3 Pro. Regenerates specific segment
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "ltx-2-3-pro-retake",
-                "prompt": "<prompt>",
+                "model": "ltx-2-3-extend",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "task": "retake",
-                "retake_start_time": 0,
-                "retake_duration": 2,
-                "retake_mode": "replace_audio_and_video"
+                "duration": 6,
+                "extend_mode": "end"
             },
         )
         enqueue.raise_for_status()
@@ -283,8 +269,7 @@ Targeted video editing from Lightricks LTX-2.3 Pro. Regenerates specific segment
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-pro-retake",
-          "prompt": "<prompt>",
+          "model": "ltx-2-3-extend",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }' | jq -r '.generations[0].generation_id')
 
@@ -313,8 +298,7 @@ Targeted video editing from Lightricks LTX-2.3 Pro. Regenerates specific segment
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "ltx-2-3-pro-retake",
-                "prompt": "<prompt>",
+                "model": "ltx-2-3-extend",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
@@ -350,13 +334,10 @@ Targeted video editing from Lightricks LTX-2.3 Pro. Regenerates specific segment
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "ltx-2-3-pro-retake",
-          "prompt": "<prompt>",
+          "model": "ltx-2-3-extend",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "task": "retake",
-          "retake_start_time": 0,
-          "retake_duration": 2,
-          "retake_mode": "replace_audio_and_video"
+          "duration": 6,
+          "extend_mode": "end"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -384,13 +365,10 @@ Targeted video editing from Lightricks LTX-2.3 Pro. Regenerates specific segment
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "ltx-2-3-pro-retake",
-                "prompt": "<prompt>",
+                "model": "ltx-2-3-extend",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "task": "retake",
-                "retake_start_time": 0,
-                "retake_duration": 2,
-                "retake_mode": "replace_audio_and_video"
+                "duration": 6,
+                "extend_mode": "end"
             },
         )
         enqueue.raise_for_status()
@@ -425,7 +403,7 @@ Targeted video editing from Lightricks LTX-2.3 Pro. Regenerates specific segment
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/ltx-2-3-pro-retake
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/ltx-2-3-extend
 ```
 
 ## Request parameters
@@ -434,14 +412,13 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | Text prompt describing the edit to make |
-| `input_video` | `string` | &mdash; | Input video for retake editing Format: uri. |
+| `input_video` | `string` | &mdash; | The clip to extend. 16:9 or 9:16, up to 4K, at least 3 seconds. Format: uri. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `task` | `string` | `"retake"` | The generation task (fixed for this model) One of: retake. |
-| `retake_start_time` | `number` | `0` | Start time in seconds of the section to edit Range: 0 – +∞. |
-| `retake_duration` | `number` | `2` | Duration in seconds of the section to edit. Must be at least 2 seconds. Range: 2 – +∞. |
-| `retake_mode` | `string` | `"replace_audio_and_video"` | What to replace in the retake section One of: replace_audio, replace_video, replace_audio_and_video. |
+| `prompt` | `string` | &mdash; | Optional description of what happens in the added footage. |
+| `duration` | `integer` | `6` | Seconds of new footage to add, 2 to 20. Range: 2 – 20. |
+| `extend_mode` | `string` | `"end"` | Add the new footage at the start or the end of the clip. One of: start, end. |
+| `context` | `number` | &mdash; | Seconds of the input video to use as context, up to 20. Defaults to 5 (less for long extensions). Context seconds are billed with the extension. Range: 1 – 20. |
