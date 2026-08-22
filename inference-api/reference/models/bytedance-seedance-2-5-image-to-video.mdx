@@ -11,7 +11,7 @@ description: "Animate images into video with audio"
 
 **Model ID:** `bytedance-seedance-2-5-image-to-video`
 
-ByteDance Seedance 2.5 animates a starting frame from a text motion prompt, with optional end-frame control for transitions and synchronized audio on by default. Supports 480p and 720p output and durations from 4 to 30 seconds. The output keeps the aspect ratio of the first-frame image.
+ByteDance Seedance 2.5 animates a starting frame from a text motion prompt, with optional end-frame control for transitions and synchronized audio on by default. Supports 480p, 720p, and 1080p output (1080p uses 10-bit color and H.265/HEVC encoding) and durations from 4 to 30 seconds. The output keeps the aspect ratio of the first-frame image.
 
 ## Example request
 
@@ -660,7 +660,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | `input_image_has_face` | `boolean` | `false` | Turn this on when the start frame contains a real human face. Content filters may block the request if this is not enabled. |
 | `tail_image_url` | `string` | &mdash; | Optional URL of the end-frame image. When provided, the generated video transitions from the start frame to this end frame. Format: uri. |
 | `tail_image_url_has_face` | `boolean` | `false` | Turn this on when the end frame contains a real human face. Content filters may block the request if this is not enabled. |
-| `resolution` | `string` | `"720p"` | Video resolution. 480p for faster generation, 720p for higher quality. One of: 480p, 720p. |
+| `resolution` | `string` | `"720p"` | Video resolution. 480p for faster generation, 720p for balance, 1080p for high quality with 10-bit color (H.265/HEVC output). One of: 480p, 720p, 1080p. |
 | `duration` | `['integer', 'string']` | `"auto"` | Duration of the video in seconds. Supports 4 to 30 seconds, or "auto" to let the model decide based on the prompt. One of: auto, 4, 5, 6, 8, 10, 12, 15, 20, 25, 30. |
 | `generate_audio` | `boolean` | `true` | Whether to generate synchronized audio. |
 | `output_format` | `string` | `"mp4"` | Output video format. mp4 for broad compatibility, mov for high color precision in professional post-production workflows. One of: mp4, mov. |

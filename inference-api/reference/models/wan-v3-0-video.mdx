@@ -13,7 +13,7 @@ description: "Reference-driven video with audio, up to 30s"
 
 WAN 3.0 is a unified video generation model that replaces the separate text-to-video, image-to-video, reference-to-video, and video-edit models of the 2.x line with a single endpoint covering all of them. It generates 2 to 30 second clips at up to 1080P, with generated audio on by default, and supports a smart duration mode that lets the model pick the length from the prompt.
 
-Input works in one of two mutually exclusive modes. All-in-one reference accepts up to 10 images, 5 video clips, and 5 audio clips as combined references for appearance, motion, and voice; refer to them from the prompt as "Image 1", "Video 1" and so on, numbered separately within each type. First and last frame mode instead takes a starting frame and an optional ending frame. Mixing the two modes fails the request.
+Input works in one of two mutually exclusive modes. All-in-one reference accepts up to 10 images, 5 video clips, and 5 audio clips as combined references for appearance, motion, and voice; refer to them from the prompt as @Image 1, @Video 1, @Audio 1 and so on, numbered separately within each type. Alibaba's prompt guide structures a prompt as reference subject + action + dialogue, e.g. "Using the voice from @Audio 1, @Image 1 points at @Image 2 and says, ...", and a reference can be mentioned more than once. First and last frame mode instead takes a starting frame and an optional ending frame. Mixing the two modes fails the request.
 
 WAN 3.0 also accepts document and web page input when thinking mode is enabled, which the Oxen API does not expose yet. Note that it removes the `negative_prompt` and `prompt_extend` parameters that the 2.x models accepted.
 
@@ -630,7 +630,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | Text prompt describing the desired video. Supports Chinese and English. Max 5000 characters. Refer to reference assets as Image 1, Image 2, ... and Video 1, Video 2, ...; images and videos are numbered separately within their own type. |
+| `prompt` | `string` | &mdash; | Text prompt describing the desired video. Max 5000 characters. Refer to reference assets with the @ syntax: @Image 1, @Image 2, ..., @Video 1, ..., @Audio 1, ...; each type is numbered separately. |
 
 ### Optional parameters
 
