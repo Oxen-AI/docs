@@ -1,6 +1,6 @@
 ---
 title: "WAN 3.0"
-description: "Reference-driven video with audio, up to 30s"
+description: "Reference or first/last frame video with audio"
 ---
 
 <CardGroup cols={1}>
@@ -11,11 +11,11 @@ description: "Reference-driven video with audio, up to 30s"
 
 **Model ID:** `wan-v3-0-video`
 
-WAN 3.0 is a unified video generation model that replaces the separate text-to-video, image-to-video, reference-to-video, and video-edit models of the 2.x line with a single endpoint covering all of them. It generates 2 to 30 second clips at up to 1080P, with generated audio on by default, and supports a smart duration mode that lets the model pick the length from the prompt.
+WAN 3.0 Omni is the all-in-one reference mode of Alibaba's WAN 3.0 unified video model. It generates 2 to 30 second clips at up to 1080P, with generated audio on by default, and supports a smart duration mode that lets the model pick the length from the prompt. With no references supplied it generates from the prompt alone, replacing the separate text-to-video and reference-to-video models of the 2.x line.
 
-Input works in one of two mutually exclusive modes. All-in-one reference accepts up to 10 images, 5 video clips, and 5 audio clips as combined references for appearance, motion, and voice; refer to them from the prompt as @Image 1, @Video 1, @Audio 1 and so on, numbered separately within each type. Alibaba's prompt guide structures a prompt as reference subject + action + dialogue, e.g. "Using the voice from @Audio 1, @Image 1 points at @Image 2 and says, ...", and a reference can be mentioned more than once. First and last frame mode instead takes a starting frame and an optional ending frame. Mixing the two modes fails the request.
+It accepts up to 10 images, 5 video clips, and 5 audio clips as combined references for appearance, motion, and voice; refer to them from the prompt as @Image 1, @Video 1, @Audio 1 and so on, numbered separately within each type. Alibaba's prompt guide structures a prompt as reference subject + action + dialogue, e.g. "Using the voice from @Audio 1, @Image 1 points at @Image 2 and says, ...", and a reference can be mentioned more than once.
 
-WAN 3.0 also accepts document and web page input when thinking mode is enabled, which the Oxen API does not expose yet. Note that it removes the `negative_prompt` and `prompt_extend` parameters that the 2.x models accepted.
+It also supports first/last frame generation: supply a first frame image and optionally a last frame to interpolate toward, in place of references. The provider rejects requests that mix frame inputs with reference inputs, so use one mode or the other per request.
 
 ## Example request
 
@@ -78,10 +78,21 @@ WAN 3.0 also accepts document and web page input when thinking mode is enabled, 
           -d '{
           "model": "wan-v3-0-video",
           "prompt": "<prompt>",
-          "resolution": "1080P",
+          "input_images": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_videos": [
+            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+          ],
+          "input_audios": [
+            "https://example.com/audio.mp3"
+          ],
+          "generate_audio": true,
           "aspect_ratio": "adaptive",
-          "duration": 5,
-          "generate_audio": true
+          "resolution": "1080P",
+          "duration": 5
         }'
         ```
 
@@ -98,10 +109,21 @@ WAN 3.0 also accepts document and web page input when thinking mode is enabled, 
             json={
                 "model": "wan-v3-0-video",
                 "prompt": "<prompt>",
-                "resolution": "1080P",
+                "input_images": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_videos": [
+                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+                ],
+                "input_audios": [
+                    "https://example.com/audio.mp3"
+                ],
+                "generate_audio": true,
                 "aspect_ratio": "adaptive",
-                "duration": 5,
-                "generate_audio": true
+                "resolution": "1080P",
+                "duration": 5
             },
         )
         response.raise_for_status()
@@ -122,10 +144,21 @@ WAN 3.0 also accepts document and web page input when thinking mode is enabled, 
           -d '{
           "model": "wan-v3-0-video",
           "prompt": "<prompt>",
-          "resolution": "1080P",
-          "aspect_ratio": "adaptive",
-          "duration": 5,
+          "input_images": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_videos": [
+            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+          ],
+          "input_audios": [
+            "https://example.com/audio.mp3"
+          ],
           "generate_audio": true,
+          "aspect_ratio": "adaptive",
+          "resolution": "1080P",
+          "duration": 5,
           "enable_thinking": false,
           "watermark": false
         }'
@@ -144,10 +177,21 @@ WAN 3.0 also accepts document and web page input when thinking mode is enabled, 
             json={
                 "model": "wan-v3-0-video",
                 "prompt": "<prompt>",
-                "resolution": "1080P",
-                "aspect_ratio": "adaptive",
-                "duration": 5,
+                "input_images": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_videos": [
+                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+                ],
+                "input_audios": [
+                    "https://example.com/audio.mp3"
+                ],
                 "generate_audio": true,
+                "aspect_ratio": "adaptive",
+                "resolution": "1080P",
+                "duration": 5,
                 "enable_thinking": false,
                 "watermark": false
             },
@@ -246,10 +290,21 @@ WAN 3.0 also accepts document and web page input when thinking mode is enabled, 
           -d '{
           "model": "wan-v3-0-video",
           "prompt": "<prompt>",
-          "resolution": "1080P",
+          "input_images": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_videos": [
+            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+          ],
+          "input_audios": [
+            "https://example.com/audio.mp3"
+          ],
+          "generate_audio": true,
           "aspect_ratio": "adaptive",
-          "duration": 5,
-          "generate_audio": true
+          "resolution": "1080P",
+          "duration": 5
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -282,10 +337,21 @@ WAN 3.0 also accepts document and web page input when thinking mode is enabled, 
             json={
                 "model": "wan-v3-0-video",
                 "prompt": "<prompt>",
-                "resolution": "1080P",
+                "input_images": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_videos": [
+                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+                ],
+                "input_audios": [
+                    "https://example.com/audio.mp3"
+                ],
+                "generate_audio": true,
                 "aspect_ratio": "adaptive",
-                "duration": 5,
-                "generate_audio": true
+                "resolution": "1080P",
+                "duration": 5
             },
         )
         enqueue.raise_for_status()
@@ -321,10 +387,21 @@ WAN 3.0 also accepts document and web page input when thinking mode is enabled, 
           -d '{
           "model": "wan-v3-0-video",
           "prompt": "<prompt>",
-          "resolution": "1080P",
-          "aspect_ratio": "adaptive",
-          "duration": 5,
+          "input_images": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_videos": [
+            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+          ],
+          "input_audios": [
+            "https://example.com/audio.mp3"
+          ],
           "generate_audio": true,
+          "aspect_ratio": "adaptive",
+          "resolution": "1080P",
+          "duration": 5,
           "enable_thinking": false,
           "watermark": false
         }' | jq -r '.generations[0].generation_id')
@@ -359,10 +436,21 @@ WAN 3.0 also accepts document and web page input when thinking mode is enabled, 
             json={
                 "model": "wan-v3-0-video",
                 "prompt": "<prompt>",
-                "resolution": "1080P",
-                "aspect_ratio": "adaptive",
-                "duration": 5,
+                "input_images": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_videos": [
+                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+                ],
+                "input_audios": [
+                    "https://example.com/audio.mp3"
+                ],
                 "generate_audio": true,
+                "aspect_ratio": "adaptive",
+                "resolution": "1080P",
+                "duration": 5,
                 "enable_thinking": false,
                 "watermark": false
             },
@@ -473,10 +561,21 @@ WAN 3.0 also accepts document and web page input when thinking mode is enabled, 
           -d '{
           "model": "wan-v3-0-video",
           "prompt": "<prompt>",
-          "resolution": "1080P",
+          "input_images": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_videos": [
+            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+          ],
+          "input_audios": [
+            "https://example.com/audio.mp3"
+          ],
+          "generate_audio": true,
           "aspect_ratio": "adaptive",
-          "duration": 5,
-          "generate_audio": true
+          "resolution": "1080P",
+          "duration": 5
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -506,10 +605,21 @@ WAN 3.0 also accepts document and web page input when thinking mode is enabled, 
             json={
                 "model": "wan-v3-0-video",
                 "prompt": "<prompt>",
-                "resolution": "1080P",
+                "input_images": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_videos": [
+                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+                ],
+                "input_audios": [
+                    "https://example.com/audio.mp3"
+                ],
+                "generate_audio": true,
                 "aspect_ratio": "adaptive",
-                "duration": 5,
-                "generate_audio": true
+                "resolution": "1080P",
+                "duration": 5
             },
         )
         enqueue.raise_for_status()
@@ -546,10 +656,21 @@ WAN 3.0 also accepts document and web page input when thinking mode is enabled, 
           -d '{
           "model": "wan-v3-0-video",
           "prompt": "<prompt>",
-          "resolution": "1080P",
-          "aspect_ratio": "adaptive",
-          "duration": 5,
+          "input_images": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_videos": [
+            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+          ],
+          "input_audios": [
+            "https://example.com/audio.mp3"
+          ],
           "generate_audio": true,
+          "aspect_ratio": "adaptive",
+          "resolution": "1080P",
+          "duration": 5,
           "enable_thinking": false,
           "watermark": false
         }' | jq -r '.generations[0].generation_id')
@@ -581,10 +702,21 @@ WAN 3.0 also accepts document and web page input when thinking mode is enabled, 
             json={
                 "model": "wan-v3-0-video",
                 "prompt": "<prompt>",
-                "resolution": "1080P",
-                "aspect_ratio": "adaptive",
-                "duration": 5,
+                "input_images": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_videos": [
+                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+                ],
+                "input_audios": [
+                    "https://example.com/audio.mp3"
+                ],
                 "generate_audio": true,
+                "aspect_ratio": "adaptive",
+                "resolution": "1080P",
+                "duration": 5,
                 "enable_thinking": false,
                 "watermark": false
             },
@@ -636,10 +768,15 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `resolution` | `string` | `"1080P"` | Output video resolution tier. One of: 480P, 720P, 1080P. |
-| `aspect_ratio` | `string` | `"adaptive"` | Aspect ratio of the generated video. Adaptive lets the model choose, which is usually what you want when supplying a first frame image. One of: adaptive, 16:9, 9:16, 1:1, 4:3, 3:4. |
-| `duration` | `integer` | `5` | Output video duration in seconds. Auto lets the model choose the length from the prompt. One of: -1, 2, 3, 4, 5, 6, 8, 10, 12, 15, 20, 25, 30. |
+| `input_images` | `array<string>` | &mdash; | Reference images for character, object, or scene appearance. Order maps to @Image 1, @Image 2, etc. in the prompt. Up to 10 images, max 20 MB each. JPEG/PNG/BMP/WEBP. |
+| `input_image` | `string` | &mdash; | Optional first frame image the video is generated from. JPEG/PNG/BMP/WEBP, max 20 MB. The output aspect ratio is taken from this image. Cannot be combined with reference images, videos, or audio. Format: uri. |
+| `tail_image_url` | `string` | &mdash; | Optional last frame image. The video interpolates from the first frame to this one. Requires a first frame image; same format constraints. Cannot be combined with reference images, videos, or audio. Format: uri. |
+| `input_videos` | `array<string>` | &mdash; | Reference videos for character or object appearance, motion, voice, or a camera movement to follow. Order maps to @Video 1, @Video 2, etc. in the prompt. Up to 5 clips totalling 15 seconds, max 100 MB each. MP4/MOV. |
+| `input_audios` | `array<string>` | &mdash; | Reference audio used as a voice or sound reference. Order maps to @Audio 1, @Audio 2, etc. in the prompt, e.g. "using the voice from @Audio 1". Up to 5 clips totalling 15 seconds, max 15 MB each. WAV/MP3. |
 | `generate_audio` | `boolean` | `true` | Whether the model generates sound for the video. Pricing is the same either way. |
+| `aspect_ratio` | `string` | `"adaptive"` | Aspect Ratio One of: adaptive, 16:9, 9:16, 1:1, 4:3, 3:4. |
+| `resolution` | `string` | `"1080P"` | Resolution One of: 480P, 720P, 1080P. |
+| `duration` | `integer` | `5` | Duration Range: 2 – 30. |
 | `enable_thinking` | `boolean` | `false` | Enables thinking mode, which lets the model reason about the prompt before generating. Adds processing time. |
 | `seed` | `integer` | &mdash; | Random seed for reproducibility (0-2147483647). |
 | `watermark` | `boolean` | `false` | Adds an 'AI generated' watermark to the bottom-right corner. |

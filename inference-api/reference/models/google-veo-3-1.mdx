@@ -615,6 +615,6 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `input_image` | `string` | &mdash; | Optional first-frame image to animate (image-to-video). Leave empty to generate from the prompt alone. Must be jpeg, png, gif, or webp. Format: uri. |
-| `aspect_ratio` | `string` | `"16:9"` | Video aspect ratio One of: 16:9, 9:16. |
-| `resolution` | `string` | `"1080p"` | Resolution of the generated video. 1080p and 4k require an 8 second duration. One of: 720p, 1080p, 4k. |
-| `duration` | `integer` | `8` | Video duration in seconds. 1080p and 4k require 8 seconds. One of: 4, 6, 8. |
+| `aspect_ratio` | `string` | `"16:9"` | Aspect Ratio One of: 16:9, 9:16. |
+| `resolution` | `string` | `"1080p"` | Resolution One of: 720p, 1080p, 4k. |
+| `duration` | `integer` | `8` | Duration (seconds) Range: 4 – 8. |

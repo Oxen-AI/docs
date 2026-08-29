@@ -605,6 +605,6 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `input_image` | `string` | &mdash; | Optional image used as the first frame. The image must exactly match the target output dimensions. Valid dimensions are 720x1280, 1280x720, 1024x1792, or 1792x1024. Format: uri. |
-| `aspect_ratio` | `string` | `"landscape"` | Target video orientation. Portrait outputs are vertical, landscape outputs are horizontal. Valid dimensions depend on the selected resolution. One of: landscape, portrait. |
-| `resolution` | `string` | `"standard"` | Output resolution. Standard produces 720x1280 (portrait) or 1280x720 (landscape). High produces 1024x1792 (portrait) or 1792x1024 (landscape). One of: standard, high. |
+| `aspect_ratio` | `string` | `"landscape"` | Aspect Ratio One of: landscape, portrait. |
+| `resolution` | `string` | `"standard"` | Resolution One of: standard, high. |
 | `seconds` | `string` | `"4"` | Total video length in seconds. One of: 4, 8, 12. |

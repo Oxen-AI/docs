@@ -124,10 +124,10 @@ Supply keyframes to animate stills, or a source clip to continue it; with neithe
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "resolution": "720p",
-          "aspect_ratio": "auto",
-          "duration": 5,
           "generate_audio": true,
+          "aspect_ratio": "auto",
+          "resolution": "720p",
+          "duration": 5,
           "draft": false,
           "safety_tolerance": 2
         }'
@@ -150,10 +150,10 @@ Supply keyframes to animate stills, or a source clip to continue it; with neithe
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "resolution": "720p",
-                "aspect_ratio": "auto",
-                "duration": 5,
                 "generate_audio": true,
+                "aspect_ratio": "auto",
+                "resolution": "720p",
+                "duration": 5,
                 "draft": false,
                 "safety_tolerance": 2
             },
@@ -331,10 +331,10 @@ Supply keyframes to animate stills, or a source clip to continue it; with neithe
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "resolution": "720p",
-          "aspect_ratio": "auto",
-          "duration": 5,
           "generate_audio": true,
+          "aspect_ratio": "auto",
+          "resolution": "720p",
+          "duration": 5,
           "draft": false,
           "safety_tolerance": 2
         }' | jq -r '.generations[0].generation_id')
@@ -373,10 +373,10 @@ Supply keyframes to animate stills, or a source clip to continue it; with neithe
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "resolution": "720p",
-                "aspect_ratio": "auto",
-                "duration": 5,
                 "generate_audio": true,
+                "aspect_ratio": "auto",
+                "resolution": "720p",
+                "duration": 5,
                 "draft": false,
                 "safety_tolerance": 2
             },
@@ -564,10 +564,10 @@ Supply keyframes to animate stills, or a source clip to continue it; with neithe
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "resolution": "720p",
-          "aspect_ratio": "auto",
-          "duration": 5,
           "generate_audio": true,
+          "aspect_ratio": "auto",
+          "resolution": "720p",
+          "duration": 5,
           "draft": false,
           "safety_tolerance": 2
         }' | jq -r '.generations[0].generation_id')
@@ -603,10 +603,10 @@ Supply keyframes to animate stills, or a source clip to continue it; with neithe
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "resolution": "720p",
-                "aspect_ratio": "auto",
-                "duration": 5,
                 "generate_audio": true,
+                "aspect_ratio": "auto",
+                "resolution": "720p",
+                "duration": 5,
                 "draft": false,
                 "safety_tolerance": 2
             },
@@ -660,9 +660,9 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 |-------|------|---------|-------------|
 | `input_images` | `array<string>` | &mdash; | Images that become frames of the generated video, 1 to 10 in order: one image starts the video, two start and end it, and beyond that the first starts it, the last ends it, and the rest fall evenly in between. They are frames, not references, so the prompt cannot cite them. Leave empty to generate from the prompt alone. Cannot be combined with Continue From Video. |
 | `input_video` | `string` | &mdash; | Clip to extend; the generated video carries on from its final frames. MP4. Cannot be combined with Keyframes. Billed at a higher per-second rate than generating from a prompt or keyframes. Format: uri. |
-| `resolution` | `string` | `"720p"` | Output resolution. 1080p costs more per second. One of: 720p, 1080p. |
-| `aspect_ratio` | `string` | `"auto"` | Aspect ratio of the generated video. Auto lets the model choose. One of: auto, 21:9, 2:1, 16:9, 4:3, 1:1, 3:4, 9:16. |
-| `duration` | `integer` | `5` | Duration in seconds. One of: 5, 6, 7, 8, 9, 10, 12, 15, 18, 20. |
 | `generate_audio` | `boolean` | `true` | Generate synchronized audio for the video. |
+| `aspect_ratio` | `string` | `"auto"` | Aspect Ratio One of: auto, 21:9, 2:1, 16:9, 4:3, 1:1, 3:4, 9:16. |
+| `resolution` | `string` | `"720p"` | Resolution One of: 720p, 1080p. |
+| `duration` | `integer` | `5` | Duration Range: 5 – 20. |
 | `draft` | `boolean` | `false` | Draft mode: rapid, cost-effective exploration at a lower per-second rate. HD only. |
 | `safety_tolerance` | `integer` | `2` | Safety filter strictness, 0 is strictest. One of: 0, 1, 2, 3, 4. |

@@ -435,5 +435,5 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `duration` | `integer` | `5` | Video duration in seconds One of: 5, 10, 15. |
 | `audio_url` | `string` | &mdash; | URL of the audio to use as the background music. If the audio duration exceeds the duration value, the audio is truncated to the first N seconds, and the rest is discarded. Format: uri. |
+| `duration` | `integer` | `5` | Duration (seconds) Range: 5 – 15. |

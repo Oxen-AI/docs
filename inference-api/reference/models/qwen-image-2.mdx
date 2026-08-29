@@ -615,7 +615,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 |-------|------|---------|-------------|
 | `input_image` | `string` | &mdash; | Optional reference image for image editing, style transfer, or image-to-image generation Format: uri. |
 | `match_input_image` | `boolean` | `false` | When true and an image is provided, use the input image's aspect ratio and resolution instead of the aspect_ratio parameter |
-| `aspect_ratio` | `string` | `"16:9"` | Aspect ratio of the generated image One of: 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 2:1, 1:2. |
+| `aspect_ratio` | `string` | `"16:9"` | Aspect Ratio One of: 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 2:1, 1:2. |
 | `enable_prompt_expansion` | `boolean` | `true` | Automatically expand and optimize the prompt for better results |
 | `negative_prompt` | `string` | &mdash; | Negative prompt to specify elements to avoid in the generated image |
 | `seed` | `integer` | &mdash; | Random seed for reproducible generation. Range: 0-2147483647 |

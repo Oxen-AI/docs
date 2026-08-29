@@ -1,28 +1,32 @@
 ---
-title: "GPT Image 2"
-description: "High-fidelity images with near-perfect text rendering"
+title: "FLUX Video Upscaler"
+description: "Video super-resolution to 4K, precise or creative"
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try GPT Image 2 in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=gpt-image-2">
+  <Card title="Try FLUX Video Upscaler in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=flux-video-upscaler">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `gpt-image-2`
+**Model ID:** `flux-video-upscaler`
 
-GPT Image 2 is OpenAI's next-generation image model. It produces photorealistic images with strong prompt adherence, pixel-perfect text rendering, and accurate handling of dense or multilingual layouts, making it suitable for infographics, UI mockups, product photography, and architectural visualization. Pass a reference image to edit it, or omit one to generate from the prompt alone.
+FLUX Video Upscaler raises the resolution of an existing clip using FLUX 3 super-resolution, up to 1080p, 2K, or 4K. It takes MP4 input up to 20 seconds and 50 MB.
+
+Two modes trade fidelity against detail. Precise stays faithful to the source, which suits footage that must match a reference. Creative synthesizes detail the original never had and takes an optional prompt to steer what it invents, which suits stylized or generated material. Creative costs more per second at every resolution.
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=gpt-image-2) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=flux-video-upscaler) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
   <Tab title="Sync">
 
-    See the [image editing reference](/inference-api/reference/image_editing) for more details.
+    This blocks until the video is ready (typically 5-15 minutes). Prefer **Async** or **Async with SSE** for anything beyond quick experimentation.
+
+    See the [video generation reference](/inference-api/reference/video_generation) for more details.
 
     <Tabs>
       <Tab title="Minimal">
@@ -30,12 +34,12 @@ GPT Image 2 is OpenAI's next-generation image model. It produces photorealistic 
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
+        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "gpt-image-2",
-          "prompt": "<prompt>"
+          "model": "flux-video-upscaler",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }'
         ```
 
@@ -44,14 +48,14 @@ GPT Image 2 is OpenAI's next-generation image model. It produces photorealistic 
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/edit",
+            "https://hub.oxen.ai/api/ai/videos/generate",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "gpt-image-2",
-                "prompt": "<prompt>"
+                "model": "flux-video-upscaler",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         response.raise_for_status()
@@ -66,15 +70,13 @@ GPT Image 2 is OpenAI's next-generation image model. It produces photorealistic 
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
+        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "gpt-image-2",
-          "prompt": "<prompt>",
-          "input_image": [
-            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ]
+          "model": "flux-video-upscaler",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -83,17 +85,15 @@ GPT Image 2 is OpenAI's next-generation image model. It produces photorealistic 
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/edit",
+            "https://hub.oxen.ai/api/ai/videos/generate",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "gpt-image-2",
-                "prompt": "<prompt>",
-                "input_image": [
-                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ]
+                "model": "flux-video-upscaler",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -108,19 +108,16 @@ GPT Image 2 is OpenAI's next-generation image model. It produces photorealistic 
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
+        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "gpt-image-2",
+          "model": "flux-video-upscaler",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "prompt": "<prompt>",
-          "input_image": [
-            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ],
-          "aspect_ratio": "16:9",
-          "resolution": "2K",
-          "quality": "high",
-          "output_format": "png"
+          "upscale_factor": 2,
+          "creativity": 0,
+          "safety_tolerance": 2
         }'
         ```
 
@@ -129,21 +126,18 @@ GPT Image 2 is OpenAI's next-generation image model. It produces photorealistic 
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/edit",
+            "https://hub.oxen.ai/api/ai/videos/generate",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "gpt-image-2",
+                "model": "flux-video-upscaler",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "prompt": "<prompt>",
-                "input_image": [
-                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ],
-                "aspect_ratio": "16:9",
-                "resolution": "2K",
-                "quality": "high",
-                "output_format": "png"
+                "upscale_factor": 2,
+                "creativity": 0,
+                "safety_tolerance": 2
             },
         )
         response.raise_for_status()
@@ -171,8 +165,8 @@ GPT Image 2 is OpenAI's next-generation image model. It produces photorealistic 
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "gpt-image-2",
-          "prompt": "<prompt>"
+          "model": "flux-video-upscaler",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -203,8 +197,8 @@ GPT Image 2 is OpenAI's next-generation image model. It produces photorealistic 
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "gpt-image-2",
-                "prompt": "<prompt>"
+                "model": "flux-video-upscaler",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         enqueue.raise_for_status()
@@ -238,11 +232,9 @@ GPT Image 2 is OpenAI's next-generation image model. It produces photorealistic 
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "gpt-image-2",
-          "prompt": "<prompt>",
-          "input_image": [
-            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ]
+          "model": "flux-video-upscaler",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -273,11 +265,9 @@ GPT Image 2 is OpenAI's next-generation image model. It produces photorealistic 
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "gpt-image-2",
-                "prompt": "<prompt>",
-                "input_image": [
-                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ]
+                "model": "flux-video-upscaler",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -311,15 +301,12 @@ GPT Image 2 is OpenAI's next-generation image model. It produces photorealistic 
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "gpt-image-2",
+          "model": "flux-video-upscaler",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "prompt": "<prompt>",
-          "input_image": [
-            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ],
-          "aspect_ratio": "16:9",
-          "resolution": "2K",
-          "quality": "high",
-          "output_format": "png"
+          "upscale_factor": 2,
+          "creativity": 0,
+          "safety_tolerance": 2
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -350,15 +337,12 @@ GPT Image 2 is OpenAI's next-generation image model. It produces photorealistic 
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "gpt-image-2",
+                "model": "flux-video-upscaler",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "prompt": "<prompt>",
-                "input_image": [
-                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ],
-                "aspect_ratio": "16:9",
-                "resolution": "2K",
-                "quality": "high",
-                "output_format": "png"
+                "upscale_factor": 2,
+                "creativity": 0,
+                "safety_tolerance": 2
             },
         )
         enqueue.raise_for_status()
@@ -400,8 +384,8 @@ GPT Image 2 is OpenAI's next-generation image model. It produces photorealistic 
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "gpt-image-2",
-          "prompt": "<prompt>"
+          "model": "flux-video-upscaler",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -429,8 +413,8 @@ GPT Image 2 is OpenAI's next-generation image model. It produces photorealistic 
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "gpt-image-2",
-                "prompt": "<prompt>"
+                "model": "flux-video-upscaler",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         enqueue.raise_for_status()
@@ -465,11 +449,9 @@ GPT Image 2 is OpenAI's next-generation image model. It produces photorealistic 
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "gpt-image-2",
-          "prompt": "<prompt>",
-          "input_image": [
-            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ]
+          "model": "flux-video-upscaler",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -497,11 +479,9 @@ GPT Image 2 is OpenAI's next-generation image model. It produces photorealistic 
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "gpt-image-2",
-                "prompt": "<prompt>",
-                "input_image": [
-                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ]
+                "model": "flux-video-upscaler",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -536,15 +516,12 @@ GPT Image 2 is OpenAI's next-generation image model. It produces photorealistic 
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "gpt-image-2",
+          "model": "flux-video-upscaler",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "prompt": "<prompt>",
-          "input_image": [
-            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ],
-          "aspect_ratio": "16:9",
-          "resolution": "2K",
-          "quality": "high",
-          "output_format": "png"
+          "upscale_factor": 2,
+          "creativity": 0,
+          "safety_tolerance": 2
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -572,15 +549,12 @@ GPT Image 2 is OpenAI's next-generation image model. It produces photorealistic 
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "gpt-image-2",
+                "model": "flux-video-upscaler",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "prompt": "<prompt>",
-                "input_image": [
-                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ],
-                "aspect_ratio": "16:9",
-                "resolution": "2K",
-                "quality": "high",
-                "output_format": "png"
+                "upscale_factor": 2,
+                "creativity": 0,
+                "safety_tolerance": 2
             },
         )
         enqueue.raise_for_status()
@@ -615,7 +589,7 @@ GPT Image 2 is OpenAI's next-generation image model. It produces photorealistic 
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/gpt-image-2
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/flux-video-upscaler
 ```
 
 ## Request parameters
@@ -624,15 +598,13 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | Text description of the image to generate. |
+| `input_video` | `string` | &mdash; | Clip to upscale. MP4, up to 20 seconds and 50 MB. Format: uri. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `input_image` | `array<string>` | &mdash; | Optional reference image(s) to edit. Leave empty to generate from the prompt alone. |
-| `mask_url` | `string` | &mdash; | Optional mask image URL. White pixels mark regions to edit; black pixels are preserved. Leave empty to edit the whole image. Format: uri. |
-| `aspect_ratio` | `string` | `"16:9"` | Aspect Ratio One of: auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 21:9, 9:21. |
-| `resolution` | `string` | `"2K"` | Resolution One of: 1K, 2K, 4K. |
-| `quality` | `string` | `"high"` | Output quality tier: low, medium, or high. Higher quality renders more detail and costs more. One of: low, medium, high. |
-| `output_format` | `string` | `"png"` | File format for the generated image. One of: png, jpeg, webp. |
+| `prompt` | `string` | &mdash; | Optional steer for the detail Creative mode invents. Ignored in Precise mode. |
+| `upscale_factor` | `number` | `2` | How much to enlarge the clip, keeping its aspect ratio. Cost follows the resolution this lands on. Range: 1 – 4. |
+| `creativity` | `integer` | `0` | Precise stays faithful to the source. Creative invents detail the original lacks and costs more per second. One of: 0, 1. |
+| `safety_tolerance` | `integer` | `2` | Moderation strictness, where lower is stricter. |
