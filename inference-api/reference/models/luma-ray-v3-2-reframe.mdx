@@ -39,8 +39,8 @@ The prompt describes the content to paint into the newly exposed canvas area, an
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "luma-ray-v3-2-reframe",
-          "prompt": "<prompt>",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "prompt": "<prompt>",
           "aspect_ratio": "3:4"
         }'
         ```
@@ -57,8 +57,8 @@ The prompt describes the content to paint into the newly exposed canvas area, an
             },
             json={
                 "model": "luma-ray-v3-2-reframe",
-                "prompt": "<prompt>",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "prompt": "<prompt>",
                 "aspect_ratio": "3:4"
             },
         )
@@ -79,8 +79,8 @@ The prompt describes the content to paint into the newly exposed canvas area, an
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "luma-ray-v3-2-reframe",
-          "prompt": "<prompt>",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "prompt": "<prompt>",
           "aspect_ratio": "3:4",
           "resolution": "540p"
         }'
@@ -98,8 +98,8 @@ The prompt describes the content to paint into the newly exposed canvas area, an
             },
             json={
                 "model": "luma-ray-v3-2-reframe",
-                "prompt": "<prompt>",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "prompt": "<prompt>",
                 "aspect_ratio": "3:4",
                 "resolution": "540p"
             },
@@ -130,8 +130,8 @@ The prompt describes the content to paint into the newly exposed canvas area, an
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "luma-ray-v3-2-reframe",
-          "prompt": "<prompt>",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "prompt": "<prompt>",
           "aspect_ratio": "3:4"
         }' | jq -r '.generations[0].generation_id')
 
@@ -164,8 +164,8 @@ The prompt describes the content to paint into the newly exposed canvas area, an
             headers=HEADERS,
             json={
                 "model": "luma-ray-v3-2-reframe",
-                "prompt": "<prompt>",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "prompt": "<prompt>",
                 "aspect_ratio": "3:4"
             },
         )
@@ -201,8 +201,8 @@ The prompt describes the content to paint into the newly exposed canvas area, an
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "luma-ray-v3-2-reframe",
-          "prompt": "<prompt>",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "prompt": "<prompt>",
           "aspect_ratio": "3:4",
           "resolution": "540p"
         }' | jq -r '.generations[0].generation_id')
@@ -236,8 +236,8 @@ The prompt describes the content to paint into the newly exposed canvas area, an
             headers=HEADERS,
             json={
                 "model": "luma-ray-v3-2-reframe",
-                "prompt": "<prompt>",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "prompt": "<prompt>",
                 "aspect_ratio": "3:4",
                 "resolution": "540p"
             },
@@ -282,8 +282,8 @@ The prompt describes the content to paint into the newly exposed canvas area, an
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "luma-ray-v3-2-reframe",
-          "prompt": "<prompt>",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "prompt": "<prompt>",
           "aspect_ratio": "3:4"
         }' | jq -r '.generations[0].generation_id')
 
@@ -313,8 +313,8 @@ The prompt describes the content to paint into the newly exposed canvas area, an
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "luma-ray-v3-2-reframe",
-                "prompt": "<prompt>",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "prompt": "<prompt>",
                 "aspect_ratio": "3:4"
             },
         )
@@ -351,8 +351,8 @@ The prompt describes the content to paint into the newly exposed canvas area, an
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "luma-ray-v3-2-reframe",
-          "prompt": "<prompt>",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "prompt": "<prompt>",
           "aspect_ratio": "3:4",
           "resolution": "540p"
         }' | jq -r '.generations[0].generation_id')
@@ -383,8 +383,8 @@ The prompt describes the content to paint into the newly exposed canvas area, an
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "luma-ray-v3-2-reframe",
-                "prompt": "<prompt>",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "prompt": "<prompt>",
                 "aspect_ratio": "3:4",
                 "resolution": "540p"
             },
@@ -430,13 +430,13 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | Text prompt describing the content to paint into the newly exposed canvas area when reframing to the target aspect ratio. |
 | `input_video` | `string` | &mdash; | URL of the source video to reframe (must be 30 seconds or less). Format: uri. |
-| `aspect_ratio` | `string` | &mdash; | Target aspect ratio for the reframed video. One of: 3:4, 4:3, 1:1, 9:16, 16:9, 21:9. |
+| `prompt` | `string` | &mdash; | Text prompt describing the content to paint into the newly exposed canvas area when reframing to the target aspect ratio. |
+| `aspect_ratio` | `string` | &mdash; | Aspect Ratio One of: 3:4, 4:3, 1:1, 9:16, 16:9, 21:9. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `resolution` | `string` | `"540p"` | Resolution of the reframed video. Higher resolutions cost more. One of: 540p, 720p, 1080p. |
+| `resolution` | `string` | `"540p"` | Resolution One of: 540p, 720p, 1080p. |
 | `source_position` | `object` | &mdash; | Optional normalized source rectangle controlling where the source video sits in the output canvas. |

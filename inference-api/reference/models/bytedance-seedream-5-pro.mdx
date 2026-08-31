@@ -633,7 +633,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `input_image` | `array<string>` | &mdash; | Optional reference image URLs for image-to-image editing. Provide one image for single-image editing or multiple for multi-reference fusion; reference them in the prompt as @Image1, @Image2, etc. Up to 10 images. |
-| `aspect_ratio` | `string` | `"1:1"` | Aspect ratio of the generated image. Combined with the resolution to set the output dimensions. One of: 1:1, 4:3, 3:4, 16:9, 9:16, 3:2, 2:3, 21:9. |
+| `aspect_ratio` | `string` | `"1:1"` | Aspect Ratio One of: 1:1, 4:3, 3:4, 16:9, 9:16, 3:2, 2:3, 21:9. |
 | `size` | `string` | `"2K"` | Resolution level. Combined with the aspect ratio to set the output dimensions. One of: 1K, 2K. |
 | `output_format` | `string` | `"png"` | Output image format. One of: png, jpeg. |
 | `watermark` | `boolean` | `false` | Whether to add an 'AI generated' watermark. |

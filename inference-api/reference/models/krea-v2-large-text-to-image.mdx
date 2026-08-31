@@ -623,6 +623,6 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `image_style_references` | `array<object>` | &mdash; | Optional list of reference image URLs that guide the style of the generated image. At most 10 entries. |
-| `aspect_ratio` | `string` | `"1:1"` | Aspect ratio of the generated image. One of: 1:1, 4:3, 3:2, 16:9, 2.35:1, 4:5, 2:3, 9:16. |
+| `aspect_ratio` | `string` | `"1:1"` | Aspect Ratio One of: 1:1, 4:3, 3:2, 16:9, 2.35:1, 4:5, 2:3, 9:16. |
 | `creativity` | `string` | `"medium"` | Controls how loosely the model interprets the prompt. Higher means more creative results that may drift from the prompt; low or raw values stay closer to the prompt. One of: raw, low, medium, high. |
 | `seed` | `integer` | &mdash; | Random seed for reproducible generation. |

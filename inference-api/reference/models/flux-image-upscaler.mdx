@@ -1,39 +1,24 @@
 ---
-title: "FLUX.1-Kontext [dev]"
-description: "In-context image editing model"
+title: "FLUX Image Upscaler"
+description: "Detail-preserving image upscaling up to 4x"
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try FLUX.1-Kontext [dev] in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=flux-kontext-dev">
+  <Card title="Try FLUX Image Upscaler in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=flux-image-upscaler">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `flux-kontext-dev`
+**Model ID:** `flux-image-upscaler`
 
-black-forest-labs/FLUX.1-Kontext-dev is a 12 billion parameter **multimodal LVM (vision model)** designed for high-fidelity image editing and generation using both text and image inputs.
+FLUX Image Upscaler enlarges a still up to 4x while adding detail, holding natural color and keeping artifacts down. It suits photographs, product shots, and generated images that need to print or display larger than they were made.
 
-It excels in **iterative image editing**, maintaining character, style, and object consistency over multiple successive edits with minimal visual drift. The model reliably performs both local and global modifications, and is noted for its robust contextual understanding and ability to process instructions for precise regional edits or full scene transformations.
-
-Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
-- Preserving unique elements (like characters or objects) across different scenes and environments, even after several edits.
-- Generating novel images with style or character references guided by either text or example images.
-
-| Metric             | Value          |
-|--------------------|---------------|
-| Parameter Count    | 12 billion     |
-| Mixture of Experts | No             |
-| Context Length     | 0K (not applicable for vision model) |
-| Multilingual       | No             |
-| Quantized*         | Yes            |
-| Precision*         | FP8            |
-
-*_Quantization is specific to the inference provider and the model may be offered with different quantization levels by other providers._
+Creativity controls how far the model may depart from the source: low values restore detail conservatively, higher values invent texture where the original has none.
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=flux-kontext-dev) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=flux-image-upscaler) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
@@ -51,8 +36,7 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "flux-kontext-dev",
-          "prompt": "<prompt>",
+          "model": "flux-image-upscaler",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }'
         ```
@@ -68,8 +52,7 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "flux-kontext-dev",
-                "prompt": "<prompt>",
+                "model": "flux-image-upscaler",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
@@ -89,15 +72,11 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "flux-kontext-dev",
-          "prompt": "<prompt>",
+          "model": "flux-image-upscaler",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "aspect_ratio": "16:9",
-          "num_inference_steps": 28,
-          "guidance": 2.5,
-          "output_format": "webp",
-          "output_quality": 80,
-          "disable_safety_checker": false
+          "upscale_factor": 2,
+          "creativity": 0.3,
+          "num_inference_steps": 20
         }'
         ```
 
@@ -112,15 +91,11 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "flux-kontext-dev",
-                "prompt": "<prompt>",
+                "model": "flux-image-upscaler",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "aspect_ratio": "16:9",
-                "num_inference_steps": 28,
-                "guidance": 2.5,
-                "output_format": "webp",
-                "output_quality": 80,
-                "disable_safety_checker": false
+                "upscale_factor": 2,
+                "creativity": 0.3,
+                "num_inference_steps": 20
             },
         )
         response.raise_for_status()
@@ -148,8 +123,7 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "flux-kontext-dev",
-          "prompt": "<prompt>",
+          "model": "flux-image-upscaler",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }' | jq -r '.generations[0].generation_id')
 
@@ -181,8 +155,7 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "flux-kontext-dev",
-                "prompt": "<prompt>",
+                "model": "flux-image-upscaler",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
@@ -217,15 +190,11 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "flux-kontext-dev",
-          "prompt": "<prompt>",
+          "model": "flux-image-upscaler",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "aspect_ratio": "16:9",
-          "num_inference_steps": 28,
-          "guidance": 2.5,
-          "output_format": "webp",
-          "output_quality": 80,
-          "disable_safety_checker": false
+          "upscale_factor": 2,
+          "creativity": 0.3,
+          "num_inference_steps": 20
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -256,15 +225,11 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "flux-kontext-dev",
-                "prompt": "<prompt>",
+                "model": "flux-image-upscaler",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "aspect_ratio": "16:9",
-                "num_inference_steps": 28,
-                "guidance": 2.5,
-                "output_format": "webp",
-                "output_quality": 80,
-                "disable_safety_checker": false
+                "upscale_factor": 2,
+                "creativity": 0.3,
+                "num_inference_steps": 20
             },
         )
         enqueue.raise_for_status()
@@ -306,8 +271,7 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "flux-kontext-dev",
-          "prompt": "<prompt>",
+          "model": "flux-image-upscaler",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }' | jq -r '.generations[0].generation_id')
 
@@ -336,8 +300,7 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "flux-kontext-dev",
-                "prompt": "<prompt>",
+                "model": "flux-image-upscaler",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
@@ -373,15 +336,11 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "flux-kontext-dev",
-          "prompt": "<prompt>",
+          "model": "flux-image-upscaler",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "aspect_ratio": "16:9",
-          "num_inference_steps": 28,
-          "guidance": 2.5,
-          "output_format": "webp",
-          "output_quality": 80,
-          "disable_safety_checker": false
+          "upscale_factor": 2,
+          "creativity": 0.3,
+          "num_inference_steps": 20
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -409,15 +368,11 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "flux-kontext-dev",
-                "prompt": "<prompt>",
+                "model": "flux-image-upscaler",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "aspect_ratio": "16:9",
-                "num_inference_steps": 28,
-                "guidance": 2.5,
-                "output_format": "webp",
-                "output_quality": 80,
-                "disable_safety_checker": false
+                "upscale_factor": 2,
+                "creativity": 0.3,
+                "num_inference_steps": 20
             },
         )
         enqueue.raise_for_status()
@@ -452,7 +407,7 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/flux-kontext-dev
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/flux-image-upscaler
 ```
 
 ## Request parameters
@@ -461,17 +416,13 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | Text description of what you want to generate, or the instruction on how to edit the given image. |
-| `input_image` | `string` | &mdash; | Image to use as reference. Must be jpeg, png, gif, or webp. Format: uri. |
+| `input_image` | `string` | &mdash; | Image to upscale. Must be jpg, jpeg, png, webp, gif, or avif. Format: uri. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `aspect_ratio` | `string` | `"16:9"` | Aspect Ratio One of: 1:1, 16:9, 21:9, 3:2, 2:3, 4:5, 5:4, 3:4, 4:3, 9:16, 9:21, match_input_image. |
-| `num_inference_steps` | `integer` | `28` | Number of inference steps Range: 4 – 50. |
-| `guidance` | `number` | `2.5` | Guidance scale for generation Range: 0 – 10. |
-| `seed` | `integer` | &mdash; | Random seed for reproducible generation. Leave blank for random. |
-| `output_format` | `string` | `"webp"` | Output image format One of: webp, jpg, png. |
-| `output_quality` | `integer` | `80` | Quality when saving the output images, from 0 to 100. 100 is best quality, 0 is lowest quality. Not relevant for .png outputs Range: 0 – 100. |
-| `disable_safety_checker` | `boolean` | `false` | Disable NSFW safety checker |
+| `upscale_factor` | `number` | `2` | How much to enlarge the image. Cost follows the output area, so 4x costs roughly four times 2x. Range: 1 – 4. |
+| `creativity` | `number` | `0.3` | How far the model may depart from the source. Low values restore detail conservatively, high values invent new texture. Range: 0 – 1. |
+| `num_inference_steps` | `integer` | `20` | Number of denoising steps. More steps refine detail and take longer. Range: 4 – 50. |
+| `seed` | `integer` | &mdash; | Random seed. Set for reproducible output. |

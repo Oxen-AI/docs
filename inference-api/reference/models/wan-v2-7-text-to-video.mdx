@@ -434,11 +434,11 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `aspect_ratio` | `string` | `"16:9"` | Aspect ratio of the generated video. One of: 16:9, 9:16, 1:1, 4:3, 3:4. |
-| `resolution` | `string` | `"1080P"` | Output video resolution tier. One of: 720P, 1080P. |
-| `duration` | `integer` | `5` | Output video duration in seconds (2-15). Range: 2 – 15. |
-| `negative_prompt` | `string` | &mdash; | Content to avoid in the video. Supports Chinese and English. Max 500 characters. |
 | `audio_url` | `string` | &mdash; | URL of driving audio. Supports WAV and MP3. Duration: 2-30s. Max 15 MB. If omitted, the model auto-generates matching background audio. Format: uri. |
+| `aspect_ratio` | `string` | `"16:9"` | Aspect Ratio One of: 16:9, 9:16, 1:1, 4:3, 3:4. |
+| `resolution` | `string` | `"1080P"` | Resolution One of: 720P, 1080P. |
+| `duration` | `integer` | `5` | Duration Range: 2 – 15. |
+| `negative_prompt` | `string` | &mdash; | Content to avoid in the video. Supports Chinese and English. Max 500 characters. |
 | `prompt_extend` | `boolean` | `true` | Whether the model rewrites short prompts to improve quality. Adds processing time. |
 | `watermark` | `boolean` | `false` | Adds an 'AI-generated' watermark to the bottom-right corner. |
 | `seed` | `integer` | &mdash; | Random seed for reproducibility (0-2147483647). Range: 0 – 2147483647. |

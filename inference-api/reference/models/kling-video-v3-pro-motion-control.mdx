@@ -449,5 +449,5 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `keep_original_sound` | `boolean` | `true` | Whether to keep the original sound from the reference video. |
 | `elements` | `array<object>` | &mdash; | Optional element for facial consistency binding. Upload a facial element to enhance identity preservation in the generated video. Only 1 element is supported. Reference in prompt as @Element1. Element binding is only supported when character_orientation is 'video'. |
+| `keep_original_sound` | `boolean` | `true` | Whether to keep the original sound from the reference video. |

@@ -124,11 +124,11 @@ Some other noteworthy features of LTX-2.3 22B - Image to Video include multi-key
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "last_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "task": "image_to_video",
-          "resolution": "1080p",
-          "duration": 6,
+          "generate_audio": true,
           "aspect_ratio": "16:9",
-          "fps": 25,
-          "generate_audio": true
+          "duration": 6,
+          "resolution": "1080p",
+          "fps": 25
         }'
         ```
 
@@ -148,11 +148,11 @@ Some other noteworthy features of LTX-2.3 22B - Image to Video include multi-key
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "last_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "task": "image_to_video",
-                "resolution": "1080p",
-                "duration": 6,
+                "generate_audio": true,
                 "aspect_ratio": "16:9",
-                "fps": 25,
-                "generate_audio": true
+                "duration": 6,
+                "resolution": "1080p",
+                "fps": 25
             },
         )
         response.raise_for_status()
@@ -323,11 +323,11 @@ Some other noteworthy features of LTX-2.3 22B - Image to Video include multi-key
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "last_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "task": "image_to_video",
-          "resolution": "1080p",
-          "duration": 6,
+          "generate_audio": true,
           "aspect_ratio": "16:9",
-          "fps": 25,
-          "generate_audio": true
+          "duration": 6,
+          "resolution": "1080p",
+          "fps": 25
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -363,11 +363,11 @@ Some other noteworthy features of LTX-2.3 22B - Image to Video include multi-key
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "last_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "task": "image_to_video",
-                "resolution": "1080p",
-                "duration": 6,
+                "generate_audio": true,
                 "aspect_ratio": "16:9",
-                "fps": 25,
-                "generate_audio": true
+                "duration": 6,
+                "resolution": "1080p",
+                "fps": 25
             },
         )
         enqueue.raise_for_status()
@@ -548,11 +548,11 @@ Some other noteworthy features of LTX-2.3 22B - Image to Video include multi-key
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "last_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "task": "image_to_video",
-          "resolution": "1080p",
-          "duration": 6,
+          "generate_audio": true,
           "aspect_ratio": "16:9",
-          "fps": 25,
-          "generate_audio": true
+          "duration": 6,
+          "resolution": "1080p",
+          "fps": 25
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -585,11 +585,11 @@ Some other noteworthy features of LTX-2.3 22B - Image to Video include multi-key
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "last_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "task": "image_to_video",
-                "resolution": "1080p",
-                "duration": 6,
+                "generate_audio": true,
                 "aspect_ratio": "16:9",
-                "fps": 25,
-                "generate_audio": true
+                "duration": 6,
+                "resolution": "1080p",
+                "fps": 25
             },
         )
         enqueue.raise_for_status()
@@ -642,8 +642,8 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | `input_image` | `string` | &mdash; | First frame image for image-to-video generation Format: uri. |
 | `last_frame_image` | `string` | &mdash; | Last frame image. When provided, the video interpolates between the first frame and this last frame. Format: uri. |
 | `task` | `string` | `"image_to_video"` | The generation task (fixed for this model) One of: image_to_video. |
-| `resolution` | `string` | `"1080p"` | Resolution quality of the generated video One of: 720p, 1080p, 2k, 4k. |
-| `duration` | `integer` | `6` | Duration of the video in seconds One of: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10. |
-| `aspect_ratio` | `string` | `"16:9"` | Aspect ratio of the generated video One of: 16:9, 9:16. |
-| `fps` | `integer` | `25` | Frame rate in frames per second One of: 24, 25, 48, 50. |
 | `generate_audio` | `boolean` | `true` | Generate audio for the video |
+| `aspect_ratio` | `string` | `"16:9"` | Aspect Ratio One of: 16:9, 9:16. |
+| `duration` | `integer` | `6` | Duration Range: 6 – 10. |
+| `resolution` | `string` | `"1080p"` | Resolution One of: 720p, 1080p, 2k, 4k. |
+| `fps` | `integer` | `25` | Frame rate in frames per second One of: 24, 25, 48, 50. |

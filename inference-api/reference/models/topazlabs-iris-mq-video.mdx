@@ -79,12 +79,12 @@ Use this model when restoring faces in compressed web video, video calls, or oth
           "resolution": "1080p",
           "interpolate_frames": false,
           "target_fps": 30,
-          "blur": 0,
           "compression": 0,
           "details": 0,
-          "grain": 0.05,
+          "noise": 0,
+          "blur": 0,
           "halo": 0,
-          "noise": 0
+          "grain": 0.05
         }'
         ```
 
@@ -104,12 +104,12 @@ Use this model when restoring faces in compressed web video, video calls, or oth
                 "resolution": "1080p",
                 "interpolate_frames": false,
                 "target_fps": 30,
-                "blur": 0,
                 "compression": 0,
                 "details": 0,
-                "grain": 0.05,
+                "noise": 0,
+                "blur": 0,
                 "halo": 0,
-                "noise": 0
+                "grain": 0.05
             },
         )
         response.raise_for_status()
@@ -209,12 +209,12 @@ Use this model when restoring faces in compressed web video, video calls, or oth
           "resolution": "1080p",
           "interpolate_frames": false,
           "target_fps": 30,
-          "blur": 0,
           "compression": 0,
           "details": 0,
-          "grain": 0.05,
+          "noise": 0,
+          "blur": 0,
           "halo": 0,
-          "noise": 0
+          "grain": 0.05
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -250,12 +250,12 @@ Use this model when restoring faces in compressed web video, video calls, or oth
                 "resolution": "1080p",
                 "interpolate_frames": false,
                 "target_fps": 30,
-                "blur": 0,
                 "compression": 0,
                 "details": 0,
-                "grain": 0.05,
+                "noise": 0,
+                "blur": 0,
                 "halo": 0,
-                "noise": 0
+                "grain": 0.05
             },
         )
         enqueue.raise_for_status()
@@ -367,12 +367,12 @@ Use this model when restoring faces in compressed web video, video calls, or oth
           "resolution": "1080p",
           "interpolate_frames": false,
           "target_fps": 30,
-          "blur": 0,
           "compression": 0,
           "details": 0,
-          "grain": 0.05,
+          "noise": 0,
+          "blur": 0,
           "halo": 0,
-          "noise": 0
+          "grain": 0.05
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -405,12 +405,12 @@ Use this model when restoring faces in compressed web video, video calls, or oth
                 "resolution": "1080p",
                 "interpolate_frames": false,
                 "target_fps": 30,
-                "blur": 0,
                 "compression": 0,
                 "details": 0,
-                "grain": 0.05,
+                "noise": 0,
+                "blur": 0,
                 "halo": 0,
-                "noise": 0
+                "grain": 0.05
             },
         )
         enqueue.raise_for_status()
@@ -460,13 +460,13 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `resolution` | `string` | `"1080p"` | Target output resolution. One of: 720p, 1080p, 2k, 4k. |
+| `resolution` | `string` | `"1080p"` | One of: 720p, 1080p, 2k, 4k. |
 | `interpolate_frames` | `boolean` | `false` | Increase the output frame rate by generating new frames. More expensive. |
 | `target_fps` | `number` | `30` | Output frame rate after interpolation. One of: 24, 23.976, 25, 29.97, 30, 50, 59.94, 60. |
-| `blur` | `number` | `0` | Anti-blur / sharpening. Higher values produce a sharper result. Range: -1 – 1. |
 | `compression` | `number` | `0` | Reduces compression artifacts. Higher values remove more artifacts. Range: -1 – 1. |
 | `details` | `number` | `0` | Detail enhancement. Higher values boost fine detail. Range: -1 – 1. |
+| `noise` | `number` | `0` | Noise handling. Negative reduces noise, positive adds grain-like noise. Range: -1 – 1. |
+| `blur` | `number` | `0` | Anti-blur / sharpening. Higher values produce a sharper result. Range: -1 – 1. |
+| `halo` | `number` | `0` | Halo and ringing reduction. Higher values suppress halos more strongly. Range: -1 – 1. |
 | `grain` | `number` | `0.05` | Film grain intensity. Range: 0 – 0.1. |
 | `grain_type` | `string` | &mdash; | Film grain style. One of: silver_rich, gaussian, grey. |
-| `halo` | `number` | `0` | Halo and ringing reduction. Higher values suppress halos more strongly. Range: -1 – 1. |
-| `noise` | `number` | `0` | Noise handling. Negative reduces noise, positive adds grain-like noise. Range: -1 – 1. |

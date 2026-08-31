@@ -90,9 +90,9 @@ The model returns an MP4 preview of the HDR result for quick inspection alongsid
           "prompt": "<prompt>",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "num_frames": 121,
+          "generate_audio": true,
           "resolution": "auto",
           "frames_per_second": 24,
-          "generate_audio": true,
           "video_quality": "high"
         }'
         ```
@@ -112,9 +112,9 @@ The model returns an MP4 preview of the HDR result for quick inspection alongsid
                 "prompt": "<prompt>",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "num_frames": 121,
+                "generate_audio": true,
                 "resolution": "auto",
                 "frames_per_second": 24,
-                "generate_audio": true,
                 "video_quality": "high"
             },
         )
@@ -216,9 +216,9 @@ The model returns an MP4 preview of the HDR result for quick inspection alongsid
           "prompt": "<prompt>",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "num_frames": 121,
+          "generate_audio": true,
           "resolution": "auto",
           "frames_per_second": 24,
-          "generate_audio": true,
           "video_quality": "high"
         }' | jq -r '.generations[0].generation_id')
 
@@ -254,9 +254,9 @@ The model returns an MP4 preview of the HDR result for quick inspection alongsid
                 "prompt": "<prompt>",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "num_frames": 121,
+                "generate_audio": true,
                 "resolution": "auto",
                 "frames_per_second": 24,
-                "generate_audio": true,
                 "video_quality": "high"
             },
         )
@@ -370,9 +370,9 @@ The model returns an MP4 preview of the HDR result for quick inspection alongsid
           "prompt": "<prompt>",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "num_frames": 121,
+          "generate_audio": true,
           "resolution": "auto",
           "frames_per_second": 24,
-          "generate_audio": true,
           "video_quality": "high"
         }' | jq -r '.generations[0].generation_id')
 
@@ -405,9 +405,9 @@ The model returns an MP4 preview of the HDR result for quick inspection alongsid
                 "prompt": "<prompt>",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "num_frames": 121,
+                "generate_audio": true,
                 "resolution": "auto",
                 "frames_per_second": 24,
-                "generate_audio": true,
                 "video_quality": "high"
             },
         )
@@ -460,9 +460,9 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `num_frames` | `integer` | `121` | The number of frames to generate. Range: 9 – 481. |
-| `resolution` | `string` | `"auto"` | Output video size. The output is generated at up to ~720p (shorter side capped at 704px); larger requested sizes are scaled down, preserving the aspect ratio. One of: auto, square_hd, square, portrait_4_3, portrait_16_9, landscape_4_3, landscape_16_9. |
-| `frames_per_second` | `number` | `24` | Frames per second of the generated video. Range: 1 – 60. |
 | `generate_audio` | `boolean` | `true` | Whether to include audio in the returned video. When disabled, the final MP4 is returned without an audio track. |
+| `resolution` | `string` | `"auto"` | Resolution One of: auto, square_hd, square, portrait_4_3, portrait_16_9, landscape_4_3, landscape_16_9. |
+| `frames_per_second` | `number` | `24` | Frames per second of the generated video. Range: 1 – 60. |
 | `video_quality` | `string` | `"high"` | The quality preset of the generated video. One of: low, medium, high, maximum. |
 | `negative_prompt` | `string` | &mdash; | The negative prompt to steer generation away from. |
 | `seed` | `integer` | &mdash; | Random seed for reproducibility. If None, a random seed is chosen. |

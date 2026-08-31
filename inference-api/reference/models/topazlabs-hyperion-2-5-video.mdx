@@ -1,45 +1,32 @@
 ---
-title: "FLUX.1-Kontext [dev]"
-description: "In-context image editing model"
+title: "Topaz Hyperion 2.5"
+description: "SDR-to-HDR video, including AI-generated footage"
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try FLUX.1-Kontext [dev] in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=flux-kontext-dev">
+  <Card title="Try Topaz Hyperion 2.5 in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=topazlabs-hyperion-2-5-video">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `flux-kontext-dev`
+**Model ID:** `topazlabs-hyperion-2-5-video`
 
-black-forest-labs/FLUX.1-Kontext-dev is a 12 billion parameter **multimodal LVM (vision model)** designed for high-fidelity image editing and generation using both text and image inputs.
+Topaz Hyperion 2.5 converts 8-bit AI video into true HDR: an SDR-to-HDR model that redistributes luminance and color across highlights, midtones, and shadows while preserving fine detail, with no tuning parameters to set. AI footage can finally sit alongside live action in professional and VFX pipelines.
 
-It excels in **iterative image editing**, maintaining character, style, and object consistency over multiple successive edits with minimal visual drift. The model reliably performs both local and global modifications, and is noted for its robust contextual understanding and ability to process instructions for precise regional edits or full scene transformations.
-
-Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
-- Preserving unique elements (like characters or objects) across different scenes and environments, even after several edits.
-- Generating novel images with style or character references guided by either text or example images.
-
-| Metric             | Value          |
-|--------------------|---------------|
-| Parameter Count    | 12 billion     |
-| Mixture of Experts | No             |
-| Context Length     | 0K (not applicable for vision model) |
-| Multilingual       | No             |
-| Quantized*         | Yes            |
-| Precision*         | FP8            |
-
-*_Quantization is specific to the inference provider and the model may be offered with different quantization levels by other providers._
+It handles AI-generated footage as well as camera source, taking 8-bit input up to professional deliverables. Output is HDR in the BT.2020 color space with a PQ (SMPTE-2084) transfer function, delivered as 10-bit H.265, 10-bit ProRes, or 16-bit lossless FFV1 for mastering, grading, and VFX workflows.
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=flux-kontext-dev) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=topazlabs-hyperion-2-5-video) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
   <Tab title="Sync">
 
-    See the [image editing reference](/inference-api/reference/image_editing) for more details.
+    This blocks until the video is ready (typically 5-15 minutes). Prefer **Async** or **Async with SSE** for anything beyond quick experimentation.
+
+    See the [video generation reference](/inference-api/reference/video_generation) for more details.
 
     <Tabs>
       <Tab title="Minimal">
@@ -47,13 +34,12 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
+        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "flux-kontext-dev",
-          "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "model": "topazlabs-hyperion-2-5-video",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }'
         ```
 
@@ -62,15 +48,14 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/edit",
+            "https://hub.oxen.ai/api/ai/videos/generate",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "flux-kontext-dev",
-                "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "model": "topazlabs-hyperion-2-5-video",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         response.raise_for_status()
@@ -85,19 +70,14 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
+        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "flux-kontext-dev",
-          "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "aspect_ratio": "16:9",
-          "num_inference_steps": 28,
-          "guidance": 2.5,
-          "output_format": "webp",
-          "output_quality": 80,
-          "disable_safety_checker": false
+          "model": "topazlabs-hyperion-2-5-video",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "output_encoder": "H265",
+          "output_profile": "422 HQ"
         }'
         ```
 
@@ -106,21 +86,16 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/edit",
+            "https://hub.oxen.ai/api/ai/videos/generate",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "flux-kontext-dev",
-                "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "aspect_ratio": "16:9",
-                "num_inference_steps": 28,
-                "guidance": 2.5,
-                "output_format": "webp",
-                "output_quality": 80,
-                "disable_safety_checker": false
+                "model": "topazlabs-hyperion-2-5-video",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "output_encoder": "H265",
+                "output_profile": "422 HQ"
             },
         )
         response.raise_for_status()
@@ -148,9 +123,8 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "flux-kontext-dev",
-          "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "model": "topazlabs-hyperion-2-5-video",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -181,9 +155,8 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "flux-kontext-dev",
-                "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "model": "topazlabs-hyperion-2-5-video",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         enqueue.raise_for_status()
@@ -217,15 +190,10 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "flux-kontext-dev",
-          "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "aspect_ratio": "16:9",
-          "num_inference_steps": 28,
-          "guidance": 2.5,
-          "output_format": "webp",
-          "output_quality": 80,
-          "disable_safety_checker": false
+          "model": "topazlabs-hyperion-2-5-video",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "output_encoder": "H265",
+          "output_profile": "422 HQ"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -256,15 +224,10 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "flux-kontext-dev",
-                "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "aspect_ratio": "16:9",
-                "num_inference_steps": 28,
-                "guidance": 2.5,
-                "output_format": "webp",
-                "output_quality": 80,
-                "disable_safety_checker": false
+                "model": "topazlabs-hyperion-2-5-video",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "output_encoder": "H265",
+                "output_profile": "422 HQ"
             },
         )
         enqueue.raise_for_status()
@@ -306,9 +269,8 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "flux-kontext-dev",
-          "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "model": "topazlabs-hyperion-2-5-video",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -336,9 +298,8 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "flux-kontext-dev",
-                "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "model": "topazlabs-hyperion-2-5-video",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         enqueue.raise_for_status()
@@ -373,15 +334,10 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "flux-kontext-dev",
-          "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "aspect_ratio": "16:9",
-          "num_inference_steps": 28,
-          "guidance": 2.5,
-          "output_format": "webp",
-          "output_quality": 80,
-          "disable_safety_checker": false
+          "model": "topazlabs-hyperion-2-5-video",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "output_encoder": "H265",
+          "output_profile": "422 HQ"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -409,15 +365,10 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "flux-kontext-dev",
-                "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "aspect_ratio": "16:9",
-                "num_inference_steps": 28,
-                "guidance": 2.5,
-                "output_format": "webp",
-                "output_quality": 80,
-                "disable_safety_checker": false
+                "model": "topazlabs-hyperion-2-5-video",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "output_encoder": "H265",
+                "output_profile": "422 HQ"
             },
         )
         enqueue.raise_for_status()
@@ -452,7 +403,7 @@ Some other noteworthy features of black-forest-labs/FLUX.1-Kontext-dev include:
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/flux-kontext-dev
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/topazlabs-hyperion-2-5-video
 ```
 
 ## Request parameters
@@ -461,17 +412,11 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | Text description of what you want to generate, or the instruction on how to edit the given image. |
-| `input_image` | `string` | &mdash; | Image to use as reference. Must be jpeg, png, gif, or webp. Format: uri. |
+| `input_video` | `string` | &mdash; | SDR video file to convert to HDR (URL or file path). Format: uri. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `aspect_ratio` | `string` | `"16:9"` | Aspect Ratio One of: 1:1, 16:9, 21:9, 3:2, 2:3, 4:5, 5:4, 3:4, 4:3, 9:16, 9:21, match_input_image. |
-| `num_inference_steps` | `integer` | `28` | Number of inference steps Range: 4 – 50. |
-| `guidance` | `number` | `2.5` | Guidance scale for generation Range: 0 – 10. |
-| `seed` | `integer` | &mdash; | Random seed for reproducible generation. Leave blank for random. |
-| `output_format` | `string` | `"webp"` | Output image format One of: webp, jpg, png. |
-| `output_quality` | `integer` | `80` | Quality when saving the output images, from 0 to 100. 100 is best quality, 0 is lowest quality. Not relevant for .png outputs Range: 0 – 100. |
-| `disable_safety_checker` | `boolean` | `false` | Disable NSFW safety checker |
+| `output_encoder` | `string` | `"H265"` | Encoder for the rendered HDR output. H.265 (10-bit) for compact delivery, ProRes (10-bit) for pro editing and grading, FFV1 (16-bit lossless, MKV) for maximum-fidelity mastering and VFX interchange. One of: H265, ProRes, FFV1. |
+| `output_profile` | `string` | `"422 HQ"` | ProRes quality profile. All 422 profiles are 10-bit; HQ preserves the most detail. One of: 422 Proxy, 422 LT, 422 Std, 422 HQ. |
