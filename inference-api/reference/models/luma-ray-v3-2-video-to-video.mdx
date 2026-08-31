@@ -39,8 +39,8 @@ The edit can be steered with an optional start image (e.g. a restyled version of
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "luma-ray-v3-2-video-to-video",
-          "prompt": "<prompt>",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -56,8 +56,8 @@ The edit can be steered with an optional start image (e.g. a restyled version of
             },
             json={
                 "model": "luma-ray-v3-2-video-to-video",
-                "prompt": "<prompt>",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -77,8 +77,8 @@ The edit can be steered with an optional start image (e.g. a restyled version of
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "luma-ray-v3-2-video-to-video",
-          "prompt": "<prompt>",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "prompt": "<prompt>",
           "resolution": "540p",
           "duration": "5s"
         }'
@@ -96,8 +96,8 @@ The edit can be steered with an optional start image (e.g. a restyled version of
             },
             json={
                 "model": "luma-ray-v3-2-video-to-video",
-                "prompt": "<prompt>",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "prompt": "<prompt>",
                 "resolution": "540p",
                 "duration": "5s"
             },
@@ -128,8 +128,8 @@ The edit can be steered with an optional start image (e.g. a restyled version of
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "luma-ray-v3-2-video-to-video",
-          "prompt": "<prompt>",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -161,8 +161,8 @@ The edit can be steered with an optional start image (e.g. a restyled version of
             headers=HEADERS,
             json={
                 "model": "luma-ray-v3-2-video-to-video",
-                "prompt": "<prompt>",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -197,8 +197,8 @@ The edit can be steered with an optional start image (e.g. a restyled version of
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "luma-ray-v3-2-video-to-video",
-          "prompt": "<prompt>",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "prompt": "<prompt>",
           "resolution": "540p",
           "duration": "5s"
         }' | jq -r '.generations[0].generation_id')
@@ -232,8 +232,8 @@ The edit can be steered with an optional start image (e.g. a restyled version of
             headers=HEADERS,
             json={
                 "model": "luma-ray-v3-2-video-to-video",
-                "prompt": "<prompt>",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "prompt": "<prompt>",
                 "resolution": "540p",
                 "duration": "5s"
             },
@@ -278,8 +278,8 @@ The edit can be steered with an optional start image (e.g. a restyled version of
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "luma-ray-v3-2-video-to-video",
-          "prompt": "<prompt>",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -308,8 +308,8 @@ The edit can be steered with an optional start image (e.g. a restyled version of
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "luma-ray-v3-2-video-to-video",
-                "prompt": "<prompt>",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -345,8 +345,8 @@ The edit can be steered with an optional start image (e.g. a restyled version of
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "luma-ray-v3-2-video-to-video",
-          "prompt": "<prompt>",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "prompt": "<prompt>",
           "resolution": "540p",
           "duration": "5s"
         }' | jq -r '.generations[0].generation_id')
@@ -377,8 +377,8 @@ The edit can be steered with an optional start image (e.g. a restyled version of
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "luma-ray-v3-2-video-to-video",
-                "prompt": "<prompt>",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "prompt": "<prompt>",
                 "resolution": "540p",
                 "duration": "5s"
             },
@@ -424,16 +424,16 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | Text prompt describing how to edit the source video. |
 | `input_video` | `string` | &mdash; | URL of the source video to edit. Format: uri. |
+| `prompt` | `string` | &mdash; | Text prompt describing how to edit the source video. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `input_image` | `string` | &mdash; | Optional URL of an image to use as the edited video's first frame — e.g. a restyled version of the source's opening frame to steer the look of the edit. Leave unset to let the model derive the first frame from the source video. Format: uri. |
-| `resolution` | `string` | `"540p"` | Resolution of the edited video. Higher resolutions cost more. One of: 540p, 720p, 1080p. |
-| `duration` | `string` | `"5s"` | Duration of the edited video. One of: 5s, 10s. |
+| `resolution` | `string` | `"540p"` | Resolution One of: 540p, 720p, 1080p. |
+| `duration` | `string` | `"5s"` | Duration One of: 5s, 10s. |
 | `edit_strength` | `string` | &mdash; | How closely the edit preserves the source video. 'adhere_*' stays closest to the source, 'flex_*' is balanced, and 'reimagine_*' diverges most. Leave unset to use Luma's default. Cannot be combined with auto_controls. One of: adhere_1, adhere_2, adhere_3, flex_1, flex_2, flex_3, reimagine_1, reimagine_2, reimagine_3. |
 | `auto_controls` | `boolean` | &mdash; | Let the model derive the edit conditioning schedule from the source video. Cannot be combined with edit_strength. |
 | `hdr` | `boolean` | &mdash; | Generate an HDR-encoded MP4. Requires HDR access on the account and a resolution of 720p or 1080p. |

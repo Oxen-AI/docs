@@ -689,9 +689,9 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | `reference_images` | `array<object>` | &mdash; | Array of reference images for character/object/scene appearance. Each item has a URL and an optional reference voice. Order maps to @Image1, @Image2, etc. Reference images + reference videos must total ≤ 5. JPEG/JPG/PNG/BMP/WEBP, 240-8000 px per side, aspect ratio 1:8 to 8:1, max 20 MB each. |
 | `reference_videos` | `array<object>` | &mdash; | Array of reference videos for character/object appearance, motion, and voice. Each item has a URL and an optional reference voice. Order maps to @Video1, @Video2, etc. Reference images + reference videos must total ≤ 5. MP4/MOV, 1-30s, 240-4096 px per side, aspect ratio 1:8 to 8:1, max 100 MB each. |
 | `input_image` | `string` | &mdash; | Optional first-frame image used for joint control. Provides a starting frame the video is generated from. JPEG/JPG/PNG/BMP/WEBP, 240-8000 px per side, max 20 MB. When provided, the output aspect ratio is taken from this image and the aspect_ratio parameter is ignored. Format: uri. |
-| `aspect_ratio` | `string` | `"16:9"` | Aspect ratio of the generated video. Ignored when a first frame image is provided (the model uses the input asset's ratio). One of: 16:9, 9:16, 1:1, 4:3, 3:4. |
-| `resolution` | `string` | `"1080P"` | Output video resolution tier. One of: 720P, 1080P. |
-| `duration` | `integer` | `5` | Output video duration in seconds. 2-15 with reference images only; 2-10 when any reference video is included. Range: 2 – 15. |
+| `aspect_ratio` | `string` | `"16:9"` | Aspect Ratio One of: 16:9, 9:16, 1:1, 4:3, 3:4. |
+| `resolution` | `string` | `"1080P"` | Resolution One of: 720P, 1080P. |
+| `duration` | `integer` | `5` | Duration Range: 2 – 15. |
 | `negative_prompt` | `string` | &mdash; | Content to avoid in the video. Supports Chinese and English. Max 500 characters. |
 | `prompt_extend` | `boolean` | `true` | Whether the model rewrites short prompts to improve quality. Adds processing time. |
 | `watermark` | `boolean` | `false` | Adds an 'AI Generated' watermark to the bottom-right corner. |

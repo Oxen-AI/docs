@@ -419,6 +419,6 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `prompt` | `string` | &mdash; | Optional description of what happens in the added footage. |
-| `duration` | `integer` | `6` | Seconds of new footage to add, 2 to 20. Range: 2 – 20. |
+| `duration` | `integer` | `6` | Extension (seconds) Range: 2 – 20. |
 | `extend_mode` | `string` | `"end"` | Add the new footage at the start or the end of the clip. One of: start, end. |
 | `context` | `number` | &mdash; | Seconds of the input video to use as context, up to 20. Defaults to 5 (less for long extensions). Context seconds are billed with the extension. Range: 1 – 20. |

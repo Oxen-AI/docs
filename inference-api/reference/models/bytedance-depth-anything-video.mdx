@@ -436,7 +436,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 |-------|------|---------|-------------|
 | `depth_model` | `string` | `"VDA-Large"` | Depth estimation model size. VDA-Large = best quality, VDA-Small = fastest. One of: VDA-Small, VDA-Base, VDA-Large. |
 | `colormap` | `string` | `"grayscale"` | Colormap for depth visualization. One of: grayscale, turbo, inferno, magma, viridis. |
-| `resolution` | `string` | `"auto"` | Output resolution. Auto preserves input resolution up to 1080p. One of: auto, 360p, 480p, 720p, 1080p. |
+| `resolution` | `string` | `"auto"` | Resolution One of: auto, 360p, 480p, 720p, 1080p. |
 | `max_frames` | `integer` | &mdash; | Maximum number of frames to process. Leave unset to process all frames. |
 | `output_fps` | `number` | &mdash; | Output video FPS. Leave unset to use the input frame rate. |
 | `side_by_side` | `boolean` | `false` | If true, output a side-by-side original and depth comparison video. |

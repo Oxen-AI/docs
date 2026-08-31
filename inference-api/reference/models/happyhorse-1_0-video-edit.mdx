@@ -37,8 +37,8 @@ HappyHorse 1.0 video edit performs local or global edits to a source video from 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "happyhorse-1.0-video-edit",
-          "prompt": "<prompt>",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -54,8 +54,8 @@ HappyHorse 1.0 video edit performs local or global edits to a source video from 
             },
             json={
                 "model": "happyhorse-1.0-video-edit",
-                "prompt": "<prompt>",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -75,11 +75,11 @@ HappyHorse 1.0 video edit performs local or global edits to a source video from 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "happyhorse-1.0-video-edit",
-          "prompt": "<prompt>",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "reference_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ]
+          ],
+          "prompt": "<prompt>"
         }'
         ```
 
@@ -95,11 +95,11 @@ HappyHorse 1.0 video edit performs local or global edits to a source video from 
             },
             json={
                 "model": "happyhorse-1.0-video-edit",
-                "prompt": "<prompt>",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "reference_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ]
+                ],
+                "prompt": "<prompt>"
             },
         )
         response.raise_for_status()
@@ -119,11 +119,11 @@ HappyHorse 1.0 video edit performs local or global edits to a source video from 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "happyhorse-1.0-video-edit",
-          "prompt": "<prompt>",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "reference_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
+          "prompt": "<prompt>",
           "resolution": "1080P",
           "audio_setting": "auto"
         }'
@@ -141,11 +141,11 @@ HappyHorse 1.0 video edit performs local or global edits to a source video from 
             },
             json={
                 "model": "happyhorse-1.0-video-edit",
-                "prompt": "<prompt>",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "reference_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
+                "prompt": "<prompt>",
                 "resolution": "1080P",
                 "audio_setting": "auto"
             },
@@ -176,8 +176,8 @@ HappyHorse 1.0 video edit performs local or global edits to a source video from 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "happyhorse-1.0-video-edit",
-          "prompt": "<prompt>",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -209,8 +209,8 @@ HappyHorse 1.0 video edit performs local or global edits to a source video from 
             headers=HEADERS,
             json={
                 "model": "happyhorse-1.0-video-edit",
-                "prompt": "<prompt>",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -245,11 +245,11 @@ HappyHorse 1.0 video edit performs local or global edits to a source video from 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "happyhorse-1.0-video-edit",
-          "prompt": "<prompt>",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "reference_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ]
+          ],
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -281,11 +281,11 @@ HappyHorse 1.0 video edit performs local or global edits to a source video from 
             headers=HEADERS,
             json={
                 "model": "happyhorse-1.0-video-edit",
-                "prompt": "<prompt>",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "reference_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ]
+                ],
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -320,11 +320,11 @@ HappyHorse 1.0 video edit performs local or global edits to a source video from 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "happyhorse-1.0-video-edit",
-          "prompt": "<prompt>",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "reference_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
+          "prompt": "<prompt>",
           "resolution": "1080P",
           "audio_setting": "auto"
         }' | jq -r '.generations[0].generation_id')
@@ -358,11 +358,11 @@ HappyHorse 1.0 video edit performs local or global edits to a source video from 
             headers=HEADERS,
             json={
                 "model": "happyhorse-1.0-video-edit",
-                "prompt": "<prompt>",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "reference_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
+                "prompt": "<prompt>",
                 "resolution": "1080P",
                 "audio_setting": "auto"
             },
@@ -407,8 +407,8 @@ HappyHorse 1.0 video edit performs local or global edits to a source video from 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "happyhorse-1.0-video-edit",
-          "prompt": "<prompt>",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -437,8 +437,8 @@ HappyHorse 1.0 video edit performs local or global edits to a source video from 
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "happyhorse-1.0-video-edit",
-                "prompt": "<prompt>",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -474,11 +474,11 @@ HappyHorse 1.0 video edit performs local or global edits to a source video from 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "happyhorse-1.0-video-edit",
-          "prompt": "<prompt>",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "reference_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ]
+          ],
+          "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -507,11 +507,11 @@ HappyHorse 1.0 video edit performs local or global edits to a source video from 
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "happyhorse-1.0-video-edit",
-                "prompt": "<prompt>",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "reference_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ]
+                ],
+                "prompt": "<prompt>"
             },
         )
         enqueue.raise_for_status()
@@ -547,11 +547,11 @@ HappyHorse 1.0 video edit performs local or global edits to a source video from 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "happyhorse-1.0-video-edit",
-          "prompt": "<prompt>",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "reference_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
+          "prompt": "<prompt>",
           "resolution": "1080P",
           "audio_setting": "auto"
         }' | jq -r '.generations[0].generation_id')
@@ -582,11 +582,11 @@ HappyHorse 1.0 video edit performs local or global edits to a source video from 
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "happyhorse-1.0-video-edit",
-                "prompt": "<prompt>",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "reference_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
+                "prompt": "<prompt>",
                 "resolution": "1080P",
                 "audio_setting": "auto"
             },
@@ -632,13 +632,13 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | Text prompt describing the desired edit. Reference supplied reference images using '@Image1', '@Image2', ... up to '@Image5'. Max 2500 characters. |
 | `input_video` | `string` | &mdash; | URL of the source video to edit. Formats: MP4, MOV (H.264 recommended). Duration 3-60 seconds. Longer side at most 2160 pixels, shorter side at least 320 pixels. Aspect ratio between 1:2.5 and 2.5:1. Frame rate above 8 fps. Max 100 MB. Output preserves the source aspect ratio and matches the input duration, capped at the first 15 seconds. Format: uri. |
+| `prompt` | `string` | &mdash; | Text prompt describing the desired edit. Reference supplied reference images using '@Image1', '@Image2', ... up to '@Image5'. Max 2500 characters. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `reference_images` | `array<string>` | &mdash; | Optional array of up to 5 reference image URLs to guide the edit. Order maps to '@Image1', '@Image2', etc. Formats: JPEG, JPG, PNG, WEBP. Each side must be at least 300 pixels. Aspect ratio between 1:2.5 and 2.5:1. Max 10 MB each. |
-| `resolution` | `string` | `"1080P"` | Output video resolution tier. One of: 720P, 1080P. |
+| `resolution` | `string` | `"1080P"` | Resolution One of: 720P, 1080P. |
 | `audio_setting` | `string` | `"auto"` | Audio handling: 'auto' generates a new synchronized audio track, 'origin' keeps the source video's audio. One of: auto, origin. |

@@ -77,9 +77,9 @@ Generate videos from images with audio using xAI's Grok Imagine Video model.
           "model": "xai-grok-imagine-video-image-to-video",
           "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "resolution": "480p",
+          "aspect_ratio": "16:9",
           "duration": 6,
-          "aspect_ratio": "16:9"
+          "resolution": "480p"
         }'
         ```
 
@@ -97,9 +97,9 @@ Generate videos from images with audio using xAI's Grok Imagine Video model.
                 "model": "xai-grok-imagine-video-image-to-video",
                 "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "resolution": "480p",
+                "aspect_ratio": "16:9",
                 "duration": 6,
-                "aspect_ratio": "16:9"
+                "resolution": "480p"
             },
         )
         response.raise_for_status()
@@ -199,9 +199,9 @@ Generate videos from images with audio using xAI's Grok Imagine Video model.
           "model": "xai-grok-imagine-video-image-to-video",
           "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "resolution": "480p",
+          "aspect_ratio": "16:9",
           "duration": 6,
-          "aspect_ratio": "16:9"
+          "resolution": "480p"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -235,9 +235,9 @@ Generate videos from images with audio using xAI's Grok Imagine Video model.
                 "model": "xai-grok-imagine-video-image-to-video",
                 "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "resolution": "480p",
+                "aspect_ratio": "16:9",
                 "duration": 6,
-                "aspect_ratio": "16:9"
+                "resolution": "480p"
             },
         )
         enqueue.raise_for_status()
@@ -349,9 +349,9 @@ Generate videos from images with audio using xAI's Grok Imagine Video model.
           "model": "xai-grok-imagine-video-image-to-video",
           "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "resolution": "480p",
+          "aspect_ratio": "16:9",
           "duration": 6,
-          "aspect_ratio": "16:9"
+          "resolution": "480p"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -382,9 +382,9 @@ Generate videos from images with audio using xAI's Grok Imagine Video model.
                 "model": "xai-grok-imagine-video-image-to-video",
                 "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "resolution": "480p",
+                "aspect_ratio": "16:9",
                 "duration": 6,
-                "aspect_ratio": "16:9"
+                "resolution": "480p"
             },
         )
         enqueue.raise_for_status()
@@ -435,6 +435,6 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `resolution` | `string` | `"480p"` | Resolution quality of the generated video One of: 720p, 480p. |
-| `duration` | `integer` | `6` | Duration of the video in seconds One of: 3, 6, 8, 10, 15. |
-| `aspect_ratio` | `string` | `"16:9"` | Aspect ratio for the generated image One of: auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3. |
+| `aspect_ratio` | `string` | `"16:9"` | Aspect Ratio One of: auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3. |
+| `duration` | `integer` | `6` | Duration Range: 3 – 15. |
+| `resolution` | `string` | `"480p"` | Resolution One of: 720p, 480p. |

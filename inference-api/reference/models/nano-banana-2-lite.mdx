@@ -637,6 +637,6 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `input_image` | `array<string>` | &mdash; | Optional reference image to edit. Leave empty to generate from the prompt alone. Reference it in the prompt as @Image1. |
-| `aspect_ratio` | `string` | `"16:9"` | Aspect ratio for the generated image One of: auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 4:5, 5:4, 21:9, 4:1, 1:4, 8:1, 1:8. |
-| `resolution` | `string` | `"1K"` | Resolution of the generated image. This model only supports 1K output. One of: 1K. |
+| `aspect_ratio` | `string` | `"16:9"` | Aspect Ratio One of: auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 4:5, 5:4, 21:9, 4:1, 1:4, 8:1, 1:8. |
+| `resolution` | `string` | `"1K"` | Resolution One of: 1K. |
 | `thinking_level` | `string` | `"minimal"` | How much the model reasons before generating. 'high' improves complex compositions at higher latency and cost. One of: minimal, high. |

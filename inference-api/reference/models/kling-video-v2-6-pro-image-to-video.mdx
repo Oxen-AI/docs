@@ -126,7 +126,7 @@ Some other noteworthy features of Kling 2.6 Pro - Image to Video include support
           "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "duration": 5,
-          "generate_audio": false
+          "generate_audio": true
         }'
         ```
 
@@ -145,7 +145,7 @@ Some other noteworthy features of Kling 2.6 Pro - Image to Video include support
                 "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "duration": 5,
-                "generate_audio": false
+                "generate_audio": true
             },
         )
         response.raise_for_status()
@@ -313,7 +313,7 @@ Some other noteworthy features of Kling 2.6 Pro - Image to Video include support
           "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "duration": 5,
-          "generate_audio": false
+          "generate_audio": true
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -348,7 +348,7 @@ Some other noteworthy features of Kling 2.6 Pro - Image to Video include support
                 "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "duration": 5,
-                "generate_audio": false
+                "generate_audio": true
             },
         )
         enqueue.raise_for_status()
@@ -526,7 +526,7 @@ Some other noteworthy features of Kling 2.6 Pro - Image to Video include support
           "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "duration": 5,
-          "generate_audio": false
+          "generate_audio": true
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -558,7 +558,7 @@ Some other noteworthy features of Kling 2.6 Pro - Image to Video include support
                 "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "duration": 5,
-                "generate_audio": false
+                "generate_audio": true
             },
         )
         enqueue.raise_for_status()
@@ -610,5 +610,5 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 |-------|------|---------|-------------|
 | `input_image` | `string` | &mdash; | Image to use as reference. Must be jpeg, png, gif, or webp. Format: uri. |
 | `negative_prompt` | `string` | &mdash; | Text description of what you *do not* want the model to do. |
-| `duration` | `integer` | `5` | Video duration in seconds One of: 5, 10. |
-| `generate_audio` | `boolean` | `false` | Generate audio with the video. |
+| `duration` | `integer` | `5` | Duration (seconds) Range: 5 – 10. |
+| `generate_audio` | `boolean` | `true` | Generate audio with the video. |

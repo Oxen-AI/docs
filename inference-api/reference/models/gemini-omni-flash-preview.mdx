@@ -617,4 +617,4 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | `first_frame_image` | `string` | &mdash; | Optional image to use as the video's starting frame. Reference it in the prompt as @FirstFrame. Format: uri. |
 | `input_image` | `array<string>` | `[]` | Optional reference images (characters, objects, styles to carry into the video). Reference them in the prompt as @Image1, @Image2, etc. |
 | `input_video` | `string` | &mdash; | Optional video to edit. The prompt describes the changes to apply; unmentioned elements are preserved. Leave empty to generate a new video. Format: uri. |
-| `aspect_ratio` | `string` | `"16:9"` | Output video aspect ratio. One of: 16:9, 9:16. |
+| `aspect_ratio` | `string` | `"16:9"` | Aspect Ratio One of: 16:9, 9:16. |

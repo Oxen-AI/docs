@@ -636,8 +636,8 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | `end_image_url` | `string` | &mdash; | Optional URL of the last frame image for first-and-last-frame-to-video. Same format constraints as the first frame image. Format: uri. |
 | `input_video` | `string` | &mdash; | URL of an input video for continuation (first_clip). Formats: MP4, MOV. Duration 2-10s, resolution 240-4096 px per side, aspect ratio 1:8 to 8:1, max 100 MB. Mutually exclusive with input_image. Format: uri. |
 | `audio_url` | `string` | &mdash; | Optional driving audio URL. Used for lip-sync and action timing. Supports WAV and MP3. Duration 2-30s, max 15 MB. If shorter than the video, the remainder is silent; if longer, it is truncated. Format: uri. |
-| `resolution` | `string` | `"1080P"` | Output video resolution tier. One of: 720P, 1080P. |
-| `duration` | `integer` | `5` | Output video duration in seconds (2-15). Range: 2 – 15. |
+| `resolution` | `string` | `"1080P"` | Resolution One of: 720P, 1080P. |
+| `duration` | `integer` | `5` | Duration Range: 2 – 15. |
 | `negative_prompt` | `string` | &mdash; | Content to avoid in the video. Supports Chinese and English. Max 500 characters. |
 | `prompt_extend` | `boolean` | `true` | Whether the model rewrites short prompts to improve quality. Adds processing time. |
 | `watermark` | `boolean` | `false` | Adds an 'AI Generated' watermark to the bottom-right corner. |

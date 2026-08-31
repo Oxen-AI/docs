@@ -75,10 +75,10 @@ Pick the Fast tier for speed and cost or the Pro tier for higher fidelity; both 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "ltx-2-3",
+          "video_mode": "fast",
           "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "input_audio": "https://example.com/audio.mp3",
-          "video_mode": "fast"
+          "input_audio": "https://example.com/audio.mp3"
         }'
         ```
 
@@ -94,10 +94,10 @@ Pick the Fast tier for speed and cost or the Pro tier for higher fidelity; both 
             },
             json={
                 "model": "ltx-2-3",
+                "video_mode": "fast",
                 "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "input_audio": "https://example.com/audio.mp3",
-                "video_mode": "fast"
+                "input_audio": "https://example.com/audio.mp3"
             },
         )
         response.raise_for_status()
@@ -117,15 +117,15 @@ Pick the Fast tier for speed and cost or the Pro tier for higher fidelity; both 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "ltx-2-3",
+          "video_mode": "fast",
           "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "input_audio": "https://example.com/audio.mp3",
-          "video_mode": "fast",
-          "resolution": "1080p",
+          "generate_audio": true,
           "aspect_ratio": "16:9",
+          "resolution": "1080p",
           "duration": 6,
           "fps": 24,
-          "generate_audio": true,
           "camera_motion": "none"
         }'
         ```
@@ -142,15 +142,15 @@ Pick the Fast tier for speed and cost or the Pro tier for higher fidelity; both 
             },
             json={
                 "model": "ltx-2-3",
+                "video_mode": "fast",
                 "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "input_audio": "https://example.com/audio.mp3",
-                "video_mode": "fast",
-                "resolution": "1080p",
+                "generate_audio": true,
                 "aspect_ratio": "16:9",
+                "resolution": "1080p",
                 "duration": 6,
                 "fps": 24,
-                "generate_audio": true,
                 "camera_motion": "none"
             },
         )
@@ -247,10 +247,10 @@ Pick the Fast tier for speed and cost or the Pro tier for higher fidelity; both 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "ltx-2-3",
+          "video_mode": "fast",
           "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "input_audio": "https://example.com/audio.mp3",
-          "video_mode": "fast"
+          "input_audio": "https://example.com/audio.mp3"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -282,10 +282,10 @@ Pick the Fast tier for speed and cost or the Pro tier for higher fidelity; both 
             headers=HEADERS,
             json={
                 "model": "ltx-2-3",
+                "video_mode": "fast",
                 "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "input_audio": "https://example.com/audio.mp3",
-                "video_mode": "fast"
+                "input_audio": "https://example.com/audio.mp3"
             },
         )
         enqueue.raise_for_status()
@@ -320,15 +320,15 @@ Pick the Fast tier for speed and cost or the Pro tier for higher fidelity; both 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "ltx-2-3",
+          "video_mode": "fast",
           "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "input_audio": "https://example.com/audio.mp3",
-          "video_mode": "fast",
-          "resolution": "1080p",
+          "generate_audio": true,
           "aspect_ratio": "16:9",
+          "resolution": "1080p",
           "duration": 6,
           "fps": 24,
-          "generate_audio": true,
           "camera_motion": "none"
         }' | jq -r '.generations[0].generation_id')
 
@@ -361,15 +361,15 @@ Pick the Fast tier for speed and cost or the Pro tier for higher fidelity; both 
             headers=HEADERS,
             json={
                 "model": "ltx-2-3",
+                "video_mode": "fast",
                 "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "input_audio": "https://example.com/audio.mp3",
-                "video_mode": "fast",
-                "resolution": "1080p",
+                "generate_audio": true,
                 "aspect_ratio": "16:9",
+                "resolution": "1080p",
                 "duration": 6,
                 "fps": 24,
-                "generate_audio": true,
                 "camera_motion": "none"
             },
         )
@@ -478,10 +478,10 @@ Pick the Fast tier for speed and cost or the Pro tier for higher fidelity; both 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "ltx-2-3",
+          "video_mode": "fast",
           "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "input_audio": "https://example.com/audio.mp3",
-          "video_mode": "fast"
+          "input_audio": "https://example.com/audio.mp3"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -510,10 +510,10 @@ Pick the Fast tier for speed and cost or the Pro tier for higher fidelity; both 
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "ltx-2-3",
+                "video_mode": "fast",
                 "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "input_audio": "https://example.com/audio.mp3",
-                "video_mode": "fast"
+                "input_audio": "https://example.com/audio.mp3"
             },
         )
         enqueue.raise_for_status()
@@ -549,15 +549,15 @@ Pick the Fast tier for speed and cost or the Pro tier for higher fidelity; both 
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "ltx-2-3",
+          "video_mode": "fast",
           "prompt": "<prompt>",
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "input_audio": "https://example.com/audio.mp3",
-          "video_mode": "fast",
-          "resolution": "1080p",
+          "generate_audio": true,
           "aspect_ratio": "16:9",
+          "resolution": "1080p",
           "duration": 6,
           "fps": 24,
-          "generate_audio": true,
           "camera_motion": "none"
         }' | jq -r '.generations[0].generation_id')
 
@@ -587,15 +587,15 @@ Pick the Fast tier for speed and cost or the Pro tier for higher fidelity; both 
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "ltx-2-3",
+                "video_mode": "fast",
                 "prompt": "<prompt>",
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "input_audio": "https://example.com/audio.mp3",
-                "video_mode": "fast",
-                "resolution": "1080p",
+                "generate_audio": true,
                 "aspect_ratio": "16:9",
+                "resolution": "1080p",
                 "duration": 6,
                 "fps": 24,
-                "generate_audio": true,
                 "camera_motion": "none"
             },
         )
@@ -646,14 +646,14 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
+| `video_mode` | `string` | `"fast"` | Fast is quicker and cheaper; Pro is higher fidelity. Audio-to-video always runs on Pro. One of: fast, pro. |
 | `input_image` | `string` | &mdash; | Optional first-frame image to animate (image-to-video). Leave empty to generate from the prompt alone. Format: uri. |
 | `input_audio` | `string` | &mdash; | Optional audio track (2-20 seconds) to drive an audio-to-video generation. Output length and lip sync follow the audio; 1080p only. Always runs on Pro. Format: uri. |
-| `video_mode` | `string` | `"fast"` | Fast is quicker and cheaper; Pro is higher fidelity. Audio-to-video always runs on Pro. One of: fast, pro. |
 | `tail_image_url` | `string` | &mdash; | Optional last frame for image-to-video; the model interpolates between the input image and this frame. Format: uri. |
-| `resolution` | `string` | `"1080p"` | Output resolution tier. Audio-to-video is 1080p only. One of: 720p, 1080p, 1440p, 4k. |
-| `aspect_ratio` | `string` | `"16:9"` | Output aspect ratio. One of: 16:9, 9:16. |
-| `duration` | `integer` | `6` | Video duration in seconds. Up to 20 seconds on Fast at 720p/1080p and 24/25 FPS, otherwise up to 10. Range: 6 – 20. |
-| `fps` | `integer` | `24` | Frame rate. 48 and 50 FPS shorten the maximum duration. One of: 24, 25, 48, 50. |
 | `generate_audio` | `boolean` | `true` | Generate synchronized audio for the video. |
+| `aspect_ratio` | `string` | `"16:9"` | Aspect Ratio One of: 16:9, 9:16. |
+| `resolution` | `string` | `"1080p"` | Resolution One of: 720p, 1080p, 1440p, 4k. |
+| `duration` | `integer` | `6` | Duration (seconds) Range: 6 – 20. |
+| `fps` | `integer` | `24` | Frame rate. 48 and 50 FPS shorten the maximum duration. One of: 24, 25, 48, 50. |
 | `camera_motion` | `string` | `"none"` | Camera motion effect to apply to the generated video. One of: none, dolly_in, dolly_out, dolly_left, dolly_right, jib_up, jib_down, static, focus_shift. |
 | `guidance_scale` | `number` | &mdash; | Audio-to-video only: how strictly the video follows the prompt. Defaults to 5 with a prompt, 9 with an input image. Range: 1 – 15. |

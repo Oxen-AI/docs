@@ -634,9 +634,9 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 |-------|------|---------|-------------|
 | `input_image` | `string` | &mdash; | First frame image for image-to-video generation Format: uri. |
 | `input_video` | `string` | &mdash; | Primary conditioning video URL. Format: uri. |
-| `duration` | `integer` | `6` | Duration of the video in seconds One of: 6, 8, 10. |
-| `aspect_ratio` | `string` | `"16:9"` | Aspect ratio of the generated video One of: 16:9, 9:16. |
-| `resolution` | `string` | `"1080p"` | Resolution quality of the generated video One of: 1080p, 2k, 4k. |
+| `duration` | `integer` | `6` | Duration Range: 6 – 10. |
+| `aspect_ratio` | `string` | `"16:9"` | Aspect Ratio One of: 16:9, 9:16. |
+| `resolution` | `string` | `"1080p"` | Resolution One of: 1080p, 2k, 4k. |
 | `fps` | `integer` | `25` | Frame rate in frames per second One of: 24, 25, 30, 48, 50, 60. |
 | `video_conditioning_strength` | `number` | `1.0` | Default strength applied to conditioning videos when per-item strength is not provided. Range: 0.0 – 1.0. |
 | `conditioning_attention_strength` | `number` | `1.0` | Attention strength for IC-LoRA conditioning. Range: 0.0 – 1.0. |

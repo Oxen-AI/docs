@@ -78,12 +78,12 @@ Use this model to enrich stylized or synthetic footage with adjustable creativit
           -d '{
           "model": "topazlabs-astra-2-video",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "prompt": "<prompt>",
           "resolution": "4k",
           "interpolate_frames": false,
           "target_fps": 30,
           "creativity": 0.5,
-          "sharp": 0.5,
-          "prompt": "<prompt>"
+          "sharp": 0.5
         }'
         ```
 
@@ -100,12 +100,12 @@ Use this model to enrich stylized or synthetic footage with adjustable creativit
             json={
                 "model": "topazlabs-astra-2-video",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "prompt": "<prompt>",
                 "resolution": "4k",
                 "interpolate_frames": false,
                 "target_fps": 30,
                 "creativity": 0.5,
-                "sharp": 0.5,
-                "prompt": "<prompt>"
+                "sharp": 0.5
             },
         )
         response.raise_for_status()
@@ -204,12 +204,12 @@ Use this model to enrich stylized or synthetic footage with adjustable creativit
           -d '{
           "model": "topazlabs-astra-2-video",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "prompt": "<prompt>",
           "resolution": "4k",
           "interpolate_frames": false,
           "target_fps": 30,
           "creativity": 0.5,
-          "sharp": 0.5,
-          "prompt": "<prompt>"
+          "sharp": 0.5
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -242,12 +242,12 @@ Use this model to enrich stylized or synthetic footage with adjustable creativit
             json={
                 "model": "topazlabs-astra-2-video",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "prompt": "<prompt>",
                 "resolution": "4k",
                 "interpolate_frames": false,
                 "target_fps": 30,
                 "creativity": 0.5,
-                "sharp": 0.5,
-                "prompt": "<prompt>"
+                "sharp": 0.5
             },
         )
         enqueue.raise_for_status()
@@ -358,12 +358,12 @@ Use this model to enrich stylized or synthetic footage with adjustable creativit
           -d '{
           "model": "topazlabs-astra-2-video",
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "prompt": "<prompt>",
           "resolution": "4k",
           "interpolate_frames": false,
           "target_fps": 30,
           "creativity": 0.5,
-          "sharp": 0.5,
-          "prompt": "<prompt>"
+          "sharp": 0.5
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -393,12 +393,12 @@ Use this model to enrich stylized or synthetic footage with adjustable creativit
             json={
                 "model": "topazlabs-astra-2-video",
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "prompt": "<prompt>",
                 "resolution": "4k",
                 "interpolate_frames": false,
                 "target_fps": 30,
                 "creativity": 0.5,
-                "sharp": 0.5,
-                "prompt": "<prompt>"
+                "sharp": 0.5
             },
         )
         enqueue.raise_for_status()
@@ -449,8 +449,8 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `resolution` | `string` | `"4k"` | Target output resolution. One of: 1080p, 2k, 4k. |
+| `prompt` | `string` | `""` | Optional prompt to guide enhancement. Limits clips to 450 frames when set. |
+| `resolution` | `string` | `"4k"` | Resolution One of: 1080p, 2k, 4k. |
 | `interpolate_frames` | `boolean` | `false` | Increase the output frame rate by generating new frames. More expensive. |
 | `target_fps` | `number` | `30` | Output frame rate after interpolation. One of: 24, 23.976, 25, 29.97, 30, 50, 59.94, 60. |
 | `sharp` | `number` | `0.5` | Pre-enhance sharpness (0.0 softens, 0.5 passthrough, 1.0 sharpens). Range: 0 – 1. |
-| `prompt` | `string` | `""` | Optional prompt to guide enhancement. Limits clips to 450 frames when set. |

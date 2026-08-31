@@ -87,8 +87,8 @@ Some other noteworthy use cases of google/veo-3 include creating marketing and e
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "google-veo-3",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "prompt": "<prompt>"
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }'
         ```
 
@@ -104,8 +104,8 @@ Some other noteworthy use cases of google/veo-3 include creating marketing and e
             },
             json={
                 "model": "google-veo-3",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "prompt": "<prompt>"
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         response.raise_for_status()
@@ -125,12 +125,12 @@ Some other noteworthy use cases of google/veo-3 include creating marketing and e
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "google-veo-3",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "generate_audio": true,
           "aspect_ratio": "16:9",
           "duration": 8,
-          "resolution": "1080p",
-          "generate_audio": false
+          "resolution": "1080p"
         }'
         ```
 
@@ -146,12 +146,12 @@ Some other noteworthy use cases of google/veo-3 include creating marketing and e
             },
             json={
                 "model": "google-veo-3",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "generate_audio": true,
                 "aspect_ratio": "16:9",
                 "duration": 8,
-                "resolution": "1080p",
-                "generate_audio": false
+                "resolution": "1080p"
             },
         )
         response.raise_for_status()
@@ -247,8 +247,8 @@ Some other noteworthy use cases of google/veo-3 include creating marketing and e
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "google-veo-3",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "prompt": "<prompt>"
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -280,8 +280,8 @@ Some other noteworthy use cases of google/veo-3 include creating marketing and e
             headers=HEADERS,
             json={
                 "model": "google-veo-3",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "prompt": "<prompt>"
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         enqueue.raise_for_status()
@@ -316,12 +316,12 @@ Some other noteworthy use cases of google/veo-3 include creating marketing and e
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "google-veo-3",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "generate_audio": true,
           "aspect_ratio": "16:9",
           "duration": 8,
-          "resolution": "1080p",
-          "generate_audio": false
+          "resolution": "1080p"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -353,12 +353,12 @@ Some other noteworthy use cases of google/veo-3 include creating marketing and e
             headers=HEADERS,
             json={
                 "model": "google-veo-3",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "generate_audio": true,
                 "aspect_ratio": "16:9",
                 "duration": 8,
-                "resolution": "1080p",
-                "generate_audio": false
+                "resolution": "1080p"
             },
         )
         enqueue.raise_for_status()
@@ -466,8 +466,8 @@ Some other noteworthy use cases of google/veo-3 include creating marketing and e
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "google-veo-3",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "prompt": "<prompt>"
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -496,8 +496,8 @@ Some other noteworthy use cases of google/veo-3 include creating marketing and e
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "google-veo-3",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "prompt": "<prompt>"
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         enqueue.raise_for_status()
@@ -533,12 +533,12 @@ Some other noteworthy use cases of google/veo-3 include creating marketing and e
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "google-veo-3",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "generate_audio": true,
           "aspect_ratio": "16:9",
           "duration": 8,
-          "resolution": "1080p",
-          "generate_audio": false
+          "resolution": "1080p"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -567,12 +567,12 @@ Some other noteworthy use cases of google/veo-3 include creating marketing and e
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "google-veo-3",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "generate_audio": true,
                 "aspect_ratio": "16:9",
                 "duration": 8,
-                "resolution": "1080p",
-                "generate_audio": false
+                "resolution": "1080p"
             },
         )
         enqueue.raise_for_status()
@@ -623,7 +623,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `input_image` | `string` | &mdash; | Image to use as reference. Must be jpeg, png, gif, or webp. Format: uri. |
-| `aspect_ratio` | `string` | `"16:9"` | Video aspect ratio One of: 9:16, 16:9. |
-| `duration` | `integer` | `8` | Video duration in seconds One of: 4, 6, 8. |
-| `resolution` | `string` | `"1080p"` | Resolution of the generated video One of: 1080p, 720p. |
-| `generate_audio` | `boolean` | `false` | Generate audio with the video. |
+| `generate_audio` | `boolean` | `true` | Generate audio with the video. |
+| `aspect_ratio` | `string` | `"16:9"` | Aspect Ratio One of: 9:16, 16:9. |
+| `duration` | `integer` | `8` | Duration (seconds) Range: 4 – 8. |
+| `resolution` | `string` | `"1080p"` | Resolution One of: 1080p, 720p. |
