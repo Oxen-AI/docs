@@ -1,38 +1,30 @@
 ---
-title: "Krea 2 Raw"
-description: "Open-weights text-to-image base for LoRA fine-tuning"
+title: "Muse Image 1.0"
+description: "Fast image generation and precise editing"
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try Krea 2 Raw in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=krea-2-raw">
+  <Card title="Try Muse Image 1.0 in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=muse-image-1-0">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `krea-2-raw`
+**Model ID:** `muse-image-1-0`
 
-Krea 2 Raw is the undistilled open-weights checkpoint of Krea's Krea 2 text-to-image model, taken from mid-training and released specifically as a base for fine-tuning, LoRA training, and post-training.
+Muse Image 1.0 is Meta's image model for generation, editing, and multi-image composition. It takes an agentic approach to a request: it plans the image first, pulls real references from the web, and generates and runs code where precision matters before rendering, with search grounding and reasoning included in the per-image price.
 
-Because it has no distillation or post-training applied, it is diverse and malleable: train a LoRA on it to capture a specific aesthetic such as product photography, architectural renders, or editorial illustration. It can be deployed for dedicated inference (of the base model or a fine-tuned checkpoint); for always-on hosted inference the distilled Krea 2 Large model is the better fit.
-
-| Metric             | Value              |
-|--------------------|--------------------|
-| Parameter Count    | 12.9 billion       |
-| Mixture of Experts | No                 |
-| Quantized*         | No                 |
-
-*_Quantization is specific to the inference provider and the model may be offered with different quantization levels by other providers._
+When editing, the model is designed to change exactly what is specified and leave everything else untouched. It edits or composes one or more reference images, generates from text alone, and keeps a series consistent when generations share the same references.
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=krea-2-raw) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=muse-image-1-0) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
   <Tab title="Sync">
 
-    See the [image generation reference](/inference-api/reference/image_generation) for more details.
+    See the [image editing reference](/inference-api/reference/image_editing) for more details.
 
     <Tabs>
       <Tab title="Minimal">
@@ -40,11 +32,11 @@ Because it has no distillation or post-training applied, it is diverse and malle
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-2-raw",
+          "model": "muse-image-1-0",
           "prompt": "<prompt>"
         }'
         ```
@@ -54,13 +46,13 @@ Because it has no distillation or post-training applied, it is diverse and malle
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/generate",
+            "https://hub.oxen.ai/api/ai/images/edit",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "krea-2-raw",
+                "model": "muse-image-1-0",
                 "prompt": "<prompt>"
             },
         )
@@ -76,15 +68,15 @@ Because it has no distillation or post-training applied, it is diverse and malle
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-2-raw",
+          "model": "muse-image-1-0",
           "prompt": "<prompt>",
-          "negative_prompt": "<negative_prompt>",
-          "width": 1024,
-          "height": 1024
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ]
         }'
         ```
 
@@ -93,17 +85,17 @@ Because it has no distillation or post-training applied, it is diverse and malle
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/generate",
+            "https://hub.oxen.ai/api/ai/images/edit",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "krea-2-raw",
+                "model": "muse-image-1-0",
                 "prompt": "<prompt>",
-                "negative_prompt": "<negative_prompt>",
-                "width": 1024,
-                "height": 1024
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ]
             },
         )
         response.raise_for_status()
@@ -118,17 +110,18 @@ Because it has no distillation or post-training applied, it is diverse and malle
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-2-raw",
+          "model": "muse-image-1-0",
           "prompt": "<prompt>",
-          "negative_prompt": "<negative_prompt>",
-          "width": 1024,
-          "height": 1024,
-          "num_inference_steps": 28,
-          "guidance_scale": 4.5
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
+          "aspect_ratio": "16:9",
+          "thinking_level": "high",
+          "output_format": "png"
         }'
         ```
 
@@ -137,19 +130,20 @@ Because it has no distillation or post-training applied, it is diverse and malle
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/generate",
+            "https://hub.oxen.ai/api/ai/images/edit",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "krea-2-raw",
+                "model": "muse-image-1-0",
                 "prompt": "<prompt>",
-                "negative_prompt": "<negative_prompt>",
-                "width": 1024,
-                "height": 1024,
-                "num_inference_steps": 28,
-                "guidance_scale": 4.5
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
+                "aspect_ratio": "16:9",
+                "thinking_level": "high",
+                "output_format": "png"
             },
         )
         response.raise_for_status()
@@ -177,7 +171,7 @@ Because it has no distillation or post-training applied, it is diverse and malle
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-2-raw",
+          "model": "muse-image-1-0",
           "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
@@ -209,7 +203,7 @@ Because it has no distillation or post-training applied, it is diverse and malle
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "krea-2-raw",
+                "model": "muse-image-1-0",
                 "prompt": "<prompt>"
             },
         )
@@ -244,11 +238,11 @@ Because it has no distillation or post-training applied, it is diverse and malle
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-2-raw",
+          "model": "muse-image-1-0",
           "prompt": "<prompt>",
-          "negative_prompt": "<negative_prompt>",
-          "width": 1024,
-          "height": 1024
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ]
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -279,11 +273,11 @@ Because it has no distillation or post-training applied, it is diverse and malle
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "krea-2-raw",
+                "model": "muse-image-1-0",
                 "prompt": "<prompt>",
-                "negative_prompt": "<negative_prompt>",
-                "width": 1024,
-                "height": 1024
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ]
             },
         )
         enqueue.raise_for_status()
@@ -317,13 +311,14 @@ Because it has no distillation or post-training applied, it is diverse and malle
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-2-raw",
+          "model": "muse-image-1-0",
           "prompt": "<prompt>",
-          "negative_prompt": "<negative_prompt>",
-          "width": 1024,
-          "height": 1024,
-          "num_inference_steps": 28,
-          "guidance_scale": 4.5
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
+          "aspect_ratio": "16:9",
+          "thinking_level": "high",
+          "output_format": "png"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -354,13 +349,14 @@ Because it has no distillation or post-training applied, it is diverse and malle
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "krea-2-raw",
+                "model": "muse-image-1-0",
                 "prompt": "<prompt>",
-                "negative_prompt": "<negative_prompt>",
-                "width": 1024,
-                "height": 1024,
-                "num_inference_steps": 28,
-                "guidance_scale": 4.5
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
+                "aspect_ratio": "16:9",
+                "thinking_level": "high",
+                "output_format": "png"
             },
         )
         enqueue.raise_for_status()
@@ -402,7 +398,7 @@ Because it has no distillation or post-training applied, it is diverse and malle
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-2-raw",
+          "model": "muse-image-1-0",
           "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
@@ -431,7 +427,7 @@ Because it has no distillation or post-training applied, it is diverse and malle
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "krea-2-raw",
+                "model": "muse-image-1-0",
                 "prompt": "<prompt>"
             },
         )
@@ -467,11 +463,11 @@ Because it has no distillation or post-training applied, it is diverse and malle
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-2-raw",
+          "model": "muse-image-1-0",
           "prompt": "<prompt>",
-          "negative_prompt": "<negative_prompt>",
-          "width": 1024,
-          "height": 1024
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ]
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -499,11 +495,11 @@ Because it has no distillation or post-training applied, it is diverse and malle
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "krea-2-raw",
+                "model": "muse-image-1-0",
                 "prompt": "<prompt>",
-                "negative_prompt": "<negative_prompt>",
-                "width": 1024,
-                "height": 1024
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ]
             },
         )
         enqueue.raise_for_status()
@@ -538,13 +534,14 @@ Because it has no distillation or post-training applied, it is diverse and malle
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-2-raw",
+          "model": "muse-image-1-0",
           "prompt": "<prompt>",
-          "negative_prompt": "<negative_prompt>",
-          "width": 1024,
-          "height": 1024,
-          "num_inference_steps": 28,
-          "guidance_scale": 4.5
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
+          "aspect_ratio": "16:9",
+          "thinking_level": "high",
+          "output_format": "png"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -572,13 +569,14 @@ Because it has no distillation or post-training applied, it is diverse and malle
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "krea-2-raw",
+                "model": "muse-image-1-0",
                 "prompt": "<prompt>",
-                "negative_prompt": "<negative_prompt>",
-                "width": 1024,
-                "height": 1024,
-                "num_inference_steps": 28,
-                "guidance_scale": 4.5
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
+                "aspect_ratio": "16:9",
+                "thinking_level": "high",
+                "output_format": "png"
             },
         )
         enqueue.raise_for_status()
@@ -613,7 +611,7 @@ Because it has no distillation or post-training applied, it is diverse and malle
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/krea-2-raw
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/muse-image-1-0
 ```
 
 ## Request parameters
@@ -622,15 +620,13 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | Text prompt describing the image. |
+| `prompt` | `string` | &mdash; | Text description of the image to generate, or of the edit to apply to the reference images. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `negative_prompt` | `string` | &mdash; | What to avoid in the image. |
-| `width` | `integer` | `1024` | Width Range: 512 – 2048. |
-| `height` | `integer` | `1024` | Height Range: 512 – 2048. |
-| `num_inference_steps` | `integer` | `28` | More steps trade speed for detail. Range: 1 – 50. |
-| `guidance_scale` | `number` | `4.5` | How strongly the prompt steers generation. Range: 0 – 10. |
-| `seed` | `integer` | &mdash; | Random seed for reproducible generation. |
+| `input_image` | `array<string>` | &mdash; | Optional reference image(s). Pass one to edit it, several to compose them, or leave empty to generate from the prompt alone. |
+| `aspect_ratio` | `string` | `"16:9"` | Aspect Ratio One of: auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 21:9, 9:21. |
+| `thinking_level` | `string` | `"high"` | How much the model reasons before generating. 'high' improves complex compositions at higher latency; 'low' renders faster. One of: low, high. |
+| `output_format` | `string` | `"png"` | File format for the generated image. One of: png, jpeg, webp. |

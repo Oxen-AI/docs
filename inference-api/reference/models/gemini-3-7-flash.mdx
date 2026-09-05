@@ -1,29 +1,31 @@
 ---
-title: "GLM 5.3"
-description: "Long-horizon coding agents, 1M context"
+title: "Gemini 3.7 Flash"
+description: "Coding and agentic workhorse, 1M context"
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try GLM 5.3 in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=zai-org-glm-5-3">
+  <Card title="Try Gemini 3.7 Flash in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=gemini-3-7-flash">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `zai-org-glm-5-3`
+**Model ID:** `gemini-3-7-flash`
 
-GLM-5.3 is a large reasoning language model from Z AI built for complex software engineering and long-horizon agent tasks. It keeps the 1M-token context window of GLM-5.2 and improves on it in coding and in the balance between quality and token efficiency.
+**gemini-3.7-flash is a Multimodal LLM.** It is Google's workhorse model for coding and agentic tasks, with substantial gains over Gemini 3.6 Flash in software engineering, web development, and dense-document comprehension (65.3% vs 49.0% on DeepSWE v1.1, 43.6% vs 34.4% on FrontierCode 1.1, 34.0% vs 22.0% on GDP.pdf).
 
-The model supports function calling and sustained multi-step workflows, and suits agentic engineering, code assistance, and reasoning over very long contexts. Weights have not been published, so it is served through its API rather than self-hosted.
+Some other noteworthy features of gemini-3.7-flash include configurable thinking levels (low, medium, high; unlike earlier Flash models, minimal is not supported), structured output, tool use, code execution, context caching, search grounding, and support for multimodal inputs like text, images, audio, video, and PDFs. Multimodal gains over 3.6 Flash are uneven: long-video understanding improves modestly (85.4% vs 84.2% on LVBench) and chart reasoning is slightly lower on CharXiv, so document-heavy work benefits more than chart analysis.
+
+It also supports Google's agentic video understanding, an opt-in per-request mode where the model decides which video segments to load, at what speed, and through which modality (frames, audio, or transcript) instead of sampling at a fixed frame rate. Google reports up to 88% fewer tokens, up to 66% lower cost, and up to 7% better accuracy on video analysis, at standard token pricing.
 
 | Metric             | Value              |
 |--------------------|--------------------|
-| Context Length     | 1,048,576 tokens   |
+| Context Length     | 1M tokens          |
 | Multilingual       | Yes                |
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=zai-org-glm-5-3) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=gemini-3-7-flash) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
@@ -36,7 +38,7 @@ The model supports function calling and sustained multi-step workflows, and suit
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer $OXEN_API_KEY" \
       -d '{
-      "model": "zai-org-glm-5-3",
+      "model": "gemini-3-7-flash",
       "messages": [
         {
           "role": "user",
@@ -57,7 +59,7 @@ The model supports function calling and sustained multi-step workflows, and suit
             "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
         },
         json={
-            "model": "zai-org-glm-5-3",
+            "model": "gemini-3-7-flash",
             "messages": [
                 {
                     "role": "user",
@@ -82,7 +84,7 @@ The model supports function calling and sustained multi-step workflows, and suit
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer $OXEN_API_KEY" \
       -d '{
-      "model": "zai-org-glm-5-3",
+      "model": "gemini-3-7-flash",
       "messages": [
         {
           "role": "user",
@@ -106,7 +108,7 @@ The model supports function calling and sustained multi-step workflows, and suit
             "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
         },
         json={
-            "model": "zai-org-glm-5-3",
+            "model": "gemini-3-7-flash",
             "messages": [
                 {
                     "role": "user",
@@ -134,7 +136,7 @@ The model supports function calling and sustained multi-step workflows, and suit
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer $OXEN_API_KEY" \
       -d '{
-      "model": "zai-org-glm-5-3",
+      "model": "gemini-3-7-flash",
       "messages": [
         {
           "role": "user",
@@ -159,7 +161,7 @@ The model supports function calling and sustained multi-step workflows, and suit
             "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
         },
         json={
-            "model": "zai-org-glm-5-3",
+            "model": "gemini-3-7-flash",
             "messages": [
                 {
                     "role": "user",
@@ -186,7 +188,7 @@ The model supports function calling and sustained multi-step workflows, and suit
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/zai-org-glm-5-3
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/gemini-3-7-flash
 ```
 
 ## Request parameters

@@ -1,38 +1,32 @@
 ---
-title: "Krea 2 Raw"
-description: "Open-weights text-to-image base for LoRA fine-tuning"
+title: "MiniMax H3 Max: Image to Video"
+description: "Prompt-optimized image-to-video generation"
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try Krea 2 Raw in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=krea-2-raw">
+  <Card title="Try MiniMax H3 Max: Image to Video in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=minimax-h3-max-image-to-video">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `krea-2-raw`
+**Model ID:** `minimax-h3-max-image-to-video`
 
-Krea 2 Raw is the undistilled open-weights checkpoint of Krea's Krea 2 text-to-image model, taken from mid-training and released specifically as a base for fine-tuning, LoRA training, and post-training.
+MiniMax H3 Max (Image to Video) is a post-trained variant of MiniMax H3, tuned by fal for stronger prompt adherence and better aesthetics, and served on fal's inference stack. It animates an optional first-frame image from a text prompt into a video, and routes to text-to-video when no image is given.
 
-Because it has no distillation or post-training applied, it is diverse and malleable: train a LoRA on it to capture a specific aesthetic such as product photography, architectural renders, or editorial illustration. It can be deployed for dedicated inference (of the base model or a fine-tuned checkpoint); for always-on hosted inference the distilled Krea 2 Large model is the better fit.
-
-| Metric             | Value              |
-|--------------------|--------------------|
-| Parameter Count    | 12.9 billion       |
-| Mixture of Experts | No                 |
-| Quantized*         | No                 |
-
-*_Quantization is specific to the inference provider and the model may be offered with different quantization levels by other providers._
+It generates 5 to 15 second clips at 480P or 768P resolution, with prompt expansion modes that trade latency for prompt fidelity, an optional end frame for first-to-last keyframe generation, and a safety checker enabled by default. When a first frame is provided, the output keeps its aspect ratio.
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=krea-2-raw) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=minimax-h3-max-image-to-video) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
   <Tab title="Sync">
 
-    See the [image generation reference](/inference-api/reference/image_generation) for more details.
+    This blocks until the video is ready (typically 5-15 minutes). Prefer **Async** or **Async with SSE** for anything beyond quick experimentation.
+
+    See the [video generation reference](/inference-api/reference/video_generation) for more details.
 
     <Tabs>
       <Tab title="Minimal">
@@ -40,12 +34,13 @@ Because it has no distillation or post-training applied, it is diverse and malle
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-2-raw",
-          "prompt": "<prompt>"
+          "model": "minimax-h3-max-image-to-video",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }'
         ```
 
@@ -54,14 +49,15 @@ Because it has no distillation or post-training applied, it is diverse and malle
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/generate",
+            "https://hub.oxen.ai/api/ai/videos/generate",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "krea-2-raw",
-                "prompt": "<prompt>"
+                "model": "minimax-h3-max-image-to-video",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         response.raise_for_status()
@@ -76,15 +72,14 @@ Because it has no distillation or post-training applied, it is diverse and malle
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-2-raw",
+          "model": "minimax-h3-max-image-to-video",
           "prompt": "<prompt>",
-          "negative_prompt": "<negative_prompt>",
-          "width": 1024,
-          "height": 1024
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }'
         ```
 
@@ -93,17 +88,16 @@ Because it has no distillation or post-training applied, it is diverse and malle
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/generate",
+            "https://hub.oxen.ai/api/ai/videos/generate",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "krea-2-raw",
+                "model": "minimax-h3-max-image-to-video",
                 "prompt": "<prompt>",
-                "negative_prompt": "<negative_prompt>",
-                "width": 1024,
-                "height": 1024
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         response.raise_for_status()
@@ -118,17 +112,19 @@ Because it has no distillation or post-training applied, it is diverse and malle
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-2-raw",
+          "model": "minimax-h3-max-image-to-video",
           "prompt": "<prompt>",
-          "negative_prompt": "<negative_prompt>",
-          "width": 1024,
-          "height": 1024,
-          "num_inference_steps": 28,
-          "guidance_scale": 4.5
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "duration": 5,
+          "resolution": "768P",
+          "enable_safety_checker": true,
+          "sync_mode": false,
+          "prompt_expansion_mode": "balanced"
         }'
         ```
 
@@ -137,19 +133,21 @@ Because it has no distillation or post-training applied, it is diverse and malle
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/generate",
+            "https://hub.oxen.ai/api/ai/videos/generate",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "krea-2-raw",
+                "model": "minimax-h3-max-image-to-video",
                 "prompt": "<prompt>",
-                "negative_prompt": "<negative_prompt>",
-                "width": 1024,
-                "height": 1024,
-                "num_inference_steps": 28,
-                "guidance_scale": 4.5
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "duration": 5,
+                "resolution": "768P",
+                "enable_safety_checker": true,
+                "sync_mode": false,
+                "prompt_expansion_mode": "balanced"
             },
         )
         response.raise_for_status()
@@ -177,8 +175,9 @@ Because it has no distillation or post-training applied, it is diverse and malle
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-2-raw",
-          "prompt": "<prompt>"
+          "model": "minimax-h3-max-image-to-video",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -209,8 +208,9 @@ Because it has no distillation or post-training applied, it is diverse and malle
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "krea-2-raw",
-                "prompt": "<prompt>"
+                "model": "minimax-h3-max-image-to-video",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         enqueue.raise_for_status()
@@ -244,11 +244,10 @@ Because it has no distillation or post-training applied, it is diverse and malle
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-2-raw",
+          "model": "minimax-h3-max-image-to-video",
           "prompt": "<prompt>",
-          "negative_prompt": "<negative_prompt>",
-          "width": 1024,
-          "height": 1024
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -279,11 +278,10 @@ Because it has no distillation or post-training applied, it is diverse and malle
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "krea-2-raw",
+                "model": "minimax-h3-max-image-to-video",
                 "prompt": "<prompt>",
-                "negative_prompt": "<negative_prompt>",
-                "width": 1024,
-                "height": 1024
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         enqueue.raise_for_status()
@@ -317,13 +315,15 @@ Because it has no distillation or post-training applied, it is diverse and malle
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-2-raw",
+          "model": "minimax-h3-max-image-to-video",
           "prompt": "<prompt>",
-          "negative_prompt": "<negative_prompt>",
-          "width": 1024,
-          "height": 1024,
-          "num_inference_steps": 28,
-          "guidance_scale": 4.5
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "duration": 5,
+          "resolution": "768P",
+          "enable_safety_checker": true,
+          "sync_mode": false,
+          "prompt_expansion_mode": "balanced"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -354,13 +354,15 @@ Because it has no distillation or post-training applied, it is diverse and malle
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "krea-2-raw",
+                "model": "minimax-h3-max-image-to-video",
                 "prompt": "<prompt>",
-                "negative_prompt": "<negative_prompt>",
-                "width": 1024,
-                "height": 1024,
-                "num_inference_steps": 28,
-                "guidance_scale": 4.5
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "duration": 5,
+                "resolution": "768P",
+                "enable_safety_checker": true,
+                "sync_mode": false,
+                "prompt_expansion_mode": "balanced"
             },
         )
         enqueue.raise_for_status()
@@ -402,8 +404,9 @@ Because it has no distillation or post-training applied, it is diverse and malle
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-2-raw",
-          "prompt": "<prompt>"
+          "model": "minimax-h3-max-image-to-video",
+          "prompt": "<prompt>",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -431,8 +434,9 @@ Because it has no distillation or post-training applied, it is diverse and malle
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "krea-2-raw",
-                "prompt": "<prompt>"
+                "model": "minimax-h3-max-image-to-video",
+                "prompt": "<prompt>",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         enqueue.raise_for_status()
@@ -467,11 +471,10 @@ Because it has no distillation or post-training applied, it is diverse and malle
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-2-raw",
+          "model": "minimax-h3-max-image-to-video",
           "prompt": "<prompt>",
-          "negative_prompt": "<negative_prompt>",
-          "width": 1024,
-          "height": 1024
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -499,11 +502,10 @@ Because it has no distillation or post-training applied, it is diverse and malle
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "krea-2-raw",
+                "model": "minimax-h3-max-image-to-video",
                 "prompt": "<prompt>",
-                "negative_prompt": "<negative_prompt>",
-                "width": 1024,
-                "height": 1024
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         enqueue.raise_for_status()
@@ -538,13 +540,15 @@ Because it has no distillation or post-training applied, it is diverse and malle
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-2-raw",
+          "model": "minimax-h3-max-image-to-video",
           "prompt": "<prompt>",
-          "negative_prompt": "<negative_prompt>",
-          "width": 1024,
-          "height": 1024,
-          "num_inference_steps": 28,
-          "guidance_scale": 4.5
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "duration": 5,
+          "resolution": "768P",
+          "enable_safety_checker": true,
+          "sync_mode": false,
+          "prompt_expansion_mode": "balanced"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -572,13 +576,15 @@ Because it has no distillation or post-training applied, it is diverse and malle
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "krea-2-raw",
+                "model": "minimax-h3-max-image-to-video",
                 "prompt": "<prompt>",
-                "negative_prompt": "<negative_prompt>",
-                "width": 1024,
-                "height": 1024,
-                "num_inference_steps": 28,
-                "guidance_scale": 4.5
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "duration": 5,
+                "resolution": "768P",
+                "enable_safety_checker": true,
+                "sync_mode": false,
+                "prompt_expansion_mode": "balanced"
             },
         )
         enqueue.raise_for_status()
@@ -613,7 +619,7 @@ Because it has no distillation or post-training applied, it is diverse and malle
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/krea-2-raw
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/minimax-h3-max-image-to-video
 ```
 
 ## Request parameters
@@ -622,15 +628,17 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | Text prompt describing the image. |
+| `prompt` | `string` | &mdash; | Text prompt for video generation |
+| `input_image` | `string` | &mdash; | Optional URL of the image to use as the first frame. When provided, the output aspect ratio follows this image. When omitted, the request is handled as text-to-video (16:9 by default). Format: uri. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `negative_prompt` | `string` | &mdash; | What to avoid in the image. |
-| `width` | `integer` | `1024` | Width Range: 512 – 2048. |
-| `height` | `integer` | `1024` | Height Range: 512 – 2048. |
-| `num_inference_steps` | `integer` | `28` | More steps trade speed for detail. Range: 1 – 50. |
-| `guidance_scale` | `number` | `4.5` | How strongly the prompt steers generation. Range: 0 – 10. |
-| `seed` | `integer` | &mdash; | Random seed for reproducible generation. |
+| `tail_image_url` | `string` | &mdash; | Optional URL of the image to use as the last frame, for first-to-last keyframe generation. Format: uri. |
+| `duration` | `integer` | `5` | The duration of the video in seconds. Range: 5 – 15. |
+| `resolution` | `string` | `"768P"` | The native generation resolution of the video. One of: 480P, 768P. |
+| `enable_safety_checker` | `boolean` | `true` | If set to true, the safety checker will be enabled. |
+| `sync_mode` | `boolean` | `false` | Return the generated video as base64 instead of a CDN URL. |
+| `prompt_expansion_mode` | `string` | `"balanced"` | How much effort to spend rewriting the prompt before generation. 'balanced' returns in about a second. 'quality' spends up to ~30s on a richer prompt. One of: balanced, quality. |
+| `seed` | `integer` | &mdash; | Random seed. A random seed is selected when omitted. |

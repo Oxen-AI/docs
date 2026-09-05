@@ -1,38 +1,32 @@
 ---
-title: "Krea 2 Raw"
-description: "Open-weights text-to-image base for LoRA fine-tuning"
+title: "Gemini Omni 1.1 Flash"
+description: "Omni-modal video with keyframes, edit and extend"
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try Krea 2 Raw in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=krea-2-raw">
+  <Card title="Try Gemini Omni 1.1 Flash in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=gemini-omni-1-1-flash">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `krea-2-raw`
+**Model ID:** `gemini-omni-1-1-flash`
 
-Krea 2 Raw is the undistilled open-weights checkpoint of Krea's Krea 2 text-to-image model, taken from mid-training and released specifically as a base for fine-tuning, LoRA training, and post-training.
+Gemini Omni 1.1 Flash is Google's omni-modal video model that handles text-to-video, first/last frame keyframing, reference-guided generation from images and short video clips, and video editing and extension in a single model. Every clip ships with synchronized native audio (dialogue, sound effects, and music directed from the prompt), and camera work is described in natural language.
 
-Because it has no distillation or post-training applied, it is diverse and malleable: train a LoRA on it to capture a specific aesthetic such as product photography, architectural renders, or editorial illustration. It can be deployed for dedicated inference (of the base model or a fine-tuned checkpoint); for always-on hosted inference the distilled Krea 2 Large model is the better fit.
-
-| Metric             | Value              |
-|--------------------|--------------------|
-| Parameter Count    | 12.9 billion       |
-| Mixture of Experts | No                 |
-| Quantized*         | No                 |
-
-*_Quantization is specific to the inference provider and the model may be offered with different quantization levels by other providers._
+Each generation is a 3 to 10 second clip at 24 fps in 16:9 or 9:16, rendered at 360p (a fast, low-cost draft tier), 720p (the default), or upscaled to 1080p or 4K. Pin a first frame, or a first and last frame, to control a shot's start and end; add up to 3 reference images and up to 3 reference videos of at most 3 seconds each to carry a character, object, or style into the scene (audio in reference videos is ignored). Supply a video to edit it by instruction while preserving everything the prompt does not mention, or to extend it: extensions append 3 to 10 seconds at a time, use up to 10 seconds of prior footage as context, and can stack to a cumulative 40 seconds.
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=krea-2-raw) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=gemini-omni-1-1-flash) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
   <Tab title="Sync">
 
-    See the [image generation reference](/inference-api/reference/image_generation) for more details.
+    This blocks until the video is ready (typically 5-15 minutes). Prefer **Async** or **Async with SSE** for anything beyond quick experimentation.
+
+    See the [video generation reference](/inference-api/reference/video_generation) for more details.
 
     <Tabs>
       <Tab title="Minimal">
@@ -40,11 +34,11 @@ Because it has no distillation or post-training applied, it is diverse and malle
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-2-raw",
+          "model": "gemini-omni-1-1-flash",
           "prompt": "<prompt>"
         }'
         ```
@@ -54,13 +48,13 @@ Because it has no distillation or post-training applied, it is diverse and malle
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/generate",
+            "https://hub.oxen.ai/api/ai/videos/generate",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "krea-2-raw",
+                "model": "gemini-omni-1-1-flash",
                 "prompt": "<prompt>"
             },
         )
@@ -76,15 +70,21 @@ Because it has no distillation or post-training applied, it is diverse and malle
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-2-raw",
+          "model": "gemini-omni-1-1-flash",
           "prompt": "<prompt>",
-          "negative_prompt": "<negative_prompt>",
-          "width": 1024,
-          "height": 1024
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_images": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
+          "input_videos": [
+            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+          ],
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }'
         ```
 
@@ -93,17 +93,23 @@ Because it has no distillation or post-training applied, it is diverse and malle
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/generate",
+            "https://hub.oxen.ai/api/ai/videos/generate",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "krea-2-raw",
+                "model": "gemini-omni-1-1-flash",
                 "prompt": "<prompt>",
-                "negative_prompt": "<negative_prompt>",
-                "width": 1024,
-                "height": 1024
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_images": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
+                "input_videos": [
+                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+                ],
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         response.raise_for_status()
@@ -118,17 +124,24 @@ Because it has no distillation or post-training applied, it is diverse and malle
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-2-raw",
+          "model": "gemini-omni-1-1-flash",
           "prompt": "<prompt>",
-          "negative_prompt": "<negative_prompt>",
-          "width": 1024,
-          "height": 1024,
-          "num_inference_steps": 28,
-          "guidance_scale": 4.5
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_images": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
+          "input_videos": [
+            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+          ],
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "aspect_ratio": "16:9",
+          "resolution": "720p",
+          "duration": 8
         }'
         ```
 
@@ -137,19 +150,26 @@ Because it has no distillation or post-training applied, it is diverse and malle
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/generate",
+            "https://hub.oxen.ai/api/ai/videos/generate",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "krea-2-raw",
+                "model": "gemini-omni-1-1-flash",
                 "prompt": "<prompt>",
-                "negative_prompt": "<negative_prompt>",
-                "width": 1024,
-                "height": 1024,
-                "num_inference_steps": 28,
-                "guidance_scale": 4.5
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_images": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
+                "input_videos": [
+                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+                ],
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "aspect_ratio": "16:9",
+                "resolution": "720p",
+                "duration": 8
             },
         )
         response.raise_for_status()
@@ -177,7 +197,7 @@ Because it has no distillation or post-training applied, it is diverse and malle
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-2-raw",
+          "model": "gemini-omni-1-1-flash",
           "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
@@ -209,7 +229,7 @@ Because it has no distillation or post-training applied, it is diverse and malle
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "krea-2-raw",
+                "model": "gemini-omni-1-1-flash",
                 "prompt": "<prompt>"
             },
         )
@@ -244,11 +264,17 @@ Because it has no distillation or post-training applied, it is diverse and malle
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-2-raw",
+          "model": "gemini-omni-1-1-flash",
           "prompt": "<prompt>",
-          "negative_prompt": "<negative_prompt>",
-          "width": 1024,
-          "height": 1024
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_images": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
+          "input_videos": [
+            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+          ],
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -279,11 +305,17 @@ Because it has no distillation or post-training applied, it is diverse and malle
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "krea-2-raw",
+                "model": "gemini-omni-1-1-flash",
                 "prompt": "<prompt>",
-                "negative_prompt": "<negative_prompt>",
-                "width": 1024,
-                "height": 1024
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_images": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
+                "input_videos": [
+                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+                ],
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         enqueue.raise_for_status()
@@ -317,13 +349,20 @@ Because it has no distillation or post-training applied, it is diverse and malle
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-2-raw",
+          "model": "gemini-omni-1-1-flash",
           "prompt": "<prompt>",
-          "negative_prompt": "<negative_prompt>",
-          "width": 1024,
-          "height": 1024,
-          "num_inference_steps": 28,
-          "guidance_scale": 4.5
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_images": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
+          "input_videos": [
+            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+          ],
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "aspect_ratio": "16:9",
+          "resolution": "720p",
+          "duration": 8
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -354,13 +393,20 @@ Because it has no distillation or post-training applied, it is diverse and malle
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "krea-2-raw",
+                "model": "gemini-omni-1-1-flash",
                 "prompt": "<prompt>",
-                "negative_prompt": "<negative_prompt>",
-                "width": 1024,
-                "height": 1024,
-                "num_inference_steps": 28,
-                "guidance_scale": 4.5
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_images": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
+                "input_videos": [
+                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+                ],
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "aspect_ratio": "16:9",
+                "resolution": "720p",
+                "duration": 8
             },
         )
         enqueue.raise_for_status()
@@ -402,7 +448,7 @@ Because it has no distillation or post-training applied, it is diverse and malle
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-2-raw",
+          "model": "gemini-omni-1-1-flash",
           "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
@@ -431,7 +477,7 @@ Because it has no distillation or post-training applied, it is diverse and malle
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "krea-2-raw",
+                "model": "gemini-omni-1-1-flash",
                 "prompt": "<prompt>"
             },
         )
@@ -467,11 +513,17 @@ Because it has no distillation or post-training applied, it is diverse and malle
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-2-raw",
+          "model": "gemini-omni-1-1-flash",
           "prompt": "<prompt>",
-          "negative_prompt": "<negative_prompt>",
-          "width": 1024,
-          "height": 1024
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_images": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
+          "input_videos": [
+            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+          ],
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -499,11 +551,17 @@ Because it has no distillation or post-training applied, it is diverse and malle
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "krea-2-raw",
+                "model": "gemini-omni-1-1-flash",
                 "prompt": "<prompt>",
-                "negative_prompt": "<negative_prompt>",
-                "width": 1024,
-                "height": 1024
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_images": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
+                "input_videos": [
+                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+                ],
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         enqueue.raise_for_status()
@@ -538,13 +596,20 @@ Because it has no distillation or post-training applied, it is diverse and malle
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-2-raw",
+          "model": "gemini-omni-1-1-flash",
           "prompt": "<prompt>",
-          "negative_prompt": "<negative_prompt>",
-          "width": 1024,
-          "height": 1024,
-          "num_inference_steps": 28,
-          "guidance_scale": 4.5
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_images": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
+          "input_videos": [
+            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+          ],
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "aspect_ratio": "16:9",
+          "resolution": "720p",
+          "duration": 8
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -572,13 +637,20 @@ Because it has no distillation or post-training applied, it is diverse and malle
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "krea-2-raw",
+                "model": "gemini-omni-1-1-flash",
                 "prompt": "<prompt>",
-                "negative_prompt": "<negative_prompt>",
-                "width": 1024,
-                "height": 1024,
-                "num_inference_steps": 28,
-                "guidance_scale": 4.5
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_images": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
+                "input_videos": [
+                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+                ],
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "aspect_ratio": "16:9",
+                "resolution": "720p",
+                "duration": 8
             },
         )
         enqueue.raise_for_status()
@@ -613,7 +685,7 @@ Because it has no distillation or post-training applied, it is diverse and malle
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/krea-2-raw
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/gemini-omni-1-1-flash
 ```
 
 ## Request parameters
@@ -622,15 +694,17 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | Text prompt describing the image. |
+| `prompt` | `string` | &mdash; | Describe the video, or the edit or extension to apply to the input video. Refer to media as @FirstFrame, @LastFrame, @Image1, @Video1, etc. Describe audio and negatives in plain language. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `negative_prompt` | `string` | &mdash; | What to avoid in the image. |
-| `width` | `integer` | `1024` | Width Range: 512 – 2048. |
-| `height` | `integer` | `1024` | Height Range: 512 – 2048. |
-| `num_inference_steps` | `integer` | `28` | More steps trade speed for detail. Range: 1 – 50. |
-| `guidance_scale` | `number` | `4.5` | How strongly the prompt steers generation. Range: 0 – 10. |
-| `seed` | `integer` | &mdash; | Random seed for reproducible generation. |
+| `input_image` | `string` | &mdash; | Image the video starts on. Format: uri. |
+| `tail_image_url` | `string` | &mdash; | Image the video ends on. Requires a first frame. Format: uri. |
+| `input_images` | `array<string>` | &mdash; | Up to 3 images of characters, objects, or styles to carry into the video. |
+| `input_videos` | `array<string>` | &mdash; | Up to 3 clips of at most 3 seconds each for a character, motion, or camera move. Audio is ignored. |
+| `input_video` | `string` | &mdash; | Video of 10 seconds or less. Describe a change to edit it, or what happens next to extend it by the chosen duration. Format: uri. |
+| `aspect_ratio` | `string` | `"16:9"` | Aspect Ratio One of: 16:9, 9:16. |
+| `resolution` | `string` | `"720p"` | Resolution One of: 360p, 720p, 1080p, 4k. |
+| `duration` | `integer` | `8` | Duration Range: 3 – 10. |
