@@ -1,29 +1,30 @@
 ---
-title: "GLM 5.3"
-description: "Long-horizon coding agents, 1M context"
+title: "Claude Fable 5.1"
+description: "Long-horizon agents and research, 1M context"
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try GLM 5.3 in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=zai-org-glm-5-3">
+  <Card title="Try Claude Fable 5.1 in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=claude-fable-5-1">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `zai-org-glm-5-3`
+**Model ID:** `claude-fable-5-1`
 
-GLM-5.3 is a large reasoning language model from Z AI built for complex software engineering and long-horizon agent tasks. It keeps the 1M-token context window of GLM-5.2 and improves on it in coding and in the balance between quality and token efficiency.
+**Claude Fable 5.1 is the successor to Claude Fable 5 in Anthropic's Mythos-class tier, built for demanding reasoning and long-horizon agentic work.** It keeps Claude Fable 5's input and output prices and brings stronger long-running agentic coding, multistep research, and document, spreadsheet, and slide work. Anthropic positions Claude Opus 5 as the starting point for most workloads and Claude Fable 5.1 for tasks where Opus 5 at higher effort still falls short.
 
-The model supports function calling and sustained multi-step workflows, and suits agentic engineering, code assistance, and reasoning over very long contexts. Weights have not been published, so it is served through its API rather than self-hosted.
+Adaptive thinking is always on and steered by the effort parameter (low through max); the raw chain of thought is never returned. Safety classifiers may decline requests in sensitive domains such as cybersecurity and biology, returning a refusal stop reason that can be routed to another Claude model via server-side fallback. Compared with Claude Fable 5, forced tool use is no longer supported, thinking blocks are readable only by the model that produced them, and editing earlier turns invalidates thinking blocks, so conversation histories should be append-only. Prompt cache reads cost a quarter of Claude Fable 5's rate. It accepts text and images and has a reliable knowledge cutoff of June 2026.
 
 | Metric             | Value              |
 |--------------------|--------------------|
-| Context Length     | 1,048,576 tokens   |
+| Context Length     | 1,000,000 tokens   |
+| Max Output         | 128,000 tokens     |
 | Multilingual       | Yes                |
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=zai-org-glm-5-3) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=claude-fable-5-1) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
@@ -36,7 +37,7 @@ The model supports function calling and sustained multi-step workflows, and suit
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer $OXEN_API_KEY" \
       -d '{
-      "model": "zai-org-glm-5-3",
+      "model": "claude-fable-5-1",
       "messages": [
         {
           "role": "user",
@@ -57,7 +58,7 @@ The model supports function calling and sustained multi-step workflows, and suit
             "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
         },
         json={
-            "model": "zai-org-glm-5-3",
+            "model": "claude-fable-5-1",
             "messages": [
                 {
                     "role": "user",
@@ -82,7 +83,7 @@ The model supports function calling and sustained multi-step workflows, and suit
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer $OXEN_API_KEY" \
       -d '{
-      "model": "zai-org-glm-5-3",
+      "model": "claude-fable-5-1",
       "messages": [
         {
           "role": "user",
@@ -106,7 +107,7 @@ The model supports function calling and sustained multi-step workflows, and suit
             "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
         },
         json={
-            "model": "zai-org-glm-5-3",
+            "model": "claude-fable-5-1",
             "messages": [
                 {
                     "role": "user",
@@ -125,60 +126,6 @@ The model supports function calling and sustained multi-step workflows, and suit
     </CodeGroup>
 
   </Tab>
-  <Tab title="All parameters">
-
-    <CodeGroup>
-
-    ```bash cURL
-    curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
-      -H "Content-Type: application/json" \
-      -H "Authorization: Bearer $OXEN_API_KEY" \
-      -d '{
-      "model": "zai-org-glm-5-3",
-      "messages": [
-        {
-          "role": "user",
-          "content": "Hello, what can you do?"
-        }
-      ],
-      "temperature": 0.7,
-      "max_tokens": 1024,
-      "stream": false,
-      "top_p": 1.0
-    }'
-    ```
-
-    ```python Python
-    import os
-    import requests
-
-    response = requests.post(
-        "https://hub.oxen.ai/api/ai/chat/completions",
-        headers={
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
-        },
-        json={
-            "model": "zai-org-glm-5-3",
-            "messages": [
-                {
-                    "role": "user",
-                    "content": "Hello, what can you do?"
-                }
-            ],
-            "temperature": 0.7,
-            "max_tokens": 1024,
-            "stream": false,
-            "top_p": 1.0
-        },
-    )
-    response.raise_for_status()
-    print(response.json())
-    ```
-
-    </CodeGroup>
-
-  </Tab>
 </Tabs>
 
 ## Fetch model details
@@ -186,7 +133,7 @@ The model supports function calling and sustained multi-step workflows, and suit
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/zai-org-glm-5-3
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/claude-fable-5-1
 ```
 
 ## Request parameters

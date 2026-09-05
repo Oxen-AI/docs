@@ -11,7 +11,7 @@ description: "Omni-modal short video generation and editing"
 
 **Model ID:** `gemini-omni-flash-preview`
 
-Gemini Omni Flash is Google's omni-modal model that generates short videos with synchronized audio from a text prompt, input images, or an input video to edit. It brings multimodal creative direction into a single model, producing 720p MP4 clips a few seconds long.
+Gemini Omni Flash is Google's omni-modal model that generates short videos with synchronized audio from a text prompt, input images, or an input video to edit. It brings multimodal creative direction into a single model, producing 3 to 10 second 720p MP4 clips.
 
 ## Example request
 
@@ -74,8 +74,10 @@ Gemini Omni Flash is Google's omni-modal model that generates short videos with 
           -d '{
           "model": "gemini-omni-flash-preview",
           "prompt": "<prompt>",
-          "first_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "input_image": [],
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_images": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }'
         ```
@@ -93,8 +95,10 @@ Gemini Omni Flash is Google's omni-modal model that generates short videos with 
             json={
                 "model": "gemini-omni-flash-preview",
                 "prompt": "<prompt>",
-                "first_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "input_image": [],
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_images": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
@@ -116,10 +120,13 @@ Gemini Omni Flash is Google's omni-modal model that generates short videos with 
           -d '{
           "model": "gemini-omni-flash-preview",
           "prompt": "<prompt>",
-          "first_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "input_image": [],
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_images": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "aspect_ratio": "16:9"
+          "aspect_ratio": "16:9",
+          "duration": 8
         }'
         ```
 
@@ -136,10 +143,13 @@ Gemini Omni Flash is Google's omni-modal model that generates short videos with 
             json={
                 "model": "gemini-omni-flash-preview",
                 "prompt": "<prompt>",
-                "first_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "input_image": [],
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_images": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "aspect_ratio": "16:9"
+                "aspect_ratio": "16:9",
+                "duration": 8
             },
         )
         response.raise_for_status()
@@ -236,8 +246,10 @@ Gemini Omni Flash is Google's omni-modal model that generates short videos with 
           -d '{
           "model": "gemini-omni-flash-preview",
           "prompt": "<prompt>",
-          "first_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "input_image": [],
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_images": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }' | jq -r '.generations[0].generation_id')
 
@@ -271,8 +283,10 @@ Gemini Omni Flash is Google's omni-modal model that generates short videos with 
             json={
                 "model": "gemini-omni-flash-preview",
                 "prompt": "<prompt>",
-                "first_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "input_image": [],
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_images": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
@@ -309,10 +323,13 @@ Gemini Omni Flash is Google's omni-modal model that generates short videos with 
           -d '{
           "model": "gemini-omni-flash-preview",
           "prompt": "<prompt>",
-          "first_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "input_image": [],
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_images": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "aspect_ratio": "16:9"
+          "aspect_ratio": "16:9",
+          "duration": 8
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -345,10 +362,13 @@ Gemini Omni Flash is Google's omni-modal model that generates short videos with 
             json={
                 "model": "gemini-omni-flash-preview",
                 "prompt": "<prompt>",
-                "first_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "input_image": [],
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_images": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "aspect_ratio": "16:9"
+                "aspect_ratio": "16:9",
+                "duration": 8
             },
         )
         enqueue.raise_for_status()
@@ -457,8 +477,10 @@ Gemini Omni Flash is Google's omni-modal model that generates short videos with 
           -d '{
           "model": "gemini-omni-flash-preview",
           "prompt": "<prompt>",
-          "first_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "input_image": [],
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_images": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }' | jq -r '.generations[0].generation_id')
 
@@ -489,8 +511,10 @@ Gemini Omni Flash is Google's omni-modal model that generates short videos with 
             json={
                 "model": "gemini-omni-flash-preview",
                 "prompt": "<prompt>",
-                "first_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "input_image": [],
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_images": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
@@ -528,10 +552,13 @@ Gemini Omni Flash is Google's omni-modal model that generates short videos with 
           -d '{
           "model": "gemini-omni-flash-preview",
           "prompt": "<prompt>",
-          "first_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "input_image": [],
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_images": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "aspect_ratio": "16:9"
+          "aspect_ratio": "16:9",
+          "duration": 8
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -561,10 +588,13 @@ Gemini Omni Flash is Google's omni-modal model that generates short videos with 
             json={
                 "model": "gemini-omni-flash-preview",
                 "prompt": "<prompt>",
-                "first_frame_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "input_image": [],
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_images": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "aspect_ratio": "16:9"
+                "aspect_ratio": "16:9",
+                "duration": 8
             },
         )
         enqueue.raise_for_status()
@@ -614,7 +644,8 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `first_frame_image` | `string` | &mdash; | Optional image to use as the video's starting frame. Reference it in the prompt as @FirstFrame. Format: uri. |
-| `input_image` | `array<string>` | `[]` | Optional reference images (characters, objects, styles to carry into the video). Reference them in the prompt as @Image1, @Image2, etc. |
+| `input_image` | `string` | &mdash; | Optional image to use as the video's starting frame. Reference it in the prompt as @FirstFrame. Format: uri. |
+| `input_images` | `array<string>` | &mdash; | Optional reference images (characters, objects, styles to carry into the video). Reference them in the prompt as @Image1, @Image2, etc. |
 | `input_video` | `string` | &mdash; | Optional video to edit. The prompt describes the changes to apply; unmentioned elements are preserved. Leave empty to generate a new video. Format: uri. |
 | `aspect_ratio` | `string` | `"16:9"` | Aspect Ratio One of: 16:9, 9:16. |
+| `duration` | `integer` | `8` | Duration Range: 3 – 10. |

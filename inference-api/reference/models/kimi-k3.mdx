@@ -11,9 +11,9 @@ description: "Agentic coding and vision, 1M context"
 
 **Model ID:** `kimi-k3`
 
-Kimi K3 is Moonshot AI's flagship Mixture-of-Experts model with a 1M-token context window, built for long-horizon agentic coding and reasoning workloads with native visual understanding.
+Kimi K3 is Moonshot AI's largest Mixture-of-Experts model with a 1M-token context window, built for long-horizon agentic coding and reasoning workloads with native visual understanding.
 
-The model uses the Kimi Delta Attention (KDA) hybrid linear attention mechanism and activates 16 of 896 experts per token. Thinking mode is always enabled: responses include separate reasoning content alongside the answer, and the `reasoning_effort` parameter currently accepts only "max". It handles tool calling (including forced tool choice and strict JSON schema output) and accepts images and videos through base64 or the Files API. Sampling parameters are fixed by the provider (temperature 1.0, top_p 0.95), and input caching is priced separately, with cache hits costing a tenth of cache misses. Open weights are slated for release in late July 2026.
+The model uses the Kimi Delta Attention (KDA) hybrid linear attention mechanism and activates 16 of 896 experts per token. Thinking mode is always enabled, with reasoning content returned alongside the answer. It handles tool calling with strict JSON schema output, and understands images and video. Open weights were released in July 2026 under the custom Kimi K3 License.
 
 | Metric             | Value              |
 |--------------------|--------------------|

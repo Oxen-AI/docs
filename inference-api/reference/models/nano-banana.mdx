@@ -1,6 +1,6 @@
 ---
 title: "Nano Banana"
-description: "On-device photorealistic image generation"
+description: "Fast photorealistic image generation and editing"
 ---
 
 <CardGroup cols={1}>
@@ -11,21 +11,11 @@ description: "On-device photorealistic image generation"
 
 **Model ID:** `nano-banana`
 
-nano-banana is an image generation model (sometimes referred to as Gemini 2.5 Flash Image) that excels in efficient on-device image synthesis, high prompt adherence, and advanced text rendering within images. It is designed for both speed and quality, enabling image generation at native 1024x1024 resolution while maintaining consistent quality across various aspect ratios and device types.
+nano-banana is Google's Gemini 2.5 Flash Image model, a fast image generation and editing model with high prompt adherence and advanced text rendering within images. It generates at native 1024x1024 resolution while maintaining consistent quality across aspect ratios.
 
-The model's main strengths are its ability to process and generate photorealistic images with accurate text integration, its efficiency on mobile and cloud hardware, and its strong semantic understanding of prompts. It reliably interprets and renders complex scenes, textual elements, and styles, outperforming previous diffusion models in prompt adherence and visual coherence, especially for applications requiring accurate text in images and mobile deployment.
+The model's main strengths are its ability to generate photorealistic images with accurate text integration (in multiple languages), its speed, and its strong semantic understanding of prompts. It reliably interprets and renders complex scenes, textual elements, and styles, outperforming previous diffusion models in prompt adherence and visual coherence, especially for applications requiring accurate text in images and mobile deployment.
 
-Some other noteworthy features of nano-banana include mask-free inpainting (editing image regions with natural language rather than pixel masks), layout-aware outpainting (extending images while preserving perspective and lighting), and high style transfer consistency, making it suitable for professional branding, creative workflows, and mobile-first applications.
-
-| Metric             | Value              |
-|--------------------|--------------------|
-| Parameter Count    | 450 million (base); up to 8 billion (enterprise scaling) |
-| Mixture of Experts | No              |
-| Context Length     | Unknown            |
-| Multilingual       | Yes (supports text rendering in multiple languages) |
-| Quantized*         | Yes             |
-
-*_Quantization is specific to the inference provider and the model may be offered with different quantization levels by other providers._
+Some other noteworthy features of nano-banana include mask-free inpainting (editing image regions with natural language rather than pixel masks), layout-aware outpainting (extending images while preserving perspective and lighting), and high style transfer consistency, making it suitable for professional branding and creative workflows.
 
 ## Example request
 

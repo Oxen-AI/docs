@@ -13,9 +13,9 @@ description: "Reference or first/last frame video with audio"
 
 WAN 3.0 Omni is the all-in-one reference mode of Alibaba's WAN 3.0 unified video model. It generates 2 to 30 second clips at up to 1080P, with generated audio on by default, and supports a smart duration mode that lets the model pick the length from the prompt. With no references supplied it generates from the prompt alone, replacing the separate text-to-video and reference-to-video models of the 2.x line.
 
-It accepts up to 10 images, 5 video clips, and 5 audio clips as combined references for appearance, motion, and voice; refer to them from the prompt as @Image 1, @Video 1, @Audio 1 and so on, numbered separately within each type. Alibaba's prompt guide structures a prompt as reference subject + action + dialogue, e.g. "Using the voice from @Audio 1, @Image 1 points at @Image 2 and says, ...", and a reference can be mentioned more than once.
+It accepts up to 10 images, 5 video clips, and 5 audio clips as combined references for appearance, motion, and voice.
 
-It also supports first/last frame generation: supply a first frame image and optionally a last frame to interpolate toward, in place of references. The provider rejects requests that mix frame inputs with reference inputs, so use one mode or the other per request.
+It also supports first/last frame generation as an alternative mode; frame inputs and reference inputs cannot be combined in a single request.
 
 ## Example request
 
@@ -762,7 +762,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | Text prompt describing the desired video. Max 5000 characters. Refer to reference assets with the @ syntax: @Image 1, @Image 2, ..., @Video 1, ..., @Audio 1, ...; each type is numbered separately. |
+| `prompt` | `string` | &mdash; | Text prompt describing the desired video. Refer to reference assets with the @ syntax: @Image 1, @Image 2, ..., @Video 1, ..., @Audio 1, ...; each type is numbered separately. |
 
 ### Optional parameters
 
