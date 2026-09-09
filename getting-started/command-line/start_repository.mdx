@@ -77,6 +77,10 @@ oxen config --set-remote origin https://hub.oxen.ai/ox/CatDogBBox
 
 Specify a remote name (commonly `origin`) and the URL of the remote repository. Cloned repositories already have `origin` set automatically.
 
+Setting a remote reads the repository from the server and records its identifier alongside the name and URL, so the remote has to be reachable and the repository has to exist. Create the remote repository first if it does not exist yet.
+
+Pointing a remote that is already set at a different repository is refused, since the identifier recorded for it no longer matches what the new URL serves. Delete the remote with `oxen config --delete-remote origin` and set it again to attach it to a different repository.
+
 A repo can have multiple remotes — most commands default to `origin` if no remote is specified.
 
 ### Create a Remote from the CLI
