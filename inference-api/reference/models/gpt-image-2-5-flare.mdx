@@ -1,32 +1,30 @@
 ---
-title: "Krea 2 Large"
-description: "High-fidelity text-to-image with style references"
+title: "GPT Image 2.5 Flare"
+description: "Fast, high-quality image generation and editing"
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try Krea 2 Large in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=krea-v2-large-text-to-image">
+  <Card title="Try GPT Image 2.5 Flare in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=gpt-image-2-5-flare">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `krea-v2-large-text-to-image`
+**Model ID:** `gpt-image-2-5-flare`
 
-Krea 2 Large is Krea's text-to-image model. It generates high-fidelity images from text with strong aesthetic quality and fine detail.
+GPT Image 2.5 Flare is OpenAI's general-purpose image generation and editing model, the successor to GPT Image 2. It renders images with more natural lighting and richer textures than GPT Image 2 at up to 50% lower latency, preserves subjects from reference photos, and follows editing instructions reliably across repeated edits without degrading earlier ones.
 
-The model supports a range of aspect ratios, a creativity control that trades prompt adherence for more imaginative results, and seed control for reproducible generation. It also accepts optional image style references, which can be weighted to control how strongly they influence the output.
-
-Krea 2 Large cannot be fine-tuned. For fine-tuning, see Krea 2 Raw, the open-weights checkpoint Krea released as a base for customization.
+It generates from a text prompt or edits up to 16 reference images, with optional mask-based inpainting, transparent backgrounds, custom dimensions up to 4K (3840x2160), and five quality tiers from low through the new xhigh and max settings. It suits creator and social content, product imagery, visual search, rapid prototyping, and high-volume generation. For edit-heavy workflows that need the tightest control, see GPT Image 2.5 Sunburst.
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=krea-v2-large-text-to-image) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=gpt-image-2-5-flare) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
   <Tab title="Sync">
 
-    See the [image generation reference](/inference-api/reference/image_generation) for more details.
+    See the [image editing reference](/inference-api/reference/image_editing) for more details.
 
     <Tabs>
       <Tab title="Minimal">
@@ -34,11 +32,11 @@ Krea 2 Large cannot be fine-tuned. For fine-tuning, see Krea 2 Raw, the open-wei
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-v2-large-text-to-image",
+          "model": "gpt-image-2-5-flare",
           "prompt": "<prompt>"
         }'
         ```
@@ -48,13 +46,13 @@ Krea 2 Large cannot be fine-tuned. For fine-tuning, see Krea 2 Raw, the open-wei
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/generate",
+            "https://hub.oxen.ai/api/ai/images/edit",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "krea-v2-large-text-to-image",
+                "model": "gpt-image-2-5-flare",
                 "prompt": "<prompt>"
             },
         )
@@ -70,13 +68,13 @@ Krea 2 Large cannot be fine-tuned. For fine-tuning, see Krea 2 Raw, the open-wei
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-v2-large-text-to-image",
+          "model": "gpt-image-2-5-flare",
           "prompt": "<prompt>",
-          "image_style_references": [
+          "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
         }'
@@ -87,15 +85,15 @@ Krea 2 Large cannot be fine-tuned. For fine-tuning, see Krea 2 Raw, the open-wei
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/generate",
+            "https://hub.oxen.ai/api/ai/images/edit",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "krea-v2-large-text-to-image",
+                "model": "gpt-image-2-5-flare",
                 "prompt": "<prompt>",
-                "image_style_references": [
+                "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
             },
@@ -112,17 +110,20 @@ Krea 2 Large cannot be fine-tuned. For fine-tuning, see Krea 2 Raw, the open-wei
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-v2-large-text-to-image",
+          "model": "gpt-image-2-5-flare",
           "prompt": "<prompt>",
-          "image_style_references": [
+          "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "aspect_ratio": "1:1",
-          "creativity": "medium"
+          "aspect_ratio": "16:9",
+          "resolution": "2K",
+          "quality": "high",
+          "output_format": "png",
+          "background": "auto"
         }'
         ```
 
@@ -131,19 +132,22 @@ Krea 2 Large cannot be fine-tuned. For fine-tuning, see Krea 2 Raw, the open-wei
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/generate",
+            "https://hub.oxen.ai/api/ai/images/edit",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "krea-v2-large-text-to-image",
+                "model": "gpt-image-2-5-flare",
                 "prompt": "<prompt>",
-                "image_style_references": [
+                "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "aspect_ratio": "1:1",
-                "creativity": "medium"
+                "aspect_ratio": "16:9",
+                "resolution": "2K",
+                "quality": "high",
+                "output_format": "png",
+                "background": "auto"
             },
         )
         response.raise_for_status()
@@ -171,7 +175,7 @@ Krea 2 Large cannot be fine-tuned. For fine-tuning, see Krea 2 Raw, the open-wei
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-v2-large-text-to-image",
+          "model": "gpt-image-2-5-flare",
           "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
@@ -203,7 +207,7 @@ Krea 2 Large cannot be fine-tuned. For fine-tuning, see Krea 2 Raw, the open-wei
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "krea-v2-large-text-to-image",
+                "model": "gpt-image-2-5-flare",
                 "prompt": "<prompt>"
             },
         )
@@ -238,9 +242,9 @@ Krea 2 Large cannot be fine-tuned. For fine-tuning, see Krea 2 Raw, the open-wei
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-v2-large-text-to-image",
+          "model": "gpt-image-2-5-flare",
           "prompt": "<prompt>",
-          "image_style_references": [
+          "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
         }' | jq -r '.generations[0].generation_id')
@@ -273,9 +277,9 @@ Krea 2 Large cannot be fine-tuned. For fine-tuning, see Krea 2 Raw, the open-wei
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "krea-v2-large-text-to-image",
+                "model": "gpt-image-2-5-flare",
                 "prompt": "<prompt>",
-                "image_style_references": [
+                "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
             },
@@ -311,13 +315,16 @@ Krea 2 Large cannot be fine-tuned. For fine-tuning, see Krea 2 Raw, the open-wei
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-v2-large-text-to-image",
+          "model": "gpt-image-2-5-flare",
           "prompt": "<prompt>",
-          "image_style_references": [
+          "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "aspect_ratio": "1:1",
-          "creativity": "medium"
+          "aspect_ratio": "16:9",
+          "resolution": "2K",
+          "quality": "high",
+          "output_format": "png",
+          "background": "auto"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -348,13 +355,16 @@ Krea 2 Large cannot be fine-tuned. For fine-tuning, see Krea 2 Raw, the open-wei
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "krea-v2-large-text-to-image",
+                "model": "gpt-image-2-5-flare",
                 "prompt": "<prompt>",
-                "image_style_references": [
+                "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "aspect_ratio": "1:1",
-                "creativity": "medium"
+                "aspect_ratio": "16:9",
+                "resolution": "2K",
+                "quality": "high",
+                "output_format": "png",
+                "background": "auto"
             },
         )
         enqueue.raise_for_status()
@@ -396,7 +406,7 @@ Krea 2 Large cannot be fine-tuned. For fine-tuning, see Krea 2 Raw, the open-wei
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-v2-large-text-to-image",
+          "model": "gpt-image-2-5-flare",
           "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
@@ -425,7 +435,7 @@ Krea 2 Large cannot be fine-tuned. For fine-tuning, see Krea 2 Raw, the open-wei
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "krea-v2-large-text-to-image",
+                "model": "gpt-image-2-5-flare",
                 "prompt": "<prompt>"
             },
         )
@@ -461,9 +471,9 @@ Krea 2 Large cannot be fine-tuned. For fine-tuning, see Krea 2 Raw, the open-wei
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-v2-large-text-to-image",
+          "model": "gpt-image-2-5-flare",
           "prompt": "<prompt>",
-          "image_style_references": [
+          "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
         }' | jq -r '.generations[0].generation_id')
@@ -493,9 +503,9 @@ Krea 2 Large cannot be fine-tuned. For fine-tuning, see Krea 2 Raw, the open-wei
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "krea-v2-large-text-to-image",
+                "model": "gpt-image-2-5-flare",
                 "prompt": "<prompt>",
-                "image_style_references": [
+                "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
             },
@@ -532,13 +542,16 @@ Krea 2 Large cannot be fine-tuned. For fine-tuning, see Krea 2 Raw, the open-wei
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "krea-v2-large-text-to-image",
+          "model": "gpt-image-2-5-flare",
           "prompt": "<prompt>",
-          "image_style_references": [
+          "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "aspect_ratio": "1:1",
-          "creativity": "medium"
+          "aspect_ratio": "16:9",
+          "resolution": "2K",
+          "quality": "high",
+          "output_format": "png",
+          "background": "auto"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -566,13 +579,16 @@ Krea 2 Large cannot be fine-tuned. For fine-tuning, see Krea 2 Raw, the open-wei
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "krea-v2-large-text-to-image",
+                "model": "gpt-image-2-5-flare",
                 "prompt": "<prompt>",
-                "image_style_references": [
+                "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "aspect_ratio": "1:1",
-                "creativity": "medium"
+                "aspect_ratio": "16:9",
+                "resolution": "2K",
+                "quality": "high",
+                "output_format": "png",
+                "background": "auto"
             },
         )
         enqueue.raise_for_status()
@@ -607,7 +623,7 @@ Krea 2 Large cannot be fine-tuned. For fine-tuning, see Krea 2 Raw, the open-wei
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/krea-v2-large-text-to-image
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/gpt-image-2-5-flare
 ```
 
 ## Request parameters
@@ -616,13 +632,16 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | Text description of the image to generate. |
+| `prompt` | `string` | &mdash; | Text description of the image to generate, or the instruction on how to edit the reference images. Use @Image1, @Image2, etc. to reference the input images. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `image_style_references` | `array<object>` | &mdash; | Optional list of reference image URLs that guide the style of the generated image. At most 10 entries. |
-| `aspect_ratio` | `string` | `"1:1"` | Aspect Ratio One of: 1:1, 4:3, 3:2, 16:9, 2.35:1, 4:5, 2:3, 9:16. |
-| `creativity` | `string` | `"medium"` | Controls how loosely the model interprets the prompt. Higher means more creative results that may drift from the prompt; low or raw values stay closer to the prompt. One of: raw, low, medium, high. |
-| `seed` | `integer` | &mdash; | Random seed for reproducible generation. |
+| `input_image` | `array<string>` | &mdash; | Optional reference image(s) to edit, up to 16. Leave empty to generate from the prompt alone. |
+| `mask_url` | `string` | &mdash; | Optional mask image URL for inpainting. Transparent pixels mark regions to edit; opaque pixels are preserved. Must match the first reference image's size. Leave empty to edit the whole image. Format: uri. |
+| `aspect_ratio` | `string` | `"16:9"` | Aspect Ratio One of: auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 21:9, 9:21. |
+| `resolution` | `string` | `"2K"` | Resolution One of: 1K, 2K, 4K. |
+| `quality` | `string` | `"high"` | Output quality tier. Higher tiers render more detail and cost more; xhigh and max are the slowest and most detailed. One of: low, medium, high, xhigh, max. |
+| `output_format` | `string` | `"png"` | File format for the generated image. One of: png, jpeg, webp. |
+| `background` | `string` | `"auto"` | Background of the generated image. 'transparent' requires png or webp output. One of: auto, opaque, transparent. |

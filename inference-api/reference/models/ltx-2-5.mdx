@@ -11,9 +11,16 @@ description: "Text, image, and audio to video, up to 4K"
 
 **Model ID:** `ltx-2-5`
 
-LTX 2.5 generates video from a text prompt, a first-frame image, or an audio track, served directly by Lightricks' LTX API. A single model covers all three modes.
+LTX 2.5 generates video from a text prompt, a first-frame image, or an audio track. A single model covers all three modes.
 
 Two tiers are offered: Fast reaches 4K and 20-second clips; Pro trades resolution (up to 1080p, 10 seconds) for higher fidelity. Both tiers support native multi-shot generation that keeps characters, lighting, and voices consistent across cuts, camera motion effects, and synchronized audio (turn Generate Audio off for silent output).
+
+The open 22B dev checkpoint supports LoRA fine-tuning on video clips with audio.
+
+| Metric             | Value              |
+|--------------------|--------------------|
+| Parameter Count    | 22 billion         |
+| Mixture of Experts | No                 |
 
 ## Example request
 

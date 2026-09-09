@@ -11,7 +11,7 @@ description: "Prompt-optimized image-to-video generation"
 
 **Model ID:** `minimax-h3-max-image-to-video`
 
-MiniMax H3 Max (Image to Video) is a post-trained variant of MiniMax H3, tuned by fal for stronger prompt adherence and better aesthetics, and served on fal's inference stack. It animates an optional first-frame image from a text prompt into a video, and routes to text-to-video when no image is given.
+MiniMax H3 Max (Image to Video) is a post-trained variant of MiniMax H3, tuned by fal for stronger prompt adherence and better aesthetics. It animates an optional first-frame image from a text prompt into a video, and routes to text-to-video when no image is given.
 
 It generates 5 to 15 second clips at 480P or 768P resolution, with prompt expansion modes that trade latency for prompt fidelity, an optional end frame for first-to-last keyframe generation, and a safety checker enabled by default. When a first frame is provided, the output keeps its aspect ratio.
 

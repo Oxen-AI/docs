@@ -1,29 +1,37 @@
 ---
-title: "GLM 5.3"
-description: "Long-horizon coding agents, 1M context"
+title: "GLM 5.3 Flash"
+description: "Efficient multimodal coding, 1M context"
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try GLM 5.3 in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=zai-org-glm-5-3">
+  <Card title="Try GLM 5.3 Flash in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=zai-org-glm-5-3-flash">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `zai-org-glm-5-3`
+**Model ID:** `zai-org-glm-5-3-flash`
 
-GLM-5.3 is a large reasoning language model from Z AI built for complex software engineering and long-horizon agent tasks. It keeps the 1M-token context window of GLM-5.2 and improves on it in coding and in the balance between quality and token efficiency.
+GLM-5.3-Flash is a native multimodal model from Z AI built for efficient coding and long-horizon agent tasks. With 320 billion total parameters and just 18 billion active, it outperforms GLM-5.2 across benchmarks at a fraction of the cost while approaching Claude Opus 4.8 on coding and agentic tasks.
 
-The model supports function calling and sustained multi-step workflows, and suits agentic engineering, code assistance, and reasoning over very long contexts. Weights have not been published.
+It is the first multimodal model in the GLM-5 series, combining sparse and linear attention in a hybrid architecture that cuts long-context serving costs. Reasoning is always on and cannot be disabled; the reasoning_effort parameter accepts low, high, and max, with max as the default. Weights are published under an MIT license.
 
-| Metric             | Value              |
-|--------------------|--------------------|
-| Context Length     | 1,048,576 tokens   |
-| Multilingual       | Yes                |
+Fine-tuning trains an adapter over attention while the routed experts stay frozen in 4 bits, so a fine tune of this model costs about what a far smaller one would.
+
+| Metric                  | Value               |
+|-------------------------|---------------------|
+| Parameter Count         | 320 billion         |
+| Active Parameter Count  | 18 billion          |
+| Mixture of Experts      | Yes                 |
+| Context Length          | 1,048,576 tokens    |
+| Max Output              | 131,072 tokens      |
+| Multilingual            | Yes                 |
+| Tool Use                | Yes                 |
+| Structured Outputs      | Yes                 |
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=zai-org-glm-5-3) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=zai-org-glm-5-3-flash) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
@@ -36,7 +44,7 @@ The model supports function calling and sustained multi-step workflows, and suit
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer $OXEN_API_KEY" \
       -d '{
-      "model": "zai-org-glm-5-3",
+      "model": "zai-org-glm-5-3-flash",
       "messages": [
         {
           "role": "user",
@@ -57,7 +65,7 @@ The model supports function calling and sustained multi-step workflows, and suit
             "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
         },
         json={
-            "model": "zai-org-glm-5-3",
+            "model": "zai-org-glm-5-3-flash",
             "messages": [
                 {
                     "role": "user",
@@ -82,7 +90,7 @@ The model supports function calling and sustained multi-step workflows, and suit
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer $OXEN_API_KEY" \
       -d '{
-      "model": "zai-org-glm-5-3",
+      "model": "zai-org-glm-5-3-flash",
       "messages": [
         {
           "role": "user",
@@ -106,7 +114,7 @@ The model supports function calling and sustained multi-step workflows, and suit
             "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
         },
         json={
-            "model": "zai-org-glm-5-3",
+            "model": "zai-org-glm-5-3-flash",
             "messages": [
                 {
                     "role": "user",
@@ -134,7 +142,7 @@ The model supports function calling and sustained multi-step workflows, and suit
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer $OXEN_API_KEY" \
       -d '{
-      "model": "zai-org-glm-5-3",
+      "model": "zai-org-glm-5-3-flash",
       "messages": [
         {
           "role": "user",
@@ -159,7 +167,7 @@ The model supports function calling and sustained multi-step workflows, and suit
             "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
         },
         json={
-            "model": "zai-org-glm-5-3",
+            "model": "zai-org-glm-5-3-flash",
             "messages": [
                 {
                     "role": "user",
@@ -186,7 +194,7 @@ The model supports function calling and sustained multi-step workflows, and suit
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/zai-org-glm-5-3
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/zai-org-glm-5-3-flash
 ```
 
 ## Request parameters
