@@ -11,7 +11,7 @@ description: "Reference-guided video with lip-synced audio"
 
 **Model ID:** `minimax-h3-max-reference-to-video`
 
-MiniMax H3 Max (Reference to Video) is a post-trained variant of MiniMax H3, tuned by fal for stronger prompt adherence and better aesthetics, and served on fal's inference stack. It generates video from a text prompt guided by multimodal references: up to 9 subject or style images, 3 motion video clips, and 3 audio clips.
+MiniMax H3 Max (Reference to Video) is a post-trained variant of MiniMax H3, tuned by fal for stronger prompt adherence and better aesthetics. It generates video from a text prompt guided by multimodal references: up to 9 subject or style images, 3 motion video clips, and 3 audio clips.
 
 It generates 5 to 15 second clips at 480P or 768P resolution with audio, including lip-synced dialogue, keeping subjects consistent with their reference images while following referenced motion and voices. References may total at most 12 files; video and audio clips run 2 to 15 seconds each with at most 15 seconds combined per type, and audio cannot be the only reference. Prompt expansion modes trade latency for prompt fidelity.
 

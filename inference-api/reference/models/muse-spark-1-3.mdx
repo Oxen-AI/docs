@@ -1,28 +1,29 @@
 ---
-title: "Muse Spark 1.1"
-description: "Agentic coding with 1M context"
+title: "Muse Spark 1.3"
+description: "Agentic coding with 1M context, fewer tool calls"
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try Muse Spark 1.1 in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=muse-spark-1-1">
+  <Card title="Try Muse Spark 1.3 in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=muse-spark-1-3">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `muse-spark-1-1`
+**Model ID:** `muse-spark-1-3`
 
-Muse Spark 1.1 is Meta's multimodal reasoning model for agentic workflows, coding, computer use, and long-running tasks. It can plan across tools, delegate work to parallel subagents, work with large codebases, and retain important context across extended sessions.
+Muse Spark 1.3 is Meta's multimodal reasoning model for long-running agentic, multi-agent, and coding workflows. It can plan across tools, delegate work to parallel subagents, work with large codebases, and sustain longer-horizon tasks while juggling multiple workflows in a single extended thread.
 
-The model supports structured output, parallel tool calling, and visual understanding. Meta serves Muse Spark 1.1 through the proprietary Meta Model API in public preview; its weights are not available for local deployment or fine-tuning.
+Compared with earlier Muse Spark releases, it completes engineering tasks with fewer tool calls and fewer output tokens, takes fewer turns where they are not needed, and produces a cleaner coding style. Meta also reports stronger resistance to adversarial inputs and prompt injections. The model supports structured output, parallel tool calling, and visual understanding.
 
 | Metric             | Value              |
 |--------------------|--------------------|
-| Context Length     | 1,000,000 tokens   |
+| Context Length     | 1,048,576 tokens   |
+| Max Output         | 131,072 tokens     |
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=muse-spark-1-1) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=muse-spark-1-3) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
@@ -35,7 +36,7 @@ The model supports structured output, parallel tool calling, and visual understa
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer $OXEN_API_KEY" \
       -d '{
-      "model": "muse-spark-1-1",
+      "model": "muse-spark-1-3",
       "messages": [
         {
           "role": "user",
@@ -56,7 +57,7 @@ The model supports structured output, parallel tool calling, and visual understa
             "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
         },
         json={
-            "model": "muse-spark-1-1",
+            "model": "muse-spark-1-3",
             "messages": [
                 {
                     "role": "user",
@@ -81,7 +82,7 @@ The model supports structured output, parallel tool calling, and visual understa
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer $OXEN_API_KEY" \
       -d '{
-      "model": "muse-spark-1-1",
+      "model": "muse-spark-1-3",
       "messages": [
         {
           "role": "user",
@@ -105,7 +106,7 @@ The model supports structured output, parallel tool calling, and visual understa
             "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
         },
         json={
-            "model": "muse-spark-1-1",
+            "model": "muse-spark-1-3",
             "messages": [
                 {
                     "role": "user",
@@ -133,7 +134,7 @@ The model supports structured output, parallel tool calling, and visual understa
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer $OXEN_API_KEY" \
       -d '{
-      "model": "muse-spark-1-1",
+      "model": "muse-spark-1-3",
       "messages": [
         {
           "role": "user",
@@ -158,7 +159,7 @@ The model supports structured output, parallel tool calling, and visual understa
             "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
         },
         json={
-            "model": "muse-spark-1-1",
+            "model": "muse-spark-1-3",
             "messages": [
                 {
                     "role": "user",
@@ -185,7 +186,7 @@ The model supports structured output, parallel tool calling, and visual understa
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/muse-spark-1-1
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/muse-spark-1-3
 ```
 
 ## Request parameters
