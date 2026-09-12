@@ -123,7 +123,8 @@ It generates from a text prompt or edits up to 16 reference images, with optiona
           "resolution": "2K",
           "quality": "high",
           "output_format": "png",
-          "background": "auto"
+          "background": "auto",
+          "moderation": "low"
         }'
         ```
 
@@ -147,7 +148,8 @@ It generates from a text prompt or edits up to 16 reference images, with optiona
                 "resolution": "2K",
                 "quality": "high",
                 "output_format": "png",
-                "background": "auto"
+                "background": "auto",
+                "moderation": "low"
             },
         )
         response.raise_for_status()
@@ -324,7 +326,8 @@ It generates from a text prompt or edits up to 16 reference images, with optiona
           "resolution": "2K",
           "quality": "high",
           "output_format": "png",
-          "background": "auto"
+          "background": "auto",
+          "moderation": "low"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -364,7 +367,8 @@ It generates from a text prompt or edits up to 16 reference images, with optiona
                 "resolution": "2K",
                 "quality": "high",
                 "output_format": "png",
-                "background": "auto"
+                "background": "auto",
+                "moderation": "low"
             },
         )
         enqueue.raise_for_status()
@@ -551,7 +555,8 @@ It generates from a text prompt or edits up to 16 reference images, with optiona
           "resolution": "2K",
           "quality": "high",
           "output_format": "png",
-          "background": "auto"
+          "background": "auto",
+          "moderation": "low"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -588,7 +593,8 @@ It generates from a text prompt or edits up to 16 reference images, with optiona
                 "resolution": "2K",
                 "quality": "high",
                 "output_format": "png",
-                "background": "auto"
+                "background": "auto",
+                "moderation": "low"
             },
         )
         enqueue.raise_for_status()
@@ -645,3 +651,4 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | `quality` | `string` | `"high"` | Output quality tier. Higher tiers render more detail and cost more; xhigh and max are the slowest and most detailed. One of: low, medium, high, xhigh, max. |
 | `output_format` | `string` | `"png"` | File format for the generated image. One of: png, jpeg, webp. |
 | `background` | `string` | `"auto"` | Background of the generated image. 'transparent' requires png or webp output. One of: auto, opaque, transparent. |
+| `moderation` | `string` | `"low"` | Content moderation strictness. 'low' is less restrictive than 'auto'; OpenAI still filters all prompts and outputs under its usage policies. One of: low, auto. |
