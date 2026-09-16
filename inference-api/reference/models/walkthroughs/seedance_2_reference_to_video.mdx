@@ -10,12 +10,11 @@ ByteDance Seedance 2.0 reference-to-video generates video from a text prompt gui
 ## Endpoint
 
 ```
-POST /api/ai/videos/generate
+POST /api/ai/queue
 ```
 
-Video generation is synchronous — the request blocks until the video is ready (typically 1–5 minutes).
-
-It is recommended to use [`/ai/queue`](/inference-api/reference/async_queue) instead for long-running jobs, so that you don't have long running http requests.
+Generation runs in the background and usually takes 1 to 5 minutes. Enqueueing returns a
+generation ID right away; poll it or wait on the event stream for the finished video.
 
 ## Request Parameters
 
@@ -31,7 +30,6 @@ It is recommended to use [`/ai/queue`](/inference-api/reference/async_queue) ins
 | `generate_audio` | boolean | no | `true` | Generate synchronized audio (sound effects, ambient sounds, lip-synced speech). Cost is the same either way. |
 | `aspect_ratio` | string | no | `"auto"` | `"auto"`, `"21:9"`, `"16:9"`, `"4:3"`, `"1:1"`, `"3:4"`, or `"9:16"`. |
 | `seed` | integer | no | -- | Random seed for reproducibility. Results may still vary slightly. |
-| `response_format` | string | no | `"url"` | `"url"` returns a hosted URL. `"b64_json"` returns base64-encoded video bytes inline. |
 | `target_namespace` | string | no | current user | Namespace to save results and bill to. Can be an organization name. |
 
 ### Reference Media Limits
@@ -61,7 +59,7 @@ Total files across all modalities must not exceed 12.
 import requests
 
 response = requests.post(
-    "https://hub.oxen.ai/api/ai/videos/generate",
+    "https://hub.oxen.ai/api/ai/queue",
     headers={
         "Authorization": "Bearer YOUR_API_KEY",
         "Content-Type": "application/json",
@@ -72,12 +70,12 @@ response = requests.post(
     },
 )
 
-data = response.json()
-print("Video URL:", data["videos"][0]["url"])
+generation_id = response.json()["generations"][0]["generation_id"]
+print("Enqueued:", generation_id)
 ```
 
 ```bash cURL
-curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+curl -X POST https://hub.oxen.ai/api/ai/queue \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -96,7 +94,7 @@ curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
 import requests
 
 response = requests.post(
-    "https://hub.oxen.ai/api/ai/videos/generate",
+    "https://hub.oxen.ai/api/ai/queue",
     headers={
         "Authorization": "Bearer YOUR_API_KEY",
         "Content-Type": "application/json",
@@ -110,12 +108,12 @@ response = requests.post(
     },
 )
 
-data = response.json()
-print("Video URL:", data["videos"][0]["url"])
+generation_id = response.json()["generations"][0]["generation_id"]
+print("Enqueued:", generation_id)
 ```
 
 ```bash cURL
-curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+curl -X POST https://hub.oxen.ai/api/ai/queue \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -137,7 +135,7 @@ curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
 import requests
 
 response = requests.post(
-    "https://hub.oxen.ai/api/ai/videos/generate",
+    "https://hub.oxen.ai/api/ai/queue",
     headers={
         "Authorization": "Bearer YOUR_API_KEY",
         "Content-Type": "application/json",
@@ -154,12 +152,12 @@ response = requests.post(
     },
 )
 
-data = response.json()
-print("Video URL:", data["videos"][0]["url"])
+generation_id = response.json()["generations"][0]["generation_id"]
+print("Enqueued:", generation_id)
 ```
 
 ```bash cURL
-curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+curl -X POST https://hub.oxen.ai/api/ai/queue \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -184,7 +182,7 @@ curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
 import requests
 
 response = requests.post(
-    "https://hub.oxen.ai/api/ai/videos/generate",
+    "https://hub.oxen.ai/api/ai/queue",
     headers={
         "Authorization": "Bearer YOUR_API_KEY",
         "Content-Type": "application/json",
@@ -200,12 +198,12 @@ response = requests.post(
     },
 )
 
-data = response.json()
-print("Video URL:", data["videos"][0]["url"])
+generation_id = response.json()["generations"][0]["generation_id"]
+print("Enqueued:", generation_id)
 ```
 
 ```bash cURL
-curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+curl -X POST https://hub.oxen.ai/api/ai/queue \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -221,83 +219,24 @@ curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
 
 </CodeGroup>
 
-### Response (`response_format: "url"`)
+### Response
+
+Enqueueing returns one generation ID per copy, immediately:
 
 ```json
 {
-  "created": 1775090723,
-  "model": "bytedance-seedance-2-0-reference-to-video",
-  "videos": [
-    {
-      "url": "https://hub.oxen.ai/api/repos/.../files/.../video.mp4?..."
-    }
+  "generations": [
+    {"generation_id": "4ef840a4-1234-5678-9abc-def012345678", "status": "queued"}
   ]
 }
 ```
 
-The URL is a temporary link that expires after a period of time.
+## Collect the result
 
-### Response (`response_format: "b64_json"`)
-
-```json
-{
-  "created": 1775090723,
-  "model": "bytedance-seedance-2-0-reference-to-video",
-  "videos": [
-    {
-      "b64_json": "<base64-encoded mp4 bytes>"
-    }
-  ]
-}
-```
-
-## Using with /ai/queue
-
-Recommended for video generation. Returns immediately, processes in the background.
-
-### Enqueue
-
-<CodeGroup>
-
-```python Python
-import requests
-
-response = requests.post(
-    "https://hub.oxen.ai/api/ai/queue",
-    headers={
-        "Authorization": "Bearer YOUR_API_KEY",
-        "Content-Type": "application/json",
-    },
-    json={
-        "model": "bytedance-seedance-2-0-reference-to-video",
-        "prompt": "@Image1 waves at the camera and smiles",
-        "input_images": ["https://example.com/person.jpg"],
-        "duration": "5",
-        "num_generations": 2,
-    },
-)
-
-generations = response.json()["generations"]
-for g in generations:
-    print(f"ID: {g['generation_id']}, Status: {g['status']}")
-```
-
-```bash cURL
-curl -X POST https://hub.oxen.ai/api/ai/queue \
-  -H "Authorization: Bearer $OXEN_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "bytedance-seedance-2-0-reference-to-video",
-    "prompt": "@Image1 waves at the camera and smiles",
-    "input_images": ["https://example.com/person.jpg"],
-    "duration": "5",
-    "num_generations": 2
-  }'
-```
-
-</CodeGroup>
-
-### Poll
+Poll the generation until its `status` is `succeeded`, `failed`, or `cancelled`. On
+success, `result_url` points to the output file. To wait on the event stream instead, or
+to cancel or retry a generation, see the
+[media generation reference](/inference-api/reference/async_queue).
 
 <CodeGroup>
 
@@ -328,31 +267,6 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" \
 
 </CodeGroup>
 
-A generation is done when its `status` is `succeeded`, `failed`, or `cancelled`. On success, `result_url` points to the output file.
-
-### Cancel
-
-<CodeGroup>
-
-```python Python
-import requests
-
-generation_id = "4ef840a4-..."
-response = requests.delete(
-    f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
-    headers={"Authorization": "Bearer YOUR_API_KEY"},
-)
-
-print(response.json())
-```
-
-```bash cURL
-curl -X DELETE -H "Authorization: Bearer $OXEN_API_KEY" \
-  "https://hub.oxen.ai/api/ai/queue/4ef840a4-..."
-```
-
-</CodeGroup>
-
 ## Errors
 
 | Error | Cause | Fix |
@@ -362,4 +276,4 @@ curl -X DELETE -H "Authorization: Bearer $OXEN_API_KEY" \
 | `Audio requires at least one image or video` | `input_audios` provided without `input_images` or `input_videos` | Add at least one reference image or video |
 | `Invalid duration` | Duration not `"auto"` or `"4"`–`"15"` | Use a supported duration value |
 | `Invalid resolution` | Resolution not `"480p"` or `"720p"` | Use `"480p"` or `"720p"` |
-| `num_generations must be an integer between 1 and 4` | Invalid count (via `/ai/queue`) | Use 1–4 |
+| `num_generations must be an integer between 1 and 12` | Invalid count (via `/ai/queue`) | Use 1–12 |

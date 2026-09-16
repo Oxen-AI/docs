@@ -10,10 +10,11 @@ Transforms reference images into dynamic video sequences. Preserves identity, la
 ## Endpoint
 
 ```
-POST /api/ai/videos/generate
+POST /api/ai/queue
 ```
 
-Video generation is synchronous, the request blocks until the video is ready (typically 1-5 minutes). It is recommended to use [`/ai/queue`](/inference-api/reference/async_queue) instead for long-running jobs, so that you don't have long running http requests.
+Generation runs in the background and usually takes 1 to 5 minutes. Enqueueing returns a
+generation ID right away; poll it or wait on the event stream for the finished video.
 
 ## Request Parameters
 
@@ -30,7 +31,6 @@ Video generation is synchronous, the request blocks until the video is ready (ty
 | `negative_prompt` | string | no | `"blur, distort, and low quality"` | Text describing what to avoid in the generated video. |
 | `aspect_ratio` | string | no | `"16:9"` | `"9:16"`, `"1:1"`, or `"16:9"`. |
 | `generate_audio` | boolean | no | `false` | Generate native audio. Supports Chinese and English voice output. |
-| `response_format` | string | no | `"url"` | `"url"` returns a hosted URL. `"b64_json"` returns base64-encoded video bytes inline. |
 | `target_namespace` | string | no | current user | Namespace to save results and bill to. Can be an organization name. |
 
 ### prompt vs multi_prompt
@@ -122,7 +122,7 @@ Maximum 4 total images across all elements and `input_image` references.
 import requests
 
 response = requests.post(
-    "https://hub.oxen.ai/api/ai/videos/generate",
+    "https://hub.oxen.ai/api/ai/queue",
     headers={
         "Authorization": "Bearer YOUR_API_KEY",
         "Content-Type": "application/json",
@@ -133,12 +133,12 @@ response = requests.post(
     },
 )
 
-data = response.json()
-print("Video URL:", data["videos"][0]["url"])
+generation_id = response.json()["generations"][0]["generation_id"]
+print("Enqueued:", generation_id)
 ```
 
 ```bash cURL
-curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+curl -X POST https://hub.oxen.ai/api/ai/queue \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -157,7 +157,7 @@ curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
 import requests
 
 response = requests.post(
-    "https://hub.oxen.ai/api/ai/videos/generate",
+    "https://hub.oxen.ai/api/ai/queue",
     headers={
         "Authorization": "Bearer YOUR_API_KEY",
         "Content-Type": "application/json",
@@ -169,12 +169,12 @@ response = requests.post(
     },
 )
 
-data = response.json()
-print("Video URL:", data["videos"][0]["url"])
+generation_id = response.json()["generations"][0]["generation_id"]
+print("Enqueued:", generation_id)
 ```
 
 ```bash cURL
-curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+curl -X POST https://hub.oxen.ai/api/ai/queue \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -194,7 +194,7 @@ curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
 import requests
 
 response = requests.post(
-    "https://hub.oxen.ai/api/ai/videos/generate",
+    "https://hub.oxen.ai/api/ai/queue",
     headers={
         "Authorization": "Bearer YOUR_API_KEY",
         "Content-Type": "application/json",
@@ -209,12 +209,12 @@ response = requests.post(
     },
 )
 
-data = response.json()
-print("Video URL:", data["videos"][0]["url"])
+generation_id = response.json()["generations"][0]["generation_id"]
+print("Enqueued:", generation_id)
 ```
 
 ```bash cURL
-curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+curl -X POST https://hub.oxen.ai/api/ai/queue \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -237,7 +237,7 @@ curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
 import requests
 
 response = requests.post(
-    "https://hub.oxen.ai/api/ai/videos/generate",
+    "https://hub.oxen.ai/api/ai/queue",
     headers={
         "Authorization": "Bearer YOUR_API_KEY",
         "Content-Type": "application/json",
@@ -260,12 +260,12 @@ response = requests.post(
     },
 )
 
-data = response.json()
-print("Video URL:", data["videos"][0]["url"])
+generation_id = response.json()["generations"][0]["generation_id"]
+print("Enqueued:", generation_id)
 ```
 
 ```bash cURL
-curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+curl -X POST https://hub.oxen.ai/api/ai/queue \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -288,81 +288,24 @@ curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
 
 </CodeGroup>
 
-### Response (`response_format: "url"`)
+### Response
+
+Enqueueing returns one generation ID per copy, immediately:
 
 ```json
 {
-  "created": 1775090723,
-  "model": "kling-video-o3-pro-reference-to-video",
-  "videos": [
-    {
-      "url": "https://hub.oxen.ai/api/repos/.../files/.../video.mp4?..."
-    }
+  "generations": [
+    {"generation_id": "4ef840a4-1234-5678-9abc-def012345678", "status": "queued"}
   ]
 }
 ```
 
-The URL is a temporary link that expires after a period of time.
+## Collect the result
 
-### Response (`response_format: "b64_json"`)
-
-```json
-{
-  "created": 1775090723,
-  "model": "kling-video-o3-pro-reference-to-video",
-  "videos": [
-    {
-      "b64_json": "<base64-encoded mp4 bytes>"
-    }
-  ]
-}
-```
-
-## Using with /ai/queue
-
-Recommended for video generation. Returns immediately, processes in the background.
-
-### Enqueue
-
-<CodeGroup>
-
-```python Python
-import requests
-
-response = requests.post(
-    "https://hub.oxen.ai/api/ai/queue",
-    headers={
-        "Authorization": "Bearer YOUR_API_KEY",
-        "Content-Type": "application/json",
-    },
-    json={
-        "model": "kling-video-o3-pro-reference-to-video",
-        "multi_prompt": [{"prompt": "A person speaking into a microphone", "duration": 5}],
-        "generate_audio": True,
-        "num_generations": 2,
-    },
-)
-
-generations = response.json()["generations"]
-for g in generations:
-    print(f"ID: {g['generation_id']}, Status: {g['status']}")
-```
-
-```bash cURL
-curl -X POST https://hub.oxen.ai/api/ai/queue \
-  -H "Authorization: Bearer $OXEN_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "kling-video-o3-pro-reference-to-video",
-    "multi_prompt": [{"prompt": "A person speaking into a microphone", "duration": 5}],
-    "generate_audio": true,
-    "num_generations": 2
-  }'
-```
-
-</CodeGroup>
-
-### Poll
+Poll the generation until its `status` is `succeeded`, `failed`, or `cancelled`. On
+success, `result_url` points to the output file. To wait on the event stream instead, or
+to cancel or retry a generation, see the
+[media generation reference](/inference-api/reference/async_queue).
 
 <CodeGroup>
 
@@ -393,31 +336,6 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" \
 
 </CodeGroup>
 
-A generation is done when its `status` is `succeeded`, `failed`, or `cancelled`. On success, `result_url` points to the output file.
-
-### Cancel
-
-<CodeGroup>
-
-```python Python
-import requests
-
-generation_id = "4ef840a4-..."
-response = requests.delete(
-    f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
-    headers={"Authorization": "Bearer YOUR_API_KEY"},
-)
-
-print(response.json())
-```
-
-```bash cURL
-curl -X DELETE -H "Authorization: Bearer $OXEN_API_KEY" \
-  "https://hub.oxen.ai/api/ai/queue/4ef840a4-..."
-```
-
-</CodeGroup>
-
 ## Errors
 
 | Error | Cause | Fix |
@@ -428,7 +346,7 @@ curl -X DELETE -H "Authorization: Bearer $OXEN_API_KEY" \
 | `duration value '2' is invalid` | Total duration < 3 seconds | Ensure total across shots >= 3 |
 | `Total shot duration (16s) exceeds maximum allowed (15s)` | Total duration > 15 seconds | Keep total at 15 seconds or less |
 | `Input should be '1', '2', ... or '15'` | Single shot > 15 | Keep each shot at 15 seconds or less |
-| `num_generations must be an integer between 1 and 4` | Invalid count (via `/ai/queue`) | Use 1-4 |
+| `num_generations must be an integer between 1 and 12` | Invalid count (via `/ai/queue`) | Use 1-4 |
 
 ## Other Kling Models
 
