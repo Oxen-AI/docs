@@ -1,118 +1,132 @@
 ---
 title: "Video Generation"
-description: "Generate videos from text prompts in minutes"
+description: "Generate videos from text prompts, images, or other videos"
 ---
 
-## Overview
+Video generation runs through the media queue. You submit a job, get a generation ID back right
+away, then poll that ID until the video is ready. Expect anywhere from one to fifteen minutes
+depending on the model and the duration you ask for.
 
-Generate videos from text descriptions, reference images, or existing videos.
-
-## Minimal Example (Synchronous)
-
-Note: Synchronous generation can take 5-15 minutes to complete for certain models, we recommend using the async queue and polling for long-running jobs (See Below).
+## Generate a video
 
 <CodeGroup>
 
 ```python Python
+import os
 import requests
+import time
 
-response = requests.post(
-    "https://hub.oxen.ai/api/ai/videos/generate",
-    headers={
-        "Authorization": "Bearer YOUR_API_KEY",
-        "Content-Type": "application/json",
-    },
+HEADERS = {
+    "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+    "Content-Type": "application/json",
+}
+
+enqueue = requests.post(
+    "https://hub.oxen.ai/api/ai/queue",
+    headers=HEADERS,
     json={
         "model": "kling-video-v2-6-pro-text-to-video",
         "prompt": "A red balloon floating upward through blue sky",
         "duration": 5,
     },
 )
+enqueue.raise_for_status()
+generation_id = enqueue.json()["generations"][0]["generation_id"]
+print(f"Enqueued {generation_id}")
 
-data = response.json()
-print("Video URL:", data["videos"][0]["url"])
-```
-
-```bash cURL
-curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "kling-video-v2-6-pro-text-to-video",
-    "prompt": "A red balloon floating upward through blue sky",
-    "duration": 5
-  }'
-```
-
-</CodeGroup>
-
-## Async Generation (Recommended)
-
-For video generation, using the async queue avoids long-lived HTTP connections:
-
-<CodeGroup>
-
-```python Python
-import requests
-import time
-
-API_KEY = "YOUR_API_KEY"
-MODEL = "kling-video-v2-6-pro-text-to-video"
-HEADERS = {
-    "Authorization": f"Bearer {API_KEY}",
-    "Content-Type": "application/json",
-}
-
-# 1. Enqueue
-response = requests.post(
-    "https://hub.oxen.ai/api/ai/queue",
-    headers=HEADERS,
-    json={
-        "model": MODEL,
-        "prompt": "A sunset timelapse over the ocean",
-        "duration": 5,
-    },
-)
-generation_id = response.json()["generations"][0]["generation_id"]
-print(f"Enqueued generation: {generation_id}")
-
-# 2. Poll until done
 while True:
     data = requests.get(
         f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
         headers=HEADERS,
     ).json()
-    print(f"Status: {data['status']}")
+    print(f"  {data['status']}")
     if data["status"] in {"succeeded", "failed", "cancelled"}:
         break
-    time.sleep(10)
+    time.sleep(15)
 
-if data["status"] == "succeeded":
-    print(f"Done! Result: {data['result_url']}")
-else:
-    print(f"Generation {data['status']}: {data.get('error_message')}")
+if data["status"] != "succeeded":
+    raise SystemExit(f"{data['status']}: {data['error_message']}")
+
+with open("output.mp4", "wb") as f:
+    f.write(requests.get(data["result_url"]).content)
+print("Saved output.mp4")
 ```
 
 ```bash cURL
-# 1. Enqueue
-curl -X POST https://hub.oxen.ai/api/ai/queue \
-  -H "Authorization: Bearer YOUR_API_KEY" \
+# Enqueue and capture the generation id.
+GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "model": "kling-video-v2-6-pro-text-to-video",
-    "prompt": "A sunset timelapse over the ocean",
+    "prompt": "A red balloon floating upward through blue sky",
     "duration": 5
-  }'
+  }' | jq -r '.generations[0].generation_id')
 
-# 2. Poll until done
-curl -H "Authorization: Bearer YOUR_API_KEY" \
-  "https://hub.oxen.ai/api/ai/queue?model=kling-video-v2-6-pro-text-to-video"
+# Poll until it finishes.
+while true; do
+  STATUS=$(curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+    "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.status')
+  echo "$STATUS"
+  case $STATUS in succeeded|failed|cancelled) break;; esac
+  sleep 15
+done
+
+# Download the result.
+curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+  "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.result_url' \
+  | xargs curl -o output.mp4
 ```
 
 </CodeGroup>
 
-## What's Next
+## Start from an image or a video
 
-- [Video Generation Reference](/inference-api/reference/video_generation) for the full parameter list
-- [Kling O3 Pro: Reference to Video](/inference-api/reference/models/kling-video-o3-pro-reference-to-video) for multi-shot video with reference images
-- [Async Queue Reference](/inference-api/reference/async_queue) for batch generation
+Image-to-video and reference-to-video models take `input_image`, and video-to-video models take
+`input_video`. Which one a model wants is part of its schema, and the model's own reference page
+shows a working request.
+
+```bash
+curl -X POST https://hub.oxen.ai/api/ai/queue \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "kling-video-v2-6-pro-image-to-video",
+    "prompt": "The camera pushes in slowly as the light shifts to dusk",
+    "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+    "duration": 5
+  }'
+```
+
+## Multi-shot video
+
+Some models cut between shots within one generation. Pass `multi_prompt` with a prompt and duration
+per shot instead of a single `prompt`.
+
+```bash
+curl -X POST https://hub.oxen.ai/api/ai/queue \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "kling-video-o3-pro-reference-to-video",
+    "multi_prompt": [
+      {"prompt": "Wide shot: a bird takes off from a branch", "duration": 5},
+      {"prompt": "Tracking shot: the bird soars through clouds", "duration": 5}
+    ],
+    "aspect_ratio": "16:9"
+  }'
+```
+
+## Don't sit on a poll loop
+
+Video takes minutes, so a completion event beats polling for it. Subscribe to
+`GET /api/events` before you enqueue and you get told the moment the file lands. See
+[completion events](/inference-api/reference/async_queue#completion-events).
+
+## What's next
+
+- [Media Generation reference](/inference-api/reference/async_queue) for every parameter,
+  cancellation, retries, and how long result URLs stay valid
+- [Kling O3 Pro: Reference to Video](/inference-api/reference/models/walkthroughs/kling_o3_pro_reference_to_video)
+  for multi-shot video built from reference images
+- [Model API references](/inference-api/reference/model-references) for what each model accepts
