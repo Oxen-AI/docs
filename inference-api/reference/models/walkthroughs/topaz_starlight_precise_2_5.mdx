@@ -130,7 +130,7 @@ Enqueueing returns one generation ID per copy, immediately:
 Poll the generation until its `status` is `succeeded`, `failed`, or `cancelled`. On
 success, `result_url` points to the output file. To wait on the event stream instead, or
 to cancel or retry a generation, see the
-[media generation reference](/inference-api/reference/async_queue).
+[queue reference](/inference-api/reference/async_queue).
 
 <CodeGroup>
 
@@ -168,4 +168,4 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" \
 | `Field required` | Missing `input_video` | Provide a video URL |
 | `Invalid resolution` | Unsupported resolution value | Use `"1080p"`, `"2k"`, or `"4k"` |
 | `target_fps must be between 1 and 60` | FPS out of range | Use a value between 1 and 60 |
-| `num_generations must be an integer between 1 and 12` | Invalid count (via `/ai/queue`) | Use 1–12 |
+| `num_generations` out of range | Invalid count (via `/ai/queue`) | Use 1 to 4 |

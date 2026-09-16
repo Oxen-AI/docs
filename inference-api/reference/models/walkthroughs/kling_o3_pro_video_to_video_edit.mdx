@@ -189,7 +189,7 @@ Enqueueing returns one generation ID per copy, immediately:
 Poll the generation until its `status` is `succeeded`, `failed`, or `cancelled`. On
 success, `result_url` points to the output file. To wait on the event stream instead, or
 to cancel or retry a generation, see the
-[media generation reference](/inference-api/reference/async_queue).
+[queue reference](/inference-api/reference/async_queue).
 
 <CodeGroup>
 
@@ -226,7 +226,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" \
 |---|---|---|
 | `Field required` | Missing `prompt` or `input_video` | Both are required |
 | `Invalid URL` | Malformed `input_video` URL | Provide a valid video URL |
-| `num_generations must be an integer between 1 and 12` | Invalid count (via `/ai/queue`) | Use 1–12 |
+| `num_generations` out of range | Invalid count (via `/ai/queue`) | Use 1 to 4 |
 
 ## Other Kling Models
 
