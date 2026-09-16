@@ -3,19 +3,18 @@ title: "Kling O3 Edit: Video to Video"
 description: "Edit existing videos using text prompts with optional reference images and character elements"
 ---
 
-Edit existing videos using text instructions. Describe what to change — add objects, swap characters, alter scenery — and the model re-renders the video accordingly. Supports reference images (`@Image1`, `@Image2`, …) and structured element references (`@Element1`, `@Element2`, …) for character/object consistency across the edit.
+Edit existing videos using text instructions. Describe what to change (add objects, swap characters, alter scenery) and the model re-renders the video accordingly. Supports reference images (`@Image1`, `@Image2`, …) and structured element references (`@Element1`, `@Element2`, …) for character/object consistency across the edit.
 
 **Model name:** `kling-video-o3-pro-video-to-video-edit`
 
 ## Endpoint
 
 ```
-POST /api/ai/videos/generate
+POST /api/ai/queue
 ```
 
-Video editing is synchronous — the request blocks until the edited video is ready (typically 1–5 minutes).
-
-It is recommended to use [`/ai/queue`](/inference-api/reference/async_queue) instead for long-running jobs, so that you don't have long running http requests.
+The edit runs in the background and usually takes 1 to 5 minutes. Enqueueing returns a
+generation ID right away; poll it or wait on the event stream for the finished video.
 
 ## Request Parameters
 
@@ -27,7 +26,6 @@ It is recommended to use [`/ai/queue`](/inference-api/reference/async_queue) ins
 | `input_image` | array of URIs | no | -- | Reference images for style/appearance. Use `@Image1`, `@Image2`, etc. in the prompt to refer to them. |
 | `elements` | array of objects | no | -- | Structured element references for characters/objects. See [elements](#elements) below. |
 | `keep_audio` | boolean | no | `false` | Whether to keep the original audio from the source video. |
-| `response_format` | string | no | `"url"` | `"url"` returns a hosted URL. `"b64_json"` returns base64-encoded video bytes inline. |
 | `target_namespace` | string | no | current user | Namespace to save results and bill to. Can be an organization name. |
 
 ### elements
@@ -49,7 +47,7 @@ Array of element objects for character/object reference. Use `@Element1`, `@Elem
 import requests
 
 response = requests.post(
-    "https://hub.oxen.ai/api/ai/videos/generate",
+    "https://hub.oxen.ai/api/ai/queue",
     headers={
         "Authorization": "Bearer YOUR_API_KEY",
         "Content-Type": "application/json",
@@ -61,12 +59,12 @@ response = requests.post(
     },
 )
 
-data = response.json()
-print("Video URL:", data["videos"][0]["url"])
+generation_id = response.json()["generations"][0]["generation_id"]
+print("Enqueued:", generation_id)
 ```
 
 ```bash cURL
-curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+curl -X POST https://hub.oxen.ai/api/ai/queue \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -86,7 +84,7 @@ curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
 import requests
 
 response = requests.post(
-    "https://hub.oxen.ai/api/ai/videos/generate",
+    "https://hub.oxen.ai/api/ai/queue",
     headers={
         "Authorization": "Bearer YOUR_API_KEY",
         "Content-Type": "application/json",
@@ -99,12 +97,12 @@ response = requests.post(
     },
 )
 
-data = response.json()
-print("Video URL:", data["videos"][0]["url"])
+generation_id = response.json()["generations"][0]["generation_id"]
+print("Enqueued:", generation_id)
 ```
 
 ```bash cURL
-curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+curl -X POST https://hub.oxen.ai/api/ai/queue \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -125,7 +123,7 @@ curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
 import requests
 
 response = requests.post(
-    "https://hub.oxen.ai/api/ai/videos/generate",
+    "https://hub.oxen.ai/api/ai/queue",
     headers={
         "Authorization": "Bearer YOUR_API_KEY",
         "Content-Type": "application/json",
@@ -147,12 +145,12 @@ response = requests.post(
     },
 )
 
-data = response.json()
-print("Video URL:", data["videos"][0]["url"])
+generation_id = response.json()["generations"][0]["generation_id"]
+print("Enqueued:", generation_id)
 ```
 
 ```bash cURL
-curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+curl -X POST https://hub.oxen.ai/api/ai/queue \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -174,81 +172,24 @@ curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
 
 </CodeGroup>
 
-### Response (`response_format: "url"`)
+### Response
+
+Enqueueing returns one generation ID per copy, immediately:
 
 ```json
 {
-  "created": 1775090723,
-  "model": "kling-video-o3-pro-video-to-video-edit",
-  "videos": [
-    {
-      "url": "https://hub.oxen.ai/api/repos/.../files/.../video.mp4?..."
-    }
+  "generations": [
+    {"generation_id": "4ef840a4-1234-5678-9abc-def012345678", "status": "queued"}
   ]
 }
 ```
 
-The URL is a temporary link that expires after a period of time.
+## Collect the result
 
-### Response (`response_format: "b64_json"`)
-
-```json
-{
-  "created": 1775090723,
-  "model": "kling-video-o3-pro-video-to-video-edit",
-  "videos": [
-    {
-      "b64_json": "<base64-encoded mp4 bytes>"
-    }
-  ]
-}
-```
-
-## Using with /ai/queue
-
-Recommended for video editing. Returns immediately, processes in the background.
-
-### Enqueue
-
-<CodeGroup>
-
-```python Python
-import requests
-
-response = requests.post(
-    "https://hub.oxen.ai/api/ai/queue",
-    headers={
-        "Authorization": "Bearer YOUR_API_KEY",
-        "Content-Type": "application/json",
-    },
-    json={
-        "model": "kling-video-o3-pro-video-to-video-edit",
-        "prompt": "Change the background to a sunset beach",
-        "input_video": "https://example.com/my-video.mp4",
-        "num_generations": 2,
-    },
-)
-
-generations = response.json()["generations"]
-for g in generations:
-    print(f"ID: {g['generation_id']}, Status: {g['status']}")
-```
-
-```bash cURL
-curl -X POST https://hub.oxen.ai/api/ai/queue \
-  -H "Authorization: Bearer $OXEN_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "kling-video-o3-pro-video-to-video-edit",
-    "prompt": "Change the background to a sunset beach",
-    "input_video": "https://example.com/my-video.mp4",
-    "num_generations": 2
-  }'
-```
-
-</CodeGroup>
-
-### Poll
+Poll the generation until its `status` is `succeeded`, `failed`, or `cancelled`. On
+success, `result_url` points to the output file. To wait on the event stream instead, or
+to cancel or retry a generation, see the
+[media generation reference](/inference-api/reference/async_queue).
 
 <CodeGroup>
 
@@ -279,38 +220,13 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" \
 
 </CodeGroup>
 
-A generation is done when its `status` is `succeeded`, `failed`, or `cancelled`. On success, `result_url` points to the output file.
-
-### Cancel
-
-<CodeGroup>
-
-```python Python
-import requests
-
-generation_id = "4ef840a4-..."
-response = requests.delete(
-    f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
-    headers={"Authorization": "Bearer YOUR_API_KEY"},
-)
-
-print(response.json())
-```
-
-```bash cURL
-curl -X DELETE -H "Authorization: Bearer $OXEN_API_KEY" \
-  "https://hub.oxen.ai/api/ai/queue/4ef840a4-..."
-```
-
-</CodeGroup>
-
 ## Errors
 
 | Error | Cause | Fix |
 |---|---|---|
 | `Field required` | Missing `prompt` or `input_video` | Both are required |
 | `Invalid URL` | Malformed `input_video` URL | Provide a valid video URL |
-| `num_generations must be an integer between 1 and 4` | Invalid count (via `/ai/queue`) | Use 1–4 |
+| `num_generations must be an integer between 1 and 12` | Invalid count (via `/ai/queue`) | Use 1–12 |
 
 ## Other Kling Models
 
