@@ -67,23 +67,28 @@ def load_models(args: argparse.Namespace) -> list[dict[str, Any]]:
     return models
 
 
+# Every model that produces a file goes through the media queue; only text
+# answers inside the request. The endpoint_type still distinguishes the
+# modalities because it picks which example parameters a page shows.
+QUEUE_ENDPOINT = "/api/ai/queue"
+CHAT_ENDPOINT = "/api/ai/chat/completions"
+
+
 def pick_endpoint(model: dict[str, Any]) -> tuple[str, str]:
     """Return (endpoint_path, endpoint_type)."""
     capabilities = model.get("capabilities") or {}
     inputs = capabilities.get("input") or []
     outputs = capabilities.get("output") or []
 
-    if "audio" in inputs and "text" in outputs and "video" not in outputs and "image" not in outputs:
-        return "/api/ai/audio/transcriptions", "audio_transcribe"
-    if "audio" in outputs and "video" not in outputs and "image" not in outputs:
-        return "/api/ai/audio/speech", "audio_speech"
     if "video" in outputs:
-        return "/api/ai/videos/generate", "video_generate"
+        return QUEUE_ENDPOINT, "video_generate"
+    if "audio" in outputs:
+        return QUEUE_ENDPOINT, "audio_generate"
     if "image" in outputs:
         if "image" in inputs:
-            return "/api/ai/images/edit", "image_edit"
-        return "/api/ai/images/generate", "image_generate"
-    return "/api/ai/chat/completions", "chat"
+            return QUEUE_ENDPOINT, "image_edit"
+        return QUEUE_ENDPOINT, "image_generate"
+    return CHAT_ENDPOINT, "chat"
 
 
 def _x_order(field: dict[str, Any] | None) -> float:
@@ -148,11 +153,6 @@ def example_body(model: dict[str, Any], endpoint_type: str, variant: str = "basi
         if not include(field_name, field_schema):
             continue
         body[field_name] = field_placeholder(field_name, field_schema)
-
-    if endpoint_type == "audio_transcribe" and "audio_url" not in body:
-        body["audio_url"] = FALLBACK_AUDIO_URL
-    if endpoint_type == "audio_speech" and "input" not in body:
-        body["input"] = "Welcome to Oxen"
 
     return body
 
@@ -378,7 +378,7 @@ def render_python(endpoint: str, body: dict[str, Any]) -> str:
     )
 
 
-ASYNC_ENDPOINT_TYPES = {"image_generate", "image_edit", "video_generate"}
+QUEUED_ENDPOINT_TYPES = {"image_generate", "image_edit", "video_generate", "audio_generate"}
 
 
 def _json_body_py(body: dict[str, Any], *, indent_prefix: str = "    ") -> str:
@@ -558,16 +558,7 @@ def _indent_lines(lines: list[str], prefix: str) -> list[str]:
     return [_indent(line, prefix) for line in lines]
 
 
-# Where each endpoint's top-level reference doc lives, for the per-tab
-# "See the X reference for more details" link.
-_ENDPOINT_REFERENCE_DOCS = {
-    "chat": ("chat completions reference", "/inference-api/reference/chat_completions"),
-    "image_generate": ("image generation reference", "/inference-api/reference/image_generation"),
-    "image_edit": ("image editing reference", "/inference-api/reference/image_editing"),
-    "video_generate": ("video generation reference", "/inference-api/reference/video_generation"),
-}
-
-_ASYNC_QUEUE_DOC = ("async queue reference", "/inference-api/reference/async_queue")
+_QUEUE_DOC = ("media generation reference", "/inference-api/reference/async_queue")
 
 
 def _render_example_block(
@@ -651,46 +642,37 @@ def _wrap_in_tab(title: str, header_paragraphs: list[str], inner_block: list[str
     return lines
 
 
-def _render_sync_async_sse_tabs(
-    endpoint: str,
-    endpoint_type: str,
+def _render_queue_tabs(
     kept_variants: list[tuple[str, dict[str, Any]]],
 ) -> list[str]:
-    """Render a Sync / Async / Async-with-SSE outer Tabs block.
+    """Render a Poll / Event stream outer Tabs block.
 
     Each outer tab nests the existing Minimal/Basic/All variant block, so readers
-    pick their execution mode first and their parameter depth second.
+    pick how they wait for the result first and their parameter depth second.
     """
-    sync_header: list[str] = []
-    if endpoint_type == "video_generate":
-        sync_header.append(
-            "This blocks until the video is ready (typically 5-15 minutes)."
-            " Prefer **Async** or **Async with SSE** for anything beyond quick experimentation."
-        )
-    sync_header.append(_reference_link_md(_ENDPOINT_REFERENCE_DOCS[endpoint_type]))
-
-    sync_block = _render_example_block(
-        kept_variants,
-        lambda body: render_curl(endpoint, body),
-        lambda body: render_python(endpoint, body),
-    )
-    async_poll_block = _render_example_block(
+    poll_block = _render_example_block(
         kept_variants,
         lambda body: render_async_poll_curl(body),
         lambda body: render_async_poll_python(body),
     )
-    async_sse_block = _render_example_block(
+    sse_block = _render_example_block(
         kept_variants,
         lambda body: render_async_sse_curl(body),
         lambda body: render_async_sse_python(body),
     )
 
-    async_link = [_reference_link_md(_ASYNC_QUEUE_DOC)]
+    poll_header = [
+        "Submit the job, then poll the generation until it reaches a terminal status.",
+        _reference_link_md(_QUEUE_DOC),
+    ]
+    sse_header = [
+        "Submit the job, then wait on the event stream instead of polling.",
+        _reference_link_md(_QUEUE_DOC),
+    ]
 
     lines = ["<Tabs>"]
-    lines += _wrap_in_tab("Sync", sync_header, sync_block)
-    lines += _wrap_in_tab("Async", async_link, async_poll_block)
-    lines += _wrap_in_tab("Async with SSE", async_link, async_sse_block)
+    lines += _wrap_in_tab("Poll", poll_header, poll_block)
+    lines += _wrap_in_tab("Event stream", sse_header, sse_block)
     lines.append("</Tabs>")
     return lines
 
@@ -744,8 +726,8 @@ def render_page(model: dict[str, Any], workbench_base: str) -> str:
         "</Tip>",
         "",
     ]
-    if endpoint_type in ASYNC_ENDPOINT_TYPES:
-        body_md += _render_sync_async_sse_tabs(endpoint, endpoint_type, kept_variants)
+    if endpoint_type in QUEUED_ENDPOINT_TYPES:
+        body_md += _render_queue_tabs(kept_variants)
     else:
         body_md += _render_example_block(
             kept_variants,
@@ -777,7 +759,8 @@ def render_page(model: dict[str, Any], workbench_base: str) -> str:
             "## Request parameters",
             "",
             "This model follows the standard OpenAI chat completions request body. See the"
-            " [chat completions reference](../inference-api.mdx) for the full parameter list.",
+            " [chat completions reference](/inference-api/reference/chat_completions) for the"
+            " full parameter list.",
         ]
 
     body_md += [""]
