@@ -76,7 +76,7 @@ print(f"Generated image: {data['result_url']}")
 - **model**: The model to generate with (for example `qwen-image`)
 - **prompt**: Text description of the image you want
 - **num_inference_steps**: Number of inference steps (optional, defaults vary by model)
-- **num_generations**: How many images to queue in one call, 1 to 12 (optional, defaults to 1)
+- **num_generations**: How many images to queue in one call, 1 to 4 (optional, defaults to 1)
 
 Every other parameter is the model's own. `GET /api/ai/models/:id` returns its schema, and the
 [media generation reference](/inference-api/reference/async_queue) covers the queue itself: the
