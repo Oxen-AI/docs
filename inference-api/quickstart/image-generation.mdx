@@ -122,7 +122,7 @@ models take an array of URLs instead of one; the model's own reference says whic
 
 ## Generate several at once
 
-`num_generations` queues up to 12 copies of the same request in one call, each with its own ID.
+`num_generations` queues up to 4 copies of the same request in one call, each with its own ID.
 
 ```bash
 curl -X POST https://hub.oxen.ai/api/ai/queue \
@@ -137,7 +137,7 @@ curl -X POST https://hub.oxen.ai/api/ai/queue \
 
 ## What's next
 
-- [Media Generation reference](/inference-api/reference/async_queue) for every parameter, the event
+- [queue reference](/inference-api/reference/async_queue) for every parameter, the event
   stream, cancellation, and how long result URLs stay valid
 - [Model API references](/inference-api/reference/model-references) for what each model accepts
 - [Video Generation](/inference-api/quickstart/video-generation) for the same flow with video
