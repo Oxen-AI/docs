@@ -254,11 +254,12 @@ echo "Deployed model: $DEPLOYED_MODEL"
 
 ## Step 5 – Run Inference with the Deployed Model
 
-With the deployment live, you can call the **image editing** inference endpoint using the deployed model identifier.
+With the deployment live, you submit edits to the media queue using the deployed model
+identifier, exactly as you would for a base model.
 
 **Endpoint**
 
-- `POST /api/ai/images/edit`
+- `POST /api/ai/queue`
 
 **Example `curl` request** (single input image):
 
@@ -266,7 +267,7 @@ With the deployment live, you can call the **image editing** inference endpoint 
 export DEPLOYED_MODEL="${DEPLOYED_MODEL:-oxen:your-fine-tuned-image-edit-model}"
 
 curl -X POST \
-  "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/ai/images/edit" \
+  "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/ai/queue" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer ${OXEN_API_KEY}" \
   -d "{
@@ -281,7 +282,7 @@ For models that support **multiple input images** (for example when using a mult
 
 ```bash
 curl -X POST \
-  "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/ai/images/edit" \
+  "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/ai/queue" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer ${OXEN_API_KEY}" \
   -d "{
@@ -295,9 +296,17 @@ curl -X POST \
   }"
 ```
 
+Each call returns a generation ID. Poll `GET /api/ai/queue/<generation_id>` until its `status`
+is `succeeded`, then read `result_url`:
+
+```bash
+curl -s -H "Authorization: Bearer ${OXEN_API_KEY}" \
+  "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/ai/queue/${GENERATION_ID}" | jq -r '.result_url'
+```
+
 These requests mirror the general image editing examples, but use your **fine-tuned image model** as the `model` value instead of a base model.
 
-For more background on the image editing inference API, see the
-[`Image Editing` examples](/examples/inference/image_editing).
+For the queue itself, including the event stream and how long result URLs stay valid, see the
+[media generation reference](/inference-api/reference/async_queue).
 
 With these five steps, you have a complete end-to-end image fine-tuning, deployment, and inference workflow using only `curl`, fully scriptable from the command line.

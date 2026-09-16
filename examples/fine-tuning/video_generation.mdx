@@ -137,8 +137,12 @@ curl -X POST \
   "model": "ox-objective-cyan-puffin",
   "prompt": "An ox walking in a field",
   "run_fast": true
-}' https://hub.oxen.ai/api/ai/videos/generate
+}' https://hub.oxen.ai/api/ai/queue
 ```
+
+That returns a generation ID. Poll `GET /api/ai/queue/<generation_id>` until its `status` is
+`succeeded` and read `result_url`. See the
+[media generation reference](/inference-api/reference/async_queue) for the full flow.
 
 <img alt="Deploy the Model and API usage" className="rounded-xl" src="/images/fine_tuning/text-to-video/ltx-deploy.jpg" />
 

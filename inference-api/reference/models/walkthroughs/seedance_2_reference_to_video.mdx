@@ -276,4 +276,4 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" \
 | `Audio requires at least one image or video` | `input_audios` provided without `input_images` or `input_videos` | Add at least one reference image or video |
 | `Invalid duration` | Duration not `"auto"` or `"4"`–`"15"` | Use a supported duration value |
 | `Invalid resolution` | Resolution not `"480p"` or `"720p"` | Use `"480p"` or `"720p"` |
-| `num_generations must be an integer between 1 and 12` | Invalid count (via `/ai/queue`) | Use 1–12 |
+| `num_generations` out of range | Invalid count (via `/ai/queue`) | Use 1 to 4 |

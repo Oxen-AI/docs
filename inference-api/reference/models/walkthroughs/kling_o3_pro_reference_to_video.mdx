@@ -346,7 +346,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" \
 | `duration value '2' is invalid` | Total duration < 3 seconds | Ensure total across shots >= 3 |
 | `Total shot duration (16s) exceeds maximum allowed (15s)` | Total duration > 15 seconds | Keep total at 15 seconds or less |
 | `Input should be '1', '2', ... or '15'` | Single shot > 15 | Keep each shot at 15 seconds or less |
-| `num_generations must be an integer between 1 and 12` | Invalid count (via `/ai/queue`) | Use 1-4 |
+| `num_generations` out of range | Invalid count (via `/ai/queue`) | Use 1 to 4 |
 
 ## Other Kling Models
 
