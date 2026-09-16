@@ -295,7 +295,7 @@ The response will include deployment information with a **model identifier** you
   "deployment": {
     "model_slug": "oxen:tutorials/cyberpunkart-ft_img_gen_12345",
     "status": "deploying",
-    "endpoint": "https://hub.oxen.ai/api/ai/images/generate"
+    "endpoint": "https://hub.oxen.ai/api/ai/queue"
   }
 }
 ```
@@ -315,17 +315,18 @@ Deployment may take 2-5 minutes as the model is loaded onto a GPU instance. You 
 
 ## Step 5 – Generate Images with Your Fine-Tuned Model
 
-Now you can generate images in your custom style using the inference API.
+Now you can generate images in your custom style. Deployed fine-tunes go through the media queue
+like every other image model.
 
 **Endpoint**
 
-- `POST /api/ai/images/generate`
+- `POST /api/ai/queue`
 
 **Example `curl` request** (text-to-image):
 
 ```bash
 curl -X POST \
-  "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/ai/images/generate" \
+  "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/ai/queue" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer ${OXEN_API_KEY}" \
   -d "{
@@ -344,7 +345,7 @@ You can generate multiple variations by setting `num_images`:
 
 ```bash
 curl -X POST \
-  "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/ai/images/generate" \
+  "${OXEN_BASE_URL:-https://hub.oxen.ai}/api/ai/queue" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer ${OXEN_API_KEY}" \
   -d "{
@@ -479,7 +480,7 @@ time.sleep(60)
 
 # Step 5: Generate image
 print("Generating image...")
-generate_url = f"{BASE_URL}/api/ai/images/generate"
+queue_url = f"{BASE_URL}/api/ai/queue"
 gen_data = {
     "model": deployed_model,
     "prompt": "a motorcycle racing through the city in cyberpunk style",
@@ -489,9 +490,16 @@ gen_data = {
     "height": 1024
 }
 
-response = requests.post(generate_url, headers=headers, json=gen_data)
-image_url = response.json()["images"][0]["url"]
-print(f"Generated image: {image_url}")
+response = requests.post(queue_url, headers=headers, json=gen_data)
+generation_id = response.json()["generations"][0]["generation_id"]
+
+while True:
+    generation = requests.get(f"{queue_url}/{generation_id}", headers=headers).json()
+    if generation["status"] in {"succeeded", "failed", "cancelled"}:
+        break
+    time.sleep(5)
+
+print(f"Generated image: {generation['result_url']}")
 ```
 
 ---
