@@ -1,52 +1,83 @@
 ---
 title: '🖼️ Image Generation'
-description: 'How to use the image generation API on Oxen.ai.'
+description: 'How to generate images with the Oxen.ai API.'
 ---
 
 ### Image Generation
 
-The image generation endpoint allows you to generate images from text prompts. Simply provide a prompt describing the image you want to create. To see the list of models that support image generation, visit the [Models](https://www.oxen.ai/ai/models?modalities=text-to-image) page and filter by "Text to Image".
+Image generation is queued: you submit a prompt, get a generation ID back immediately, then poll
+that ID until the image is ready. To see which models generate images, visit the
+[Models](https://www.oxen.ai/ai/models?modalities=text-to-image) page and filter by "Text to Image".
 
 <CodeGroup>
 
 ```bash cURL
-curl -X POST \
-  https://hub.oxen.ai/api/ai/images/generate \
+# Enqueue the job and capture the generation id.
+GEN_ID=$(curl -s -X POST \
+  https://hub.oxen.ai/api/ai/queue \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -d '{
-    "model": "Qwen/Qwen-Image",
+    "model": "qwen-image",
     "prompt": "A majestic ox standing in a field at sunset",
     "num_inference_steps": 28
-  }'
+  }' | jq -r '.generations[0].generation_id')
+
+# Poll until it finishes, then print the result.
+while true; do
+  STATUS=$(curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+    "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.status')
+  case $STATUS in succeeded|failed|cancelled) break;; esac
+  sleep 3
+done
+
+curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+  "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.result_url'
 ```
 
 ```python Python
-import requests
 import os
+import requests
+import time
 
-response = requests.post(
-    "https://hub.oxen.ai/api/ai/images/generate",
-    headers={
-        "Authorization": f"Bearer {os.getenv('OXEN_API_KEY')}",
-        "Content-Type": "application/json"
-    },
+HEADERS = {
+    "Authorization": f"Bearer {os.getenv('OXEN_API_KEY')}",
+    "Content-Type": "application/json",
+}
+
+enqueue = requests.post(
+    "https://hub.oxen.ai/api/ai/queue",
+    headers=HEADERS,
     json={
-        "model": "Qwen/Qwen-Image",
+        "model": "qwen-image",
         "prompt": "A majestic ox standing in a field at sunset",
-        "num_inference_steps": 28
-    }
+        "num_inference_steps": 28,
+    },
 )
+enqueue.raise_for_status()
+generation_id = enqueue.json()["generations"][0]["generation_id"]
 
-# The response contains the generated image URL
-image_url = response.json()["image_url"]
-print(f"Generated image: {image_url}")
+while True:
+    data = requests.get(
+        f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
+        headers=HEADERS,
+    ).json()
+    if data["status"] in {"succeeded", "failed", "cancelled"}:
+        break
+    time.sleep(3)
+
+print(f"Generated image: {data['result_url']}")
 ```
 
 </CodeGroup>
 
 ## Parameters
 
-- **model**: The model identifier to use for image generation (e.g., `Qwen/Qwen-Image`)
-- **prompt**: Text description of the image you want to generate
+- **model**: The model to generate with (for example `qwen-image`)
+- **prompt**: Text description of the image you want
 - **num_inference_steps**: Number of inference steps (optional, defaults vary by model)
+- **num_generations**: How many images to queue in one call, 1 to 12 (optional, defaults to 1)
+
+Every other parameter is the model's own. `GET /api/ai/models/:id` returns its schema, and the
+[media generation reference](/inference-api/reference/async_queue) covers the queue itself: the
+event stream, cancellation, retries, and how long result URLs stay valid.
