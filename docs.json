@@ -109,17 +109,13 @@
                 "pages": [
                   "inference-api/quickstart/chat",
                   "inference-api/quickstart/image-generation",
-                  "inference-api/quickstart/video-generation",
-                  "inference-api/quickstart/async-queue"
+                  "inference-api/quickstart/video-generation"
                 ]
               },
               {
                 "group": "API Reference",
                 "pages": [
                   "inference-api/reference/chat_completions",
-                  "inference-api/reference/image_generation",
-                  "inference-api/reference/image_editing",
-                  "inference-api/reference/video_generation",
                   "inference-api/reference/async_queue",
                   "inference-api/reference/models/overview",
                   "inference-api/reference/model-references"
@@ -263,5 +259,23 @@
     "posthog": {
       "apiKey": "phc_Do6VnS78puWwBQuPcJ7TkjixBZwsV4Xxc3ABHVNvjmE"
     }
-  }
+  },
+  "redirects": [
+    {
+      "source": "/inference-api/quickstart/async-queue",
+      "destination": "/inference-api/reference/async_queue"
+    },
+    {
+      "source": "/inference-api/reference/image_editing",
+      "destination": "/inference-api/reference/async_queue"
+    },
+    {
+      "source": "/inference-api/reference/image_generation",
+      "destination": "/inference-api/reference/async_queue"
+    },
+    {
+      "source": "/inference-api/reference/video_generation",
+      "destination": "/inference-api/reference/async_queue"
+    }
+  ]
 }

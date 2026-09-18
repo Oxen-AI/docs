@@ -1,16 +1,17 @@
 ---
-title: "Async Queue"
-description: "Enqueue image and video generation jobs that process in the background"
+title: "Media Generation"
+description: "Queue image, video, and audio generations and collect the results"
 ---
 
-## Why Use the Async Queue
+Every image, video, and audio model runs through one pair of endpoints. You submit a job to
+`POST /api/ai/queue`, get a generation ID back immediately, then poll that ID or listen on an event
+stream until it reaches a terminal state. Text models answer inside the request, through
+[chat completions](/inference-api/reference/chat_completions).
 
-The synchronous endpoints (`/ai/images/generate`, `/ai/videos/generate`) block until the result is ready. For video generation, this can be 1-10+ minutes. The async queue returns immediately with generation IDs so you can:
-
-- Run many generations in parallel (up to 4 per request, no limit on total queued)
-- Avoid long-lived HTTP connections
-- Build progress-tracking UIs
-- Query completed generations and their output URLs at any time
+Media generation is queued because the work takes anywhere from five seconds to fifteen minutes,
+which is longer than an HTTP connection should be asked to survive. Queueing also lets many
+generations run at once, up to 4 per request with no limit on the total queued, without holding a
+connection open for each.
 
 ## Workflow
 
@@ -32,7 +33,7 @@ A Server-Sent Events stream at `GET /api/events` can also deliver completion not
 POST /api/ai/queue
 ```
 
-Submit an async image or video generation job.
+Submit an image, video, or audio generation job.
 
 ### Required Parameters
 
@@ -50,6 +51,54 @@ Submit an async image or video generation job.
 All other parameters (e.g. `prompt`, `multi_prompt`, `input_image`, `input_video`, `aspect_ratio`, `duration`, `seed`, `generate_audio`) are passed through to the model. Consult the model's `request_schema` via `GET /api/ai/models/:id` for supported parameters and their constraints.
 
 `response_format` is the exception. A queued generation writes a file into your repository, so there is nothing to inline and the queue always answers with a URL. Download `result_url` when you want the bytes.
+
+The parameters most models share, by modality:
+
+<Tabs>
+  <Tab title="Image generation">
+
+| Parameter | Description |
+|---|---|
+| `prompt` | What to draw. |
+| `aspect_ratio` | Shape of the output. Which values a model accepts varies, and an unsupported one can come back as the model's own default, so check the dimensions of what you get. |
+| `num_inference_steps` | Denoising steps. Higher values take longer. |
+| `seed` | Fixes the random draw, so the same request reproduces. |
+
+  </Tab>
+  <Tab title="Image editing">
+
+| Parameter | Description |
+|---|---|
+| `prompt` | The change to make. |
+| `input_image` | The image to work from. Some models take one URL and some take an array; the model's schema says which. |
+
+The model downloads `input_image` itself, so the URL has to be reachable without credentials. Data
+URIs work and bloat the request, so prefer a hosted file.
+
+  </Tab>
+  <Tab title="Video">
+
+| Parameter | Description |
+|---|---|
+| `prompt` | What happens in the shot. Use this or `multi_prompt`. |
+| `multi_prompt` | A prompt and a duration per shot, for models that cut between shots inside one generation. |
+| `duration` | Length in seconds, when using `prompt`. |
+| `aspect_ratio` | Shape of the output. |
+| `input_image` | Starting frame or reference images, depending on the model. |
+| `input_video` | The clip a video-to-video model works from. |
+| `generate_audio` | Ask for an audio track, where the model can make one. |
+
+  </Tab>
+  <Tab title="Audio">
+
+| Parameter | Description |
+|---|---|
+| `prompt` | The words to speak, or a description of the sound. |
+| `audio_urls` | Reference clips, for cloning a voice. |
+| `output_format` | Container for the result, such as `mp3`. |
+
+  </Tab>
+</Tabs>
 
 ### Response
 
@@ -69,7 +118,7 @@ The API validates at enqueue time that:
 - `num_generations` is 1-4
 - The user is authenticated with sufficient credits
 
-Model-specific parameter validation (prompt content, duration ranges, aspect ratio values) happens **when the generation runs**, not at enqueue time. If a parameter is invalid, the generation transitions to `failed` status with an `error_message`. To validate parameters and get immediate error feedback, use `/ai/images/generate` or `/ai/videos/generate` instead.
+Model-specific parameter validation happens **when the generation runs**. A misspelled parameter, a duration the model refuses, an unreachable `input_image`, or no `prompt` at all will each return `200` with a generation ID and then surface seconds later as `status: "failed"` with an `error_message`. A successful enqueue tells you the request was accepted, so read `error_message` on every failure.
 
 ---
 
