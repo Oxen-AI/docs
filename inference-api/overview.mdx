@@ -5,13 +5,16 @@ description: "Run inference on hundreds of AI models through a unified API for t
 
 ## What is the Inference API?
 
-The Inference API gives you access to hundreds of AI models through a single, consistent interface. Generate text, images, and videos without managing infrastructure or juggling multiple provider SDKs.
+The Inference API gives you access to hundreds of AI models through a single, consistent interface. Generate text, images, videos, and audio without managing infrastructure or juggling multiple provider SDKs.
+
+There are two doors. Text models answer inside the request, through chat completions. Everything that produces a file, meaning images, video, and audio, is queued: you submit a job, get an ID back, and collect the result once it is ready.
 
 **Capabilities:**
 
 - **Text Generation**: Chat completions, tool calling, vision, audio, documents (PDFs), structured output
 - **Image Generation**: Text-to-image, image-to-image editing
 - **Video Generation**: Text-to-video, image-to-video, reference-to-video, video-to-video editing
+- **Audio Generation**: Text-to-speech and voice cloning
 
 ## Where to find things
 
@@ -25,7 +28,7 @@ The Inference API gives you access to hundreds of AI models through a single, co
 
 ## Quick Starts
 
-<CardGroup cols={4}>
+<CardGroup cols={3}>
   <Card title="Chat" icon="message" href="/inference-api/quickstart/chat">
     Text generation in minutes
   </Card>
@@ -35,9 +38,6 @@ The Inference API gives you access to hundreds of AI models through a single, co
   <Card title="Videos" icon="video" href="/inference-api/quickstart/video-generation">
     Text-to-video in minutes
   </Card>
-  <Card title="Async Queue" icon="layer-group" href="/inference-api/quickstart/async-queue">
-    Generate in background
-  </Card>
 </CardGroup>
 
 ## API Reference
@@ -46,17 +46,8 @@ The Inference API gives you access to hundreds of AI models through a single, co
   <Card title="Chat Completions" icon="message" href="/inference-api/reference/chat_completions">
     Text generation, vision, audio, documents, tool calling
   </Card>
-  <Card title="Image Generation" icon="image" href="/inference-api/reference/image_generation">
-    Text-to-image generation
-  </Card>
-  <Card title="Image Editing" icon="wand-magic-sparkles" href="/inference-api/reference/image_editing">
-    Edit images with text prompts
-  </Card>
-  <Card title="Video Generation" icon="video" href="/inference-api/reference/video_generation">
-    Text-to-video, image-to-video, multi-shot
-  </Card>
-  <Card title="Async Queue" icon="layer-group" href="/inference-api/reference/async_queue">
-    Background image/video generation
+  <Card title="Media Generation" icon="layer-group" href="/inference-api/reference/async_queue">
+    Queued image, video, and audio generation
   </Card>
   <Card title="Models" icon="cube" href="/inference-api/reference/models/overview">
     List, search, and manage models
@@ -116,13 +107,13 @@ If you're using the OpenAI SDK, set the base URL to `https://hub.oxen.ai/api/ai`
 | Endpoint | Method | Description |
 |---|---|---|
 | `/ai/chat/completions` | POST | Text generation (chat, vision, documents, tool use) |
-| `/ai/images/generate` | POST | Image generation |
-| `/ai/images/edit` | POST | Image editing |
-| `/ai/videos/generate` | POST | Video generation |
-| `/ai/queue` | POST | Async image/video generation |
+| `/ai/queue` | POST | Submit an image, video, or audio generation |
 | `/ai/queue` | GET | List generations (active by default, filterable by status) |
 | `/ai/queue/:generation_id` | GET | Get generation status and result |
 | `/ai/queue/:generation_id` | DELETE | Cancel a queued generation |
+| `/ai/queue/:generation_id/retry` | POST | Kill a generation and run it again |
+| `/ai/generations` | GET | Browse generation history, paginated, with cost per row |
+| `/api/events` | GET | Event stream that fires when a generation finishes |
 | `/ai/models` | GET | List available models |
 | `/ai/models/:id` | GET | Get model details and parameter schema |
 | `/ai/models/search` | GET | Search models by name |
@@ -136,7 +127,6 @@ These parameters are accepted across multiple endpoints:
 | Parameter | Type | Description |
 |---|---|---|
 | `model` | string | Required. The model to use (e.g. `claude-sonnet-4-6`, `flux-2-dev`, `kling-video-o3-pro-reference-to-video`). |
-| `response_format` | string | `"url"` (default) returns a hosted URL. `"b64_json"` returns base64-encoded bytes inline. Supported on image and video endpoints. |
 | `target_namespace` | string | Namespace to save results and bill to. Defaults to your user. Can be an organization name. |
 
 ## Discovering Models
