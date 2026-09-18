@@ -20,7 +20,7 @@ The synchronous endpoints (`/ai/images/generate`, `/ai/videos/generate`) block u
 3. Read result_url from the completed generation
 ```
 
-Generations persist after reaching a terminal state (`succeeded`, `failed`, or `cancelled`), so you can retrieve results at any time.
+Generations persist after reaching a terminal state (`succeeded`, `failed`, or `cancelled`), so you can retrieve their status at any time. The link they carry to the output file is short-lived; see [Where results go](#where-results-go).
 
 A Server-Sent Events stream at `GET /api/events` can also deliver completion notifications with the output file URL. See [Completion Events](#completion-events).
 
@@ -45,7 +45,9 @@ Submit an async image or video generation job.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `num_generations` | integer | `1` | How many generations to enqueue per request. Range: 1-4. Call the endpoint multiple times to queue more. |
-| `target_namespace` | string | your username | Namespace to store results and bill to. |
+| `target_namespace` | string | your username | Namespace that stores the results and pays for them. An organization name works if you are a member. |
+| `target_repo` | string | `playground` | Repository the files are written to. Created on first use. |
+| `target_directory` | string | repo root | Directory inside that repository. |
 
 All other parameters (e.g. `prompt`, `multi_prompt`, `input_image`, `input_video`, `aspect_ratio`, `duration`, `seed`, `generate_audio`, `response_format`) are passed through to the model. Consult the model's `request_schema` via `GET /api/ai/models/:id` for supported parameters and their constraints.
 
@@ -68,6 +70,37 @@ The API validates at enqueue time that:
 - The user is authenticated with sufficient credits
 
 Model-specific parameter validation (prompt content, duration ranges, aspect ratio values) happens **when the generation runs**, not at enqueue time. If a parameter is invalid, the generation transitions to `failed` status with an `error_message`. To validate parameters and get immediate error feedback, use `/ai/images/generate` or `/ai/videos/generate` instead.
+
+---
+
+## Where results go
+
+A generation writes its output into a repository in your namespace and records the parameters that
+produced it alongside the file. That is what makes a run reproducible, and it is why a few weeks of
+generations is already a dataset you can version, share, or fine-tune on.
+
+Everything lands in a repository called `playground` unless you say otherwise. An application built
+on this API will pile up files there, so give it a repository of its own with `target_repo` and
+`target_directory`.
+
+### Result URLs
+
+`result_url` is a signed link to that file. The signature is good for one hour from the moment the
+generation completes, and the stored link is never refreshed, so a generation you come back to a day
+later hands you a link that expired long ago.
+
+Drop the query string and authenticate with your API key to fetch the same file at any point
+afterwards:
+
+```bash
+# Good for the first hour.
+curl -o output.png "$RESULT_URL"
+
+# Good indefinitely.
+curl -o output.png -H "Authorization: Bearer $OXEN_API_KEY" "${RESULT_URL%%\?*}"
+```
+
+Download while the link is warm, or keep the bare path and authenticate when you need the bytes.
 
 ---
 
@@ -329,7 +362,7 @@ data: {"generation_id":"bb8f5eb7-...","status":"failed","media_type":"video","er
 | `status` | `"succeeded"` | `"failed"` | Only these two values appear |
 | `media_type` | yes | yes | `"image"` or `"video"` |
 | `model` | yes | no | Model name |
-| `url` | yes | no | Presigned URL to the output file. Expires after a limited time. |
+| `url` | yes | no | Signed link to the output file, good for one hour; see [Result URLs](#result-urls). |
 | `error` | no | yes | Human-readable failure reason |
 
 ### Other events on this stream
