@@ -341,12 +341,13 @@ data: {"generation_id":"bb8f5eb7-...","status":"failed","media_type":"video","er
 <CodeGroup>
 
 ```python Python
+import os
 import json
 import requests
 import threading
 import time
 
-API_KEY = "YOUR_API_KEY"
+API_KEY = os.environ["OXEN_API_KEY"]
 HEADERS = {"Authorization": f"Bearer {API_KEY}"}
 
 def listen(results):
@@ -426,10 +427,11 @@ curl -N -H "Authorization: Bearer $OXEN_API_KEY" \
 <CodeGroup>
 
 ```python Python
+import os
 import requests
 import time
 
-API_KEY = "YOUR_API_KEY"
+API_KEY = os.environ["OXEN_API_KEY"]
 HEADERS = {
     "Authorization": f"Bearer {API_KEY}",
     "Content-Type": "application/json",
@@ -453,28 +455,29 @@ gen_ids = [g["generation_id"] for g in response.json()["generations"]]
 for gid in gen_ids:
     print(f"  generation_id: {gid}")
 
-# Poll individual generations until all reach a terminal status
+# Poll the generations still running, dropping each one as it settles.
 terminal = {"succeeded", "failed", "cancelled"}
+pending = set(gen_ids)
+statuses = {}
 start = time.time()
-while True:
-    statuses = {}
-    for gid in gen_ids:
-        resp = requests.get(
+while pending:
+    for gid in list(pending):
+        status = requests.get(
             f"https://hub.oxen.ai/api/ai/queue/{gid}",
             headers=HEADERS,
-        ).json()
-        statuses[gid] = resp["status"]
-    done = sum(1 for s in statuses.values() if s in terminal)
+        ).json()["status"]
+        if status in terminal:
+            statuses[gid] = status
+            pending.discard(gid)
     elapsed = time.time() - start
-    print(f"  [{elapsed:5.1f}s] {done}/{len(gen_ids)} complete")
-    if done == len(gen_ids):
-        break
-    time.sleep(5)
+    print(f"  [{elapsed:5.1f}s] {len(statuses)}/{len(gen_ids)} complete")
+    if pending:
+        time.sleep(5)
 
 elapsed = time.time() - start
 print(f"\nAll {len(gen_ids)} images generated in {elapsed:.1f}s!")
-for gid, s in statuses.items():
-    print(f"  {gid}: {s}")
+for gid, status in statuses.items():
+    print(f"  {gid}: {status}")
 ```
 
 ```bash cURL
@@ -503,17 +506,84 @@ echo "All images generated!"
 
 </CodeGroup>
 
+### Enqueue, poll, and download
+
+<CodeGroup>
+
+```python Python
+import os
+import requests
+import time
+
+HEADERS = {
+    "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+    "Content-Type": "application/json",
+}
+
+enqueue = requests.post(
+    "https://hub.oxen.ai/api/ai/queue",
+    headers=HEADERS,
+    json={
+        "model": "black-forest-labs-flux-2-klein-4b",
+        "prompt": "A red cube on a white background",
+    },
+)
+enqueue.raise_for_status()
+generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+while True:
+    data = requests.get(
+        f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
+        headers=HEADERS,
+    ).json()
+    if data["status"] in {"succeeded", "failed", "cancelled"}:
+        break
+    time.sleep(5)
+
+if data["status"] != "succeeded":
+    raise SystemExit(f"{data['status']}: {data['error_message']}")
+
+with open("output.png", "wb") as f:
+    f.write(requests.get(data["result_url"]).content)
+print("Saved output.png")
+```
+
+```bash cURL
+GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "black-forest-labs-flux-2-klein-4b",
+    "prompt": "A red cube on a white background"
+  }' | jq -r '.generations[0].generation_id')
+
+while true; do
+  STATUS=$(curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+    "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.status')
+  echo "$STATUS"
+  case $STATUS in succeeded|failed|cancelled) break;; esac
+  sleep 5
+done
+
+curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+  "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.result_url' \
+  | xargs curl -o output.png
+```
+
+</CodeGroup>
+
 ### Async video generation
 
 <CodeGroup>
 
 ```python Python
+import os
 import requests
 
 response = requests.post(
     "https://hub.oxen.ai/api/ai/queue",
     headers={
-        "Authorization": "Bearer YOUR_API_KEY",
+        "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
         "Content-Type": "application/json",
     },
     json={
@@ -550,10 +620,11 @@ curl -X POST https://hub.oxen.ai/api/ai/queue \
 <CodeGroup>
 
 ```python Python
+import os
 import requests
 import time
 
-API_KEY = "YOUR_API_KEY"
+API_KEY = os.environ["OXEN_API_KEY"]
 HEADERS = {"Authorization": f"Bearer {API_KEY}"}
 
 # After enqueuing, grab a generation ID
@@ -578,7 +649,7 @@ while True:
         elif status == "failed":
             print(f"  error: {data['error_message']}")
         break
-    print(f"  [{elapsed:5.1f}s] Poll #{poll_count} — {status} ({data['model_name']}, {data['media_type']})")
+    print(f"  [{elapsed:5.1f}s] Poll #{poll_count}: {status} ({data['model_name']}, {data['media_type']})")
     time.sleep(10)
 ```
 
@@ -597,13 +668,14 @@ curl -X DELETE -H "Authorization: Bearer $OXEN_API_KEY" \
 ### End-to-end: enqueue, wait for SSE, download
 
 ```python Python
+import os
 import json
 import queue
 import requests
 import threading
 import time
 
-API_KEY = "YOUR_API_KEY"
+API_KEY = os.environ["OXEN_API_KEY"]
 HEADERS = {"Authorization": f"Bearer {API_KEY}"}
 
 def listen(events):
