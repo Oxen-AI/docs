@@ -38,7 +38,7 @@ Submit an async image or video generation job.
 
 | Parameter | Type | Description |
 |---|---|---|
-| `model` | string | Must be an image or video model. Text-only models are rejected. |
+| `model` | string | Must be an image, video, or audio model. Text-only models are rejected. |
 
 ### Additional Parameters
 
@@ -47,7 +47,9 @@ Submit an async image or video generation job.
 | `num_generations` | integer | `1` | How many generations to enqueue per request. Range: 1-4. Call the endpoint multiple times to queue more. |
 | `target_namespace` | string | your username | Namespace to store results and bill to. |
 
-All other parameters (e.g. `prompt`, `multi_prompt`, `input_image`, `input_video`, `aspect_ratio`, `duration`, `seed`, `generate_audio`, `response_format`) are passed through to the model. Consult the model's `request_schema` via `GET /api/ai/models/:id` for supported parameters and their constraints.
+All other parameters (e.g. `prompt`, `multi_prompt`, `input_image`, `input_video`, `aspect_ratio`, `duration`, `seed`, `generate_audio`) are passed through to the model. Consult the model's `request_schema` via `GET /api/ai/models/:id` for supported parameters and their constraints.
+
+`response_format` is the exception. A queued generation writes a file into your repository, so there is nothing to inline and the queue always answers with a URL. Download `result_url` when you want the bytes.
 
 ### Response
 
@@ -63,7 +65,7 @@ All other parameters (e.g. `prompt`, `multi_prompt`, `input_image`, `input_video
 ### Validation
 
 The API validates at enqueue time that:
-- The model exists and has image or video output capability
+- The model exists and produces image, video, or audio output
 - `num_generations` is 1-4
 - The user is authenticated with sufficient credits
 
@@ -86,7 +88,7 @@ Lists generations for the authenticated user's namespace. By default, only activ
 | `namespace` | string | no | Namespace to query. Defaults to the authenticated user. |
 | `model` | string | no | Filter by model name. |
 | `status` | string | no | Filter by status: `queued`, `processing`, `succeeded`, `failed`, or `cancelled`. When omitted, only active generations are returned. |
-| `media_type` | string | no | Filter by `image` or `video`. |
+| `media_type` | string | no | Filter by `image`, `video`, or `audio`. |
 | `repo` | string | no | Filter by target repository name. |
 | `folder` | string | no | Filter by target directory. |
 
@@ -132,7 +134,7 @@ Lists generations for the authenticated user's namespace. By default, only activ
 | `generation_id` | yes | Unique ID for this generation |
 | `model_name` | yes | Model name |
 | `prompt` | yes | Text prompt (from original request parameters) |
-| `media_type` | yes | `"image"` or `"video"` |
+| `media_type` | yes | `"image"`, `"video"`, or `"audio"` |
 | `status` | yes | `"queued"`, `"processing"`, `"succeeded"`, `"failed"`, or `"cancelled"` |
 | `result_url` | yes | Output file URL when succeeded, otherwise `null` |
 | `error_message` | yes | Error details when failed, otherwise `null` |
@@ -326,8 +328,8 @@ data: {"generation_id":"bb8f5eb7-...","status":"failed","media_type":"video","er
 | Field | succeeded | failed | Description |
 |---|---|---|---|
 | `generation_id` | yes | yes | Matches the ID returned by `POST /ai/queue` |
-| `status` | `"succeeded"` | `"failed"` | Only these two values appear |
-| `media_type` | yes | yes | `"image"` or `"video"` |
+| `status` | `"succeeded"` | `"failed"` | `"cancelled"` also appears; see [Cancellation](#cancellation) |
+| `media_type` | yes | yes | `"image"`, `"video"`, or `"audio"` |
 | `model` | yes | no | Model name |
 | `url` | yes | no | Presigned URL to the output file. Expires after a limited time. |
 | `error` | no | yes | Human-readable failure reason |
@@ -413,9 +415,17 @@ curl -N -H "Authorization: Bearer $OXEN_API_KEY" \
 
 </CodeGroup>
 
-### Terminal states without events
+### Cancellation
 
-`media_generation_completed` does not fire for cancelled generations (you called `DELETE /ai/queue/:id`). You can still retrieve the final status of any generation via `GET /ai/queue/:id`.
+Cancelling a generation fires the same event with `status: "cancelled"`:
+
+```
+event: media_generation_completed
+data: {"generation_id":"bb8f5eb7-...","status":"cancelled","media_type":"video","model":"kling-video-o3-pro-reference-to-video"}
+
+```
+
+A cancelled event carries only the identifying fields, so branch on `status` when you handle one.
 
 ---
 
@@ -673,7 +683,8 @@ else:
 
 | Condition | Error |
 |---|---|
-| `num_generations` out of range | `"num_generations must be an integer between 1 and 4"` |
+| Namespace credit will not cover this request plus everything already queued | 402 `insufficient_credits`, with `required`, `available`, `amount_short`, and `pending_count` |
+| `num_generations` out of range | 400, with a message naming the range the API accepts |
 | Model not found | `"Model not found: <name>"` |
 | Text-only model | `":unsupported_media_type"` |
 | 404 on GET/DELETE | Generation ID does not exist |
