@@ -139,6 +139,11 @@ Lists generations for the authenticated user's namespace. By default, only activ
 | `enqueued_at` | yes | Unix timestamp when the job was enqueued |
 | `started_at` | yes | Unix timestamp when processing began, or `null` |
 | `completed_at` | yes | Unix timestamp when the job reached a terminal state, or `null` |
+| `error_retryable` | yes | Whether sending the same request again is worth it |
+| `error_source` | yes | Whether the failure was ours or the upstream provider's |
+| `error_provider`, `error_provider_code` | yes | The provider that refused and the code it gave, when there is one |
+| `retried_from_id` | yes | The generation this one replaced |
+| `target_namespace`, `target_repo`, `target_directory` | yes | Where the output was written |
 | `seed` | if submitted | Random seed |
 | `aspect_ratio` | if submitted | Aspect ratio |
 | `duration` | if submitted | Video duration |
@@ -282,6 +287,46 @@ You can only cancel generations that are still active (`queued` or `processing`)
 
 ---
 
+## Retry Generation
+
+```
+POST /api/ai/queue/:generation_id/retry
+```
+
+Kills a generation and enqueues a fresh attempt with the same parameters. The replacement records the
+original in `retried_from_id`, and only the attempt that succeeds is billed.
+
+Reach for it when `error_retryable` is `true`, or when a generation has been sitting in `processing`
+longer than the model should take.
+
+### Response
+
+```json
+{
+  "status": "success",
+  "generation_id": "0d4a1a7e-9d2b-4b62-9f50-1a0c0f2a1111",
+  "retried_from_id": "bb8f5eb7-361e-4e13-ab73-67457bc8057e"
+}
+```
+
+A generation can be retried once. One that already succeeded, was already cancelled, or already has a
+replacement comes back `409`.
+
+---
+
+## Generation History
+
+```
+GET /api/ai/generations
+GET /api/ai/generations/:generation_id
+```
+
+The same filters as `GET /api/ai/queue`, plus `page` and `page_size`, and each row carries the cost it
+was charged and the user who ran it. Use the queue endpoint for work in flight and this one for
+looking back at what a namespace has produced and spent.
+
+---
+
 ## Completion Events
 
 ```
@@ -331,6 +376,8 @@ data: {"generation_id":"bb8f5eb7-...","status":"failed","media_type":"video","er
 | `model` | yes | no | Model name |
 | `url` | yes | no | Presigned URL to the output file. Expires after a limited time. |
 | `error` | no | yes | Human-readable failure reason |
+| `retryable` | no | yes | Whether sending the same request again is worth it |
+| `source`, `provider`, `provider_code`, `guidance` | no | yes | Where the failure came from and what to do about it, when known |
 
 ### Other events on this stream
 
