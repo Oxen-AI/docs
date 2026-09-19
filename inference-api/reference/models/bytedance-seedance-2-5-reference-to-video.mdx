@@ -788,9 +788,9 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `input_face_images` | `array<string>` | &mdash; | Place reference images here when they show a real human face. Content filters may block the request otherwise. |
+| `input_face_images` | `array<string>` | &mdash; | Place reference images here when they show faces, people, or characters. Content filters may block the request otherwise. |
 | `input_images` | `array<string>` | &mdash; | Reference images that guide the generated video. Up to 30 total reference images may be used. |
-| `input_face_videos` | `array<string>` | &mdash; | Place reference videos here when they show a real human face. Content filters may block the request otherwise. |
+| `input_face_videos` | `array<string>` | &mdash; | Place reference videos here when they show faces, people, or characters. Content filters may block the request otherwise. |
 | `input_videos` | `array<string>` | &mdash; | Reference videos that guide the generated video. Up to 10 total reference videos may be used, each 2-30 seconds long with a combined duration of at most 30 seconds. |
 | `input_audios` | `array<string>` | &mdash; | Reference audios that guide the generated video. Audio-only input is supported. Up to 10 reference audio clips may be used, each 2-30 seconds long with a combined duration of at most 30 seconds. |
 | `generate_audio` | `boolean` | `true` | Whether to generate synchronized audio. |
