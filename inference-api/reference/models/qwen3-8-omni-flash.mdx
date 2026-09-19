@@ -1,0 +1,75 @@
+---
+title: "Qwen3.8 Omni Flash"
+description: "Omnimodal audio and video understanding, 1M context"
+---
+
+<CardGroup cols={1}>
+  <Card title="Try Qwen3.8 Omni Flash in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=qwen3-8-omni-flash">
+    Run this model interactively, tune parameters, and compare outputs.
+  </Card>
+</CardGroup>
+
+**Model ID:** `qwen3-8-omni-flash`
+
+Qwen3.8 Omni Flash is a native omnimodal model that reads text, images, audio, and video in one request and answers in text. It is built for long-form audio-visual understanding, meeting and call analysis, subtitling, and agentic work over recorded media, and it accepts 113 languages and dialects as audio input.
+
+The distinctive behavior is agentic long-form understanding: rather than processing a whole recording, the model starts from the question and gathers evidence in coarse-to-fine passes, so most of the media is never read. Thinking is enabled by default with adjustable reasoning effort, and the model supports function calling and web search. Audio input can be multichannel, letting it use spatial information to separate speakers.
+
+Output is text only, so the model cannot speak a reply; the Qwen3.5-Omni models handle speech generation. Weights are not published.
+
+| Metric             | Value              |
+|--------------------|--------------------|
+| Context Length     | 1,000,000 tokens   |
+| Max Output         | 131,072 tokens     |
+| Multilingual       | Yes                |
+
+## Example request
+
+<Tip>
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=qwen3-8-omni-flash) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+</Tip>
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST https://hub.oxen.ai/api/ai/audio/transcriptions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -d '{
+  "model": "qwen3-8-omni-flash",
+  "audio_url": "https://example.com/audio.mp3"
+}'
+```
+
+```python Python
+import os
+import requests
+
+response = requests.post(
+    "https://hub.oxen.ai/api/ai/audio/transcriptions",
+    headers={
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+    },
+    json={
+        "model": "qwen3-8-omni-flash",
+        "audio_url": "https://example.com/audio.mp3"
+    },
+)
+response.raise_for_status()
+print(response.json())
+```
+
+</CodeGroup>
+
+## Fetch model details
+
+The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
+
+```bash
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/qwen3-8-omni-flash
+```
+
+## Request parameters
+
+This model follows the standard OpenAI chat completions request body. See the [chat completions reference](../inference-api.mdx) for the full parameter list.
