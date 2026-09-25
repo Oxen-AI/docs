@@ -24,139 +24,11 @@ Some other noteworthy use cases of google/veo-3 include creating marketing and e
 </Tip>
 
 <Tabs>
-  <Tab title="Sync">
+  <Tab title="Poll">
 
-    This blocks until the video is ready (typically 5-15 minutes). Prefer **Async** or **Async with SSE** for anything beyond quick experimentation.
+    Submit the job, then poll the generation until it reaches a terminal status.
 
-    See the [video generation reference](/inference-api/reference/video_generation) for more details.
-
-    <Tabs>
-      <Tab title="Minimal">
-
-        <CodeGroup>
-
-        ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
-          -H "Content-Type: application/json" \
-          -H "Authorization: Bearer $OXEN_API_KEY" \
-          -d '{
-          "model": "google-veo-3",
-          "prompt": "<prompt>"
-        }'
-        ```
-
-        ```python Python
-        import os
-        import requests
-
-        response = requests.post(
-            "https://hub.oxen.ai/api/ai/videos/generate",
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
-            },
-            json={
-                "model": "google-veo-3",
-                "prompt": "<prompt>"
-            },
-        )
-        response.raise_for_status()
-        print(response.json())
-        ```
-
-        </CodeGroup>
-
-      </Tab>
-      <Tab title="Basic parameters">
-
-        <CodeGroup>
-
-        ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
-          -H "Content-Type: application/json" \
-          -H "Authorization: Bearer $OXEN_API_KEY" \
-          -d '{
-          "model": "google-veo-3",
-          "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-        }'
-        ```
-
-        ```python Python
-        import os
-        import requests
-
-        response = requests.post(
-            "https://hub.oxen.ai/api/ai/videos/generate",
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
-            },
-            json={
-                "model": "google-veo-3",
-                "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-            },
-        )
-        response.raise_for_status()
-        print(response.json())
-        ```
-
-        </CodeGroup>
-
-      </Tab>
-      <Tab title="All parameters">
-
-        <CodeGroup>
-
-        ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
-          -H "Content-Type: application/json" \
-          -H "Authorization: Bearer $OXEN_API_KEY" \
-          -d '{
-          "model": "google-veo-3",
-          "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "generate_audio": true,
-          "aspect_ratio": "16:9",
-          "duration": 8,
-          "resolution": "1080p"
-        }'
-        ```
-
-        ```python Python
-        import os
-        import requests
-
-        response = requests.post(
-            "https://hub.oxen.ai/api/ai/videos/generate",
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
-            },
-            json={
-                "model": "google-veo-3",
-                "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "generate_audio": true,
-                "aspect_ratio": "16:9",
-                "duration": 8,
-                "resolution": "1080p"
-            },
-        )
-        response.raise_for_status()
-        print(response.json())
-        ```
-
-        </CodeGroup>
-
-      </Tab>
-    </Tabs>
-
-  </Tab>
-  <Tab title="Async">
-
-    See the [async queue reference](/inference-api/reference/async_queue) for more details.
+    See the [media generation reference](/inference-api/reference/async_queue) for more details.
 
     <Tabs>
       <Tab title="Minimal">
@@ -375,9 +247,11 @@ Some other noteworthy use cases of google/veo-3 include creating marketing and e
     </Tabs>
 
   </Tab>
-  <Tab title="Async with SSE">
+  <Tab title="Event stream">
 
-    See the [async queue reference](/inference-api/reference/async_queue) for more details.
+    Submit the job, then wait on the event stream instead of polling.
+
+    See the [media generation reference](/inference-api/reference/async_queue) for more details.
 
     <Tabs>
       <Tab title="Minimal">

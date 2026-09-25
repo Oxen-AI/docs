@@ -22,105 +22,11 @@ Use this model to enrich stylized or synthetic footage with adjustable creativit
 </Tip>
 
 <Tabs>
-  <Tab title="Sync">
+  <Tab title="Poll">
 
-    This blocks until the video is ready (typically 5-15 minutes). Prefer **Async** or **Async with SSE** for anything beyond quick experimentation.
+    Submit the job, then poll the generation until it reaches a terminal status.
 
-    See the [video generation reference](/inference-api/reference/video_generation) for more details.
-
-    <Tabs>
-      <Tab title="Minimal">
-
-        <CodeGroup>
-
-        ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
-          -H "Content-Type: application/json" \
-          -H "Authorization: Bearer $OXEN_API_KEY" \
-          -d '{
-          "model": "topazlabs-astra-2-video",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "creativity": 0.5
-        }'
-        ```
-
-        ```python Python
-        import os
-        import requests
-
-        response = requests.post(
-            "https://hub.oxen.ai/api/ai/videos/generate",
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
-            },
-            json={
-                "model": "topazlabs-astra-2-video",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "creativity": 0.5
-            },
-        )
-        response.raise_for_status()
-        print(response.json())
-        ```
-
-        </CodeGroup>
-
-      </Tab>
-      <Tab title="Basic parameters">
-
-        <CodeGroup>
-
-        ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
-          -H "Content-Type: application/json" \
-          -H "Authorization: Bearer $OXEN_API_KEY" \
-          -d '{
-          "model": "topazlabs-astra-2-video",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "prompt": "<prompt>",
-          "resolution": "4k",
-          "interpolate_frames": false,
-          "target_fps": 30,
-          "creativity": 0.5,
-          "sharp": 0.5
-        }'
-        ```
-
-        ```python Python
-        import os
-        import requests
-
-        response = requests.post(
-            "https://hub.oxen.ai/api/ai/videos/generate",
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
-            },
-            json={
-                "model": "topazlabs-astra-2-video",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "prompt": "<prompt>",
-                "resolution": "4k",
-                "interpolate_frames": false,
-                "target_fps": 30,
-                "creativity": 0.5,
-                "sharp": 0.5
-            },
-        )
-        response.raise_for_status()
-        print(response.json())
-        ```
-
-        </CodeGroup>
-
-      </Tab>
-    </Tabs>
-
-  </Tab>
-  <Tab title="Async">
-
-    See the [async queue reference](/inference-api/reference/async_queue) for more details.
+    See the [media generation reference](/inference-api/reference/async_queue) for more details.
 
     <Tabs>
       <Tab title="Minimal">
@@ -274,9 +180,11 @@ Use this model to enrich stylized or synthetic footage with adjustable creativit
     </Tabs>
 
   </Tab>
-  <Tab title="Async with SSE">
+  <Tab title="Event stream">
 
-    See the [async queue reference](/inference-api/reference/async_queue) for more details.
+    Submit the job, then wait on the event stream instead of polling.
+
+    See the [media generation reference](/inference-api/reference/async_queue) for more details.
 
     <Tabs>
       <Tab title="Minimal">

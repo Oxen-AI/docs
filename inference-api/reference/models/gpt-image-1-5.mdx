@@ -22,141 +22,11 @@ Some other noteworthy features of GPT Image 1.5 include image-to-image editing, 
 </Tip>
 
 <Tabs>
-  <Tab title="Sync">
+  <Tab title="Poll">
 
-    See the [image generation reference](/inference-api/reference/image_generation) for more details.
+    Submit the job, then poll the generation until it reaches a terminal status.
 
-    <Tabs>
-      <Tab title="Minimal">
-
-        <CodeGroup>
-
-        ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
-          -H "Content-Type: application/json" \
-          -H "Authorization: Bearer $OXEN_API_KEY" \
-          -d '{
-          "model": "gpt-image-1-5",
-          "prompt": "<prompt>"
-        }'
-        ```
-
-        ```python Python
-        import os
-        import requests
-
-        response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/generate",
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
-            },
-            json={
-                "model": "gpt-image-1-5",
-                "prompt": "<prompt>"
-            },
-        )
-        response.raise_for_status()
-        print(response.json())
-        ```
-
-        </CodeGroup>
-
-      </Tab>
-      <Tab title="Basic parameters">
-
-        <CodeGroup>
-
-        ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
-          -H "Content-Type: application/json" \
-          -H "Authorization: Bearer $OXEN_API_KEY" \
-          -d '{
-          "model": "gpt-image-1-5",
-          "prompt": "<prompt>",
-          "input_image": [
-            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ]
-        }'
-        ```
-
-        ```python Python
-        import os
-        import requests
-
-        response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/generate",
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
-            },
-            json={
-                "model": "gpt-image-1-5",
-                "prompt": "<prompt>",
-                "input_image": [
-                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ]
-            },
-        )
-        response.raise_for_status()
-        print(response.json())
-        ```
-
-        </CodeGroup>
-
-      </Tab>
-      <Tab title="All parameters">
-
-        <CodeGroup>
-
-        ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
-          -H "Content-Type: application/json" \
-          -H "Authorization: Bearer $OXEN_API_KEY" \
-          -d '{
-          "model": "gpt-image-1-5",
-          "prompt": "<prompt>",
-          "input_image": [
-            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ],
-          "output_format": "png",
-          "size": "auto"
-        }'
-        ```
-
-        ```python Python
-        import os
-        import requests
-
-        response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/generate",
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
-            },
-            json={
-                "model": "gpt-image-1-5",
-                "prompt": "<prompt>",
-                "input_image": [
-                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ],
-                "output_format": "png",
-                "size": "auto"
-            },
-        )
-        response.raise_for_status()
-        print(response.json())
-        ```
-
-        </CodeGroup>
-
-      </Tab>
-    </Tabs>
-
-  </Tab>
-  <Tab title="Async">
-
-    See the [async queue reference](/inference-api/reference/async_queue) for more details.
+    See the [media generation reference](/inference-api/reference/async_queue) for more details.
 
     <Tabs>
       <Tab title="Minimal">
@@ -379,9 +249,11 @@ Some other noteworthy features of GPT Image 1.5 include image-to-image editing, 
     </Tabs>
 
   </Tab>
-  <Tab title="Async with SSE">
+  <Tab title="Event stream">
 
-    See the [async queue reference](/inference-api/reference/async_queue) for more details.
+    Submit the job, then wait on the event stream instead of polling.
+
+    See the [media generation reference](/inference-api/reference/async_queue) for more details.
 
     <Tabs>
       <Tab title="Minimal">

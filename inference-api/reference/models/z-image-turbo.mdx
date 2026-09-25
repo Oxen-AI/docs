@@ -31,93 +31,11 @@ Some other noteworthy features of Tongyi-MAI/Z-Image-Turbo include strong **inst
 </Tip>
 
 <Tabs>
-  <Tab title="Sync">
+  <Tab title="Poll">
 
-    See the [image generation reference](/inference-api/reference/image_generation) for more details.
+    Submit the job, then poll the generation until it reaches a terminal status.
 
-    <Tabs>
-      <Tab title="Minimal">
-
-        <CodeGroup>
-
-        ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
-          -H "Content-Type: application/json" \
-          -H "Authorization: Bearer $OXEN_API_KEY" \
-          -d '{
-          "model": "z-image-turbo",
-          "prompt": "<prompt>"
-        }'
-        ```
-
-        ```python Python
-        import os
-        import requests
-
-        response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/generate",
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
-            },
-            json={
-                "model": "z-image-turbo",
-                "prompt": "<prompt>"
-            },
-        )
-        response.raise_for_status()
-        print(response.json())
-        ```
-
-        </CodeGroup>
-
-      </Tab>
-      <Tab title="All parameters">
-
-        <CodeGroup>
-
-        ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
-          -H "Content-Type: application/json" \
-          -H "Authorization: Bearer $OXEN_API_KEY" \
-          -d '{
-          "model": "z-image-turbo",
-          "prompt": "<prompt>",
-          "num_inference_steps": 8,
-          "output_format": "webp"
-        }'
-        ```
-
-        ```python Python
-        import os
-        import requests
-
-        response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/generate",
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
-            },
-            json={
-                "model": "z-image-turbo",
-                "prompt": "<prompt>",
-                "num_inference_steps": 8,
-                "output_format": "webp"
-            },
-        )
-        response.raise_for_status()
-        print(response.json())
-        ```
-
-        </CodeGroup>
-
-      </Tab>
-    </Tabs>
-
-  </Tab>
-  <Tab title="Async">
-
-    See the [async queue reference](/inference-api/reference/async_queue) for more details.
+    See the [media generation reference](/inference-api/reference/async_queue) for more details.
 
     <Tabs>
       <Tab title="Minimal">
@@ -261,9 +179,11 @@ Some other noteworthy features of Tongyi-MAI/Z-Image-Turbo include strong **inst
     </Tabs>
 
   </Tab>
-  <Tab title="Async with SSE">
+  <Tab title="Event stream">
 
-    See the [async queue reference](/inference-api/reference/async_queue) for more details.
+    Submit the job, then wait on the event stream instead of polling.
+
+    See the [media generation reference](/inference-api/reference/async_queue) for more details.
 
     <Tabs>
       <Tab title="Minimal">

@@ -24,141 +24,11 @@ Krea 2 Large cannot be fine-tuned. For fine-tuning, see Krea 2 Raw, the open-wei
 </Tip>
 
 <Tabs>
-  <Tab title="Sync">
+  <Tab title="Poll">
 
-    See the [image generation reference](/inference-api/reference/image_generation) for more details.
+    Submit the job, then poll the generation until it reaches a terminal status.
 
-    <Tabs>
-      <Tab title="Minimal">
-
-        <CodeGroup>
-
-        ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
-          -H "Content-Type: application/json" \
-          -H "Authorization: Bearer $OXEN_API_KEY" \
-          -d '{
-          "model": "krea-v2-large-text-to-image",
-          "prompt": "<prompt>"
-        }'
-        ```
-
-        ```python Python
-        import os
-        import requests
-
-        response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/generate",
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
-            },
-            json={
-                "model": "krea-v2-large-text-to-image",
-                "prompt": "<prompt>"
-            },
-        )
-        response.raise_for_status()
-        print(response.json())
-        ```
-
-        </CodeGroup>
-
-      </Tab>
-      <Tab title="Basic parameters">
-
-        <CodeGroup>
-
-        ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
-          -H "Content-Type: application/json" \
-          -H "Authorization: Bearer $OXEN_API_KEY" \
-          -d '{
-          "model": "krea-v2-large-text-to-image",
-          "prompt": "<prompt>",
-          "image_style_references": [
-            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ]
-        }'
-        ```
-
-        ```python Python
-        import os
-        import requests
-
-        response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/generate",
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
-            },
-            json={
-                "model": "krea-v2-large-text-to-image",
-                "prompt": "<prompt>",
-                "image_style_references": [
-                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ]
-            },
-        )
-        response.raise_for_status()
-        print(response.json())
-        ```
-
-        </CodeGroup>
-
-      </Tab>
-      <Tab title="All parameters">
-
-        <CodeGroup>
-
-        ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/generate \
-          -H "Content-Type: application/json" \
-          -H "Authorization: Bearer $OXEN_API_KEY" \
-          -d '{
-          "model": "krea-v2-large-text-to-image",
-          "prompt": "<prompt>",
-          "image_style_references": [
-            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ],
-          "aspect_ratio": "1:1",
-          "creativity": "medium"
-        }'
-        ```
-
-        ```python Python
-        import os
-        import requests
-
-        response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/generate",
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
-            },
-            json={
-                "model": "krea-v2-large-text-to-image",
-                "prompt": "<prompt>",
-                "image_style_references": [
-                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ],
-                "aspect_ratio": "1:1",
-                "creativity": "medium"
-            },
-        )
-        response.raise_for_status()
-        print(response.json())
-        ```
-
-        </CodeGroup>
-
-      </Tab>
-    </Tabs>
-
-  </Tab>
-  <Tab title="Async">
-
-    See the [async queue reference](/inference-api/reference/async_queue) for more details.
+    See the [media generation reference](/inference-api/reference/async_queue) for more details.
 
     <Tabs>
       <Tab title="Minimal">
@@ -381,9 +251,11 @@ Krea 2 Large cannot be fine-tuned. For fine-tuning, see Krea 2 Raw, the open-wei
     </Tabs>
 
   </Tab>
-  <Tab title="Async with SSE">
+  <Tab title="Event stream">
 
-    See the [async queue reference](/inference-api/reference/async_queue) for more details.
+    Submit the job, then wait on the event stream instead of polling.
+
+    See the [media generation reference](/inference-api/reference/async_queue) for more details.
 
     <Tabs>
       <Tab title="Minimal">

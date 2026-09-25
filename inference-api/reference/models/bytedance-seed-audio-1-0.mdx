@@ -20,144 +20,472 @@ ByteDance Seed Audio 1.0 is a text-to-speech and audio generation model. It synt
 </Tip>
 
 <Tabs>
-  <Tab title="Minimal">
+  <Tab title="Poll">
 
-    <CodeGroup>
+    Submit the job, then poll the generation until it reaches a terminal status.
 
-    ```bash cURL
-    curl -X POST https://hub.oxen.ai/api/ai/audio/speech \
-      -H "Content-Type: application/json" \
-      -H "Authorization: Bearer $OXEN_API_KEY" \
-      -d '{
-      "model": "bytedance-seed-audio-1-0",
-      "prompt": "<prompt>",
-      "input": "Welcome to Oxen"
-    }'
-    ```
+    See the [media generation reference](/inference-api/reference/async_queue) for more details.
 
-    ```python Python
-    import os
-    import requests
+    <Tabs>
+      <Tab title="Minimal">
 
-    response = requests.post(
-        "https://hub.oxen.ai/api/ai/audio/speech",
-        headers={
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "bytedance-seed-audio-1-0",
+          "prompt": "<prompt>"
+        }' | jq -r '.generations[0].generation_id')
+
+        # Poll until the generation reaches a terminal status.
+        while true; do
+          STATUS=$(curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.status')
+          echo "Status: $STATUS"
+          case $STATUS in succeeded|failed|cancelled) break;; esac
+          sleep 5
+        done
+
+        # Print the result.
+        curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+          "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq .
+        ```
+
+        ```python Python
+        import os
+        import time
+        import requests
+
+        HEADERS = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
-        },
-        json={
-            "model": "bytedance-seed-audio-1-0",
-            "prompt": "<prompt>",
-            "input": "Welcome to Oxen"
-        },
-    )
-    response.raise_for_status()
-    print(response.json())
-    ```
+        }
 
-    </CodeGroup>
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers=HEADERS,
+            json={
+                "model": "bytedance-seed-audio-1-0",
+                "prompt": "<prompt>"
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        while True:
+            data = requests.get(
+                f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
+                headers=HEADERS,
+            ).json()
+            if data["status"] in {"succeeded", "failed", "cancelled"}:
+                break
+            time.sleep(5)
+
+        if data["status"] == "succeeded":
+            print(f"Result: {data['result_url']}")
+        else:
+            print(f"Generation {data['status']}: {data.get('error_message')}")
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+      <Tab title="Basic parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "bytedance-seed-audio-1-0",
+          "prompt": "<prompt>",
+          "audio_urls": [
+            "https://example.com/audio.mp3"
+          ],
+          "image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+        }' | jq -r '.generations[0].generation_id')
+
+        # Poll until the generation reaches a terminal status.
+        while true; do
+          STATUS=$(curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.status')
+          echo "Status: $STATUS"
+          case $STATUS in succeeded|failed|cancelled) break;; esac
+          sleep 5
+        done
+
+        # Print the result.
+        curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+          "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq .
+        ```
+
+        ```python Python
+        import os
+        import time
+        import requests
+
+        HEADERS = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        }
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers=HEADERS,
+            json={
+                "model": "bytedance-seed-audio-1-0",
+                "prompt": "<prompt>",
+                "audio_urls": [
+                    "https://example.com/audio.mp3"
+                ],
+                "image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        while True:
+            data = requests.get(
+                f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
+                headers=HEADERS,
+            ).json()
+            if data["status"] in {"succeeded", "failed", "cancelled"}:
+                break
+            time.sleep(5)
+
+        if data["status"] == "succeeded":
+            print(f"Result: {data['result_url']}")
+        else:
+            print(f"Generation {data['status']}: {data.get('error_message')}")
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+      <Tab title="All parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "bytedance-seed-audio-1-0",
+          "prompt": "<prompt>",
+          "audio_urls": [
+            "https://example.com/audio.mp3"
+          ],
+          "image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "output_format": "mp3",
+          "sample_rate": 24000,
+          "speed": 1.0,
+          "volume": 1.0,
+          "pitch": 0
+        }' | jq -r '.generations[0].generation_id')
+
+        # Poll until the generation reaches a terminal status.
+        while true; do
+          STATUS=$(curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.status')
+          echo "Status: $STATUS"
+          case $STATUS in succeeded|failed|cancelled) break;; esac
+          sleep 5
+        done
+
+        # Print the result.
+        curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+          "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq .
+        ```
+
+        ```python Python
+        import os
+        import time
+        import requests
+
+        HEADERS = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        }
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers=HEADERS,
+            json={
+                "model": "bytedance-seed-audio-1-0",
+                "prompt": "<prompt>",
+                "audio_urls": [
+                    "https://example.com/audio.mp3"
+                ],
+                "image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "output_format": "mp3",
+                "sample_rate": 24000,
+                "speed": 1.0,
+                "volume": 1.0,
+                "pitch": 0
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        while True:
+            data = requests.get(
+                f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
+                headers=HEADERS,
+            ).json()
+            if data["status"] in {"succeeded", "failed", "cancelled"}:
+                break
+            time.sleep(5)
+
+        if data["status"] == "succeeded":
+            print(f"Result: {data['result_url']}")
+        else:
+            print(f"Generation {data['status']}: {data.get('error_message')}")
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+    </Tabs>
 
   </Tab>
-  <Tab title="Basic parameters">
+  <Tab title="Event stream">
 
-    <CodeGroup>
+    Submit the job, then wait on the event stream instead of polling.
 
-    ```bash cURL
-    curl -X POST https://hub.oxen.ai/api/ai/audio/speech \
-      -H "Content-Type: application/json" \
-      -H "Authorization: Bearer $OXEN_API_KEY" \
-      -d '{
-      "model": "bytedance-seed-audio-1-0",
-      "prompt": "<prompt>",
-      "audio_urls": [
-        "https://example.com/audio.mp3"
-      ],
-      "image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-      "input": "Welcome to Oxen"
-    }'
-    ```
+    See the [media generation reference](/inference-api/reference/async_queue) for more details.
 
-    ```python Python
-    import os
-    import requests
+    <Tabs>
+      <Tab title="Minimal">
 
-    response = requests.post(
-        "https://hub.oxen.ai/api/ai/audio/speech",
-        headers={
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
-        },
-        json={
-            "model": "bytedance-seed-audio-1-0",
-            "prompt": "<prompt>",
-            "audio_urls": [
-                "https://example.com/audio.mp3"
-            ],
-            "image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-            "input": "Welcome to Oxen"
-        },
-    )
-    response.raise_for_status()
-    print(response.json())
-    ```
+        <CodeGroup>
 
-    </CodeGroup>
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "bytedance-seed-audio-1-0",
+          "prompt": "<prompt>"
+        }' | jq -r '.generations[0].generation_id')
 
-  </Tab>
-  <Tab title="All parameters">
+        # Stream the SSE channel, grab the data line that follows a
+        # media_generation_completed event for our id, and pretty-print it.
+        curl -sN -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/events \
+          | awk -v id="$GEN_ID" '
+            /^event: media_generation_completed$/ { expect=1; next }
+            /^data: / && expect {
+              payload = substr($0, 7)
+              if (index(payload, "\"generation_id\":\"" id "\"")) { print payload; exit }
+              expect = 0
+            }
+          ' | jq .
+        ```
 
-    <CodeGroup>
+        ```python Python
+        import json
+        import os
+        import requests
 
-    ```bash cURL
-    curl -X POST https://hub.oxen.ai/api/ai/audio/speech \
-      -H "Content-Type: application/json" \
-      -H "Authorization: Bearer $OXEN_API_KEY" \
-      -d '{
-      "model": "bytedance-seed-audio-1-0",
-      "prompt": "<prompt>",
-      "audio_urls": [
-        "https://example.com/audio.mp3"
-      ],
-      "image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-      "output_format": "mp3",
-      "sample_rate": 24000,
-      "speed": 1.0,
-      "volume": 1.0,
-      "pitch": 0,
-      "input": "Welcome to Oxen"
-    }'
-    ```
+        API_KEY = os.environ["OXEN_API_KEY"]
+        AUTH = {"Authorization": f"Bearer {API_KEY}"}
 
-    ```python Python
-    import os
-    import requests
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers={**AUTH, "Content-Type": "application/json"},
+            json={
+                "model": "bytedance-seed-audio-1-0",
+                "prompt": "<prompt>"
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
 
-    response = requests.post(
-        "https://hub.oxen.ai/api/ai/audio/speech",
-        headers={
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
-        },
-        json={
-            "model": "bytedance-seed-audio-1-0",
-            "prompt": "<prompt>",
-            "audio_urls": [
-                "https://example.com/audio.mp3"
-            ],
-            "image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-            "output_format": "mp3",
-            "sample_rate": 24000,
-            "speed": 1.0,
-            "volume": 1.0,
-            "pitch": 0,
-            "input": "Welcome to Oxen"
-        },
-    )
-    response.raise_for_status()
-    print(response.json())
-    ```
+        with requests.get(
+            "https://hub.oxen.ai/api/events",
+            headers=AUTH,
+            stream=True,
+        ) as stream:
+            event_name = None
+            for line in stream.iter_lines(decode_unicode=True):
+                if line.startswith("event: "):
+                    event_name = line.removeprefix("event: ")
+                elif line.startswith("data: ") and event_name == "media_generation_completed":
+                    payload = json.loads(line.removeprefix("data: "))
+                    if payload.get("generation_id") == generation_id:
+                        print(payload)
+                        break
+        ```
 
-    </CodeGroup>
+        </CodeGroup>
+
+      </Tab>
+      <Tab title="Basic parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "bytedance-seed-audio-1-0",
+          "prompt": "<prompt>",
+          "audio_urls": [
+            "https://example.com/audio.mp3"
+          ],
+          "image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+        }' | jq -r '.generations[0].generation_id')
+
+        # Stream the SSE channel, grab the data line that follows a
+        # media_generation_completed event for our id, and pretty-print it.
+        curl -sN -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/events \
+          | awk -v id="$GEN_ID" '
+            /^event: media_generation_completed$/ { expect=1; next }
+            /^data: / && expect {
+              payload = substr($0, 7)
+              if (index(payload, "\"generation_id\":\"" id "\"")) { print payload; exit }
+              expect = 0
+            }
+          ' | jq .
+        ```
+
+        ```python Python
+        import json
+        import os
+        import requests
+
+        API_KEY = os.environ["OXEN_API_KEY"]
+        AUTH = {"Authorization": f"Bearer {API_KEY}"}
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers={**AUTH, "Content-Type": "application/json"},
+            json={
+                "model": "bytedance-seed-audio-1-0",
+                "prompt": "<prompt>",
+                "audio_urls": [
+                    "https://example.com/audio.mp3"
+                ],
+                "image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        with requests.get(
+            "https://hub.oxen.ai/api/events",
+            headers=AUTH,
+            stream=True,
+        ) as stream:
+            event_name = None
+            for line in stream.iter_lines(decode_unicode=True):
+                if line.startswith("event: "):
+                    event_name = line.removeprefix("event: ")
+                elif line.startswith("data: ") and event_name == "media_generation_completed":
+                    payload = json.loads(line.removeprefix("data: "))
+                    if payload.get("generation_id") == generation_id:
+                        print(payload)
+                        break
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+      <Tab title="All parameters">
+
+        <CodeGroup>
+
+        ```bash cURL
+        # Enqueue, capture the generation id.
+        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $OXEN_API_KEY" \
+          -d '{
+          "model": "bytedance-seed-audio-1-0",
+          "prompt": "<prompt>",
+          "audio_urls": [
+            "https://example.com/audio.mp3"
+          ],
+          "image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "output_format": "mp3",
+          "sample_rate": 24000,
+          "speed": 1.0,
+          "volume": 1.0,
+          "pitch": 0
+        }' | jq -r '.generations[0].generation_id')
+
+        # Stream the SSE channel, grab the data line that follows a
+        # media_generation_completed event for our id, and pretty-print it.
+        curl -sN -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/events \
+          | awk -v id="$GEN_ID" '
+            /^event: media_generation_completed$/ { expect=1; next }
+            /^data: / && expect {
+              payload = substr($0, 7)
+              if (index(payload, "\"generation_id\":\"" id "\"")) { print payload; exit }
+              expect = 0
+            }
+          ' | jq .
+        ```
+
+        ```python Python
+        import json
+        import os
+        import requests
+
+        API_KEY = os.environ["OXEN_API_KEY"]
+        AUTH = {"Authorization": f"Bearer {API_KEY}"}
+
+        enqueue = requests.post(
+            "https://hub.oxen.ai/api/ai/queue",
+            headers={**AUTH, "Content-Type": "application/json"},
+            json={
+                "model": "bytedance-seed-audio-1-0",
+                "prompt": "<prompt>",
+                "audio_urls": [
+                    "https://example.com/audio.mp3"
+                ],
+                "image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "output_format": "mp3",
+                "sample_rate": 24000,
+                "speed": 1.0,
+                "volume": 1.0,
+                "pitch": 0
+            },
+        )
+        enqueue.raise_for_status()
+        generation_id = enqueue.json()["generations"][0]["generation_id"]
+
+        with requests.get(
+            "https://hub.oxen.ai/api/events",
+            headers=AUTH,
+            stream=True,
+        ) as stream:
+            event_name = None
+            for line in stream.iter_lines(decode_unicode=True):
+                if line.startswith("event: "):
+                    event_name = line.removeprefix("event: ")
+                elif line.startswith("data: ") and event_name == "media_generation_completed":
+                    payload = json.loads(line.removeprefix("data: "))
+                    if payload.get("generation_id") == generation_id:
+                        print(payload)
+                        break
+        ```
+
+        </CodeGroup>
+
+      </Tab>
+    </Tabs>
 
   </Tab>
 </Tabs>
