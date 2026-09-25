@@ -70,7 +70,7 @@ oxen config --auth <HOST> <TOKEN>
 
 ## 🗂️ Sync Directory
 
-The default directory that Oxen stores data is `/tmp/oxen_sync`, which is not a good idea for production. To change it set the `SYNC_DIR` environment variable to a path.
+The default directory that Oxen stores data is `data`, relative to the working directory the server was started from, which is convenient for trying things out but not what you want in production. To change it set the `SYNC_DIR` environment variable to an absolute path.
 
 ```bash
 export SYNC_DIR=/var/oxen/data
