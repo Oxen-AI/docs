@@ -8,7 +8,7 @@ description: 'How to use the video generation API on Oxen.ai.'
 The video generation endpoint allows you to generate videos from text prompts. Simply provide a prompt describing the video you want to create. To see the list of models that support video generation, visit the [Models](https://www.oxen.ai/ai/models?modalities=text-to-video) page and filter by "Text to Video".
 
 <Info>
-Video generation can take a few minutes to generate, depending on the model. So we recommend using the `run_fast` parameter to speed up the process. We are working on async video generation, reach out at [support@oxen.ai](mailto:support@oxen.ai) if you want early access.
+Video generation takes a few minutes on most models. Submit the job to [`/ai/queue`](/inference-api/reference/async_queue) and poll it rather than holding a request open.
 </Info>
 
 <CodeGroup>
