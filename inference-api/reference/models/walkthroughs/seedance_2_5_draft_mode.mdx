@@ -1,0 +1,430 @@
+---
+title: "Seedance 2.5: Draft Mode"
+description: "Preview a Seedance 2.5 video at 480p, then render the exact same shot at 1080p with one more request."
+---
+
+Draft mode lets you preview a Seedance 2.5 video at 480p, then finalize the exact same shot at 1080p with one more request. The final reuses the draft's prompt, media, and settings, so what you approved is what you get. It is a good way to save money while you are iterating on your motion, dialogue, and shot details before committing to a 1080p generation.
+
+The flow has two calls:
+
+1. **Draft.** Send your normal request with `draft: true`. You get a 480p video and a `draft_task_id`.
+2. **Final.** Send the `draft_task_id` back with the same `model`. You get the 1080p video. No prompt needed.
+
+|  | Draft | Final |
+| --- | --- | --- |
+| Request adds | `draft: true` | `draft_task_id` |
+| Resolution | 480p (pinned) | 1080p (pinned) |
+| Prompt | Required | Not sent; reused from the draft |
+| Duration, aspect ratio, audio, seed | Set by you | Inherited from the draft |
+| Billed as | A normal 480p video | A normal 1080p video |
+| Returns `draft_task_id` | Yes, valid for 7 days | No |
+
+**Supported model:** `bytedance-seedance-2-5-text-to-video`
+
+**Base URL:** `https://hub.oxen.ai/api`. Authenticate every request with `Authorization: Bearer $OXEN_API_KEY`.
+
+Draft mode works on both the queue ([`POST /ai/queue`](/inference-api/reference/async_queue)) and the sync endpoint ([`POST /ai/videos/generate`](/inference-api/reference/video_generation)). It is also available in the Oxen.ai UI: render a draft, then click to render the final.
+
+<Note>
+  We recommend the async queue workflow. Seedance generations may take a long time, and your HTTP connection may time out in sync mode.
+</Note>
+
+<Card title="Seedance 2.5 - Text to Video API reference" icon="book" href="/inference-api/reference/models/bytedance-seedance-2-5-text-to-video">
+  Full parameter table, request builder, and sample code for the underlying model.
+</Card>
+
+## Quickstart (async queue, recommended)
+
+We recommend the [async queue](/inference-api/reference/async_queue) for draft mode. Seedance generations can take several minutes, and in sync mode your HTTP connection may time out before the video is ready. Enqueue returns a `generation_id` right away; poll (or listen for the completion event) until the generation finishes.
+
+### 1. Enqueue a draft
+
+Add `draft: true` to a normal request. Any `resolution` you send is overridden to 480p.
+
+```bash
+curl -X POST https://hub.oxen.ai/api/ai/queue \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "bytedance-seedance-2-5-text-to-video",
+    "prompt": "A lone ox walks down an empty desert highway at golden hour",
+    "duration": 5,
+    "draft": true
+  }'
+```
+
+Response:
+
+```json
+{ "generations": [{ "generation_id": "d8656ef0-085c-498e-afe2-289442222450", "status": "queued" }] }
+```
+
+### 2. Poll the draft
+
+```bash
+curl https://hub.oxen.ai/api/ai/queue/d8656ef0-085c-498e-afe2-289442222450 \
+  -H "Authorization: Bearer $OXEN_API_KEY"
+```
+
+`status` moves from `queued` to `processing` and `videos` stays empty until the generation has a result. Once `status` is `succeeded`, read the draft ID from `videos[0]`:
+
+```json
+{
+  "generation_id": "d8656ef0-085c-498e-afe2-289442222450",
+  "model_name": "bytedance-seedance-2-5-text-to-video",
+  "media_type": "video",
+  "status": "succeeded",
+  "result_url": "https://hub.oxen.ai/api/repos/ox/playground/workspaces/269822c4-.../files/20260926-034218_a-lone-ox-walks-down-an-empty-desert-highway-at_0e48f80b.mp4?oxen_expires=1790397738&oxen_signature=...",
+  "videos": [
+    {
+      "url": "https://hub.oxen.ai/api/repos/ox/playground/workspaces/269822c4-.../files/20260926-034218_a-lone-ox-walks-down-an-empty-desert-highway-at_0e48f80b.mp4?oxen_expires=1790397738&oxen_signature=...",
+      "draft_task_id": "cgt-20260926114114-r4bb8",
+      "draft_expires_at": "2026-10-01T18:04:11Z"
+    }
+  ]
+}
+```
+
+If you consume the [`media_generation_completed` event](/inference-api/reference/async_queue#completion-events) instead of polling, it carries the same `videos` list beside its `url`.
+
+### 3. Enqueue the final
+
+```bash
+curl -X POST https://hub.oxen.ai/api/ai/queue \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "bytedance-seedance-2-5-text-to-video",
+    "draft_task_id": "cgt-20260926114114-r4bb8"
+  }'
+```
+
+Response:
+
+```json
+{ "generations": [{ "generation_id": "f2a9c1d4-6b3e-4c7a-9e21-5d8b0a7c3e10", "status": "queued" }] }
+```
+
+### 4. Poll the final
+
+Poll `GET /ai/queue/{generation_id}` as before. The succeeded final lists its video with only a `url`. Its top-level `draft_task_id` names the draft it came from, so you can link the two in your own records.
+
+```json
+{
+  "generation_id": "f2a9c1d4-6b3e-4c7a-9e21-5d8b0a7c3e10",
+  "model_name": "bytedance-seedance-2-5-text-to-video",
+  "media_type": "video",
+  "status": "succeeded",
+  "draft_task_id": "cgt-20260926114114-r4bb8",
+  "result_url": "https://hub.oxen.ai/api/repos/ox/playground/workspaces/269822c4-.../files/20260926-034319_9173d907.mp4?oxen_expires=1790397799&oxen_signature=...",
+  "videos": [
+    { "url": "https://hub.oxen.ai/api/repos/ox/playground/workspaces/269822c4-.../files/20260926-034319_9173d907.mp4?oxen_expires=1790397799&oxen_signature=..." }
+  ]
+}
+```
+
+## Sync flow
+
+The sync endpoint holds the connection open and returns the finished video. It is fine for quick experiments, but for anything else prefer the async queue above, since a long Seedance render can outlast your HTTP connection.
+
+### 1. Render a draft
+
+Add `draft: true` to a normal request. Any `resolution` you send is overridden to 480p.
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "bytedance-seedance-2-5-text-to-video",
+    "prompt": "A lone ox walks down an empty desert highway at golden hour",
+    "duration": 5,
+    "draft": true
+  }'
+```
+
+```python Python
+import os
+import requests
+
+response = requests.post(
+    "https://hub.oxen.ai/api/ai/videos/generate",
+    headers={
+        "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        "Content-Type": "application/json",
+    },
+    json={
+        "model": "bytedance-seedance-2-5-text-to-video",
+        "prompt": "A lone ox walks down an empty desert highway at golden hour",
+        "duration": 5,
+        "draft": True,
+    },
+    timeout=600,
+)
+response.raise_for_status()
+draft = response.json()["videos"][0]
+print("Draft URL:", draft["url"])
+print("Draft ID:", draft["draft_task_id"], "expires", draft["draft_expires_at"])
+```
+
+</CodeGroup>
+
+The response lists the video with its draft ID and expiry:
+
+```json
+{
+  "model": "bytedance-seedance-2-5-text-to-video",
+  "videos": [
+    {
+      "url": "https://hub.oxen.ai/api/repos/ox/playground/workspaces/269822c4-.../files/20260926-034218_a-lone-ox-walks-down-an-empty-desert-highway-at_0e48f80b.mp4?oxen_expires=1790397738&oxen_signature=...",
+      "draft_task_id": "cgt-20260926114114-r4bb8",
+      "draft_expires_at": "2026-10-01T18:04:11Z"
+    }
+  ],
+  "created": 1790000000
+}
+```
+
+Store `videos[0].draft_task_id` and `videos[0].draft_expires_at` with the draft. You need the ID to render the final.
+
+### 2. Render the final
+
+Send the `draft_task_id` back exactly as you received it, with the same `model`. Leave out `prompt`, `duration`, and other settings.
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "bytedance-seedance-2-5-text-to-video",
+    "draft_task_id": "cgt-20260926114114-r4bb8"
+  }'
+```
+
+```python Python
+import os
+import requests
+
+response = requests.post(
+    "https://hub.oxen.ai/api/ai/videos/generate",
+    headers={
+        "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        "Content-Type": "application/json",
+    },
+    json={
+        "model": "bytedance-seedance-2-5-text-to-video",
+        "draft_task_id": "cgt-20260926114114-r4bb8",
+    },
+    timeout=900,
+)
+response.raise_for_status()
+print("Final URL:", response.json()["videos"][0]["url"])
+```
+
+</CodeGroup>
+
+The final is 1080p at the draft's duration and audio setting. Its item carries only a `url`:
+
+```json
+{
+  "model": "bytedance-seedance-2-5-text-to-video",
+  "videos": [
+    {
+      "url": "https://hub.oxen.ai/api/repos/ox/playground/workspaces/269822c4-.../files/20260926-034319_9173d907.mp4?oxen_expires=1790397799&oxen_signature=..."
+    }
+  ],
+  "created": 1790000300
+}
+```
+
+## Reference
+
+### Request parameters
+
+Both endpoints accept these fields in the JSON body.
+
+| Field | Type | Used on | Notes |
+| --- | --- | --- | --- |
+| `model` | string | Draft, final | `bytedance-seedance-2-5-text-to-video`. The final must use the draft's model. |
+| `draft` | boolean | Draft | `true` renders a 480p draft. Omit or `false` for a normal render. |
+| `prompt` | string | Draft | Required on the draft. Not needed on the final. |
+| `duration` | integer | Draft | Seconds. The final inherits it. |
+| `resolution` | string | Neither | Pinned: 480p for drafts, 1080p for finals. Any value you send is overridden, though the queue generation record still echoes the value you sent. |
+| `draft_task_id` | string | Final | The ID from the draft's response, sent back unchanged. Replaces the prompt requirement. |
+
+Settings like aspect ratio, audio, and seed are set on the draft and locked for the final. The final ignores them if resent, along with any `prompt`. The queue generation record still echoes whatever you sent, so do not read the final's settings back from it. Read them from the draft.
+
+### Response fields
+
+Every endpoint lists media the same way: a `videos` array of items with a stored `url`, plus any fields you can act on.
+
+| Field | Where | Present on | Notes |
+| --- | --- | --- | --- |
+| `videos[].url` | Sync, queue, event | All videos | Signed URL of the stored MP4. |
+| `videos[].draft_task_id` | Sync, queue, event | Drafts only | Send this back to render the final. |
+| `videos[].draft_expires_at` | Sync, queue, event | Drafts only | ISO 8601 UTC. Creation time plus 7 days. |
+| `draft_task_id` (top level) | Queue generation | Finals only | The source draft of this final. Always the request param, never a new draft. |
+| `result_url` | Queue generation, event | All videos | Same as `videos[0].url`. Kept for older clients; prefer `videos`. |
+| `status` | Queue generation | All | `queued`, then `processing`, then `succeeded`, `failed`, or `cancelled`. |
+| `draft` | Queue generation | Drafts only | `true`, echoed from the request. Useful for filtering `GET /ai/generations`. |
+| `error_message` | Queue generation | Failed only | Why the generation failed. Provider errors also set `error_provider` and `error_provider_code`. |
+
+### Endpoints
+
+| Method | Path | Purpose |
+| --- | --- | --- |
+| `POST` | [`/ai/videos/generate`](/inference-api/reference/video_generation) | Render a draft or final and wait for the result. |
+| `POST` | [`/ai/queue`](/inference-api/reference/async_queue#enqueue) | Enqueue a draft or final. Returns `generations[].generation_id`. |
+| `GET` | [`/ai/queue/{generation_id}`](/inference-api/reference/async_queue#get-generation) | Read one generation's status and media. |
+| `GET` | [`/ai/generations`](/inference-api/reference/async_queue#list-generations) | List generations, with the same `videos` shape. |
+
+## Rules, billing, and errors
+
+### Rules
+
+- **Drafts expire after 7 days.** Render the final before `draft_expires_at`. After that, render a new draft.
+- **One draft, many finals.** A draft ID stays valid until it expires, so you can re-render the final if you need to.
+- **The final is locked to the draft.** To change the prompt, media, duration, aspect ratio, audio, or seed, render a new draft.
+- **Use the same model.** Send the final to the model that produced the draft.
+
+### Billing
+
+Drafts and finals are each billed as a normal video at their resolution. A draft costs the same as any 480p render. A final costs the same as any 1080p render, using the duration and audio of the finished video.
+
+The cost estimate for a final shows a range from silent to with-audio, since the final inherits the draft's audio setting. Pass the draft's `duration` on the final request to tighten the estimate. It does not change the render.
+
+Every render, sync or queued, appears on your requests page and in your usage totals.
+
+### Errors
+
+The sync endpoint returns an HTTP 400 with the error in the body. The queue accepts the request and reports the same error on the generation once it runs: `status` is `failed`, `videos` is empty, and `error_message` explains why.
+
+| Cause | Error | Fix |
+| --- | --- | --- |
+| Draft request with no `prompt` | `Prompt cannot be empty` | Add a prompt. Only finals skip it. |
+| `draft_task_id` sent to a model that doesn't support draft mode | `Prompt cannot be empty` (the model ignores `draft_task_id` and sees a request with no prompt) | Use `bytedance-seedance-2-5-text-to-video`. |
+| `draft_task_id` expired or unknown | `model_response_error` from the provider: `the parameter 'draft_task_id' must be a draft task with status 'succeeded'` | Render a new draft. |
+
+Sync error body for an unknown draft ID:
+
+```json
+{
+  "error": {
+    "code": 400,
+    "reason": "bad_input",
+    "type": "model_response_error",
+    "detail": "Getting model response error: API error: 400 - The parameter `content[0].draft_task.id` specified in the request is not valid: the parameter 'draft_task_id' must be a draft task with status 'succeeded'; received: cgt-does-not-exist. ...",
+    "provider": "ByteDance",
+    "provider_code": "InvalidParameter",
+    "retryable": false
+  },
+  "status": "error",
+  "status_message": "model_response_error"
+}
+```
+
+## Integration guide
+
+This section is written so a coding agent can implement draft mode from it directly. Point Claude Code or a similar tool at this page and ask it to add draft mode to your Seedance 2.5 integration.
+
+### Checklist
+
+- [ ] Add a `draft` option to your Seedance 2.5 request builder that sets `"draft": true`.
+- [ ] Read `draft_task_id` and `draft_expires_at` from `videos[0]` on the sync response, the succeeded queue generation, or the `media_generation_completed` event.
+- [ ] Persist both fields next to the draft's video URL and prompt.
+- [ ] Add a "render final" action that sends only `model` and `draft_task_id`.
+- [ ] Hide or disable that action once `draft_expires_at` has passed.
+- [ ] Lock prompt and settings in your UI for finals. Editing them means a new draft.
+- [ ] Link each final to its draft using the final generation's top-level `draft_task_id`.
+- [ ] Read media from `videos[]`. Treat an empty `videos` list as not ready.
+
+### Reference implementation (Python)
+
+A minimal client covering both paths. It uses only `requests`.
+
+```python
+import os
+import time
+from datetime import datetime, timezone
+
+import requests
+
+BASE = "https://hub.oxen.ai/api"
+MODEL = "bytedance-seedance-2-5-text-to-video"
+HEADERS = {
+    "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+    "Content-Type": "application/json",
+}
+
+
+def render_draft(prompt: str, duration: int = 5, **settings) -> dict:
+    """Render a 480p draft synchronously. Returns url, draft_task_id, draft_expires_at."""
+    body = {"model": MODEL, "prompt": prompt, "duration": duration, "draft": True, **settings}
+    r = requests.post(f"{BASE}/ai/videos/generate", json=body, headers=HEADERS, timeout=600)
+    r.raise_for_status()
+    return r.json()["videos"][0]
+
+
+def render_final(draft: dict) -> dict:
+    """Render the 1080p final from a draft returned by render_draft."""
+    expires = datetime.fromisoformat(draft["draft_expires_at"].replace("Z", "+00:00"))
+    if expires <= datetime.now(timezone.utc):
+        raise ValueError("Draft expired. Render a new draft.")
+    body = {"model": MODEL, "draft_task_id": draft["draft_task_id"]}
+    r = requests.post(f"{BASE}/ai/videos/generate", json=body, headers=HEADERS, timeout=900)
+    r.raise_for_status()
+    return r.json()["videos"][0]
+
+
+def enqueue(body: dict) -> str:
+    r = requests.post(f"{BASE}/ai/queue", json=body, headers=HEADERS, timeout=30)
+    r.raise_for_status()
+    return r.json()["generations"][0]["generation_id"]
+
+
+def wait(generation_id: str, interval: float = 5.0) -> dict:
+    """Poll a queued generation until it succeeds. Returns the full generation."""
+    while True:
+        r = requests.get(f"{BASE}/ai/queue/{generation_id}", headers=HEADERS, timeout=30)
+        r.raise_for_status()
+        gen = r.json()
+        if gen["status"] == "succeeded" and gen.get("videos"):
+            return gen
+        if gen["status"] in {"failed", "cancelled"}:
+            raise RuntimeError(f"Generation {generation_id} {gen['status']}: {gen.get('error_message')}")
+        time.sleep(interval)
+
+
+if __name__ == "__main__":
+    prompt = "A lone ox walks down an empty desert highway at golden hour"
+
+    # Queued (recommended): draft, review, final in the background
+    gid = enqueue({"model": MODEL, "prompt": prompt, "duration": 5, "draft": True})
+    queued_draft = wait(gid)["videos"][0]
+    print("Draft:", queued_draft["url"])
+    gid = enqueue({"model": MODEL, "draft_task_id": queued_draft["draft_task_id"]})
+    queued_final = wait(gid)
+    print("Final:", queued_final["videos"][0]["url"], "from draft", queued_final["draft_task_id"])
+
+    # Sync: same flow, holding the connection open
+    draft = render_draft(prompt)
+    print("Draft:", draft["url"])
+    final = render_final(draft)
+    print("Final:", final["url"])
+```
+
+### Prompt for your coding agent
+
+```
+Add Seedance 2.5 draft mode to our video generation integration, following
+the Oxen.ai Seedance 2.5 Draft Mode docs at
+https://docs.oxen.ai/inference-api/reference/models/walkthroughs/seedance_2_5_draft_mode.
+Drafts send draft: true and return videos[0].draft_task_id and
+videos[0].draft_expires_at. Persist both. Finals send only model and
+draft_task_id. Block finals after draft_expires_at. Read media from
+videos[], or from result_url, but videos[] will be the standard going forward.
+```
