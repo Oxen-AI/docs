@@ -54,48 +54,27 @@ To install on other platforms, follow the [installation instructions](/getting-s
 
 ## 🏎️ Start Server
 
-The server can be run with access token authentication turned on or off. The server runs with no authentication by default.
-
 ```bash
 oxen-server start
 ```
 
-To enable authentication, generate a token to give it to the user to access to the server
-
-```bash
-oxen-server add-user --email YOUR_EMAIL --name YOUR_NAME
-```
-
-Output:
-
-```
-User access token created:
-
-XXXXXXXX
-
-To give user access have them run the command `oxen config --auth <HOST> <TOKEN>`
-```
-
-You may have different authentication tokens for different hosts. From the client side, you can setup an auth token per host with the `config` command. If you ever need to debug or edit the tokens manually, they are stored in the `~/.config/oxen/auth_config.toml` file.
+`oxen-server` does not authenticate requests itself. To require authentication, run it behind a reverse proxy or gateway that checks each request before forwarding it. If the gateway checks a bearer token, give each client its token with the `config` command. It keeps one token per host in `~/.config/oxen/auth_config.toml` and sends it as `Authorization: Bearer <TOKEN>` on every request to that host.
 
 ```bash
 oxen config --auth <HOST> <TOKEN>
-cat ~/.config/oxen/auth_config.toml
 ```
 
-To run the server with authentication, use the `-a` flag
-
-```bash
-oxen-server start -a
-```
+<Note>
+  `oxen-server` 0.59.0 removed the `-a` flag and the `add-user` command, and a server started with `-a` refuses to start. See [the upgrade steps](https://github.com/Oxen-AI/Oxen/blob/main/docs/migrations.md#stop-starting-the-server-with--a) before upgrading a server that uses them.
+</Note>
 
 ## 🗂️ Sync Directory
 
-The default directory that Oxen stores data is `/tmp/oxen_sync`, which is not a good idea for production. To change it set the `SYNC_DIR` environment variable to a path.
+The default directory that Oxen stores data is `data`, relative to the working directory the server was started from, which is convenient for trying things out but not what you want in production. To change it set the `SYNC_DIR` environment variable to an absolute path.
 
 ```bash
 export SYNC_DIR=/var/oxen/data
-oxen-server start -a
+oxen-server start
 ```
 
 Output:
