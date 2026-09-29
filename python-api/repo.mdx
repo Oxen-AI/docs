@@ -67,7 +67,10 @@ Will create a .oxen folder to store all the versions and metadata.
 ## clone
 
 ```python
-def clone(url: str, branch: str = "main", all=False)
+def clone(url: str,
+          branch: str = "main",
+          all=False,
+          filters: Optional[str | list[str]] = None)
 ```
 
 Clone repository from a remote url.
@@ -80,6 +83,10 @@ Clone repository from a remote url.
   The name of the branch to clone. Default: main
 - `all` - `bool`
   Whether to clone the full commit history or not. Default: False
+- `filters` - `str | list[str] | None`
+  Filter down the set of directories you want to clone. Useful if
+  you have a large repository and only want to make changes to a
+  specific subset of files. Default: None
 
 <a id="oxen.repo.Repo.branches"></a>
 
@@ -97,6 +104,16 @@ List all branches for a repo
 
 ```python
 def branch(name: str, delete=False)
+```
+
+
+
+<a id="oxen.repo.Repo.branch_exists"></a>
+
+## branch\_exists
+
+```python
+def branch_exists(name: str)
 ```
 
 
@@ -146,8 +163,15 @@ Add schema to the local repository
 def rm(path: str, recursive=False, staged=False)
 ```
 
-Remove a file or directory from being tracked.
-This will not delete the file or directory.
+Delete a file or directory from the working tree and stage the removal.
+
+The next commit records the path as removed. The path must already be
+committed. To bring the file back, use `oxen restore --staged <path>` to
+unstage the removal and then `oxen restore <path>`.
+
+With `staged=True` the path is removed from the staging area and the
+working-tree copy is left in place. This unstages an earlier add or
+removal, and the path need not be committed.
 
 **Arguments**:
 
@@ -156,11 +180,64 @@ This will not delete the file or directory.
 - `recursive` - `bool`
   Whether to remove the file or directory recursively. Default: False
 - `staged` - `bool`
-  Whether to remove the file or directory from the staging area.
-- `Default` - False
-- `remote` - `bool`
-  Whether to remove the file or directory from a remote workspace.
-- `Default` - False
+  Whether to remove the path from the staging area without
+  deleting the working-tree copy. Default: False
+
+<a id="oxen.repo.Repo.restore"></a>
+
+## restore
+
+```python
+def restore(path: str, staged=False, source=None)
+```
+
+Restore a file or directory to a previous state.
+
+By default the working copy is written back from the commit. With
+`staged=True` the staged entry is discarded instead and the working copy
+is left alone, so undoing an `rm` takes both, staged first.
+
+**Arguments**:
+
+- `path` - `str`
+  The path to the file or directory to restore.
+- `staged` - `bool`
+  Discard the staged entry rather than the working copy. Default: False
+- `source` - `str`
+  Commit id or branch name to take the contents from, when
+  restoring the working copy. Defaults to HEAD, and has no effect
+  with `staged=True`.
+
+<a id="oxen.repo.Repo.clean"></a>
+
+## clean
+
+```python
+def clean(paths=None, force=False)
+```
+
+Remove untracked files and directories from the working tree.
+
+Without `force=True` this is a dry-run — the returned object lists what
+*would* be removed but nothing is deleted. Pass `force=True` to actually
+delete.
+
+Matches the `oxen clean` CLI: tracked files, `.oxen/`, and
+`.oxenignore`-matched files are never touched.
+
+**Arguments**:
+
+- `paths` - `list[str] | None`
+  Optional list of paths to scope the cleanup. `None` (the default)
+  means the whole working tree.
+- `force` - `bool`
+  Actually remove. Without this the call is a dry-run. Default: False
+  
+
+**Returns**:
+
+  A `CleanResult` with `.files`, `.dirs`, `.total_bytes`, and `.applied`
+  attributes.
 
 <a id="oxen.repo.Repo.status"></a>
 
@@ -207,12 +284,21 @@ def set_remote(name: str, url: str)
 
 Map a name to a remote url.
 
+Reads the repository at `url` and records its identifier alongside the name and
+url, so the remote has to be reachable and the repository has to exist.
+
 **Arguments**:
 
 - `name` - `str`
   The name of the remote. Ex) origin
 - `url` - `str`
   The url you want to map the name to. Ex) https://hub.oxen.ai/ox/chatbot
+  
+
+**Raises**:
+
+- `PyOxenError` - If the repository at `url` cannot be read, or if `name` is
+  already attached to a different repository.
 
 <a id="oxen.repo.Repo.push"></a>
 

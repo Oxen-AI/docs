@@ -245,6 +245,77 @@ Download a file or directory from the remote repo.
 - `revision` - `str | None`
   The branch or commit id to download. Defaults to `self.revision`
 
+<a id="oxen.remote_repo.RemoteRepo.download_zip"></a>
+
+## download\_zip
+
+```python
+def download_zip(src: str,
+                 dst: Optional[str] = None,
+                 revision: Optional[str] = None)
+```
+
+Download the contents of a directory as a zip file
+
+**Arguments**:
+
+- `src` - `str`
+  The path to the remote dir to download files from. This must be a directory
+- `dst` - `str | None`
+  The path to the local file. If None, will download to `{src}.zip`
+- `revision` - `str | None`
+  The branch or commit id to download. Defaults to `self.revision`
+
+<a id="oxen.remote_repo.RemoteRepo.get_file"></a>
+
+## get\_file
+
+```python
+def get_file(src: str, revision: Optional[str] = None)
+```
+
+Get a file from the remote repo.
+
+**Arguments**:
+
+- `src` - `str`
+  The path to the remote file
+- `revision` - `str | None`
+  The branch or commit id to download. Defaults to `self.revision`
+
+<a id="oxen.remote_repo.RemoteRepo.create_workspace"></a>
+
+## create\_workspace
+
+```python
+def create_workspace(branch: Optional[str] = None,
+                     workspace_name: Optional[str] = None)
+```
+
+Create a new workspace in the remote repo. If the workspace already exists, it will just be returned.
+
+**Arguments**:
+
+- `branch` - `str | None`
+  The branch to create the workspace on. Defaults to `self.revision`
+- `workspace_name` - `str | None`
+  The named workspace to use when adding the file. If None, will create a temporary workspace
+  
+
+**Returns**:
+
+  [Workspace](/python-api/workspace)
+
+<a id="oxen.remote_repo.RemoteRepo.delete_workspace"></a>
+
+## delete\_workspace
+
+```python
+def delete_workspace()
+```
+
+Delete the current workspace in the remote repo.
+
 <a id="oxen.remote_repo.RemoteRepo.add"></a>
 
 ## add
@@ -266,6 +337,8 @@ Stage a file to a workspace in the remote repo.
   The directory to upload the file to. If None, will upload to the root directory.
 - `branch` - `str | None`
   The branch to upload the file to. Defaults to `self.revision`
+- `workspace_name` - `str | None`
+  The named workspace to use when adding the file. If None, will create a temporary workspace
   
 
 **Returns**:
@@ -287,10 +360,38 @@ Get the status of the workspace.
 ## commit
 
 ```python
-def commit(message: str)
+def commit(message: str, branch: Optional[str] = None)
 ```
 
 Commit the workspace to the remote repo.
+
+**Arguments**:
+
+- `message` - `str`
+  The message to commit with
+- `branch` - `str | None`
+  The branch to commit to. Defaults to the branch the workspace was created on.
+
+<a id="oxen.remote_repo.RemoteRepo.delete_file"></a>
+
+## delete\_file
+
+```python
+def delete_file(path: str,
+                commit_message: Optional[str] = None,
+                branch: Optional[str] = None)
+```
+
+Delete from the remote repo. This can be used with a committed file or dir
+
+**Arguments**:
+
+- `path` - `str`
+  The path to the remote file to remove
+- `commit_message` - `str` | None
+  The message to commit with. Defaults to "Removed '{path}'"
+- `branch` - `str | None`
+  The branch to remove the file from. Defaults to `self.revision`
 
 <a id="oxen.remote_repo.RemoteRepo.upload"></a>
 
@@ -310,6 +411,8 @@ Upload a file to the remote repo.
 
 - `src` - `str`
   The path to the local file to upload
+- `commit_message` - `str`
+  The message to commit with. Defaults to "Uploaded '{src}'"
 - `file_name` - `str | None`
   The name of the file to upload. If None, will use the name of the file in `src`
 - `dst_dir` - `str | None`
@@ -332,7 +435,7 @@ Get the metadata for a file in the remote repo.
 ## file\_exists
 
 ```python
-def file_exists(path: str, revision: str = None)
+def file_exists(path: str, revision: Optional[str] = None)
 ```
 
 Check if a file exists in the remote repo.
@@ -370,10 +473,25 @@ Check if a local file has changed compared to a remote revision
 ## log
 
 ```python
-def log()
+def log(revision: Optional[str] = None,
+        path: Optional[str] = None,
+        page_num: int = 1,
+        page_size: int = 10)
 ```
 
 Get the commit history for a remote repo
+
+**Arguments**:
+
+- `revision` - `str | None`
+  The revision to get the commit history for. Defaults to `self.revision`
+- `path` - `str | None`
+  The path to the file to get the commit history for. Defaults to
+  None, which will return the commit history for the entire repo
+- `page_num` - `int`
+  The page number to return. Defaults to 1
+- `page_size` - `int`
+  The number of items to return per page. Defaults to 10
 
 <a id="oxen.remote_repo.RemoteRepo.branch_exists"></a>
 
@@ -451,6 +569,21 @@ creating it from the currently checked out branch if it doesn't exist
 - `branch` - `str`
   The name to assign to the created branch
 
+<a id="oxen.remote_repo.RemoteRepo.delete_branch"></a>
+
+## delete\_branch
+
+```python
+def delete_branch(branch: str)
+```
+
+Delete a branch from the remote repo.
+
+**Arguments**:
+
+- `branch` - `str`
+  The name of the branch to delete
+
 <a id="oxen.remote_repo.RemoteRepo.create_checkout_branch"></a>
 
 ## create\_checkout\_branch
@@ -483,6 +616,42 @@ Merge the head branch into the base branch on the remote repo.
   The base branch to merge into
 - `head_branch` - `str`
   The head branch to merge
+
+<a id="oxen.remote_repo.RemoteRepo.mergeable"></a>
+
+## mergeable
+
+```python
+def mergeable(base_branch: str, head_branch: str)
+```
+
+Check if a branch is mergeable into another branch.
+
+**Arguments**:
+
+- `base_branch` - str
+  The target branch to merge into
+- `head_branch` - str
+  The source branch to merge from
+
+<a id="oxen.remote_repo.RemoteRepo.diff"></a>
+
+## diff
+
+```python
+def diff(base: str | PyCommit, head: str | PyCommit, path: str)
+```
+
+Get the diff between two refs on the remote repo.
+
+**Arguments**:
+
+- `base` - `str`
+  The base ref to diff (branch or commit)
+- `head` - `str`
+  The head ref to diff (branch or commit)
+- `path` - `str`
+  The path to the file to diff
 
 <a id="oxen.remote_repo.RemoteRepo.namespace"></a>
 
@@ -538,4 +707,28 @@ def revision() -> str
 ```
 
 The branch or commit id for the repo
+
+<a id="oxen.remote_repo.RemoteRepo.repo_uuid"></a>
+
+## repo\_uuid
+
+```python
+@property
+def repo_uuid() -> Optional[str]
+```
+
+The identifier the server addresses this repo by, or None from a server
+that reports no identity. Raises if the repo does not exist yet.
+
+<a id="oxen.remote_repo.RemoteRepo.storage_backend"></a>
+
+## storage\_backend
+
+```python
+@property
+def storage_backend() -> str
+```
+
+Where the server keeps this repo's version files, "local" or "s3".
+Raises if the repo does not exist yet.
 
