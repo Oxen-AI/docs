@@ -74,6 +74,15 @@ When the "output" is a file listing, a config file, or other structured content,
 second block with the file's format (`toml`, `json`, `yaml`, ...) for syntax highlighting;
 still keep it separate from the command that produced it.
 
+## Generated pages
+
+The pages under `python-api/` are generated from the `oxen-python` docstrings in the [Oxen](https://github.com/Oxen-AI/Oxen) repo by `generate-python-docs.sh`, so an edit made to one of them here is lost the next time anyone runs it. Correct the docstring in that repo instead, then regenerate. The README has the invocation. It needs `pydoc-markdown` and GNU `sed` (as `gsed`) on `PATH`.
+
+- **Regenerate whenever an `oxen-python` docstring changes**, including when a class gains a method or property. Nothing else publishes a docstring, and these pages have sat more than a year behind the package that ships.
+- **The script has no per-page flag.** It rewrites every page in its list, so the change carries each page whose docstrings moved rather than only the one you came for.
+
+`fine-tuning-api/reference/` and the model reference are generated as well, by `generate-finetune-docs.py` and `generate-model-docs.py`, and the model pages refresh on a weekly workflow. The same rule applies: change the source, not the page.
+
 ## Public
 
 This repository is **public**. Do not mention Oxen's private/internal repositories — by name or description — in code comments, doc-comments, error messages, commit messages, PR titles or descriptions, or any other code or documentation committed here. Keep references to private repos out of public artifacts entirely; if internal context is genuinely needed, point to the relevant Linear issue rather than inlining private-repo details.
