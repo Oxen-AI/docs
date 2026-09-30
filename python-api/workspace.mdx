@@ -36,14 +36,18 @@ repo = RemoteRepo("ox/CatDogBBox")
 workspace = Workspace(repo, "my-branch")
 
 # Add a file to the workspace
-workspace.add("my-image.png")
+failed_to_upload = workspace.add("my-image.png", raise_on_failure=False)
+assert len(failed_to_upload) == 0
+
+# Or raise an exception if any files fail to upload
+workspace.add("my-image-final-final.png")
 
 # Print the status of the workspace
 status = workspace.status()
 print(status.added_files())
 
 # Commit the workspace
-workspace.commit("Adding my image to the workspace.")
+workspace.commit("Adding my images to the workspace.")
 ```
 
 <a id="oxen.workspace.Workspace.__init__"></a>
@@ -55,7 +59,7 @@ def __init__(repo: "RemoteRepo",
              branch: str,
              workspace_id: Optional[str] = None,
              workspace_name: Optional[str] = None,
-             path: Optional[str] = None)
+             path: Optional[str] = None) -> None
 ```
 
 Create a new Workspace.
@@ -114,10 +118,22 @@ Get the branch that the workspace is tied to.
 
 ```python
 @property
-def commit_id()
+def commit_id() -> str
 ```
 
 Get the commit id of the workspace.
+
+<a id="oxen.workspace.Workspace.created_at"></a>
+
+## created\_at
+
+```python
+@property
+def created_at() -> Optional[str]
+```
+
+Get the RFC 3339 time the workspace was created, or None for a workspace
+created before the server recorded it.
 
 <a id="oxen.workspace.Workspace.repo"></a>
 
@@ -150,15 +166,105 @@ Get the status of the workspace.
 ## add
 
 ```python
-def add(src: str, dst: str = "")
+def add(src: str | Iterable[str] | Path | Iterable[Path],
+        dst: str = "",
+        raise_on_failure: bool = True) -> list[PyErrorFileInfo]
 ```
 
-Add a file to the workspace
+Add files to the workspace.
+
+Accepts a single file, a single directory, or multiple of either.
+
+Recursively walks directories to add all accessible files. Preserves
+relative path to destination when adding multiple files from a directory.
+
+**Arguments**:
+
+- `src` - `str` | Iterable[str] | Path | Iterable[Path]
+  The path(s) to the local file(s) to be staged.
+- `dst` - `str`
+  The path in the remote repo where the file(s) will be added.
+- `raise_on_failure` - `bool`
+  Whether to raise an exception if any files fail to upload.
+  By default, raises an exception. Set to `False` to return
+  a list of failed file paths instead.
+  
+
+**Returns**:
+
+  A list of `PyErrorFileInfo` for files that failed to upload.
+  An empty list means all files were uploaded successfully.
+  Each entry has `.hash`, `.path`, and `.error` attributes.
+  
+
+**Raises**:
+
+  ValueError if the provided input is not a valid filepath, an invalid
+  directory, or it points to an empty directory, or is a collection
+  of empty directories.
+
+<a id="oxen.workspace.Workspace.add_files"></a>
+
+## add\_files
+
+```python
+def add_files(base_dir: str | Path,
+              paths: Iterable[str] | Iterable[Path],
+              raise_on_failure: bool = True) -> list[PyErrorFileInfo]
+```
+
+A workspace add that preserves relative paths of files that share a common base.
+
+Unlike `add`, which places files into a flat destination directory,
+this method uses each file's path relative to the supplied base directory as
+its staging path on the server.
+
+The `base_dir` serves as a stand-in for the root of the remote repository. The key
+use of `add_files` is to import a large file tree into an existing repository.
+
+For example, a file at
+``repo/data/images/cat.jpg`` will be staged as ``data/images/cat.jpg``.
+
+**Arguments**:
+
+- `base_dir` - `str` | `Path`
+  The base directory: all added files share this as an ancestor.
+- `paths` - `Iterable[str]` | `Iterable[Path]`
+  The file paths to add. Can be absolute or relative to the
+  base directory. Each path must point to an existing file.
+- `raise_on_failure` - `bool`
+  Whether to raise an exception if any files fail to upload.
+  By default, raises an exception. Set to `False` to return
+  a list of failed file paths instead.
+  
+
+**Returns**:
+
+  A list of `PyErrorFileInfo` for files that failed to upload.
+  An empty list means all files were uploaded successfully.
+  Each entry has `.hash`, `.path`, and `.error` attributes.
+  
+
+**Raises**:
+
+- `PyOxenError` - If no valid file paths are provided.
+
+<a id="oxen.workspace.Workspace.add_bytes"></a>
+
+## add\_bytes
+
+```python
+def add_bytes(src: str, buf: bytes, dst: str = "") -> None
+```
+
+Adds from a memory buffer to the workspace
 
 **Arguments**:
 
 - `src` - `str`
-  The path to the local file to be staged
+  The relative path to be used as the entry's name in the workspace
+- `buf` - `bytes`
+  The memory buffer to be read from for this entry
 - `dst` - `str`
   The path in the remote repo where the file will be added
 
@@ -167,15 +273,34 @@ Add a file to the workspace
 ## rm
 
 ```python
-def rm(path: str)
+def rm(path: str) -> None
 ```
 
-Remove a file from the workspace
+Unstage a file that was previously added to the workspace.
+Despite the name, this does not stage a deletion of a file in
+the base repo. Prefer `unstage`, which does the same thing
+through the non-deprecated endpoint.
 
 **Arguments**:
 
 - `path` - `str`
-  The path to the file on workspace to be removed
+  The path to the staged file to unstage
+
+<a id="oxen.workspace.Workspace.unstage"></a>
+
+## unstage
+
+```python
+def unstage(path: str) -> None
+```
+
+Unstage a file that was previously added to the workspace,
+without touching the base repo.
+
+**Arguments**:
+
+- `path` - `str`
+  The path to the staged file to unstage
 
 <a id="oxen.workspace.Workspace.commit"></a>
 
@@ -200,7 +325,7 @@ Commit the workspace to a branch
 ## delete
 
 ```python
-def delete()
+def delete() -> None
 ```
 
 Delete the workspace

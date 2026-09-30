@@ -12,7 +12,7 @@ class DataFrame()
 
 The DataFrame class allows you to perform CRUD operations on a remote data frame.
 
-If you pass in a [Workspace](/examples/data/workspaces) or a [RemoteRepo](/concepts/remote-repos) the data is indexed into DuckDB on an oxen-server without downloading the data locally.
+If you pass in a [Workspace](/concepts/workspaces) or a [RemoteRepo](/concepts/remote-repos) the data is indexed into DuckDB on an oxen-server without downloading the data locally.
 
 ## Examples
 
@@ -41,10 +41,6 @@ print(row)
 
 # Delete a row
 data_frame.delete_row(row_id)
-
-# Get the current changes to the data frame
-status = data_frame.diff()
-print(status.added_files())
 
 # Commit the changes
 data_frame.commit("Updating data.csv")
@@ -154,7 +150,7 @@ List the rows within the data frame.
 ## insert\_row
 
 ```python
-def insert_row(data: dict)
+def insert_row(data: dict, workspace: Optional[Workspace] = None)
 ```
 
 Insert a single row of data into the data frame.
@@ -171,6 +167,26 @@ Insert a single row of data into the data frame.
 **Returns**:
 
   The id of the row that was inserted.
+
+<a id="oxen.data_frame.DataFrame.get_columns"></a>
+
+## get\_columns
+
+```python
+def get_columns() -> List[PyColumn]
+```
+
+Get the columns of the data frame.
+
+<a id="oxen.data_frame.DataFrame.add_column"></a>
+
+## add\_column
+
+```python
+def add_column(name: str, data_type: str)
+```
+
+Add a column to the data frame.
 
 <a id="oxen.data_frame.DataFrame.where_sql_from_dict"></a>
 
@@ -347,7 +363,8 @@ Delete a single row of data by id.
 def restore()
 ```
 
-Unstage any changes to the schema or contents of a data frame
+Discard all uncommitted edits to the data frame by re-indexing it
+from the committed version
 
 <a id="oxen.data_frame.DataFrame.commit"></a>
 
