@@ -19,7 +19,13 @@ The flow has two calls:
 | Billed as | A normal 480p video | A normal 1080p video |
 | Returns `draft_task_id` | Yes, valid for 7 days | No |
 
-**Supported model:** `bytedance-seedance-2-5-text-to-video`
+**Supported models:** every Seedance 2.5 model.
+
+- [`bytedance-seedance-2-5-text-to-video`](/inference-api/reference/models/bytedance-seedance-2-5-text-to-video)
+- [`bytedance-seedance-2-5-image-to-video`](/inference-api/reference/models/bytedance-seedance-2-5-image-to-video)
+- [`bytedance-seedance-2-5-reference-to-video`](/inference-api/reference/models/bytedance-seedance-2-5-reference-to-video)
+
+The examples on this page use text-to-video. For image-to-video or reference-to-video, swap in that model ID and add its image, video, or audio inputs to the draft request as you normally would. The final still sends only `model` and `draft_task_id`; the media is reused from the draft.
 
 **Base URL:** `https://hub.oxen.ai/api`. Authenticate every request with `Authorization: Bearer $OXEN_API_KEY`.
 
@@ -28,10 +34,6 @@ Draft mode works on both the queue ([`POST /ai/queue`](/inference-api/reference/
 <Note>
   We recommend the async queue workflow. Seedance generations may take a long time, and your HTTP connection may time out in sync mode.
 </Note>
-
-<Card title="Seedance 2.5 - Text to Video API reference" icon="book" href="/inference-api/reference/models/bytedance-seedance-2-5-text-to-video">
-  Full parameter table, request builder, and sample code for the underlying model.
-</Card>
 
 ## Quickstart (async queue, recommended)
 
@@ -249,7 +251,7 @@ Both endpoints accept these fields in the JSON body.
 
 | Field | Type | Used on | Notes |
 | --- | --- | --- | --- |
-| `model` | string | Draft, final | `bytedance-seedance-2-5-text-to-video`. The final must use the draft's model. |
+| `model` | string | Draft, final | Any Seedance 2.5 model: text-to-video, image-to-video, or reference-to-video. The final must use the draft's model. |
 | `draft` | boolean | Draft | `true` renders a 480p draft. Omit or `false` for a normal render. |
 | `prompt` | string | Draft | Required on the draft. Not needed on the final. |
 | `duration` | integer | Draft | Seconds. The final inherits it. |
@@ -306,7 +308,7 @@ The sync endpoint returns an HTTP 400 with the error in the body. The queue acce
 | Cause | Error | Fix |
 | --- | --- | --- |
 | Draft request with no `prompt` | `Prompt cannot be empty` | Add a prompt. Only finals skip it. |
-| `draft_task_id` sent to a model that doesn't support draft mode | `Prompt cannot be empty` (the model ignores `draft_task_id` and sees a request with no prompt) | Use `bytedance-seedance-2-5-text-to-video`. |
+| `draft_task_id` sent to a model that doesn't support draft mode | `Prompt cannot be empty` (the model ignores `draft_task_id` and sees a request with no prompt) | Use a Seedance 2.5 model, and the same one that rendered the draft. |
 | `draft_task_id` expired or unknown | `model_response_error` from the provider: `the parameter 'draft_task_id' must be a draft task with status 'succeeded'` | Render a new draft. |
 
 Sync error body for an unknown draft ID:
@@ -344,7 +346,7 @@ This section is written so a coding agent can implement draft mode from it direc
 
 ### Reference implementation (Python)
 
-A minimal client covering both paths. It uses only `requests`.
+A minimal client covering both paths. It uses only `requests`. Set `MODEL` to whichever Seedance 2.5 model you use, and pass that model's media inputs to the draft through `settings`.
 
 ```python
 import os
