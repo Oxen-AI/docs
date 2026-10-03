@@ -1,24 +1,26 @@
 ---
-title: "Qwen Image 2.0 Pro"
-description: "Text-and-image to image generation"
+title: "Qwen Image 2.0"
+description: "Fast text-to-image and editing, 2K"
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try Qwen Image 2.0 Pro in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=qwen-image-2">
+  <Card title="Try Qwen Image 2.0 in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=qwen-image-2">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
 **Model ID:** `qwen-image-2`
 
-**Qwen Image 2.0 Pro** is the pro version of Qwen Image 2 from Alibaba's Qwen team. Enhanced text rendering, realism, and semantic adherence for high-quality image generation and editing.
+Qwen Image 2.0 is the accelerated tier of Alibaba's Qwen Image 2.0 series, trading a little of the Pro model's fidelity for faster, cheaper generation while keeping the same text-to-image and editing workflow.
 
-It is a 7B-parameter architecture that generates images natively at up to 2048×2048 pixels (2K resolution) and supports prompts up to 1,000 tokens. The model excels in professional-grade typography for complex layouts including PPT slides, infographics, movie posters, calendars, data charts, and comics. Text adapts to surfaces like glass, fabric, and signage with correct perspective and supports both Chinese and English characters.
+It renders any size from 512x512 up to 2048x2048 total pixels with 2K output by default, takes up to three input images for edits and multi-image composition, and can return up to six candidates per call. Use it for drafts, iteration, and volume work where the Pro tier is more than the job needs.
 
-| Metric             | Value              |
-|--------------------|--------------------|
-| Context Length     | 1,000 tokens       |
-| Max Resolution     | 2048×2048 (2K)     |
+Prompts are limited to 1,300 tokens and weights are not published.
+
+| Metric             | Value                  |
+|--------------------|------------------------|
+| Context Length     | 1,300 tokens           |
+| Max Resolution     | 2048x2048 (2K)         |
 | Multilingual       | Yes (Chinese, English) |
 
 ## Example request
@@ -80,7 +82,9 @@ It is a 7B-parameter architecture that generates images natively at up to 2048×
           -d '{
           "model": "qwen-image-2",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "input_images": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ]
         }'
         ```
 
@@ -97,7 +101,9 @@ It is a 7B-parameter architecture that generates images natively at up to 2048×
             json={
                 "model": "qwen-image-2",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "input_images": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ]
             },
         )
         response.raise_for_status()
@@ -118,10 +124,14 @@ It is a 7B-parameter architecture that generates images natively at up to 2048×
           -d '{
           "model": "qwen-image-2",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "match_input_image": false,
+          "input_images": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
           "aspect_ratio": "16:9",
-          "enable_prompt_expansion": true
+          "resolution": "2K",
+          "num_images": 1,
+          "enable_prompt_expansion": true,
+          "watermark": false
         }'
         ```
 
@@ -138,10 +148,14 @@ It is a 7B-parameter architecture that generates images natively at up to 2048×
             json={
                 "model": "qwen-image-2",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "match_input_image": false,
+                "input_images": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
                 "aspect_ratio": "16:9",
-                "enable_prompt_expansion": true
+                "resolution": "2K",
+                "num_images": 1,
+                "enable_prompt_expansion": true,
+                "watermark": false
             },
         )
         response.raise_for_status()
@@ -238,7 +252,9 @@ It is a 7B-parameter architecture that generates images natively at up to 2048×
           -d '{
           "model": "qwen-image-2",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "input_images": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ]
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -271,7 +287,9 @@ It is a 7B-parameter architecture that generates images natively at up to 2048×
             json={
                 "model": "qwen-image-2",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "input_images": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ]
             },
         )
         enqueue.raise_for_status()
@@ -307,10 +325,14 @@ It is a 7B-parameter architecture that generates images natively at up to 2048×
           -d '{
           "model": "qwen-image-2",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "match_input_image": false,
+          "input_images": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
           "aspect_ratio": "16:9",
-          "enable_prompt_expansion": true
+          "resolution": "2K",
+          "num_images": 1,
+          "enable_prompt_expansion": true,
+          "watermark": false
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -343,10 +365,14 @@ It is a 7B-parameter architecture that generates images natively at up to 2048×
             json={
                 "model": "qwen-image-2",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "match_input_image": false,
+                "input_images": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
                 "aspect_ratio": "16:9",
-                "enable_prompt_expansion": true
+                "resolution": "2K",
+                "num_images": 1,
+                "enable_prompt_expansion": true,
+                "watermark": false
             },
         )
         enqueue.raise_for_status()
@@ -455,7 +481,9 @@ It is a 7B-parameter architecture that generates images natively at up to 2048×
           -d '{
           "model": "qwen-image-2",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "input_images": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ]
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -485,7 +513,9 @@ It is a 7B-parameter architecture that generates images natively at up to 2048×
             json={
                 "model": "qwen-image-2",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "input_images": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ]
             },
         )
         enqueue.raise_for_status()
@@ -522,10 +552,14 @@ It is a 7B-parameter architecture that generates images natively at up to 2048×
           -d '{
           "model": "qwen-image-2",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-          "match_input_image": false,
+          "input_images": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
           "aspect_ratio": "16:9",
-          "enable_prompt_expansion": true
+          "resolution": "2K",
+          "num_images": 1,
+          "enable_prompt_expansion": true,
+          "watermark": false
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -555,10 +589,14 @@ It is a 7B-parameter architecture that generates images natively at up to 2048×
             json={
                 "model": "qwen-image-2",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-                "match_input_image": false,
+                "input_images": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
                 "aspect_ratio": "16:9",
-                "enable_prompt_expansion": true
+                "resolution": "2K",
+                "num_images": 1,
+                "enable_prompt_expansion": true,
+                "watermark": false
             },
         )
         enqueue.raise_for_status()
@@ -602,15 +640,17 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | Text prompt for image generation or editing |
+| `prompt` | `string` | &mdash; | Text prompt describing the image to generate, or the edit to apply. Use @Image1, @Image2, etc. to reference the input images. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `input_image` | `string` | &mdash; | Optional reference image for image editing, style transfer, or image-to-image generation Format: uri. |
-| `match_input_image` | `boolean` | `false` | When true and an image is provided, use the input image's aspect ratio and resolution instead of the aspect_ratio parameter |
-| `aspect_ratio` | `string` | `"16:9"` | Aspect Ratio One of: 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 2:1, 1:2. |
-| `enable_prompt_expansion` | `boolean` | `true` | Automatically expand and optimize the prompt for better results |
-| `negative_prompt` | `string` | &mdash; | Negative prompt to specify elements to avoid in the generated image |
-| `seed` | `integer` | &mdash; | Random seed for reproducible generation. Range: 0-2147483647 |
+| `input_images` | `array<string>` | &mdash; | Optional input images to edit or combine. The output keeps the aspect ratio of the last image unless an aspect ratio is chosen. Reference them in the prompt as @Image1, @Image2, etc. Up to 3 images. |
+| `aspect_ratio` | `string` | `"16:9"` | Aspect Ratio One of: auto, 16:9, 9:16, 1:1, 4:3, 3:4. |
+| `resolution` | `string` | `"2K"` | Resolution One of: 1K, 2K. |
+| `num_images` | `integer` | `1` | Number of images to generate, 1 to 6. Only the first is returned; all are billed. Range: 1 – 6. |
+| `enable_prompt_expansion` | `boolean` | `true` | Let the model rewrite the prompt with more detail before rendering. Turn off for tighter control over the wording. |
+| `negative_prompt` | `string` | &mdash; | What to keep out of the image. Up to 500 characters. |
+| `seed` | `integer` | &mdash; | Seed for reproducible generation, 0 to 2147483647. Results can still vary between runs. |
+| `watermark` | `boolean` | `false` | Add an AI-generated watermark in the bottom-right corner. |

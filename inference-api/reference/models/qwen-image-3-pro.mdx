@@ -1,32 +1,38 @@
 ---
-title: "Seedance 2.5 - Reference to Video"
-description: "Reference-guided video, audio-driven, up to 30s"
+title: "Qwen Image 3.0 Pro"
+description: "Long-prompt generation and editing, fine text"
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try Seedance 2.5 - Reference to Video in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=bytedance-seedance-2-5-reference-to-video">
+  <Card title="Try Qwen Image 3.0 Pro in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=qwen-image-3-pro">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `bytedance-seedance-2-5-reference-to-video`
+**Model ID:** `qwen-image-3-pro`
 
-ByteDance Seedance 2.5 generates video from a text prompt guided by reference images, videos, and/or audio, with synchronized audio on by default. Accepts up to 30 reference images, 10 reference videos, and 10 reference audio clips, including audio-only input. Supports generating new videos, editing videos, extending videos, and coherent outputs up to 30 seconds long at 480p, 720p, or 1080p (1080p uses 10-bit color and H.265/HEVC encoding).
+Qwen Image 3.0 Pro is the Pro tier of Alibaba's Qwen Image 3.0 series, a closed model that handles text-to-image generation and image editing in one endpoint and is built for dense, layout-heavy work such as posters, documents, infographics, and annotated images.
 
-Draft mode renders a quick 480p preview for checking the scene, motion, and prompt. Its draft task ID then renders the final 1080p video with the same prompt, media, and settings, and stays valid for seven days after the draft is created.
+It reads prompts up to 4,500 tokens, renders legible text down to about 10 pixels in 12 languages, and can reason about the prompt before rendering. It takes up to three input images for edits and composition, outputs any size from 512x512 to 2048x2048 total pixels, and picks a resolution from the prompt when none is set. Compared with the standard 3.0 tier it trades speed for fidelity on complex scenes and small text.
+
+Weights are not published.
+
+| Metric             | Value                  |
+|--------------------|------------------------|
+| Context Length     | 4,500 tokens           |
+| Max Resolution     | 2048x2048 (2K)         |
+| Multilingual       | Yes (12 languages)     |
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=bytedance-seedance-2-5-reference-to-video) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=qwen-image-3-pro) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
   <Tab title="Sync">
 
-    This blocks until the video is ready (typically 5-15 minutes). Prefer **Async** or **Async with SSE** for anything beyond quick experimentation.
-
-    See the [video generation reference](/inference-api/reference/video_generation) for more details.
+    See the [image editing reference](/inference-api/reference/image_editing) for more details.
 
     <Tabs>
       <Tab title="Minimal">
@@ -34,11 +40,11 @@ Draft mode renders a quick 480p preview for checking the scene, motion, and prom
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "bytedance-seedance-2-5-reference-to-video",
+          "model": "qwen-image-3-pro",
           "prompt": "<prompt>"
         }'
         ```
@@ -48,13 +54,13 @@ Draft mode renders a quick 480p preview for checking the scene, motion, and prom
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/videos/generate",
+            "https://hub.oxen.ai/api/ai/images/edit",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "bytedance-seedance-2-5-reference-to-video",
+                "model": "qwen-image-3-pro",
                 "prompt": "<prompt>"
             },
         )
@@ -70,26 +76,14 @@ Draft mode renders a quick 480p preview for checking the scene, motion, and prom
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "bytedance-seedance-2-5-reference-to-video",
+          "model": "qwen-image-3-pro",
           "prompt": "<prompt>",
-          "input_face_images": [
-            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ],
           "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ],
-          "input_face_videos": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-          ],
-          "input_videos": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-          ],
-          "input_audios": [
-            "https://example.com/audio.mp3"
           ]
         }'
         ```
@@ -99,28 +93,16 @@ Draft mode renders a quick 480p preview for checking the scene, motion, and prom
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/videos/generate",
+            "https://hub.oxen.ai/api/ai/images/edit",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "bytedance-seedance-2-5-reference-to-video",
+                "model": "qwen-image-3-pro",
                 "prompt": "<prompt>",
-                "input_face_images": [
-                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ],
                 "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ],
-                "input_face_videos": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-                ],
-                "input_videos": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-                ],
-                "input_audios": [
-                    "https://example.com/audio.mp3"
                 ]
             },
         )
@@ -136,34 +118,20 @@ Draft mode renders a quick 480p preview for checking the scene, motion, and prom
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "bytedance-seedance-2-5-reference-to-video",
+          "model": "qwen-image-3-pro",
           "prompt": "<prompt>",
-          "input_face_images": [
-            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ],
           "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "input_face_videos": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-          ],
-          "input_videos": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-          ],
-          "input_audios": [
-            "https://example.com/audio.mp3"
-          ],
-          "omni_reference_task_type": "auto",
-          "generate_audio": true,
-          "aspect_ratio": "adaptive",
-          "duration": "auto",
-          "resolution": "720p",
-          "draft": false,
-          "output_format": "mp4",
+          "aspect_ratio": "auto",
+          "resolution": "2K",
+          "num_images": 1,
+          "enable_prompt_expansion": true,
+          "enable_thinking": true,
           "watermark": false
         }'
         ```
@@ -173,36 +141,22 @@ Draft mode renders a quick 480p preview for checking the scene, motion, and prom
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/videos/generate",
+            "https://hub.oxen.ai/api/ai/images/edit",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "bytedance-seedance-2-5-reference-to-video",
+                "model": "qwen-image-3-pro",
                 "prompt": "<prompt>",
-                "input_face_images": [
-                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ],
                 "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "input_face_videos": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-                ],
-                "input_videos": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-                ],
-                "input_audios": [
-                    "https://example.com/audio.mp3"
-                ],
-                "omni_reference_task_type": "auto",
-                "generate_audio": true,
-                "aspect_ratio": "adaptive",
-                "duration": "auto",
-                "resolution": "720p",
-                "draft": false,
-                "output_format": "mp4",
+                "aspect_ratio": "auto",
+                "resolution": "2K",
+                "num_images": 1,
+                "enable_prompt_expansion": true,
+                "enable_thinking": true,
                 "watermark": false
             },
         )
@@ -231,7 +185,7 @@ Draft mode renders a quick 480p preview for checking the scene, motion, and prom
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "bytedance-seedance-2-5-reference-to-video",
+          "model": "qwen-image-3-pro",
           "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
@@ -263,7 +217,7 @@ Draft mode renders a quick 480p preview for checking the scene, motion, and prom
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "bytedance-seedance-2-5-reference-to-video",
+                "model": "qwen-image-3-pro",
                 "prompt": "<prompt>"
             },
         )
@@ -298,22 +252,10 @@ Draft mode renders a quick 480p preview for checking the scene, motion, and prom
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "bytedance-seedance-2-5-reference-to-video",
+          "model": "qwen-image-3-pro",
           "prompt": "<prompt>",
-          "input_face_images": [
-            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ],
           "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ],
-          "input_face_videos": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-          ],
-          "input_videos": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-          ],
-          "input_audios": [
-            "https://example.com/audio.mp3"
           ]
         }' | jq -r '.generations[0].generation_id')
 
@@ -345,22 +287,10 @@ Draft mode renders a quick 480p preview for checking the scene, motion, and prom
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "bytedance-seedance-2-5-reference-to-video",
+                "model": "qwen-image-3-pro",
                 "prompt": "<prompt>",
-                "input_face_images": [
-                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ],
                 "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ],
-                "input_face_videos": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-                ],
-                "input_videos": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-                ],
-                "input_audios": [
-                    "https://example.com/audio.mp3"
                 ]
             },
         )
@@ -395,30 +325,16 @@ Draft mode renders a quick 480p preview for checking the scene, motion, and prom
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "bytedance-seedance-2-5-reference-to-video",
+          "model": "qwen-image-3-pro",
           "prompt": "<prompt>",
-          "input_face_images": [
-            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ],
           "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "input_face_videos": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-          ],
-          "input_videos": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-          ],
-          "input_audios": [
-            "https://example.com/audio.mp3"
-          ],
-          "omni_reference_task_type": "auto",
-          "generate_audio": true,
-          "aspect_ratio": "adaptive",
-          "duration": "auto",
-          "resolution": "720p",
-          "draft": false,
-          "output_format": "mp4",
+          "aspect_ratio": "auto",
+          "resolution": "2K",
+          "num_images": 1,
+          "enable_prompt_expansion": true,
+          "enable_thinking": true,
           "watermark": false
         }' | jq -r '.generations[0].generation_id')
 
@@ -450,30 +366,16 @@ Draft mode renders a quick 480p preview for checking the scene, motion, and prom
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "bytedance-seedance-2-5-reference-to-video",
+                "model": "qwen-image-3-pro",
                 "prompt": "<prompt>",
-                "input_face_images": [
-                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ],
                 "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "input_face_videos": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-                ],
-                "input_videos": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-                ],
-                "input_audios": [
-                    "https://example.com/audio.mp3"
-                ],
-                "omni_reference_task_type": "auto",
-                "generate_audio": true,
-                "aspect_ratio": "adaptive",
-                "duration": "auto",
-                "resolution": "720p",
-                "draft": false,
-                "output_format": "mp4",
+                "aspect_ratio": "auto",
+                "resolution": "2K",
+                "num_images": 1,
+                "enable_prompt_expansion": true,
+                "enable_thinking": true,
                 "watermark": false
             },
         )
@@ -516,7 +418,7 @@ Draft mode renders a quick 480p preview for checking the scene, motion, and prom
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "bytedance-seedance-2-5-reference-to-video",
+          "model": "qwen-image-3-pro",
           "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
@@ -545,7 +447,7 @@ Draft mode renders a quick 480p preview for checking the scene, motion, and prom
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "bytedance-seedance-2-5-reference-to-video",
+                "model": "qwen-image-3-pro",
                 "prompt": "<prompt>"
             },
         )
@@ -581,22 +483,10 @@ Draft mode renders a quick 480p preview for checking the scene, motion, and prom
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "bytedance-seedance-2-5-reference-to-video",
+          "model": "qwen-image-3-pro",
           "prompt": "<prompt>",
-          "input_face_images": [
-            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ],
           "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ],
-          "input_face_videos": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-          ],
-          "input_videos": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-          ],
-          "input_audios": [
-            "https://example.com/audio.mp3"
           ]
         }' | jq -r '.generations[0].generation_id')
 
@@ -625,22 +515,10 @@ Draft mode renders a quick 480p preview for checking the scene, motion, and prom
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "bytedance-seedance-2-5-reference-to-video",
+                "model": "qwen-image-3-pro",
                 "prompt": "<prompt>",
-                "input_face_images": [
-                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ],
                 "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ],
-                "input_face_videos": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-                ],
-                "input_videos": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-                ],
-                "input_audios": [
-                    "https://example.com/audio.mp3"
                 ]
             },
         )
@@ -676,30 +554,16 @@ Draft mode renders a quick 480p preview for checking the scene, motion, and prom
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "bytedance-seedance-2-5-reference-to-video",
+          "model": "qwen-image-3-pro",
           "prompt": "<prompt>",
-          "input_face_images": [
-            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ],
           "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "input_face_videos": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-          ],
-          "input_videos": [
-            "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-          ],
-          "input_audios": [
-            "https://example.com/audio.mp3"
-          ],
-          "omni_reference_task_type": "auto",
-          "generate_audio": true,
-          "aspect_ratio": "adaptive",
-          "duration": "auto",
-          "resolution": "720p",
-          "draft": false,
-          "output_format": "mp4",
+          "aspect_ratio": "auto",
+          "resolution": "2K",
+          "num_images": 1,
+          "enable_prompt_expansion": true,
+          "enable_thinking": true,
           "watermark": false
         }' | jq -r '.generations[0].generation_id')
 
@@ -728,30 +592,16 @@ Draft mode renders a quick 480p preview for checking the scene, motion, and prom
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "bytedance-seedance-2-5-reference-to-video",
+                "model": "qwen-image-3-pro",
                 "prompt": "<prompt>",
-                "input_face_images": [
-                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ],
                 "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "input_face_videos": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-                ],
-                "input_videos": [
-                    "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
-                ],
-                "input_audios": [
-                    "https://example.com/audio.mp3"
-                ],
-                "omni_reference_task_type": "auto",
-                "generate_audio": true,
-                "aspect_ratio": "adaptive",
-                "duration": "auto",
-                "resolution": "720p",
-                "draft": false,
-                "output_format": "mp4",
+                "aspect_ratio": "auto",
+                "resolution": "2K",
+                "num_images": 1,
+                "enable_prompt_expansion": true,
+                "enable_thinking": true,
                 "watermark": false
             },
         )
@@ -787,7 +637,7 @@ Draft mode renders a quick 480p preview for checking the scene, motion, and prom
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/bytedance-seedance-2-5-reference-to-video
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/qwen-image-3-pro
 ```
 
 ## Request parameters
@@ -796,23 +646,18 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | The text prompt used to generate the video. Use @Image1, @Image2, @Video1, @Audio1, etc. to reference inputs. Face-containing media is indexed before non-face media within its type. |
+| `prompt` | `string` | &mdash; | Text prompt describing the image to generate, or the edit to apply. Up to 4,500 tokens. Use @Image1, @Image2, etc. to reference the input images. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `input_face_images` | `array<string>` | &mdash; | Place reference images here when they show faces, people, or characters. Content filters may block the request otherwise. |
-| `input_images` | `array<string>` | &mdash; | Reference images that guide the generated video. Up to 30 total reference images may be used. |
-| `input_face_videos` | `array<string>` | &mdash; | Place reference videos here when they show faces, people, or characters. Content filters may block the request otherwise. |
-| `input_videos` | `array<string>` | &mdash; | Reference videos that guide the generated video. Up to 10 total reference videos may be used, each 2-30 seconds long (4-30 seconds for Edit video) with a combined duration of at most 30 seconds. |
-| `input_audios` | `array<string>` | &mdash; | Reference audios that guide the generated video. Audio-only input is supported. Up to 10 reference audio clips may be used, each 2-30 seconds long with a combined duration of at most 30 seconds. |
-| `omni_reference_task_type` | `string` | `"auto"` | Whether the reference video is edited or extended, or 'Auto' to let the prompt decide. 'Edit' and 'Extend' need a reference video and match the video's aspect ratio. One of: auto, edit, extend. |
-| `generate_audio` | `boolean` | `true` | Whether to generate synchronized audio. |
-| `aspect_ratio` | `string` | `"adaptive"` | Aspect Ratio One of: adaptive, 21:9, 16:9, 4:3, 1:1, 3:4, 9:16. |
-| `duration` | `['integer', 'string']` | `"auto"` | Duration Range: 4 – 30. |
-| `resolution` | `string` | `"720p"` | Resolution One of: 480p, 720p, 1080p. |
-| `draft` | `boolean` | `false` | Generate a quick 480p preview to check the scene and motion before the full-quality render. |
-| `draft_task_id` | `string` | &mdash; | Render the final 1080p video from a draft, reusing its prompt, media, and settings. Draft task IDs expire seven days after the draft is created. |
-| `output_format` | `string` | `"mp4"` | Output video format. mp4 for broad compatibility, mov for high color precision in professional post-production workflows. For video editing and extension, mov input and output is recommended. One of: mp4, mov. |
-| `watermark` | `boolean` | `false` | Whether to add an 'AI generated' watermark to the output. |
+| `input_images` | `array<string>` | &mdash; | Optional input images to edit or combine. The output keeps the aspect ratio of the last image unless an aspect ratio is chosen. Reference them in the prompt as @Image1, @Image2, etc. Up to 3 images. |
+| `aspect_ratio` | `string` | `"auto"` | Aspect Ratio One of: auto, 16:9, 9:16, 1:1, 4:3, 3:4. |
+| `resolution` | `string` | `"2K"` | Resolution One of: 1K, 2K. |
+| `num_images` | `integer` | `1` | Number of images to generate, 1 to 6. Only the first is returned; all are billed. Range: 1 – 6. |
+| `enable_prompt_expansion` | `boolean` | `true` | Let the model rewrite the prompt with more detail before rendering. Turn off for tighter control over the wording. |
+| `enable_thinking` | `boolean` | `true` | Reason about the prompt before rendering. Improves quality on complex layouts and long prompts at the cost of generation time. Requires prompt expansion. |
+| `negative_prompt` | `string` | &mdash; | What to keep out of the image. |
+| `seed` | `integer` | &mdash; | Seed for reproducible generation, 0 to 2147483647. |
+| `watermark` | `boolean` | `false` | Add an AI-generated watermark in the bottom-right corner. |

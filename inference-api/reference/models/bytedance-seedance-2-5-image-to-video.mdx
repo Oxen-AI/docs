@@ -13,6 +13,8 @@ description: "Animate images into video with audio"
 
 ByteDance Seedance 2.5 animates a starting frame from a text motion prompt, with optional end-frame control for transitions and synchronized audio on by default. Supports 480p, 720p, and 1080p output (1080p uses 10-bit color and H.265/HEVC encoding) and durations from 4 to 30 seconds. The output keeps the aspect ratio of the first-frame image.
 
+Draft mode renders a quick 480p preview for checking the scene, motion, and prompt. Its draft task ID then renders the final 1080p video with the same prompt, media, and settings, and stays valid for seven days after the draft is created.
+
 ## Example request
 
 <Tip>
@@ -127,6 +129,7 @@ ByteDance Seedance 2.5 animates a starting frame from a text motion prompt, with
           "generate_audio": true,
           "resolution": "720p",
           "duration": "auto",
+          "draft": false,
           "output_format": "mp4",
           "watermark": false
         }'
@@ -152,6 +155,7 @@ ByteDance Seedance 2.5 animates a starting frame from a text motion prompt, with
                 "generate_audio": true,
                 "resolution": "720p",
                 "duration": "auto",
+                "draft": false,
                 "output_format": "mp4",
                 "watermark": false
             },
@@ -334,6 +338,7 @@ ByteDance Seedance 2.5 animates a starting frame from a text motion prompt, with
           "generate_audio": true,
           "resolution": "720p",
           "duration": "auto",
+          "draft": false,
           "output_format": "mp4",
           "watermark": false
         }' | jq -r '.generations[0].generation_id')
@@ -375,6 +380,7 @@ ByteDance Seedance 2.5 animates a starting frame from a text motion prompt, with
                 "generate_audio": true,
                 "resolution": "720p",
                 "duration": "auto",
+                "draft": false,
                 "output_format": "mp4",
                 "watermark": false
             },
@@ -567,6 +573,7 @@ ByteDance Seedance 2.5 animates a starting frame from a text motion prompt, with
           "generate_audio": true,
           "resolution": "720p",
           "duration": "auto",
+          "draft": false,
           "output_format": "mp4",
           "watermark": false
         }' | jq -r '.generations[0].generation_id')
@@ -605,6 +612,7 @@ ByteDance Seedance 2.5 animates a starting frame from a text motion prompt, with
                 "generate_audio": true,
                 "resolution": "720p",
                 "duration": "auto",
+                "draft": false,
                 "output_format": "mp4",
                 "watermark": false
             },
@@ -663,5 +671,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | `generate_audio` | `boolean` | `true` | Whether to generate synchronized audio. |
 | `resolution` | `string` | `"720p"` | Resolution One of: 480p, 720p, 1080p. |
 | `duration` | `['integer', 'string']` | `"auto"` | Duration Range: 4 – 30. |
+| `draft` | `boolean` | `false` | Generate a quick 480p preview to check the scene and motion before the full-quality render. |
+| `draft_task_id` | `string` | &mdash; | Render the final 1080p video from a draft, reusing its prompt, media, and settings. Draft task IDs expire seven days after the draft is created. |
 | `output_format` | `string` | `"mp4"` | Output video format. mp4 for broad compatibility, mov for high color precision in professional post-production workflows. One of: mp4, mov. |
 | `watermark` | `boolean` | `false` | Whether to add an 'AI generated' watermark to the output. |
