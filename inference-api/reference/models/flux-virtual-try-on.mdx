@@ -1,30 +1,30 @@
 ---
-title: "WAN 2.7 - Text to Video"
-description: "Text-to-video, 1080p, multi-shot"
+title: "FLUX Virtual Try-On"
+description: "Dress a person in a garment from a reference image"
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try WAN 2.7 - Text to Video in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=wan-v2-7-text-to-video">
+  <Card title="Try FLUX Virtual Try-On in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=flux-virtual-try-on">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `wan-v2-7-text-to-video`
+**Model ID:** `flux-virtual-try-on`
 
-WAN 2.7 text-to-video generates video from a text prompt with enhanced motion smoothness, superior scene fidelity, and greater visual coherence over previous versions. Supports 720P and 1080P output, durations from 2-15 seconds, multiple aspect ratios (16:9, 9:16, 1:1, 4:3, 3:4), multi-shot generation, and optional driving audio.
+FLUX Virtual Try-On dresses the person in one image in the clothing from another, keeping their face, pose and the rest of the scene intact. The garment can be a flat-lay packshot or worn by someone else, and a single reference can carry a whole outfit. It is built for fitting rooms, social filters and other interactive uses where latency matters.
+
+It takes a person image and a garment image, and a short prompt that refers to them as image 1 and image 2. The output follows the person image's resolution: inputs up to 4 megapixels are used as they are, and larger ones are downscaled to about 1 megapixel. Keeping both images near 1 megapixel gives the best balance of quality and speed.
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=wan-v2-7-text-to-video) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=flux-virtual-try-on) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
   <Tab title="Sync">
 
-    This blocks until the video is ready (typically 5-15 minutes). Prefer **Async** or **Async with SSE** for anything beyond quick experimentation.
-
-    See the [video generation reference](/inference-api/reference/video_generation) for more details.
+    See the [image editing reference](/inference-api/reference/image_editing) for more details.
 
     <Tabs>
       <Tab title="Minimal">
@@ -32,12 +32,14 @@ WAN 2.7 text-to-video generates video from a text prompt with enhanced motion sm
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "wan-v2-7-text-to-video",
-          "prompt": "<prompt>"
+          "model": "flux-virtual-try-on",
+          "prompt": "The person of image 1, keeping exactly their face and pose, wearing the garment of image 2.",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_image_2": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }'
         ```
 
@@ -46,14 +48,16 @@ WAN 2.7 text-to-video generates video from a text prompt with enhanced motion sm
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/videos/generate",
+            "https://hub.oxen.ai/api/ai/images/edit",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "wan-v2-7-text-to-video",
-                "prompt": "<prompt>"
+                "model": "flux-virtual-try-on",
+                "prompt": "The person of image 1, keeping exactly their face and pose, wearing the garment of image 2.",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_image_2": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         response.raise_for_status()
@@ -68,17 +72,15 @@ WAN 2.7 text-to-video generates video from a text prompt with enhanced motion sm
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "wan-v2-7-text-to-video",
-          "prompt": "<prompt>",
-          "aspect_ratio": "16:9",
-          "resolution": "1080P",
-          "duration": 5,
-          "prompt_extend": true,
-          "watermark": false
+          "model": "flux-virtual-try-on",
+          "prompt": "The person of image 1, keeping exactly their face and pose, wearing the garment of image 2.",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_image_2": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "safety_tolerance": 2
         }'
         ```
 
@@ -87,19 +89,17 @@ WAN 2.7 text-to-video generates video from a text prompt with enhanced motion sm
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/videos/generate",
+            "https://hub.oxen.ai/api/ai/images/edit",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "wan-v2-7-text-to-video",
-                "prompt": "<prompt>",
-                "aspect_ratio": "16:9",
-                "resolution": "1080P",
-                "duration": 5,
-                "prompt_extend": true,
-                "watermark": false
+                "model": "flux-virtual-try-on",
+                "prompt": "The person of image 1, keeping exactly their face and pose, wearing the garment of image 2.",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_image_2": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "safety_tolerance": 2
             },
         )
         response.raise_for_status()
@@ -127,8 +127,10 @@ WAN 2.7 text-to-video generates video from a text prompt with enhanced motion sm
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "wan-v2-7-text-to-video",
-          "prompt": "<prompt>"
+          "model": "flux-virtual-try-on",
+          "prompt": "The person of image 1, keeping exactly their face and pose, wearing the garment of image 2.",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_image_2": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -159,8 +161,10 @@ WAN 2.7 text-to-video generates video from a text prompt with enhanced motion sm
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "wan-v2-7-text-to-video",
-                "prompt": "<prompt>"
+                "model": "flux-virtual-try-on",
+                "prompt": "The person of image 1, keeping exactly their face and pose, wearing the garment of image 2.",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_image_2": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         enqueue.raise_for_status()
@@ -194,13 +198,11 @@ WAN 2.7 text-to-video generates video from a text prompt with enhanced motion sm
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "wan-v2-7-text-to-video",
-          "prompt": "<prompt>",
-          "aspect_ratio": "16:9",
-          "resolution": "1080P",
-          "duration": 5,
-          "prompt_extend": true,
-          "watermark": false
+          "model": "flux-virtual-try-on",
+          "prompt": "The person of image 1, keeping exactly their face and pose, wearing the garment of image 2.",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_image_2": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "safety_tolerance": 2
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -231,13 +233,11 @@ WAN 2.7 text-to-video generates video from a text prompt with enhanced motion sm
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "wan-v2-7-text-to-video",
-                "prompt": "<prompt>",
-                "aspect_ratio": "16:9",
-                "resolution": "1080P",
-                "duration": 5,
-                "prompt_extend": true,
-                "watermark": false
+                "model": "flux-virtual-try-on",
+                "prompt": "The person of image 1, keeping exactly their face and pose, wearing the garment of image 2.",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_image_2": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "safety_tolerance": 2
             },
         )
         enqueue.raise_for_status()
@@ -279,8 +279,10 @@ WAN 2.7 text-to-video generates video from a text prompt with enhanced motion sm
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "wan-v2-7-text-to-video",
-          "prompt": "<prompt>"
+          "model": "flux-virtual-try-on",
+          "prompt": "The person of image 1, keeping exactly their face and pose, wearing the garment of image 2.",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_image_2": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -308,8 +310,10 @@ WAN 2.7 text-to-video generates video from a text prompt with enhanced motion sm
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "wan-v2-7-text-to-video",
-                "prompt": "<prompt>"
+                "model": "flux-virtual-try-on",
+                "prompt": "The person of image 1, keeping exactly their face and pose, wearing the garment of image 2.",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_image_2": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
             },
         )
         enqueue.raise_for_status()
@@ -344,13 +348,11 @@ WAN 2.7 text-to-video generates video from a text prompt with enhanced motion sm
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "wan-v2-7-text-to-video",
-          "prompt": "<prompt>",
-          "aspect_ratio": "16:9",
-          "resolution": "1080P",
-          "duration": 5,
-          "prompt_extend": true,
-          "watermark": false
+          "model": "flux-virtual-try-on",
+          "prompt": "The person of image 1, keeping exactly their face and pose, wearing the garment of image 2.",
+          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_image_2": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "safety_tolerance": 2
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -378,13 +380,11 @@ WAN 2.7 text-to-video generates video from a text prompt with enhanced motion sm
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "wan-v2-7-text-to-video",
-                "prompt": "<prompt>",
-                "aspect_ratio": "16:9",
-                "resolution": "1080P",
-                "duration": 5,
-                "prompt_extend": true,
-                "watermark": false
+                "model": "flux-virtual-try-on",
+                "prompt": "The person of image 1, keeping exactly their face and pose, wearing the garment of image 2.",
+                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_image_2": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "safety_tolerance": 2
             },
         )
         enqueue.raise_for_status()
@@ -419,7 +419,7 @@ WAN 2.7 text-to-video generates video from a text prompt with enhanced motion sm
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/wan-v2-7-text-to-video
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/flux-virtual-try-on
 ```
 
 ## Request parameters
@@ -428,17 +428,13 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | Text prompt for the video. Chinese and English, up to 500 characters. Ask for a single-shot or multi-shot video, or describe shots with timestamps, to control the shot structure. |
+| `prompt` | `string` | `"The person of image 1, keeping exactly their face and pose, wearing the garment of image 2."` | What the result should show. Refer to the person as image 1 and the garment as image 2. |
+| `input_image` | `string` | &mdash; | Person to dress (image 1). The output keeps this image's resolution, up to 4 megapixels. Format: uri. |
+| `input_image_2` | `string` | &mdash; | Garment to put on the person (image 2), as a flat-lay packshot or worn by someone else. One image can carry a whole outfit. Format: uri. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `audio_url` | `string` | &mdash; | Optional audio to drive the video, 2 to 30 seconds, WAV or MP3 up to 15 MB. Without it the model generates matching audio. Format: uri. |
-| `aspect_ratio` | `string` | `"16:9"` | Aspect Ratio One of: 16:9, 9:16, 1:1, 4:3, 3:4. |
-| `resolution` | `string` | `"1080P"` | Resolution One of: 720P, 1080P. |
-| `duration` | `integer` | `5` | Duration Range: 2 – 15. |
-| `negative_prompt` | `string` | &mdash; | What to keep out of the video. Up to 500 characters. |
-| `prompt_extend` | `boolean` | `true` | Let the model expand short prompts. Adds processing time. |
-| `watermark` | `boolean` | `false` | Add an AI-generated watermark in the bottom-right corner. |
-| `seed` | `integer` | &mdash; | Seed for reproducible generation. Range: 0 – 2147483647. |
+| `seed` | `integer` | &mdash; | Seed |
+| `safety_tolerance` | `integer` | `2` | Safety filter strictness, 0 is strictest. One of: 0, 1, 2, 3, 4, 5. |

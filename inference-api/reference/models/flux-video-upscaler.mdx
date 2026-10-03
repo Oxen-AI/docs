@@ -11,7 +11,7 @@ description: "Video super-resolution to 4K, precise or creative"
 
 **Model ID:** `flux-video-upscaler`
 
-FLUX Video Upscaler raises the resolution of an existing clip using FLUX 3 super-resolution, up to 1080p, 2K, or 4K. It takes MP4 input up to 20 seconds and 50 MB.
+FLUX Video Upscaler raises the resolution of an existing clip using FLUX 3 super-resolution, up to 1080p, 2K, or 4K. It takes MP4 input up to 20 seconds, 50 MB and 2560x1440, enlarges it by 1.5x to 3x while keeping the aspect ratio and the source audio, and caps output frames near 14 megapixels, so a large source may land below the requested factor.
 
 Two modes trade fidelity against detail. Precise stays faithful to the source, which suits footage that must match a reference. Creative synthesizes detail the original never had and takes an optional prompt to steer what it invents, which suits stylized or generated material. Creative costs more per second at every resolution.
 
@@ -598,13 +598,13 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `input_video` | `string` | &mdash; | Clip to upscale. MP4, up to 20 seconds and 50 MB. Format: uri. |
+| `input_video` | `string` | &mdash; | Clip to upscale. MP4, up to 20 seconds, 50 MB and 2560x1440. Longer or larger clips are rejected rather than trimmed. Format: uri. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `prompt` | `string` | &mdash; | Optional steer for the detail Creative mode invents. Ignored in Precise mode. |
-| `upscale_factor` | `number` | `2` | How much to enlarge the clip, keeping its aspect ratio. Cost follows the resolution this lands on. Range: 1 – 4. |
+| `upscale_factor` | `number` | `2` | How much to enlarge the clip, from 1.5x to 3x, keeping its aspect ratio. Cost follows the resolution this lands on. Range: 1.5 – 3. |
 | `creativity` | `integer` | `0` | Precise stays faithful to the source. Creative invents detail the original lacks and costs more per second. One of: 0, 1. |
-| `safety_tolerance` | `integer` | `2` | Moderation strictness, where lower is stricter. |
+| `safety_tolerance` | `integer` | `2` | Safety filter strictness, 0 is strictest. One of: 0, 1, 2, 3, 4. |
