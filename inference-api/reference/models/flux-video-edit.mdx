@@ -41,8 +41,8 @@ Output follows the source: the same duration and aspect ratio at 24 fps, downsca
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "flux-video-edit",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "prompt": "<prompt>"
+          "prompt": "<prompt>",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }'
         ```
 
@@ -58,8 +58,8 @@ Output follows the source: the same duration and aspect ratio at 24 fps, downsca
             },
             json={
                 "model": "flux-video-edit",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "prompt": "<prompt>"
+                "prompt": "<prompt>",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         response.raise_for_status()
@@ -79,8 +79,8 @@ Output follows the source: the same duration and aspect ratio at 24 fps, downsca
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "flux-video-edit",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "prompt": "<prompt>",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "safety_tolerance": 2
         }'
         ```
@@ -97,8 +97,8 @@ Output follows the source: the same duration and aspect ratio at 24 fps, downsca
             },
             json={
                 "model": "flux-video-edit",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "prompt": "<prompt>",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "safety_tolerance": 2
             },
         )
@@ -128,8 +128,8 @@ Output follows the source: the same duration and aspect ratio at 24 fps, downsca
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "flux-video-edit",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "prompt": "<prompt>"
+          "prompt": "<prompt>",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -161,8 +161,8 @@ Output follows the source: the same duration and aspect ratio at 24 fps, downsca
             headers=HEADERS,
             json={
                 "model": "flux-video-edit",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "prompt": "<prompt>"
+                "prompt": "<prompt>",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         enqueue.raise_for_status()
@@ -197,8 +197,8 @@ Output follows the source: the same duration and aspect ratio at 24 fps, downsca
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "flux-video-edit",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "prompt": "<prompt>",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "safety_tolerance": 2
         }' | jq -r '.generations[0].generation_id')
 
@@ -231,8 +231,8 @@ Output follows the source: the same duration and aspect ratio at 24 fps, downsca
             headers=HEADERS,
             json={
                 "model": "flux-video-edit",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "prompt": "<prompt>",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "safety_tolerance": 2
             },
         )
@@ -276,8 +276,8 @@ Output follows the source: the same duration and aspect ratio at 24 fps, downsca
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "flux-video-edit",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-          "prompt": "<prompt>"
+          "prompt": "<prompt>",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -306,8 +306,8 @@ Output follows the source: the same duration and aspect ratio at 24 fps, downsca
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "flux-video-edit",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
-                "prompt": "<prompt>"
+                "prompt": "<prompt>",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         enqueue.raise_for_status()
@@ -343,8 +343,8 @@ Output follows the source: the same duration and aspect ratio at 24 fps, downsca
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "flux-video-edit",
-          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "prompt": "<prompt>",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "safety_tolerance": 2
         }' | jq -r '.generations[0].generation_id')
 
@@ -374,8 +374,8 @@ Output follows the source: the same duration and aspect ratio at 24 fps, downsca
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "flux-video-edit",
-                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "prompt": "<prompt>",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "safety_tolerance": 2
             },
         )
@@ -420,8 +420,8 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `input_video` | `string` | &mdash; | Clip to edit. MP4, up to 15 seconds and 50 MB. The output keeps the clip's duration and aspect ratio at 24 fps, downscaled to 720p if larger. Format: uri. |
 | `prompt` | `string` | &mdash; | The edit to make, prompt only what you want to change. Combine several edits in one prompt. New dialogue cannot run longer than the line it replaces. |
+| `input_video` | `string` | &mdash; | Clip to edit. MP4, up to 15 seconds and 50 MB. The output keeps the clip's duration and aspect ratio at 24 fps, downscaled to 720p if larger. Format: uri. |
 
 ### Optional parameters
 

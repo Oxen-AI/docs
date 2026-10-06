@@ -74,7 +74,7 @@ HappyHorse 1.0 reference-to-video generates video from a text prompt and up to 9
           -d '{
           "model": "happyhorse-1.0-r2v",
           "prompt": "<prompt>",
-          "reference_images": [
+          "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
         }'
@@ -93,7 +93,7 @@ HappyHorse 1.0 reference-to-video generates video from a text prompt and up to 9
             json={
                 "model": "happyhorse-1.0-r2v",
                 "prompt": "<prompt>",
-                "reference_images": [
+                "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
             },
@@ -116,7 +116,7 @@ HappyHorse 1.0 reference-to-video generates video from a text prompt and up to 9
           -d '{
           "model": "happyhorse-1.0-r2v",
           "prompt": "<prompt>",
-          "reference_images": [
+          "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
           "aspect_ratio": "16:9",
@@ -138,7 +138,7 @@ HappyHorse 1.0 reference-to-video generates video from a text prompt and up to 9
             json={
                 "model": "happyhorse-1.0-r2v",
                 "prompt": "<prompt>",
-                "reference_images": [
+                "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
                 "aspect_ratio": "16:9",
@@ -240,7 +240,7 @@ HappyHorse 1.0 reference-to-video generates video from a text prompt and up to 9
           -d '{
           "model": "happyhorse-1.0-r2v",
           "prompt": "<prompt>",
-          "reference_images": [
+          "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
         }' | jq -r '.generations[0].generation_id')
@@ -275,7 +275,7 @@ HappyHorse 1.0 reference-to-video generates video from a text prompt and up to 9
             json={
                 "model": "happyhorse-1.0-r2v",
                 "prompt": "<prompt>",
-                "reference_images": [
+                "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
             },
@@ -313,7 +313,7 @@ HappyHorse 1.0 reference-to-video generates video from a text prompt and up to 9
           -d '{
           "model": "happyhorse-1.0-r2v",
           "prompt": "<prompt>",
-          "reference_images": [
+          "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
           "aspect_ratio": "16:9",
@@ -351,7 +351,7 @@ HappyHorse 1.0 reference-to-video generates video from a text prompt and up to 9
             json={
                 "model": "happyhorse-1.0-r2v",
                 "prompt": "<prompt>",
-                "reference_images": [
+                "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
                 "aspect_ratio": "16:9",
@@ -465,7 +465,7 @@ HappyHorse 1.0 reference-to-video generates video from a text prompt and up to 9
           -d '{
           "model": "happyhorse-1.0-r2v",
           "prompt": "<prompt>",
-          "reference_images": [
+          "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
         }' | jq -r '.generations[0].generation_id')
@@ -497,7 +497,7 @@ HappyHorse 1.0 reference-to-video generates video from a text prompt and up to 9
             json={
                 "model": "happyhorse-1.0-r2v",
                 "prompt": "<prompt>",
-                "reference_images": [
+                "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
             },
@@ -536,7 +536,7 @@ HappyHorse 1.0 reference-to-video generates video from a text prompt and up to 9
           -d '{
           "model": "happyhorse-1.0-r2v",
           "prompt": "<prompt>",
-          "reference_images": [
+          "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
           "aspect_ratio": "16:9",
@@ -571,7 +571,7 @@ HappyHorse 1.0 reference-to-video generates video from a text prompt and up to 9
             json={
                 "model": "happyhorse-1.0-r2v",
                 "prompt": "<prompt>",
-                "reference_images": [
+                "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
                 "aspect_ratio": "16:9",
@@ -626,7 +626,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `reference_images` | `array<string>` | &mdash; | Array of up to 9 reference image URLs for character/object/scene appearance. Order maps to @Image1, @Image2, etc. Formats: JPEG, JPG, PNG. Max 10 MB each. 720p or higher recommended; shorter side must exceed 400 pixels. Reference images should share a similar aspect ratio close to the target video's aspect ratio. |
+| `input_images` | `array<string>` | &mdash; | Array of up to 9 reference image URLs for character/object/scene appearance. Order maps to @Image1, @Image2, etc. Formats: JPEG, JPG, PNG. Max 10 MB each. 720p or higher recommended; shorter side must exceed 400 pixels. Reference images should share a similar aspect ratio close to the target video's aspect ratio. |
 | `aspect_ratio` | `string` | `"16:9"` | Aspect Ratio One of: 16:9, 9:16, 1:1, 4:3, 3:4. |
 | `resolution` | `string` | `"1080P"` | Resolution One of: 720P, 1080P. |
 | `duration` | `integer` | `5` | Duration Range: 3 – 15. |
