@@ -29,15 +29,11 @@ The examples on this page use text-to-video. For image-to-video or reference-to-
 
 **Base URL:** `https://hub.oxen.ai/api`. Authenticate every request with `Authorization: Bearer $OXEN_API_KEY`.
 
-Draft mode works on both the queue ([`POST /ai/queue`](/inference-api/reference/async_queue)) and the sync endpoint ([`POST /ai/videos/generate`](/inference-api/reference/video_generation)). It is also available in the Oxen.ai UI: render a draft, then click to render the final.
+Draft mode runs through the queue ([`POST /ai/queue`](/inference-api/reference/async_queue)). It is also available in the Oxen.ai UI: render a draft, then click to render the final.
 
-<Note>
-  We recommend the async queue workflow. Seedance generations may take a long time, and your HTTP connection may time out in sync mode.
-</Note>
+## Quickstart
 
-## Quickstart (async queue, recommended)
-
-We recommend the [async queue](/inference-api/reference/async_queue) for draft mode. Seedance generations can take several minutes, and in sync mode your HTTP connection may time out before the video is ready. Enqueue returns a `generation_id` right away; poll (or listen for the completion event) until the generation finishes.
+Seedance generations can take several minutes, which is longer than an HTTP connection should be asked to survive. Enqueue returns a `generation_id` right away; poll it, or listen for the completion event, until the generation finishes.
 
 ### 1. Enqueue a draft
 
@@ -125,129 +121,11 @@ Poll `GET /ai/queue/{generation_id}` as before. The succeeded final lists its vi
 }
 ```
 
-## Sync flow
-
-The sync endpoint holds the connection open and returns the finished video. It is fine for quick experiments, but for anything else prefer the async queue above, since a long Seedance render can outlast your HTTP connection.
-
-### 1. Render a draft
-
-Add `draft: true` to a normal request. Any `resolution` you send is overridden to 480p.
-
-<CodeGroup>
-
-```bash cURL
-curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
-  -H "Authorization: Bearer $OXEN_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "bytedance-seedance-2-5-text-to-video",
-    "prompt": "A lone ox walks down an empty desert highway at golden hour",
-    "duration": 5,
-    "draft": true
-  }'
-```
-
-```python Python
-import os
-import requests
-
-response = requests.post(
-    "https://hub.oxen.ai/api/ai/videos/generate",
-    headers={
-        "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
-        "Content-Type": "application/json",
-    },
-    json={
-        "model": "bytedance-seedance-2-5-text-to-video",
-        "prompt": "A lone ox walks down an empty desert highway at golden hour",
-        "duration": 5,
-        "draft": True,
-    },
-    timeout=600,
-)
-response.raise_for_status()
-draft = response.json()["videos"][0]
-print("Draft URL:", draft["url"])
-print("Draft ID:", draft["draft_task_id"], "expires", draft["draft_expires_at"])
-```
-
-</CodeGroup>
-
-The response lists the video with its draft ID and expiry:
-
-```json
-{
-  "model": "bytedance-seedance-2-5-text-to-video",
-  "videos": [
-    {
-      "url": "https://hub.oxen.ai/api/repos/ox/playground/workspaces/269822c4-.../files/20260926-034218_a-lone-ox-walks-down-an-empty-desert-highway-at_0e48f80b.mp4?oxen_expires=1790397738&oxen_signature=...",
-      "draft_task_id": "cgt-20260926114114-r4bb8",
-      "draft_expires_at": "2026-10-01T18:04:11Z"
-    }
-  ],
-  "created": 1790000000
-}
-```
-
-Store `videos[0].draft_task_id` and `videos[0].draft_expires_at` with the draft. You need the ID to render the final.
-
-### 2. Render the final
-
-Send the `draft_task_id` back exactly as you received it, with the same `model`. Leave out `prompt`, `duration`, and other settings.
-
-<CodeGroup>
-
-```bash cURL
-curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
-  -H "Authorization: Bearer $OXEN_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "bytedance-seedance-2-5-text-to-video",
-    "draft_task_id": "cgt-20260926114114-r4bb8"
-  }'
-```
-
-```python Python
-import os
-import requests
-
-response = requests.post(
-    "https://hub.oxen.ai/api/ai/videos/generate",
-    headers={
-        "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
-        "Content-Type": "application/json",
-    },
-    json={
-        "model": "bytedance-seedance-2-5-text-to-video",
-        "draft_task_id": "cgt-20260926114114-r4bb8",
-    },
-    timeout=900,
-)
-response.raise_for_status()
-print("Final URL:", response.json()["videos"][0]["url"])
-```
-
-</CodeGroup>
-
-The final is 1080p at the draft's duration and audio setting. Its item carries only a `url`:
-
-```json
-{
-  "model": "bytedance-seedance-2-5-text-to-video",
-  "videos": [
-    {
-      "url": "https://hub.oxen.ai/api/repos/ox/playground/workspaces/269822c4-.../files/20260926-034319_9173d907.mp4?oxen_expires=1790397799&oxen_signature=..."
-    }
-  ],
-  "created": 1790000300
-}
-```
-
 ## Reference
 
 ### Request parameters
 
-Both endpoints accept these fields in the JSON body.
+The queue accepts these fields in the JSON body.
 
 | Field | Type | Used on | Notes |
 | --- | --- | --- | --- |
@@ -279,7 +157,6 @@ Every endpoint lists media the same way: a `videos` array of items with a stored
 
 | Method | Path | Purpose |
 | --- | --- | --- |
-| `POST` | [`/ai/videos/generate`](/inference-api/reference/video_generation) | Render a draft or final and wait for the result. |
 | `POST` | [`/ai/queue`](/inference-api/reference/async_queue#enqueue) | Enqueue a draft or final. Returns `generations[].generation_id`. |
 | `GET` | [`/ai/queue/{generation_id}`](/inference-api/reference/async_queue#get-generation) | Read one generation's status and media. |
 | `GET` | [`/ai/generations`](/inference-api/reference/async_queue#list-generations) | List generations, with the same `videos` shape. |
@@ -362,31 +239,22 @@ HEADERS = {
     "Content-Type": "application/json",
 }
 
-
 def render_draft(prompt: str, duration: int = 5, **settings) -> dict:
-    """Render a 480p draft synchronously. Returns url, draft_task_id, draft_expires_at."""
+    """Render a 480p draft. Returns url, draft_task_id, draft_expires_at."""
     body = {"model": MODEL, "prompt": prompt, "duration": duration, "draft": True, **settings}
-    r = requests.post(f"{BASE}/ai/videos/generate", json=body, headers=HEADERS, timeout=600)
-    r.raise_for_status()
-    return r.json()["videos"][0]
-
+    return wait(enqueue(body))["videos"][0]
 
 def render_final(draft: dict) -> dict:
     """Render the 1080p final from a draft returned by render_draft."""
     expires = datetime.fromisoformat(draft["draft_expires_at"].replace("Z", "+00:00"))
     if expires <= datetime.now(timezone.utc):
         raise ValueError("Draft expired. Render a new draft.")
-    body = {"model": MODEL, "draft_task_id": draft["draft_task_id"]}
-    r = requests.post(f"{BASE}/ai/videos/generate", json=body, headers=HEADERS, timeout=900)
-    r.raise_for_status()
-    return r.json()["videos"][0]
-
+    return wait(enqueue({"model": MODEL, "draft_task_id": draft["draft_task_id"]}))["videos"][0]
 
 def enqueue(body: dict) -> str:
     r = requests.post(f"{BASE}/ai/queue", json=body, headers=HEADERS, timeout=30)
     r.raise_for_status()
     return r.json()["generations"][0]["generation_id"]
-
 
 def wait(generation_id: str, interval: float = 5.0) -> dict:
     """Poll a queued generation until it succeeds. Returns the full generation."""
@@ -400,19 +268,9 @@ def wait(generation_id: str, interval: float = 5.0) -> dict:
             raise RuntimeError(f"Generation {generation_id} {gen['status']}: {gen.get('error_message')}")
         time.sleep(interval)
 
-
 if __name__ == "__main__":
     prompt = "A lone ox walks down an empty desert highway at golden hour"
 
-    # Queued (recommended): draft, review, final in the background
-    gid = enqueue({"model": MODEL, "prompt": prompt, "duration": 5, "draft": True})
-    queued_draft = wait(gid)["videos"][0]
-    print("Draft:", queued_draft["url"])
-    gid = enqueue({"model": MODEL, "draft_task_id": queued_draft["draft_task_id"]})
-    queued_final = wait(gid)
-    print("Final:", queued_final["videos"][0]["url"], "from draft", queued_final["draft_task_id"])
-
-    # Sync: same flow, holding the connection open
     draft = render_draft(prompt)
     print("Draft:", draft["url"])
     final = render_final(draft)
