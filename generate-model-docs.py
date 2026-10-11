@@ -43,6 +43,9 @@ FALLBACK_VIDEO_URL = (
 FALLBACK_AUDIO_URL = "https://example.com/audio.mp3"
 
 SLUG_UNSAFE = re.compile(r"[^A-Za-z0-9_-]+")
+# Every generated page carries this line, which is how a page this script wrote is told
+# apart from one somebody added to the same directory by hand.
+MODEL_ID_MARKER = re.compile(r"^\*\*Model ID:\*\* `", re.MULTILINE)
 
 
 def slugify(name: str) -> str:
@@ -820,6 +823,25 @@ def write_pages(models: list[dict[str, Any]], output_dir: Path, workbench_base: 
     return written
 
 
+def prune_removed_pages(output_dir: Path, written: list[tuple[str, dict[str, Any]]]) -> list[str]:
+    """Delete generated pages for models the API no longer lists.
+
+    A page for a retired model keeps serving a request nobody can make any more, and the
+    index stops linking it, so nothing points at it and nothing takes it down either. Only
+    files this generator produced are considered, which is why the check is for the marker
+    it writes rather than for the filename.
+    """
+    keep = {Path(path).name for path, _ in written}
+    removed: list[str] = []
+
+    for path in sorted(output_dir.glob("*.mdx")):
+        if path.name in keep or not MODEL_ID_MARKER.search(path.read_text()):
+            continue
+        path.unlink()
+        removed.append(str(path))
+    return removed
+
+
 def _developer_label(model: dict[str, Any]) -> str:
     """Pick a display label to bucket a model under on the index page."""
     dev = model.get("developer")
@@ -927,9 +949,16 @@ def main() -> None:
     output_dir = Path(args.output)
     written = write_pages(models, output_dir, args.workbench_base)
 
+    removed = prune_removed_pages(output_dir, written)
+
     print(f"Wrote {len(written)} model reference page(s) under {output_dir}", file=sys.stderr)
     for path, _ in written:
         print(path)
+
+    if removed:
+        print(f"Removed {len(removed)} page(s) for models the API no longer lists", file=sys.stderr)
+        for path in removed:
+            print(f"removed {path}", file=sys.stderr)
 
     if args.index_path:
         index_path = Path(args.index_path)
