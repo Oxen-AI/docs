@@ -1,32 +1,30 @@
 ---
-title: "Veo 3.1 Fast"
-description: "Fast text/image-to-video with audio, 4K"
+title: "Nano Banana 2.1"
+description: "Fast 4K image generation and editing"
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try Veo 3.1 Fast in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=google-veo-3-1-fast">
+  <Card title="Try Nano Banana 2.1 in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=nano-banana-2-1">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `google-veo-3-1-fast`
+**Model ID:** `nano-banana-2-1`
 
-Veo 3.1 Fast is Google's faster, lower-cost Veo model for generating short, high-fidelity videos from a text prompt or a first-frame image, with native synchronized audio.
+Nano Banana 2.1 is Google's Flash-tier image generation and editing model, an update to Nano Banana 2 with better visual quality, prompt adherence, text rendering, and character consistency across edits.
 
-It supports natural motion, realistic scene animation, and controllable output settings such as duration, aspect ratio, and resolution (including 4k).
+It generates from a text prompt alone, or edits and fuses up to 14 reference images, keeping up to 4 characters and 10 objects consistent. Output comes at 1K, 2K, or 4K across standard and panoramic aspect ratios (up to 8:1 and 1:8), with fewer tiling artifacts on wide formats at 2K and 4K than Nano Banana 2. Images can be grounded in Google Web Search and Google Image Search for factual or current subjects, and a configurable thinking level trades latency for better handling of complex compositions.
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=google-veo-3-1-fast) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=nano-banana-2-1) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
   <Tab title="Sync">
 
-    This blocks until the video is ready (typically 5-15 minutes). Prefer **Async** or **Async with SSE** for anything beyond quick experimentation.
-
-    See the [video generation reference](/inference-api/reference/video_generation) for more details.
+    See the [image editing reference](/inference-api/reference/image_editing) for more details.
 
     <Tabs>
       <Tab title="Minimal">
@@ -34,11 +32,11 @@ It supports natural motion, realistic scene animation, and controllable output s
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "google-veo-3-1-fast",
+          "model": "nano-banana-2-1",
           "prompt": "<prompt>"
         }'
         ```
@@ -48,13 +46,13 @@ It supports natural motion, realistic scene animation, and controllable output s
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/videos/generate",
+            "https://hub.oxen.ai/api/ai/images/edit",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "google-veo-3-1-fast",
+                "model": "nano-banana-2-1",
                 "prompt": "<prompt>"
             },
         )
@@ -70,13 +68,15 @@ It supports natural motion, realistic scene animation, and controllable output s
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "google-veo-3-1-fast",
+          "model": "nano-banana-2-1",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ]
         }'
         ```
 
@@ -85,15 +85,17 @@ It supports natural motion, realistic scene animation, and controllable output s
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/videos/generate",
+            "https://hub.oxen.ai/api/ai/images/edit",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "google-veo-3-1-fast",
+                "model": "nano-banana-2-1",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ]
             },
         )
         response.raise_for_status()
@@ -108,16 +110,20 @@ It supports natural motion, realistic scene animation, and controllable output s
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
+        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "google-veo-3-1-fast",
+          "model": "nano-banana-2-1",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
           "aspect_ratio": "16:9",
-          "resolution": "720p",
-          "duration": 8
+          "resolution": "2K",
+          "google_search": false,
+          "image_search": false,
+          "thinking_level": "medium"
         }'
         ```
 
@@ -126,18 +132,22 @@ It supports natural motion, realistic scene animation, and controllable output s
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/videos/generate",
+            "https://hub.oxen.ai/api/ai/images/edit",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "google-veo-3-1-fast",
+                "model": "nano-banana-2-1",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
                 "aspect_ratio": "16:9",
-                "resolution": "720p",
-                "duration": 8
+                "resolution": "2K",
+                "google_search": false,
+                "image_search": false,
+                "thinking_level": "medium"
             },
         )
         response.raise_for_status()
@@ -165,7 +175,7 @@ It supports natural motion, realistic scene animation, and controllable output s
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "google-veo-3-1-fast",
+          "model": "nano-banana-2-1",
           "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
@@ -197,7 +207,7 @@ It supports natural motion, realistic scene animation, and controllable output s
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "google-veo-3-1-fast",
+                "model": "nano-banana-2-1",
                 "prompt": "<prompt>"
             },
         )
@@ -232,9 +242,11 @@ It supports natural motion, realistic scene animation, and controllable output s
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "google-veo-3-1-fast",
+          "model": "nano-banana-2-1",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ]
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -265,9 +277,11 @@ It supports natural motion, realistic scene animation, and controllable output s
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "google-veo-3-1-fast",
+                "model": "nano-banana-2-1",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ]
             },
         )
         enqueue.raise_for_status()
@@ -301,12 +315,16 @@ It supports natural motion, realistic scene animation, and controllable output s
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "google-veo-3-1-fast",
+          "model": "nano-banana-2-1",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
           "aspect_ratio": "16:9",
-          "resolution": "720p",
-          "duration": 8
+          "resolution": "2K",
+          "google_search": false,
+          "image_search": false,
+          "thinking_level": "medium"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -337,12 +355,16 @@ It supports natural motion, realistic scene animation, and controllable output s
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "google-veo-3-1-fast",
+                "model": "nano-banana-2-1",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
                 "aspect_ratio": "16:9",
-                "resolution": "720p",
-                "duration": 8
+                "resolution": "2K",
+                "google_search": false,
+                "image_search": false,
+                "thinking_level": "medium"
             },
         )
         enqueue.raise_for_status()
@@ -384,7 +406,7 @@ It supports natural motion, realistic scene animation, and controllable output s
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "google-veo-3-1-fast",
+          "model": "nano-banana-2-1",
           "prompt": "<prompt>"
         }' | jq -r '.generations[0].generation_id')
 
@@ -413,7 +435,7 @@ It supports natural motion, realistic scene animation, and controllable output s
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "google-veo-3-1-fast",
+                "model": "nano-banana-2-1",
                 "prompt": "<prompt>"
             },
         )
@@ -449,9 +471,11 @@ It supports natural motion, realistic scene animation, and controllable output s
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "google-veo-3-1-fast",
+          "model": "nano-banana-2-1",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ]
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -479,9 +503,11 @@ It supports natural motion, realistic scene animation, and controllable output s
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "google-veo-3-1-fast",
+                "model": "nano-banana-2-1",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ]
             },
         )
         enqueue.raise_for_status()
@@ -516,12 +542,16 @@ It supports natural motion, realistic scene animation, and controllable output s
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "google-veo-3-1-fast",
+          "model": "nano-banana-2-1",
           "prompt": "<prompt>",
-          "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "input_image": [
+            "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+          ],
           "aspect_ratio": "16:9",
-          "resolution": "720p",
-          "duration": 8
+          "resolution": "2K",
+          "google_search": false,
+          "image_search": false,
+          "thinking_level": "medium"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -549,12 +579,16 @@ It supports natural motion, realistic scene animation, and controllable output s
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "google-veo-3-1-fast",
+                "model": "nano-banana-2-1",
                 "prompt": "<prompt>",
-                "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "input_image": [
+                    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
+                ],
                 "aspect_ratio": "16:9",
-                "resolution": "720p",
-                "duration": 8
+                "resolution": "2K",
+                "google_search": false,
+                "image_search": false,
+                "thinking_level": "medium"
             },
         )
         enqueue.raise_for_status()
@@ -589,7 +623,7 @@ It supports natural motion, realistic scene animation, and controllable output s
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/google-veo-3-1-fast
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/nano-banana-2-1
 ```
 
 ## Request parameters
@@ -598,14 +632,15 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | Text description of the video to generate, or how to animate the input image. |
+| `prompt` | `string` | &mdash; | Text description of what you want to generate, or the instruction on how to edit the given image. Use @Image1, @Image2, etc. to reference the input images. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `input_image` | `string` | &mdash; | Optional first-frame image to animate (image-to-video). Leave empty to generate from the prompt alone. Format: uri. |
-| `aspect_ratio` | `string` | `"16:9"` | Aspect Ratio One of: 16:9, 9:16. |
-| `resolution` | `string` | `"720p"` | Resolution One of: 720p, 1080p, 4k. |
-| `duration` | `integer` | `8` | Duration (seconds) Range: 4 – 8. |
-| `seed` | `integer` | &mdash; | Random seed for deterministic generation. |
+| `input_image` | `array<string>` | &mdash; | Optional reference image(s) to edit or combine, up to 14. Leave empty to generate from the prompt alone. Reference them in the prompt as @Image1, @Image2, etc. |
+| `aspect_ratio` | `string` | `"16:9"` | Aspect Ratio One of: auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 4:5, 5:4, 21:9, 4:1, 1:4, 8:1, 1:8. |
+| `resolution` | `string` | `"2K"` | Resolution One of: 1K, 2K, 4K. |
+| `google_search` | `boolean` | `false` | Use live web results for current facts. |
+| `image_search` | `boolean` | `false` | Use Google images as visual references. |
+| `thinking_level` | `string` | `"medium"` | Higher levels handle complex scenes but run slower. One of: minimal, medium, high. |

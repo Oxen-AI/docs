@@ -13,7 +13,7 @@ description: "Omni-modal video with keyframes, edit and extend"
 
 Gemini Omni 1.1 Flash is Google's omni-modal video model that handles text-to-video, first/last frame keyframing, reference-guided generation from images and short video clips, and video editing and extension in a single model. Every clip ships with synchronized native audio (dialogue, sound effects, and music directed from the prompt), and camera work is described in natural language.
 
-Each generation is a 3 to 10 second clip at 24 fps in 16:9 or 9:16, rendered at 360p (a fast, low-cost draft tier), 720p (the default), or upscaled to 1080p or 4K. Pin a first frame, or a first and last frame, to control a shot's start and end; add up to 3 reference images and up to 3 reference videos of at most 3 seconds each to carry a character, object, or style into the scene (audio in reference videos is ignored). Supply a video to edit it by instruction while preserving everything the prompt does not mention, or to extend it: extensions append 3 to 10 seconds at a time, use up to 10 seconds of prior footage as context, and can stack to a cumulative 40 seconds.
+Each generation is a 3 to 10 second clip at 24 fps in 16:9 or 9:16, rendered at 360p (a fast, low-cost draft tier), 720p (the default), or upscaled to 1080p or 4K. Pin a first frame, or a first and last frame, to control a shot's start and end; add up to 3 reference images and up to 3 reference videos of at most 3 seconds each to carry a character, object, or style into the scene (audio in reference videos is ignored). Supply a video of up to 10 seconds to edit it by instruction while preserving everything the prompt does not mention, or to extend it: an edit keeps the input video's length, while an extension appends 3 to 10 seconds at a time, uses up to 10 seconds of prior footage as context, and can stack to a cumulative 40 seconds.
 
 ## Example request
 
@@ -139,6 +139,7 @@ Each generation is a 3 to 10 second clip at 24 fps in 16:9 or 9:16, rendered at 
             "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
           ],
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "task": "auto",
           "aspect_ratio": "16:9",
           "resolution": "720p",
           "duration": 8
@@ -167,6 +168,7 @@ Each generation is a 3 to 10 second clip at 24 fps in 16:9 or 9:16, rendered at 
                     "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
                 ],
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "task": "auto",
                 "aspect_ratio": "16:9",
                 "resolution": "720p",
                 "duration": 8
@@ -360,6 +362,7 @@ Each generation is a 3 to 10 second clip at 24 fps in 16:9 or 9:16, rendered at 
             "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
           ],
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "task": "auto",
           "aspect_ratio": "16:9",
           "resolution": "720p",
           "duration": 8
@@ -404,6 +407,7 @@ Each generation is a 3 to 10 second clip at 24 fps in 16:9 or 9:16, rendered at 
                     "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
                 ],
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "task": "auto",
                 "aspect_ratio": "16:9",
                 "resolution": "720p",
                 "duration": 8
@@ -607,6 +611,7 @@ Each generation is a 3 to 10 second clip at 24 fps in 16:9 or 9:16, rendered at 
             "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
           ],
           "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "task": "auto",
           "aspect_ratio": "16:9",
           "resolution": "720p",
           "duration": 8
@@ -648,6 +653,7 @@ Each generation is a 3 to 10 second clip at 24 fps in 16:9 or 9:16, rendered at 
                     "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
                 ],
                 "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "task": "auto",
                 "aspect_ratio": "16:9",
                 "resolution": "720p",
                 "duration": 8
@@ -704,7 +710,8 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | `tail_image_url` | `string` | &mdash; | Image the video ends on. Requires a first frame. Format: uri. |
 | `input_images` | `array<string>` | &mdash; | Up to 3 images of characters, objects, or styles to carry into the video. |
 | `input_videos` | `array<string>` | &mdash; | Up to 3 clips of at most 3 seconds each for a character, motion, or camera move. Audio is ignored. |
-| `input_video` | `string` | &mdash; | Video of 10 seconds or less. Describe a change to edit it, or what happens next to extend it by the chosen duration. Format: uri. |
-| `aspect_ratio` | `string` | `"16:9"` | Aspect Ratio One of: 16:9, 9:16. |
+| `input_video` | `string` | &mdash; | Video of 10 seconds or less to edit or extend. Pick the task below, or leave it on Auto to let the prompt decide. Format: uri. |
+| `task` | `string` | `"auto"` | What to do with the input video: Edit changes it and keeps its length, Extend adds the chosen duration after it, Auto lets the prompt decide. One of: auto, edit, extend. |
+| `aspect_ratio` | `string` | `"16:9"` | Aspect Ratio One of: 16:9, 9:16, adaptive. |
 | `resolution` | `string` | `"720p"` | Resolution One of: 360p, 720p, 1080p, 4k. |
-| `duration` | `integer` | `8` | Duration Range: 3 – 10. |
+| `duration` | `['integer', 'string']` | `8` | Duration Range: 3 – 10. |
