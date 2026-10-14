@@ -401,9 +401,11 @@ event = results[gen_id]
 if event["status"] == "succeeded":
     print(f"\nGeneration succeeded in {elapsed:.1f}s")
     print(f"  URL: {event['url']}")
-else:
+elif event["status"] == "failed":
     print(f"\nGeneration failed after {elapsed:.1f}s")
     print(f"  Error: {event['error']}")
+else:
+    print(f"\nGeneration cancelled after {elapsed:.1f}s")
 ```
 
 ```bash cURL
@@ -672,9 +674,11 @@ if event["status"] == "succeeded":
     with open("output.png", "wb") as f:
         f.write(requests.get(event["url"]).content)
     print("  Saved output.png")
-else:
+elif event["status"] == "failed":
     print(f"\nGeneration failed after {elapsed:.1f}s")
     print(f"  Error: {event['error']}")
+else:
+    print(f"\nGeneration cancelled after {elapsed:.1f}s")
 ```
 
 ## Errors
