@@ -49,8 +49,6 @@ Submit an async image or video generation job.
 
 All other parameters (e.g. `prompt`, `multi_prompt`, `input_image`, `input_video`, `aspect_ratio`, `duration`, `seed`, `generate_audio`) are passed through to the model. Consult the model's `request_schema` via `GET /api/ai/models/:id` for supported parameters and their constraints.
 
-`response_format` is the exception. A queued generation writes a file into your repository, so there is nothing to inline and the queue always answers with a URL. Download `result_url` when you want the bytes.
-
 ### Response
 
 ```json
