@@ -685,7 +685,7 @@ else:
 
 | Condition | Error |
 |---|---|
-| Namespace credit will not cover this request plus everything already queued | 402 `insufficient_credits`, with `required`, `available`, `amount_short`, and `pending_count` |
+| Not enough credit left after what's already queued | 402 `insufficient_credits`, with `required`, `available`, `amount_short`, and `pending_count` |
 | `num_generations` out of range | 400, with a message naming the range the API accepts |
 | Model not found | `"Model not found: <name>"` |
 | Text-only model | `":unsupported_media_type"` |
