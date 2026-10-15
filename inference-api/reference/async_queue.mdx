@@ -75,7 +75,7 @@ Model-specific parameter validation (prompt content, duration ranges, aspect rat
 
 ## Output Files
 
-A generation writes its output file into a repository in the target namespace. The repository is `playground` unless you pass `target_repo`, and it's created the first time it's used. The file goes at the repository's root unless you pass `target_directory`. An application that generates a lot is easier to manage in a repository of its own.
+A generation writes its output file into a repository in the target namespace. The repository is `playground` unless you pass `target_repo`, and it's created the first time it's used. The file goes at the repository's root unless you pass `target_directory`. The workbench also saves your uploads and generations to `playground`. Give an application its own `target_repo` to keep its files separate.
 
 `result_url` is a signed link to that file, good for one hour. [Get Generation](#get-generation) and [List Generations](#list-generations) sign it again on every call, which means you can keep the `generation_id` and fetch a fresh link whenever you need the file. The `url` in a [completion event](#completion-events) is signed when the generation completes and also lasts an hour.
 
