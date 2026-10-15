@@ -79,8 +79,6 @@ A generation writes its output file into a repository in the target namespace. T
 
 `result_url` is a signed link to that file, good for one hour. [Get Generation](#get-generation) and [List Generations](#list-generations) sign it again on every call, which means you can keep the `generation_id` and fetch a fresh link whenever you need the file. The `url` in a [completion event](#completion-events) is signed when the generation completes and also lasts an hour.
 
-Download any file you want to keep. Generated files are staged in the repository without being committed, and a staged file can be lost.
-
 ---
 
 ## List Generations
