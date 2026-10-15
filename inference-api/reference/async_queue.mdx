@@ -46,6 +46,8 @@ Submit an async image or video generation job.
 |---|---|---|---|
 | `num_generations` | integer | `1` | How many generations to enqueue per request. Range: 1-4. Call the endpoint multiple times to queue more. |
 | `target_namespace` | string | your username | Namespace to store results and bill to. |
+| `target_repo` | string | `playground` | Repository the output file is written to. Created on first use. |
+| `target_directory` | string | repository root | Directory inside that repository. |
 
 All other parameters (e.g. `prompt`, `multi_prompt`, `input_image`, `input_video`, `aspect_ratio`, `duration`, `seed`, `generate_audio`) are passed through to the model. Consult the model's `request_schema` via `GET /api/ai/models/:id` for supported parameters and their constraints.
 
