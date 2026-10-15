@@ -20,7 +20,7 @@ The synchronous endpoints (`/ai/images/generate`, `/ai/videos/generate`) block u
 3. Read result_url from the completed generation
 ```
 
-Generations persist after reaching a terminal state (`succeeded`, `failed`, or `cancelled`), so you can retrieve results at any time.
+Generations persist after reaching a terminal state (`succeeded`, `failed`, or `cancelled`), and you can look one up at any time. [Where results go](#where-results-go) covers the output file and its link.
 
 A Server-Sent Events stream at `GET /api/events` can also deliver completion notifications with the output file URL. See [Completion Events](#completion-events).
 
@@ -70,6 +70,16 @@ The API validates at enqueue time that:
 - The user is authenticated with sufficient credits
 
 Model-specific parameter validation (prompt content, duration ranges, aspect ratio values) happens **when the generation runs**, not at enqueue time. If a parameter is invalid, the generation transitions to `failed` status with an `error_message`. To validate parameters and get immediate error feedback, use `/ai/images/generate` or `/ai/videos/generate` instead.
+
+---
+
+## Where results go
+
+A generation writes its output file into a repository in the target namespace. The repository is `playground` unless you pass `target_repo`, and it's created the first time it's used. The file goes at the repository's root unless you pass `target_directory`. An application that generates a lot is easier to manage in a repository of its own.
+
+`result_url` is a signed link to that file, good for one hour. [Get Generation](#get-generation) and [List Generations](#list-generations) sign it again on every call, which means you can keep the `generation_id` and fetch a fresh link whenever you need the file. The `url` in a [completion event](#completion-events) is signed when the generation completes and also lasts an hour.
+
+Download any file you want to keep. Generated files are staged in the repository without being committed, and a staged file can be lost.
 
 ---
 
@@ -331,7 +341,7 @@ data: {"generation_id":"bb8f5eb7-...","status":"failed","media_type":"video","er
 | `status` | `"succeeded"` | `"failed"` | |
 | `media_type` | yes | yes | `"image"`, `"video"`, or `"audio"` |
 | `model` | yes | no | Model name |
-| `url` | yes | no | Presigned URL to the output file. Expires after a limited time. |
+| `url` | yes | no | Signed link to the output file, good for one hour. |
 | `error` | no | yes | Human-readable failure reason |
 
 ### Other events on this stream
