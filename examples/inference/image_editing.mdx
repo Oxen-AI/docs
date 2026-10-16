@@ -1,14 +1,20 @@
 ---
-title: '🎨 Image Editing'
-description: 'How to edit images with the Oxen.ai API.'
+title: '🎨 Image to Image'
+description: 'How to generate images from other images with the Oxen.ai API.'
 ---
 
-### Image Editing
+### Image to Image
 
-Edit an image by describing the change you want. You send the image's URL and a prompt, get a
-generation ID back right away, and poll that ID until the edited image is ready. To see which models
-edit images, visit the [Models](https://www.oxen.ai/ai/models?modalities=image-to-image) page and
-filter by "Image to Image".
+Image to image models take one or more images along with your prompt. The request is the same as
+for [image generation](/examples/inference/image_generation), with `input_image` added. You get a
+generation ID back right away and poll that ID until the image is ready.
+
+Some of these models are built for editing. They change the image you give them and keep the rest,
+and a few do a single job, like erasing an object, upscaling, or trying clothes on a person. Others
+are generation models that also accept reference images, carrying a character, a product, or a style
+from them into a new image. To see them all, visit the
+[Models](https://www.oxen.ai/ai/models?modalities=image-to-image) page and filter by "Image to
+image".
 
 <CodeGroup>
 
@@ -92,9 +98,9 @@ reachable without credentials, since the model downloads it.
 
 ## Parameters
 
-- **model**: The editing model to use (for example `qwen-image-edit`)
-- **input_image**: URL of the image to edit, or an array of URLs for models that take several
-- **prompt**: Text description of the edit you want
+- **model**: The model to use (for example `qwen-image-edit`)
+- **input_image**: URL of the input image, or an array of URLs for models that take several
+- **prompt**: Text description of the change or the image you want
 - **num_inference_steps**: Number of inference steps (optional, defaults vary by model)
 
 Each model takes its own parameters beyond these, and `GET /api/ai/models/:id` returns them. The

@@ -3,7 +3,7 @@ title: "Image Generation"
 description: "Generate images from text prompts in minutes"
 ---
 
-Generate images from text prompts, edit an image you already have, and make several at once. Each
+Generate images from text prompts, start from an image you already have, and make several at once. Each
 request gives you a generation ID right away, and you poll that ID until the image is ready, usually
 within 5 to 30 seconds.
 
@@ -78,10 +78,10 @@ curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
 
 </CodeGroup>
 
-## Edit an image
+## Start from an image
 
-Editing is the same request with an image to work from. Pass `input_image` and pick a model that
-takes images as input.
+Add `input_image` to the same request to start from an image. Editing models change the image you
+give them, while many generation models use it as a reference for a new one.
 
 <CodeGroup>
 
