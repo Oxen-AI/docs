@@ -98,22 +98,6 @@ curl -X POST https://hub.oxen.ai/api/ai/queue \
   }'
 ```
 
-## Multi-shot video
-
-Some models cut between shots within one generation. WAN 2.7 reads the shots from the prompt itself,
-each with its time range in brackets.
-
-```bash
-curl -X POST https://hub.oxen.ai/api/ai/queue \
-  -H "Authorization: Bearer $OXEN_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "wan-v2-7-text-to-video",
-    "prompt": "Generate a multi-shot video. Shot 1 [0-5s] Wide shot: a bird takes off from a branch. Shot 2 [5-10s] Tracking shot: the bird soars through clouds.",
-    "duration": 10
-  }'
-```
-
 ## Don't sit on a poll loop
 
 Video takes minutes, so a completion event beats polling for it. Subscribe to
