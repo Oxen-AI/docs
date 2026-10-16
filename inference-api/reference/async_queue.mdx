@@ -20,7 +20,7 @@ The synchronous endpoints (`/ai/images/generate`, `/ai/videos/generate`) block u
 3. Read result_url from the completed generation
 ```
 
-Generations persist after reaching a terminal state (`succeeded`, `failed`, or `cancelled`), so you can retrieve results at any time.
+Generations persist after reaching a terminal state (`succeeded`, `failed`, or `cancelled`), and you can fetch them at any time. See [Output Files](#output-files) for more information about where the outputs are saved.
 
 A Server-Sent Events stream at `GET /api/events` can also deliver completion notifications with the output file URL. See [Completion Events](#completion-events).
 
@@ -46,6 +46,8 @@ Submit an async image or video generation job.
 |---|---|---|---|
 | `num_generations` | integer | `1` | How many generations to enqueue per request. Range: 1-4. Call the endpoint multiple times to queue more. |
 | `target_namespace` | string | your username | Namespace to store results and bill to. |
+| `target_repo` | string | `playground` | Repository the output file is written to. Created on first use. |
+| `target_directory` | string | repository root | Directory inside that repository. |
 
 All other parameters (e.g. `prompt`, `multi_prompt`, `input_image`, `input_video`, `aspect_ratio`, `duration`, `seed`, `generate_audio`) are passed through to the model. Consult the model's `request_schema` via `GET /api/ai/models/:id` for supported parameters and their constraints.
 
@@ -68,6 +70,20 @@ The API validates at enqueue time that:
 - The user is authenticated with sufficient credits
 
 Model-specific parameter validation (prompt content, duration ranges, aspect ratio values) happens **when the generation runs**, not at enqueue time. If a parameter is invalid, the generation transitions to `failed` status with an `error_message`. To validate parameters and get immediate error feedback, use `/ai/images/generate` or `/ai/videos/generate` instead.
+
+---
+
+## Billing an Organization
+
+A generation bills the target namespace and saves its file there. That's your own account unless you pass `target_namespace`. Pass an organization's name to use its credits and storage with your own API key, as long as you're an admin or editor of that organization. Only the organization's balance counts, and a request fails with a 402 when the organization is out of credit, even if your own account has plenty.
+
+---
+
+## Output Files
+
+A generation writes its output file into a repository in the target namespace. The repository is `playground` unless you pass `target_repo`, and it's created the first time it's used. The file goes at the repository's root unless you pass `target_directory`. The workbench also saves your uploads and generations to `playground`. Give an application its own `target_repo` to keep its files separate.
+
+`result_url` is a signed link to that file which expires after one hour. [Get Generation](#get-generation) and [List Generations](#list-generations) sign it again on every call, which means you can keep the `generation_id` and fetch a fresh link whenever you need the file. The `url` in a [completion event](#completion-events) is signed when the generation completes and expires an hour later.
 
 ---
 
@@ -329,7 +345,7 @@ data: {"generation_id":"bb8f5eb7-...","status":"failed","media_type":"video","er
 | `status` | `"succeeded"` | `"failed"` | |
 | `media_type` | yes | yes | `"image"`, `"video"`, or `"audio"` |
 | `model` | yes | no | Model name |
-| `url` | yes | no | Presigned URL to the output file. Expires after a limited time. |
+| `url` | yes | no | Signed link to the output file, good for one hour. |
 | `error` | no | yes | Human-readable failure reason |
 
 ### Other events on this stream
