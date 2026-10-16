@@ -98,10 +98,10 @@ curl -X POST https://hub.oxen.ai/api/ai/queue \
   }'
 ```
 
-## Don't sit on a poll loop
+## Get notified when it's ready
 
-Video takes minutes, so a completion event beats polling for it. Subscribe to
-`GET /api/events` before you enqueue and you get told the moment the file lands. See
+Instead of polling for several minutes, you can subscribe to `GET /api/events` before you send the
+request and get an event as soon as the video is ready. See
 [completion events](/inference-api/reference/async_queue#completion-events).
 
 ## What's next

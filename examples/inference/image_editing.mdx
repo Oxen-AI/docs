@@ -97,9 +97,9 @@ reachable without credentials, since the model downloads it.
 - **prompt**: Text description of the edit you want
 - **num_inference_steps**: Number of inference steps (optional, defaults vary by model)
 
-Every other parameter is the model's own. `GET /api/ai/models/:id` returns its schema, and the
-[queue reference](/inference-api/reference/async_queue) covers the queue itself: the
-event stream, cancellation, retries, and how long result URLs stay valid.
+Each model takes its own parameters beyond these, and `GET /api/ai/models/:id` returns them. The
+[queue reference](/inference-api/reference/async_queue) covers the event stream, cancellation,
+retries, and how long result URLs stay valid.
 
 ## Playground Interface
 

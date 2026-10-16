@@ -78,9 +78,9 @@ print(f"Generated video: {data['result_url']}")
 - **prompt**: Text description of the video you want
 - **duration**: Length in seconds (optional, defaults vary by model)
 
-Every other parameter is the model's own. `GET /api/ai/models/:id` returns its schema, and the
-[queue reference](/inference-api/reference/async_queue) covers the queue itself: the
-event stream, cancellation, retries, and how long result URLs stay valid.
+Each model takes its own parameters beyond these, and `GET /api/ai/models/:id` returns them. The
+[queue reference](/inference-api/reference/async_queue) covers the event stream, cancellation,
+retries, and how long result URLs stay valid.
 
-Waiting on a poll loop for several minutes is wasteful. Subscribe to `GET /api/events` before you
-enqueue and you get told the moment the file lands.
+Instead of polling for several minutes, you can subscribe to `GET /api/events` before you send the
+request and get an event as soon as the video is ready.
