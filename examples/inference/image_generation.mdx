@@ -17,9 +17,8 @@ GEN_ID=$(curl -s -X POST \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -d '{
-    "model": "qwen-image",
-    "prompt": "A majestic ox standing in a field at sunset",
-    "num_inference_steps": 28
+    "model": "gpt-image-2-5-sunburst",
+    "prompt": "A majestic ox standing in a field at sunset"
   }' | jq -r '.generations[0].generation_id')
 
 # Wait for it to finish, then print the result
@@ -48,9 +47,8 @@ enqueue = requests.post(
     "https://hub.oxen.ai/api/ai/queue",
     headers=HEADERS,
     json={
-        "model": "qwen-image",
+        "model": "gpt-image-2-5-sunburst",
         "prompt": "A majestic ox standing in a field at sunset",
-        "num_inference_steps": 28,
     },
 )
 enqueue.raise_for_status()
@@ -72,9 +70,8 @@ print(f"Generated image: {data['result_url']}")
 
 ## Parameters
 
-- **model**: Model name, for example `qwen-image`
+- **model**: Model name, for example `gpt-image-2-5-sunburst`
 - **prompt**: What to generate
-- **num_inference_steps**: Number of inference steps (optional, defaults vary by model)
 - **num_generations**: Number of images, 1 to 4 (optional, default 1)
 
 Models can take more parameters, listed in each model's

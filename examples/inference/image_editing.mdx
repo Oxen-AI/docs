@@ -5,8 +5,8 @@ description: 'How to edit an image, or make a new one from reference images, wit
 
 ### Image Editing
 
-Editing works like [image generation](/examples/inference/image_generation) with an image added to
-the request. Pass its URL in `input_image` along with your prompt.
+Editing works like [image generation](/examples/inference/image_generation) with images added to
+the request. Pass their URLs in `input_image` along with your prompt.
 
 Some models edit the image directly, while others generate images with optional image references. To
 see all image generation models that can take input images, visit the
@@ -21,10 +21,9 @@ GEN_ID=$(curl -s -X POST \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -d '{
-    "model": "qwen-image-edit",
-    "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
-    "prompt": "Add a funny hat to the ox",
-    "num_inference_steps": 28
+    "model": "gpt-image-2-5-sunburst",
+    "input_image": ["https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"],
+    "prompt": "Add a funny hat to the ox"
   }' | jq -r '.generations[0].generation_id')
 
 # Wait for it to finish, then print the result
@@ -53,10 +52,9 @@ enqueue = requests.post(
     "https://hub.oxen.ai/api/ai/queue",
     headers=HEADERS,
     json={
-        "model": "qwen-image-edit",
-        "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+        "model": "gpt-image-2-5-sunburst",
+        "input_image": ["https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"],
         "prompt": "Add a funny hat to the ox",
-        "num_inference_steps": 28,
     },
 )
 enqueue.raise_for_status()
@@ -76,11 +74,11 @@ print(f"Edited image: {data['result_url']}")
 
 </CodeGroup>
 
-Some models take several images. Pass an array:
+Pass more than one image to combine them:
 
 ```json
 {
-  "model": "qwen-image-edit-plus",
+  "model": "gpt-image-2-5-sunburst",
   "input_image": [
     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
     "https://hub.oxen.ai/api/repos/elau/assets/file/main/paintings/Wanderer_above_the_Sea_of_Fog_Caspar_David_Friedrich_399x512.jpeg"
@@ -93,10 +91,9 @@ Image URLs must be public, since the model downloads them.
 
 ## Parameters
 
-- **model**: Model name, for example `qwen-image-edit`
+- **model**: Model name, for example `gpt-image-2-5-sunburst`
 - **input_image**: Image URL, or an array of URLs
 - **prompt**: What to change or create
-- **num_inference_steps**: Number of inference steps (optional, defaults vary by model)
 
 Models can take more parameters, listed in each model's
 [API reference](/inference-api/reference/model-references). The
