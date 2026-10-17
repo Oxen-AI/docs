@@ -5,14 +5,13 @@ description: 'How to generate images with the Oxen.ai API.'
 
 ### Image Generation
 
-Generate an image from a text prompt. You send the prompt, get a generation ID back right away, and
-poll that ID until the image is ready. To see which models generate images, visit the
-[Models](https://www.oxen.ai/ai/models?modalities=text-to-image) page and filter by "Text to image".
+Generate an image from a text prompt. To find models, filter the
+[Models](https://www.oxen.ai/ai/models?modalities=text-to-image) page by "Text to image".
 
 <CodeGroup>
 
 ```bash cURL
-# Enqueue the job and capture the generation id.
+# Start the generation
 GEN_ID=$(curl -s -X POST \
   https://hub.oxen.ai/api/ai/queue \
   -H "Content-Type: application/json" \
@@ -23,7 +22,7 @@ GEN_ID=$(curl -s -X POST \
     "num_inference_steps": 28
   }' | jq -r '.generations[0].generation_id')
 
-# Poll until it finishes, then print the result.
+# Wait for it to finish, then print the result
 while true; do
   STATUS=$(curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
     "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.status')
@@ -73,11 +72,11 @@ print(f"Generated image: {data['result_url']}")
 
 ## Parameters
 
-- **model**: The model to generate with (for example `qwen-image`)
-- **prompt**: Text description of the image you want
+- **model**: Model name, for example `qwen-image`
+- **prompt**: What to generate
 - **num_inference_steps**: Number of inference steps (optional, defaults vary by model)
-- **num_generations**: How many images to make in one call, 1 to 4 (optional, defaults to 1)
+- **num_generations**: Number of images, 1 to 4 (optional, default 1)
 
-Each model takes its own parameters beyond these, and `GET /api/ai/models/:id` returns them. The
-[queue reference](/inference-api/reference/async_queue) covers the event stream, cancellation,
-retries, and how long result URLs stay valid.
+Models can take more parameters, listed in each model's
+[API reference](/inference-api/reference/model-references). The
+[queue reference](/inference-api/reference/async_queue) covers the rest of the queue API.

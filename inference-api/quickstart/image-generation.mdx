@@ -3,9 +3,8 @@ title: "Image Generation"
 description: "Generate images from text prompts in minutes"
 ---
 
-Generate images from text prompts, start from an image you already have, and make several at once. Each
-request gives you a generation ID right away, and you poll that ID until the image is ready, usually
-within 5 to 30 seconds.
+Generate images with the Oxen.ai API. Each request returns a generation ID right away, and you poll
+it until the image is ready, usually in under 30 seconds.
 
 ## Generate an image
 
@@ -52,7 +51,7 @@ print("Saved output.png")
 ```
 
 ```bash cURL
-# Enqueue and capture the generation id.
+# Start the generation
 GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
@@ -61,7 +60,7 @@ GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
     "prompt": "A red cube on a white background, minimal"
   }' | jq -r '.generations[0].generation_id')
 
-# Poll until it finishes.
+# Wait for it to finish
 while true; do
   STATUS=$(curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
     "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.status')
@@ -80,8 +79,8 @@ curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
 
 ## Start from an image
 
-Add `input_image` to the same request to start from an image. Editing models change the image you
-give them, while many generation models use it as a reference for a new one.
+Add `input_image` to start from an image. Editing models like `qwen-image-edit` change it, and many
+generation models use it as a reference.
 
 <CodeGroup>
 
@@ -118,13 +117,11 @@ curl -X POST https://hub.oxen.ai/api/ai/queue \
 
 </CodeGroup>
 
-The `input_image` URL has to be reachable without credentials, since the model downloads it. Some
-models take an array of URLs instead of one; the model's own reference says which.
+The URL must be public, since the model downloads it. Some models take an array of URLs.
 
 ## Generate several at once
 
-`num_generations` makes up to 4 images from the same request in one call, each with its own
-generation ID.
+Set `num_generations` to get up to 4 images from one request. Each has its own generation ID.
 
 ```bash
 curl -X POST https://hub.oxen.ai/api/ai/queue \
@@ -139,7 +136,6 @@ curl -X POST https://hub.oxen.ai/api/ai/queue \
 
 ## What's next
 
-- [queue reference](/inference-api/reference/async_queue) for every parameter, the event
-  stream, cancellation, and how long result URLs stay valid
-- [Model API references](/inference-api/reference/model-references) for what each model accepts
-- [Video Generation](/inference-api/quickstart/video-generation) for the same flow with video
+- [Queue reference](/inference-api/reference/async_queue)
+- [Model API references](/inference-api/reference/model-references)
+- [Video generation quickstart](/inference-api/quickstart/video-generation)

@@ -5,15 +5,13 @@ description: 'How to generate videos with the Oxen.ai API.'
 
 ### Video Generation
 
-Generate a video from a text prompt. You send the prompt, get a generation ID back right away, and
-poll that ID until the video is ready, which takes one to fifteen minutes depending on the model and
-duration. To see which models generate video, visit the
-[Models](https://www.oxen.ai/ai/models?modalities=text-to-video) page and filter by "Text to video".
+Generate a video from a text prompt. Videos can take several minutes. To find models, filter the
+[Models](https://www.oxen.ai/ai/models?modalities=text-to-video) page by "Text to video".
 
 <CodeGroup>
 
 ```bash cURL
-# Enqueue the job and capture the generation id.
+# Start the generation
 GEN_ID=$(curl -s -X POST \
   https://hub.oxen.ai/api/ai/queue \
   -H "Content-Type: application/json" \
@@ -24,7 +22,7 @@ GEN_ID=$(curl -s -X POST \
     "duration": 5
   }' | jq -r '.generations[0].generation_id')
 
-# Poll until it finishes, then print the result.
+# Wait for it to finish, then print the result
 while true; do
   STATUS=$(curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
     "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.status')
@@ -74,13 +72,13 @@ print(f"Generated video: {data['result_url']}")
 
 ## Parameters
 
-- **model**: The model to generate with (for example `kling-video-v2-6-pro-text-to-video`)
-- **prompt**: Text description of the video you want
+- **model**: Model name, for example `kling-video-v2-6-pro-text-to-video`
+- **prompt**: What to generate
 - **duration**: Length in seconds (optional, defaults vary by model)
 
-Each model takes its own parameters beyond these, and `GET /api/ai/models/:id` returns them. The
-[queue reference](/inference-api/reference/async_queue) covers the event stream, cancellation,
-retries, and how long result URLs stay valid.
+Models can take more parameters, listed in each model's
+[API reference](/inference-api/reference/model-references). The
+[queue reference](/inference-api/reference/async_queue) covers the rest of the queue API.
 
-Instead of polling for several minutes, you can subscribe to `GET /api/events` before you send the
-request and get an event as soon as the video is ready.
+To skip polling, listen for [completion events](/inference-api/reference/async_queue#completion-events)
+instead.

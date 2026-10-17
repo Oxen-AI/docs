@@ -3,9 +3,8 @@ title: "Video Generation"
 description: "Generate videos from text prompts, images, or other videos"
 ---
 
-Generate videos from text prompts, images, or other videos. Each request gives you a generation ID
-right away, and you poll that ID until the video is ready, which takes one to fifteen minutes
-depending on the model and the duration you ask for.
+Generate videos with the Oxen.ai API. Each request returns a generation ID right away, and you poll
+it until the video is ready. Videos can take several minutes.
 
 ## Generate a video
 
@@ -53,7 +52,7 @@ print("Saved output.mp4")
 ```
 
 ```bash cURL
-# Enqueue and capture the generation id.
+# Start the generation
 GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
@@ -63,7 +62,7 @@ GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
     "duration": 5
   }' | jq -r '.generations[0].generation_id')
 
-# Poll until it finishes.
+# Wait for it to finish
 while true; do
   STATUS=$(curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
     "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.status')
@@ -82,9 +81,8 @@ curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
 
 ## Start from an image or a video
 
-Image-to-video and reference-to-video models take `input_image`, and video-to-video models take
-`input_video`. Which one a model wants is part of its schema, and the model's own reference page
-shows a working request.
+Many video models also take an image (`input_image`) or a video (`input_video`), and some take audio.
+Each model's [API reference](/inference-api/reference/model-references) lists what it accepts.
 
 ```bash
 curl -X POST https://hub.oxen.ai/api/ai/queue \
@@ -100,14 +98,11 @@ curl -X POST https://hub.oxen.ai/api/ai/queue \
 
 ## Get notified when it's ready
 
-Instead of polling for several minutes, you can subscribe to `GET /api/events` before you send the
-request and get an event as soon as the video is ready. See
-[completion events](/inference-api/reference/async_queue#completion-events).
+Instead of polling, subscribe to `GET /api/events` before you start the generation. You'll get an
+event when the video is ready. See [completion events](/inference-api/reference/async_queue#completion-events).
 
 ## What's next
 
-- [queue reference](/inference-api/reference/async_queue) for every parameter,
-  cancellation, retries, and how long result URLs stay valid
-- [Model API references](/inference-api/reference/model-references) for what each model accepts
+- [Queue reference](/inference-api/reference/async_queue)
+- [Model API references](/inference-api/reference/model-references)
 - [Seedance 2.5: Draft Mode](/inference-api/reference/models/walkthroughs/seedance_2_5_draft_mode)
-  to preview at 480p before rendering the final at 1080p

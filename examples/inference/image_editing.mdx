@@ -5,21 +5,17 @@ description: 'How to edit an image, or make a new one from reference images, wit
 
 ### Image Editing
 
-Many image models take images along with your prompt. The request is the same as
-for [image generation](/examples/inference/image_generation), with `input_image` added. You get a
-generation ID back right away and poll that ID until the image is ready.
+Editing works like [image generation](/examples/inference/image_generation) with an image added to
+the request. Pass its URL in `input_image` along with your prompt.
 
-Some of these models are built for editing. They change the image you give them and keep the rest,
-and a few do a single job, like erasing an object, upscaling, or trying clothes on a person. Others
-are generation models that also accept reference images, carrying a character, a product, or a style
-from them into a new image. To see them all, visit the
-[Models](https://www.oxen.ai/ai/models?modalities=image-to-image) page and filter by "Image to
-image".
+Some models are made for editing, like `qwen-image-edit`. Others generate new images and can take
+reference images too, like Seedream and FLUX.2. To find them, filter the
+[Models](https://www.oxen.ai/ai/models?modalities=image-to-image) page by "Image to image".
 
 <CodeGroup>
 
 ```bash cURL
-# Enqueue the edit and capture the generation id.
+# Start the edit
 GEN_ID=$(curl -s -X POST \
   https://hub.oxen.ai/api/ai/queue \
   -H "Content-Type: application/json" \
@@ -31,7 +27,7 @@ GEN_ID=$(curl -s -X POST \
     "num_inference_steps": 28
   }' | jq -r '.generations[0].generation_id')
 
-# Poll until it finishes, then print the result.
+# Wait for it to finish, then print the result
 while true; do
   STATUS=$(curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
     "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.status')
@@ -80,7 +76,7 @@ print(f"Edited image: {data['result_url']}")
 
 </CodeGroup>
 
-Models that take several reference images accept an array in `input_image`:
+Some models take several images. Pass an array:
 
 ```json
 {
@@ -93,19 +89,18 @@ Models that take several reference images accept an array in `input_image`:
 }
 ```
 
-Whether a model wants one URL or an array is part of its schema, and either way the URL has to be
-reachable without credentials, since the model downloads it.
+Image URLs must be public, since the model downloads them.
 
 ## Parameters
 
-- **model**: The model to use (for example `qwen-image-edit`)
-- **input_image**: URL of the input image, or an array of URLs for models that take several
-- **prompt**: Text description of the change or the image you want
+- **model**: Model name, for example `qwen-image-edit`
+- **input_image**: Image URL, or an array of URLs
+- **prompt**: What to change or create
 - **num_inference_steps**: Number of inference steps (optional, defaults vary by model)
 
-Each model takes its own parameters beyond these, and `GET /api/ai/models/:id` returns them. The
-[queue reference](/inference-api/reference/async_queue) covers the event stream, cancellation,
-retries, and how long result URLs stay valid.
+Models can take more parameters, listed in each model's
+[API reference](/inference-api/reference/model-references). The
+[queue reference](/inference-api/reference/async_queue) covers the rest of the queue API.
 
 ## Playground Interface
 
