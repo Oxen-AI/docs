@@ -8,9 +8,10 @@ it until the image is ready, usually in under 30 seconds.
 
 ## Generate an image
 
-<CodeGroup>
+<Tabs>
+<Tab title="Python">
 
-```python Python
+```python
 import os
 import requests
 import time
@@ -50,8 +51,10 @@ with open("output.png", "wb") as f:
 print("Saved output.png")
 ```
 
-```bash cURL
-# Start the generation
+</Tab>
+<Tab title="cURL">
+
+```bash Start the generation
 GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
@@ -59,8 +62,9 @@ GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
     "model": "gpt-image-2-5-sunburst",
     "prompt": "A red cube on a white background, minimal"
   }' | jq -r '.generations[0].generation_id')
+```
 
-# Wait for it to finish
+```bash Wait for it to finish
 while true; do
   STATUS=$(curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
     "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.status')
@@ -68,14 +72,16 @@ while true; do
   case $STATUS in succeeded|failed|cancelled) break;; esac
   sleep 3
 done
+```
 
-# Download the result.
+```bash Download the result
 curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
   "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.result_url' \
   | xargs curl -o output.png
 ```
 
-</CodeGroup>
+</Tab>
+</Tabs>
 
 ## Start from an image
 

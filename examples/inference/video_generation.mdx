@@ -8,10 +8,10 @@ description: 'How to generate videos with the Oxen.ai API.'
 Generate a video from a text prompt. Videos can take several minutes. To find models, filter the
 [Models](https://www.oxen.ai/ai/models?modalities=text-to-video) page by "Text to video".
 
-<CodeGroup>
+<Tabs>
+<Tab title="cURL">
 
-```bash cURL
-# Start the generation
+```bash Start the generation
 GEN_ID=$(curl -s -X POST \
   https://hub.oxen.ai/api/ai/queue \
   -H "Content-Type: application/json" \
@@ -21,8 +21,9 @@ GEN_ID=$(curl -s -X POST \
     "prompt": "An ox walking in a field",
     "duration": 5
   }' | jq -r '.generations[0].generation_id')
+```
 
-# Wait for it to finish, then print the result
+```bash Wait for it to finish
 while true; do
   STATUS=$(curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
     "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.status')
@@ -34,7 +35,10 @@ curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
   "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.result_url'
 ```
 
-```python Python
+</Tab>
+<Tab title="Python">
+
+```python
 import os
 import requests
 import time
@@ -68,7 +72,8 @@ while True:
 print(f"Generated video: {data['result_url']}")
 ```
 
-</CodeGroup>
+</Tab>
+</Tabs>
 
 ## Parameters
 
