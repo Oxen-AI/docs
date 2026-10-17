@@ -3,155 +3,145 @@ title: "Image Generation"
 description: "Generate images from text prompts in minutes"
 ---
 
-## Overview
+Generate images with the Oxen.ai API. Each request returns a generation ID right away, and you poll
+it until the image is ready, usually in under 30 seconds.
 
-Generate images from text descriptions using models like FLUX and DALL-E.
+## Generate an image
 
-## Minimal Example (Synchronous)
+<Tabs>
+<Tab title="Python">
 
-<CodeGroup>
-
-```python Python
-import requests
-
-response = requests.post(
-    "https://hub.oxen.ai/api/ai/images/generate",
-    headers={
-        "Authorization": "Bearer YOUR_API_KEY",
-        "Content-Type": "application/json",
-    },
-    json={
-        "model": "black-forest-labs-flux-2-klein-4b",
-        "prompt": "A red cube on a white background, minimal",
-    },
-)
-
-data = response.json()
-print("Image URL:", data["images"][0]["url"])
-```
-
-```bash cURL
-curl -X POST https://hub.oxen.ai/api/ai/images/generate \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "black-forest-labs-flux-2-klein-4b",
-    "prompt": "A red cube on a white background, minimal"
-  }'
-```
-
-</CodeGroup>
-
-## With Base64 Response
-
-Set `response_format` to `"b64_json"` to get the image bytes directly instead of a URL:
-
-<CodeGroup>
-
-```python Python
-import requests
-import base64
-
-response = requests.post(
-    "https://hub.oxen.ai/api/ai/images/generate",
-    headers={
-        "Authorization": "Bearer YOUR_API_KEY",
-        "Content-Type": "application/json",
-    },
-    json={
-        "model": "black-forest-labs-flux-2-klein-4b",
-        "prompt": "A blue sphere on grey background",
-        "response_format": "b64_json",
-    },
-)
-
-data = response.json()
-image_bytes = base64.b64decode(data["images"][0]["b64_json"])
-
-with open("output.png", "wb") as f:
-    f.write(image_bytes)
-
-print("Saved to output.png")
-```
-
-```bash cURL
-curl -X POST https://hub.oxen.ai/api/ai/images/generate \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "black-forest-labs-flux-2-klein-4b",
-    "prompt": "A blue sphere on grey background",
-    "response_format": "b64_json"
-  }'
-```
-
-</CodeGroup>
-
-## Async Generation (Recommended)
-
-For longer-running image generation jobs, using the async queue avoids long-lived HTTP connections:
-
-<CodeGroup>
-
-```python Python
+```python
+import os
 import requests
 import time
 
-API_KEY = "YOUR_API_KEY"
-MODEL = "black-forest-labs-flux-2-klein-4b"
 HEADERS = {
-    "Authorization": f"Bearer {API_KEY}",
+    "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
     "Content-Type": "application/json",
 }
 
-# 1. Enqueue
-response = requests.post(
+enqueue = requests.post(
     "https://hub.oxen.ai/api/ai/queue",
     headers=HEADERS,
     json={
-        "model": MODEL,
-        "prompt": "A watercolor painting of a mountain landscape",
+        "model": "gpt-image-2-5-sunburst",
+        "prompt": "A red cube on a white background, minimal",
     },
 )
-generation_id = response.json()["generations"][0]["generation_id"]
-print(f"Enqueued generation: {generation_id}")
+enqueue.raise_for_status()
+generation_id = enqueue.json()["generations"][0]["generation_id"]
+print(f"Enqueued {generation_id}")
 
-# 2. Poll until done
 while True:
     data = requests.get(
         f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
         headers=HEADERS,
     ).json()
-    print(f"Status: {data['status']}")
+    print(f"  {data['status']}")
     if data["status"] in {"succeeded", "failed", "cancelled"}:
         break
-    time.sleep(10)
+    time.sleep(3)
 
-if data["status"] == "succeeded":
-    print(f"Done! Result: {data['result_url']}")
-else:
-    print(f"Generation {data['status']}: {data.get('error_message')}")
+if data["status"] != "succeeded":
+    raise SystemExit(f"{data['status']}: {data['error_message']}")
+
+with open("output.png", "wb") as f:
+    f.write(requests.get(data["result_url"]).content)
+print("Saved output.png")
+```
+
+</Tab>
+<Tab title="cURL">
+
+```bash Start the generation
+GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-image-2-5-sunburst",
+    "prompt": "A red cube on a white background, minimal"
+  }' | jq -r '.generations[0].generation_id')
+```
+
+```bash Wait for it to finish
+while true; do
+  STATUS=$(curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+    "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.status')
+  echo "$STATUS"
+  case $STATUS in succeeded|failed|cancelled) break;; esac
+  sleep 3
+done
+```
+
+```bash Download the result
+curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+  "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.result_url' \
+  | xargs curl -o output.png
+```
+
+</Tab>
+</Tabs>
+
+## Start from an image
+
+Add `input_image` to start from an image. Editing models like `qwen-image-edit` change it, and many
+generation models use it as a reference.
+
+<CodeGroup>
+
+```python Python
+import os
+import requests
+
+response = requests.post(
+    "https://hub.oxen.ai/api/ai/queue",
+    headers={
+        "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        "Content-Type": "application/json",
+    },
+    json={
+        "model": "gpt-image-2-5-sunburst",
+        "prompt": "Make the background blue",
+        "input_image": ["https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"],
+    },
+)
+
+print(response.json())
 ```
 
 ```bash cURL
-# 1. Enqueue
 curl -X POST https://hub.oxen.ai/api/ai/queue \
-  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "black-forest-labs-flux-2-klein-4b",
-    "prompt": "A watercolor painting of a mountain landscape"
+    "model": "gpt-image-2-5-sunburst",
+    "prompt": "Make the background blue",
+    "input_image": ["https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"]
   }'
-
-# 2. Poll until done (replace GENERATION_ID with the id from the enqueue response)
-curl -H "Authorization: Bearer YOUR_API_KEY" \
-  "https://hub.oxen.ai/api/ai/queue/GENERATION_ID"
 ```
 
 </CodeGroup>
 
-## What's Next
+The URLs must be public, since the model downloads them.
 
-- [Image Generation Reference](/inference-api/reference/image_generation) for the full parameter list
-- [Image Editing Reference](/inference-api/reference/image_editing) to edit existing images
-- [Async Queue](/inference-api/reference/async_queue) to generate multiple images in parallel
+## Generate several at once
+
+Set `num_generations` to get up to 4 images from one request. Each has its own generation ID.
+
+```bash
+curl -X POST https://hub.oxen.ai/api/ai/queue \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gpt-image-2-5-sunburst",
+    "prompt": "Abstract geometric pattern in blue and gold",
+    "num_generations": 4
+  }'
+```
+
+## What's next
+
+- [Queue reference](/inference-api/reference/async_queue)
+- [Model API references](/inference-api/reference/model-references)
+- [Video generation quickstart](/inference-api/quickstart/video-generation)

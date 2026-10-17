@@ -1,105 +1,108 @@
 ---
 title: '🎨 Image Editing'
-description: 'How to use the image editing API on Oxen.ai.'
+description: 'How to edit an image, or make a new one from reference images, with the Oxen.ai API.'
 ---
 
 ### Image Editing
 
-The image editing endpoint allows you to edit images using AI models. Simply provide an input image URL and a prompt describing the edits you want to make. To see the list of models that support image editing, visit the [Models](https://www.oxen.ai/ai/models?modalities=image-to-image) page and filter by "Image to Image".
+Editing works like [image generation](/examples/inference/image_generation) with images added to
+the request. Pass their URLs in `input_image` along with your prompt.
 
-<CodeGroup>
+Some models edit the image directly, while others generate images with optional image references. To
+see all image generation models that can take input images, visit the
+[Models](https://www.oxen.ai/ai/models?modalities=image-to-image) page and filter by "Image to image".
 
-```bash cURL
-curl -X POST \
-  https://hub.oxen.ai/api/ai/images/edit \
+<Tabs>
+<Tab title="cURL">
+
+```bash Start the edit
+GEN_ID=$(curl -s -X POST \
+  https://hub.oxen.ai/api/ai/queue \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -d '{
-    "model": "Qwen/Qwen-Image-Edit",
-    "input_image": "https://example.com/image.png",
-    "prompt": "Add a funny hat to the ox",
-    "num_inference_steps": 28
-  }'
+    "model": "gpt-image-2-5-sunburst",
+    "input_image": ["https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"],
+    "prompt": "Add a funny hat to the ox"
+  }' | jq -r '.generations[0].generation_id')
 ```
 
-```python Python
-import requests
+```bash Wait for it to finish
+while true; do
+  STATUS=$(curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+    "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.status')
+  case $STATUS in succeeded|failed|cancelled) break;; esac
+  sleep 3
+done
+
+curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
+  "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.result_url'
+```
+
+</Tab>
+<Tab title="Python">
+
+```python
 import os
-
-response = requests.post(
-    "https://hub.oxen.ai/api/ai/images/edit",
-    headers={
-        "Authorization": f"Bearer {os.getenv('OXEN_API_KEY')}",
-        "Content-Type": "application/json"
-    },
-    json={
-        "model": "Qwen/Qwen-Image-Edit",
-        "input_image": "https://example.com/image.png",
-        "prompt": "Add a funny hat to the ox",
-        "num_inference_steps": 28
-    }
-)
-
-# The response contains the edited image URL
-edited_image_url = response.json()["image_url"]
-print(f"Edited image: {edited_image_url}")
-```
-
-</CodeGroup>
-
-For models that support multiple input images, you can pass an array of image URLs:
-
-<CodeGroup>
-
-```bash cURL (multiple images)
-curl -X POST \
-  https://hub.oxen.ai/api/ai/images/edit \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer $OXEN_API_KEY" \
-  -d '{
-    "model": "Qwen/Qwen-Image-Edit",
-    "input_image": [
-      "https://example.com/image1.png",
-      "https://example.com/image2.png"
-    ],
-    "prompt": "Add a funny hat to the ox",
-    "num_inference_steps": 28
-  }'
-```
-
-```python Python (multiple images)
 import requests
-import os
+import time
 
-response = requests.post(
-    "https://hub.oxen.ai/api/ai/images/edit",
-    headers={
-        "Authorization": f"Bearer {os.getenv('OXEN_API_KEY')}",
-        "Content-Type": "application/json"
-    },
+HEADERS = {
+    "Authorization": f"Bearer {os.getenv('OXEN_API_KEY')}",
+    "Content-Type": "application/json",
+}
+
+enqueue = requests.post(
+    "https://hub.oxen.ai/api/ai/queue",
+    headers=HEADERS,
     json={
-        "model": "Qwen/Qwen-Image-Edit",
-        "input_image": [
-            "https://example.com/image1.png",
-            "https://example.com/image2.png"
-        ],
+        "model": "gpt-image-2-5-sunburst",
+        "input_image": ["https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"],
         "prompt": "Add a funny hat to the ox",
-        "num_inference_steps": 28
-    }
+    },
 )
+enqueue.raise_for_status()
+generation_id = enqueue.json()["generations"][0]["generation_id"]
 
-edited_image_url = response.json()["image_url"]
-print(f"Edited image: {edited_image_url}")
+while True:
+    data = requests.get(
+        f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
+        headers=HEADERS,
+    ).json()
+    if data["status"] in {"succeeded", "failed", "cancelled"}:
+        break
+    time.sleep(3)
+
+print(f"Edited image: {data['result_url']}")
 ```
 
-</CodeGroup>
+</Tab>
+</Tabs>
+
+Pass more than one image to combine them:
+
+```json
+{
+  "model": "gpt-image-2-5-sunburst",
+  "input_image": [
+    "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+    "https://hub.oxen.ai/api/repos/elau/assets/file/main/paintings/Wanderer_above_the_Sea_of_Fog_Caspar_David_Friedrich_399x512.jpeg"
+  ],
+  "prompt": "Put the character from the first image into the scene from the second"
+}
+```
+
+Image URLs must be public, since the model downloads them.
 
 ## Parameters
 
-- **model**: The model identifier to use for image editing (e.g., `Qwen/Qwen-Image-Edit`)
-- **input_image**: URL of the input image(s) you want to edit. Can be a string (single image URL) or an array of strings (multiple image URLs) for models that support multiple images as input
-- **prompt**: Text description of the edits you want to make
-- **num_inference_steps**: Number of inference steps (optional, defaults vary by model)
+- **model**: Model name, for example `gpt-image-2-5-sunburst`
+- **input_image**: Image URL, or an array of URLs
+- **prompt**: What to change or create
+
+Models can take more parameters, listed in each model's
+[API reference](/inference-api/reference/model-references). The
+[queue reference](/inference-api/reference/async_queue) covers the rest of the queue API.
 
 ## Playground Interface
 
