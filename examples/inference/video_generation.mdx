@@ -17,7 +17,7 @@ GEN_ID=$(curl -s -X POST \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -d '{
-    "model": "kling-video-v2-6-pro-text-to-video",
+    "model": "bytedance-seedance-2-5-text-to-video",
     "prompt": "An ox walking in a field",
     "duration": 5
   }' | jq -r '.generations[0].generation_id')
@@ -52,7 +52,7 @@ enqueue = requests.post(
     "https://hub.oxen.ai/api/ai/queue",
     headers=HEADERS,
     json={
-        "model": "kling-video-v2-6-pro-text-to-video",
+        "model": "bytedance-seedance-2-5-text-to-video",
         "prompt": "An ox walking in a field",
         "duration": 5,
     },
@@ -77,7 +77,7 @@ print(f"Generated video: {data['result_url']}")
 
 ## Parameters
 
-- **model**: Model name, for example `kling-video-v2-6-pro-text-to-video`
+- **model**: Model name, for example `bytedance-seedance-2-5-text-to-video`
 - **prompt**: What to generate
 - **duration**: Length in seconds (optional, defaults vary by model)
 

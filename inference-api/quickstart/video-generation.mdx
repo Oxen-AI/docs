@@ -25,7 +25,7 @@ enqueue = requests.post(
     "https://hub.oxen.ai/api/ai/queue",
     headers=HEADERS,
     json={
-        "model": "kling-video-v2-6-pro-text-to-video",
+        "model": "bytedance-seedance-2-5-text-to-video",
         "prompt": "A red balloon floating upward through blue sky",
         "duration": 5,
     },
@@ -60,7 +60,7 @@ GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "kling-video-v2-6-pro-text-to-video",
+    "model": "bytedance-seedance-2-5-text-to-video",
     "prompt": "A red balloon floating upward through blue sky",
     "duration": 5
   }' | jq -r '.generations[0].generation_id')
@@ -85,19 +85,20 @@ curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
 </Tab>
 </Tabs>
 
-## Start from an image or a video
+## Add images, video or audio
 
-Many video models also take an image (`input_image`) or a video (`input_video`), and some take audio.
-Each model's [API reference](/inference-api/reference/model-references) lists what it accepts.
+Many video models take more than a prompt. Seedance 2.5 Reference to Video takes lists of images
+(`input_images`), videos (`input_videos`) and audio clips (`input_audios`). Each model's
+[API reference](/inference-api/reference/model-references) lists the inputs it accepts.
 
 ```bash
 curl -X POST https://hub.oxen.ai/api/ai/queue \
   -H "Authorization: Bearer $OXEN_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "kling-video-v2-6-pro-image-to-video",
-    "prompt": "The camera pushes in slowly as the light shifts to dusk",
-    "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+    "model": "bytedance-seedance-2-5-reference-to-video",
+    "prompt": "The ox from the image walks through a misty forest",
+    "input_images": ["https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"],
     "duration": 5
   }'
 ```
