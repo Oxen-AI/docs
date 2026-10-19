@@ -1,6 +1,6 @@
 ---
 title: "Chat Completions"
-description: "Generate text responses from language models with support for streaming, vision, audio, documents, and tool calling"
+description: "Generate text responses from language models with support for streaming, vision, audio, documents, tool calling, and prompt caching"
 ---
 
 ## Endpoint
@@ -9,7 +9,7 @@ description: "Generate text responses from language models with support for stre
 POST /api/ai/chat/completions
 ```
 
-Compatible with the OpenAI chat completions format. Supports streaming, multimodal input (images, video, audio, and documents), tool calling, and structured output.
+Compatible with the OpenAI chat completions format. Supports streaming, multimodal input (images, video, audio, and documents), tool calling, structured output, and [prompt caching](#prompt-caching).
 
 ## Request Parameters
 
@@ -159,6 +159,95 @@ A 400 response for an unsupported type looks like:
 }
 ```
 
+## Prompt caching
+
+When several requests start with the same prompt prefix, Oxen can serve
+that prefix from its prompt cache instead of processing it again. Cache hits
+make long prompts faster. You don't need extra parameters: send the same
+OpenAI-format request and caching happens upstream.
+
+| Provider | How caching works |
+|---|---|
+| OpenAI (`gpt-*`) and other OpenAI-compatible providers | Automatic for prompts of 1,024 tokens or more. |
+| Anthropic (`claude-*`) | Oxen marks a cache breakpoint at the end of the stable prefix: after the system message, or after the last tool definition if there is no system message. A prefix shorter than the model's minimum cacheable length isn't cached. |
+| Google (`gemini-*`) | Gemini's implicit caching, applied on a best-effort basis. A repeated prefix isn't guaranteed to hit, and some Gemini models rarely report cache hits. |
+| DeepSeek, Mistral, Moonshot (`kimi-*`), Qwen (`qwen3-*-max`) | Automatic on the provider's side. |
+| Other models | Depends on the provider. Some don't cache prompts at all. Check `cached_tokens` in the response to see whether a model is serving your prefix from cache. |
+
+To get cache hits:
+
+- **Put stable content first.** The system prompt, tool definitions, and any
+  large documents or few-shot examples belong at the start of the request.
+  Content that changes per request, such as the user's question, goes last.
+- **Keep the prefix byte-identical.** Any change to the prefix, even a
+  timestamp in the system prompt or reordered tools, invalidates the cache from
+  that point on.
+- **Use a plain string system message for Claude.** The cache breakpoint is
+  added to the first system message when its `content` is a string.
+- **Send requests close together.** Cache entries expire after a few minutes
+  of inactivity, depending on the provider.
+
+### Reading cache usage
+
+When the provider reports cache activity, `usage` includes
+`prompt_tokens_details.cached_tokens`: the number of prompt tokens served from
+the cache. Cached tokens are already counted in `prompt_tokens`, so don't add
+them on top. Streaming responses report the same field in the final usage
+chunk.
+
+```json
+"usage": {
+  "prompt_tokens": 9526,
+  "completion_tokens": 20,
+  "total_tokens": 9546,
+  "prompt_tokens_details": {"cached_tokens": 9514},
+  "cost": "0.031765800",
+  "currency": "USD"
+}
+```
+
+`cost` is the amount charged for the request, in `currency`.
+
+If a response has no `prompt_tokens_details`, the provider didn't report any
+cache activity for that request.
+
+### Example
+
+Send two requests that share a long system prompt and compare cache usage:
+
+```python Python
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://hub.oxen.ai/api/ai",
+    api_key="YOUR_API_KEY",
+)
+
+# A long, unchanging prefix: instructions, reference docs, examples, etc.
+system_prompt = open("support_policy.md").read()
+
+for question in ["How do I reset my password?", "Can I change my billing date?"]:
+    response = client.chat.completions.create(
+        model="claude-sonnet-4-6",
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": question},
+        ],
+    )
+    details = response.usage.prompt_tokens_details
+    cached = details.cached_tokens if details else 0
+    print(f"prompt_tokens={response.usage.prompt_tokens} cached_tokens={cached}")
+```
+
+Output:
+
+```
+prompt_tokens=9521 cached_tokens=0
+prompt_tokens=9526 cached_tokens=9514
+```
+
+The first request writes the prefix to the cache. The second reads it back.
+
 ## Examples
 
 ### Basic text generation
@@ -218,10 +307,15 @@ curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
   "usage": {
     "prompt_tokens": 15,
     "completion_tokens": 5,
-    "total_tokens": 20
+    "total_tokens": 20,
+    "cost": "0.000120000",
+    "currency": "USD"
   }
 }
 ```
+
+`usage` may also include `prompt_tokens_details.cached_tokens`. See
+[Prompt caching](#prompt-caching).
 
 ### Analyze a PDF
 
