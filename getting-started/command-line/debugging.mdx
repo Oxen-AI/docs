@@ -111,11 +111,13 @@ export OXEN_TIMEOUT_SECS="100"
 
 ## Chunk Size
 
-Under the hood, oxen groups files into small files and large files for more efficient transfer in `oxen push`, `oxen workspace add`, etc. Files are considered large if they're larger than `AVG_CHUNK_SIZE`, which is set to 10 MB by default. This can be configured via the `AVG_CHUNK_SIZE` environment variable
+Under the hood, `oxen push` and `oxen workspace add` send small files in batches, and upload each large file on its own in parts. A file is large when it's bigger than `OXEN_STREAM_SEGMENT_SIZE`, which is 10 MiB (10485760 bytes) by default. This can be configured via the `OXEN_STREAM_SEGMENT_SIZE` environment variable, in bytes:
 
 ```bash
-export AVG_CHUNK_SIZE="20_000_000" 
+export OXEN_STREAM_SEGMENT_SIZE="20971520"
 ```
+
+A single file may be at most 1 TiB, a provisional limit that will be raised when users need larger files. A push or workspace add of a larger file fails.
 
 ## Debug Logs
 
