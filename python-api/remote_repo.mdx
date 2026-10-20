@@ -493,6 +493,13 @@ Get the commit history for a remote repo
 - `page_size` - `int`
   The number of items to return per page. Defaults to 10
 
+
+**Returns**:
+
+  One page of commits, newest first. `has_more` says whether a later page exists.
+  `pagination` carries the totals for a revision's history, and is `None` for a path's
+  history, which is not counted.
+
 <a id="oxen.remote_repo.RemoteRepo.branch_exists"></a>
 
 ## branch\_exists
@@ -731,4 +738,3 @@ def storage_backend() -> str
 
 Where the server keeps this repo's version files, "local" or "s3".
 Raises if the repo does not exist yet.
-
