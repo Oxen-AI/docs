@@ -48,6 +48,7 @@ Submit an async image or video generation job.
 | `target_namespace` | string | your username | Namespace to store results and bill to. |
 | `target_repo` | string | `playground` | Repository the output file is written to. Created on first use. |
 | `target_directory` | string | repository root | Directory inside that repository. |
+| `workbench_session_id` | string (UUID) | none | Session to file the generation under. See [Sessions](#sessions). |
 
 All other parameters (e.g. `prompt`, `multi_prompt`, `input_image`, `input_video`, `aspect_ratio`, `duration`, `seed`, `generate_audio`) are passed through to the model. Consult the model's `request_schema` via `GET /api/ai/models/:id` for supported parameters and their constraints.
 
@@ -442,6 +443,155 @@ data: {"generation_id":"bb8f5eb7-...","status":"cancelled","media_type":"video",
 ```
 
 A cancelled event carries only the identifying fields, so branch on `status` when you handle one.
+
+---
+
+## Sessions
+
+A session groups related generations, such as one task, one agent run, or one storyboard. Each session appears as a tab in the workbench. Sessions belong to you and to one repository, which is the `target_repo` your generations write to (`playground` by default). Another user can't add to your sessions or read them.
+
+<img
+  src="/images/workbench-session-tabs.png"
+  alt="Workbench session tabs named Locations, Cars, and People"
+  style={{ borderRadius: "12px", border: "1px solid #e5e7eb", maxWidth: "480px" }}
+/>
+
+### Default session
+
+**A generation sent without `workbench_session_id` goes into your default session.** Your default session is the first one you create on a repository, so if you never pass a session ID, all of your generations land in that first session.
+
+To be precise, a generation with no session ID isn't tagged with any session. Reads filtered to your default session also return your untagged generations, which is why they appear there. This has two consequences:
+
+- Untagged generations appear in whichever session is your default when you read them, including generations you made before you created any session.
+- If you delete your default session, the next session you create becomes the default and the untagged generations move to it.
+
+To keep an agent's work separate from everything else, create a session for it and pass that session's ID on every request.
+
+### Session lifecycle
+
+All session endpoints are scoped to a repository:
+
+```
+/api/repos/:namespace/:repo_name/workbench/sessions
+```
+
+| Method | Path | Description |
+|---|---|---|
+| `POST` | `/sessions` | Create a session. Returns 201 with the new session. |
+| `GET` | `/sessions` | List your sessions on the repository, oldest first. |
+| `GET` | `/sessions/:id` | Get one session. |
+| `PATCH` | `/sessions/:id` | Replace the session's `payload`. |
+| `DELETE` | `/sessions/:id` | Delete the session. Its generations and output files are kept. |
+
+The optional JSON `payload` on create and update is yours to use. A session has no name field, so store a label or any other metadata in `payload` (up to 1 MB). A `PATCH` replaces the whole payload rather than merging into it.
+
+A session object looks like this:
+
+```json
+{
+  "id": "3f2b8c1e-5d6a-4e7f-9a0b-1c2d3e4f5a6b",
+  "payload": {"name": "Product shots"},
+  "repository_id": "...",
+  "user_id": "...",
+  "default": false,
+  "last_activity_at": "2026-10-19T17:02:11Z",
+  "inserted_at": "2026-10-19T16:58:40Z",
+  "updated_at": "2026-10-19T17:02:11Z"
+}
+```
+
+`default` is `true` on the session that untagged generations appear in. Create returns it under `workbench_session`, and list returns an array under `workbench_sessions`.
+
+### Example: group an agent's work into a session
+
+Create a session, pass its ID when you enqueue, read the session's generations back, and delete the session when the task is done.
+
+<CodeGroup>
+
+```python Python
+import requests
+
+API_KEY = "YOUR_API_KEY"
+NAMESPACE = "YOUR_USERNAME"
+REPO = "playground"  # the target_repo your generations write to
+HEADERS = {
+    "Authorization": f"Bearer {API_KEY}",
+    "Content-Type": "application/json",
+}
+SESSIONS_URL = f"https://hub.oxen.ai/api/repos/{NAMESPACE}/{REPO}/workbench/sessions"
+
+# 1. Start a session for this task
+session = requests.post(
+    SESSIONS_URL,
+    headers=HEADERS,
+    json={"payload": {"name": "Product shots"}},
+).json()["workbench_session"]
+session_id = session["id"]
+
+# 2. Tag every generation in the task with the session ID
+for prompt in ["A red sneaker on white", "A blue sneaker on white"]:
+    requests.post(
+        "https://hub.oxen.ai/api/ai/queue",
+        headers=HEADERS,
+        json={
+            "model": "black-forest-labs-flux-2-klein-4b",
+            "prompt": prompt,
+            "target_repo": REPO,
+            "workbench_session_id": session_id,
+        },
+    ).raise_for_status()
+
+# 3. Read back everything in the session, including generations still in the queue
+history = requests.get(
+    f"https://hub.oxen.ai/api/repos/{NAMESPACE}/{REPO}/workbench/history",
+    headers=HEADERS,
+    params={"filter[workbench_session_id]": session_id},
+).json()
+for row in history["data_frame"]["view"]["data"]:
+    print(row["uuid"], row["status"], row["prompt"])
+
+# 4. Find a session again later
+for s in requests.get(SESSIONS_URL, headers=HEADERS).json()["workbench_sessions"]:
+    print(s["id"], s["default"], s["payload"].get("name"))
+
+# 5. Delete the session when you're done. The generations are kept.
+requests.delete(f"{SESSIONS_URL}/{session_id}", headers=HEADERS)
+```
+
+```bash cURL
+# Create a session
+curl -X POST "https://hub.oxen.ai/api/repos/$NAMESPACE/playground/workbench/sessions" \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"payload": {"name": "Product shots"}}'
+
+# Enqueue into it
+curl -X POST https://hub.oxen.ai/api/ai/queue \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "black-forest-labs-flux-2-klein-4b",
+    "prompt": "A red sneaker on white",
+    "workbench_session_id": "'"$SESSION_ID"'"
+  }'
+
+# List the session's generations
+curl -G -H "Authorization: Bearer $OXEN_API_KEY" \
+  "https://hub.oxen.ai/api/repos/$NAMESPACE/playground/workbench/history" \
+  --data-urlencode "filter[workbench_session_id]=$SESSION_ID"
+
+# Delete the session
+curl -X DELETE -H "Authorization: Bearer $OXEN_API_KEY" \
+  "https://hub.oxen.ai/api/repos/$NAMESPACE/playground/workbench/sessions/$SESSION_ID"
+```
+
+</CodeGroup>
+
+### Rules
+
+- **The session must be on the target repository.** Create the session on the same `target_namespace`/`target_repo` you enqueue into. If `workbench_session_id` names a session that doesn't exist, has been deleted, is on a different repository, or belongs to someone else, `POST /ai/queue` returns 422 with code `workbench_session_invalid`.
+- **Filter history by session to see a session's generations.** `GET /ai/queue` has no session filter. Use `filter[workbench_session_id]` on the repository's `workbench/history` endpoint. [Get Generation](#get-generation) does return `workbench_session_id` for a tagged generation, along with the other request parameters.
+- **Deleting a session keeps its generations.** The generations and output files stay in the repository and still carry the session ID. They no longer appear under any tab.
 
 ---
 
