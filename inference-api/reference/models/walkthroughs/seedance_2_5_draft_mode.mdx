@@ -1,22 +1,22 @@
 ---
 title: "Seedance 2.5: Draft Mode"
-description: "Preview a Seedance 2.5 video at 480p, then render the exact same shot at 1080p with one more request."
+description: "Preview a Seedance 2.5 video at 480p, then render the exact same shot at 1080p or 4k with one more request."
 ---
 
-Draft mode lets you preview a Seedance 2.5 video at 480p, then finalize the exact same shot at 1080p with one more request. The final reuses the draft's prompt, media, and settings, so what you approved is what you get. It is a good way to save money while you are iterating on your motion, dialogue, and shot details before committing to a 1080p generation.
+Draft mode lets you preview a Seedance 2.5 video at 480p, then finalize the exact same shot at 1080p or 4k with one more request. The final reuses the draft's prompt, media, and settings, so what you approved is what you get. It is a good way to save money while you are iterating on your motion, dialogue, and shot details before committing to a full-resolution generation.
 
 The flow has two calls:
 
 1. **Draft.** Send your normal request with `draft: true`. You get a 480p video and a `draft_task_id`.
-2. **Final.** Send the `draft_task_id` back with the same `model`. You get the 1080p video. No prompt needed.
+2. **Final.** Send the `draft_task_id` back with the same `model`. You get the 1080p video, or the 4k video if you also send `"resolution": "4k"`. No prompt needed.
 
 |  | Draft | Final |
 | --- | --- | --- |
-| Request adds | `draft: true` | `draft_task_id` |
-| Resolution | 480p (pinned) | 1080p (pinned) |
+| Request adds | `draft: true` | `draft_task_id`, and optionally `resolution: "4k"` |
+| Resolution | 480p (pinned) | 1080p (default) or 4k |
 | Prompt | Required | Not sent; reused from the draft |
 | Duration, aspect ratio, audio, seed | Set by you | Inherited from the draft |
-| Billed as | A normal 480p video | A normal 1080p video |
+| Billed as | A normal 480p video | A normal 1080p or 4k video |
 | Returns `draft_task_id` | Yes, valid for 7 days | No |
 
 **Supported models:** every Seedance 2.5 model.
@@ -25,11 +25,11 @@ The flow has two calls:
 - [`bytedance-seedance-2-5-image-to-video`](/inference-api/reference/models/bytedance-seedance-2-5-image-to-video)
 - [`bytedance-seedance-2-5-reference-to-video`](/inference-api/reference/models/bytedance-seedance-2-5-reference-to-video)
 
-The examples on this page use text-to-video. For image-to-video or reference-to-video, swap in that model ID and add its image, video, or audio inputs to the draft request as you normally would. The final still sends only `model` and `draft_task_id`; the media is reused from the draft.
+The examples on this page use text-to-video. For image-to-video or reference-to-video, swap in that model ID and add its image, video, or audio inputs to the draft request as you normally would. The final still sends only `model` and `draft_task_id` (plus `resolution` for 4k); the media is reused from the draft.
 
 **Base URL:** `https://hub.oxen.ai/api`. Authenticate every request with `Authorization: Bearer $OXEN_API_KEY`.
 
-Draft mode works on both the queue ([`POST /ai/queue`](/inference-api/reference/async_queue)) and the sync endpoint ([`POST /ai/videos/generate`](/inference-api/reference/video_generation)). It is also available in the Oxen.ai UI: render a draft, then click to render the final.
+Draft mode works on both the queue ([`POST /ai/queue`](/inference-api/reference/async_queue)) and the sync endpoint ([`POST /ai/videos/generate`](/inference-api/reference/video_generation)). It is also available in the Oxen.ai UI: render a draft, then click to render the final and pick 1080p or 4k.
 
 <Note>
   We recommend the async queue workflow. Seedance generations may take a long time, and your HTTP connection may time out in sync mode.
@@ -106,6 +106,8 @@ Response:
 ```json
 { "generations": [{ "generation_id": "f2a9c1d4-6b3e-4c7a-9e21-5d8b0a7c3e10", "status": "queued" }] }
 ```
+
+The final renders at 1080p. To render it at 4k instead, add `"resolution": "4k"`; see [Render the final in 4k](#render-the-final-in-4k).
 
 ### 4. Poll the final
 
@@ -229,7 +231,7 @@ print("Final URL:", response.json()["videos"][0]["url"])
 
 </CodeGroup>
 
-The final is 1080p at the draft's duration and audio setting. Its item carries only a `url`:
+The final is 1080p (or 4k, if you sent `"resolution": "4k"`) at the draft's duration and audio setting. Its item carries only a `url`:
 
 ```json
 {
@@ -243,6 +245,27 @@ The final is 1080p at the draft's duration and audio setting. Its item carries o
 }
 ```
 
+## Render the final in 4k
+
+A final renders at 1080p unless you ask for 4k. Add `"resolution": "4k"` to the final request; everything else stays the same. The draft itself is still a 480p preview, so you can check the shot cheaply and only pay for 4k once you like it.
+
+```bash
+curl -X POST https://hub.oxen.ai/api/ai/queue \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "bytedance-seedance-2-5-text-to-video",
+    "draft_task_id": "cgt-20260926114114-r4bb8",
+    "resolution": "4k"
+  }'
+```
+
+The 4k final (3840×2160 at 16:9) keeps the draft's aspect ratio, duration, audio setting, and seed, so it is the same shot at four times the pixels of 1080p. Like 1080p, it uses 10-bit color and H.265/HEVC encoding.
+
+- **Only `1080p` and `4k` are valid for a final.** Any other `resolution` (such as `720p`), or none at all, renders the final at 1080p.
+- **The same draft can render both.** A draft ID stays valid for 7 days, so you can render a 1080p final first and a 4k final later, or the reverse.
+- **It costs more.** A 4k final is billed as a normal 4k render of the draft's length. See the model's page for its per-second price at each resolution.
+
 ## Reference
 
 ### Request parameters
@@ -255,7 +278,7 @@ Both endpoints accept these fields in the JSON body.
 | `draft` | boolean | Draft | `true` renders a 480p draft. Omit or `false` for a normal render. |
 | `prompt` | string | Draft | Required on the draft. Not needed on the final. |
 | `duration` | integer | Draft | Seconds. The final inherits it. |
-| `resolution` | string | Neither | Pinned: 480p for drafts, 1080p for finals. Any value you send is overridden, though the queue generation record still echoes the value you sent. |
+| `resolution` | string | Final | `1080p` (default) or `4k` for a final; any other value renders the final at 1080p. Drafts are pinned to 480p and override any value you send. The queue generation record echoes the value you sent. |
 | `draft_task_id` | string | Final | The ID from the draft's response, sent back unchanged. Replaces the prompt requirement. |
 
 Settings like aspect ratio, audio, and seed are set on the draft and locked for the final. The final ignores them if resent, along with any `prompt`. The queue generation record still echoes whatever you sent, so do not read the final's settings back from it. Read them from the draft.
@@ -295,7 +318,7 @@ Every endpoint lists media the same way: a `videos` array of items with a stored
 
 ### Billing
 
-Drafts and finals are each billed as a normal video at their resolution. A draft costs the same as any 480p render. A final costs the same as any 1080p render, using the duration and audio of the finished video.
+Drafts and finals are each billed as a normal video at their resolution. A draft costs the same as any 480p render. A final costs the same as any 1080p or 4k render, whichever you asked for, using the duration and audio of the finished video.
 
 The cost estimate for a final shows a range from silent to with-audio, since the final inherits the draft's audio setting. Pass the draft's `duration` on the final request to tighten the estimate. It does not change the render.
 
@@ -338,7 +361,7 @@ This section is written so a coding agent can implement draft mode from it direc
 - [ ] Add a `draft` option to your Seedance 2.5 request builder that sets `"draft": true`.
 - [ ] Read `draft_task_id` and `draft_expires_at` from `videos[0]` on the sync response, the succeeded queue generation, or the `media_generation_completed` event.
 - [ ] Persist both fields next to the draft's video URL and prompt.
-- [ ] Add a "render final" action that sends only `model` and `draft_task_id`.
+- [ ] Add a "render final" action that sends only `model` and `draft_task_id`, plus `"resolution": "4k"` when the user wants 4k.
 - [ ] Hide or disable that action once `draft_expires_at` has passed.
 - [ ] Lock prompt and settings in your UI for finals. Editing them means a new draft.
 - [ ] Link each final to its draft using the final generation's top-level `draft_task_id`.
@@ -371,12 +394,12 @@ def render_draft(prompt: str, duration: int = 5, **settings) -> dict:
     return r.json()["videos"][0]
 
 
-def render_final(draft: dict) -> dict:
-    """Render the 1080p final from a draft returned by render_draft."""
+def render_final(draft: dict, resolution: str = "1080p") -> dict:
+    """Render the final from a draft returned by render_draft, at "1080p" or "4k"."""
     expires = datetime.fromisoformat(draft["draft_expires_at"].replace("Z", "+00:00"))
     if expires <= datetime.now(timezone.utc):
         raise ValueError("Draft expired. Render a new draft.")
-    body = {"model": MODEL, "draft_task_id": draft["draft_task_id"]}
+    body = {"model": MODEL, "draft_task_id": draft["draft_task_id"], "resolution": resolution}
     r = requests.post(f"{BASE}/ai/videos/generate", json=body, headers=HEADERS, timeout=900)
     r.raise_for_status()
     return r.json()["videos"][0]
@@ -417,6 +440,8 @@ if __name__ == "__main__":
     print("Draft:", draft["url"])
     final = render_final(draft)
     print("Final:", final["url"])
+    final_4k = render_final(draft, resolution="4k")
+    print("4k final:", final_4k["url"])
 ```
 
 ### Prompt for your coding agent
@@ -427,6 +452,7 @@ the Oxen.ai Seedance 2.5 Draft Mode docs at
 https://docs.oxen.ai/inference-api/reference/models/walkthroughs/seedance_2_5_draft_mode.
 Drafts send draft: true and return videos[0].draft_task_id and
 videos[0].draft_expires_at. Persist both. Finals send only model and
-draft_task_id. Block finals after draft_expires_at. Read media from
+draft_task_id, plus resolution "4k" for a 4k final (1080p otherwise).
+Block finals after draft_expires_at. Read media from
 videos[], or from result_url, but videos[] will be the standard going forward.
 ```

@@ -26,7 +26,7 @@ For long-running or batch generation, consider using the [async queue](/inferenc
 | `input_video` | string (URL) | no | -- | Reference video for video-to-video models. |
 | `generate_audio` | boolean | no | `false` | Generate audio track (model-dependent). |
 | `draft` | boolean | no | `false` | Render a 480p draft that can later be re-rendered at 1080p. Seedance 2.5 only. See [Seedance 2.5: Draft Mode](/inference-api/reference/models/walkthroughs/seedance_2_5_draft_mode). |
-| `draft_task_id` | string | no | -- | Render the 1080p final of a previous draft. Replaces `prompt`. Seedance 2.5 only. |
+| `draft_task_id` | string | no | -- | Render the final of a previous draft at 1080p, or at 4k with `"resolution": "4k"`. Replaces `prompt`. Seedance 2.5 only. See [Seedance 2.5 draft mode](/inference-api/reference/models/walkthroughs/seedance_2_5_draft_mode). |
 | `response_format` | string | no | `"url"` | `"url"` returns a hosted URL. `"b64_json"` returns base64-encoded video bytes inline. |
 | `target_namespace` | string | no | current user | Namespace to save results and bill to. Can be an organization name. |
 
