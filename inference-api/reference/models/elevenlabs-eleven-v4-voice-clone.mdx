@@ -1,0 +1,156 @@
+---
+title: "Eleven v4 Voice Clone"
+description: "Speak text in a voice cloned from samples"
+---
+
+<CardGroup cols={1}>
+  <Card title="Try Eleven v4 Voice Clone in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=elevenlabs-eleven-v4-voice-clone">
+    Run this model interactively, tune parameters, and compare outputs.
+  </Card>
+</CardGroup>
+
+**Model ID:** `elevenlabs-eleven-v4-voice-clone`
+
+Eleven v4 Voice Clone speaks your text in a voice cloned from short reference recordings, with Eleven v4's expressive delivery across more than 90 languages.
+
+Upload one or more clean clips of the speaker along with the text to say, and the model speaks it in that voice. Audio tags such as `[whispering]` or `[laughing]` direct delivery as with Eleven v4, and the clone can speak languages the reference never did. More and cleaner reference audio, a minute or two in total without music or other voices, gives a closer match. You must have the right to use the voice you upload.
+
+| Metric         | Value                    |
+|----------------|--------------------------|
+| Context Length | 10,000 characters        |
+| Multilingual   | Yes, 90+ languages       |
+
+## Example request
+
+<Tip>
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=elevenlabs-eleven-v4-voice-clone) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+</Tip>
+
+<Tabs>
+  <Tab title="Minimal">
+
+    <CodeGroup>
+
+    ```bash cURL
+    curl -X POST https://hub.oxen.ai/api/ai/audio/speech \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $OXEN_API_KEY" \
+      -d '{
+      "model": "elevenlabs-eleven-v4-voice-clone",
+      "prompt": "<prompt>",
+      "input_audios": [
+        "https://example.com/audio.mp3"
+      ],
+      "voice_rights_confirmed": false,
+      "input": "Welcome to Oxen"
+    }'
+    ```
+
+    ```python Python
+    import os
+    import requests
+
+    response = requests.post(
+        "https://hub.oxen.ai/api/ai/audio/speech",
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        },
+        json={
+            "model": "elevenlabs-eleven-v4-voice-clone",
+            "prompt": "<prompt>",
+            "input_audios": [
+                "https://example.com/audio.mp3"
+            ],
+            "voice_rights_confirmed": false,
+            "input": "Welcome to Oxen"
+        },
+    )
+    response.raise_for_status()
+    print(response.json())
+    ```
+
+    </CodeGroup>
+
+  </Tab>
+  <Tab title="All parameters">
+
+    <CodeGroup>
+
+    ```bash cURL
+    curl -X POST https://hub.oxen.ai/api/ai/audio/speech \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $OXEN_API_KEY" \
+      -d '{
+      "model": "elevenlabs-eleven-v4-voice-clone",
+      "prompt": "<prompt>",
+      "input_audios": [
+        "https://example.com/audio.mp3"
+      ],
+      "voice_rights_confirmed": false,
+      "remove_background_noise": false,
+      "stability": 0.5,
+      "similarity_boost": 0.75,
+      "input": "Welcome to Oxen"
+    }'
+    ```
+
+    ```python Python
+    import os
+    import requests
+
+    response = requests.post(
+        "https://hub.oxen.ai/api/ai/audio/speech",
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        },
+        json={
+            "model": "elevenlabs-eleven-v4-voice-clone",
+            "prompt": "<prompt>",
+            "input_audios": [
+                "https://example.com/audio.mp3"
+            ],
+            "voice_rights_confirmed": false,
+            "remove_background_noise": false,
+            "stability": 0.5,
+            "similarity_boost": 0.75,
+            "input": "Welcome to Oxen"
+        },
+    )
+    response.raise_for_status()
+    print(response.json())
+    ```
+
+    </CodeGroup>
+
+  </Tab>
+</Tabs>
+
+## Fetch model details
+
+The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
+
+```bash
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/elevenlabs-eleven-v4-voice-clone
+```
+
+## Request parameters
+
+### Required parameters
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `prompt` | `string` | &mdash; | Text to speak, up to 10,000 characters. Put audio tags in square brackets before a line to direct its delivery, e.g. [whispering], [excited]. |
+| `input_audios` | `array<string>` | &mdash; | Clean recordings of the voice to clone, up to 5 clips. A minute or two in total, without music or other speakers, works best. |
+| `voice_rights_confirmed` | `boolean` | `false` | I confirm I have the rights and consent to clone this voice. |
+
+### Optional parameters
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `remove_background_noise` | `boolean` | `false` | Clean background noise from the samples before cloning. Can lower quality on samples that are already clean. |
+| `language_code` | `string` | &mdash; | Optional ISO 639-1 language code (e.g. en, es, ja) to force the language and its text normalization. Leave empty to detect it from the text. |
+| `stability` | `number` | `0.5` | Lower values give more varied, expressive delivery; higher values keep the performance consistent across generations. Range: 0.0 – 1.0. |
+| `similarity_boost` | `number` | `0.75` | How closely the output follows the cloned voice. Higher values match it more closely at some cost to naturalness. Range: 0.0 – 1.0. |
+| `seed` | `integer` | &mdash; | Optional seed for best-effort deterministic output. Range: 0 – 4294967295. |
