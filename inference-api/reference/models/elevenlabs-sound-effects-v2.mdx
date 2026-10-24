@@ -1,0 +1,135 @@
+---
+title: "Eleven Sound Effects v2"
+description: "Text-to-sound effects up to 30s, loopable"
+---
+
+<CardGroup cols={1}>
+  <Card title="Try Eleven Sound Effects v2 in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=elevenlabs-sound-effects-v2">
+    Run this model interactively, tune parameters, and compare outputs.
+  </Card>
+</CardGroup>
+
+**Model ID:** `elevenlabs-sound-effects-v2`
+
+Eleven Sound Effects v2 generates sound effects, ambiences, and short musical stingers from a text description.
+
+Describe the sound and its character, such as "heavy wooden door creaking open in a stone hallway", and the model returns a clip of up to 30 seconds, or picks a length from the prompt. Loop mode produces clips that repeat seamlessly for ambiences and game audio, and a prompt-influence control trades variety for closer adherence to the description. It suits foley for video, game assets, UI sounds, and adding audio to silent video generations.
+
+| Metric     | Value       |
+|------------|-------------|
+| Max Output | 30 seconds  |
+
+## Example request
+
+<Tip>
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=elevenlabs-sound-effects-v2) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+</Tip>
+
+<Tabs>
+  <Tab title="Minimal">
+
+    <CodeGroup>
+
+    ```bash cURL
+    curl -X POST https://hub.oxen.ai/api/ai/audio/speech \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $OXEN_API_KEY" \
+      -d '{
+      "model": "elevenlabs-sound-effects-v2",
+      "prompt": "<prompt>",
+      "input": "Welcome to Oxen"
+    }'
+    ```
+
+    ```python Python
+    import os
+    import requests
+
+    response = requests.post(
+        "https://hub.oxen.ai/api/ai/audio/speech",
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        },
+        json={
+            "model": "elevenlabs-sound-effects-v2",
+            "prompt": "<prompt>",
+            "input": "Welcome to Oxen"
+        },
+    )
+    response.raise_for_status()
+    print(response.json())
+    ```
+
+    </CodeGroup>
+
+  </Tab>
+  <Tab title="All parameters">
+
+    <CodeGroup>
+
+    ```bash cURL
+    curl -X POST https://hub.oxen.ai/api/ai/audio/speech \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $OXEN_API_KEY" \
+      -d '{
+      "model": "elevenlabs-sound-effects-v2",
+      "prompt": "<prompt>",
+      "duration": 5,
+      "loop": false,
+      "prompt_influence": 0.3,
+      "input": "Welcome to Oxen"
+    }'
+    ```
+
+    ```python Python
+    import os
+    import requests
+
+    response = requests.post(
+        "https://hub.oxen.ai/api/ai/audio/speech",
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        },
+        json={
+            "model": "elevenlabs-sound-effects-v2",
+            "prompt": "<prompt>",
+            "duration": 5,
+            "loop": false,
+            "prompt_influence": 0.3,
+            "input": "Welcome to Oxen"
+        },
+    )
+    response.raise_for_status()
+    print(response.json())
+    ```
+
+    </CodeGroup>
+
+  </Tab>
+</Tabs>
+
+## Fetch model details
+
+The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
+
+```bash
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/elevenlabs-sound-effects-v2
+```
+
+## Request parameters
+
+### Required parameters
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `prompt` | `string` | &mdash; | Describe the sound, its source, and the space it is in. |
+
+### Optional parameters
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `duration` | `number` | `5` | Duration Range: 0.5 – 30. |
+| `loop` | `boolean` | `false` | Make a clip that repeats seamlessly. |
+| `prompt_influence` | `number` | `0.3` | Higher values follow the prompt more closely with less variation between generations. Range: 0.0 – 1.0. |

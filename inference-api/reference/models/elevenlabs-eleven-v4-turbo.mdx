@@ -1,0 +1,143 @@
+---
+title: "Eleven v4 Turbo"
+description: "Low-latency, low-cost expressive text-to-speech"
+---
+
+<CardGroup cols={1}>
+  <Card title="Try Eleven v4 Turbo in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=elevenlabs-eleven-v4-turbo">
+    Run this model interactively, tune parameters, and compare outputs.
+  </Card>
+</CardGroup>
+
+**Model ID:** `elevenlabs-eleven-v4-turbo`
+
+Eleven v4 Turbo is the low-latency variant of Eleven v4, producing expressive speech in more than 90 languages at about 100 ms median inference latency.
+
+It shares Eleven v4's audio tags, voice settings, and language coverage, so `[whispering]`, `[laughing]`, and similar tags direct delivery the same way. It fits voice agents, assistants, interactive characters, and bulk narration where speed and cost matter. A single request takes up to 10,000 characters.
+
+| Metric         | Value                    |
+|----------------|--------------------------|
+| Context Length | 10,000 characters        |
+| Multilingual   | Yes, 90+ languages       |
+
+## Example request
+
+<Tip>
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=elevenlabs-eleven-v4-turbo) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+</Tip>
+
+<Tabs>
+  <Tab title="Minimal">
+
+    <CodeGroup>
+
+    ```bash cURL
+    curl -X POST https://hub.oxen.ai/api/ai/audio/speech \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $OXEN_API_KEY" \
+      -d '{
+      "model": "elevenlabs-eleven-v4-turbo",
+      "prompt": "<prompt>",
+      "voice_id": "JBFqnCBsd6RMkjVDRZzb",
+      "input": "Welcome to Oxen"
+    }'
+    ```
+
+    ```python Python
+    import os
+    import requests
+
+    response = requests.post(
+        "https://hub.oxen.ai/api/ai/audio/speech",
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        },
+        json={
+            "model": "elevenlabs-eleven-v4-turbo",
+            "prompt": "<prompt>",
+            "voice_id": "JBFqnCBsd6RMkjVDRZzb",
+            "input": "Welcome to Oxen"
+        },
+    )
+    response.raise_for_status()
+    print(response.json())
+    ```
+
+    </CodeGroup>
+
+  </Tab>
+  <Tab title="All parameters">
+
+    <CodeGroup>
+
+    ```bash cURL
+    curl -X POST https://hub.oxen.ai/api/ai/audio/speech \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $OXEN_API_KEY" \
+      -d '{
+      "model": "elevenlabs-eleven-v4-turbo",
+      "prompt": "<prompt>",
+      "voice_id": "JBFqnCBsd6RMkjVDRZzb",
+      "stability": 0.5,
+      "similarity_boost": 0.75,
+      "apply_text_normalization": "auto",
+      "input": "Welcome to Oxen"
+    }'
+    ```
+
+    ```python Python
+    import os
+    import requests
+
+    response = requests.post(
+        "https://hub.oxen.ai/api/ai/audio/speech",
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        },
+        json={
+            "model": "elevenlabs-eleven-v4-turbo",
+            "prompt": "<prompt>",
+            "voice_id": "JBFqnCBsd6RMkjVDRZzb",
+            "stability": 0.5,
+            "similarity_boost": 0.75,
+            "apply_text_normalization": "auto",
+            "input": "Welcome to Oxen"
+        },
+    )
+    response.raise_for_status()
+    print(response.json())
+    ```
+
+    </CodeGroup>
+
+  </Tab>
+</Tabs>
+
+## Fetch model details
+
+The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
+
+```bash
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/elevenlabs-eleven-v4-turbo
+```
+
+## Request parameters
+
+### Required parameters
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `prompt` | `string` | &mdash; | Text to speak, up to 10,000 characters. Put audio tags in square brackets before a line to direct its delivery, e.g. [whispering], [excited], [sigh]. |
+| `voice_id` | `string` | `"JBFqnCBsd6RMkjVDRZzb"` | The voice that speaks the text. One of: pNInz6obpgDQGcFmaJgB, Xb7hH8MSUJpSbSDYk0k2, hpp4J3VqNfWAUOO0d1Us, pqHfZKP75CvOlQylNhV4, nPczCjzI2devNBz1zQrb, N2lVS1w4EtoT3dr4eOWO, IKne3meq5aSn9XLyUdCD, iP95p4xoKVk53GoZ742B, onwK4e9ZLuTAKqWW03F9, cjVigY5qzO86Huf0OWal, JBFqnCBsd6RMkjVDRZzb, SOYHLrjzK2X1ezoPC6cr, cgSgspJ2msm6clMCkdW9, FGY2WhTYpPnrIDTdsKH5, TX3LPaxmHKxFdv7VOQHJ, pFZP5JQG7iQjIQuC4Bku, XrExE9yKIg1WjnnlVkGX, SAz9YHcvj6GT2YYXdXww, CwhRBWXzGAHq8TQ4Fs17, EXAVITQu4vr4xnSDxMaL, bIHbv24MWmeRgasZH58o. |
+
+### Optional parameters
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `language_code` | `string` | &mdash; | Optional ISO 639-1 language code (e.g. en, es, ja) to force the language and its text normalization. Leave empty to detect it from the text. |
+| `stability` | `number` | `0.5` | Lower values give more varied, expressive delivery; higher values keep the performance consistent across generations. Range: 0.0 – 1.0. |
+| `similarity_boost` | `number` | `0.75` | How closely the output follows the voice. Higher values match it more closely at some cost to naturalness. Range: 0.0 – 1.0. |
+| `apply_text_normalization` | `string` | `"auto"` | Whether numbers, dates, and abbreviations are spelled out before speaking. One of: auto, on, off. |
+| `seed` | `integer` | &mdash; | Optional seed for best-effort deterministic output. Range: 0 – 4294967295. |

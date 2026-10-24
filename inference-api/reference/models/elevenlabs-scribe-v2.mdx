@@ -1,0 +1,142 @@
+---
+title: "Scribe v2"
+description: "Speech-to-text with diarization, 90+ languages"
+---
+
+<CardGroup cols={1}>
+  <Card title="Try Scribe v2 in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=elevenlabs-scribe-v2">
+    Run this model interactively, tune parameters, and compare outputs.
+  </Card>
+</CardGroup>
+
+**Model ID:** `elevenlabs-scribe-v2`
+
+Scribe v2 is a speech-to-text model that transcribes audio and video in more than 90 languages with word-level timestamps and speaker diarization.
+
+It labels up to 32 speakers, tags non-speech events such as laughter or applause, and detects entities like names, numbers, and medical or financial terms with their timestamps. Keyterm prompting biases recognition toward product names, jargon, or proper nouns, and a no-verbatim mode drops filler words and false starts. It suits meeting and interview transcripts, subtitles, podcast and video indexing, and labeling speech datasets. Files can run up to 10 hours.
+
+| Metric       | Value                          |
+|--------------|--------------------------------|
+| Max Input    | 10 hours                       |
+| Multilingual | Yes, 90+ languages             |
+
+## Example request
+
+<Tip>
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=elevenlabs-scribe-v2) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+</Tip>
+
+<Tabs>
+  <Tab title="Minimal">
+
+    <CodeGroup>
+
+    ```bash cURL
+    curl -X POST https://hub.oxen.ai/api/ai/audio/transcriptions \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $OXEN_API_KEY" \
+      -d '{
+      "model": "elevenlabs-scribe-v2",
+      "input_audio": "https://example.com/audio.mp3",
+      "audio_url": "https://example.com/audio.mp3"
+    }'
+    ```
+
+    ```python Python
+    import os
+    import requests
+
+    response = requests.post(
+        "https://hub.oxen.ai/api/ai/audio/transcriptions",
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        },
+        json={
+            "model": "elevenlabs-scribe-v2",
+            "input_audio": "https://example.com/audio.mp3",
+            "audio_url": "https://example.com/audio.mp3"
+        },
+    )
+    response.raise_for_status()
+    print(response.json())
+    ```
+
+    </CodeGroup>
+
+  </Tab>
+  <Tab title="All parameters">
+
+    <CodeGroup>
+
+    ```bash cURL
+    curl -X POST https://hub.oxen.ai/api/ai/audio/transcriptions \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $OXEN_API_KEY" \
+      -d '{
+      "model": "elevenlabs-scribe-v2",
+      "input_audio": "https://example.com/audio.mp3",
+      "diarize": false,
+      "timestamps_granularity": "word",
+      "tag_audio_events": true,
+      "no_verbatim": false,
+      "audio_url": "https://example.com/audio.mp3"
+    }'
+    ```
+
+    ```python Python
+    import os
+    import requests
+
+    response = requests.post(
+        "https://hub.oxen.ai/api/ai/audio/transcriptions",
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        },
+        json={
+            "model": "elevenlabs-scribe-v2",
+            "input_audio": "https://example.com/audio.mp3",
+            "diarize": false,
+            "timestamps_granularity": "word",
+            "tag_audio_events": true,
+            "no_verbatim": false,
+            "audio_url": "https://example.com/audio.mp3"
+        },
+    )
+    response.raise_for_status()
+    print(response.json())
+    ```
+
+    </CodeGroup>
+
+  </Tab>
+</Tabs>
+
+## Fetch model details
+
+The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
+
+```bash
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/elevenlabs-scribe-v2
+```
+
+## Request parameters
+
+### Required parameters
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `input_audio` | `string` | &mdash; | Audio or video file to transcribe. Most audio and video formats are supported. Format: uri. |
+
+### Optional parameters
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `language_code` | `string` | &mdash; | Optional ISO 639-1 or 639-3 language code of the audio. Leave empty to detect it. |
+| `diarize` | `boolean` | `false` | Label which speaker is talking for each word. |
+| `num_speakers` | `integer` | &mdash; | Maximum number of speakers in the audio, if known. Helps diarization. Range: 1 – 32. |
+| `timestamps_granularity` | `string` | `"word"` | Timestamp detail in the transcript. One of: none, word, character. |
+| `tag_audio_events` | `boolean` | `true` | Mark non-speech sounds such as (laughter) or (applause) in the transcript. |
+| `no_verbatim` | `boolean` | `false` | Remove filler words, false starts, and non-speech sounds from the transcript. |
+| `keyterms` | `array<string>` | &mdash; | Words or phrases to recognize more accurately, such as product names or jargon. Up to 1,000 terms. |

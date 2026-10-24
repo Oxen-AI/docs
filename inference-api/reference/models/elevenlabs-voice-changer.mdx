@@ -1,0 +1,142 @@
+---
+title: "Eleven Voice Changer"
+description: "Re-voice speech, keeping timing and emotion"
+---
+
+<CardGroup cols={1}>
+  <Card title="Try Eleven Voice Changer in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=elevenlabs-voice-changer">
+    Run this model interactively, tune parameters, and compare outputs.
+  </Card>
+</CardGroup>
+
+**Model ID:** `elevenlabs-voice-changer`
+
+Eleven Voice Changer re-voices a speech recording in a different voice while keeping the original timing, emotion, and delivery.
+
+The performance in the source clip drives the output, so whispers, laughs, pacing, and emphasis carry through to the new voice. It works across 29 languages and can strip background noise from the input before converting. It suits replacing scratch voiceover, giving one performer several characters, anonymizing speakers, and building paired speech datasets. Each clip can be up to 5 minutes long.
+
+| Metric       | Value                |
+|--------------|----------------------|
+| Max Input    | 5 minutes            |
+| Multilingual | Yes, 29 languages    |
+
+## Example request
+
+<Tip>
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=elevenlabs-voice-changer) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+</Tip>
+
+<Tabs>
+  <Tab title="Minimal">
+
+    <CodeGroup>
+
+    ```bash cURL
+    curl -X POST https://hub.oxen.ai/api/ai/audio/speech \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $OXEN_API_KEY" \
+      -d '{
+      "model": "elevenlabs-voice-changer",
+      "input_audio": "https://example.com/audio.mp3",
+      "voice_id": "EXAVITQu4vr4xnSDxMaL",
+      "input": "Welcome to Oxen"
+    }'
+    ```
+
+    ```python Python
+    import os
+    import requests
+
+    response = requests.post(
+        "https://hub.oxen.ai/api/ai/audio/speech",
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        },
+        json={
+            "model": "elevenlabs-voice-changer",
+            "input_audio": "https://example.com/audio.mp3",
+            "voice_id": "EXAVITQu4vr4xnSDxMaL",
+            "input": "Welcome to Oxen"
+        },
+    )
+    response.raise_for_status()
+    print(response.json())
+    ```
+
+    </CodeGroup>
+
+  </Tab>
+  <Tab title="All parameters">
+
+    <CodeGroup>
+
+    ```bash cURL
+    curl -X POST https://hub.oxen.ai/api/ai/audio/speech \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $OXEN_API_KEY" \
+      -d '{
+      "model": "elevenlabs-voice-changer",
+      "input_audio": "https://example.com/audio.mp3",
+      "voice_id": "EXAVITQu4vr4xnSDxMaL",
+      "remove_background_noise": false,
+      "stability": 0.5,
+      "similarity_boost": 0.75,
+      "input": "Welcome to Oxen"
+    }'
+    ```
+
+    ```python Python
+    import os
+    import requests
+
+    response = requests.post(
+        "https://hub.oxen.ai/api/ai/audio/speech",
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        },
+        json={
+            "model": "elevenlabs-voice-changer",
+            "input_audio": "https://example.com/audio.mp3",
+            "voice_id": "EXAVITQu4vr4xnSDxMaL",
+            "remove_background_noise": false,
+            "stability": 0.5,
+            "similarity_boost": 0.75,
+            "input": "Welcome to Oxen"
+        },
+    )
+    response.raise_for_status()
+    print(response.json())
+    ```
+
+    </CodeGroup>
+
+  </Tab>
+</Tabs>
+
+## Fetch model details
+
+The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
+
+```bash
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/elevenlabs-voice-changer
+```
+
+## Request parameters
+
+### Required parameters
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `input_audio` | `string` | &mdash; | Speech recording to re-voice, up to 5 minutes. Its timing, emotion, and delivery carry over. Format: uri. |
+| `voice_id` | `string` | `"EXAVITQu4vr4xnSDxMaL"` | The voice to convert the recording into. One of: pNInz6obpgDQGcFmaJgB, Xb7hH8MSUJpSbSDYk0k2, hpp4J3VqNfWAUOO0d1Us, pqHfZKP75CvOlQylNhV4, nPczCjzI2devNBz1zQrb, N2lVS1w4EtoT3dr4eOWO, IKne3meq5aSn9XLyUdCD, iP95p4xoKVk53GoZ742B, onwK4e9ZLuTAKqWW03F9, cjVigY5qzO86Huf0OWal, JBFqnCBsd6RMkjVDRZzb, SOYHLrjzK2X1ezoPC6cr, cgSgspJ2msm6clMCkdW9, FGY2WhTYpPnrIDTdsKH5, TX3LPaxmHKxFdv7VOQHJ, pFZP5JQG7iQjIQuC4Bku, XrExE9yKIg1WjnnlVkGX, SAz9YHcvj6GT2YYXdXww, CwhRBWXzGAHq8TQ4Fs17, EXAVITQu4vr4xnSDxMaL, bIHbv24MWmeRgasZH58o. |
+
+### Optional parameters
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `remove_background_noise` | `boolean` | `false` | Isolate the speech from background noise before converting it. |
+| `stability` | `number` | `0.5` | Lower values give more varied delivery; higher values stay closer to a fixed baseline. Range: 0.0 – 1.0. |
+| `similarity_boost` | `number` | `0.75` | How closely the output follows the target voice. Range: 0.0 – 1.0. |
+| `seed` | `integer` | &mdash; | Optional seed for best-effort deterministic output. Range: 0 – 4294967295. |

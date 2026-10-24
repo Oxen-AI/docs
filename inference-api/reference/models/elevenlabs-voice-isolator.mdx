@@ -1,0 +1,77 @@
+---
+title: "Eleven Voice Isolator"
+description: "Remove background noise and music from speech"
+---
+
+<CardGroup cols={1}>
+  <Card title="Try Eleven Voice Isolator in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=elevenlabs-voice-isolator">
+    Run this model interactively, tune parameters, and compare outputs.
+  </Card>
+</CardGroup>
+
+**Model ID:** `elevenlabs-voice-isolator`
+
+Eleven Voice Isolator extracts clean speech from a recording, removing background noise, music, reverb, and ambient sound.
+
+It keeps the speaker's voice and delivery intact while stripping everything around it, which makes it useful for cleaning up field and phone recordings, preparing voiceover, rescuing interview audio, and cleaning speech before transcription or voice cloning.
+
+| Metric     | Value                 |
+|------------|-----------------------|
+| Min Input  | 4.6 seconds           |
+
+## Example request
+
+<Tip>
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=elevenlabs-voice-isolator) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+</Tip>
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST https://hub.oxen.ai/api/ai/audio/speech \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -d '{
+  "model": "elevenlabs-voice-isolator",
+  "input_audio": "https://example.com/audio.mp3",
+  "input": "Welcome to Oxen"
+}'
+```
+
+```python Python
+import os
+import requests
+
+response = requests.post(
+    "https://hub.oxen.ai/api/ai/audio/speech",
+    headers={
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+    },
+    json={
+        "model": "elevenlabs-voice-isolator",
+        "input_audio": "https://example.com/audio.mp3",
+        "input": "Welcome to Oxen"
+    },
+)
+response.raise_for_status()
+print(response.json())
+```
+
+</CodeGroup>
+
+## Fetch model details
+
+The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
+
+```bash
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/elevenlabs-voice-isolator
+```
+
+## Request parameters
+
+### Required parameters
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `input_audio` | `string` | &mdash; | Recording to clean up, between 4.6 seconds and 1 hour long. Format: uri. |

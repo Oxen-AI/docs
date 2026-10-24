@@ -1,0 +1,137 @@
+---
+title: "Fish Audio Drama 3"
+description: "Expressive speech you direct with inline cues"
+---
+
+<CardGroup cols={1}>
+  <Card title="Try Fish Audio Drama 3 in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=fish-audio-drama-3">
+    Run this model interactively, tune parameters, and compare outputs.
+  </Card>
+</CardGroup>
+
+**Model ID:** `fish-audio-drama-3`
+
+Fish Audio Drama 3 is a text to speech model built for performances you direct from inside the script, across more than 80 languages.
+
+Directions in square brackets, such as `[barely holding it together]` or `[sighs]`, are acted out where they're written, and tag pairs like `&lt;whisper>…&lt;/whisper>` change how the words inside them are said. It suits character scenes, audio drama, and long-form narration. Language tags such as `&lt;french>…&lt;/french>` switch the language for a phrase, though they're still experimental. The weights are published under the Fish Audio Community License.
+
+| Metric             | Value              |
+|--------------------|--------------------|
+| Parameter Count    | 35B (3B active)    |
+| Mixture of Experts | Yes                |
+| Multilingual       | Yes, 80+ languages |
+
+## Example request
+
+<Tip>
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=fish-audio-drama-3) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+</Tip>
+
+<Tabs>
+  <Tab title="Minimal">
+
+    <CodeGroup>
+
+    ```bash cURL
+    curl -X POST https://hub.oxen.ai/api/ai/audio/speech \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $OXEN_API_KEY" \
+      -d '{
+      "model": "fish-audio-drama-3",
+      "prompt": "<prompt>",
+      "input": "Welcome to Oxen"
+    }'
+    ```
+
+    ```python Python
+    import os
+    import requests
+
+    response = requests.post(
+        "https://hub.oxen.ai/api/ai/audio/speech",
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        },
+        json={
+            "model": "fish-audio-drama-3",
+            "prompt": "<prompt>",
+            "input": "Welcome to Oxen"
+        },
+    )
+    response.raise_for_status()
+    print(response.json())
+    ```
+
+    </CodeGroup>
+
+  </Tab>
+  <Tab title="All parameters">
+
+    <CodeGroup>
+
+    ```bash cURL
+    curl -X POST https://hub.oxen.ai/api/ai/audio/speech \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $OXEN_API_KEY" \
+      -d '{
+      "model": "fish-audio-drama-3",
+      "prompt": "<prompt>",
+      "voice": "933563129e564b19a115bedd57b7406a",
+      "output_format": "mp3",
+      "speed": 1.0,
+      "input": "Welcome to Oxen"
+    }'
+    ```
+
+    ```python Python
+    import os
+    import requests
+
+    response = requests.post(
+        "https://hub.oxen.ai/api/ai/audio/speech",
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        },
+        json={
+            "model": "fish-audio-drama-3",
+            "prompt": "<prompt>",
+            "voice": "933563129e564b19a115bedd57b7406a",
+            "output_format": "mp3",
+            "speed": 1.0,
+            "input": "Welcome to Oxen"
+        },
+    )
+    response.raise_for_status()
+    print(response.json())
+    ```
+
+    </CodeGroup>
+
+  </Tab>
+</Tabs>
+
+## Fetch model details
+
+The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
+
+```bash
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/fish-audio-drama-3
+```
+
+## Request parameters
+
+### Required parameters
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `prompt` | `string` | &mdash; | Text to speak. Directions in square brackets, like [nervous] or [sighs], are acted out instead of read aloud. A tag pair like &lt;whisper>go on&lt;/whisper> changes how the words inside it are said. |
+
+### Optional parameters
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `voice` | `string` | `"933563129e564b19a115bedd57b7406a"` | The voice that speaks the text. Each voice keeps its own accent in every language it speaks. One of: 933563129e564b19a115bedd57b7406a, bf322df2096a46f18c579d0baa36f41d, b347db033a6549378b48d00acb0d06cd, 536d3a5e000945adb7038665781a4aca, 9a9cf47702da476aa4629e2506d4a857, 79d0bd3e4e5444b18f7b6d89b5927bf1, e3cd384158934cc9a01029cd7d278634, 0db6e93af420470b9d9b9a886dbaa954, f3a2b90078d54a65af4b95f63bc7798e, c70cfb98867a4bfb9ae20d2401257b92, 74c6aba5cbf94a15bbdc547ffce5cb38, 5d29a99739c14d4ca3e4fe42193105b2, 97eda32449cf443bbc4b8782853ca554, 297a6fd278df47c3b9da9bfdf55ac89a, 96ed4e3f47334430b990df471d0a0268, 1faa840246094164bf4b0b0b94ae1675, 3f065d660212478a9c697fa965b4d098, ec0718028a2445fb9be8e8bfb56a0150, 5f2350f72d864ba0915668843dd1a584, 0ffee1af32254090b3630823baade12b, 10a3a20742114a4ea6dd441e7591850f, f69bca092b674168a8d02d61ca20943c, 3937b44b604249f18b94913daef94043, 7b7c88bf825a4ab3bca27d55c26ddf16, ef02f46e6a7540759f9d767d7e22c2e5, 59ac2b0ad66641b5ab4666d3ed89e5d4, bf75c2e80b0e441485eeec20330a75fa, b871e425b6c0442baa5cf73f6c336bbe, 0b14f34a13a94ed88fe6113193749bb0, b26519ebdcd14bec967c020c5aabc927, 2f64e528a4f2406691925ab1e0ed5b7f, b080019dc38545f39def724726386d30. |
+| `output_format` | `string` | `"mp3"` | Audio file format. One of: mp3, wav. |
+| `speed` | `number` | `1.0` | Speaking rate, where 1.0 is the voice's natural pace. Range: 0.5 – 2.0. |
