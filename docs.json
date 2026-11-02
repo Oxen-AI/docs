@@ -121,6 +121,7 @@
                   "inference-api/reference/image_editing",
                   "inference-api/reference/video_generation",
                   "inference-api/reference/async_queue",
+                  "inference-api/reference/cost_estimates",
                   "inference-api/reference/models/overview",
                   "inference-api/reference/model-references"
                 ]

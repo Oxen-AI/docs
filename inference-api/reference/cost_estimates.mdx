@@ -1,0 +1,208 @@
+---
+title: "Cost Estimates"
+description: "Estimate what a generation will cost before you run it"
+---
+
+## Why Estimate First
+
+A generation's price depends on its parameters: how many images, what resolution, how many seconds of video, whether it has audio. The estimate endpoint prices a request from those parameters before you send it, using the same pricing that bills the generation, so you can:
+
+- Show users a price before they generate
+- Keep a batch of generations under a budget
+- Compare models or settings on cost
+
+The final charge is always computed from what the generation actually produced, such as the real length of a video. An estimate is an upper bound you can plan around, not a quote.
+
+---
+
+## Estimate a Generation
+
+```
+POST /api/ai/models/:id/estimate
+```
+
+`:id` is the model's name (for example `nano-banana-2-1`) or its ID. Public models can be estimated without an API key. A private model needs the key of an account that can see it.
+
+### Request Body
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `params` | object | `{}` | The parameters you would send to the model, such as `prompt`, `resolution`, `duration` or `num_images`. See the model's `request_schema` from [Retrieve Model](/inference-api/reference/models/overview#retrieve-model). |
+| `num_generations` | integer | `1` | How many generations to price. Range: 1-100. |
+| `input_video_seconds` | number | none | Length in seconds of the longest input video. Only used for a video edit (`omni_reference_task_type: "edit"`), which runs at the length of the video being edited, not the `duration` in the request. |
+
+Send `params` exactly as you would send them to the generation endpoints. Parameters that don't affect price, like the prompt text, are ignored.
+
+### Example
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST https://hub.oxen.ai/api/ai/models/nano-banana-2-1/estimate \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "params": {"prompt": "A fox in a teal forest", "resolution": "2K"},
+    "num_generations": 2
+  }'
+```
+
+```python Python
+import os
+import requests
+
+response = requests.post(
+    "https://hub.oxen.ai/api/ai/models/nano-banana-2-1/estimate",
+    headers={"Authorization": f"Bearer {os.environ['OXEN_API_KEY']}"},
+    json={
+        "params": {"prompt": "A fox in a teal forest", "resolution": "2K"},
+        "num_generations": 2,
+    },
+)
+print(response.json()["estimate"])
+```
+
+</CodeGroup>
+
+### Response
+
+```json
+{
+  "model": "nano-banana-2-1",
+  "estimate": {
+    "kind": "exact",
+    "min_usd": "0.13104",
+    "max_usd": "0.13104",
+    "rates": [],
+    "label": "$0.13",
+    "note": "Billed per image at the size and quality requested, for 2 generations. The final charge is computed from what the run actually produced."
+  }
+}
+```
+
+| Field | Type | Description |
+|---|---|---|
+| `model` | string | The model's name |
+| `estimate.kind` | string | `exact`, `range`, `rate` or `unknown`. See [Kinds of Estimate](#kinds-of-estimate). |
+| `estimate.min_usd` | string/null | The lowest the request could cost, in dollars. Set for `exact` and `range`. |
+| `estimate.max_usd` | string/null | The highest the request could cost, in dollars. Set for `exact` and `range`. |
+| `estimate.rates` | array | For `rate`: what each unit costs, as `{"usd": "...", "per": "..."}`. `per` is `second`, `credit`, `1M input tokens` or `1M output tokens`. Empty otherwise. |
+| `estimate.label` | string | The estimate formatted for display, e.g. `$0.13`, `$1.05 to $7.89` or `$0.10/sec`. |
+| `estimate.note` | string | A sentence on how the model is billed, suitable for a tooltip. |
+
+Amounts are decimal strings rather than JSON numbers, so they arrive without floating-point rounding. Parse them with a decimal type if you add them up.
+
+---
+
+## Kinds of Estimate
+
+| Kind | When | What to read |
+|---|---|---|
+| `exact` | The parameters fix the price: an image at a given size, a video with a pinned `duration`. | `max_usd` (equal to `min_usd`) |
+| `range` | The parameters leave the price open. A video with `duration: "auto"` spans the shortest to the longest duration the model allows. | `min_usd` to `max_usd`. Budget against `max_usd`. |
+| `rate` | The model is billed by units only known after it runs: tokens, seconds of compute, or a video length the model picks itself. | `rates` |
+| `unknown` | The model's price can't be estimated ahead of time. | `note`. The cost appears on the generation once it finishes. |
+
+A video model with an automatic duration returns a range:
+
+```bash
+curl -X POST https://hub.oxen.ai/api/ai/models/bytedance-seedance-2-5-reference-to-video/estimate \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"params": {"duration": "auto", "resolution": "720p"}}'
+```
+
+Output:
+
+```json
+{
+  "model": "bytedance-seedance-2-5-reference-to-video",
+  "estimate": {
+    "kind": "range",
+    "min_usd": "1.052",
+    "max_usd": "7.89",
+    "rates": [],
+    "label": "$1.05 to $7.89",
+    "note": "Billed per second of generated video. The request leaves the length or size open, so this spans what it could be. The final charge is computed from what the run actually produced."
+  }
+}
+```
+
+A chat model returns its token rates:
+
+```bash
+curl -X POST https://hub.oxen.ai/api/ai/models/gpt-4o/estimate \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{}'
+```
+
+Output:
+
+```json
+{
+  "model": "gpt-4o",
+  "estimate": {
+    "kind": "rate",
+    "min_usd": null,
+    "max_usd": null,
+    "rates": [
+      {"per": "1M input tokens", "usd": "2.5"},
+      {"per": "1M output tokens", "usd": "10"}
+    ],
+    "label": "$2.50/1M in, $10.00/1M out",
+    "note": "Billed by token usage once the response is generated."
+  }
+}
+```
+
+---
+
+## Staying Under a Budget
+
+To keep a batch of generations under a dollar amount, estimate each request and add up the `max_usd` values before enqueueing:
+
+```python
+import os
+from decimal import Decimal
+
+import requests
+
+API = "https://hub.oxen.ai/api"
+HEADERS = {"Authorization": f"Bearer {os.environ['OXEN_API_KEY']}"}
+BUDGET = Decimal("5.00")
+
+shots = [
+    {"model": "nano-banana-2-1", "params": {"prompt": "Opening frame", "resolution": "2K"}},
+    {"model": "bytedance-seedance-2-5-reference-to-video", "params": {"prompt": "The fox runs", "duration": "5s", "resolution": "720p"}},
+]
+
+total = Decimal("0")
+for shot in shots:
+    estimate = requests.post(
+        f"{API}/ai/models/{shot['model']}/estimate",
+        headers=HEADERS,
+        json={"params": shot["params"]},
+    ).json()["estimate"]
+    if estimate["max_usd"] is None:
+        raise ValueError(f"{shot['model']} can't be priced ahead: {estimate['label']}")
+    total += Decimal(estimate["max_usd"])
+
+if total > BUDGET:
+    raise ValueError(f"These shots could cost up to ${total}, over the ${BUDGET} budget")
+
+for shot in shots:
+    requests.post(f"{API}/ai/queue", headers=HEADERS, json={"model": shot["model"], **shot["params"]})
+```
+
+---
+
+## Errors
+
+| Condition | Status | Error |
+|---|---|---|
+| Model not found | 404 | `"Model not found: <name>"` |
+| Private model you can't see | 403 | `"unauthorized"` |
+| `params` isn't an object | 400 | ``"`params` must be an object of the model's parameters."`` |
+| `num_generations` out of range | 400 | ``"`num_generations` must be an integer from 1 to 100."`` |
+| `input_video_seconds` negative or not a number | 400 | ``"`input_video_seconds` must be a non-negative number."`` |
