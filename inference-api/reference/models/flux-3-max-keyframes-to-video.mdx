@@ -1,39 +1,32 @@
 ---
-title: "FLUX.2 [dev]"
-description: "Open text-to-image with multi-reference"
+title: "FLUX 3 Max: Keyframes to Video"
+description: "Video through up to 10 keyframes"
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try FLUX.2 [dev] in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=flux-2-dev">
+  <Card title="Try FLUX 3 Max: Keyframes to Video in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=flux-3-max-keyframes-to-video">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `flux-2-dev`
+**Model ID:** `flux-3-max-keyframes-to-video`
 
-FLUX.2 [dev] is a 32-billion parameter image generation model that excels in generating highly detailed, photorealistic images and performing precise image editing, including multi-reference editing with strong consistency across subjects, products, and styles. It is best at rendering complex typography, infographics, and UI mockups with legible fine text, and supports flexible input/output ratios up to 4 megapixels.
+FLUX 3 Max (Keyframes to Video) generates a video with native audio that passes through up to 10 keyframe images, with the prompt describing the motion between them. FLUX 3 Max is a post-trained variant of FLUX 3 Video, built by fal with Black Forest Labs and tuned for stronger prompt adherence, better visual quality and much lower latency.
 
-Some other noteworthy features of FLUX.2 [dev] include native support for LoRA fine-tuning workflows, making it suitable for rapid prototyping and custom training, and efficient resource usage for high-volume generation tasks.
-
-| Metric             | Value              |
-|--------------------|--------------------|
-| Parameter Count    | 32 billion         |
-| Mixture of Experts | No                 |
-| Multilingual       | Yes                |
-| Quantized*         | No                 |
-
-*_Quantization is specific to the inference provider and the model may be offered with different quantization levels by other providers._
+It generates 5 to 20 second clips at 720p or 1080p with synchronized audio, in aspect ratios from 21:9 to 9:16. A reasoning level controls how much the model expands the prompt before generating: high for closer prompt adherence, low for faster turnaround.
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=flux-2-dev) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=flux-3-max-keyframes-to-video) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
   <Tab title="Sync">
 
-    See the [image editing reference](/inference-api/reference/image_editing) for more details.
+    This blocks until the video is ready (typically 5-15 minutes). Prefer **Async** or **Async with SSE** for anything beyond quick experimentation.
+
+    See the [video generation reference](/inference-api/reference/video_generation) for more details.
 
     <Tabs>
       <Tab title="Minimal">
@@ -41,47 +34,11 @@ Some other noteworthy features of FLUX.2 [dev] include native support for LoRA f
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
+        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "flux-2-dev",
-          "prompt": "<prompt>"
-        }'
-        ```
-
-        ```python Python
-        import os
-        import requests
-
-        response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/edit",
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
-            },
-            json={
-                "model": "flux-2-dev",
-                "prompt": "<prompt>"
-            },
-        )
-        response.raise_for_status()
-        print(response.json())
-        ```
-
-        </CodeGroup>
-
-      </Tab>
-      <Tab title="Basic parameters">
-
-        <CodeGroup>
-
-        ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
-          -H "Content-Type: application/json" \
-          -H "Authorization: Bearer $OXEN_API_KEY" \
-          -d '{
-          "model": "flux-2-dev",
+          "model": "flux-3-max-keyframes-to-video",
           "prompt": "<prompt>",
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
@@ -94,13 +51,13 @@ Some other noteworthy features of FLUX.2 [dev] include native support for LoRA f
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/edit",
+            "https://hub.oxen.ai/api/ai/videos/generate",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "flux-2-dev",
+                "model": "flux-3-max-keyframes-to-video",
                 "prompt": "<prompt>",
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
@@ -119,22 +76,20 @@ Some other noteworthy features of FLUX.2 [dev] include native support for LoRA f
         <CodeGroup>
 
         ```bash cURL
-        curl -X POST https://hub.oxen.ai/api/ai/images/edit \
+        curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "flux-2-dev",
+          "model": "flux-3-max-keyframes-to-video",
           "prompt": "<prompt>",
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "aspect_ratio": "16:9",
-          "resolution": "1 MP",
-          "num_inference_steps": 30,
-          "guidance": 2,
-          "output_format": "webp",
-          "output_quality": 80,
-          "disable_safety_checker": false
+          "aspect_ratio": "auto",
+          "resolution": "720p",
+          "duration": 5,
+          "generate_audio": true,
+          "reasoning_level": "high"
         }'
         ```
 
@@ -143,24 +98,22 @@ Some other noteworthy features of FLUX.2 [dev] include native support for LoRA f
         import requests
 
         response = requests.post(
-            "https://hub.oxen.ai/api/ai/images/edit",
+            "https://hub.oxen.ai/api/ai/videos/generate",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
             },
             json={
-                "model": "flux-2-dev",
+                "model": "flux-3-max-keyframes-to-video",
                 "prompt": "<prompt>",
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "aspect_ratio": "16:9",
-                "resolution": "1 MP",
-                "num_inference_steps": 30,
-                "guidance": 2,
-                "output_format": "webp",
-                "output_quality": 80,
-                "disable_safety_checker": false
+                "aspect_ratio": "auto",
+                "resolution": "720p",
+                "duration": 5,
+                "generate_audio": true,
+                "reasoning_level": "high"
             },
         )
         response.raise_for_status()
@@ -188,74 +141,7 @@ Some other noteworthy features of FLUX.2 [dev] include native support for LoRA f
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "flux-2-dev",
-          "prompt": "<prompt>"
-        }' | jq -r '.generations[0].generation_id')
-
-        # Poll until the generation reaches a terminal status.
-        while true; do
-          STATUS=$(curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
-            "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq -r '.status')
-          echo "Status: $STATUS"
-          case $STATUS in succeeded|failed|cancelled) break;; esac
-          sleep 5
-        done
-
-        # Print the result.
-        curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
-          "https://hub.oxen.ai/api/ai/queue/$GEN_ID" | jq .
-        ```
-
-        ```python Python
-        import os
-        import time
-        import requests
-
-        HEADERS = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
-        }
-
-        enqueue = requests.post(
-            "https://hub.oxen.ai/api/ai/queue",
-            headers=HEADERS,
-            json={
-                "model": "flux-2-dev",
-                "prompt": "<prompt>"
-            },
-        )
-        enqueue.raise_for_status()
-        generation_id = enqueue.json()["generations"][0]["generation_id"]
-
-        while True:
-            data = requests.get(
-                f"https://hub.oxen.ai/api/ai/queue/{generation_id}",
-                headers=HEADERS,
-            ).json()
-            if data["status"] in {"succeeded", "failed", "cancelled"}:
-                break
-            time.sleep(5)
-
-        if data["status"] == "succeeded":
-            print(f"Result: {data['result_url']}")
-        else:
-            print(f"Generation {data['status']}: {data.get('error_message')}")
-        ```
-
-        </CodeGroup>
-
-      </Tab>
-      <Tab title="Basic parameters">
-
-        <CodeGroup>
-
-        ```bash cURL
-        # Enqueue, capture the generation id.
-        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
-          -H "Content-Type: application/json" \
-          -H "Authorization: Bearer $OXEN_API_KEY" \
-          -d '{
-          "model": "flux-2-dev",
+          "model": "flux-3-max-keyframes-to-video",
           "prompt": "<prompt>",
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
@@ -290,7 +176,7 @@ Some other noteworthy features of FLUX.2 [dev] include native support for LoRA f
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "flux-2-dev",
+                "model": "flux-3-max-keyframes-to-video",
                 "prompt": "<prompt>",
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
@@ -328,18 +214,16 @@ Some other noteworthy features of FLUX.2 [dev] include native support for LoRA f
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "flux-2-dev",
+          "model": "flux-3-max-keyframes-to-video",
           "prompt": "<prompt>",
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "aspect_ratio": "16:9",
-          "resolution": "1 MP",
-          "num_inference_steps": 30,
-          "guidance": 2,
-          "output_format": "webp",
-          "output_quality": 80,
-          "disable_safety_checker": false
+          "aspect_ratio": "auto",
+          "resolution": "720p",
+          "duration": 5,
+          "generate_audio": true,
+          "reasoning_level": "high"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -370,18 +254,16 @@ Some other noteworthy features of FLUX.2 [dev] include native support for LoRA f
             "https://hub.oxen.ai/api/ai/queue",
             headers=HEADERS,
             json={
-                "model": "flux-2-dev",
+                "model": "flux-3-max-keyframes-to-video",
                 "prompt": "<prompt>",
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "aspect_ratio": "16:9",
-                "resolution": "1 MP",
-                "num_inference_steps": 30,
-                "guidance": 2,
-                "output_format": "webp",
-                "output_quality": 80,
-                "disable_safety_checker": false
+                "aspect_ratio": "auto",
+                "resolution": "720p",
+                "duration": 5,
+                "generate_audio": true,
+                "reasoning_level": "high"
             },
         )
         enqueue.raise_for_status()
@@ -423,72 +305,7 @@ Some other noteworthy features of FLUX.2 [dev] include native support for LoRA f
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "flux-2-dev",
-          "prompt": "<prompt>"
-        }' | jq -r '.generations[0].generation_id')
-
-        # Stream the SSE channel, grab the data line that follows a
-        # media_generation_completed event for our id, and pretty-print it.
-        curl -sN -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/events \
-          | awk -v id="$GEN_ID" '
-            /^event: media_generation_completed$/ { expect=1; next }
-            /^data: / && expect {
-              payload = substr($0, 7)
-              if (index(payload, "\"generation_id\":\"" id "\"")) { print payload; exit }
-              expect = 0
-            }
-          ' | jq .
-        ```
-
-        ```python Python
-        import json
-        import os
-        import requests
-
-        API_KEY = os.environ["OXEN_API_KEY"]
-        AUTH = {"Authorization": f"Bearer {API_KEY}"}
-
-        enqueue = requests.post(
-            "https://hub.oxen.ai/api/ai/queue",
-            headers={**AUTH, "Content-Type": "application/json"},
-            json={
-                "model": "flux-2-dev",
-                "prompt": "<prompt>"
-            },
-        )
-        enqueue.raise_for_status()
-        generation_id = enqueue.json()["generations"][0]["generation_id"]
-
-        with requests.get(
-            "https://hub.oxen.ai/api/events",
-            headers=AUTH,
-            stream=True,
-        ) as stream:
-            event_name = None
-            for line in stream.iter_lines(decode_unicode=True):
-                if line.startswith("event: "):
-                    event_name = line.removeprefix("event: ")
-                elif line.startswith("data: ") and event_name == "media_generation_completed":
-                    payload = json.loads(line.removeprefix("data: "))
-                    if payload.get("generation_id") == generation_id:
-                        print(payload)
-                        break
-        ```
-
-        </CodeGroup>
-
-      </Tab>
-      <Tab title="Basic parameters">
-
-        <CodeGroup>
-
-        ```bash cURL
-        # Enqueue, capture the generation id.
-        GEN_ID=$(curl -s -X POST https://hub.oxen.ai/api/ai/queue \
-          -H "Content-Type: application/json" \
-          -H "Authorization: Bearer $OXEN_API_KEY" \
-          -d '{
-          "model": "flux-2-dev",
+          "model": "flux-3-max-keyframes-to-video",
           "prompt": "<prompt>",
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
@@ -520,7 +337,7 @@ Some other noteworthy features of FLUX.2 [dev] include native support for LoRA f
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "flux-2-dev",
+                "model": "flux-3-max-keyframes-to-video",
                 "prompt": "<prompt>",
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
@@ -559,18 +376,16 @@ Some other noteworthy features of FLUX.2 [dev] include native support for LoRA f
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
-          "model": "flux-2-dev",
+          "model": "flux-3-max-keyframes-to-video",
           "prompt": "<prompt>",
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
-          "aspect_ratio": "16:9",
-          "resolution": "1 MP",
-          "num_inference_steps": 30,
-          "guidance": 2,
-          "output_format": "webp",
-          "output_quality": 80,
-          "disable_safety_checker": false
+          "aspect_ratio": "auto",
+          "resolution": "720p",
+          "duration": 5,
+          "generate_audio": true,
+          "reasoning_level": "high"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -598,18 +413,16 @@ Some other noteworthy features of FLUX.2 [dev] include native support for LoRA f
             "https://hub.oxen.ai/api/ai/queue",
             headers={**AUTH, "Content-Type": "application/json"},
             json={
-                "model": "flux-2-dev",
+                "model": "flux-3-max-keyframes-to-video",
                 "prompt": "<prompt>",
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
-                "aspect_ratio": "16:9",
-                "resolution": "1 MP",
-                "num_inference_steps": 30,
-                "guidance": 2,
-                "output_format": "webp",
-                "output_quality": 80,
-                "disable_safety_checker": false
+                "aspect_ratio": "auto",
+                "resolution": "720p",
+                "duration": 5,
+                "generate_audio": true,
+                "reasoning_level": "high"
             },
         )
         enqueue.raise_for_status()
@@ -644,7 +457,7 @@ Some other noteworthy features of FLUX.2 [dev] include native support for LoRA f
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/flux-2-dev
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/flux-3-max-keyframes-to-video
 ```
 
 ## Request parameters
@@ -653,18 +466,16 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `prompt` | `string` | &mdash; | Prompt for generated image. Use @Image1, @Image2, etc. to reference the input images. |
+| `prompt` | `string` | &mdash; | Describe how the video moves between the keyframes, including any sound. |
+| `input_image` | `array<string>` | &mdash; | Images the video passes through, 1 to 10 in order: the first starts the video, the last ends it, and the rest fall evenly in between. PNG, JPEG or WebP. With aspect ratio on auto, the video follows the first image's shape. |
 
 ### Optional parameters
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `input_image` | `array<string>` | &mdash; | Input images to transform or use as reference. Reference them in the prompt as @Image1, @Image2, etc. |
-| `aspect_ratio` | `string` | `"16:9"` | Aspect Ratio One of: 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, match_input_image. |
-| `resolution` | `string` | `"1 MP"` | Resolution One of: 1 MP, 2 MP, 0.5 MP. |
-| `num_inference_steps` | `integer` | `30` | Number of denoising steps. Recommended range is 28-50, and lower number of steps produce lower quality outputs, faster. Range: 1 – 50. |
-| `guidance` | `number` | `2` | Guidance for generated image. Lower values can give more realistic images. Good values to try are 2, 2.5, 3 and 3.5 Range: 0 – 10. |
-| `seed` | `integer` | &mdash; | Random seed. Set for reproducible generation |
-| `output_format` | `string` | `"webp"` | Format of the output images One of: webp, jpg, png. |
-| `output_quality` | `integer` | `80` | Quality when saving the output images, from 0 to 100. 100 is best quality, 0 is lowest quality. Not relevant for .png outputs Range: 0 – 100. |
-| `disable_safety_checker` | `boolean` | `false` | Disable safety checker for generated images. |
+| `aspect_ratio` | `string` | `"auto"` | Aspect Ratio One of: auto, 21:9, 2:1, 16:9, 4:3, 1:1, 3:4, 9:16. |
+| `resolution` | `string` | `"720p"` | Resolution One of: 720p, 1080p. |
+| `duration` | `integer` | `5` | Length of the generated video. Range: 5 – 20. |
+| `generate_audio` | `boolean` | `true` | Generate synchronized audio for the video. |
+| `reasoning_level` | `string` | `"high"` | How much effort the model spends expanding the prompt before generating. High follows the prompt more closely; low returns faster. One of: low, high. |
+| `seed` | `integer` | &mdash; | Random seed. A random seed is selected when omitted. |

@@ -1,34 +1,31 @@
 ---
-title: "Mistral 7B"
-description: "General-purpose open model"
+title: "GPT 6.1 Terra"
+description: "Fast computer use and visual reasoning, 1M context"
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try Mistral 7B in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=open-mistral-7b">
+  <Card title="Try GPT 6.1 Terra in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=gpt-6-1-terra">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `open-mistral-7b`
+**Model ID:** `gpt-6-1-terra`
 
-Mistral 7B is a 7 billion parameter LLM that excels in general-purpose language tasks, including text generation, question answering, and code tasks. It is particularly notable for its balanced performance across both natural language and programming tasks, achieving comparable results to specialized models like CodeLlama 7B while maintaining strong general capabilities.
+GPT 6.1 Terra is OpenAI's mid-tier GPT-6.1 model, pairing visual reasoning and precise computer use with clear, natural writing at a low per-token price. It succeeds GPT 5.6 Terra and runs agentic tasks considerably faster than GPT 6.1 Sol and GPT 6 Astra, which remain the choice for the most complex coding work.
 
-Some noteworthy use cases of Mistral 7B include handling longer text sequences efficiently and performing well on code-related tasks.
+It accepts text and images and supports configurable reasoning effort (none, low, medium, high, xhigh, and max), streaming, structured outputs, and function calling, with the web search, file search, image generation, code interpreter, hosted shell, apply patch, skills, computer use, MCP, and tool search tools. It suits high-volume coding, computer-use agents, document and screenshot understanding, and everyday writing and analysis.
 
 | Metric             | Value              |
 |--------------------|--------------------|
-| Parameter Count    | 7 billion         |
-| Mixture of Experts | No                |
-| Context Length     | 32,768 tokens     |
-| Multilingual       | No (primarily English) |
-| Quantized*         | Unknown           |
-
-*_Quantization is specific to the inference provider and the model may be offered with different quantization levels by other providers._
+| Context Length     | 1,050,000 tokens   |
+| Max Output Tokens  | 128,000 tokens     |
+| Knowledge Cutoff   | Jun 1, 2026        |
+| Multilingual       | Yes                |
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=open-mistral-7b) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=gpt-6-1-terra) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
@@ -41,7 +38,7 @@ Some noteworthy use cases of Mistral 7B include handling longer text sequences e
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer $OXEN_API_KEY" \
       -d '{
-      "model": "open-mistral-7b",
+      "model": "gpt-6-1-terra",
       "messages": [
         {
           "role": "user",
@@ -62,7 +59,7 @@ Some noteworthy use cases of Mistral 7B include handling longer text sequences e
             "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
         },
         json={
-            "model": "open-mistral-7b",
+            "model": "gpt-6-1-terra",
             "messages": [
                 {
                     "role": "user",
@@ -87,7 +84,7 @@ Some noteworthy use cases of Mistral 7B include handling longer text sequences e
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer $OXEN_API_KEY" \
       -d '{
-      "model": "open-mistral-7b",
+      "model": "gpt-6-1-terra",
       "messages": [
         {
           "role": "user",
@@ -111,7 +108,7 @@ Some noteworthy use cases of Mistral 7B include handling longer text sequences e
             "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
         },
         json={
-            "model": "open-mistral-7b",
+            "model": "gpt-6-1-terra",
             "messages": [
                 {
                     "role": "user",
@@ -139,7 +136,7 @@ Some noteworthy use cases of Mistral 7B include handling longer text sequences e
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer $OXEN_API_KEY" \
       -d '{
-      "model": "open-mistral-7b",
+      "model": "gpt-6-1-terra",
       "messages": [
         {
           "role": "user",
@@ -149,7 +146,9 @@ Some noteworthy use cases of Mistral 7B include handling longer text sequences e
       "temperature": 0.7,
       "max_tokens": 1024,
       "stream": false,
-      "top_p": 1.0
+      "top_p": 1.0,
+      "frequency_penalty": 0,
+      "presence_penalty": 0
     }'
     ```
 
@@ -164,7 +163,7 @@ Some noteworthy use cases of Mistral 7B include handling longer text sequences e
             "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
         },
         json={
-            "model": "open-mistral-7b",
+            "model": "gpt-6-1-terra",
             "messages": [
                 {
                     "role": "user",
@@ -174,7 +173,9 @@ Some noteworthy use cases of Mistral 7B include handling longer text sequences e
             "temperature": 0.7,
             "max_tokens": 1024,
             "stream": false,
-            "top_p": 1.0
+            "top_p": 1.0,
+            "frequency_penalty": 0,
+            "presence_penalty": 0
         },
     )
     response.raise_for_status()
@@ -191,7 +192,7 @@ Some noteworthy use cases of Mistral 7B include handling longer text sequences e
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/open-mistral-7b
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/gpt-6-1-terra
 ```
 
 ## Request parameters
