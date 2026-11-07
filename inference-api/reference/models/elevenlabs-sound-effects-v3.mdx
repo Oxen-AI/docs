@@ -1,19 +1,19 @@
 ---
-title: "Eleven Sound Effects v2"
-description: "Text-to-sound effects up to 30s, loopable"
+title: "Eleven Sound Effects v3"
+description: "Layered multi-sound effects up to 30s, loopable"
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try Eleven Sound Effects v2 in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=elevenlabs-sound-effects-v2">
+  <Card title="Try Eleven Sound Effects v3 in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=elevenlabs-sound-effects-v3">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `elevenlabs-sound-effects-v2`
+**Model ID:** `elevenlabs-sound-effects-v3`
 
-Eleven Sound Effects v2 generates sound effects, ambiences, and short musical stingers from a text description.
+Eleven Sound Effects v3 generates sound effects, ambiences, music cues, and vocal sounds from a text description, following several sound instructions in a single prompt.
 
-Describe the sound and its character, such as "heavy wooden door creaking open in a stone hallway", and the model returns a clip of up to 30 seconds, or picks a length from the prompt. Loop mode produces clips that repeat seamlessly for ambiences and game audio, and a prompt-influence control trades variety for closer adherence to the description. It suits foley for video, game assets, UI sounds, and adding audio to silent video generations.
+Describe a layered scene, such as "rain on a tin roof, a dog barking in the distance, and a kettle starting to whistle", and the model renders each element in one clip of up to 30 seconds, or picks a length from the prompt. It produces clean, natural audio, with convincing music and vocals and tonal sounds like gongs, chimes, and whistles. Loop mode produces clips that repeat seamlessly for ambiences and game audio, and a prompt-influence control trades variety for closer adherence to the description. It suits foley for video, game assets, UI sounds, and adding audio to silent video generations.
 
 | Metric     | Value       |
 |------------|-------------|
@@ -22,7 +22,7 @@ Describe the sound and its character, such as "heavy wooden door creaking open i
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=elevenlabs-sound-effects-v2) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=elevenlabs-sound-effects-v3) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
@@ -35,7 +35,7 @@ Describe the sound and its character, such as "heavy wooden door creaking open i
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer $OXEN_API_KEY" \
       -d '{
-      "model": "elevenlabs-sound-effects-v2",
+      "model": "elevenlabs-sound-effects-v3",
       "prompt": "<prompt>",
       "input": "Welcome to Oxen"
     }'
@@ -52,7 +52,7 @@ Describe the sound and its character, such as "heavy wooden door creaking open i
             "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
         },
         json={
-            "model": "elevenlabs-sound-effects-v2",
+            "model": "elevenlabs-sound-effects-v3",
             "prompt": "<prompt>",
             "input": "Welcome to Oxen"
         },
@@ -73,7 +73,7 @@ Describe the sound and its character, such as "heavy wooden door creaking open i
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer $OXEN_API_KEY" \
       -d '{
-      "model": "elevenlabs-sound-effects-v2",
+      "model": "elevenlabs-sound-effects-v3",
       "prompt": "<prompt>",
       "duration": 5,
       "loop": false,
@@ -93,7 +93,7 @@ Describe the sound and its character, such as "heavy wooden door creaking open i
             "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
         },
         json={
-            "model": "elevenlabs-sound-effects-v2",
+            "model": "elevenlabs-sound-effects-v3",
             "prompt": "<prompt>",
             "duration": 5,
             "loop": false,
@@ -115,7 +115,7 @@ Describe the sound and its character, such as "heavy wooden door creaking open i
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/elevenlabs-sound-effects-v2
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/elevenlabs-sound-effects-v3
 ```
 
 ## Request parameters

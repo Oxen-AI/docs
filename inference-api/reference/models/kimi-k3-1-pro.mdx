@@ -1,33 +1,34 @@
 ---
-title: "Mixtral 8x7B"
-description: "Efficient open MoE model"
+title: "Kimi K3.1 Pro"
+description: "Agentic coding and tool use, 1M context"
 ---
 
 <CardGroup cols={1}>
-  <Card title="Try Mixtral 8x7B in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=open-mixtral-8x7b">
+  <Card title="Try Kimi K3.1 Pro in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=kimi-k3-1-pro">
     Run this model interactively, tune parameters, and compare outputs.
   </Card>
 </CardGroup>
 
-**Model ID:** `open-mixtral-8x7b`
+**Model ID:** `kimi-k3-1-pro`
 
-Mixtral 8x7B is an LLM designed for efficient processing and optimized model size. It excels in multilingual capabilities and cost-performance efficiency, making it a strong contender against models like GPT-3.5.
+Kimi K3.1 Pro is Moonshot AI's post-trained upgrade of Kimi K3, a Mixture-of-Experts model with a 1M-token context window aimed at agentic coding, terminal work, and long-horizon tool use.
+
+The model always thinks before answering and returns its reasoning alongside the response, with a reasoning effort of low, high, or max. It calls tools with strict JSON schema output and understands images and video, which suits coding agents that read screenshots, multi-step research, and whole-repository work. Moonshot is publishing open weights for the model.
 
 | Metric             | Value              |
 |--------------------|--------------------|
-| Parameter Count    | 47 billion        |
-| Mixture of Experts | Yes               |
-| Active Parameter Count | 13 billion     |
-| Context Length     | 32,768 tokens     |
-| Multilingual       | Yes               |
-| Quantized*         | Unknown           |
+| Parameter Count    | Unknown            |
+| Mixture of Experts | Yes                |
+| Context Length     | 1,048,576 tokens   |
+| Multilingual       | Yes                |
+| Quantized*         | Unknown            |
 
-*_Quantization is specific to the inference provider and may vary._
+*_Quantization is specific to the inference provider and the model may be offered with different quantization levels by other providers._
 
 ## Example request
 
 <Tip>
-  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=open-mixtral-8x7b) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=kimi-k3-1-pro) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
 </Tip>
 
 <Tabs>
@@ -40,7 +41,7 @@ Mixtral 8x7B is an LLM designed for efficient processing and optimized model siz
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer $OXEN_API_KEY" \
       -d '{
-      "model": "open-mixtral-8x7b",
+      "model": "kimi-k3-1-pro",
       "messages": [
         {
           "role": "user",
@@ -61,7 +62,7 @@ Mixtral 8x7B is an LLM designed for efficient processing and optimized model siz
             "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
         },
         json={
-            "model": "open-mixtral-8x7b",
+            "model": "kimi-k3-1-pro",
             "messages": [
                 {
                     "role": "user",
@@ -86,7 +87,7 @@ Mixtral 8x7B is an LLM designed for efficient processing and optimized model siz
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer $OXEN_API_KEY" \
       -d '{
-      "model": "open-mixtral-8x7b",
+      "model": "kimi-k3-1-pro",
       "messages": [
         {
           "role": "user",
@@ -110,7 +111,7 @@ Mixtral 8x7B is an LLM designed for efficient processing and optimized model siz
             "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
         },
         json={
-            "model": "open-mixtral-8x7b",
+            "model": "kimi-k3-1-pro",
             "messages": [
                 {
                     "role": "user",
@@ -138,7 +139,7 @@ Mixtral 8x7B is an LLM designed for efficient processing and optimized model siz
       -H "Content-Type: application/json" \
       -H "Authorization: Bearer $OXEN_API_KEY" \
       -d '{
-      "model": "open-mixtral-8x7b",
+      "model": "kimi-k3-1-pro",
       "messages": [
         {
           "role": "user",
@@ -163,7 +164,7 @@ Mixtral 8x7B is an LLM designed for efficient processing and optimized model siz
             "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
         },
         json={
-            "model": "open-mixtral-8x7b",
+            "model": "kimi-k3-1-pro",
             "messages": [
                 {
                     "role": "user",
@@ -190,7 +191,7 @@ Mixtral 8x7B is an LLM designed for efficient processing and optimized model siz
 The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
 
 ```bash
-curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/open-mixtral-8x7b
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/kimi-k3-1-pro
 ```
 
 ## Request parameters
