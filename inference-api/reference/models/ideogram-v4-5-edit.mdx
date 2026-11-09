@@ -81,7 +81,9 @@ Output preserves the source geometry by default, with downscaling when needed. O
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ]
+          ],
+          "mask": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "lock_unmasked": true
         }'
         ```
 
@@ -101,7 +103,9 @@ Output preserves the source geometry by default, with downscaling when needed. O
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ]
+                ],
+                "mask": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "lock_unmasked": true
             },
         )
         response.raise_for_status()
@@ -126,6 +130,8 @@ Output preserves the source geometry by default, with downscaling when needed. O
           "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
+          "mask": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "lock_unmasked": true,
           "edit_precision": "regular",
           "quality": "medium",
           "aspect_ratio": "auto",
@@ -151,6 +157,8 @@ Output preserves the source geometry by default, with downscaling when needed. O
                 "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
+                "mask": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "lock_unmasked": true,
                 "edit_precision": "regular",
                 "quality": "medium",
                 "aspect_ratio": "auto",
@@ -257,7 +265,9 @@ Output preserves the source geometry by default, with downscaling when needed. O
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ]
+          ],
+          "mask": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "lock_unmasked": true
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -293,7 +303,9 @@ Output preserves the source geometry by default, with downscaling when needed. O
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ]
+                ],
+                "mask": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "lock_unmasked": true
             },
         )
         enqueue.raise_for_status()
@@ -333,6 +345,8 @@ Output preserves the source geometry by default, with downscaling when needed. O
           "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
+          "mask": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "lock_unmasked": true,
           "edit_precision": "regular",
           "quality": "medium",
           "aspect_ratio": "auto",
@@ -374,6 +388,8 @@ Output preserves the source geometry by default, with downscaling when needed. O
                 "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
+                "mask": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "lock_unmasked": true,
                 "edit_precision": "regular",
                 "quality": "medium",
                 "aspect_ratio": "auto",
@@ -492,7 +508,9 @@ Output preserves the source geometry by default, with downscaling when needed. O
           "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ]
+          ],
+          "mask": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "lock_unmasked": true
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -525,7 +543,9 @@ Output preserves the source geometry by default, with downscaling when needed. O
                 "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ]
+                ],
+                "mask": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "lock_unmasked": true
             },
         )
         enqueue.raise_for_status()
@@ -566,6 +586,8 @@ Output preserves the source geometry by default, with downscaling when needed. O
           "input_images": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
+          "mask": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "lock_unmasked": true,
           "edit_precision": "regular",
           "quality": "medium",
           "aspect_ratio": "auto",
@@ -604,6 +626,8 @@ Output preserves the source geometry by default, with downscaling when needed. O
                 "input_images": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
+                "mask": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "lock_unmasked": true,
                 "edit_precision": "regular",
                 "quality": "medium",
                 "aspect_ratio": "auto",
@@ -660,7 +684,8 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `input_images` | `array<string>` | &mdash; | Up to four reference images, or three when a mask is supplied, in addition to the primary source image. |
-| `mask_url` | `string` | &mdash; | Optional mask matching the source dimensions. Black pixels mark regions to edit; white pixels are preserved. Must contain both regions. When supplied, keep the aspect ratio on auto and use at most three reference images. Format: uri. |
+| `mask` | `string` | &mdash; | Paint the part of Image 1 to change. Takes up to three reference images. Format: uri. |
+| `lock_unmasked` | `boolean` | `true` | Only modify the pixels within the masked region. |
 | `edit_precision` | `string` | `"regular"` | Regular performs generative editing. High uses precise editing with restoration of unchanged pixels. One of: regular, high. |
 | `quality` | `string` | `"medium"` | Image quality tier. Very low costs $0.008, low $0.03, medium $0.06, and high $0.22 per image, independent of image size. One of: very_low, low, medium, high. |
 | `aspect_ratio` | `string` | `"auto"` | Aspect Ratio One of: auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 5:4, 4:5, 16:10, 10:16, 2:1, 1:2. |

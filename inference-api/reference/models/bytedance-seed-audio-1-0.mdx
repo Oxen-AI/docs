@@ -69,10 +69,10 @@ ByteDance Seed Audio 1.0 is a text-to-speech and audio generation model. It synt
       -d '{
       "model": "bytedance-seed-audio-1-0",
       "prompt": "<prompt>",
-      "audio_urls": [
+      "input_audios": [
         "https://example.com/audio.mp3"
       ],
-      "image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+      "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
       "input": "Welcome to Oxen"
     }'
     ```
@@ -90,10 +90,10 @@ ByteDance Seed Audio 1.0 is a text-to-speech and audio generation model. It synt
         json={
             "model": "bytedance-seed-audio-1-0",
             "prompt": "<prompt>",
-            "audio_urls": [
+            "input_audios": [
                 "https://example.com/audio.mp3"
             ],
-            "image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+            "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
             "input": "Welcome to Oxen"
         },
     )
@@ -115,10 +115,10 @@ ByteDance Seed Audio 1.0 is a text-to-speech and audio generation model. It synt
       -d '{
       "model": "bytedance-seed-audio-1-0",
       "prompt": "<prompt>",
-      "audio_urls": [
+      "input_audios": [
         "https://example.com/audio.mp3"
       ],
-      "image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+      "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
       "output_format": "mp3",
       "sample_rate": 24000,
       "speed": 1.0,
@@ -141,10 +141,10 @@ ByteDance Seed Audio 1.0 is a text-to-speech and audio generation model. It synt
         json={
             "model": "bytedance-seed-audio-1-0",
             "prompt": "<prompt>",
-            "audio_urls": [
+            "input_audios": [
                 "https://example.com/audio.mp3"
             ],
-            "image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+            "input_image": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
             "output_format": "mp3",
             "sample_rate": 24000,
             "speed": 1.0,
@@ -182,8 +182,8 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `audio_urls` | `array<string>` | &mdash; | Up to 3 reference audio URLs for voice cloning (max 30s and 10MB each). Reference them in the prompt as @Audio1, @Audio2, @Audio3. Supported formats: wav, mp3, pcm, ogg_opus. |
-| `image_url` | `string` | &mdash; | Optional single reference image URL (jpeg, png, or webp, max 10MB). Incompatible with audio references. Format: uri. |
+| `input_audios` | `array<string>` | &mdash; | Up to 3 reference audio URLs for voice cloning (max 30s and 10MB each). Reference them in the prompt as @Audio1, @Audio2, @Audio3. Supported formats: wav, mp3, pcm, ogg_opus. |
+| `input_image` | `string` | &mdash; | Optional single reference image URL (jpeg, png, or webp, max 10MB). Incompatible with audio references. Format: uri. |
 | `output_format` | `string` | `"mp3"` | Output audio file format. One of: wav, mp3, pcm, ogg_opus. |
 | `sample_rate` | `integer` | `24000` | Output sample rate in Hz. One of: 8000, 16000, 24000, 32000, 44100, 48000. |
 | `speed` | `number` | `1.0` | Speech tempo multiplier (typical range 0.5-2.0). Range: 0.5 – 2.0. |

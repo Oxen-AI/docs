@@ -435,7 +435,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `reference_image_url` | `string` | &mdash; | Reference image URL for reference-based editing. Format: uri. |
+| `input_images` | `array<string>` | &mdash; | A reference image for the edit to follow. |
 | `resolution` | `string` | `"1080p"` | Resolution One of: 720p, 1080p. |
 | `duration` | `integer` | `0` | Duration Range: 2 – 10. |
 | `audio_setting` | `string` | `"auto"` | Audio handling. 'auto': model decides whether to regenerate audio. 'origin': preserve original audio from input video. One of: auto, origin. |

@@ -82,7 +82,7 @@ Prompts are limited to 1,300 tokens and weights are not published.
           -d '{
           "model": "qwen-image-2",
           "prompt": "<prompt>",
-          "input_images": [
+          "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
         }'
@@ -101,7 +101,7 @@ Prompts are limited to 1,300 tokens and weights are not published.
             json={
                 "model": "qwen-image-2",
                 "prompt": "<prompt>",
-                "input_images": [
+                "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
             },
@@ -124,7 +124,7 @@ Prompts are limited to 1,300 tokens and weights are not published.
           -d '{
           "model": "qwen-image-2",
           "prompt": "<prompt>",
-          "input_images": [
+          "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
           "aspect_ratio": "16:9",
@@ -148,7 +148,7 @@ Prompts are limited to 1,300 tokens and weights are not published.
             json={
                 "model": "qwen-image-2",
                 "prompt": "<prompt>",
-                "input_images": [
+                "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
                 "aspect_ratio": "16:9",
@@ -252,7 +252,7 @@ Prompts are limited to 1,300 tokens and weights are not published.
           -d '{
           "model": "qwen-image-2",
           "prompt": "<prompt>",
-          "input_images": [
+          "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
         }' | jq -r '.generations[0].generation_id')
@@ -287,7 +287,7 @@ Prompts are limited to 1,300 tokens and weights are not published.
             json={
                 "model": "qwen-image-2",
                 "prompt": "<prompt>",
-                "input_images": [
+                "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
             },
@@ -325,7 +325,7 @@ Prompts are limited to 1,300 tokens and weights are not published.
           -d '{
           "model": "qwen-image-2",
           "prompt": "<prompt>",
-          "input_images": [
+          "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
           "aspect_ratio": "16:9",
@@ -365,7 +365,7 @@ Prompts are limited to 1,300 tokens and weights are not published.
             json={
                 "model": "qwen-image-2",
                 "prompt": "<prompt>",
-                "input_images": [
+                "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
                 "aspect_ratio": "16:9",
@@ -481,7 +481,7 @@ Prompts are limited to 1,300 tokens and weights are not published.
           -d '{
           "model": "qwen-image-2",
           "prompt": "<prompt>",
-          "input_images": [
+          "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
         }' | jq -r '.generations[0].generation_id')
@@ -513,7 +513,7 @@ Prompts are limited to 1,300 tokens and weights are not published.
             json={
                 "model": "qwen-image-2",
                 "prompt": "<prompt>",
-                "input_images": [
+                "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
             },
@@ -552,7 +552,7 @@ Prompts are limited to 1,300 tokens and weights are not published.
           -d '{
           "model": "qwen-image-2",
           "prompt": "<prompt>",
-          "input_images": [
+          "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
           "aspect_ratio": "16:9",
@@ -589,7 +589,7 @@ Prompts are limited to 1,300 tokens and weights are not published.
             json={
                 "model": "qwen-image-2",
                 "prompt": "<prompt>",
-                "input_images": [
+                "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
                 "aspect_ratio": "16:9",
@@ -646,7 +646,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `input_images` | `array<string>` | &mdash; | Optional input images to edit or combine. The output keeps the aspect ratio of the last image unless an aspect ratio is chosen. Reference them in the prompt as @Image1, @Image2, etc. Up to 3 images. |
+| `input_image` | `array<string>` | &mdash; | Optional input images to edit or combine. The output keeps the aspect ratio of the last image unless an aspect ratio is chosen. Reference them in the prompt as @Image1, @Image2, etc. Up to 3 images. |
 | `aspect_ratio` | `string` | `"16:9"` | Aspect Ratio One of: auto, 16:9, 9:16, 1:1, 4:3, 3:4. |
 | `resolution` | `string` | `"2K"` | Resolution One of: 1K, 2K. |
 | `num_images` | `integer` | `1` | Number of images to generate, 1 to 6. Only the first is returned; all are billed. Range: 1 – 6. |

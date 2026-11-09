@@ -76,7 +76,9 @@ It generates from a text prompt or edits up to 16 reference images, with optiona
           "prompt": "<prompt>",
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ]
+          ],
+          "mask": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "lock_unmasked": true
         }'
         ```
 
@@ -95,7 +97,9 @@ It generates from a text prompt or edits up to 16 reference images, with optiona
                 "prompt": "<prompt>",
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ]
+                ],
+                "mask": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "lock_unmasked": true
             },
         )
         response.raise_for_status()
@@ -119,6 +123,8 @@ It generates from a text prompt or edits up to 16 reference images, with optiona
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
+          "mask": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "lock_unmasked": true,
           "aspect_ratio": "16:9",
           "resolution": "2K",
           "quality": "high",
@@ -144,6 +150,8 @@ It generates from a text prompt or edits up to 16 reference images, with optiona
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
+                "mask": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "lock_unmasked": true,
                 "aspect_ratio": "16:9",
                 "resolution": "2K",
                 "quality": "high",
@@ -248,7 +256,9 @@ It generates from a text prompt or edits up to 16 reference images, with optiona
           "prompt": "<prompt>",
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ]
+          ],
+          "mask": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "lock_unmasked": true
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -283,7 +293,9 @@ It generates from a text prompt or edits up to 16 reference images, with optiona
                 "prompt": "<prompt>",
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ]
+                ],
+                "mask": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "lock_unmasked": true
             },
         )
         enqueue.raise_for_status()
@@ -322,6 +334,8 @@ It generates from a text prompt or edits up to 16 reference images, with optiona
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
+          "mask": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "lock_unmasked": true,
           "aspect_ratio": "16:9",
           "resolution": "2K",
           "quality": "high",
@@ -363,6 +377,8 @@ It generates from a text prompt or edits up to 16 reference images, with optiona
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
+                "mask": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "lock_unmasked": true,
                 "aspect_ratio": "16:9",
                 "resolution": "2K",
                 "quality": "high",
@@ -479,7 +495,9 @@ It generates from a text prompt or edits up to 16 reference images, with optiona
           "prompt": "<prompt>",
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-          ]
+          ],
+          "mask": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "lock_unmasked": true
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -511,7 +529,9 @@ It generates from a text prompt or edits up to 16 reference images, with optiona
                 "prompt": "<prompt>",
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
-                ]
+                ],
+                "mask": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "lock_unmasked": true
             },
         )
         enqueue.raise_for_status()
@@ -551,6 +571,8 @@ It generates from a text prompt or edits up to 16 reference images, with optiona
           "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
+          "mask": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+          "lock_unmasked": true,
           "aspect_ratio": "16:9",
           "resolution": "2K",
           "quality": "high",
@@ -589,6 +611,8 @@ It generates from a text prompt or edits up to 16 reference images, with optiona
                 "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
+                "mask": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
+                "lock_unmasked": true,
                 "aspect_ratio": "16:9",
                 "resolution": "2K",
                 "quality": "high",
@@ -645,7 +669,8 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `input_image` | `array<string>` | &mdash; | Optional reference image(s) to edit, up to 16. Leave empty to generate from the prompt alone. |
-| `mask_url` | `string` | &mdash; | Optional mask image URL for inpainting. Transparent pixels mark regions to edit; opaque pixels are preserved. Must match the first reference image's size. Leave empty to edit the whole image. Format: uri. |
+| `mask` | `string` | &mdash; | Paint the part of Image 1 to change. Format: uri. |
+| `lock_unmasked` | `boolean` | `true` | Only modify the pixels within the masked region. |
 | `aspect_ratio` | `string` | `"16:9"` | Aspect Ratio One of: auto, 1:1, 16:9, 9:16, 4:3, 3:4, 3:2, 2:3, 21:9, 9:21. |
 | `resolution` | `string` | `"2K"` | Resolution One of: 1K, 2K, 4K. |
 | `quality` | `string` | `"high"` | Output quality tier. Higher tiers render more detail and cost more; xhigh and max are the slowest and most detailed. One of: low, medium, high, xhigh, max. |
