@@ -635,7 +635,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | `input_image` | `string` | &mdash; | First frame of the video. JPEG, PNG, BMP, or WEBP up to 20 MB. Leave empty when continuing from a video. Format: uri. |
 | `tail_image_url` | `string` | &mdash; | Optional last frame. Same requirements as the first frame. Format: uri. |
 | `input_video` | `string` | &mdash; | Optional clip to continue from, 2 to 10 seconds, MP4 or MOV up to 100 MB. Leave empty when starting from an image. Format: uri. |
-| `audio_url` | `string` | &mdash; | Optional audio for lip sync and timing, 2 to 30 seconds, WAV or MP3 up to 15 MB. Format: uri. |
+| `input_audio` | `string` | &mdash; | Optional audio for lip sync and timing, 2 to 30 seconds, WAV or MP3 up to 15 MB. Format: uri. |
 | `resolution` | `string` | `"1080P"` | Resolution One of: 720P, 1080P. |
 | `duration` | `integer` | `5` | Duration Range: 2 – 15. |
 | `negative_prompt` | `string` | &mdash; | What to keep out of the video. Up to 500 characters. |

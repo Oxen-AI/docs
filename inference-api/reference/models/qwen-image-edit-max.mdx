@@ -45,7 +45,7 @@ Weights are not published.
           -d '{
           "model": "qwen-image-edit-max",
           "prompt": "<prompt>",
-          "input_images": [
+          "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
         }'
@@ -64,7 +64,7 @@ Weights are not published.
             json={
                 "model": "qwen-image-edit-max",
                 "prompt": "<prompt>",
-                "input_images": [
+                "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
             },
@@ -87,7 +87,7 @@ Weights are not published.
           -d '{
           "model": "qwen-image-edit-max",
           "prompt": "<prompt>",
-          "input_images": [
+          "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
           "aspect_ratio": "auto",
@@ -110,7 +110,7 @@ Weights are not published.
             json={
                 "model": "qwen-image-edit-max",
                 "prompt": "<prompt>",
-                "input_images": [
+                "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
                 "aspect_ratio": "auto",
@@ -146,7 +146,7 @@ Weights are not published.
           -d '{
           "model": "qwen-image-edit-max",
           "prompt": "<prompt>",
-          "input_images": [
+          "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
         }' | jq -r '.generations[0].generation_id')
@@ -181,7 +181,7 @@ Weights are not published.
             json={
                 "model": "qwen-image-edit-max",
                 "prompt": "<prompt>",
-                "input_images": [
+                "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
             },
@@ -219,7 +219,7 @@ Weights are not published.
           -d '{
           "model": "qwen-image-edit-max",
           "prompt": "<prompt>",
-          "input_images": [
+          "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
           "aspect_ratio": "auto",
@@ -258,7 +258,7 @@ Weights are not published.
             json={
                 "model": "qwen-image-edit-max",
                 "prompt": "<prompt>",
-                "input_images": [
+                "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
                 "aspect_ratio": "auto",
@@ -308,7 +308,7 @@ Weights are not published.
           -d '{
           "model": "qwen-image-edit-max",
           "prompt": "<prompt>",
-          "input_images": [
+          "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ]
         }' | jq -r '.generations[0].generation_id')
@@ -340,7 +340,7 @@ Weights are not published.
             json={
                 "model": "qwen-image-edit-max",
                 "prompt": "<prompt>",
-                "input_images": [
+                "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ]
             },
@@ -379,7 +379,7 @@ Weights are not published.
           -d '{
           "model": "qwen-image-edit-max",
           "prompt": "<prompt>",
-          "input_images": [
+          "input_image": [
             "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
           ],
           "aspect_ratio": "auto",
@@ -415,7 +415,7 @@ Weights are not published.
             json={
                 "model": "qwen-image-edit-max",
                 "prompt": "<prompt>",
-                "input_images": [
+                "input_image": [
                     "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png"
                 ],
                 "aspect_ratio": "auto",
@@ -466,7 +466,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `prompt` | `string` | &mdash; | Text prompt describing the image to generate, or the edit to apply. Use @Image1, @Image2, etc. to reference the input images. |
-| `input_images` | `array<string>` | &mdash; | Input images to edit or combine. The output keeps the aspect ratio of the last image unless an aspect ratio is chosen. Reference them in the prompt as @Image1, @Image2, etc. Up to 3 images. |
+| `input_image` | `array<string>` | &mdash; | Input images to edit or combine. The output keeps the aspect ratio of the last image unless an aspect ratio is chosen. Reference them in the prompt as @Image1, @Image2, etc. Up to 3 images. |
 
 ### Optional parameters
 

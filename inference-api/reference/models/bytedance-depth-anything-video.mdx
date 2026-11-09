@@ -37,7 +37,7 @@ Estimate temporally consistent depth maps from video using Video Depth Anything.
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-depth-anything-video",
-          "video_url": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }'
         ```
 
@@ -53,7 +53,7 @@ Estimate temporally consistent depth maps from video using Video Depth Anything.
             },
             json={
                 "model": "bytedance-depth-anything-video",
-                "video_url": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         response.raise_for_status()
@@ -73,7 +73,7 @@ Estimate temporally consistent depth maps from video using Video Depth Anything.
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-depth-anything-video",
-          "video_url": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "depth_model": "VDA-Large",
           "colormap": "grayscale",
           "resolution": "auto",
@@ -94,7 +94,7 @@ Estimate temporally consistent depth maps from video using Video Depth Anything.
             },
             json={
                 "model": "bytedance-depth-anything-video",
-                "video_url": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "depth_model": "VDA-Large",
                 "colormap": "grayscale",
                 "resolution": "auto",
@@ -128,7 +128,7 @@ Estimate temporally consistent depth maps from video using Video Depth Anything.
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-depth-anything-video",
-          "video_url": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }' | jq -r '.generations[0].generation_id')
 
         # Poll until the generation reaches a terminal status.
@@ -160,7 +160,7 @@ Estimate temporally consistent depth maps from video using Video Depth Anything.
             headers=HEADERS,
             json={
                 "model": "bytedance-depth-anything-video",
-                "video_url": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         enqueue.raise_for_status()
@@ -195,7 +195,7 @@ Estimate temporally consistent depth maps from video using Video Depth Anything.
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-depth-anything-video",
-          "video_url": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "depth_model": "VDA-Large",
           "colormap": "grayscale",
           "resolution": "auto",
@@ -232,7 +232,7 @@ Estimate temporally consistent depth maps from video using Video Depth Anything.
             headers=HEADERS,
             json={
                 "model": "bytedance-depth-anything-video",
-                "video_url": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "depth_model": "VDA-Large",
                 "colormap": "grayscale",
                 "resolution": "auto",
@@ -280,7 +280,7 @@ Estimate temporally consistent depth maps from video using Video Depth Anything.
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-depth-anything-video",
-          "video_url": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
         }' | jq -r '.generations[0].generation_id')
 
         # Stream the SSE channel, grab the data line that follows a
@@ -309,7 +309,7 @@ Estimate temporally consistent depth maps from video using Video Depth Anything.
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "bytedance-depth-anything-video",
-                "video_url": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4"
             },
         )
         enqueue.raise_for_status()
@@ -345,7 +345,7 @@ Estimate temporally consistent depth maps from video using Video Depth Anything.
           -H "Authorization: Bearer $OXEN_API_KEY" \
           -d '{
           "model": "bytedance-depth-anything-video",
-          "video_url": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+          "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
           "depth_model": "VDA-Large",
           "colormap": "grayscale",
           "resolution": "auto",
@@ -379,7 +379,7 @@ Estimate temporally consistent depth maps from video using Video Depth Anything.
             headers={**AUTH, "Content-Type": "application/json"},
             json={
                 "model": "bytedance-depth-anything-video",
-                "video_url": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
+                "input_video": "https://hub.oxen.ai/api/repos/ox/Oxen-AI-Assets/file/main/images/winter_summer_ox.mp4",
                 "depth_model": "VDA-Large",
                 "colormap": "grayscale",
                 "resolution": "auto",
@@ -428,7 +428,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `video_url` | `string` | &mdash; | URL of the input video to estimate depth for. Format: uri. |
+| `input_video` | `string` | &mdash; | URL of the input video to estimate depth for. Format: uri. |
 
 ### Optional parameters
 
