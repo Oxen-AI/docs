@@ -133,7 +133,7 @@ curl -X POST https://hub.oxen.ai/api/repos \
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `namespace` | string | Yes | Your username or organization name |
+| `namespace` | string | Yes | Your username or team name |
 | `name` | string | Yes | Repository name |
 | `user.name` | string | Yes | Author name for commits |
 | `user.email` | string | Yes | Author email for commits |
@@ -164,7 +164,7 @@ PUT /api/repos/{namespace}/{repo_name}/file/{branch}/{path}
 
 | Parameter | Description | Example |
 |-----------|-------------|---------|
-| `namespace` | Your username or organization | `your-username` |
+| `namespace` | Your username or team | `your-username` |
 | `repo_name` | Repository name | `my-dataset` |
 | `branch` | Target branch name | `main` |
 | `path` | Destination path in repository | `data/example.txt` |

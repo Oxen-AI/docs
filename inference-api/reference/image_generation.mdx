@@ -18,7 +18,7 @@ Generates images synchronously. The request blocks until the image is ready (typ
 | `model` | string | **yes** | -- | Image model name (e.g. `black-forest-labs-flux-2-klein-4b`, `flux-2-dev`) |
 | `prompt` | string | **yes** | -- | Text description of the image to generate. |
 | `response_format` | string | no | `"url"` | `"url"` returns a hosted URL. `"b64_json"` returns base64-encoded image bytes inline. |
-| `target_namespace` | string | no | current user | Namespace to save results and bill to. Can be an organization name. |
+| `target_namespace` | string | no | current user | Namespace to save results and bill to. Can be a team name. |
 | `aspect_ratio` | string | no | -- | Aspect ratio (e.g. `"1:1"`, `"16:9"`, `"9:16"`, `"4:3"`, `"3:4"`). |
 | `num_inference_steps` | integer | no | -- | Number of denoising steps. |
 | `seed` | integer | no | -- | Reproducibility seed. |
