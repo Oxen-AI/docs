@@ -162,7 +162,11 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" \
 
 The response includes a `request_schema` field with the complete parameter definitions, types, defaults, and constraints for that model.
 
-Each model also says whether it is verified. `verified` is true when the model has a commercial license, the same models as the [verified models list](https://www.oxen.ai/legal/verified-models), and `license_type` names the license. To list only verified models:
+## Verified Models
+
+A verified model is one whose provider has signed a contract with Oxen that stops them from using what you send through Oxen to train or improve their models. An unverified model falls under the provider's own terms and privacy policy, which may let them train on your data. The [Verified Models page](https://www.oxen.ai/legal/verified-models) lists every model in each group and has the full terms.
+
+Each model in `/api/ai/models` has a `verified` field that says which group it is in, and a `license_type` field that names its license. To list only verified models:
 
 ```bash
 curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
