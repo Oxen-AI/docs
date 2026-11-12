@@ -166,7 +166,7 @@ The response includes a `request_schema` field with the complete parameter defin
 
 A verified model is one whose provider has signed a contract with Oxen that stops them from using what you send through Oxen to train or improve their models. An unverified model falls under the provider's own terms and privacy policy, which may let them train on your data. The [Verified Models page](https://www.oxen.ai/legal/verified-models) lists every model in each group and has the full terms.
 
-Each model in `/api/ai/models` has a `verified` field that says which group it is in, and a `license_type` field that names its license. To list only verified models:
+Each model in `/api/ai/models` has a `verified` field that says which group it's in, and a `license_type` field that names its license. To list only verified models:
 
 ```bash
 curl -s -H "Authorization: Bearer $OXEN_API_KEY" \
