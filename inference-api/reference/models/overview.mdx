@@ -61,11 +61,15 @@ Lists all available models. OpenAI-compatible.
       "source_model": null,
       "image_url": null,
       "released_at": "2025-06-19T00:00:00Z",
-      "request_schema": null
+      "request_schema": null,
+      "verified": true,
+      "license_type": "commercial"
     }
   ]
 }
 ```
+
+`verified` is true when the model's provider is under contract not to train on what you send through Oxen. [Verified Models](/inference-api/overview#verified-models) explains what that covers. `license_type` names the model's license, such as `commercial` or `research`, and is null when none is recorded.
 
 ### Examples
 
