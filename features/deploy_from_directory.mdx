@@ -24,6 +24,18 @@ type   = "lora"
 | `source` | yes | The base model this directory was trained from. Accepts a HuggingFace ID (e.g. `Qwen/Qwen3-8B`) or an Oxen model name. |
 | `type` | yes | Either `"lora"` (LoRA adapter weights only) or `"full"` (full model weights). |
 
+## What goes in the folder
+
+Give each model a folder of its own, holding `oxen.toml` next to the weights. The deployment downloads the weights by file name, so the names have to match exactly:
+
+| `type` | Base model | Files the folder needs |
+|---|---|---|
+| `"lora"` | Image or video model | `model.safetensors` |
+| `"lora"` | Text model | `adapter_config.json` and `adapter_model.safetensors` |
+| `"full"` | Any | The full model weights |
+
+A LoRA saved under another name, such as `my_style_000007000.safetensors`, has to be renamed to `model.safetensors` before you push it.
+
 ## Examples
 
 ### LoRA adapter
@@ -68,6 +80,77 @@ Below is an example of the deployment status in the workbench view after clickin
 <img alt="Deployment status view" classname="block" src="/images/deployment-status.png" />
 
 Redeploying from the same directory and revision reuses the existing deployment rather than creating a duplicate.
+
+## Finding and naming your model
+
+Every deployment gets a generated name made of your team's name and three words, such as `acme-grim-lime-monkey`. This is the name you pass as `model` in inference requests, and it does not change. Right after you click **Deploy Model**, the name is in the workbench address bar as `?model=<name>`.
+
+You can give the model a readable display name through the API:
+
+```bash
+curl -X PUT https://hub.oxen.ai/api/ai/models/acme-grim-lime-monkey \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"display_name": "Ghostcat Style"}'
+```
+
+## Deploying through the API
+
+The **Deploy Model** button calls one endpoint, which you can call yourself. `path` is the folder that holds `oxen.toml`, and `revision` is the branch or commit to deploy from.
+
+```bash
+curl -X POST https://hub.oxen.ai/api/repos/acme/my-loras/deploy \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"path": "ghostcat-style", "revision": "main"}'
+```
+
+Output:
+
+```json
+{
+  "status": "success",
+  "status_message": "resource_created",
+  "redeployed": false,
+  "deployment": {
+    "id": "d5f81406-959a-4eab-8c6b-423b0a81259a",
+    "model_name": "acme-grim-lime-monkey",
+    "status": "deploying"
+  }
+}
+```
+
+The response includes more fields than shown here. Keep `deployment.model_name` and `deployment.id`. A deployment takes a few minutes to start, and you can poll its status until it reads `active`:
+
+```bash
+curl https://hub.oxen.ai/api/ai/deployments/d5f81406-959a-4eab-8c6b-423b0a81259a \
+  -H "Authorization: Bearer $OXEN_API_KEY"
+```
+
+Once it is active, use the model name with the [Inference API](/inference-api/overview) like any other model:
+
+```bash
+curl -X POST https://hub.oxen.ai/api/ai/queue \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"model": "acme-grim-lime-monkey", "prompt": "a cat on a windowsill", "width": 1344, "height": 768}'
+```
+
+## Cost
+
+A deployment runs on a dedicated GPU and is billed per second for as long as it is active, whether or not it is serving requests. Deactivate it when you are done, and activate it again when you need it:
+
+```bash
+curl -X POST https://hub.oxen.ai/api/ai/models/acme-grim-lime-monkey/deactivate \
+  -H "Authorization: Bearer $OXEN_API_KEY"
+```
+
+Activating it again takes a few minutes, the same as the first deploy:
+
+```bash
+curl -X POST https://hub.oxen.ai/api/ai/models/acme-grim-lime-monkey/activate \
+  -H "Authorization: Bearer $OXEN_API_KEY"
+```
 
 ## Common errors
 
