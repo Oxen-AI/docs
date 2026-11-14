@@ -1,0 +1,141 @@
+---
+title: "Claude Haiku 5.5"
+description: "Fast, low-cost Claude for high-volume tasks"
+---
+
+<CardGroup cols={1}>
+  <Card title="Try Claude Haiku 5.5 in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=claude-haiku-5-5">
+    Run this model interactively, tune parameters, and compare outputs.
+  </Card>
+</CardGroup>
+
+**Model ID:** `claude-haiku-5-5`
+
+**Claude Haiku 5.5 is Anthropic's fast, low-cost Multimodal LLM for high-volume, latency-sensitive work.** It suits classification, routing, extraction, and subagent tasks, and succeeds Claude Haiku 4.5 with a much larger context window and output limit at a lower price.
+
+Adaptive thinking is on by default and steered by the effort parameter (low through max, default medium). Sampling parameters such as temperature are not supported. Its tokenizer counts the same text as about 30% more tokens than Claude Haiku 4.5's. Prompts over 100,000 tokens cost five times as much per token as shorter ones. Safety classifiers may decline requests in sensitive domains, returning a refusal stop reason. It accepts text and images and has a reliable knowledge cutoff of June 2026.
+
+| Metric             | Value              |
+|--------------------|--------------------|
+| Context Length     | 1,000,000 tokens   |
+| Max Output         | 128,000 tokens     |
+| Multilingual       | Yes                |
+
+## Example request
+
+<Tip>
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=claude-haiku-5-5) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+</Tip>
+
+<Tabs>
+  <Tab title="Minimal">
+
+    <CodeGroup>
+
+    ```bash cURL
+    curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $OXEN_API_KEY" \
+      -d '{
+      "model": "claude-haiku-5-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Hello, what can you do?"
+        }
+      ]
+    }'
+    ```
+
+    ```python Python
+    import os
+    import requests
+
+    response = requests.post(
+        "https://hub.oxen.ai/api/ai/chat/completions",
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        },
+        json={
+            "model": "claude-haiku-5-5",
+            "messages": [
+                {
+                    "role": "user",
+                    "content": "Hello, what can you do?"
+                }
+            ]
+        },
+    )
+    response.raise_for_status()
+    print(response.json())
+    ```
+
+    </CodeGroup>
+
+  </Tab>
+  <Tab title="Basic parameters">
+
+    <CodeGroup>
+
+    ```bash cURL
+    curl -X POST https://hub.oxen.ai/api/ai/chat/completions \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer $OXEN_API_KEY" \
+      -d '{
+      "model": "claude-haiku-5-5",
+      "messages": [
+        {
+          "role": "user",
+          "content": "Hello, what can you do?"
+        }
+      ],
+      "temperature": 0.7,
+      "max_tokens": 1024,
+      "stream": false
+    }'
+    ```
+
+    ```python Python
+    import os
+    import requests
+
+    response = requests.post(
+        "https://hub.oxen.ai/api/ai/chat/completions",
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+        },
+        json={
+            "model": "claude-haiku-5-5",
+            "messages": [
+                {
+                    "role": "user",
+                    "content": "Hello, what can you do?"
+                }
+            ],
+            "temperature": 0.7,
+            "max_tokens": 1024,
+            "stream": false
+        },
+    )
+    response.raise_for_status()
+    print(response.json())
+    ```
+
+    </CodeGroup>
+
+  </Tab>
+</Tabs>
+
+## Fetch model details
+
+The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
+
+```bash
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/claude-haiku-5-5
+```
+
+## Request parameters
+
+This model follows the standard OpenAI chat completions request body. See the [chat completions reference](../inference-api.mdx) for the full parameter list.
