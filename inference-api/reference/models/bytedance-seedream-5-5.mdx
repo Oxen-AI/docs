@@ -1,6 +1,6 @@
 ---
 title: "Seedream 5.5"
-description: "Image generation and editing, transparent PNG, 4K"
+description: "Image generation and editing, transparent PNG"
 ---
 
 <CardGroup cols={1}>
@@ -13,7 +13,7 @@ description: "Image generation and editing, transparent PNG, 4K"
 
 ByteDance Seedream 5.5 generates and edits images with more consistent edits, more realistic detail and more accurate in-image text than Seedream 5.0. It renders transparent and semi-transparent backgrounds directly from a text prompt, so product shots, stickers, logos and UI assets come out as ready-to-use PNG cutouts.
 
-It edits from up to 10 reference images (recolor, material swap, object replacement, multi-image fusion, in-image text edits) and outputs up to 4K across a range of aspect ratios. To split an image into editable layers, use Seedream 5.5 Layers.
+It edits from up to 10 reference images (recolor, material swap, object replacement, multi-image fusion, in-image text edits) and outputs at 1K or 2K across a range of aspect ratios. To split an image into editable layers, use Seedream 5.5 Layers.
 
 ## Example request
 
@@ -648,6 +648,6 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | `background` | `string` | `"auto"` | Transparent renders a PNG with an alpha channel. Auto makes the background transparent when the prompt asks for it. One of: auto, transparent, opaque. |
 | `aspect_ratio` | `string` | `"auto"` | Aspect Ratio One of: auto, 1:1, 4:3, 3:4, 16:9, 9:16, 3:2, 2:3, 21:9. |
 | `image_size` | `object` | &mdash; | Pixel dimensions sent to Seedream, looked up from aspect_ratio and size in the size table below. |
-| `size` | `string` | `"2K"` | Resolution One of: 1K, 2K, 4K. |
+| `size` | `string` | `"2K"` | Resolution One of: 1K, 2K. |
 | `output_format` | `string` | `"png"` | Output image format. One of: png, jpeg. |
 | `watermark` | `boolean` | `false` | Whether to add an 'AI generated' watermark. |
