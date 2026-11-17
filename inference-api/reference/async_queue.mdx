@@ -94,7 +94,7 @@ A generation writes its output file into a repository in the target namespace. T
 GET /api/ai/queue
 ```
 
-Lists generations for the authenticated user's namespace. By default, only active generations (`queued` or `processing`) are returned. Pass an explicit `status` filter to include terminal states.
+Lists generations for the authenticated user's namespace. By default, only active generations (`queued` or `processing`) are returned. Pass an explicit `status` filter to include terminal states. Generations come back newest first, and one response holds at most 1,000.
 
 ### Query Parameters
 
@@ -106,6 +106,7 @@ Lists generations for the authenticated user's namespace. By default, only activ
 | `media_type` | string | no | Filter by `image`, `video`, or `audio`. |
 | `repo` | string | no | Filter by target repository name. |
 | `folder` | string | no | Filter by target directory. |
+| `page_size` | integer | no | Most generations to return, from 1 to 1000. Defaults to 1000. Any other value returns a `400`. |
 
 ### Response
 
@@ -145,7 +146,7 @@ Lists generations for the authenticated user's namespace. By default, only activ
 
 | Field | Always Present | Description |
 |---|---|---|
-| `count` | yes | Number of generations in the response |
+| `count` | yes | Number of generations in the response, at most `page_size` |
 | `generation_id` | yes | Unique ID for this generation |
 | `model_name` | yes | Model name |
 | `prompt` | yes | Text prompt (from original request parameters) |
