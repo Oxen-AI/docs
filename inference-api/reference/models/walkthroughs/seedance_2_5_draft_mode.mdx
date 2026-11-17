@@ -17,7 +17,7 @@ The flow has two calls:
 | Prompt | Required | Not sent; reused from the draft |
 | Duration, aspect ratio, audio, seed | Set by you | Inherited from the draft |
 | Billed as | A normal 480p video | A normal 1080p or 4k video |
-| Returns `draft_task_id` | Yes, valid for 7 days | No |
+| Returns `draft_task_id` | Yes, valid for 14 days | No |
 
 **Supported models:** every Seedance 2.5 model.
 
@@ -76,12 +76,12 @@ curl https://hub.oxen.ai/api/ai/queue/d8656ef0-085c-498e-afe2-289442222450 \
   "model_name": "bytedance-seedance-2-5-text-to-video",
   "media_type": "video",
   "status": "succeeded",
-  "result_url": "https://hub.oxen.ai/api/repos/ox/playground/workspaces/269822c4-.../files/20260926-034218_a-lone-ox-walks-down-an-empty-desert-highway-at_0e48f80b.mp4?oxen_expires=1790397738&oxen_signature=...",
+  "result_url": "https://hub.oxen.ai/api/repos/ox/playground/workspaces/269822c4-.../files/20261116-034218_a-lone-ox-walks-down-an-empty-desert-highway-at_0e48f80b.mp4?oxen_expires=1794804138&oxen_signature=...",
   "videos": [
     {
-      "url": "https://hub.oxen.ai/api/repos/ox/playground/workspaces/269822c4-.../files/20260926-034218_a-lone-ox-walks-down-an-empty-desert-highway-at_0e48f80b.mp4?oxen_expires=1790397738&oxen_signature=...",
-      "draft_task_id": "cgt-20260926114114-r4bb8",
-      "draft_expires_at": "2026-10-01T18:04:11Z"
+      "url": "https://hub.oxen.ai/api/repos/ox/playground/workspaces/269822c4-.../files/20261116-034218_a-lone-ox-walks-down-an-empty-desert-highway-at_0e48f80b.mp4?oxen_expires=1794804138&oxen_signature=...",
+      "draft_task_id": "cgt-20261116114114-r4bb8",
+      "draft_expires_at": "2026-11-30T03:41:14Z"
     }
   ]
 }
@@ -97,7 +97,7 @@ curl -X POST https://hub.oxen.ai/api/ai/queue \
   -H "Content-Type: application/json" \
   -d '{
     "model": "bytedance-seedance-2-5-text-to-video",
-    "draft_task_id": "cgt-20260926114114-r4bb8"
+    "draft_task_id": "cgt-20261116114114-r4bb8"
   }'
 ```
 
@@ -119,10 +119,10 @@ Poll `GET /ai/queue/{generation_id}` as before. The succeeded final lists its vi
   "model_name": "bytedance-seedance-2-5-text-to-video",
   "media_type": "video",
   "status": "succeeded",
-  "draft_task_id": "cgt-20260926114114-r4bb8",
-  "result_url": "https://hub.oxen.ai/api/repos/ox/playground/workspaces/269822c4-.../files/20260926-034319_9173d907.mp4?oxen_expires=1790397799&oxen_signature=...",
+  "draft_task_id": "cgt-20261116114114-r4bb8",
+  "result_url": "https://hub.oxen.ai/api/repos/ox/playground/workspaces/269822c4-.../files/20261116-034319_9173d907.mp4?oxen_expires=1794804199&oxen_signature=...",
   "videos": [
-    { "url": "https://hub.oxen.ai/api/repos/ox/playground/workspaces/269822c4-.../files/20260926-034319_9173d907.mp4?oxen_expires=1790397799&oxen_signature=..." }
+    { "url": "https://hub.oxen.ai/api/repos/ox/playground/workspaces/269822c4-.../files/20261116-034319_9173d907.mp4?oxen_expires=1794804199&oxen_signature=..." }
   ]
 }
 ```
@@ -182,12 +182,12 @@ The response lists the video with its draft ID and expiry:
   "model": "bytedance-seedance-2-5-text-to-video",
   "videos": [
     {
-      "url": "https://hub.oxen.ai/api/repos/ox/playground/workspaces/269822c4-.../files/20260926-034218_a-lone-ox-walks-down-an-empty-desert-highway-at_0e48f80b.mp4?oxen_expires=1790397738&oxen_signature=...",
-      "draft_task_id": "cgt-20260926114114-r4bb8",
-      "draft_expires_at": "2026-10-01T18:04:11Z"
+      "url": "https://hub.oxen.ai/api/repos/ox/playground/workspaces/269822c4-.../files/20261116-034218_a-lone-ox-walks-down-an-empty-desert-highway-at_0e48f80b.mp4?oxen_expires=1794804138&oxen_signature=...",
+      "draft_task_id": "cgt-20261116114114-r4bb8",
+      "draft_expires_at": "2026-11-30T03:41:14Z"
     }
   ],
-  "created": 1790000000
+  "created": 1794800474
 }
 ```
 
@@ -205,7 +205,7 @@ curl -X POST https://hub.oxen.ai/api/ai/videos/generate \
   -H "Content-Type: application/json" \
   -d '{
     "model": "bytedance-seedance-2-5-text-to-video",
-    "draft_task_id": "cgt-20260926114114-r4bb8"
+    "draft_task_id": "cgt-20261116114114-r4bb8"
   }'
 ```
 
@@ -221,7 +221,7 @@ response = requests.post(
     },
     json={
         "model": "bytedance-seedance-2-5-text-to-video",
-        "draft_task_id": "cgt-20260926114114-r4bb8",
+        "draft_task_id": "cgt-20261116114114-r4bb8",
     },
     timeout=900,
 )
@@ -238,10 +238,10 @@ The final is 1080p (or 4k, if you sent `"resolution": "4k"`) at the draft's dura
   "model": "bytedance-seedance-2-5-text-to-video",
   "videos": [
     {
-      "url": "https://hub.oxen.ai/api/repos/ox/playground/workspaces/269822c4-.../files/20260926-034319_9173d907.mp4?oxen_expires=1790397799&oxen_signature=..."
+      "url": "https://hub.oxen.ai/api/repos/ox/playground/workspaces/269822c4-.../files/20261116-034319_9173d907.mp4?oxen_expires=1794804199&oxen_signature=..."
     }
   ],
-  "created": 1790000300
+  "created": 1794800599
 }
 ```
 
@@ -255,7 +255,7 @@ curl -X POST https://hub.oxen.ai/api/ai/queue \
   -H "Content-Type: application/json" \
   -d '{
     "model": "bytedance-seedance-2-5-text-to-video",
-    "draft_task_id": "cgt-20260926114114-r4bb8",
+    "draft_task_id": "cgt-20261116114114-r4bb8",
     "resolution": "4k"
   }'
 ```
@@ -263,7 +263,7 @@ curl -X POST https://hub.oxen.ai/api/ai/queue \
 The 4k final (3840×2160 at 16:9) keeps the draft's aspect ratio, duration, audio setting, and seed, so it is the same shot at four times the pixels of 1080p. Like 1080p, it uses 10-bit color and H.265/HEVC encoding.
 
 - **Only `1080p` and `4k` are valid for a final.** Any other `resolution` (such as `720p`), or none at all, renders the final at 1080p.
-- **The same draft can render both.** A draft ID stays valid for 7 days, so you can render a 1080p final first and a 4k final later, or the reverse.
+- **The same draft can render both.** A draft ID stays valid for 14 days, so you can render a 1080p final first and a 4k final later, or the reverse.
 - **It costs more.** A 4k final is billed as a normal 4k render of the draft's length. See the model's page for its per-second price at each resolution.
 
 ## Reference
@@ -291,7 +291,7 @@ Every endpoint lists media the same way: a `videos` array of items with a stored
 | --- | --- | --- | --- |
 | `videos[].url` | Sync, queue, event | All videos | Signed URL of the stored MP4. |
 | `videos[].draft_task_id` | Sync, queue, event | Drafts only | Send this back to render the final. |
-| `videos[].draft_expires_at` | Sync, queue, event | Drafts only | ISO 8601 UTC. Creation time plus 7 days. |
+| `videos[].draft_expires_at` | Sync, queue, event | Drafts only | ISO 8601 UTC. Creation time plus 14 days. |
 | `draft_task_id` (top level) | Queue generation | Finals only | The source draft of this final. Always the request param, never a new draft. |
 | `result_url` | Queue generation, event | All videos | Same as `videos[0].url`. Kept for older clients; prefer `videos`. |
 | `status` | Queue generation | All | `queued`, then `processing`, then `succeeded`, `failed`, or `cancelled`. |
@@ -311,7 +311,7 @@ Every endpoint lists media the same way: a `videos` array of items with a stored
 
 ### Rules
 
-- **Drafts expire after 7 days.** Render the final before `draft_expires_at`. After that, render a new draft.
+- **Drafts expire after 14 days.** Render the final before `draft_expires_at`. After that, render a new draft. Drafts created before October 28, 2026 at 02:00 UTC expired after 7 days.
 - **One draft, many finals.** A draft ID stays valid until it expires, so you can re-render the final if you need to.
 - **The final is locked to the draft.** To change the prompt, media, duration, aspect ratio, audio, or seed, render a new draft.
 - **Use the same model.** Send the final to the model that produced the draft.
