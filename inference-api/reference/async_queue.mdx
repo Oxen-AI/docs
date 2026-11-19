@@ -94,7 +94,7 @@ A generation writes its output file into a repository in the target namespace. T
 GET /api/ai/queue
 ```
 
-Lists generations for the authenticated user's namespace. By default, only active generations (`queued` or `processing`) are returned. Pass an explicit `status` filter to include terminal states. Generations come back newest first, and one response holds at most 1,000.
+Lists generations for the authenticated user's namespace. By default, only active generations (`queued` or `processing`) are returned. Pass an explicit `status` filter to include terminal states. Generations are sorted by recency and paginated with a page size up to 1,000.
 
 ### Query Parameters
 
