@@ -24,17 +24,28 @@ type   = "lora"
 | `source` | yes | The base model this directory was trained from. Accepts a HuggingFace ID (e.g. `Qwen/Qwen3-8B`) or an Oxen model name. |
 | `type` | yes | Either `"lora"` (LoRA adapter weights only) or `"full"` (full model weights). |
 
-## What goes in the folder
+## How to set up the directory
 
-Give each model a folder of its own, holding `oxen.toml` next to the weights. The deployment downloads the weights by file name, so the names have to match exactly:
+Give each model its own directory with two components:
+* An `oxen.toml` file
+* The model weights
+
+The model weights must be set up according to these rules in order for them to be recognized:
 
 | `type` | Base model | Files the folder needs |
 |---|---|---|
 | `"lora"` | Image or video model | `model.safetensors` |
+| `"full"` | Image or video model | `model.safetensors` |
 | `"lora"` | Text model | `adapter_config.json` and `adapter_model.safetensors` |
-| `"full"` | Any | The full model weights |
+| `"full"` | Text model | See below |
 
-A LoRA saved under another name, such as `my_style_000007000.safetensors`, has to be renamed to `model.safetensors` before you push it.
+A LoRA saved under another name, such as `my_style_000007000.safetensors`, MUST be renamed to `model.safetensors` before you push it.
+
+To deploy a full model, you must set up the directory like a HuggingFace model folder. This includes `config.json` and `model.safetensors` files. For a sharded model you can use `model.safetensors.index.json` and `model-00001-of-0000N.safetensors` instead of the `model.safetensors`.
+
+There are a couple exceptions:
+* Wan 2.2 A14B currently can't be deployed this way
+* Qwen3.5 ignores the "full" type
 
 ## Examples
 
