@@ -170,7 +170,7 @@ Any additional parameters from the original enqueue request (e.g. `seed`, `aspec
 
 When `next_page_token` is not `null`, send the same request again with it as `page_token` to get the next older generations. Repeat until `next_page_token` is `null`.
 
-Each page reads the queue as it stands when you ask for that page. A generation that changes status while you page, or that is enqueued in the same second as the last generation of the previous page, can be missed or show up on a later page. Any other generation enqueued after your first request appears only when you start again without a `page_token`.
+Pages go from newest to oldest. Generations enqueued after you fetched the first page may not show up, so start again without a `page_token` to see them. A generation whose status changes while you page can be skipped or show up on a later page. For a complete list, filter by a finished status such as `succeeded`.
 
 ```bash
 curl -H "Authorization: Bearer YOUR_API_KEY" \
