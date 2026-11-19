@@ -94,7 +94,7 @@ A generation writes its output file into a repository in the target namespace. T
 GET /api/ai/queue
 ```
 
-Lists generations for the authenticated user's namespace. By default, only active generations (`queued` or `processing`) are returned. Pass an explicit `status` filter to include terminal states.
+Lists generations for the authenticated user's namespace. By default, only active generations (`queued` or `processing`) are returned. Pass an explicit `status` filter to include terminal states. Generations are sorted by recency and paginated with a page size up to 1,000.
 
 ### Query Parameters
 
@@ -106,12 +106,15 @@ Lists generations for the authenticated user's namespace. By default, only activ
 | `media_type` | string | no | Filter by `image`, `video`, or `audio`. |
 | `repo` | string | no | Filter by target repository name. |
 | `folder` | string | no | Filter by target directory. |
+| `page_size` | integer | no | Most generations to return, from 1 to 1000. Defaults to 1000. Any other value returns a `400`. |
+| `page_token` | string | no | The `next_page_token` of an earlier response. Returns the generations after that response's last one. |
 
 ### Response
 
 ```json
 {
   "count": 2,
+  "next_page_token": null,
   "generations": [
     {
       "generation_id": "7cf9b23a-1234-5678-9abc-def012345678",
@@ -145,7 +148,8 @@ Lists generations for the authenticated user's namespace. By default, only activ
 
 | Field | Always Present | Description |
 |---|---|---|
-| `count` | yes | Number of generations in the response |
+| `count` | yes | Number of generations in the response, at most `page_size` |
+| `next_page_token` | yes | Pass it as `page_token` to get the next older generations. `null` when no more match |
 | `generation_id` | yes | Unique ID for this generation |
 | `model_name` | yes | Model name |
 | `prompt` | yes | Text prompt (from original request parameters) |
@@ -161,6 +165,17 @@ Lists generations for the authenticated user's namespace. By default, only activ
 | `duration` | if submitted | Video duration |
 
 Any additional parameters from the original enqueue request (e.g. `seed`, `aspect_ratio`, `duration`, `input_image`) are included in the response alongside the fields above.
+
+### Paging
+
+When `next_page_token` is not `null`, send the same request again with it as `page_token` to get the next older generations. Repeat until `next_page_token` is `null`.
+
+Pages go from newest to oldest. Generations enqueued after you fetched the first page may not show up, so start again without a `page_token` to see them. A generation whose status changes while you page can be skipped or show up on a later page. For a complete list, filter by a finished status such as `succeeded`.
+
+```bash
+curl -H "Authorization: Bearer YOUR_API_KEY" \
+  "https://hub.oxen.ai/api/ai/queue?status=succeeded&page_size=1000&page_token=NEXT_PAGE_TOKEN"
+```
 
 ### Polling Strategy
 
