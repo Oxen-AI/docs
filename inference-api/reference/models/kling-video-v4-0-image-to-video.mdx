@@ -1,6 +1,6 @@
 ---
 title: "Kling 4.0 - Image to Video"
-description: "Multi-keyframe image-to-video with audio"
+description: "Multi-keyframe image-to-video with audio, 4K HDR"
 ---
 
 <CardGroup cols={1}>
@@ -11,9 +11,9 @@ description: "Multi-keyframe image-to-video with audio"
 
 **Model ID:** `kling-video-v4-0-image-to-video`
 
-Kling 4.0 animates images into cinematic video with native audio, in single takes of 3 to 30 seconds at 720p or 1080p. Give it a first frame, a last frame, and up to 10 keyframes in total, and it moves smoothly through each one in order.
+Kling 4.0 animates images into cinematic video with native audio, in single takes of 3 to 30 seconds at 720p, 1080p, or native 4K. Give it a first frame, a last frame, and up to 10 keyframes in total, and it moves smoothly through each one in order.
 
-Keyframes make it suited to choreographed shots: a fashion walk that hits set poses, a product turning through planned angles, or a scene that travels between locations. Refer to frames in the prompt as @image_1, @image_2, and so on, counting from the first frame, to say what should carry over from each.
+Keyframes make it suited to choreographed shots: a fashion walk that hits set poses, a product turning through planned angles, or a scene that travels between locations. Refer to frames in the prompt as @image_1, @image_2, and so on, counting from the first frame, to say what should carry over from each. Turn on HDR at 1080p or 4K for 10-bit video with richer color and smoother highlights and shadows.
 
 ## Example request
 
@@ -128,6 +128,7 @@ Keyframes make it suited to choreographed shots: a fashion walk that hits set po
           ],
           "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "resolution": "1080p",
+          "dynamic_range": "sdr",
           "duration": 5
         }'
         ```
@@ -151,6 +152,7 @@ Keyframes make it suited to choreographed shots: a fashion walk that hits set po
                 ],
                 "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "resolution": "1080p",
+                "dynamic_range": "sdr",
                 "duration": 5
             },
         )
@@ -331,6 +333,7 @@ Keyframes make it suited to choreographed shots: a fashion walk that hits set po
           ],
           "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "resolution": "1080p",
+          "dynamic_range": "sdr",
           "duration": 5
         }' | jq -r '.generations[0].generation_id')
 
@@ -370,6 +373,7 @@ Keyframes make it suited to choreographed shots: a fashion walk that hits set po
                 ],
                 "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "resolution": "1080p",
+                "dynamic_range": "sdr",
                 "duration": 5
             },
         )
@@ -560,6 +564,7 @@ Keyframes make it suited to choreographed shots: a fashion walk that hits set po
           ],
           "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "resolution": "1080p",
+          "dynamic_range": "sdr",
           "duration": 5
         }' | jq -r '.generations[0].generation_id')
 
@@ -596,6 +601,7 @@ Keyframes make it suited to choreographed shots: a fashion walk that hits set po
                 ],
                 "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "resolution": "1080p",
+                "dynamic_range": "sdr",
                 "duration": 5
             },
         )
@@ -649,5 +655,6 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | `input_image` | `string` | &mdash; | Image the video starts on. Format: uri. |
 | `keyframe_images` | `array<string>` | &mdash; | Keyframes the video passes through between the first and last frame, in order. Up to 10 frames in total. |
 | `tail_image_url` | `string` | &mdash; | Image the video ends on. Format: uri. |
-| `resolution` | `string` | `"1080p"` | Resolution One of: 720p, 1080p. |
+| `resolution` | `string` | `"1080p"` | Resolution One of: 720p, 1080p, 4k. |
+| `dynamic_range` | `string` | `"sdr"` | HDR renders 10-bit video with a wider range of color and brightness. One of: sdr, hdr. |
 | `duration` | `integer` | `5` | Duration (seconds) Range: 3 – 30. |

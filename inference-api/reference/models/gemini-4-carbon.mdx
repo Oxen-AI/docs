@@ -1,0 +1,73 @@
+---
+title: "Gemini 4 Carbon"
+description: "Deep reasoning for math, science, and code"
+---
+
+<CardGroup cols={1}>
+  <Card title="Try Gemini 4 Carbon in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=gemini-4-carbon">
+    Run this model interactively, tune parameters, and compare outputs.
+  </Card>
+</CardGroup>
+
+**Model ID:** `gemini-4-carbon`
+
+**gemini-4-carbon is a Multimodal LLM.** It is Google's Gemini 4 reasoning model for complex software engineering, mathematical and scientific problem solving, factual accuracy, and autonomous multi-step agents. Google highlights gains in formal proofs, experimental data analysis, and vulnerability discovery.
+
+Some other noteworthy features of gemini-4-carbon include configurable thinking levels (low, medium, and high, with medium as the default), structured output, function calling, code execution, search grounding, URL context, file search, and computer use. It accepts text, images, audio, video, and PDFs and outputs text. It suits long, hard problems where accuracy matters more than latency, and its sibling Gemini 4 Argon trades some depth for faster, cheaper turns.
+
+| Metric             | Value              |
+|--------------------|--------------------|
+| Context Length     | 1M tokens          |
+| Max Output         | 64K tokens         |
+| Multilingual       | Yes                |
+
+## Example request
+
+<Tip>
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=gemini-4-carbon) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+</Tip>
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST https://hub.oxen.ai/api/ai/audio/transcriptions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -d '{
+  "model": "gemini-4-carbon",
+  "audio_url": "https://example.com/audio.mp3"
+}'
+```
+
+```python Python
+import os
+import requests
+
+response = requests.post(
+    "https://hub.oxen.ai/api/ai/audio/transcriptions",
+    headers={
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+    },
+    json={
+        "model": "gemini-4-carbon",
+        "audio_url": "https://example.com/audio.mp3"
+    },
+)
+response.raise_for_status()
+print(response.json())
+```
+
+</CodeGroup>
+
+## Fetch model details
+
+The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
+
+```bash
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/gemini-4-carbon
+```
+
+## Request parameters
+
+This model follows the standard OpenAI chat completions request body. See the [chat completions reference](../inference-api.mdx) for the full parameter list.

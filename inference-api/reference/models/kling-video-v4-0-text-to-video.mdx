@@ -1,6 +1,6 @@
 ---
 title: "Kling 4.0 - Text to Video"
-description: "Cinematic text-to-video with audio, up to 30s"
+description: "4K HDR text-to-video with audio, up to 30s"
 ---
 
 <CardGroup cols={1}>
@@ -11,9 +11,9 @@ description: "Cinematic text-to-video with audio, up to 30s"
 
 **Model ID:** `kling-video-v4-0-text-to-video`
 
-Kling 4.0 generates cinematic video with native audio from a text prompt, in single takes of 3 to 30 seconds at 720p or 1080p. It handles fast, complex motion and camera moves, and a prompt can lay out a sequence of events, dialogue, ambient sound, and music for the whole clip.
+Kling 4.0 generates cinematic video with native audio from a text prompt, in single takes of 3 to 30 seconds at 720p, 1080p, or native 4K. It handles fast, complex motion and camera moves, and a prompt can lay out a sequence of events, dialogue, ambient sound, and music for the whole clip.
 
-Choose 16:9, 9:16, 1:1, or 21:9 framing. Describe the scene, visual style, camera movement, action, and audio in the prompt; when no duration is set, the model follows a length stated in the prompt.
+Choose 16:9, 9:16, 1:1, 4:3, 3:4, or 21:9 framing. Describe the scene, visual style, camera movement, action, and audio in the prompt; when no duration is set, the model follows a length stated in the prompt. Turn on HDR at 1080p or 4K for 10-bit video with richer color and smoother highlights and shadows.
 
 ## Example request
 
@@ -78,6 +78,7 @@ Choose 16:9, 9:16, 1:1, or 21:9 framing. Describe the scene, visual style, camer
           "prompt": "<prompt>",
           "aspect_ratio": "16:9",
           "resolution": "1080p",
+          "dynamic_range": "sdr",
           "duration": 5
         }'
         ```
@@ -97,6 +98,7 @@ Choose 16:9, 9:16, 1:1, or 21:9 framing. Describe the scene, visual style, camer
                 "prompt": "<prompt>",
                 "aspect_ratio": "16:9",
                 "resolution": "1080p",
+                "dynamic_range": "sdr",
                 "duration": 5
             },
         )
@@ -196,6 +198,7 @@ Choose 16:9, 9:16, 1:1, or 21:9 framing. Describe the scene, visual style, camer
           "prompt": "<prompt>",
           "aspect_ratio": "16:9",
           "resolution": "1080p",
+          "dynamic_range": "sdr",
           "duration": 5
         }' | jq -r '.generations[0].generation_id')
 
@@ -231,6 +234,7 @@ Choose 16:9, 9:16, 1:1, or 21:9 framing. Describe the scene, visual style, camer
                 "prompt": "<prompt>",
                 "aspect_ratio": "16:9",
                 "resolution": "1080p",
+                "dynamic_range": "sdr",
                 "duration": 5
             },
         )
@@ -342,6 +346,7 @@ Choose 16:9, 9:16, 1:1, or 21:9 framing. Describe the scene, visual style, camer
           "prompt": "<prompt>",
           "aspect_ratio": "16:9",
           "resolution": "1080p",
+          "dynamic_range": "sdr",
           "duration": 5
         }' | jq -r '.generations[0].generation_id')
 
@@ -374,6 +379,7 @@ Choose 16:9, 9:16, 1:1, or 21:9 framing. Describe the scene, visual style, camer
                 "prompt": "<prompt>",
                 "aspect_ratio": "16:9",
                 "resolution": "1080p",
+                "dynamic_range": "sdr",
                 "duration": 5
             },
         )
@@ -424,6 +430,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `aspect_ratio` | `string` | `"16:9"` | Aspect Ratio One of: 16:9, 9:16, 1:1, 21:9. |
-| `resolution` | `string` | `"1080p"` | Resolution One of: 720p, 1080p. |
+| `aspect_ratio` | `string` | `"16:9"` | Aspect Ratio One of: 16:9, 9:16, 1:1, 4:3, 3:4, 21:9. |
+| `resolution` | `string` | `"1080p"` | Resolution One of: 720p, 1080p, 4k. |
+| `dynamic_range` | `string` | `"sdr"` | HDR renders 10-bit video with a wider range of color and brightness. One of: sdr, hdr. |
 | `duration` | `integer` | `5` | Duration (seconds) Range: 3 – 30. |
