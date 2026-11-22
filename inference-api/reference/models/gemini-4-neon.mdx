@@ -1,0 +1,73 @@
+---
+title: "Gemini 4 Neon"
+description: "Fast end-to-end coding, knowledge work, science"
+---
+
+<CardGroup cols={1}>
+  <Card title="Try Gemini 4 Neon in the Workbench" icon="flask" href="https://www.oxen.ai/ai/workbench?model=gemini-4-neon">
+    Run this model interactively, tune parameters, and compare outputs.
+  </Card>
+</CardGroup>
+
+**Model ID:** `gemini-4-neon`
+
+**gemini-4-neon is a Multimodal LLM.** It is Google's Gemini 4 model for fast end-to-end task completion across complex software engineering, knowledge work, and science workflows. Google highlights clearer writing, precise handling of uploaded spreadsheets and PDFs, and research that draws on current web sources.
+
+Some other noteworthy features of gemini-4-neon include four thinking levels (low, medium, high, and xhigh, with high as the default), structured output, function calling, code execution, search grounding, URL context, file search, and computer use. It accepts text, images, audio, video, and PDFs and outputs text. Long decode extends a single response past 64K tokens, up to the full 1M token context shared with the input, for whole reports, codebases, and book-length drafts. It sits between Gemini 4 Hydrogen and Gemini 4 Carbon, and suits coding agents, document analysis, and multi-step research where both depth and turnaround time matter.
+
+| Metric             | Value              |
+|--------------------|--------------------|
+| Context Length     | 1M tokens          |
+| Max Output         | 64K tokens, 1M with long decode |
+| Multilingual       | Yes                |
+
+## Example request
+
+<Tip>
+  Use the [Workbench](https://www.oxen.ai/ai/workbench?model=gemini-4-neon) as a request builder: configure parameters for this model in the UI, then open the **API** tab to copy the exact cURL or Python call.
+</Tip>
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST https://hub.oxen.ai/api/ai/audio/transcriptions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $OXEN_API_KEY" \
+  -d '{
+  "model": "gemini-4-neon",
+  "audio_url": "https://example.com/audio.mp3"
+}'
+```
+
+```python Python
+import os
+import requests
+
+response = requests.post(
+    "https://hub.oxen.ai/api/ai/audio/transcriptions",
+    headers={
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {os.environ['OXEN_API_KEY']}",
+    },
+    json={
+        "model": "gemini-4-neon",
+        "audio_url": "https://example.com/audio.mp3"
+    },
+)
+response.raise_for_status()
+print(response.json())
+```
+
+</CodeGroup>
+
+## Fetch model details
+
+The [models endpoint](/inference-api/reference/models/overview) returns the full model object, including its `json_request_schema`.
+
+```bash
+curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/gemini-4-neon
+```
+
+## Request parameters
+
+This model follows the standard OpenAI chat completions request body. See the [chat completions reference](../inference-api.mdx) for the full parameter list.

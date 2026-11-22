@@ -1,6 +1,6 @@
 ---
 title: "Kling 4.0 - Reference to Video"
-description: "Multi-reference video generation and editing"
+description: "Multi-reference video generation and editing, 4K HDR"
 ---
 
 <CardGroup cols={1}>
@@ -11,9 +11,9 @@ description: "Multi-reference video generation and editing"
 
 **Model ID:** `kling-video-v4-0-reference-to-video`
 
-Kling 4.0 generates and edits video guided by up to 15 references: images, videos, and consistent character or object elements, with native audio in single takes of 3 to 30 seconds at 720p or 1080p. It keeps faces, outfits, and products consistent with the references while following the motion and camera of a reference video.
+Kling 4.0 generates and edits video guided by up to 15 references: images, videos, and consistent character or object elements, with native audio in single takes of 3 to 30 seconds at 720p, 1080p, or native 4K. It keeps faces, outfits, and products consistent with the references while following the motion and camera of a reference video.
 
-Add a video to edit and describe what to change and what to keep: swap an object, restyle a scene, or rewrite a line of dialogue, and the edit runs at the source video's length by default. Refer to inputs in the prompt as @image_1, @video_1, and @element_1, and say how each should be used, such as "keep the face and outfit from @image_1" or "follow the dance moves in @video_2 but not its background".
+Add a video to edit and describe what to change and what to keep: swap an object, restyle a scene, or rewrite a line of dialogue, and the edit runs at the source video's length by default. Refer to inputs in the prompt as @image_1, @video_1, and @element_1, and say how each should be used, such as "keep the face and outfit from @image_1" or "follow the dance moves in @video_2 but not its background". Turn on HDR at 1080p or 4K for 10-bit video with richer color and smoother highlights and shadows.
 
 ## Example request
 
@@ -150,6 +150,7 @@ Add a video to edit and describe what to change and what to keep: swap an object
           "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "aspect_ratio": "adaptive",
           "resolution": "1080p",
+          "dynamic_range": "sdr",
           "duration": "auto"
         }'
         ```
@@ -181,6 +182,7 @@ Add a video to edit and describe what to change and what to keep: swap an object
                 "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "aspect_ratio": "adaptive",
                 "resolution": "1080p",
+                "dynamic_range": "sdr",
                 "duration": "auto"
             },
         )
@@ -383,6 +385,7 @@ Add a video to edit and describe what to change and what to keep: swap an object
           "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "aspect_ratio": "adaptive",
           "resolution": "1080p",
+          "dynamic_range": "sdr",
           "duration": "auto"
         }' | jq -r '.generations[0].generation_id')
 
@@ -430,6 +433,7 @@ Add a video to edit and describe what to change and what to keep: swap an object
                 "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "aspect_ratio": "adaptive",
                 "resolution": "1080p",
+                "dynamic_range": "sdr",
                 "duration": "auto"
             },
         )
@@ -642,6 +646,7 @@ Add a video to edit and describe what to change and what to keep: swap an object
           "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
           "aspect_ratio": "adaptive",
           "resolution": "1080p",
+          "dynamic_range": "sdr",
           "duration": "auto"
         }' | jq -r '.generations[0].generation_id')
 
@@ -686,6 +691,7 @@ Add a video to edit and describe what to change and what to keep: swap an object
                 "tail_image_url": "https://hub.oxen.ai/api/repos/elau/assets/file/main/bloxy/bloxy_cropped_512x512.png",
                 "aspect_ratio": "adaptive",
                 "resolution": "1080p",
+                "dynamic_range": "sdr",
                 "duration": "auto"
             },
         )
@@ -742,6 +748,7 @@ curl -H "Authorization: Bearer $OXEN_API_KEY" https://hub.oxen.ai/api/ai/models/
 | `elements` | `array<object>` | &mdash; | Characters or objects to keep consistent, each from a front view plus other angles. Up to 7 elements. |
 | `input_image` | `string` | &mdash; | Optional image the video starts on. Format: uri. |
 | `tail_image_url` | `string` | &mdash; | Optional image the video ends on. Format: uri. |
-| `aspect_ratio` | `string` | `"adaptive"` | Aspect Ratio One of: adaptive, 16:9, 9:16, 1:1, 21:9. |
-| `resolution` | `string` | `"1080p"` | Resolution One of: 720p, 1080p. |
+| `aspect_ratio` | `string` | `"adaptive"` | Aspect Ratio One of: adaptive, 16:9, 9:16, 1:1, 4:3, 3:4, 21:9. |
+| `resolution` | `string` | `"1080p"` | Resolution One of: 720p, 1080p, 4k. |
+| `dynamic_range` | `string` | `"sdr"` | HDR renders 10-bit video with a wider range of color and brightness. One of: sdr, hdr. |
 | `duration` | `['integer', 'string']` | `"auto"` | Duration Range: 3 – 30. |
